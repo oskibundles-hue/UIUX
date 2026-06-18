@@ -30,9 +30,25 @@ Notes:
 
 | Server | Package | Purpose |
 | :----- | :------ | :------ |
-| `nano-banana` | [`nano-banana-mcp`](https://github.com/ConechoAI/Nano-Banana-MCP) (ConechoAI) | Image generation/editing via Google Gemini 2.5 Flash Image ("Nano Banana") |
+| `nano-banana` | [`nano-banana-mcp`](https://github.com/ConechoAI/Nano-Banana-MCP) (ConechoAI), **vendored & patched** in `tools/nano-banana-mcp/` | Image generation/editing via Google Gemini 2.5 Flash Image ("Nano Banana") |
 
-### Required: `GEMINI_API_KEY`
+### Why it's vendored
+
+The upstream package v1.0.3 hardcodes the model `gemini-2.5-flash-image-preview`,
+which Google has retired — calling it returns `404 NOT_FOUND`. We vendored the
+package into `tools/nano-banana-mcp/` and patched the model to the current GA
+name `gemini-2.5-flash-image` (the only change). `.mcp.json` runs this local
+copy instead of the npm package.
+
+- The patched source (`dist/`) is committed; `node_modules/` is **not**.
+- On first launch the server runs `npm install --omit=dev` automatically (see
+  the `bash -c` wrapper in `.mcp.json`), so fresh clones self-bootstrap. This
+  adds a one-time ~15s delay the first time the server starts in a new
+  environment. Requires npm registry access.
+- To re-sync with upstream later, re-download the package, re-apply the
+  one-line model patch, and replace `tools/nano-banana-mcp/dist/`.
+
+### Required: `GEMINI_API_KEY` (paid tier)
 
 The `nano-banana` server needs a Google Gemini API key. It is referenced in
 `.mcp.json` as `${GEMINI_API_KEY}` so **no secret is committed** — you provide
@@ -52,3 +68,10 @@ the value through the environment.
 
 Without the key set, the `nano-banana` server loads but its tools fail when
 called.
+
+> **Billing required.** Gemini image generation is **not available on the free
+> tier** — the API returns `429 RESOURCE_EXHAUSTED` with
+> `generate_content_free_tier_requests, limit: 0` for the image model. The key's
+> Google Cloud project must have **billing enabled** (paid tier) for image
+> generation to work. A valid free-tier key authenticates fine but cannot
+> generate images.

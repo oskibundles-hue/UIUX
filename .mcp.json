@@ -1,8 +1,11 @@
 {
   "mcpServers": {
     "nano-banana": {
-      "command": "npx",
-      "args": ["-y", "nano-banana-mcp"],
+      "command": "bash",
+      "args": [
+        "-c",
+        "cd tools/nano-banana-mcp && { [ -d node_modules ] || npm install --omit=dev --no-audit --no-fund 1>&2; } && exec node dist/index.js"
+      ],
       "env": {
         "GEMINI_API_KEY": "${GEMINI_API_KEY}"
       }

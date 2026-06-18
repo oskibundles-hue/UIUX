@@ -51,3 +51,12 @@ out/
 .claude/settings.local.json
 .claude/session-state/
 ui-ux-pro-max-website/*
+
+# Local nano-banana MCP token (never commit)
+.nano-banana-config.json
+
+# Vendored patched nano-banana MCP: commit the patched source, not its deps.
+# (node_modules/ and dist/ are ignored globally above; re-include this dist.)
+tools/nano-banana-mcp/node_modules/
+!tools/nano-banana-mcp/dist/
+!tools/nano-banana-mcp/dist/**
