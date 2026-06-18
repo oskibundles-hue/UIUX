@@ -20,14 +20,16 @@ Applied to `index.html` (your `alienated.html`, repaired and renamed for hosting
 6. **Social/SEO meta** — added Open Graph + Twitter Card + `theme-color` tags.
 7. **Consent line** added under the footer email signup; footer year set to 2026.
 8. **Image hints** — `loading="lazy" decoding="async"` added to all `<img>` tags.
+9. **Assets externalized** — all 11 inline base64 assets extracted to `/media/*` real files and the
+   references rewired. **`index.html` went from 2.4 MB → ~100 KB.** Files are now cacheable, and the
+   `loading="lazy"` hints actually defer off-screen transfers. Just deploy `index.html` + `media/`
+   together (e.g. drag both to Netlify/Vercel/Cloudflare Pages).
 
-## Still needs you (can't be done without your hosting)
+## Still needs you
 
-- **Page weight (~2.4 MB).** Images/video are inline base64, so they can't be cached and bloat the
-  HTML. The real fix is to host them as real files:
-  1. Save each `data:` asset in `MEDIA = {…}` as a real `.webp`/`.avif` (images) or `.mp4` (video).
-  2. Upload to a CDN / your host and replace the base64 strings with the URLs.
-  3. The `loading="lazy"` attributes will then actually defer off-screen transfers.
+- **Optional: shrink `/media` further.** The extracted images are JPEG (~50–66 KB each). Converting
+  to `.webp`/`.avif` and the two `.mp4`s to a smaller bitrate would cut the ~1.6 MB media folder
+  roughly in half. Re-point the paths in `MEDIA = {…}` / the campaign `<video>` if you do.
 - **`og:image`** — add a hosted 1200×630 share image (placeholder TODO is in `<head>`).
 - **Live forms/checkout** — set `FORM_ENDPOINT`, `STORE_URL`/`CHECKOUT` to go out of demo mode.
 - **Scarcity counter** (`CLAIMED`) is currently hidden by `RESTRAINT = true`; keep it honest if you
