@@ -1,0 +1,19 @@
+# Netlify configuration — ALIENATED site (Git-connected deploy)
+# Static site, no build step. The site lives in the alienated/ subfolder.
+
+[build]
+  publish = "alienated"
+  command = ""
+
+# Cache the externalized media (images/video) for faster repeat visits.
+[[headers]]
+  for = "/media/*"
+  [headers.values]
+    Cache-Control = "public, max-age=604800"
+
+# Basic hardening headers.
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
