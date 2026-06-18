@@ -6,9 +6,23 @@
         "source": "github",
         "repo": "obra/superpowers-marketplace"
       }
+    },
+    "ecc": {
+      "source": {
+        "source": "github",
+        "repo": "affaan-m/ECC"
+      }
+    },
+    "thedotmack": {
+      "source": {
+        "source": "github",
+        "repo": "thedotmack/claude-mem"
+      }
     }
   },
   "enabledPlugins": {
-    "superpowers@superpowers-marketplace": true
+    "superpowers@superpowers-marketplace": true,
+    "ecc@ecc": true,
+    "claude-mem@thedotmack": true
   }
 }
