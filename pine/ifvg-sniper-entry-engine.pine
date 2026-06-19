@@ -964,7 +964,7 @@ alertcondition(
 // DASHBOARD
 //━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
 
-var table dash = table.new(position.top_right, 2, 12, border_width=1)
+var table dash = table.new(position.top_right, 2, 13, border_width=1)
 
 if showDashboard and barstate.islast
     float wr = totalWins + totalLosses > 0 ? totalWins * 100.0 / (totalWins + totalLosses) : na
@@ -1026,5 +1026,16 @@ if showDashboard and barstate.islast
          str.tostring(totalSignals) + " / " + str.tostring(totalWins) + " / " + str.tostring(totalLosses),
          bgcolor=color.new(dashboardBg, 25),
          text_color=dashboardText,
+         text_size=size.tiny
+    )
+
+    table.cell(dash, 0, 12, "Win Rate", bgcolor=color.new(dashboardBg, 0), text_color=dashboardText, text_size=size.tiny)
+    table.cell(
+         dash,
+         1,
+         12,
+         na(wr) ? "-" : str.tostring(wr, "#.0") + "%",
+         bgcolor=na(wr) ? color.new(color.gray, 35) : color.new(wr >= 50.0 ? tpColor : slColor, 65),
+         text_color=color.white,
          text_size=size.tiny
     )
