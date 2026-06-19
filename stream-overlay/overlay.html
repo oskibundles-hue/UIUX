@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Stream Overlay — Youngomarie</title>
+<style>
+  @font-face {
+    font-family: 'Luckiest Guy';
+    src: url('fonts/LuckiestGuy.ttf') format('truetype');
+    font-display: block;
+  }
+  @font-face {
+    font-family: 'Anton';
+    src: url('fonts/Anton.ttf') format('truetype');
+    font-display: block;
+  }
+  :root {
+    --yt:   #FF0000;
+    --tw:   #9146FF;
+    --ig1:  #feda75;
+    --ig2:  #d62976;
+    --ig3:  #4f5bd5;
+    --ink:  #111;
+    --paper:#ffffff;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  /* Transparent export background; the checker is only an editor aid */
+  body {
+    background:
+      linear-gradient(45deg, #cfcfcf 25%, transparent 25%) 0 0/28px 28px,
+      linear-gradient(-45deg, #cfcfcf 25%, transparent 25%) 0 14px/28px 28px,
+      linear-gradient(45deg, transparent 75%, #cfcfcf 75%) 14px -14px/28px 28px,
+      linear-gradient(-45deg, transparent 75%, #cfcfcf 75%) -14px 0/28px 28px,
+      #e8e8e8;
+    font-family: 'Anton', 'Arial Black', sans-serif;
+    padding: 60px 70px;
+    display: flex;
+    flex-direction: column;
+    gap: 58px;
+    width: max-content;
+  }
+
+  .row { display: flex; align-items: center; gap: 26px; }
+
+  /* ---- The white sticker badge that wraps every icon ---- */
+  .sticker {
+    background: var(--paper);
+    border-radius: 26px;
+    padding: 14px;
+    display: grid;
+    place-items: center;
+    box-shadow:
+      0 0 0 5px #000,          /* thin ink keyline */
+      0 10px 18px rgba(0,0,0,.35);
+    position: relative;
+  }
+  .sticker svg { display: block; }
+
+  /* icon sizes */
+  .lg .sticker svg { width: 86px; height: 86px; }
+  .lg .sticker     { border-radius: 30px; padding: 18px; }
+  .sm .sticker svg { width: 46px; height: 46px; }
+  .sm .sticker     { border-radius: 18px; padding: 10px; }
+
+  /* ---- Outlined chunky username text (the streamer look) ---- */
+  .name {
+    font-family: 'Luckiest Guy', 'Anton', 'Arial Black', sans-serif;
+    color: #fff;
+    -webkit-text-fill-color: #fff;
+    letter-spacing: 1px;
+    line-height: .9;
+    -webkit-text-stroke: 8px #000;
+    paint-order: stroke fill;
+    text-shadow: 0 8px 0 rgba(0,0,0,.28);
+  }
+  .lg .name { font-size: 88px; -webkit-text-stroke-width: 9px; }
+  .sm .name { font-size: 42px; -webkit-text-stroke-width: 5px; }
+
+  /* combined hero bar groups several stickers then a single name */
+  .hero .icons { display: flex; align-items: center; gap: 20px; }
+
+  .label {
+    font-family: 'Luckiest Guy', sans-serif;
+    color: #fff;
+    -webkit-text-fill-color: #fff;
+    -webkit-text-stroke: 9px #000;
+    paint-order: stroke fill;
+    font-size: 72px;
+    text-shadow: 0 7px 0 rgba(0,0,0,.28);
+    margin-bottom: 4px;
+  }
+  .block { display: flex; flex-direction: column; gap: 30px; }
+  .strip { display: flex; gap: 42px; flex-wrap: wrap; }
+</style>
+</head>
+<body>
+
+  <!-- ========================== HERO BAR ========================== -->
+  <div class="row hero lg">
+    <div class="icons">
+      <div class="sticker">
+        <!-- YouTube -->
+        <svg viewBox="0 0 48 48"><rect x="2" y="9" width="44" height="30" rx="9" fill="#FF0000"/><path d="M20 18.5v11l10-5.5z" fill="#fff"/></svg>
+      </div>
+      <div class="sticker">
+        <!-- Twitch -->
+        <svg viewBox="0 0 48 48"><path fill="#9146FF" d="M11 4 6 11v29h9v6l6-6h7l11-11V4H11zm29 21-5 5h-8l-5 5v-5h-7V8h25v17z"/><path fill="#9146FF" d="M30 14h3v9h-3zM22 14h3v9h-3z"/></svg>
+      </div>
+      <div class="sticker">
+        <!-- Instagram -->
+        <svg viewBox="0 0 48 48"><defs><radialGradient id="ig" cx="30%" cy="107%" r="135%"><stop offset="0%" stop-color="#fdf497"/><stop offset="5%" stop-color="#fdf497"/><stop offset="45%" stop-color="#fd5949"/><stop offset="60%" stop-color="#d6249f"/><stop offset="90%" stop-color="#285AEB"/></radialGradient></defs><rect x="4" y="4" width="40" height="40" rx="12" fill="url(#ig)"/><rect x="13" y="13" width="22" height="22" rx="7" fill="none" stroke="#fff" stroke-width="3.2"/><circle cx="24" cy="24" r="6" fill="none" stroke="#fff" stroke-width="3.2"/><circle cx="33" cy="15" r="2.3" fill="#fff"/></svg>
+      </div>
+    </div>
+    <div class="name">Youngomarie</div>
+  </div>
+
+  <!-- ===================== PER-PLATFORM HANDLES ==================== -->
+  <div class="strip">
+    <!-- YouTube -->
+    <div class="row sm">
+      <div class="sticker">
+        <svg viewBox="0 0 48 48"><rect x="2" y="9" width="44" height="30" rx="9" fill="#FF0000"/><path d="M20 18.5v11l10-5.5z" fill="#fff"/></svg>
+      </div>
+      <div class="name">Youngomarie</div>
+    </div>
+
+    <!-- Twitch -->
+    <div class="row sm">
+      <div class="sticker">
+        <svg viewBox="0 0 48 48"><path fill="#9146FF" d="M11 4 6 11v29h9v6l6-6h7l11-11V4H11zm29 21-5 5h-8l-5 5v-5h-7V8h25v17z"/><path fill="#9146FF" d="M30 14h3v9h-3zM22 14h3v9h-3z"/></svg>
+      </div>
+      <div class="name">Youngomarie</div>
+    </div>
+
+    <!-- Instagram -->
+    <div class="row sm">
+      <div class="sticker">
+        <svg viewBox="0 0 48 48"><rect x="4" y="4" width="40" height="40" rx="12" fill="url(#ig)"/><rect x="13" y="13" width="22" height="22" rx="7" fill="none" stroke="#fff" stroke-width="3.2"/><circle cx="24" cy="24" r="6" fill="none" stroke="#fff" stroke-width="3.2"/><circle cx="33" cy="15" r="2.3" fill="#fff"/></svg>
+      </div>
+      <div class="name">nq.young</div>
+    </div>
+  </div>
+
+  <!-- ===================== FULL HANDLE / URL BARS ================= -->
+  <div class="strip">
+    <div class="row sm">
+      <div class="sticker">
+        <svg viewBox="0 0 48 48"><path fill="#9146FF" d="M11 4 6 11v29h9v6l6-6h7l11-11V4H11zm29 21-5 5h-8l-5 5v-5h-7V8h25v17z"/><path fill="#9146FF" d="M30 14h3v9h-3zM22 14h3v9h-3z"/></svg>
+      </div>
+      <div class="name">twitch.tv/Youngomarie</div>
+    </div>
+    <div class="row sm">
+      <div class="sticker">
+        <svg viewBox="0 0 48 48"><rect x="2" y="9" width="44" height="30" rx="9" fill="#FF0000"/><path d="M20 18.5v11l10-5.5z" fill="#fff"/></svg>
+      </div>
+      <div class="name">youtube.com/@Youngomarie</div>
+    </div>
+  </div>
+
+</body>
+</html>
