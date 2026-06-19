@@ -34,9 +34,21 @@ const json = (obj, status) =>
   });
 
 export default async (req) => {
+  const rawKey = process.env.ANTHROPIC_API_KEY || "";
+  const key = rawKey.trim(); // defend against trailing space / newline from copy-paste
+
+  // Safe diagnostic (no secret material): GET /.netlify/functions/chat
+  if (req.method === "GET") {
+    return json({
+      configured: !!key,
+      length: key.length,
+      hadWhitespace: rawKey.length !== key.length,
+      looksValid: key.startsWith("sk-ant-"),
+    }, 200);
+  }
+
   if (req.method !== "POST") return new Response("Method Not Allowed", { status: 405 });
 
-  const key = process.env.ANTHROPIC_API_KEY;
   if (!key) return json({ error: "not_configured" }, 503); // client falls back to its FAQ matcher
 
   let body;
