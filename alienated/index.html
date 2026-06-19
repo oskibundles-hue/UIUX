@@ -530,6 +530,52 @@ header.nav{top:var(--bar)}
 .lb-cta h2{font-family:var(--bl);font-size:clamp(44px,9vw,112px);line-height:.9;margin-bottom:26px;
   background:linear-gradient(180deg,#fff,#9a9aa2 55%,#d8d8de);-webkit-background-clip:text;background-clip:text;color:transparent}
 @media(max-width:720px){.lb-grid{grid-template-columns:1fr 1fr}.lb-row img{height:58svh}}
+
+/* ===== OPERATOR — help bot ===== */
+#opLauncher{position:fixed;right:20px;bottom:20px;z-index:78;display:flex;align-items:center;gap:9px;
+  font-family:var(--m);font-size:12px;letter-spacing:.16em;text-transform:uppercase;color:var(--bone);
+  background:rgba(12,12,14,.92);border:1px solid var(--line2);padding:11px 16px;border-radius:40px;
+  backdrop-filter:blur(8px);box-shadow:0 8px 30px rgba(0,0,0,.5);transition:.25s;cursor:pointer}
+#opLauncher:hover{border-color:var(--acc);color:#fff}
+#opLauncher .od{width:8px;height:8px;border-radius:50%;background:var(--acc);box-shadow:0 0 8px var(--acc);animation:opPulse 2.4s infinite}
+@keyframes opPulse{0%,100%{opacity:1}50%{opacity:.35}}
+body.op-open #opLauncher{opacity:0;pointer-events:none;transform:translateY(8px)}
+body.op-buybar #opLauncher{bottom:78px}
+#opPanel{position:fixed;right:20px;bottom:20px;z-index:90;width:min(380px,calc(100vw - 32px));
+  height:min(560px,calc(100vh - 40px));display:flex;flex-direction:column;background:var(--ink2);
+  border:1px solid var(--line2);border-radius:14px;overflow:hidden;box-shadow:0 24px 70px rgba(0,0,0,.6);
+  opacity:0;transform:translateY(16px) scale(.98);pointer-events:none;
+  transition:opacity .3s ease,transform .3s cubic-bezier(.2,.7,.2,1)}
+body.op-open #opPanel{opacity:1;transform:none;pointer-events:auto}
+body.op-buybar #opPanel{bottom:78px}
+.op-head{display:flex;align-items:center;gap:10px;padding:14px 16px;border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg,rgba(63,224,122,.05),transparent)}
+.op-head .em{--es:24px;width:24px;height:24px;opacity:.92}
+.op-head .t{font-family:var(--m);font-size:12px;letter-spacing:.2em;text-transform:uppercase;color:var(--bone)}
+.op-head .s{font-family:var(--m);font-size:9.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--acc);display:flex;align-items:center;gap:5px;margin-top:3px}
+.op-head .s i{width:6px;height:6px;border-radius:50%;background:var(--acc);display:inline-block;box-shadow:0 0 6px var(--acc)}
+.op-head .x{margin-left:auto;font-family:var(--m);font-size:12px;color:var(--bone-dim);border:1px solid var(--line2);width:28px;height:28px;border-radius:50%;display:grid;place-items:center;transition:.2s}
+.op-head .x:hover{color:var(--bone);border-color:var(--bone)}
+#opBody{flex:1;overflow-y:auto;padding:16px;display:flex;flex-direction:column;gap:11px;scroll-behavior:smooth}
+#opBody::-webkit-scrollbar{width:7px}#opBody::-webkit-scrollbar-thumb{background:var(--line2);border-radius:4px}
+.op-msg{max-width:85%;font-family:var(--b);font-size:13.5px;line-height:1.6;padding:11px 13px;border-radius:12px;white-space:pre-line}
+.op-msg.bot{align-self:flex-start;background:var(--ink);border:1px solid var(--line);border-left:2px solid var(--acc);color:var(--bone);border-radius:4px 12px 12px 12px}
+.op-msg.me{align-self:flex-end;background:var(--acc);color:#04140a;border-radius:12px 12px 4px 12px}
+.op-msg a{color:var(--acc)}.op-msg.me a{color:#04140a}
+.op-chips{display:flex;flex-wrap:wrap;gap:7px}
+.op-chip{font-family:var(--m);font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--bone-dim);
+  border:1px solid var(--line2);padding:7px 11px;border-radius:30px;cursor:pointer;transition:.2s;background:transparent}
+.op-chip:hover{color:#04140a;background:var(--acc);border-color:var(--acc)}
+.op-typing{align-self:flex-start;display:flex;gap:4px;padding:13px 14px}
+.op-typing i{width:6px;height:6px;border-radius:50%;background:var(--bone-dim);animation:opType 1s infinite}
+.op-typing i:nth-child(2){animation-delay:.18s}.op-typing i:nth-child(3){animation-delay:.36s}
+@keyframes opType{0%,60%,100%{opacity:.25;transform:translateY(0)}30%{opacity:1;transform:translateY(-3px)}}
+#opForm{display:flex;gap:8px;padding:12px;border-top:1px solid var(--line);background:var(--ink)}
+#opForm input{flex:1;min-width:0;background:transparent;border:1px solid var(--line2);color:var(--bone);padding:11px 13px;font-family:var(--m);font-size:12.5px;border-radius:8px;outline:none;transition:.2s}
+#opForm input:focus{border-color:var(--acc)}
+#opForm input::placeholder{color:var(--bone-dim);opacity:.7}
+#opForm button{background:var(--acc);color:#04140a;border-radius:8px;padding:0 16px;font-family:var(--m);font-size:12px;letter-spacing:.1em;text-transform:uppercase;font-weight:700;cursor:pointer}
+@media(max-width:600px){#opPanel{right:8px;bottom:8px;width:calc(100vw - 16px);height:min(74vh,calc(100vh - 16px))}#opLauncher{right:12px;bottom:12px}body.op-buybar #opPanel,body.op-buybar #opLauncher{bottom:74px}}
 </style>
 </head>
 <body class="locked">
@@ -916,6 +962,20 @@ header.nav{top:var(--bar)}
 </div>
 
 <div id="toast"></div>
+<!-- ===== OPERATOR (help bot) ===== -->
+<button id="opLauncher" type="button" aria-label="Open the help line — ask a question"><span class="od"></span> Ask</button>
+<div id="opPanel" role="dialog" aria-modal="false" aria-label="ALIENATED help line">
+  <div class="op-head">
+    <span class="emblem em"><svg viewBox="0 0 40 40"><use href="#emblem"/></svg></span>
+    <div><div class="t">Operator</div><div class="s"><i></i> Online · Replies instantly</div></div>
+    <button class="x" id="opClose" type="button" aria-label="Close help line">&#10005;</button>
+  </div>
+  <div id="opBody" aria-live="polite"></div>
+  <form id="opForm" autocomplete="off">
+    <input id="opInput" type="text" maxlength="200" aria-label="Type your question" placeholder="Ask about shipping, sizing, returns…">
+    <button type="submit" aria-label="Send">Send</button>
+  </form>
+</div>
 
 <!-- sticky buy bar (product page) -->
 <div class="buybar" id="buybar">
@@ -1497,6 +1557,65 @@ document.getElementById('gateForm').addEventListener('submit', e=>{
   if(seen || !GATE_ON_LOAD){ gate.classList.remove('show'); gate.style.display='none'; document.body.classList.remove('locked'); }
   else { document.body.classList.add('locked'); startGateFilm(); gate.classList.add('show'); }
   initReveals();
+})();
+</script>
+<script>
+(function(){"use strict";
+  var panel=document.getElementById('opPanel'),launcher=document.getElementById('opLauncher'),
+      body=document.getElementById('opBody'),form=document.getElementById('opForm'),
+      input=document.getElementById('opInput'),closeBtn=document.getElementById('opClose');
+  if(!panel) return;
+  var EMAIL='hello@alienated.studio', started=false;
+  var KB=[
+    {id:'shipping',kw:['ship','shipping','delivery','deliver','dispatch','how long','arrive','tracking','track','when will','courier','express','postage'],
+     a:"Orders are packed within 1–3 business days, then you get a tracked link by email the moment it ships.\n• US: 2–4 business days after dispatch\n• International: 5–10 business days (customs/duties are the buyer's responsibility)\nWorldwide express, fully tracked. Free shipping over $250."},
+    {id:'returns',kw:['return','returns','refund','exchange','swap','send back','money back','changed my mind'],
+     a:"Unworn pieces can be returned or exchanged within 14 days of delivery — tags and the numbered woven tag still attached.\n• Size exchanges ship free (it runs small, so most people size up)\n• Refunds go to your original payment once we receive the piece\n• Final-sale items are marked at checkout"},
+    {id:'sizing',kw:['size','sizing','sizes','fit','fits','measurement','measure','small','large','size up','size chart','size guide','true to size','runs'],
+     a:"Everything is cropped, low-rise and close to the body, and it runs small by design — if you're between sizes, size up (especially the skirt).\nMade in XS–XL. Designed on a 5'8\" fit model in size S.\nThe full size guide (body + garment measurements) is on any product page under “Open the full size guide”."},
+    {id:'care',kw:['care','wash','washing','clean','dry','drying','iron','bleach','look after','maintain','tumble'],
+     a:"The hardware is real metal and the graphics are stitched appliqué — treat each piece like the collectible it is.\n• Machine wash cold, gentle — or hand wash\n• Wash darks separately the first few washes\n• Hang or lay flat to dry — never tumble dry (it loosens the studs)\n• Cool iron only, inside out, avoiding the studs and print\n• Do not bleach"},
+    {id:'drop',kw:['restock','re-stock','sold out','back in stock','drop','limited','how many','numbered','edition','run','second pressing','come back','waitlist','002','next collection'],
+     a:"Collection 001 is a single numbered run of 200 per style — once a size sells through, it's gone for good. No restocks, no second pressings.\nEvery piece is 1 of 200, with its number on a woven tag (assigned when your order is packed). Join the waitlist on the home page to hear about 002 first."},
+    {id:'products',kw:['product','products','price','prices','cost','how much','sell','collection','pieces','hoodie','skirt','full set','catalog','colorway','colour','color','sterling'],
+     a:"Collection 001 — three pieces, three colorways (Toxic Green, Venom Pink, Sterling):\n• Dead Air — Full Set (hoodie + skirt) — $410\n• Dial Tone Zip-Hoodie — $230\n• Voicemail Stud Skirt — $195\nBrowse them all in Shop."},
+    {id:'materials',kw:['material','materials','made of','fabric','quality','studs','metal','plastic','patches','applique','stitched','heavyweight','real'],
+     a:"Real antique-silver pyramid studs (actual metal — nothing plastic), stitched appliqué graphics (not printed patches), on heavyweight washed fabric with contrast topstitching. Hardware is applied by hand before the garment is closed."},
+    {id:'payment',kw:['pay','payment','card','paypal','klarna','afterpay','apple pay','installments','split','financing','checkout','currency'],
+     a:"Secure checkout in USD. We take VISA, Mastercard, AMEX, PayPal, Apple Pay, plus Klarna and Afterpay if you'd rather split it."},
+    {id:'discount',kw:['discount','code','coupon','promo','first order','voucher','offer','deal','save','ten percent'],
+     a:"Drop your email (the welcome popup, or the footer signup) and you'll get 10% off your first order — code ALIEN10, applied at checkout."},
+    {id:'where',kw:['international','worldwide','ship to','do you ship','countries','outside','overseas','my country'],
+     a:"We ship worldwide, fully tracked. International orders usually arrive in 5–10 business days; any customs or duties are the buyer's responsibility."},
+    {id:'order',kw:['my order','order status','where is my order','order number','cancel','change my order','update order','existing order'],
+     a:"You'll get a tracked link by email the moment your order ships. Need to check or change an existing order? Email "+EMAIL+" with your order number and we'll sort it within 1–2 business days."},
+    {id:'contact',kw:['contact','human','email','speak','talk','support','reach','someone','agent','phone','call','help','message','complaint'],
+     a:"Need a human? Leave a message at "+EMAIL+" — we read everything and reply within 1–2 business days. You'll also find us on Instagram and TikTok."},
+    {id:'about',kw:['who are you','what is alienated','about','brand','story','what does','concept','meaning'],
+     a:"ALIENATED is a uniform for the unreachable — dark, studded, numbered. Collection 001 is “Static”: sorry I was high, leave a message. Read the full story under “World” in the menu."}
+  ];
+  var GREET="ALIENATED switchboard — ask me anything about the collection. Pick a topic or type your question:";
+  var CHIPS=[['Shipping','shipping'],['Sizing & fit','sizing'],['Returns','returns'],['The drop','drop'],['Care','care'],['Talk to a human','contact']];
+  var FALLBACK="The line's a little fuzzy on that one — but a human can help. Leave a message at "+EMAIL+" and we'll reply within 1–2 business days. Meanwhile, here are the usual questions:";
+  function el(c,h){var d=document.createElement('div');d.className=c;if(h!=null)d.innerHTML=h;return d;}
+  function esc(s){return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+  function fmt(s){return esc(s).replace(/(hello@alienated\.studio)/g,'<a href="mailto:$1">$1</a>');}
+  function down(){body.scrollTop=body.scrollHeight;}
+  function addBot(text){body.appendChild(el('op-msg bot',fmt(text)));down();}
+  function addMe(text){body.appendChild(el('op-msg me',esc(text)));down();}
+  function addChips(){var w=el('op-chips');CHIPS.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='op-chip';b.textContent=c[0];b.addEventListener('click',function(){addMe(c[0]);byId(c[1]);});w.appendChild(b);});body.appendChild(w);down();}
+  function typing(){var t=el('op-typing','<i></i><i></i><i></i>');body.appendChild(t);down();return t;}
+  function match(q){q=q.toLowerCase();var best=null,sc=0;KB.forEach(function(it){var s=0;it.kw.forEach(function(k){var re=new RegExp('\\b'+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b');if(re.test(q))s+=(k.indexOf(' ')>-1||k.length>5)?2:1;});if(s>sc){sc=s;best=it;}});return sc>=1?best:null;}
+  function reply(text){var it=match(text),t=typing();setTimeout(function(){t.remove();if(it){addBot(it.a);}else{addBot(FALLBACK);addChips();}},360+Math.random()*240);}
+  function byId(id){var it=null;for(var i=0;i<KB.length;i++){if(KB[i].id===id){it=KB[i];break;}}var t=typing();setTimeout(function(){t.remove();addBot(it?it.a:FALLBACK);},320);}
+  function open(){document.body.classList.add('op-open');if(!started){started=true;addBot(GREET);addChips();}setTimeout(function(){input.focus();},300);}
+  function close(){document.body.classList.remove('op-open');}
+  launcher.addEventListener('click',open);
+  closeBtn.addEventListener('click',close);
+  document.addEventListener('keydown',function(e){if(e.key==='Escape'&&document.body.classList.contains('op-open'))close();});
+  form.addEventListener('submit',function(e){e.preventDefault();var v=input.value.trim();if(!v)return;addMe(v);input.value='';reply(v);});
+  var bb=document.getElementById('buybar');
+  if(bb&&window.MutationObserver){new MutationObserver(function(){document.body.classList.toggle('op-buybar',bb.classList.contains('show'));}).observe(bb,{attributes:true,attributeFilter:['class']});}
 })();
 </script>
 </body>
