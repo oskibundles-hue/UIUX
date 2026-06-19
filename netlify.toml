@@ -3,7 +3,7 @@
 
 [build]
   publish = "alienated"
-  command = ""
+  # static site — no build command
 
 # Cache the externalized media (images/video) for faster repeat visits.
 [[headers]]
