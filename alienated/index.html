@@ -1573,6 +1573,9 @@ document.getElementById('gateForm').addEventListener('submit', e=>{
       input=document.getElementById('opInput'),closeBtn=document.getElementById('opClose');
   if(!panel) return;
   var EMAIL='hello@alienated.studio', started=false;
+  // FAQ mode by default (free, instant, no key needed). To enable the AI Operator later:
+  // add ANTHROPIC_API_KEY (+ credits) in Netlify, then set AI_ENABLED = true and redeploy.
+  var AI_ENABLED = false;
   var KB=[
     {id:'shipping',kw:['ship','shipping','delivery','deliver','dispatch','how long','arrive','tracking','track','when will','courier','express','postage'],
      a:"Orders are packed within 1–3 business days, then you get a tracked link by email the moment it ships.\n• US: 2–4 business days after dispatch\n• International: 5–10 business days (customs/duties are the buyer's responsibility)\nWorldwide express, fully tracked. Free shipping over $250."},
@@ -1622,6 +1625,11 @@ document.getElementById('gateForm').addEventListener('submit', e=>{
   function reply(text){
     convo.push({role:'user',content:text});
     var t=typing();
+    if(!AI_ENABLED){ // FAQ mode: instant local answer, no network call
+      var it=match(text), a=it?it.a:FALLBACK;
+      setTimeout(function(){ t.remove(); convo.push({role:'assistant',content:a}); addBot(a); if(!it) addChips(); }, 300+Math.random()*220);
+      return;
+    }
     aiReply().then(function(ans){ t.remove(); convo.push({role:'assistant',content:ans}); addBot(ans); })
       .catch(function(){ /* AI unavailable -> fall back to the built-in FAQ matcher */
         t.remove(); var it=match(text); var a=it?it.a:FALLBACK;
