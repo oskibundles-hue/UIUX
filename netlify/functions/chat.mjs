@@ -64,8 +64,12 @@ export default async (req) => {
     });
 
     if (!r.ok) {
-      console.error("anthropic error", r.status, (await r.text()).slice(0, 500));
-      return json({ error: "upstream" }, 502);
+      const detail = (await r.text()).slice(0, 300);
+      console.error("anthropic error", r.status, detail);
+      // Surface the upstream status + error type (no secrets) to aid setup debugging.
+      let type = "";
+      try { type = JSON.parse(detail)?.error?.type || ""; } catch {}
+      return json({ error: "upstream", status: r.status, type }, 502);
     }
 
     const data = await r.json();
