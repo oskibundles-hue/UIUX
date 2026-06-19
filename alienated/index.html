@@ -1613,8 +1613,26 @@ document.getElementById('gateForm').addEventListener('submit', e=>{
   function addChips(){var w=el('op-chips');CHIPS.forEach(function(c){var b=document.createElement('button');b.type='button';b.className='op-chip';b.textContent=c[0];b.addEventListener('click',function(){addMe(c[0]);byId(c[1]);});w.appendChild(b);});body.appendChild(w);down();}
   function typing(){var t=el('op-typing','<i></i><i></i><i></i>');body.appendChild(t);down();return t;}
   function match(q){q=q.toLowerCase();var best=null,sc=0;KB.forEach(function(it){var s=0;it.kw.forEach(function(k){var re=new RegExp('\\b'+k.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+'\\b');if(re.test(q))s+=(k.indexOf(' ')>-1||k.length>5)?2:1;});if(s>sc){sc=s;best=it;}});return sc>=1?best:null;}
-  function reply(text){var it=match(text),t=typing();setTimeout(function(){t.remove();if(it){addBot(it.a);}else{addBot(FALLBACK);addChips();}},360+Math.random()*240);}
-  function byId(id){var it=null;for(var i=0;i<KB.length;i++){if(KB[i].id===id){it=KB[i];break;}}var t=typing();setTimeout(function(){t.remove();addBot(it?it.a:FALLBACK);},320);}
+  var convo=[]; // running history sent to the AI endpoint
+  function aiReply(){
+    return fetch('/.netlify/functions/chat',{method:'POST',headers:{'content-type':'application/json'},body:JSON.stringify({messages:convo})})
+      .then(function(r){ if(!r.ok) throw new Error('http'); return r.json(); })
+      .then(function(d){ if(!d||!d.reply) throw new Error('empty'); return d.reply; });
+  }
+  function reply(text){
+    convo.push({role:'user',content:text});
+    var t=typing();
+    aiReply().then(function(ans){ t.remove(); convo.push({role:'assistant',content:ans}); addBot(ans); })
+      .catch(function(){ /* AI unavailable -> fall back to the built-in FAQ matcher */
+        t.remove(); var it=match(text); var a=it?it.a:FALLBACK;
+        convo.push({role:'assistant',content:a}); addBot(a); if(!it) addChips(); });
+  }
+  function byId(id){ /* quick-reply chips answer instantly from the local KB (no AI call) */
+    var it=null;for(var i=0;i<KB.length;i++){if(KB[i].id===id){it=KB[i];break;}}
+    var a=it?it.a:FALLBACK;
+    convo.push({role:'user',content:id},{role:'assistant',content:a});
+    var t=typing();setTimeout(function(){t.remove();addBot(a);},320);
+  }
   function open(){document.body.classList.add('op-open');if(!started){started=true;addBot(GREET);addChips();}setTimeout(function(){input.focus();},300);}
   function close(){document.body.classList.remove('op-open');}
   launcher.addEventListener('click',open);

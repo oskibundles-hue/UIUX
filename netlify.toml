@@ -5,6 +5,11 @@
   publish = "alienated"
   # static site — no build command
 
+# Serverless function powering the Operator AI chat (key stays server-side).
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+
 # Cache the externalized media (images/video) for faster repeat visits.
 [[headers]]
   for = "/media/*"
