@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://alienated.netlify.app/sitemap.xml
