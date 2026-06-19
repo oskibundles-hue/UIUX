@@ -13,7 +13,13 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="ALIENATED — Collection 001 / SS25">
 <meta name="twitter:description" content="A uniform for the unreachable. Numbered 1 of 200. Leave A Message.">
-<!-- TODO add hosted 1200x630 share image: <meta property="og:image" content="https://yourdomain/og.jpg"> -->
+<meta property="og:image" content="media/og.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="ALIENATED — Collection 001. Sorry I was high. Leave a message.">
+<meta name="twitter:image" content="media/og.jpg">
+<!-- og:image uses a relative path so it survives domain/site-name changes; swap to an absolute https URL if a scraper ever needs it -->
+<link rel="preload" as="image" href="media/duo.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600&family=Pirata+One&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
@@ -578,7 +584,7 @@ header.nav{top:var(--bar)}
 <!-- ===== HOME ===== -->
 <section class="view show" id="view-home">
   <div class="hero">
-    <video class="film-grade" autoplay muted loop playsinline preload="auto"
+    <video class="film-grade" autoplay muted loop playsinline preload="auto" poster="media/duo.jpg"
       src="https://d8j0ntlcm91z4.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/hf_20260614_192506_47932689-fb7c-471b-aa9a-089615200bad.mp4"></video>
     <div class="shade"></div>
     <div class="wrap in">
