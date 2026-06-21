@@ -1169,6 +1169,8 @@ const grid = document.getElementById('grid');
 function card(p){
   const sw = p.colorways.map(c=>`<span class="sw ${c}" title="${CW[c]}"></span>`).join('');
   const rc = REVIEWS.filter(r=>r.p===p.cat).length||REVIEWS.length;
+  const sepTotal=PRODUCTS.filter(x=>x.cat!=='set').reduce((a,x)=>a+x.price,0);
+  const setSave=(p.cat==='set'&&sepTotal>p.price)?sepTotal-p.price:0;
   return `<article class="card" data-cat="${p.cat}">
     <div class="ph" data-qv="${p.id}">
       <img loading="lazy" decoding="async" class="main" src="${p.main}" alt="${p.name}" loading="lazy">
@@ -1178,7 +1180,7 @@ function card(p){
       <button class="wish" data-wish="${p.id}" aria-label="Save to wishlist">♥</button>
     </div>
     <div class="meta">
-      <div class="top"><h3>${p.name}</h3><span class="price">$${p.price}</span></div>
+      <div class="top"><h3>${p.name}</h3><span class="price">$${p.price}${setSave?` <s style="color:var(--bone-dim);font-weight:400;font-size:.8em;letter-spacing:0">$${sepTotal}</s>`:''}</span></div>
       <div class="rate"><b>★★★★★</b> ${AVG} (${rc})</div>
       <div class="numbered">Numbered drop · edition of 200</div>
       <div class="swatches">${sw}</div>
@@ -1357,6 +1359,8 @@ function openProduct(id){
   const m=PDP[id]||{a:p.main,b:p.alt,stock:12};
   pdpState={id, cw:p.colorways[0], size:p.sizes[1]||p.sizes[0]};
   const cross=PRODUCTS.find(x=>x.id===m.cross) || PRODUCTS.find(x=>x.id!==id);
+  const sepTotal=PRODUCTS.filter(x=>x.cat!=='set').reduce((a,x)=>a+x.price,0);
+  const setSave=(p.cat==='set'&&sepTotal>p.price)?sepTotal-p.price:0;
   pdpEl.innerHTML=`
     <div class="pdp-pin" id="pdpPin" style="height:calc(${m.shots.length} * 100svh)">
       <div class="pdp-stage" id="pdpStage">
@@ -1373,6 +1377,7 @@ function openProduct(id){
       <div class="eyebrow">${p.badge} · 001 ${COLLECTION}</div>
       <h1>${p.name}</h1>
       <div class="pdp-price">$${p.price}<span class="pdp-stars">★★★★★ <a href="#reviews" data-view="reviews">${REVIEWS.length} reviews</a></span></div>
+      ${setSave?`<div style="font-family:var(--m);font-size:11.5px;letter-spacing:.04em;color:var(--acc);margin-top:2px">Set price — save $${setSave} vs the pieces separately ($${sepTotal})</div>`:''}
       <div class="klarna">or 4 interest-free payments of <b>$${(p.price/4).toFixed(2)}</b> with Klarna / Afterpay</div>
       <div class="edition"><b>Numbered edition</b> · ${EDITION} made · your No. assigned at checkout</div>
       ${RESTRAINT?'':`<div class="claimed"><div class="cl-lbl"><b>${CLAIMED[p.id]||0}</b> / ${EDITION} claimed</div><div class="cl-track"><i style="width:${Math.round(((CLAIMED[p.id]||0)/EDITION)*100)}%"></i></div></div>
@@ -1382,7 +1387,7 @@ function openProduct(id){
       <div class="pdp-block"><div class="label"><span>Size</span><a href="#" id="sizeGuide" style="color:var(--bone-dim);text-transform:none;letter-spacing:.04em">Size guide</a></div>
         <div class="opts" id="pdpSize">
         ${p.sizes.map((s,i)=>`<button class="opt ${i===1?'sel':''}" data-size="${s}">${s}</button>`).join('')}</div>
-        <div class="modelnote">Model is 5'8" / 173cm, wearing size S.</div></div>
+        <div class="modelnote">Model is 5'8" / 173cm, wearing size S. Runs small — size up if you're between sizes.</div></div>
       <button class="btn acc" id="pdpAdd" style="width:100%;margin-top:4px">Add to bag · $${p.price}</button>
       ${buyHref(p.id)?`<a class="btn" href="${buyHref(p.id)}" target="_blank" rel="noopener" style="display:block;text-align:center;margin-top:8px;text-decoration:none">Buy now on Wix →</a>`:''}
       <div class="payicons"><span>VISA</span><span>MASTERCARD</span><span>AMEX</span><span>PAYPAL</span><span>KLARNA</span><span>AFTERPAY</span><span>APPLE PAY</span></div>
