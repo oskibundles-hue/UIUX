@@ -1493,7 +1493,7 @@ const SPROOF=[
   const target=Date.now() + 4*864e5 + 11*36e5; // ~4d 11h from first load
   function cd(){ let d=Math.max(0,target-Date.now()); const days=Math.floor(d/864e5); d-=days*864e5; const h=Math.floor(d/36e5); d-=h*36e5; const m=Math.floor(d/6e4); return `<b>001 closes in</b> ${days}d ${h}h ${m}m`; }
   const msgs = RESTRAINT
-    ? [()=>'ALIENATED — COLLECTION 001 · '+COLLECTION, ()=>'Worldwide express shipping']
+    ? [()=>'ALIENATED — COLLECTION 001 · '+COLLECTION, ()=>'Worldwide express · free shipping over $250', ()=>'14-day returns · numbered 1 of 200']
     : [()=>'<b>Collection 001 · '+COLLECTION+'</b> — limited run of 200 sets', ()=>'Free shipping over $250 · tracked worldwide', cd];
   let i=0; el.innerHTML=msgs[0]();
   setInterval(()=>{ i=(i+1)%msgs.length; el.style.opacity=0;
