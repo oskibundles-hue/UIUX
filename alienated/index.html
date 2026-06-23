@@ -170,6 +170,23 @@ header.nav{position:fixed;inset:0 0 auto 0;z-index:60;display:flex;align-items:c
 .card .ph img.alt{position:absolute;inset:0;opacity:0}
 .card:hover .ph img.main{opacity:0}
 .card:hover .ph img.alt{opacity:1;transform:scale(1.04)}
+/* === design tweaks (revertible) === */
+.card{transition:border-color .35s ease}
+.card:hover{border-color:rgba(63,224,122,.38)}
+.card .top h3{position:relative}
+.card .top h3::after{content:"";position:absolute;left:0;right:0;bottom:-3px;height:1px;background:var(--acc);transform:scaleX(0);transform-origin:left;transition:transform .45s cubic-bezier(.2,.7,.2,1)}
+.card:hover .top h3::after{transform:scaleX(1)}
+.fx-overlay{position:fixed;inset:0;z-index:55;pointer-events:none;opacity:.5;
+  background:repeating-linear-gradient(0deg,rgba(233,229,217,.016) 0 1px,transparent 1px 3px),
+  url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.6'/%3E%3C/svg%3E");
+  background-size:auto,140px 140px}
+.secmark{position:fixed;left:clamp(16px,4vw,40px);bottom:18px;z-index:58;pointer-events:none;
+  font-family:var(--m);font-size:10px;letter-spacing:.22em;text-transform:uppercase;color:var(--bone-dim);
+  display:flex;align-items:center;gap:10px;opacity:0;transform:translateY(4px);transition:opacity .5s,transform .5s}
+.secmark::before{content:"";width:24px;height:1px;background:var(--line2)}
+.secmark.on{opacity:.5;transform:none}
+body.locked .secmark,body.op-open .secmark{opacity:0!important}
+@media(max-width:700px){.secmark{display:none}}
 .card .ph .badge{position:absolute;top:12px;left:12px;font-family:var(--m);font-size:10px;letter-spacing:.16em;
   text-transform:uppercase;background:var(--ink);border:1px solid var(--line2);padding:5px 9px;color:var(--acc)}
 .card .meta{padding:16px 16px 18px;display:flex;flex-direction:column;gap:10px;flex:1}
@@ -968,6 +985,8 @@ body.op-buybar #opPanel{bottom:78px}
   </div>
 </div>
 
+<div class="fx-overlay" aria-hidden="true"></div>
+<div class="secmark" id="secmark" aria-hidden="true"></div>
 <div id="toast"></div>
 <!-- ===== OPERATOR (help bot) ===== -->
 <button id="opLauncher" type="button" aria-label="Open the help line — ask a question"><span class="od"></span> Ask</button>
@@ -1139,6 +1158,9 @@ function showView(v){
   if(v==='lookbook' && typeof renderLookbook==='function') renderLookbook();
   if(v==='product' && typeof pdpScroll==='function') requestAnimationFrame(pdpScroll);
   if(v!=='product'){ var bb=document.getElementById('buybar'); if(bb) bb.classList.remove('show'); }
+  (function(){var sm=document.getElementById('secmark');if(!sm)return;
+    var L={shop:'02 / Shop',lookbook:'03 / Lookbook',reviews:'04 / Reviews',about:'05 / World',info:'06 / Info'};
+    if(L[v]){sm.textContent=L[v];sm.classList.add('on');}else{sm.classList.remove('on');}})();
 }
 function go(v, opt){
   opt = opt || {};
