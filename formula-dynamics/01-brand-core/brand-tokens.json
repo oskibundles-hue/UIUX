@@ -1,0 +1,208 @@
+{
+  "brand": {
+    "name": "Formula Dynamics Performance",
+    "website": "formuladynamicsperformance.com",
+    "instagram": "@formuladynamicsperformance",
+    "email": "info@formuladynamicsperformance.com"
+  },
+  "color": {
+    "red": {
+      "hex": "#FE0F13",
+      "rgb": [
+        254,
+        15,
+        19
+      ],
+      "role": "Primary accent. CTAs, key words, underlines, highlights."
+    },
+    "white": {
+      "hex": "#FFFFFF",
+      "rgb": [
+        255,
+        255,
+        255
+      ],
+      "role": "Primary logo + headline colour on dark footage."
+    },
+    "black": {
+      "hex": "#000000",
+      "rgb": [
+        0,
+        0,
+        0
+      ],
+      "role": "Primary background. Logo colour on light footage."
+    },
+    "green": {
+      "hex": "#1DB14B",
+      "rgb": [
+        29,
+        177,
+        75
+      ],
+      "role": "Racing stripe only. Never a background or body colour."
+    },
+    "yellow": {
+      "hex": "#FFDE00",
+      "rgb": [
+        255,
+        222,
+        0
+      ],
+      "role": "Racing stripe only. Never a background or body colour."
+    }
+  },
+  "accentStripe": [
+    {
+      "color": "#FE0F13",
+      "share": 0.42
+    },
+    {
+      "color": "#FFFFFF",
+      "share": 0.24
+    },
+    {
+      "color": "#1DB14B",
+      "share": 0.2
+    },
+    {
+      "color": "#FFDE00",
+      "share": 0.14
+    }
+  ],
+  "type": {
+    "primary": {
+      "family": "Bebas Neue",
+      "use": "headlines",
+      "license": "SIL OFL 1.1",
+      "bundled": true
+    },
+    "accent": {
+      "family": "Neuropol X",
+      "use": "performance / accent",
+      "license": "commercial",
+      "bundled": false
+    }
+  },
+  "logo": {
+    "clearSpace": "one FD icon height on all sides",
+    "minWidthPx": 120,
+    "minWidthPrintMm": 25
+  },
+  "canvas": {
+    "9x16": {
+      "width": 1080,
+      "height": 1920
+    },
+    "4x5": {
+      "width": 1080,
+      "height": 1350
+    },
+    "1x1": {
+      "width": 1080,
+      "height": 1080
+    },
+    "16x9": {
+      "width": 1920,
+      "height": 1080
+    }
+  },
+  "safeZones": {
+    "9x16": {
+      "top": 0.11,
+      "bottom": 0.2,
+      "right": 0.16,
+      "left": 0.05
+    }
+  },
+  "services": [
+    {
+      "slug": "tuning",
+      "label": "TUNING",
+      "description": "ECU / TCU calibration, custom maps, dyno-verified gains.",
+      "subline": "ECU & TCU CALIBRATION"
+    },
+    {
+      "slug": "exhaust",
+      "label": "EXHAUST",
+      "description": "Valvetronic, catback, downpipes, titanium systems.",
+      "subline": "VALVETRONIC & CATBACK SYSTEMS"
+    },
+    {
+      "slug": "wheels",
+      "label": "WHEELS",
+      "description": "Forged, monoblock and multi-piece fitment.",
+      "subline": "FORGED WHEEL FITMENT"
+    },
+    {
+      "slug": "body-kits",
+      "label": "BODY KITS",
+      "description": "Aero, carbon fibre, widebody, full conversions.",
+      "subline": "AERO & CARBON FIBRE"
+    },
+    {
+      "slug": "ppf",
+      "label": "PPF",
+      "description": "Paint protection film. Full front, track pack, full body.",
+      "subline": "PAINT PROTECTION FILM"
+    },
+    {
+      "slug": "ceramic-coating",
+      "label": "CERAMIC COATING",
+      "description": "Multi-year paint, wheel and glass protection.",
+      "subline": "MULTI-YEAR PAINT PROTECTION"
+    },
+    {
+      "slug": "paint-correction",
+      "label": "PAINT CORRECTION",
+      "description": "Multi-stage machine polish and gloss restoration.",
+      "subline": "MULTI-STAGE MACHINE POLISH"
+    },
+    {
+      "slug": "detailing",
+      "label": "DETAILING",
+      "description": "Interior and exterior maintenance detailing.",
+      "subline": "INTERIOR & EXTERIOR DETAIL"
+    },
+    {
+      "slug": "suspension",
+      "label": "SUSPENSION",
+      "description": "Coilovers, lowering springs, air, lift kits.",
+      "subline": "COILOVERS, SPRINGS & AIR"
+    },
+    {
+      "slug": "service",
+      "label": "SERVICE",
+      "description": "Scheduled maintenance, fluids, brakes, diagnostics.",
+      "subline": "MAINTENANCE & DIAGNOSTICS"
+    }
+  ],
+  "priorityServices": [
+    "body-kits",
+    "exhaust",
+    "wheels",
+    "tuning"
+  ],
+  "partners": [
+    {
+      "slug": "nv-forged",
+      "label": "NV FORGED",
+      "category": "Forged wheels"
+    },
+    {
+      "slug": "ipe",
+      "label": "IPE EXHAUST",
+      "category": "Titanium / valvetronic exhaust"
+    },
+    {
+      "slug": "rift",
+      "label": "RIFT",
+      "category": "Exhaust, blow-off valves, performance hardware"
+    },
+    {
+      "slug": "luring",
+      "label": "LURING",
+      "category": "Lowering springs / suspension"
+    }
+  ]
+}
