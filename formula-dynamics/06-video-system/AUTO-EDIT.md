@@ -93,3 +93,45 @@ cut for the end card.
   matching `EXPORT-SPECS.md`.
 - Prefer CapCut? Use `--dry-run` and read the cue sheet as your build order.
   The timings transfer directly.
+
+---
+
+## Worked example — Porsche GT3 RS (white)
+
+A five-service build on fast-cut footage. The command that produced it:
+
+```bash
+python3 build_edit.py GT3RS.mov -t sound-check \
+  --title-text "GT3 RS|BUILD" --title-tone dark --title-scrim \
+  --partner ipe --none badge \
+  --spec "IPE EXHAUST" --spec "STAGE 2 TUNE" --spec "PPF" \
+  --spec "CERAMIC TINT" --spec "CERAMIC COATING" \
+  --badge-tone dark --bug-tone light --endcard-tone dark \
+  --cta book-your-build --cta-style bar \
+  -o GT3RS_FD.mp4
+```
+
+**Why each choice**, since the same reasoning applies to any car:
+
+- **`--bug-tone light` (black logo).** Measured the logo-bug corner across ten
+  frames: mean brightness 170/255, peaking at 232 — it's sky in most shots. A
+  white logo would have disappeared.
+- **`--title-tone dark` (white type).** The title window is the *opposite*: the
+  opening shots are dark road and a black tachometer, mean 72. This is why tone
+  is per-element rather than one global setting — real footage is rarely
+  uniformly bright or dark.
+- **`--title-scrim`.** Shot detection showed cuts roughly every second. No ink
+  colour survives sky, dark concrete *and* a yellow tach face, so the title
+  needs a soft band under it. Without it, the red "BUILD" landed on the yellow
+  dial — the weakest colour pairing in the whole clip.
+- **`--partner ipe`.** iPE is a partner, so the exhaust gets the full plate
+  rather than a chip. Partner plates earn the reshare.
+- **`--spec`, five of them.** A multi-service build earns a rundown. Chips are
+  opaque, so they stay legible as the shots change underneath.
+- **`--cta book-your-build`.** A finished five-service build is peak desire.
+- **`--endcard-tone dark`.** The footage is bright and airy throughout; closing
+  on black is deliberate contrast and reads as a brand stamp.
+
+**Finding the numbers yourself:** sample frames with ffmpeg and measure the mean
+brightness of the zone each overlay occupies. Guessing from the thumbnail is how
+you end up with a white logo on a white sky.

@@ -13,7 +13,7 @@ nudging, no drift between clips.
 Run:  python3 99-toolkit/build_overlays.py
 """
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter
 
 import fd_brand as B
 import fd_render as R
@@ -324,6 +324,25 @@ TITLES = [
     ("the-build", "THE", "BUILD"),
     ("full-send", "FULL", "SEND"),
 ]
+
+
+def title_scrim(canvas, top=0.30, height=0.34, strength=165):
+    """A soft darkening band behind a title, for fast-cut footage.
+
+    On a montage the background changes every second or so, and no single
+    ink colour survives sky, dark concrete and a yellow tach face. This band
+    peaks in the middle of the title block and falls to nothing at both
+    edges, so it reads as light falloff rather than a rectangle - unlike a
+    hard scrim box, which looks like a smudge on video.
+    """
+    fw, fh = B.CANVASES[canvas]
+    band = Image.new("RGBA", (fw, fh), (0, 0, 0, 0))
+    d = ImageDraw.Draw(band)
+    y0, h = int(fh * top), int(fh * height)
+    for i in range(h):
+        a = int(strength * (1 - abs(i - h / 2) / (h / 2)) ** 0.85)
+        d.line([(0, y0 + i), (fw, y0 + i)], fill=(0, 0, 0, a))
+    return band.filter(ImageFilter.GaussianBlur(round(fw * 0.042)))
 
 
 def title_card(canvas, line1, line2, tone="dark"):

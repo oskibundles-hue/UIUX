@@ -22,10 +22,13 @@ Requires ffmpeg. If it is not on PATH, `pip install imageio-ffmpeg` supplies one
 
 import argparse
 import json
+import tempfile
 import shutil
 import subprocess
 import sys
 from pathlib import Path
+
+from PIL import Image
 
 import fd_brand as B
 
@@ -115,7 +118,7 @@ def canvas_for(w, h):
 # --------------------------------------------------------------------------
 # The edit
 # --------------------------------------------------------------------------
-def plan(duration, canvas, tone, cfg, bug_position="top-left"):
+def plan(duration, canvas, tone, cfg, bug_position="top-left"):  # noqa: C901
     """Build the cue sheet.
 
     Beats are proportional with absolute clamps, so a 15 s clip and a 45 s
@@ -123,7 +126,15 @@ def plan(duration, canvas, tone, cfg, bug_position="top-left"):
     title card for a sixth of its length.
     """
     ov = B.OVERLAYS
-    logo_tone = "white" if tone == "dark" else "black"
+    # Real footage is rarely uniformly bright or dark: on this GT3 RS the
+    # top of frame is sky (bright) while mid and lower frame is road and
+    # shadow. So each element carries its own tone rather than inheriting
+    # one global setting.
+    t_title = cfg.get("title_tone") or tone
+    t_badge = cfg.get("badge_tone") or tone
+    t_end = cfg.get("endcard_tone") or tone
+    bug_tone = cfg.get("bug_tone") or tone
+    logo_tone = "white" if bug_tone == "dark" else "black"
     cues = []
 
     def add(layer, path, start, end, anim, note, place="full"):
@@ -139,8 +150,15 @@ def plan(duration, canvas, tone, cfg, bug_position="top-left"):
     # 1. Title card - the hook. Always ~2.5 s, never a sixth of the video.
     t_start = 0.4
     t_len = min(2.6, max(1.4, duration * 0.16))
-    if cfg.get("title"):
-        add("title", ov / "title-cards" / f"title_{canvas}_{cfg['title']}_{tone}.png",
+    if cfg.get("title_scrim"):
+        add("title scrim", cfg["title_scrim"], t_start, t_start + t_len, "fade",
+            "Keeps the title legible as the shots change underneath it.")
+    if cfg.get("title_custom"):
+        add("title", cfg["title_custom"], t_start, t_start + t_len, "fade",
+            "Hook. Names the car - the thing people search for.")
+    elif cfg.get("title"):
+        add("title", ov / "title-cards" /
+            f"title_{canvas}_{cfg['title']}_{t_title}.png",
             t_start, t_start + t_len, "fade",
             "Hook. Over your strongest opening frame.")
 
@@ -153,7 +171,12 @@ def plan(duration, canvas, tone, cfg, bug_position="top-left"):
     # 3. Service name plate.
     lt_start = max(t_start + t_len + 0.6, duration * 0.14)
     lt_len = min(4.0, max(2.5, duration * 0.22))
-    if cfg.get("service"):
+    if cfg.get("partner"):
+        add("lower-third", ov / "lower-thirds" /
+            f"lt_{canvas}_partner_{cfg['partner']}.png",
+            lt_start, lt_start + lt_len, "slide",
+            "Partner plate. Earns the reshare and adds third-party credibility.")
+    elif cfg.get("service"):
         add("lower-third", ov / "lower-thirds" /
             f"lt_{canvas}_service_{cfg['service']}.png",
             lt_start, lt_start + lt_len, "slide",
@@ -165,9 +188,24 @@ def plan(duration, canvas, tone, cfg, bug_position="top-left"):
     if cfg.get("badge"):
         # Badges are loose chips, not frame-size, so they need placing:
         # centred, above the CTA band and clear of the bottom keep-out zone.
-        add("badge", ov / "service-badges" / f"badge_{cfg['badge']}_{tone}.png",
+        add("badge", ov / "service-badges" / f"badge_{cfg['badge']}_{t_badge}.png",
             b_start, b_start + b_len, "fade", "Feature callout on the money shot.",
             place="centre-0.60")
+
+    # 4b. Spec run - a multi-service build earns a rundown rather than one
+    #     badge. Chips are spaced across the body of the video so each lands
+    #     on its own shot instead of stacking up.
+    specs = cfg.get("specs") or []
+    cta_len_pre = min(4.0, max(2.5, duration * 0.22))
+    spec_from = max(lt_start + lt_len + 0.8, duration * 0.30)
+    spec_to = end_start - cta_len_pre - 2.2
+    if specs and spec_to > spec_from + 1.5:
+        slot = (spec_to - spec_from) / len(specs)
+        hold = min(2.8, max(1.6, slot * 0.78))
+        for i, (text, path) in enumerate(specs):
+            st = spec_from + i * slot
+            add(f"spec {i + 1}", path, st, st + hold, "fade",
+                f"Spec: {text}", place="centre-0.585")
 
     # 5. One call to action, on the payoff - not the last frame, because most
     #    viewers leave before the end. Gap before the end card is deliberate:
@@ -181,7 +219,7 @@ def plan(duration, canvas, tone, cfg, bug_position="top-left"):
             "The ask. Lands on the payoff, clear of the end card.")
 
     # 6. End card - hard cut in, no fade. It is the last shot, not a graphic.
-    add("endcard", ov / "end-cards" / f"endcard_{canvas}_{tone}.png",
+    add("endcard", ov / "end-cards" / f"endcard_{canvas}_{t_end}.png",
         end_start, duration + 0.05, "cut", "Contact details. Hold to the end.")
 
     return sorted(cues, key=lambda c: c["start"])
@@ -292,6 +330,20 @@ def main():
                     help="panel reads better over red cars")
     ap.add_argument("--title"), ap.add_argument("--service")
     ap.add_argument("--badge"), ap.add_argument("--cta")
+    ap.add_argument("--partner", help="use a partner plate as the lower third")
+    ap.add_argument("--title-text", metavar="'LINE1|LINE2'",
+                    help="custom two-line title, e.g. 'GT3 RS|BUILD'")
+    ap.add_argument("--spec", action="append", default=[], metavar="TEXT",
+                    help="spec chip, repeatable: --spec 'STAGE 2 TUNE'")
+    ap.add_argument("--spec-scale", type=float, default=1.3,
+                    help="size multiplier for spec chips (default 1.3 - the "
+                         "stock chip is sized for a static poster, not a phone)")
+    ap.add_argument("--title-scrim", action="store_true",
+                    help="soft band behind the title; use on fast-cut footage "
+                         "where the background changes under it")
+    for slot in ("title", "badge", "bug", "endcard"):
+        ap.add_argument(f"--{slot}-tone", choices=["dark", "light"],
+                        help=f"override tone for the {slot}")
     ap.add_argument("--none", action="append", default=[], metavar="LAYER",
                     help="drop a slot, e.g. --none badge")
     ap.add_argument("--bitrate", default="20M")
@@ -312,6 +364,38 @@ def main():
             cfg[slot] = getattr(a, slot)
     for slot in a.none:
         cfg[slot] = None
+
+    for slot in ("title", "badge", "bug", "endcard"):
+        cfg[f"{slot}_tone"] = getattr(a, f"{slot}_tone")
+    if a.partner:
+        cfg["partner"] = a.partner
+
+    # Custom title and spec chips are rendered on demand from the same
+    # builders the kit uses, so they stay on-brand without being baked in.
+    tmp = Path(tempfile.mkdtemp(prefix="fd-edit-"))
+    if a.title_scrim:
+        import build_overlays as BO
+        cfg["title_scrim"] = tmp / "title-scrim.png"
+        BO.title_scrim(canvas).save(cfg["title_scrim"])
+    if a.title_text:
+        import build_overlays as BO
+        l1, _, l2 = a.title_text.partition("|")
+        card = BO.title_card(canvas, l1.strip(), (l2 or "").strip(),
+                             cfg.get("title_tone") or a.tone)
+        cfg["title_custom"] = tmp / "title-custom.png"
+        card.save(cfg["title_custom"])
+    if a.spec:
+        import build_overlays as BO
+        cfg["specs"] = []
+        for i, text in enumerate(a.spec):
+            chip = BO.badge(text, cfg.get("badge_tone") or a.tone)
+            if a.spec_scale != 1.0:
+                chip = chip.resize(
+                    (round(chip.width * a.spec_scale),
+                     round(chip.height * a.spec_scale)), Image.LANCZOS)
+            path = tmp / f"spec-{i}.png"
+            chip.save(path)
+            cfg["specs"].append((text, path))
 
     groups = {slug: g for slug, _, _, g in B.CTA_CAPTIONS}
     cfg["cta_group"] = groups.get(cfg.get("cta"), "booking")

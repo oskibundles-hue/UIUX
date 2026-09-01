@@ -153,6 +153,12 @@
       "subline": "MULTI-YEAR PAINT PROTECTION"
     },
     {
+      "slug": "window-tint",
+      "label": "WINDOW TINT",
+      "description": "Ceramic window tint. Heat and UV rejection.",
+      "subline": "CERAMIC WINDOW TINT"
+    },
+    {
       "slug": "paint-correction",
       "label": "PAINT CORRECTION",
       "description": "Multi-stage machine polish and gloss restoration.",

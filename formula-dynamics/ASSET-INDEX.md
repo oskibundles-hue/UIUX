@@ -14,7 +14,7 @@ The rules: brand spec, tokens, master guide, colour swatches.
 | `BRAND-SPEC.md` | 3 KB |
 | `brand-guide-master.png` | 1.5 MB |
 | `brand-tokens.css` | 1 KB |
-| `brand-tokens.json` | 4 KB |
+| `brand-tokens.json` | 5 KB |
 
 ## `01-brand-core/color-swatches/`
 
@@ -161,14 +161,14 @@ Full-frame closing cards with contact details.
 
 Service, partner and CTA name plates.
 
-**30 files** (0.8 MB). Examples:
+**32 files** (0.8 MB). Examples:
 
 - `lt_16x9_cta_book-your-build.png`
 - `lt_16x9_cta_follow.png`
 - `lt_16x9_partner_ipe.png`
 - `lt_16x9_partner_nv-forged.png`
 - `lt_16x9_partner_ryft.png`
-- …and 25 more following the same pattern
+- …and 27 more following the same pattern
 
 ## `03-overlays/partner-logos/`
 
@@ -182,14 +182,14 @@ Empty - drop official partner assets here.
 
 Chips for feature callouts.
 
-**22 files** (0.1 MB). Examples:
+**24 files** (0.1 MB). Examples:
 
 - `badge-strip_lead-services_dark.png`
 - `badge-strip_lead-services_light.png`
 - `badge_body-kits_dark.png`
 - `badge_body-kits_light.png`
 - `badge_ceramic-coating_dark.png`
-- …and 17 more following the same pattern
+- …and 19 more following the same pattern
 
 ## `03-overlays/title-cards/`
 
@@ -253,7 +253,7 @@ How to shoot, edit and export.
 
 | File | Size |
 |---|---|
-| `AUTO-EDIT.md` | 3 KB |
+| `AUTO-EDIT.md` | 5 KB |
 | `CAPCUT-WORKFLOW.md` | 4 KB |
 | `EXPORT-SPECS.md` | 2 KB |
 | `SHOT-LISTS.md` | 5 KB |
@@ -276,16 +276,16 @@ Zipped packs ready to download and unzip. Start with the vertical starter pack.
 |---|---|
 | `FD-00-VERTICAL-STARTER-PACK.zip` | 2.2 MB |
 | `FD-01-logo-bugs.zip` | 579 KB |
-| `FD-02-lower-thirds.zip` | 577 KB |
+| `FD-02-lower-thirds.zip` | 612 KB |
 | `FD-03-title-cards.zip` | 2.9 MB |
 | `FD-04-end-cards.zip` | 1.1 MB |
 | `FD-05-cta-captions.zip` | 652 KB |
-| `FD-06-service-badges.zip` | 105 KB |
+| `FD-06-service-badges.zip` | 113 KB |
 | `FD-07-accent-bars.zip` | 4 KB |
-| `FD-08-ALL-OVERLAYS.zip` | 5.8 MB |
+| `FD-08-ALL-OVERLAYS.zip` | 5.9 MB |
 | `FD-09-logos.zip` | 4.0 MB |
 | `README.md` | 2 KB |
 
 ---
 
-**382 files total.**
+**386 files total.**
