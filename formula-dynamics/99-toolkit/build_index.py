@@ -34,6 +34,7 @@ BLURB = {
     "05-copy-library": "Hooks, captions, hashtags, voice, service and partner wording.",
     "06-video-system": "How to shoot, edit and export.",
     "07-fonts": "Bebas Neue plus notes on the accent face.",
+    "08-download-bundles": "Zipped packs ready to download and unzip. Start with the vertical starter pack.",
 }
 
 

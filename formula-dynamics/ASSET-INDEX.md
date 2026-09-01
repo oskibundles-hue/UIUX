@@ -253,6 +253,23 @@ Bebas Neue plus notes on the accent face.
 | `FONTS.md` | 2 KB |
 | `OFL-BebasNeue.txt` | 4 KB |
 
+## `08-download-bundles/`
+
+Zipped packs ready to download and unzip. Start with the vertical starter pack.
+
+| File | Size |
+|---|---|
+| `FD-00-VERTICAL-STARTER-PACK.zip` | 1.9 MB |
+| `FD-01-logo-bugs.zip` | 579 KB |
+| `FD-02-lower-thirds.zip` | 577 KB |
+| `FD-03-title-cards.zip` | 2.9 MB |
+| `FD-04-end-cards.zip` | 1.1 MB |
+| `FD-05-service-badges.zip` | 105 KB |
+| `FD-06-accent-bars.zip` | 4 KB |
+| `FD-07-ALL-OVERLAYS.zip` | 5.2 MB |
+| `FD-08-logos.zip` | 4.0 MB |
+| `README.md` | 2 KB |
+
 ---
 
-**305 files total.**
+**315 files total.**

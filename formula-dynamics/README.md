@@ -19,6 +19,7 @@ timeline.
 | Write a caption | `05-copy-library/` |
 | Know how to shoot / edit / export | `06-video-system/` |
 | Print or read the whole thing offline | **[`FORMULA-DYNAMICS-BRAND-GUIDE.pdf`](FORMULA-DYNAMICS-BRAND-GUIDE.pdf)** |
+| Download the files to my computer or phone | `08-download-bundles/` |
 
 Full file-by-file listing: **[`ASSET-INDEX.md`](ASSET-INDEX.md)**
 
@@ -41,6 +42,7 @@ formula-dynamics/
 ├── 05-copy-library/      Hooks, captions, hashtags, CTAs, scripts.
 ├── 06-video-system/      How to shoot, edit, and export. CapCut workflow.
 ├── 07-fonts/             Bebas Neue (bundled) + notes on the accent face.
+├── 08-download-bundles/  Zipped packs, ready to download and unzip.
 ├── 99-toolkit/           Scripts that generated everything here.
 └── FORMULA-DYNAMICS-BRAND-GUIDE.pdf    The whole system, printable.
 ```
