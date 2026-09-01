@@ -148,14 +148,14 @@ Full-frame closing cards with contact details.
 
 Service, partner and CTA name plates.
 
-**32 files** (0.8 MB). Examples:
+**30 files** (0.8 MB). Examples:
 
 - `lt_16x9_cta_book-your-build.png`
 - `lt_16x9_cta_follow.png`
 - `lt_16x9_partner_ipe.png`
-- `lt_16x9_partner_luring.png`
 - `lt_16x9_partner_nv-forged.png`
-- …and 27 more following the same pattern
+- `lt_16x9_partner_ryft.png`
+- …and 25 more following the same pattern
 
 ## `03-overlays/partner-logos/`
 
@@ -255,4 +255,4 @@ Bebas Neue plus notes on the accent face.
 
 ---
 
-**307 files total.**
+**305 files total.**

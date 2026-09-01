@@ -7,21 +7,22 @@ contact details) and every generated file is regenerated consistently.
 
     cd 99-toolkit && python3 build_all.py
 
-Requires: Python 3, Pillow, numpy, potracer, cairosvg
-    pip install Pillow numpy potracer cairosvg
+Requires: Python 3, Pillow, numpy, potracer, cairosvg, reportlab
+    pip install Pillow numpy potracer cairosvg reportlab
 """
 
 import build_index
 import build_logos
 import build_overlays
+import build_pdf
 import build_tokens
 
 if __name__ == "__main__":
-    print("[1/4] Logos")
+    print("[1/5] Logos")
     n = build_logos.build()
     print(f"      {n} logo variants\n")
 
-    print("[2/4] Overlays and templates")
+    print("[2/5] Overlays and templates")
     total = 0
     for label, fn in [
         ("colour swatches", build_overlays.build_swatches),
@@ -37,10 +38,14 @@ if __name__ == "__main__":
         total += count
         print(f"      {label:<20} {count:>4}")
     print()
-    print("[3/4] Brand tokens")
+    print("[3/5] Brand tokens")
     print(f"      {build_tokens.build()} token files\n")
 
-    print("[4/4] Asset index")
+    print("[4/5] Printable guide (PDF)")
+    pdf = build_pdf.build()
+    print(f"      {pdf.name} ({pdf.stat().st_size / 1024:.0f} KB)\n")
+
+    print("[5/5] Asset index")
     print(f"      {build_index.main()} files indexed\n")
 
     print("Done. Kit rebuilt.")

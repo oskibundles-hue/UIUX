@@ -187,22 +187,20 @@
     {
       "slug": "nv-forged",
       "label": "NV FORGED",
+      "name": "NV Forged",
       "category": "Forged wheels"
     },
     {
       "slug": "ipe",
       "label": "IPE EXHAUST",
+      "name": "iPE Exhaust",
       "category": "Titanium / valvetronic exhaust"
     },
     {
-      "slug": "rift",
-      "label": "RIFT",
-      "category": "Exhaust, blow-off valves, performance hardware"
-    },
-    {
-      "slug": "luring",
-      "label": "LURING",
-      "category": "Lowering springs / suspension"
+      "slug": "ryft",
+      "label": "RYFT SPRINGS",
+      "name": "Ryft Springs",
+      "category": "Lowering springs, exhaust, blow-off valves"
     }
   ]
 }

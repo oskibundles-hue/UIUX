@@ -126,11 +126,15 @@ PRIORITY_SERVICES = ["body-kits", "exhaust", "wheels", "tuning"]
 # NOTE: names only. Partner LOGOS are their intellectual property and are not
 # generated here - drop official files into 03-overlays/partner-logos/.
 # --------------------------------------------------------------------------
+# (slug, on-screen label, prose name, category)
+# On-screen labels are uppercase because every graphic is set in Bebas Neue,
+# which has no lowercase. Use the prose name in captions and written copy,
+# where the brand's own styling matters: "iPE Exhaust", not "IPE EXHAUST".
 PARTNERS = [
-    ("nv-forged", "NV FORGED", "Forged wheels"),
-    ("ipe", "IPE EXHAUST", "Titanium / valvetronic exhaust"),
-    ("rift", "RIFT", "Exhaust, blow-off valves, performance hardware"),
-    ("luring", "LURING", "Lowering springs / suspension"),
+    ("nv-forged", "NV FORGED", "NV Forged", "Forged wheels"),
+    ("ipe", "IPE EXHAUST", "iPE Exhaust", "Titanium / valvetronic exhaust"),
+    ("ryft", "RYFT SPRINGS", "Ryft Springs",
+     "Lowering springs, exhaust, blow-off valves"),
 ]
 
 # --------------------------------------------------------------------------

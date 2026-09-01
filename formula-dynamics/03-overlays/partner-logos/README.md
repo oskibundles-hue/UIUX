@@ -8,8 +8,7 @@ Drop official files in this folder as you receive them:
 ```
 nv-forged/
 ipe/
-rift/
-luring/
+ryft/
 ```
 
 ## Getting official assets

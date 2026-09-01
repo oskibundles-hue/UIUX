@@ -110,4 +110,4 @@ earns a reshare. Confirm each handle on their profile before publishing;
 hashtags are harmless if wrong, but an @ mention that points at the wrong
 account is a bad look.
 
-Partners: NV Forged · IPE · RIFT · Luring
+Partners: NV Forged · iPE Exhaust · Ryft Springs

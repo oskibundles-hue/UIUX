@@ -18,8 +18,15 @@ timeline.
 | Check a colour or font | `01-brand-core/BRAND-SPEC.md` |
 | Write a caption | `05-copy-library/` |
 | Know how to shoot / edit / export | `06-video-system/` |
+| Print or read the whole thing offline | **[`FORMULA-DYNAMICS-BRAND-GUIDE.pdf`](FORMULA-DYNAMICS-BRAND-GUIDE.pdf)** |
 
 Full file-by-file listing: **[`ASSET-INDEX.md`](ASSET-INDEX.md)**
+
+**[FORMULA-DYNAMICS-BRAND-GUIDE.pdf](FORMULA-DYNAMICS-BRAND-GUIDE.pdf)** &mdash; the
+whole system as an 18-page printable document: palette, type, logo rules, the
+overlay library, CapCut workflow, export specs, shot formulas and copy. Download
+it, print it, or keep it on your phone in the bay. It is generated from the same
+source of truth as the assets, so it can never fall out of date.
 
 ---
 
@@ -34,7 +41,8 @@ formula-dynamics/
 ├── 05-copy-library/      Hooks, captions, hashtags, CTAs, scripts.
 ├── 06-video-system/      How to shoot, edit, and export. CapCut workflow.
 ├── 07-fonts/             Bebas Neue (bundled) + notes on the accent face.
-└── 99-toolkit/           Scripts that generated everything here.
+├── 99-toolkit/           Scripts that generated everything here.
+└── FORMULA-DYNAMICS-BRAND-GUIDE.pdf    The whole system, printable.
 ```
 
 ---
@@ -69,8 +77,8 @@ plus PPF, ceramic coating, paint correction, detailing, suspension.
 **Service** — scheduled maintenance, fluids, brakes, diagnostics. Lower
 glamour, high trust. Great for "why us" content.
 
-**Select partners** — NV Forged (wheels), IPE (exhaust), RIFT (exhaust, blow-off
-valves), Luring (springs/suspension).
+**Select partners** — NV Forged (wheels), iPE Exhaust (exhaust), Ryft Springs
+(springs, exhaust, blow-off valves).
 See `05-copy-library/services-and-partners.md`.
 
 ---

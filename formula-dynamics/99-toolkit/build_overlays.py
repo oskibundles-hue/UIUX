@@ -165,8 +165,8 @@ def build_lower_thirds():
                                "FORMULA DYNAMICS"),
                    out / f"lt_{canvas}_service_{slug}.png")
             n += 1
-        for slug, label, blurb in B.PARTNERS:
-            R.save(lower_third(canvas, label, blurb, "OFFICIAL PARTNER"),
+        for slug, label, _prose, category in B.PARTNERS:
+            R.save(lower_third(canvas, label, category, "OFFICIAL PARTNER"),
                    out / f"lt_{canvas}_partner_{slug}.png")
             n += 1
         R.save(lower_third(canvas, "BOOK YOUR BUILD", B.WEBSITE, "GET A QUOTE"),

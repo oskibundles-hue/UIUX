@@ -46,22 +46,33 @@ Ready-made strip: `../03-overlays/service-badges/badge-strip_lead-services_dark.
 | Partner | Category | Lower third |
 |---|---|---|
 | **NV Forged** | Forged wheels | `lt_9x16_partner_nv-forged.png` |
-| **IPE** | Titanium / valvetronic exhaust | `lt_9x16_partner_ipe.png` |
-| **RIFT** | Exhaust, blow-off valves, performance hardware | `lt_9x16_partner_rift.png` |
-| **Luring** | Lowering springs / suspension | `lt_9x16_partner_luring.png` |
+| **iPE Exhaust** | Titanium / valvetronic exhaust | `lt_9x16_partner_ipe.png` |
+| **Ryft Springs** | Lowering springs, exhaust, blow-off valves | `lt_9x16_partner_ryft.png` |
 
-### Before publishing partner content — check these
+### Casing: prose vs. on-screen
 
-The kit sets partner names as **text only**. Two things to confirm:
+Two brands here use deliberate lowercase styling. Respect it **in writing**:
 
-1. **Exact legal styling** of each name (capitalisation, spacing, "Inc."/"Ltd").
-   "IPE" is also written "iPE Exhaust" by the manufacturer — confirm which they
-   prefer.
-2. **"Luring"** — supplied as *luring springs*. Confirm the correct spelling and
-   whether this is the springs brand or a separate exhaust/BOV line.
+| Write in captions | Renders on screen as |
+|---|---|
+| iPE Exhaust | IPE EXHAUST |
+| Ryft Springs | RYFT SPRINGS |
+| NV Forged | NV FORGED |
 
-To change any of these, edit `PARTNERS` in `99-toolkit/fd_brand.py` and re-run
-`build_all.py`. Every partner lower third regenerates.
+The on-screen versions are uppercase because every graphic is set in Bebas
+Neue, which has no lowercase — that's a property of the typeface, not a
+misspelling. In captions, bios and written copy, always use the prose column.
+
+### One thing to confirm
+
+**Ryft Springs covers springs, exhaust and blow-off valves in this kit** — the
+earlier "RIFT" entry was merged into it, since it appeared to be the same
+brand. If Ryft and Rift are in fact two different suppliers, add the second one
+back to `PARTNERS` in `99-toolkit/fd_brand.py` and re-run `build_all.py`.
+
+To change any partner name or category, edit `PARTNERS` in
+`99-toolkit/fd_brand.py` and re-run `build_all.py`. Every partner lower third
+regenerates.
 
 ### Partner logos
 

@@ -11,7 +11,7 @@ together. No file gets forgotten and nothing drifts out of spec.
 ## Setup
 
 ```bash
-pip install Pillow numpy potracer cairosvg
+pip install Pillow numpy potracer cairosvg reportlab
 ```
 
 Python 3.9+.
@@ -32,6 +32,7 @@ python3 build_all.py
 | `build_logos.py` | Extracts logo lockups from the brand guide and traces them to SVG. |
 | `build_overlays.py` | Builds swatches, bars, bugs, lower thirds, badges, titles, end cards, safe zones. |
 | `build_tokens.py` | Writes `brand-tokens.json` / `.css`. |
+| `build_pdf.py` | Builds the printable brand guide PDF. |
 | `build_index.py` | Regenerates `ASSET-INDEX.md`. |
 | `build_all.py` | Runs everything in order. |
 

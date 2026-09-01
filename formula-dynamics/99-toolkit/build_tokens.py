@@ -40,7 +40,8 @@ def build():
         "services": [{"slug": s, "label": l, "description": d,
                       "subline": B.SERVICE_SUBLINE[s]} for s, l, d in B.SERVICES],
         "priorityServices": B.PRIORITY_SERVICES,
-        "partners": [{"slug": s, "label": l, "category": c} for s, l, c in B.PARTNERS],
+        "partners": [{"slug": s, "label": l, "name": n, "category": c}
+                     for s, l, n, c in B.PARTNERS],
     }
 
     (B.BRAND_CORE / "brand-tokens.json").write_text(
