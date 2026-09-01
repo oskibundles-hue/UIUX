@@ -18,6 +18,7 @@ timeline.
 | Check a colour or font | `01-brand-core/BRAND-SPEC.md` |
 | Write a caption | `05-copy-library/` |
 | Know how to shoot / edit / export | `06-video-system/` |
+| Burn the overlays into a clip automatically | `06-video-system/AUTO-EDIT.md` |
 | Print or read the whole thing offline | **[`FORMULA-DYNAMICS-BRAND-GUIDE.pdf`](FORMULA-DYNAMICS-BRAND-GUIDE.pdf)** |
 | Download the files to my computer or phone | `08-download-bundles/` |
 

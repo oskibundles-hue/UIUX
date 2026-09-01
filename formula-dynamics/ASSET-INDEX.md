@@ -253,6 +253,7 @@ How to shoot, edit and export.
 
 | File | Size |
 |---|---|
+| `AUTO-EDIT.md` | 3 KB |
 | `CAPCUT-WORKFLOW.md` | 4 KB |
 | `EXPORT-SPECS.md` | 2 KB |
 | `SHOT-LISTS.md` | 5 KB |
@@ -287,4 +288,4 @@ Zipped packs ready to download and unzip. Start with the vertical starter pack.
 
 ---
 
-**381 files total.**
+**382 files total.**

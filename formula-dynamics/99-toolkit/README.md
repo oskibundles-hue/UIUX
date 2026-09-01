@@ -34,6 +34,7 @@ python3 build_all.py
 | `build_tokens.py` | Writes `brand-tokens.json` / `.css`. |
 | `build_pdf.py` | Builds the printable brand guide PDF. |
 | `build_bundles.py` | Zips the kit into downloadable bundles. |
+| `build_edit.py` | Burns the overlays into a video clip. Not part of `build_all`. |
 | `build_index.py` | Regenerates `ASSET-INDEX.md`. |
 | `build_all.py` | Runs everything in order. |
 
