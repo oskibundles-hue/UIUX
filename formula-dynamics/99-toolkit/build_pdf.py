@@ -117,6 +117,14 @@ class Doc:
     def display(self, text, x, y, size, color=INK, tracking=0.06):
         self._tracked(text.upper(), x, y, DISPLAY, size, color, tracking)
 
+    def display_fit(self, text, x, y, size, max_w, color=INK, tracking=0.06):
+        """Draw display type, shrinking it to fit `max_w` rather than
+        letting a long name run into the next column."""
+        while size > 8 and self.text_width(text.upper(), DISPLAY, size,
+                                           tracking) > max_w:
+            size -= 0.5
+        self._tracked(text.upper(), x, y, DISPLAY, size, color, tracking)
+
     def display_centred(self, text, cx, y, size, color=INK, tracking=0.06):
         w = self.text_width(text.upper(), DISPLAY, size, tracking)
         self._tracked(text.upper(), cx - w / 2, y, DISPLAY, size, color, tracking)
@@ -362,7 +370,7 @@ def page_logos(d):
     for stem, w_pt, name, use in specs:
         im = R.logo(stem, width=1200)
         h_pt = w_pt * im.height / im.width
-        block_h = max(h_pt, 46) + 30
+        block_h = max(h_pt, 46) + 26
         d.rect(MARGIN, y - block_h, CONTENT_W, block_h, PANEL)
         d.c.drawImage(logo_png(stem, 1400), MARGIN + 22,
                       y - block_h + (block_h - h_pt) / 2,
@@ -370,9 +378,9 @@ def page_logos(d):
         tx = MARGIN + 268
         d.display(name, tx, y - block_h + block_h / 2 + 6, 15)
         d.body(use, tx, y - block_h + block_h / 2 - 2, CONTENT_W - 290, 8.6, 12, MUTED)
-        y -= block_h + 12
+        y -= block_h + 10
 
-    y -= 8
+    y -= 2
     d.label("PICK THE VARIANT BY BACKGROUND", MARGIN, y, 8, INK)
     d.table([["Background", "Variant", "Why"],
              ["Dark footage / black", "<b>--white</b>", "White wordmark, red PERFORMANCE"],
@@ -808,14 +816,20 @@ SHOTS_B = [
 ]
 
 
+# Left column width before the hook copy starts.
+HOOK_COL_X = 178
+
+
 def _shot_blocks(d, y, blocks):
     for num, name, tag, hook, shots in blocks:
         d.line(MARGIN, y + 8, PAGE_W - MARGIN, y + 8)
         d.display(num, MARGIN, y - 14, 22, B.RED, 0.02)
-        d.display(name, MARGIN + 40, y - 14, 19)
+        d.display_fit(name, MARGIN + 40, y - 14, 19, HOOK_COL_X - 40 - 12)
         d.label(tag, MARGIN + 40, y - 27, 7.2, MUTED)
-        d.body(f"<b>Hook:</b> {hook}", MARGIN + 178, y - 12, CONTENT_W - 178, 8.8, 12.4)
-        y = d.bullets(shots, MARGIN + 178, y - 30, CONTENT_W - 178, 8.6, 11.6, 2)
+        d.body(f"<b>Hook:</b> {hook}", MARGIN + HOOK_COL_X, y - 12,
+               CONTENT_W - HOOK_COL_X, 8.8, 12.4)
+        y = d.bullets(shots, MARGIN + HOOK_COL_X, y - 30,
+                      CONTENT_W - HOOK_COL_X, 8.6, 11.6, 2)
         y -= 22
     return y
 
@@ -843,7 +857,7 @@ def page_shots_b(d):
                  ["Shop culture, team, partners", "1"]],
                 MARGIN, y - 14, [CONTENT_W - 80, 80])
 
-    y -= 24
+    y -= 20
     d.label("SHOOTING BASICS", MARGIN, y, 8, B.RED)
     d.bullets(["<b>Film 60 fps.</b> Slow motion later without stuttering.",
                "<b>Golden hour or full shade.</b> Midday sun blows out paint.",
@@ -851,7 +865,7 @@ def page_shots_b(d):
                "<b>Clean the car first.</b> Every time &mdash; dust reads as neglect at 4K.",
                "Kill reflections: you, your phone, the bay lights.",
                "Wipe the lens between setups. Record audio separately for exhaust."],
-              MARGIN, y - 16, CONTENT_W)
+              MARGIN, y - 14, CONTENT_W, 8.8, 12.2, 3)
 
 
 def page_copy(d):
@@ -905,6 +919,55 @@ def page_copy(d):
            "&ldquo;gains vary by fuel and conditions&rdquo; are honest and cost nothing. Getting "
            "caught inflating a dyno number destroys trust with exactly the customer "
            "you want.", MARGIN + 20, y - 16, CONTENT_W - 40, 9.2, 13)
+
+
+def page_ctas(d):
+    y = d.new_page("05 · Copy", "Calls to action")
+
+    d.body("Sixteen on-screen calls to action, each in two styles. Ready-made "
+           "graphics are in <b>03-overlays/cta-captions/</b>.",
+           MARGIN, y, CONTENT_W, 9.6, 14)
+    y -= 34
+
+    d.label("THE TWO STYLES", MARGIN, y, 8, B.RED)
+    y = d.table([["Style", "Looks like", "Use when"],
+                 ["<b>bar</b>", "Solid red pill, white type",
+                  "Default. Dark, neutral or light footage."],
+                 ["<b>panel</b>", "Black panel, key word in red, accent stripe under",
+                  "<b>The footage is red.</b> Also busy or bright backgrounds."]],
+                MARGIN, y - 14, [70, 200, CONTENT_W - 270])
+
+    y -= 16
+    d.body("A red bar over a red Ferrari disappears, and a lot of this shop's "
+           "content is red cars. When in doubt, use <b>panel</b>.",
+           MARGIN, y, CONTENT_W, 9.2, 13.4)
+
+    y -= 30
+    rows = [["Group", "Captions"]]
+    for key, blurb in B.CTA_GROUPS.items():
+        lines = [f"{lead} {accent}" for _, lead, accent, g in B.CTA_CAPTIONS
+                 if g == key]
+        short = blurb.split(".")[0] + "."
+        rows.append([f"<b>{key.title()}</b><br/><font size=7 color='#7A7A84'>"
+                     f"{short}</font>",
+                     "<br/>".join(f"<b>{l}</b>" for l in lines)])
+    y = d.table(rows, MARGIN, y, [268, CONTENT_W - 268])
+
+    y -= 24
+    d.label("RULES THAT ACTUALLY MOVE THE NUMBER", MARGIN, y, 8, B.RED)
+    d.bullets([
+        "<b>One CTA per video. Never two.</b> Two asks is zero asks. If the end "
+        "card is on screen, that <i>is</i> the CTA.",
+        "<b>Put it on the payoff, not the last frame.</b> Most viewers leave "
+        "before the end. Bring it up as the best shot lands and hold 2&ndash;3 s.",
+        "<b>Match the ask to the content.</b> A reveal earns BOOK NOW. A "
+        "shop-culture clip earns FOLLOW FOR MORE BUILDS.",
+        "<b>Alternate reach and conversion.</b> Every third or fourth post, use "
+        "an engagement CTA &mdash; comments widen the audience the next sales CTA "
+        "lands on.",
+        "<b>Make the destination match the words.</b> LINK IN BIO has to reach a "
+        "page where booking is the first thing visible.",
+    ], MARGIN, y - 14, CONTENT_W, 9.0, 13.0, 4)
 
 
 def page_folders(d):
@@ -984,13 +1047,14 @@ CONTENTS = [
     (13, "Select partners", "Names, casing, and the rules for partner marks"),
     (14, "Shot formulas", "Seven repeatable video formats"),
     (16, "Hooks &amp; voice", "How the brand sounds, and what to write"),
-    (17, "Where the files live", "The folder map and a find-it-fast table"),
+    (17, "Calls to action", "The 16 CTAs, and which one to use when"),
+    (18, "Where the files live", "The folder map and a find-it-fast table"),
 ]
 
 PAGES = [page_contents, page_palette, page_type, page_logos, page_logo_rules,
          page_canvases, page_overlays, page_workflow, page_troubleshoot,
          page_export, page_services, page_partners, page_shots_a, page_shots_b,
-         page_copy, page_folders]
+         page_copy, page_ctas, page_folders]
 
 
 def build():

@@ -226,6 +226,90 @@ def build_badges():
 
 
 # ==========================================================================
+# 5b. Call-to-action captions
+# ==========================================================================
+def cta_caption(canvas, lead, accent, style="bar"):
+    """A bottom-anchored call to action, clear of the platform UI.
+
+    Two styles, because one is not enough in practice:
+
+    "bar"   - solid brand red, white type. Maximum punch, reads in a glance.
+    "panel" - black panel, white type with the accent half in red. Use it when
+              the footage is red: a red bar over red paint disappears, and a
+              lot of this shop's content is red cars.
+    """
+    fw, fh = B.CANVASES[canvas]
+    im = R.frame(canvas)
+    scale = fw / 1080.0
+
+    size = round(74 * scale)
+    pad_x = round(56 * scale)
+    pad_y = round(30 * scale)
+    max_text = fw * 0.78
+
+    gap = 0
+    if style == "bar":
+        label = R.text(f"{lead} {accent}", size, B.WHITE, tracking=0.05)
+        if label.width > max_text:
+            label = R.fit_text(f"{lead} {accent}", round(max_text),
+                               color=B.WHITE, tracking=0.05)
+        parts = [label]
+    else:
+        gap = round(size * 0.30)
+        a = R.text(lead, size, B.WHITE, tracking=0.05)
+        b = R.text(accent, size, B.RED, tracking=0.05)
+        if a.width + gap + b.width > max_text:
+            shrink = max_text / (a.width + gap + b.width)
+            small = max(10, round(size * shrink))
+            a = R.text(lead, small, B.WHITE, tracking=0.05)
+            b = R.text(accent, small, B.RED, tracking=0.05)
+            gap = round(small * 0.30)
+        parts = [a, b]
+
+    text_w = sum(p.width for p in parts) + gap * (len(parts) - 1)
+    text_h = max(p.height for p in parts)
+    box_w = text_w + pad_x * 2
+    box_h = text_h + pad_y * 2
+
+    # Sit above the bottom keep-out band, never inside it.
+    bottom_zone = B.SAFE_ZONES_9X16["bottom"] if canvas == "9x16" else 0.09
+    box_y = fh - round(fh * bottom_zone) - box_h - round(fh * 0.03)
+
+    box = Image.new("RGBA", (box_w, box_h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(box)
+    if style == "bar":
+        d.rounded_rectangle([0, 0, box_w - 1, box_h - 1], radius=box_h // 2,
+                            fill=B.rgb(B.RED) + (255,))
+    else:
+        d.rounded_rectangle([0, 0, box_w - 1, box_h - 1],
+                            radius=round(14 * scale), fill=(0, 0, 0, 232))
+
+    x = pad_x
+    for part in parts:
+        R.paste(box, part, x, box_h // 2, anchor="lm")
+        x += part.width + gap
+
+    R.paste(im, box, fw // 2, box_y, anchor="ct")
+
+    if style == "panel":
+        R.paste(im, R.accent_stripe(box_w, round(9 * scale)),
+                fw // 2, box_y + box_h, anchor="ct")
+    return im
+
+
+def build_cta_captions():
+    out = B.OVERLAYS / "cta-captions"
+    n = 0
+    for canvas in ("9x16", "16x9"):
+        for slug, lead, accent, group in B.CTA_CAPTIONS:
+            for style in ("bar", "panel"):
+                R.save(cta_caption(canvas, lead, accent, style),
+                       out / f"cta_{canvas}_{group}_{slug}_{style}.png")
+                n += 1
+    return n
+
+
+# ==========================================================================
 # 6. Title cards
 # ==========================================================================
 TITLES = [
@@ -404,6 +488,7 @@ if __name__ == "__main__":
         ("logo bugs", build_logo_bugs),
         ("lower thirds", build_lower_thirds),
         ("service badges", build_badges),
+        ("CTA captions", build_cta_captions),
         ("title cards", build_title_cards),
         ("end cards", build_end_cards),
         ("safe-zone guides", build_safe_zones),

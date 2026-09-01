@@ -129,6 +129,19 @@ Logo pre-positioned on a full-size transparent frame. No scaling needed.
 - `bug_16x9_top-center_logo-black.png`
 - …and 59 more following the same pattern
 
+## `03-overlays/cta-captions/`
+
+Calls to action in two styles. Use 'panel' when the footage is red.
+
+**64 files** (1.1 MB). Examples:
+
+- `cta_16x9_booking_book-now_bar.png`
+- `cta_16x9_booking_book-now_panel.png`
+- `cta_16x9_booking_book-your-build_bar.png`
+- `cta_16x9_booking_book-your-build_panel.png`
+- `cta_16x9_booking_now-booking_bar.png`
+- …and 59 more following the same pattern
+
 ## `03-overlays/end-cards/`
 
 Full-frame closing cards with contact details.
@@ -228,6 +241,7 @@ Hooks, captions, hashtags, voice, service and partner wording.
 | File | Size |
 |---|---|
 | `README.md` | 0 KB |
+| `cta-captions.md` | 5 KB |
 | `hashtags.md` | 2 KB |
 | `hooks-and-captions.md` | 4 KB |
 | `services-and-partners.md` | 3 KB |
@@ -259,17 +273,18 @@ Zipped packs ready to download and unzip. Start with the vertical starter pack.
 
 | File | Size |
 |---|---|
-| `FD-00-VERTICAL-STARTER-PACK.zip` | 1.9 MB |
+| `FD-00-VERTICAL-STARTER-PACK.zip` | 2.2 MB |
 | `FD-01-logo-bugs.zip` | 579 KB |
 | `FD-02-lower-thirds.zip` | 577 KB |
 | `FD-03-title-cards.zip` | 2.9 MB |
 | `FD-04-end-cards.zip` | 1.1 MB |
-| `FD-05-service-badges.zip` | 105 KB |
-| `FD-06-accent-bars.zip` | 4 KB |
-| `FD-07-ALL-OVERLAYS.zip` | 5.2 MB |
-| `FD-08-logos.zip` | 4.0 MB |
+| `FD-05-cta-captions.zip` | 652 KB |
+| `FD-06-service-badges.zip` | 105 KB |
+| `FD-07-accent-bars.zip` | 4 KB |
+| `FD-08-ALL-OVERLAYS.zip` | 5.8 MB |
+| `FD-09-logos.zip` | 4.0 MB |
 | `README.md` | 2 KB |
 
 ---
 
-**315 files total.**
+**381 files total.**

@@ -99,6 +99,7 @@ def build():
     essentials = []
     for folder in ("corner-logo-bugs", "lower-thirds", "title-cards", "end-cards"):
         essentials += [(p, a) for p, a in in_dir(folder) if "9x16" in p.name]
+    essentials += [(p, a) for p, a in in_dir("cta-captions") if "9x16" in p.name]
     essentials += in_dir("service-badges")
     essentials += [(p, a) for p, a in in_dir("accent-bars") if "1080w" in p.name]
     essentials.append((B.TEMPLATES / "safe-zone-guides" / "safe-zones_9x16.png",
@@ -127,10 +128,16 @@ def build():
          "Full-frame closing cards with logo, tagline and contact details.\n"
          "These are NOT transparent - they are a finished last shot.\n"
          "Hold for 1.5-2.5 seconds."),
-        ("FD-05-service-badges", "service-badges", "Service badges",
+        ("FD-05-cta-captions", "cta-captions", "CTA captions",
+         "Sixteen calls to action in two styles.\n"
+         "'bar' is the solid red default. 'panel' is black with the key word\n"
+         "in red - use it when the footage is RED, because a red bar over red\n"
+         "paint disappears.\n"
+         "One CTA per video, held 2-3 seconds, on the payoff shot."),
+        ("FD-06-service-badges", "service-badges", "Service badges",
          "Red-outlined chips for feature callouts, one per service,\n"
          "plus a ready-made strip of the four lead services."),
-        ("FD-06-accent-bars", "accent-bars", "Accent bars",
+        ("FD-07-accent-bars", "accent-bars", "Accent bars",
          "The four-colour racing stripe and solid red bars.\n"
          "Underline a title, divide a split screen, or keyframe one across\n"
          "the frame over 6-10 frames as your house transition."),
@@ -141,13 +148,13 @@ def build():
     # 3. Everything, for archiving or a one-shot import.
     every = []
     for folder in ("corner-logo-bugs", "lower-thirds", "title-cards",
-                   "end-cards", "service-badges", "accent-bars"):
+                   "end-cards", "cta-captions", "service-badges", "accent-bars"):
         every += in_dir(folder)
     every += [(p, f"safe-zone-guides/{p.name}")
               for p in (B.TEMPLATES / "safe-zone-guides").iterdir()
               if p.suffix == ".png"]
     results.append(write_bundle(
-        "FD-07-ALL-OVERLAYS", "All overlays",
+        "FD-08-ALL-OVERLAYS", "All overlays",
         "Every overlay in every format, plus the safe-zone guides.",
         every))
 
@@ -157,7 +164,7 @@ def build():
     logos += [(p, f"svg-vector/{p.name}")
               for p in (B.LOGOS / "svg-vector").iterdir() if p.suffix == ".svg"]
     results.append(write_bundle(
-        "FD-08-logos", "Logos",
+        "FD-09-logos", "Logos",
         "Every logo lockup. SVG is true vector - use it anywhere that\n"
         "accepts SVG. CapCut does not, so use the PNGs there.\n"
         "PNGs come at 1000 / 2000 / 4000 px wide.",

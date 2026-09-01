@@ -138,6 +138,61 @@ PARTNERS = [
 ]
 
 # --------------------------------------------------------------------------
+# Call-to-action captions
+# --------------------------------------------------------------------------
+# (slug, lead, accent, group)
+#
+# The two halves matter: on the black "panel" style the accent half is set in
+# brand red, so the line has one point of emphasis rather than shouting the
+# whole way through. On the solid-red "bar" style the halves are simply joined
+# and set in white - red type on a red bar would vanish.
+#
+# Grouped by what the viewer is ready to do, which is how they should be
+# chosen. See 05-copy-library/cta-captions.md.
+CTA_CAPTIONS = [
+    # Ready to book - highest intent, lowest reach. Use on payoff content.
+    ("book-now", "BOOK", "NOW", "booking"),
+    ("schedule-appointment", "SCHEDULE AN", "APPOINTMENT", "booking"),
+    ("book-your-build", "BOOK YOUR", "BUILD", "booking"),
+    ("now-booking", "NOW", "BOOKING", "booking"),
+    ("reserve-your-spot", "RESERVE YOUR", "SPOT", "booking"),
+
+    # Still deciding - invites a low-commitment first step.
+    ("see-what-fits", "SEE WHAT FITS", "YOUR CAR", "fitment"),
+    ("find-your-fitment", "FIND YOUR", "FITMENT", "fitment"),
+    ("built-for-your-car", "BUILT FOR", "YOUR CAR", "fitment"),
+
+    # Wants a number.
+    ("get-a-quote", "GET A", "QUOTE", "quote"),
+    ("dm-your-model", "DM US", "YOUR MODEL", "quote"),
+    ("dm-for-pricing", "DM FOR", "PRICING", "quote"),
+
+    # Engagement - drives comments, which drives reach. Not a sales CTA.
+    ("what-would-you-fit", "WHAT WOULD YOU", "FIT NEXT?", "engagement"),
+    ("drop-your-model", "DROP YOUR MODEL", "BELOW", "engagement"),
+
+    # Soft / top of funnel.
+    ("link-in-bio", "LINK IN", "BIO", "soft"),
+    ("follow-for-more", "FOLLOW FOR MORE", "BUILDS", "soft"),
+
+    # Trust. Pairs with service and maintenance content.
+    ("we-service-what-we-build", "WE SERVICE", "WHAT WE BUILD", "trust"),
+]
+
+CTA_GROUPS = {
+    "booking": "Ready to book. Highest intent - use on reveals, dyno results "
+               "and finished-car payoff shots.",
+    "fitment": "Still deciding. A low-commitment first step for someone who "
+               "likes the work but hasn't pictured it on their own car.",
+    "quote": "Wants a number. Opens a direct conversation.",
+    "engagement": "Drives comments, which drives reach. Not a sales CTA - "
+                  "use it to widen the audience the sales CTAs land on.",
+    "soft": "Top of funnel. Low friction, low intent.",
+    "trust": "Pairs with service and maintenance content.",
+}
+
+
+# --------------------------------------------------------------------------
 # Contact  (brand guide footer)
 # --------------------------------------------------------------------------
 WEBSITE = "formuladynamicsperformance.com"

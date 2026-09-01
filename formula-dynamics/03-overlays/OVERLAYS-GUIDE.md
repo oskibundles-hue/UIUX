@@ -62,6 +62,23 @@ the viewer before the loop.
 
 ---
 
+## `cta-captions/` — the ask
+
+`cta_{canvas}_{group}_{name}_{style}.png` — `9x16` and `16x9`.
+
+Sixteen calls to action, each in two styles:
+
+- **`bar`** — solid red pill, white type. The default.
+- **`panel`** — black panel with the key word in red. **Use this one when the
+  footage is red** — a red bar over red paint disappears.
+
+Groups: `booking` · `fitment` · `quote` · `engagement` · `soft` · `trust`.
+
+One CTA per video, held 2–3 s, placed on the payoff shot rather than the very
+last frame. Full guidance: `../05-copy-library/cta-captions.md`.
+
+---
+
 ## `service-badges/` — chips for feature callouts
 
 `badge_{service}_{dark|light}.png` — one chip per service, red outline.

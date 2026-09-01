@@ -25,6 +25,7 @@ BLURB = {
     "03-overlays/lower-thirds": "Service, partner and CTA name plates.",
     "03-overlays/title-cards": "Two-line opening titles.",
     "03-overlays/end-cards": "Full-frame closing cards with contact details.",
+    "03-overlays/cta-captions": "Calls to action in two styles. Use 'panel' when the footage is red.",
     "03-overlays/service-badges": "Chips for feature callouts.",
     "03-overlays/accent-bars": "Racing stripe and solid red bars. Also good as transitions.",
     "03-overlays/partner-logos": "Empty - drop official partner assets here.",
