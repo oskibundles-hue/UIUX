@@ -164,14 +164,20 @@ def plan(duration, canvas, tone, cfg, bug_position="top-left"):  # noqa: C901
 
     # 2. Logo bug - runs the body of the video, off before the end card so it
     #    does not sit on top of the logo that is already on that card.
-    add("bug", ov / "corner-logo-bugs" /
-        f"bug_{canvas}_{bug_position}_logo-{logo_tone}.png",
-        0.6, end_start, "fade-in", "Branding. Same position on every video.")
+    # --none bug drops it: on some footage no corner tone survives, and the
+    # HUD title block carries the mark instead.
+    if cfg.get("bug", "on") is not None:
+        add("bug", ov / "corner-logo-bugs" /
+            f"bug_{canvas}_{bug_position}_logo-{logo_tone}.png",
+            0.6, end_start, "fade-in",
+            "Branding. Same position on every video.")
 
     # 3. Service name plate.
     lt_start = max(t_start + t_len + 0.6, duration * 0.14)
     lt_len = min(4.0, max(2.5, duration * 0.22))
-    if cfg.get("partner"):
+    if cfg.get("title_block"):
+        pass          # the HUD title block is the name plate on this look
+    elif cfg.get("partner"):
         add("lower-third", ov / "lower-thirds" /
             f"lt_{canvas}_partner_{cfg['partner']}.png",
             lt_start, lt_start + lt_len, "slide",
@@ -209,6 +215,27 @@ def plan(duration, canvas, tone, cfg, bug_position="top-left"):  # noqa: C901
             st = spec_from + i * slot
             add(f"spec {i + 1}", path, st, st + hold, "fade",
                 f"Spec: {text}", place="centre-0.585")
+
+    # 4c. HUD furniture - persistent title block and ticker. Both clear the
+    #     frame before the CTA appears: the CTA occupies the same lower band,
+    #     and stacking them would put three things in one place.
+    hud_end = None
+    if cfg.get("title_block") or cfg.get("ticker"):
+        cta_len_h = min(4.0, max(2.5, duration * 0.22))
+        hud_end = end_start - cta_len_h - 1.6 if cfg.get("cta") else end_start
+        for key, layer, note in (
+            ("title_block", "title block",
+             "Persistent name plate. Replaces the big title card on this look."),
+            ("ticker", "ticker",
+             "Bottom strip. Keeps the brand present without another logo."),
+        ):
+            if cfg.get(key):
+                add(layer, cfg[key], 1.2, hud_end, "fade", note)
+
+    # 4d. Indexed callouts, each pinned to a feature on a specific shot.
+    for c in cfg.get("callouts") or []:
+        add(f"callout {c['index']}", c["path"], c["start"], c["end"], "fade",
+            f"Points at: {c['label']}")
 
     # 5. One call to action, on the payoff - not the last frame, because most
     #    viewers leave before the end. Gap before the end card is deliberate:
@@ -341,6 +368,14 @@ def main():
     ap.add_argument("--spec-scale", type=float, default=1.3,
                     help="size multiplier for spec chips (default 1.3 - the "
                          "stock chip is sized for a static poster, not a phone)")
+    ap.add_argument("--title-block", metavar="'NAME|SUBLINE'",
+                    help="persistent HUD name plate, e.g. 'FERRARI ROMA|2024 BUILD'")
+    ap.add_argument("--ticker", metavar="'A|B|C'",
+                    help="persistent bottom strip, segments split by |")
+    ap.add_argument("--callout", action="append", default=[],
+                    metavar="'IDX|LABEL|x,y|start|end'",
+                    help="indexed leader line pinned to a feature; x,y are "
+                         "fractions of the frame. Repeatable.")
     ap.add_argument("--title-scrim", action="store_true",
                     help="soft band behind the title; use on fast-cut footage "
                          "where the background changes under it")
@@ -399,6 +434,34 @@ def main():
             path = tmp / f"spec-{i}.png"
             chip.save(path)
             cfg["specs"].append((text, path))
+
+    if a.title_block or a.ticker or a.callout:
+        import fd_hud as HUD
+    if a.title_block:
+        name, _, sub = a.title_block.partition("|")
+        cfg["title_block"] = tmp / "hud-title.png"
+        HUD.title_block(canvas, name.strip(), sub.strip() or None).save(
+            cfg["title_block"])
+    if a.ticker:
+        cfg["ticker"] = tmp / "hud-ticker.png"
+        HUD.ticker(canvas, [x.strip() for x in a.ticker.split("|") if x.strip()]
+                   ).save(cfg["ticker"])
+    if a.callout:
+        cfg["callouts"] = []
+        for i, spec in enumerate(a.callout):
+            bits = [x.strip() for x in spec.split("|")]
+            if len(bits) < 5:
+                sys.exit(f"--callout needs IDX|LABEL|x,y|start|end, got: {spec}")
+            idx, label, xy, st, en = bits[:5]
+            x, y = (float(v) for v in xy.split(","))
+            # Point the label toward the frame centre so it never runs off the
+            # edge, and route the elbow away from the lower furniture.
+            side = "right" if x < 0.5 else "left"
+            drop = -0.16 if y > 0.58 else 0.12
+            path = tmp / f"callout-{i}.png"
+            HUD.callout(canvas, idx, label, (x, y), side, drop).save(path)
+            cfg["callouts"].append(dict(index=idx, label=label, path=path,
+                                        start=float(st), end=float(en)))
 
     groups = {slug: g for slug, _, _, g in B.CTA_CAPTIONS}
     cfg["cta_group"] = groups.get(cfg.get("cta"), "booking")

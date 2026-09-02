@@ -177,3 +177,53 @@ rather than reasoning about:
   applied before the slot width, so on a 22 s clip with four chips the hold
   (1.6 s) exceeded the slot (1.35 s) and two chips would have been on screen
   at once. Hold is now clamped to the slot.
+
+---
+
+## The HUD look — annotation callouts, title block, ticker
+
+A second visual system, for spec-annotation style edits: indexed leader lines
+that point at parts of the car, a persistent name plate, and a bottom ticker.
+Built in `99-toolkit/fd_hud.py`, all in the brand palette and Bebas Neue.
+
+```bash
+python3 build_edit.py ROMA.mov -t reveal --none badge --none title --none bug \
+  --title-block "FERRARI ROMA|2024 BUILD" \
+  --ticker "FORMULA DYNAMICS|ROMA|PERFORMANCE" \
+  --callout "001|QUAD EXHAUST|0.40,0.80|11.0|12.4" \
+  --callout "002|WHEELS|0.84,0.66|17.0|18.05" \
+  --endcard-tone dark --cta book-your-build --cta-style panel \
+  -o ROMA_FD.mp4
+```
+
+### Components
+
+| Component | What it is |
+|---|---|
+| **Title block** | Name plate with the FD monogram in a bracket, subline, accent stripe, on a soft scrim. Replaces the big title card and the lower third. |
+| **Ticker** | Full-width strip of short segments split by red slashes. |
+| **Callout** | Open square on the feature, elbow leader line, indexed red number plus white label with a red rule under it. |
+
+### Placing a callout
+
+`--callout "IDX|LABEL|x,y|start|end"` — `x,y` are fractions of the frame.
+
+Direction is automatic: the label runs **toward frame centre** so it never
+falls off the edge, and the elbow routes **upward** when the anchor is low
+(`y > 0.58`) so the line clears the title block.
+
+**Anchor on a still moment.** Grid a frame from the middle of the shot, read
+the fractions off it, and keep the callout short. The first attempt here put
+the wheel callout at `0.61,0.66`, which was correct for the frame that was
+gridded but landed on the front splitter once the car moved through the shot.
+
+### Two layout rules the tool enforces
+
+- **The title block and ticker clear the frame before the CTA.** All three
+  occupy the same lower band; stacking them would put three things in one
+  place. The HUD fades out about 1.6 s before the ask.
+- **The top logo bug is dropped on this look** (`--none bug`). On footage that
+  swings from near-black interiors to blown-out sky, neither a white nor a
+  black corner logo survives — tested both on the extremes and each failed at
+  one end. The FD monogram lives inside the scrimmed title block instead,
+  where it is legible on every shot.
