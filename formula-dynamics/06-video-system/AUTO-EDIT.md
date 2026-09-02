@@ -217,6 +217,22 @@ the fractions off it, and keep the callout short. The first attempt here put
 the wheel callout at `0.61,0.66`, which was correct for the frame that was
 gridded but landed on the front splitter once the car moved through the shot.
 
+**Read the fraction off a full-size frame, not a contact sheet.** Judging a
+car's extent from a 300 px thumbnail is unreliable - on the SF90 it produced
+two anchors that missed by 0.15 of the frame width, which is the difference
+between the wheel and the front splitter. Either open the frame at full size,
+or measure the subject objectively, e.g. a colour mask for the body:
+
+```python
+R, G, B = im[:,:,0], im[:,:,1], im[:,:,2]
+gold = (R > 90) & (R - B > 45) & (G > 60)      # the car, not the sky or road
+cols = np.where(gold.sum(axis=0) > gold.sum(axis=0).max() * 0.12)[0]
+print(cols.min() / w, cols.max() / w)          # its true horizontal extent
+```
+
+Verify the finished anchors by compositing the callout onto the midpoint frame
+as a still. It takes seconds, against roughly 90 for a render.
+
 ### Two layout rules the tool enforces
 
 - **The title block and ticker clear the frame before the CTA.** All three

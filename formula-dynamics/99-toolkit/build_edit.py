@@ -149,7 +149,7 @@ def plan(duration, canvas, tone, cfg, bug_position="top-left"):  # noqa: C901
 
     # 1. Title card - the hook. Always ~2.5 s, never a sixth of the video.
     t_start = 0.4
-    t_len = min(2.6, max(1.4, duration * 0.16))
+    t_len = cfg.get("title_hold") or min(2.6, max(1.4, duration * 0.16))
     if cfg.get("title_scrim"):
         add("title scrim", cfg["title_scrim"], t_start, t_start + t_len, "fade",
             "Keeps the title legible as the shots change underneath it.")
@@ -381,6 +381,9 @@ def main():
                     metavar="'IDX|LABEL|x,y|start|end'",
                     help="indexed leader line pinned to a feature; x,y are "
                          "fractions of the frame. Repeatable.")
+    ap.add_argument("--title-hold", type=float, metavar="SECONDS",
+                    help="how long the opening hook holds; shorten it to free "
+                         "an early shot for a callout")
     ap.add_argument("--title-scrim", action="store_true",
                     help="soft band behind the title; use on fast-cut footage "
                          "where the background changes under it")
@@ -410,6 +413,7 @@ def main():
 
     for slot in ("title", "badge", "bug", "endcard"):
         cfg[f"{slot}_tone"] = getattr(a, f"{slot}_tone")
+    cfg["title_hold"] = a.title_hold
     if a.partner:
         cfg["partner"] = a.partner
 
