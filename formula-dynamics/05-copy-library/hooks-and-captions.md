@@ -108,6 +108,54 @@ entire point — "703 whp on a 992 Turbo S" outperforms "huge gains" every time.
 
 ---
 
+## Opening hooks for exotic owners
+
+For the first 1–3 seconds of a build video, when the viewer doesn't yet know
+whose car it is. These sell the **shop**, not the car — use them when the goal
+is inbound enquiries rather than showing off one build.
+
+### Direct address — names the audience
+- **WHAT YOUR EXOTIC NEEDS**
+- WHAT WE DO FOR EXOTICS
+- YOUR EXOTIC, FINISHED
+- BUILT FOR EXOTICS
+
+### The gap — implies more is available
+- **STOCK IS ONLY THE START**
+- FACTORY IS THE STARTING LINE
+- WE FINISH WHAT THE FACTORY STARTED
+- THERE IS ALWAYS MORE IN IT
+
+### Specialist authority — for high-value buyers
+- **THE EXOTIC SPECIALISTS**
+- SIX FIGURES DESERVES A SPECIALIST
+- WE DON'T LEARN ON YOUR CAR
+
+### Menu — for multi-service builds
+- **FIVE UPGRADES. ONE SHOP.**
+- EVERYTHING YOUR EXOTIC NEEDS, UNDER ONE ROOF
+- ONE BUILD. FIVE UPGRADES.
+
+### Engagement — drives comments
+- WHAT WOULD YOU DO TO THIS?
+- WHICH UPGRADE FIRST?
+
+---
+
+**One warning worth more than the list.** Exotic owners are proud of their
+cars. Hooks built on what the car *lacks* — "what your exotic is missing",
+"your exotic deserves better" — read as criticism of a choice they already
+made, and they push away exactly the buyer you want.
+
+Frame the gap as **potential, not deficiency**. "Stock is only the start"
+flatters the car and still sells the upgrade. "Everything your exotic is
+missing" doesn't.
+
+Split them across two lines with the value phrase in red:
+`WHAT YOUR` / `EXOTIC NEEDS` &nbsp;·&nbsp; `STOCK IS` / `ONLY THE START`
+
+---
+
 ## CTA lines
 
 Pick one. Never stack two.

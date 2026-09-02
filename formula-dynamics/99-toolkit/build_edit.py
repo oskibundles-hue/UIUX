@@ -229,8 +229,13 @@ def plan(duration, canvas, tone, cfg, bug_position="top-left"):  # noqa: C901
             ("ticker", "ticker",
              "Bottom strip. Keeps the brand present without another logo."),
         ):
+            # Start after the opening hook, not under it - both live in the
+            # same frame and would otherwise be on screen together.
+            hud_start = 1.2
+            if cfg.get("title_custom") or cfg.get("title"):
+                hud_start = max(hud_start, t_start + t_len + 0.4)
             if cfg.get(key):
-                add(layer, cfg[key], 1.2, hud_end, "fade", note)
+                add(layer, cfg[key], hud_start, hud_end, "fade", note)
 
     # 4d. Indexed callouts, each pinned to a feature on a specific shot.
     for c in cfg.get("callouts") or []:
