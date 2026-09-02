@@ -2,6 +2,10 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Skill Usage
+
+For every request, proactively select and invoke the most suitable available skill before responding — do not wait to be asked. If a relevant skill exists (installed skills, plugin skills, or repo skills), use it. When multiple apply, process/workflow skills set the approach first, then implementation skills carry it out. Still confirm before irreversible or outward-facing actions (pushing to git, deleting files, posting externally).
+
 ## Project Overview
 
 Antigravity Kit is an AI-powered design intelligence toolkit providing searchable databases of UI styles, color palettes, font pairings, chart types, and UX guidelines. It works as a skill/workflow for AI coding assistants (Claude Code, Windsurf, Cursor, etc.).
