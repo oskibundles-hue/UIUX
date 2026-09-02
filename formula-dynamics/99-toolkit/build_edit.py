@@ -197,11 +197,14 @@ def plan(duration, canvas, tone, cfg, bug_position="top-left"):  # noqa: C901
     #     on its own shot instead of stacking up.
     specs = cfg.get("specs") or []
     cta_len_pre = min(4.0, max(2.5, duration * 0.22))
-    spec_from = max(lt_start + lt_len + 0.8, duration * 0.30)
-    spec_to = end_start - cta_len_pre - 2.2
+    spec_from = max(lt_start + lt_len + 0.5, duration * 0.28)
+    spec_to = end_start - cta_len_pre - 1.2
     if specs and spec_to > spec_from + 1.5:
         slot = (spec_to - spec_from) / len(specs)
-        hold = min(2.8, max(1.6, slot * 0.78))
+        # Hold must always be shorter than the slot, or chips overlap and two
+        # are on screen at once. On a short clip with several specs the slot
+        # gets tight, so the floor is clamped rather than applied blindly.
+        hold = min(2.8, max(1.0, slot * 0.8), slot - 0.2)
         for i, (text, path) in enumerate(specs):
             st = spec_from + i * slot
             add(f"spec {i + 1}", path, st, st + hold, "fade",

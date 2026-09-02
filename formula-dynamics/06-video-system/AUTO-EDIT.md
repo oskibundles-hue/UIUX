@@ -135,3 +135,45 @@ python3 build_edit.py GT3RS.mov -t sound-check \
 **Finding the numbers yourself:** sample frames with ffmpeg and measure the mean
 brightness of the zone each overlay occupies. Guessing from the thumbnail is how
 you end up with a white logo on a white sky.
+
+---
+
+## Worked example 2 — Ferrari SF90 Stradale (gold)
+
+Same tool, opposite answers, because the footage is the opposite.
+
+```bash
+python3 build_edit.py SF90.mp4 -t reveal --service ppf --none badge \
+  --title-text "SF90 STRADALE|BUILD" --title-tone dark --title-scrim \
+  --spec "CUSTOM WHEELS" --spec "LOWERED" \
+  --spec "UPGRADED EXHAUST" --spec "STAGE 2 TUNE" \
+  --badge-tone light --bug-tone dark --endcard-tone dark \
+  --cta book-your-build --cta-style bar -o SF90_FD.mp4
+```
+
+| | GT3 RS (white) | SF90 (gold) |
+|---|---|---|
+| Logo-bug zone brightness | 170 (sky) | 115, range 2–198 |
+| Logo colour | **black** | **white** |
+| Spec chips | dark | **light** |
+
+The GT3's frame is bright almost everywhere, so a black logo was safe. The
+SF90 opens on dark interior shots — a black logo vanished completely there,
+while white stayed legible on both those and the blue sky. Chips flipped the
+same way: white chips separate from gold bodywork and dark tarmac, where the
+dark chips used on the white car would have sunk into the road.
+
+**Test before you commit.** Composite the overlay onto the darkest and
+brightest frames it will cover and look at them side by side. It takes a
+minute and costs nothing, versus a full render.
+
+Two assumptions that did *not* survive testing here, both worth checking
+rather than reasoning about:
+
+- The red CTA bar looked like it would clash with gold paint. It didn't —
+  saturated red separates cleanly from muted bronze, and it carries more
+  urgency than the black panel. Kept the bar.
+- The `--spec` spacing had a real bug on short clips: the minimum hold was
+  applied before the slot width, so on a 22 s clip with four chips the hold
+  (1.6 s) exceeded the slot (1.35 s) and two chips would have been on screen
+  at once. Hold is now clamped to the slot.
