@@ -7,8 +7,8 @@
 /* ---------------------------------------------------------------
    Palette: grading-suite neutrals. Colour rooms are kept a cool,
    desaturated grey so nothing biases the eye. The single warm
-   accent is torchlight brass - the same warm-subject-against-
-   cool-shadow relationship the Forest LARP look is built on.
+   accent is warm brass - the same warm-subject-against-cool-room
+   relationship the Garage Chrome look is built on.
    --------------------------------------------------------------- */
 :root{
   --ground:#EAECEF;
@@ -282,6 +282,18 @@ table.sliders th:first-child{text-align:left}
 .bar-track{grid-column:1/-1;height:3px;background:var(--rule);border-radius:2px;overflow:hidden;margin-top:4px}
 .bar-fill{height:100%;background:var(--accent);border-radius:2px}
 
+/* ---- diagnosis stat tiles ---- */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:1px;
+  background:var(--rule);border:1px solid var(--rule);border-radius:3px;overflow:hidden;margin:0 0 22px}
+.stat{background:var(--surface);padding:16px 18px}
+.stat .k{font-family:Archivo,sans-serif;font-size:10.5px;font-weight:600;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:6px}
+.stat .v{font-family:Archivo,sans-serif;font-size:26px;font-weight:700;letter-spacing:-.02em;
+  color:var(--ink);display:block;line-height:1;font-variant-numeric:tabular-nums}
+.stat .n{font-size:13.5px;color:var(--ink-2);display:block;margin-top:6px;line-height:1.4}
+.stat.bad .v{color:var(--crit)}
+.stat.good .v{color:var(--good)}
+
 /* ---- code ---------------------------------------------------------- */
 pre{
   background:var(--surface-2);border:1px solid var(--rule);border-radius:3px;
@@ -307,9 +319,9 @@ html{scroll-behavior:smooth}
 <header class="mast">
   <div class="wrap mast-inner">
     <div class="rulemark"><span class="bar"></span><span class="bar b2"></span><span class="bar b3"></span></div>
-    <p class="eyebrow" style="margin:0 0 14px">DJI Osmo Action 6 &middot; D-Log M 10-bit &middot; Instagram Reels</p>
+    <p class="eyebrow" style="margin:0 0 14px">@nq.young &middot; Osmo Action 6 &middot; D-Log M 10-bit</p>
     <h1>Osmo <em>to</em> Reel</h1>
-    <p class="standfirst">The full pipeline from a flat 10-bit log file to a Reel that survives Instagram&rsquo;s encoder &mdash; and the packaging that gets it watched.</p>
+    <p class="standfirst">The full pipeline from a flat 10-bit log file to a Reel that survives Instagram&rsquo;s encoder &mdash; and the diagnosis of why 254,000 views produced 77 followers.</p>
     <div class="mast-meta">
       <span><b>Camera</b> &nbsp;Osmo Action 6</span>
       <span><b>Capture</b> &nbsp;4K 4:3 &middot; 60p &middot; D-Log M</span>
@@ -322,6 +334,7 @@ html{scroll-behavior:smooth}
 <nav class="stages" aria-label="Pipeline stages">
   <div class="wrap" style="padding:0 12px">
     <ol>
+      <li><a href="#diagnosis"><span class="n">00</span>Diagnosis</a></li>
       <li><a href="#capture"><span class="n">01</span>Capture</a></li>
       <li><a href="#convert"><span class="n">02</span>Convert</a></li>
       <li><a href="#grade"><span class="n">03</span>Grade</a></li>
@@ -353,6 +366,58 @@ html{scroll-behavior:smooth}
     </dl>
     <p class="foot"><b>Why not 4K.</b> Instagram re-encodes everything and downscales anything above 1080 on the long edge. Uploading 4K hands their resampler a job your editor does better, and it usually comes back <em>softer</em>. Deliver a clean 1080&times;1920 and you keep control of the downscale and the sharpening.</p>
   </div>
+
+
+  <!-- 00 -------------------------------------------------------------- -->
+  <section class="stage" id="diagnosis">
+    <div class="stage-head">
+      <span class="stage-num">00</span>
+      <div>
+        <h2 class="stage-title">Diagnosis</h2>
+        <p class="stage-sub">Read from 30 days of Insights. The headline number is the least useful one on the page.</p>
+      </div>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><span class="k">Views, 30 days</span><span class="v">254,176</span><span class="n">Looks like the win. It isn&rsquo;t.</span></div>
+      <div class="stat bad"><span class="k">Net followers</span><span class="v">+77</span><span class="n">From a quarter of a million views.</span></div>
+      <div class="stat good"><span class="k">Non-follower reach</span><span class="v">80.4%</span><span class="n">Distribution is working fine.</span></div>
+      <div class="stat bad"><span class="k">Best post, by follows</span><span class="v">2</span><span class="n">Your top content converts nobody.</span></div>
+      <div class="stat bad"><span class="k">Posts on the grid</span><span class="v">3</span><span class="n">Nothing to convert them <em>to</em>.</span></div>
+      <div class="stat"><span class="k">Unique viewers</span><span class="v">15,247</span><span class="n">~11 views each. A narrow pool, seen often.</span></div>
+    </div>
+
+    <div class="note warn">
+      <span class="lbl">The bottleneck is conversion, not reach</span>
+      <p>Four fifths of your views come from people who don&rsquo;t follow you, which means Instagram is already pushing your work to strangers. They are watching and then leaving. Roughly <strong>0.5% of the people who saw you followed you</strong> &mdash; and your single best-performing post earned <strong>two</strong> follows.</p>
+      <p>So more reach will not fix this. Doubling your views at this conversion rate buys you another 77 followers. The leak is between someone finishing a Reel and deciding you are worth following.</p>
+    </div>
+
+    <h3>Where the leak is</h3>
+    <ol class="body">
+      <li><strong>Three posts on the grid.</strong> Someone taps your profile and finds almost nothing. There is no body of work to scroll, no reason to believe the next post will be worth it. This is the single biggest fixable thing, and it costs nothing but volume. If you are archiving posts, stop &mdash; it actively removes the evidence that you are worth following.</li>
+      <li><strong>The bio doesn&rsquo;t say what following gets them.</strong> &ldquo;Reel creator&rdquo; plus a philosophy quote describes how you feel, not what they receive. A visitor should know your subject, your promise and where you are inside two seconds.</li>
+      <li><strong>Supercar POV is the most replicated content on the platform.</strong> The car is the star, not you. People watch the Ferrari, feel the thing they came to feel, and swipe on &mdash; there is nothing to attach to. That is exactly what a 0.5% conversion rate looks like.</li>
+      <li><strong>Your reach is shallow.</strong> 175K Reel views from about 15K accounts means the same narrow pool is seeing you repeatedly rather than the audience widening. Combined with 14% of your audience in India and Indonesia &mdash; classic broad, low-intent supercar reach &mdash; that is distribution without direction.</li>
+    </ol>
+
+    <div class="note">
+      <span class="lbl">You already have the fix, and you sent it to me</span>
+      <p>The garage walkthrough is worth more than any of the car footage. Nobody else has it. &ldquo;Anti Stock Supercar Experience&rdquo; being built from an empty building is a <em>story</em> &mdash; it has stakes, a beginning, and an outcome people will come back to check on. People follow stories; they only watch cars.</p>
+      <p>Supercar POV is your reach engine. The build is your <em>follow</em> engine. You need both, and right now you are only publishing the one that doesn&rsquo;t convert.</p>
+    </div>
+
+    <h3>Rewrite the bio</h3>
+    <p>Name the subject, the promise, and the proof. Something shaped like this:</p>
+    <pre><code>Omarie · Anti Stock Supercar Experience
+Building an exotic rental company from an empty building
+New drops + build progress every week
+📍 [your city]</code></pre>
+    <p>Four lines, and a stranger knows what they get. Compare that with a quote about the weight of words.</p>
+
+    <h3>Post when your people are actually there</h3>
+    <p>Your own Insights say <strong>Mondays 12&ndash;3PM</strong> and <strong>Tuesdays 12&ndash;6PM</strong> Pacific, with the daily curve peaking between 9am and 6pm. Use your numbers, not a generic best-time chart.</p>
+  </section>
 
   <!-- 01 -------------------------------------------------------------- -->
   <section class="stage" id="capture">
@@ -393,12 +458,13 @@ html{scroll-behavior:smooth}
       <p><strong>3. Audio is half your retention.</strong> People swipe away from bad sound faster than bad picture. Wind noise reduction on, camera out of direct wind, and grab a few seconds of room tone at each location &mdash; it makes cuts invisible.</p>
     </div>
 
-    <h3>For LARP specifically</h3>
+    <h3>For cars and garages specifically</h3>
     <ul>
-      <li><strong>Fights</strong> &mdash; 60fps, 1/120, HorizonBalancing. Slow the best two seconds to 50%; leave the rest at speed.</li>
-      <li><strong>Firelight</strong> &mdash; lock warm and <em>let it be warm</em>. Correcting torchlight to neutral kills the whole mood.</li>
-      <li><strong>Forest cover</strong> &mdash; light is green and two to three stops down. Expose for faces, not background. A blown gap in the canopy recovers; a crushed face does not.</li>
-      <li><strong>Costume detail</strong> is your differentiator. Deliberate close-ups of armour, stitching, weapons, hands. These are the shots that get saved and sent.</li>
+      <li><strong>Rolling shots</strong> &mdash; 60fps, 1/120, RockSteady. Slow the best two seconds to 50%; leave the rest at speed.</li>
+      <li><strong>Mixed garage lighting</strong> is the hard case: LED ceiling panels, daylight through the door, and dark walls all at once. Lock white balance to the dominant source and let the rest fall where it falls. Fixing it later is worse.</li>
+      <li><strong>Paint and chrome</strong> blow out fast. Expose for the highlight on the bodywork, not the ambient room &mdash; a recovered shadow looks fine, a clipped highlight on a car is gone.</li>
+      <li><strong>Talking to camera at arm&rsquo;s length</strong> &mdash; use Dewarp, not Wide. Wide up close stretches your face, and you are the thing people are meant to attach to.</li>
+      <li><strong>Deep skin tones need protecting.</strong> Most warm &ldquo;cinematic&rdquo; grades drag them orange and muddy. The looks in this kit pin skin hue so the warmth lifts the room instead of your face.</li>
     </ul>
   </section>
 
@@ -478,7 +544,7 @@ html{scroll-behavior:smooth}
     <p>These approximate the same looks in CapCut&rsquo;s Adjust panel. Apply after the D-Log M conversion. Close, not identical.</p>
     <div class="tw">
       <table class="sliders">
-        <thead><tr><th>Adjust</th><th>Neutral</th><th>Golden</th><th>Forest</th><th>Nordic</th><th>Film</th><th>Night</th></tr></thead>
+        <thead><tr><th>Adjust</th><th>Neutral</th><th>Golden</th><th>Garage</th><th>Nordic</th><th>Film</th><th>Night</th></tr></thead>
         <tbody>
           <tr><td>Brightness</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>+8</td></tr>
           <tr><td>Contrast</td><td>+18</td><td>+16</td><td>+22</td><td>+28</td><td>+10</td><td>+12</td></tr>
@@ -510,11 +576,11 @@ html{scroll-behavior:smooth}
       <li><strong>Cut on motion</strong> &mdash; mid-gesture, mid-step, mid-swing. Cuts on stillness feel like stops.</li>
       <li><strong>Pattern interrupt every 5&ndash;7 seconds</strong>: speed ramp, sound drop, angle change, text card.</li>
       <li><strong>Design the loop.</strong> Match your last frame to your first and the replay is seamless &mdash; and replays count as watch time. This is free reach.</li>
-      <li><strong>Burn in captions.</strong> Most people watch muted first. Auto-caption, then fix the proper nouns &mdash; it will mangle LARP terms and place names every time.</li>
+      <li><strong>Burn in captions.</strong> Most people watch muted first. Auto-caption, then fix the proper nouns &mdash; it will mangle car models and brand names every time.</li>
     </ul>
     <div class="note">
       <span class="lbl">Sound</span>
-      <p>Your own audio beats trending audio on original content &mdash; nat sound of a shield wall, boots, fire, a crowd is material nobody else has. If you do use a trending track, use it inside the first day or two; after that the boost is gone and you are one of thousands. Always duck music under dialogue.</p>
+      <p>Your own audio beats trending audio on original content &mdash; cold starts, revs, doors, tools, the room tone of your own garage is material nobody else has. If you do use a trending track, use it inside the first day or two; after that the boost is gone and you are one of thousands. Always duck music under dialogue.</p>
     </div>
   </section>
 
@@ -560,7 +626,7 @@ html{scroll-behavior:smooth}
     <p>The <span class="mono">ig_export.sh</span> script in the kit does conversion, look, reframe, sharpening and encode in one pass &mdash; at higher quality than any mobile app.</p>
     <pre><code>./ig_export.sh clip.mp4 \
   -c ~/Downloads/DJI_DLogM_to_Rec709.cube \
-  -l luts/AK_Forest_LARP.cube \
+  -l luts/AK_Garage_Chrome.cube \
   -m fill -f 30 -o reel.mp4</code></pre>
   </section>
 
@@ -583,26 +649,27 @@ html{scroll-behavior:smooth}
 
     <div class="note">
       <span class="lbl">Your unfair advantage</span>
-      <p>LARP is visually novel to almost everyone who sees it. Most creators fight for attention in saturated niches; you are showing people a world they have never seen. Lead with the strangest, most beautiful frame you have and let curiosity do the work. The corollary: <strong>assume no knowledge</strong> &mdash; most of your reach has never heard the word. &ldquo;Explaining this world to outsiders&rdquo; is an infinite pillar on its own.</p>
+      <p>It is not the cars. Supercar POV footage is among the most replicated content on the platform &mdash; the audience is watching the car, not you, which is why it reaches and never converts.</p>
+      <p>Your advantage is that <strong>you are building something and filming it</strong>. An empty building becoming a supercar experience has stakes, a timeline, and an outcome people will come back to check on. Cars get you the reach. The build gets you the follow. Publish both.</p>
     </div>
 
     <h3>Hooks &mdash; you have about one second</h3>
     <div class="hooks">
-      <div class="hook"><span class="k">Curiosity gap</span><q>This costs &pound;40 and took 3 months</q><q>Everyone here is in character. Including the bartender.</q></div>
-      <div class="hook"><span class="k">Stakes upfront</span><q>If this shield breaks I&rsquo;m out for the weekend</q><q>One take. 200 people watching.</q></div>
-      <div class="hook"><span class="k">POV / immersion</span><q>POV: you just walked into the wrong tavern</q><q>POV: 6am, day two, everything hurts</q></div>
-      <div class="hook"><span class="k">Transformation &mdash; strongest format on the platform</span><q>From this &rarr; to this in 40 minutes</q><q>Open on the reveal, then cut back to the start</q></div>
-      <div class="hook"><span class="k">Insider knowledge</span><q>Three things nobody tells you before your first event</q><q>What LARPers actually do when it rains</q></div>
+      <div class="hook"><span class="k">Curiosity gap</span><q>This building was completely empty 30 days ago</q><q>Everyone thinks you need money to start this. You need three things.</q></div>
+      <div class="hook"><span class="k">Stakes upfront</span><q>Rent on this place is due in six days and I have zero cars in it</q><q>I put everything into this before I made a single dollar</q></div>
+      <div class="hook"><span class="k">POV / immersion</span><q>POV: you&rsquo;re building a supercar rental from nothing</q><q>POV: your office is a garage full of Ferraris</q></div>
+      <div class="hook"><span class="k">Transformation &mdash; strongest format on the platform</span><q>Empty warehouse &rarr; supercar showroom</q><q>Open on the finished room, then cut back to the empty one</q></div>
+      <div class="hook"><span class="k">Insider knowledge</span><q>What nobody tells you about renting out exotic cars</q><q>What a McLaren actually costs to keep on the road</q></div>
     </div>
     <p>Text hook on screen from frame one, three to seven words, large and high contrast. Motion in the first frame. Never &ldquo;Hey guys&rdquo; &mdash; you have spent your second.</p>
 
     <h3>The caption CTA is your highest-leverage line</h3>
     <p>Sends are weighted enormously and they are the one signal you can directly ask for. Ask <em>specifically</em> &mdash; a named person beats a generic &ldquo;share this&rdquo;.</p>
     <div class="hooks">
-      <div class="hook"><span class="k">For sends</span><q>Send this to the friend who keeps saying they&rsquo;ll come next time</q><q>Tag the person who&rsquo;d survive about four minutes here</q></div>
-      <div class="hook"><span class="k">For comments &mdash; keep the answer low-effort</span><q>Which character would you actually play? Be honest.</q><q>Sword or bow?</q></div>
+      <div class="hook"><span class="k">For sends</span><q>Send this to whoever you&rsquo;d bring on the first drive</q><q>Tag the friend who says they&rsquo;re buying one &ldquo;next year&rdquo;</q></div>
+      <div class="hook"><span class="k">For comments &mdash; keep the answer low-effort</span><q>Which one should be the first car in here?</q><q>Ferrari or Lamborghini. One word.</q></div>
     </div>
-    <p>First caption line is a second hook &mdash; it must earn the tap on &ldquo;more&rdquo;. Write searchable words naturally (Instagram search reads captions now), and use three to five mixed-size hashtags, not thirty.</p>
+    <p>First caption line is a second hook &mdash; it must earn the tap on &ldquo;more&rdquo;. Write searchable words naturally &mdash; <em>exotic car rental, supercar experience, McLaren, Ferrari, car business</em> &mdash; because Instagram search reads captions now. Three to five mixed-size hashtags, not thirty.</p>
 
     <h3>Weekly diagnostic</h3>
     <div class="tw">
@@ -629,7 +696,7 @@ html{scroll-behavior:smooth}
 
     <h3>The 30 days</h3>
     <div class="plan">
-      <div class="week"><span class="wk">Week 1</span><div><h4>Baseline and system</h4><p>Lock the capture settings and LUT workflow. Four Reels, one per pillar. Don&rsquo;t chase reach &mdash; you&rsquo;re collecting data. Write down the five diagnostic numbers for each.</p></div></div>
+      <div class="week"><span class="wk">Week 1</span><div><h4>Baseline and system</h4><p>Lock the capture settings and LUT workflow. Four Reels, one per pillar &mdash; and fix the bio and grid before you post any of them. Don&rsquo;t chase reach &mdash; you&rsquo;re collecting data. Write down the five diagnostic numbers for each.</p></div></div>
       <div class="week"><span class="wk">Week 2</span><div><h4>Format testing</h4><p>Five Reels across three series formats. Same grade, same caption structure, different formats. You&rsquo;re looking for which <em>format</em> wins, not which topic.</p></div></div>
       <div class="week"><span class="wk">Week 3</span><div><h4>Double down</h4><p>Take the two best formats and make three more of each. Vary the subject, keep the structure identical. This is where a format becomes a series.</p></div></div>
       <div class="week"><span class="wk">Week 4</span><div><h4>Scale what works</h4><p>Five Reels, at least three in your proven format. Remake your single best post with a different hook &mdash; reposting a proven concept with a new opening is how every large account works.</p></div></div>
@@ -643,7 +710,7 @@ html{scroll-behavior:smooth}
   </section>
 
   <footer>
-    <p><strong>The kit</strong> &mdash; six look LUTs, a validating LUT generator, and an ffmpeg export pipeline live in <span class="mono">creator-kit/</span> on the <span class="mono">claude/instagram-growth-video-editing-rswexx</span> branch.</p>
+    <p><strong>The kit</strong> &mdash; six look LUTs, a validating LUT generator, and an ffmpeg export pipeline live in <span class="mono">creator-kit/</span> on the <span class="mono">claude/instagram-growth-video-editing-rswexx</span> branch. Diagnosis read from 30 days of @nq.young Insights, Sept 2026.</p>
     <p>Ranking-signal guidance reflects Instagram behaviour as of 2026 and will drift. The capture and colour pipeline won&rsquo;t.</p>
   </footer>
 </div>
@@ -656,13 +723,13 @@ const LOOKS = [
    s:["#C9885D","#557F1C","#6DA7F1","#181B20","#EEE5DA","#E76916"]},
   {n:"AK_Golden_Vlog", w:"Golden hour, cafés, interiors. Warm midtones against cool shadows, so the warmth reads as sunlight not an orange cast.",
    s:["#D98855","#5F801A","#7AA8DC","#191C25","#FFEDC5","#EF6B18"]},
-  {n:"AK_Forest_LARP", w:"Woodland. Rolls acid yellow-green foliage toward deep cinematic green and protects skin, so faces stay warm against the forest.",
+  {n:"AK_Garage_Chrome", w:"Garages, workshops, showrooms, car builds. Cools concrete and steel, controls chrome blowout, holds skin warm against a cold room.",
    s:["#C68664","#507C34","#71A9F4","#151C29","#F3F1E8","#E15F16"]},
-  {n:"AK_Nordic_Steel", w:"Overcast, combat, winter. Cold, high contrast, desaturated — reads as weight and consequence.",
+  {n:"AK_Nordic_Steel", w:"Overcast, night exteriors, dramatic beats. Cold, high contrast, desaturated — reads as weight and consequence.",
    s:["#BB896C","#517D33","#70AAF5","#111827","#EDF4F6","#CE5D10"]},
   {n:"AK_Film_Halation", w:"Montage and B-roll. Lifted matte blacks, cool shadows, warm highlights. The most ‘edited’ look in the pack.",
    s:["#C28D6C","#618234","#7CA8EA","#21262F","#F6F1DF","#DE7331"]},
-  {n:"AK_Night_City", w:"Night, bars, streets, torch and firelight. Opens shadows without amplifying the noise floor.",
+  {n:"AK_Night_City", w:"Night drives, gas stations, streets, city lights. Opens shadows without amplifying the noise floor.",
    s:["#D39678","#678B38","#84B2F7","#202733","#FCF7F4","#E87B36"]}
 ];
 const PATCH = ["skin","foliage","sky","shadow","highlight","firelight"];
@@ -677,11 +744,11 @@ document.getElementById("looks").innerHTML = LOOKS.map(l => `
   </div>`).join("");
 
 const PILLARS = [
-  {n:"World / immersion", j:"Reach. The visually stunning material nobody has seen.", p:30},
-  {n:"Explainer",         j:"Reach beyond the niche — for people who don’t know what LARP is.", p:25},
-  {n:"Craft / kit",       j:"Saves and authority. Costume, armour, weapons, builds.", p:20},
-  {n:"Human / community", j:"Follows. You, and the people around you.", p:15},
-  {n:"Lifestyle vlog",    j:"Conversion. Turns a viewer of the content into a follower of you.", p:10}
+  {n:"The build",      j:"Follows. The empty-building-to-supercar-showroom story nobody else has.", p:30},
+  {n:"Cars & drives",  j:"Reach. Your hook — but it converts nobody on its own.", p:25},
+  {n:"How it works",   j:"Saves and authority. Real costs, insurance, logistics, the boring truth.", p:20},
+  {n:"You",            j:"Follows. Face, voice, an actual opinion. This is what they attach to.", p:15},
+  {n:"Fits & lifestyle", j:"Conversion. The texture around the business.", p:10}
 ];
 document.getElementById("pillars").innerHTML = PILLARS.map(x => `
   <div class="pillar">
