@@ -1,0 +1,25 @@
+/**
+ * One place for every visual decision, so a Reel looks like the last one.
+ * Consistency across posts is a growth lever: people should recognise your
+ * grid from the thumbnail before they read the handle.
+ */
+export const theme = {
+  accent: "#F0B23C",        // brass. Reads on concrete, chrome and night asphalt.
+  accentDeep: "#C4801B",
+  ink: "#FFFFFF",
+  inkShadow: "rgba(0,0,0,0.72)",
+
+  // Instagram overlays its own UI on the Reel. Text outside these bounds gets
+  // covered by the caption block, the action rail, or the status bar.
+  safe: {
+    top: 260,
+    bottom: 470,           // username + caption + audio strip
+    left: 72,
+    right: 190,            // like / comment / share / audio rail
+  },
+
+  captionBaselineY: 1240,   // clear of the bottom UI, still in the eyeline
+  hookY: 430,
+} as const;
+
+export type Theme = typeof theme;
