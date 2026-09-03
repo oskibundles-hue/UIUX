@@ -1,0 +1,706 @@
+<title>Osmo to Reel</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&display=swap">
+
+<style>
+/* ---------------------------------------------------------------
+   Palette: grading-suite neutrals. Colour rooms are kept a cool,
+   desaturated grey so nothing biases the eye. The single warm
+   accent is torchlight brass - the same warm-subject-against-
+   cool-shadow relationship the Forest LARP look is built on.
+   --------------------------------------------------------------- */
+:root{
+  --ground:#EAECEF;
+  --surface:#FFFFFF;
+  --surface-2:#F4F5F7;
+  --ink:#15181D;
+  --ink-2:#4B515C;
+  --ink-3:#79808C;
+  --rule:#D7DAE0;
+  --rule-strong:#B9BEC7;
+  --accent:#A66A22;
+  --accent-ink:#8A5719;
+  --accent-soft:#F3E7D5;
+  --good:#3D7A4C;
+  --crit:#A63A31;
+  --shadow:0 1px 2px rgba(18,22,28,.06), 0 8px 24px -12px rgba(18,22,28,.18);
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --ground:#111317;
+    --surface:#181B20;
+    --surface-2:#1F232A;
+    --ink:#E9EBEF;
+    --ink-2:#A7AEB9;
+    --ink-3:#767D89;
+    --rule:#282D35;
+    --rule-strong:#3A404A;
+    --accent:#DFA75C;
+    --accent-ink:#EBBC7A;
+    --accent-soft:#2A2114;
+    --good:#6FB37E;
+    --crit:#E0736A;
+    --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 28px -14px rgba(0,0,0,.7);
+  }
+}
+:root[data-theme="dark"]{
+  --ground:#111317;
+  --surface:#181B20;
+  --surface-2:#1F232A;
+  --ink:#E9EBEF;
+  --ink-2:#A7AEB9;
+  --ink-3:#767D89;
+  --rule:#282D35;
+  --rule-strong:#3A404A;
+  --accent:#DFA75C;
+  --accent-ink:#EBBC7A;
+  --accent-soft:#2A2114;
+  --good:#6FB37E;
+  --crit:#E0736A;
+  --shadow:0 1px 2px rgba(0,0,0,.4), 0 8px 28px -14px rgba(0,0,0,.7);
+}
+
+*{box-sizing:border-box}
+body{
+  background:var(--ground);
+  color:var(--ink);
+  font-family:"Source Serif 4",Georgia,"Times New Roman",serif;
+  font-size:17px; line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:780px;margin:0 auto;padding:0 22px}
+
+/* ---- type roles ---------------------------------------------- */
+h1,h2,h3,h4,.ui{font-family:Archivo,"Helvetica Neue",Arial,sans-serif}
+.mono,code,td.v,.spec dd{font-family:"IBM Plex Mono",ui-monospace,Menlo,Consolas,monospace}
+.eyebrow{
+  font-family:Archivo,sans-serif; font-weight:600; font-size:11px;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--ink-3);
+}
+
+/* ---- masthead ------------------------------------------------- */
+header.mast{
+  border-bottom:1px solid var(--rule);
+  background:var(--surface);
+}
+.mast-inner{padding:52px 0 40px}
+.rulemark{
+  display:flex; align-items:center; gap:12px; margin-bottom:26px;
+}
+.rulemark .bar{height:3px;flex:1;background:var(--accent);border-radius:2px}
+.rulemark .bar.b2{background:var(--rule-strong);flex:0 0 46px}
+.rulemark .bar.b3{background:var(--rule-strong);flex:0 0 18px}
+h1{
+  font-size:clamp(38px,8vw,62px); line-height:.98; font-weight:700;
+  letter-spacing:-.032em; margin:0 0 18px; text-wrap:balance;
+}
+h1 em{font-style:normal;color:var(--accent)}
+.standfirst{
+  font-size:19px; color:var(--ink-2); margin:0; max-width:60ch;
+}
+.mast-meta{
+  display:flex; flex-wrap:wrap; gap:10px 26px; margin-top:26px;
+  font-family:Archivo,sans-serif; font-size:12.5px; color:var(--ink-3);
+  letter-spacing:.02em;
+}
+.mast-meta b{color:var(--ink-2);font-weight:600}
+
+/* ---- sticky stage nav ----------------------------------------- */
+nav.stages{
+  position:sticky; top:0; z-index:20;
+  background:color-mix(in srgb, var(--ground) 88%, transparent);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--rule);
+}
+nav.stages ol{
+  list-style:none; margin:0; padding:0; display:flex;
+  overflow-x:auto; scrollbar-width:none;
+}
+nav.stages ol::-webkit-scrollbar{display:none}
+nav.stages a{
+  display:block; padding:13px 15px; white-space:nowrap;
+  font-family:Archivo,sans-serif; font-size:12px; font-weight:600;
+  letter-spacing:.1em; text-transform:uppercase;
+  color:var(--ink-3); text-decoration:none;
+  border-bottom:2px solid transparent;
+}
+nav.stages a:hover{color:var(--ink)}
+nav.stages a .n{color:var(--accent); margin-right:7px; font-variant-numeric:tabular-nums}
+nav.stages a[aria-current="true"]{color:var(--ink);border-bottom-color:var(--accent)}
+nav.stages a:focus-visible{outline:2px solid var(--accent);outline-offset:-3px;border-radius:3px}
+
+/* ---- answer card ---------------------------------------------- */
+.answer{
+  margin:34px 0 8px; background:var(--surface); border:1px solid var(--rule);
+  border-top:3px solid var(--accent); border-radius:3px; box-shadow:var(--shadow);
+  overflow:hidden;
+}
+.answer .hd{padding:20px 24px 0}
+.answer h2{margin:6px 0 4px;font-size:22px;letter-spacing:-.015em}
+.answer .sub{margin:0 0 18px;color:var(--ink-2);font-size:15.5px}
+.spec{
+  margin:0; display:grid; grid-template-columns:1fr 1fr;
+  border-top:1px solid var(--rule);
+}
+.spec > div{
+  padding:13px 24px; border-bottom:1px solid var(--rule);
+  display:flex; justify-content:space-between; align-items:baseline; gap:14px;
+}
+.spec > div:nth-child(odd){border-right:1px solid var(--rule)}
+.spec dt{
+  font-family:Archivo,sans-serif;font-size:11.5px;font-weight:600;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--ink-3);
+}
+.spec dd{margin:0;font-size:14px;font-weight:500;color:var(--ink);text-align:right;font-variant-numeric:tabular-nums}
+.answer .foot{
+  padding:15px 24px; background:var(--surface-2); font-size:14.5px; color:var(--ink-2);
+}
+.answer .foot b{color:var(--ink);font-weight:600}
+@media(max-width:560px){
+  .spec{grid-template-columns:1fr}
+  .spec > div:nth-child(odd){border-right:0}
+}
+
+/* ---- stage sections ------------------------------------------- */
+section.stage{padding:56px 0 8px; border-top:1px solid var(--rule)}
+section.stage:first-of-type{border-top:0}
+.stage-head{display:flex;gap:16px;align-items:flex-start;margin-bottom:8px}
+.stage-num{
+  font-family:Archivo,sans-serif;font-weight:700;font-size:13px;
+  color:var(--accent); letter-spacing:.06em; padding-top:9px;
+  font-variant-numeric:tabular-nums; flex:0 0 auto;
+}
+h2.stage-title{
+  font-size:clamp(26px,4.6vw,34px); letter-spacing:-.025em; font-weight:700;
+  margin:0; line-height:1.1; text-wrap:balance;
+}
+.stage-sub{color:var(--ink-2);margin:6px 0 26px;font-size:17px;max-width:62ch}
+h3{font-size:18px;letter-spacing:-.01em;margin:34px 0 10px;font-weight:600}
+p{margin:0 0 16px;max-width:66ch}
+ul,ol.body{margin:0 0 16px;padding-left:20px;max-width:66ch}
+li{margin-bottom:7px}
+strong{font-weight:600}
+a{color:var(--accent-ink);text-underline-offset:2px}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:2px}
+
+/* ---- tables ---------------------------------------------------- */
+.tw{overflow-x:auto;margin:0 0 20px;border:1px solid var(--rule);border-radius:3px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:14.5px;min-width:440px}
+th{
+  font-family:Archivo,sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3);text-align:left;
+  padding:11px 16px;border-bottom:1px solid var(--rule-strong);white-space:nowrap;
+}
+td{padding:11px 16px;border-bottom:1px solid var(--rule);vertical-align:top;color:var(--ink-2)}
+td:first-child{color:var(--ink);font-weight:600;font-family:Archivo,sans-serif;font-size:13.5px;white-space:nowrap}
+td.v{font-size:13.5px;color:var(--ink);font-weight:500;font-variant-numeric:tabular-nums;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+table.grid td:first-child{white-space:normal}
+table.sliders{min-width:620px;font-variant-numeric:tabular-nums}
+table.sliders td{font-family:"IBM Plex Mono",monospace;font-size:12.5px;padding:9px 12px;text-align:right;color:var(--ink)}
+table.sliders td:first-child{text-align:left;font-family:Archivo,sans-serif;font-size:12.5px}
+table.sliders th{padding:10px 12px;text-align:right;font-size:10px;letter-spacing:.07em}
+table.sliders th:first-child{text-align:left}
+
+/* ---- callout --------------------------------------------------- */
+.note{
+  background:var(--surface); border:1px solid var(--rule);
+  border-left:3px solid var(--accent); border-radius:0 3px 3px 0;
+  padding:16px 20px; margin:0 0 22px;
+}
+.note .lbl{
+  font-family:Archivo,sans-serif;font-size:10.5px;font-weight:700;letter-spacing:.13em;
+  text-transform:uppercase;color:var(--accent-ink);display:block;margin-bottom:5px;
+}
+.note p:last-child{margin-bottom:0}
+.note.warn{border-left-color:var(--crit)}
+.note.warn .lbl{color:var(--crit)}
+
+/* ---- look cards + real LUT swatches ----------------------------- */
+.looks{display:grid;gap:12px;margin:0 0 24px}
+.look{
+  background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+  overflow:hidden;display:grid;grid-template-columns:118px 1fr;
+}
+.sw{display:grid;grid-template-rows:repeat(3,1fr);grid-template-columns:1fr 1fr}
+.sw span{display:block;min-height:30px}
+.look-body{padding:14px 18px;border-left:1px solid var(--rule)}
+.look-name{
+  font-family:"IBM Plex Mono",monospace;font-size:12.5px;font-weight:500;
+  color:var(--ink);margin:0 0 4px;
+}
+.look-when{font-size:14.5px;color:var(--ink-2);margin:0;line-height:1.5}
+@media(max-width:520px){
+  .look{grid-template-columns:1fr}
+  .look-body{border-left:0;border-top:1px solid var(--rule)}
+  .sw{grid-template-rows:1fr;grid-template-columns:repeat(6,1fr)}
+  .sw span{min-height:26px}
+}
+.swkey{
+  font-family:Archivo,sans-serif;font-size:11px;color:var(--ink-3);
+  letter-spacing:.05em;margin:-14px 0 24px;
+}
+
+/* ---- hook list --------------------------------------------------- */
+.hooks{display:grid;gap:0;border:1px solid var(--rule);border-radius:3px;background:var(--surface);margin-bottom:22px}
+.hook{padding:14px 18px;border-bottom:1px solid var(--rule)}
+.hook:last-child{border-bottom:0}
+.hook .k{
+  font-family:Archivo,sans-serif;font-size:11px;font-weight:600;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:7px;
+}
+.hook q{display:block;color:var(--ink);font-size:16px;quotes:'"' '"'}
+.hook q + q{margin-top:5px}
+
+/* ---- 30 day plan ------------------------------------------------- */
+.plan{display:grid;gap:10px;margin-bottom:22px}
+.week{
+  display:grid;grid-template-columns:82px 1fr;gap:18px;
+  padding:16px 18px;background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+}
+.week .wk{
+  font-family:Archivo,sans-serif;font-weight:700;font-size:12px;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--accent);padding-top:2px;
+}
+.week h4{margin:0 0 5px;font-size:16px;font-weight:600;letter-spacing:-.01em}
+.week p{margin:0;font-size:15px;color:var(--ink-2)}
+@media(max-width:520px){.week{grid-template-columns:1fr;gap:8px}}
+
+/* ---- pillars ------------------------------------------------------ */
+.pillars{display:grid;gap:9px;margin-bottom:22px}
+.pillar{
+  display:grid;grid-template-columns:1fr auto;gap:14px;align-items:center;
+  padding:13px 18px;background:var(--surface);border:1px solid var(--rule);border-radius:3px;
+}
+.pillar .nm{font-family:Archivo,sans-serif;font-weight:600;font-size:15px;color:var(--ink)}
+.pillar .jb{font-size:14.5px;color:var(--ink-2);display:block;margin-top:2px}
+.pillar .pc{
+  font-family:"IBM Plex Mono",monospace;font-size:13px;color:var(--accent-ink);
+  font-variant-numeric:tabular-nums;font-weight:500;
+}
+.bar-track{grid-column:1/-1;height:3px;background:var(--rule);border-radius:2px;overflow:hidden;margin-top:4px}
+.bar-fill{height:100%;background:var(--accent);border-radius:2px}
+
+/* ---- code ---------------------------------------------------------- */
+pre{
+  background:var(--surface-2);border:1px solid var(--rule);border-radius:3px;
+  padding:14px 16px;overflow-x:auto;font-size:13px;line-height:1.6;margin:0 0 20px;
+  color:var(--ink);
+}
+code{font-size:.92em;background:var(--surface-2);padding:1px 5px;border-radius:2px;border:1px solid var(--rule)}
+pre code{background:none;padding:0;border:0}
+
+/* ---- pipeline diagram ----------------------------------------------- */
+.pipe{margin:0 0 26px;background:var(--surface);border:1px solid var(--rule);border-radius:3px;padding:20px 18px}
+.pipe svg{display:block;width:100%;height:auto}
+
+footer{
+  border-top:1px solid var(--rule); margin-top:60px; padding:30px 0 54px;
+  color:var(--ink-3); font-size:14px;
+}
+footer p{max-width:66ch;margin:0 0 10px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important;scroll-behavior:auto!important}}
+html{scroll-behavior:smooth}
+</style>
+
+<header class="mast">
+  <div class="wrap mast-inner">
+    <div class="rulemark"><span class="bar"></span><span class="bar b2"></span><span class="bar b3"></span></div>
+    <p class="eyebrow" style="margin:0 0 14px">DJI Osmo Action 6 &middot; D-Log M 10-bit &middot; Instagram Reels</p>
+    <h1>Osmo <em>to</em> Reel</h1>
+    <p class="standfirst">The full pipeline from a flat 10-bit log file to a Reel that survives Instagram&rsquo;s encoder &mdash; and the packaging that gets it watched.</p>
+    <div class="mast-meta">
+      <span><b>Camera</b> &nbsp;Osmo Action 6</span>
+      <span><b>Capture</b> &nbsp;4K 4:3 &middot; 60p &middot; D-Log M</span>
+      <span><b>Edit</b> &nbsp;DJI Mimo &rarr; CapCut</span>
+      <span><b>Deliver</b> &nbsp;1080&times;1920 H.264</span>
+    </div>
+  </div>
+</header>
+
+<nav class="stages" aria-label="Pipeline stages">
+  <div class="wrap" style="padding:0 12px">
+    <ol>
+      <li><a href="#capture"><span class="n">01</span>Capture</a></li>
+      <li><a href="#convert"><span class="n">02</span>Convert</a></li>
+      <li><a href="#grade"><span class="n">03</span>Grade</a></li>
+      <li><a href="#cut"><span class="n">04</span>Cut</a></li>
+      <li><a href="#publish"><span class="n">05</span>Publish</a></li>
+      <li><a href="#grow"><span class="n">06</span>Grow</a></li>
+    </ol>
+  </div>
+</nav>
+
+<div class="wrap">
+
+  <!-- The direct answer to "highest resolution that's compatible" -->
+  <div class="answer">
+    <div class="hd">
+      <p class="eyebrow">The export spec</p>
+      <h2>Highest quality Instagram will actually keep</h2>
+      <p class="sub">Not the highest number your camera can produce &mdash; the highest that survives the platform.</p>
+    </div>
+    <dl class="spec">
+      <div><dt>Resolution</dt><dd>1080 &times; 1920</dd></div>
+      <div><dt>Aspect</dt><dd>9:16, square pixels</dd></div>
+      <div><dt>Frame rate</dt><dd>30 fps (60 if all motion)</dd></div>
+      <div><dt>Codec</dt><dd>H.264 High, yuv420p</dd></div>
+      <div><dt>Bitrate</dt><dd>10&ndash;14 Mbps</dd></div>
+      <div><dt>Colour tag</dt><dd>Rec.709 / bt709</dd></div>
+      <div><dt>Audio</dt><dd>AAC 48 kHz, &minus;14 LUFS</dd></div>
+      <div><dt>Container</dt><dd>MP4, faststart</dd></div>
+    </dl>
+    <p class="foot"><b>Why not 4K.</b> Instagram re-encodes everything and downscales anything above 1080 on the long edge. Uploading 4K hands their resampler a job your editor does better, and it usually comes back <em>softer</em>. Deliver a clean 1080&times;1920 and you keep control of the downscale and the sharpening.</p>
+  </div>
+
+  <!-- 01 -------------------------------------------------------------- -->
+  <section class="stage" id="capture">
+    <div class="stage-head">
+      <span class="stage-num">01</span>
+      <div>
+        <h2 class="stage-title">Capture</h2>
+        <p class="stage-sub">Everything downstream is capped by what you record. These settings are chosen for footage that has to survive a 4K&nbsp;&rarr;&nbsp;1080 downscale <em>and</em> a platform re-encode, while staying gradeable.</p>
+      </div>
+    </div>
+
+    <div class="tw">
+      <table>
+        <thead><tr><th>Setting</th><th>Value</th><th>Why</th></tr></thead>
+        <tbody>
+          <tr><td>Resolution</td><td class="v">4K 4:3</td><td>Full sensor height. Room to crop 9:16 in post and still be oversampled.</td></tr>
+          <tr><td>Frame rate</td><td class="v">60 fps</td><td>Smooth motion, and 50% slow-motion on a 30p timeline. Use 24/30 for talking head.</td></tr>
+          <tr><td>Colour</td><td class="v">D-Log M 10-bit</td><td>10-bit is what makes skies and skin gradeable instead of banded.</td></tr>
+          <tr><td>Codec</td><td class="v">HEVC</td><td>Required for 10-bit.</td></tr>
+          <tr><td>Bitrate</td><td class="v">High</td><td>Up to 120 Mbps. Storage is cheap, detail is not.</td></tr>
+          <tr><td>Shutter</td><td class="v">1/120</td><td>Double your frame rate &mdash; the 180&deg; rule. This is cinematic motion blur.</td></tr>
+          <tr><td>ISO</td><td class="v">Manual, max 3200</td><td>Stops auto-ISO pumping brightness mid-shot.</td></tr>
+          <tr><td>White balance</td><td class="v">Manual, always</td><td>See below. This is the big one.</td></tr>
+          <tr><td>Stabilisation</td><td class="v">RockSteady 3.0</td><td>HorizonBalancing for fights. HorizonSteady crops hardest &mdash; save it.</td></tr>
+          <tr><td>FOV</td><td class="v">Wide / Dewarp</td><td>Wide for arm&rsquo;s length. Dewarp for faces &mdash; wide up close distorts features.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Why 4:3 rather than 16:9</h3>
+    <p>A 9:16 crop out of 4K 4:3 leaves you roughly <span class="mono">1620&times;2880</span> &mdash; still half again larger than what you deliver, so the downscale <em>adds</em> sharpness instead of just discarding pixels. The same crop out of 4K 16:9 gives <span class="mono">1215&times;2160</span>: usable, but you have spent your margin and you cannot reframe vertically at all.</p>
+    <p>Shoot <strong>4K 9:16 natively</strong> instead when a clip is Reels-only and the framing is locked &mdash; maximum sharpness on the delivered frame, zero reframing latitude.</p>
+
+    <div class="note">
+      <span class="lbl">The three that matter most</span>
+      <p><strong>1. Lock white balance.</strong> Auto WB drifting mid-shot is the most obvious amateur tell and it is genuinely hard to fix, because the shift is non-linear. Daylight <span class="mono">5600K</span> &middot; shade <span class="mono">7000K</span> &middot; tungsten <span class="mono">3200K</span> &middot; firelight and tavern scenes <span class="mono">2800&ndash;3200K</span>. A WB change between shots reads as a cut; inside a shot it reads as a mistake.</p>
+      <p><strong>2. Get ND filters.</strong> Holding 1/120 in daylight means cutting light. ND8 for overcast and golden hour, ND16 for normal daylight, ND32 for bright sun and snow. Without them the camera runs to 1/2000 and your fight scenes strobe. This is the single clearest line between &ldquo;action cam footage&rdquo; and &ldquo;a film&rdquo;.</p>
+      <p><strong>3. Audio is half your retention.</strong> People swipe away from bad sound faster than bad picture. Wind noise reduction on, camera out of direct wind, and grab a few seconds of room tone at each location &mdash; it makes cuts invisible.</p>
+    </div>
+
+    <h3>For LARP specifically</h3>
+    <ul>
+      <li><strong>Fights</strong> &mdash; 60fps, 1/120, HorizonBalancing. Slow the best two seconds to 50%; leave the rest at speed.</li>
+      <li><strong>Firelight</strong> &mdash; lock warm and <em>let it be warm</em>. Correcting torchlight to neutral kills the whole mood.</li>
+      <li><strong>Forest cover</strong> &mdash; light is green and two to three stops down. Expose for faces, not background. A blown gap in the canopy recovers; a crushed face does not.</li>
+      <li><strong>Costume detail</strong> is your differentiator. Deliberate close-ups of armour, stitching, weapons, hands. These are the shots that get saved and sent.</li>
+    </ul>
+  </section>
+
+  <!-- 02 -------------------------------------------------------------- -->
+  <section class="stage" id="convert">
+    <div class="stage-head">
+      <span class="stage-num">02</span>
+      <div>
+        <h2 class="stage-title">Convert</h2>
+        <p class="stage-sub">D-Log M is a transfer curve, not a look. This step is technical and has one correct answer.</p>
+      </div>
+    </div>
+
+    <div class="pipe">
+      <svg viewBox="0 0 700 92" role="img" aria-label="Pipeline: D-Log M clip, then DJI official conversion to Rec.709, then a creative look LUT, then export to Instagram.">
+        <defs>
+          <marker id="ar" markerWidth="7" markerHeight="7" refX="6" refY="3.5" orient="auto">
+            <path d="M0,0 L7,3.5 L0,7 z" fill="currentColor"/>
+          </marker>
+        </defs>
+        <g style="color:var(--rule-strong)">
+          <line x1="140" y1="40" x2="176" y2="40" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar)"/>
+          <line x1="340" y1="40" x2="376" y2="40" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar)"/>
+          <line x1="524" y1="40" x2="560" y2="40" stroke="currentColor" stroke-width="1.5" marker-end="url(#ar)"/>
+        </g>
+        <g font-family="Archivo, sans-serif" font-size="12" font-weight="600">
+          <rect x="4" y="22" width="132" height="36" rx="3" fill="var(--surface-2)" stroke="var(--rule-strong)"/>
+          <text x="70" y="44" text-anchor="middle" fill="var(--ink)">D-Log M clip</text>
+          <rect x="182" y="22" width="154" height="36" rx="3" fill="var(--accent-soft)" stroke="var(--accent)"/>
+          <text x="259" y="44" text-anchor="middle" fill="var(--accent-ink)">DJI official LUT</text>
+          <rect x="382" y="22" width="138" height="36" rx="3" fill="var(--surface-2)" stroke="var(--rule-strong)"/>
+          <text x="451" y="44" text-anchor="middle" fill="var(--ink)">Look LUT</text>
+          <rect x="566" y="22" width="130" height="36" rx="3" fill="var(--surface-2)" stroke="var(--rule-strong)"/>
+          <text x="631" y="44" text-anchor="middle" fill="var(--ink)">1080&#215;1920</text>
+        </g>
+        <g font-family="Archivo, sans-serif" font-size="9.5" letter-spacing="1" fill="var(--ink-3)" text-anchor="middle">
+          <text x="70" y="76">FLAT, 10-BIT</text>
+          <text x="259" y="76">TECHNICAL</text>
+          <text x="451" y="76">CREATIVE</text>
+          <text x="631" y="76">DELIVER</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="note warn">
+      <span class="lbl">Use DJI&rsquo;s own conversion LUT &mdash; not a generated one</span>
+      <p>DJI does not publish the D-Log M transfer function. Any &ldquo;D-Log M &rarr; Rec.709&rdquo; LUT built from scratch by a third party, or by an AI, is guesswork &mdash; and a wrong conversion is worse than none, because it bakes in a colour error that every later adjustment amplifies. Download the official one free from <a href="https://www.dji.com/lut">dji.com/lut</a>.</p>
+    </div>
+
+    <p>Two reliable ways to apply it on mobile:</p>
+    <ul>
+      <li><strong>DJI Mimo</strong> &mdash; import, apply the D-Log M &rarr; Rec.709 LUT, export. Most reliable mobile path, because Mimo knows the format natively.</li>
+      <li><strong>CapCut</strong> &mdash; Filters &rarr; Import LUT. Dependable on CapCut <em>Desktop</em>; on mobile it depends on your app version. If you have no import option, convert in Mimo or use the slider recipes in stage 03.</li>
+    </ul>
+    <p>Convert first, <em>then</em> grade. If you try to fix the flat look with contrast and saturation sliders instead, you will tear the image apart.</p>
+  </section>
+
+  <!-- 03 -------------------------------------------------------------- -->
+  <section class="stage" id="grade">
+    <div class="stage-head">
+      <span class="stage-num">03</span>
+      <div>
+        <h2 class="stage-title">Grade</h2>
+        <p class="stage-sub">Six looks, built for this camera and this content. They go on top of the conversion, never instead of it.</p>
+      </div>
+    </div>
+
+    <div class="looks" id="looks"></div>
+    <p class="swkey">Swatches are rendered from each LUT&rsquo;s actual output &mdash; skin, foliage, sky, shadow, highlight, firelight.</p>
+
+    <div class="note">
+      <span class="lbl">Built for Instagram&rsquo;s encoder</span>
+      <p>Every look carries three compensations baked in: a small <strong>black floor lift</strong> so shadows band less after transcode, a <strong>guard on extreme reds</strong> (the first thing 4:2:0 chroma subsampling smears), and a <strong>highlight rolloff</strong> so skies compress instead of clipping.</p>
+    </div>
+
+    <h3>If you cannot import LUTs &mdash; CapCut slider recipes</h3>
+    <p>These approximate the same looks in CapCut&rsquo;s Adjust panel. Apply after the D-Log M conversion. Close, not identical.</p>
+    <div class="tw">
+      <table class="sliders">
+        <thead><tr><th>Adjust</th><th>Neutral</th><th>Golden</th><th>Forest</th><th>Nordic</th><th>Film</th><th>Night</th></tr></thead>
+        <tbody>
+          <tr><td>Brightness</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>+8</td></tr>
+          <tr><td>Contrast</td><td>+18</td><td>+16</td><td>+22</td><td>+28</td><td>+10</td><td>+12</td></tr>
+          <tr><td>Saturation</td><td>+10</td><td>+8</td><td>&minus;4</td><td>&minus;16</td><td>&minus;8</td><td>&minus;10</td></tr>
+          <tr><td>Temperature</td><td>0</td><td>+12</td><td>&minus;5</td><td>&minus;14</td><td>+6</td><td>&minus;4</td></tr>
+          <tr><td>Tint</td><td>0</td><td>0</td><td>+2</td><td>0</td><td>0</td><td>+3</td></tr>
+          <tr><td>Highlights</td><td>&minus;5</td><td>&minus;8</td><td>&minus;6</td><td>&minus;10</td><td>&minus;12</td><td>&minus;6</td></tr>
+          <tr><td>Shadows</td><td>+5</td><td>+8</td><td>+10</td><td>+8</td><td>+14</td><td>+22</td></tr>
+          <tr><td>Fade</td><td>0</td><td>+4</td><td>+5</td><td>+4</td><td>+12</td><td>+8</td></tr>
+          <tr><td>Sharpen</td><td>+25</td><td>+25</td><td>+25</td><td>+30</td><td>+20</td><td>+15</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Save your favourite as a CapCut template. Consistency across posts is itself a growth lever &mdash; it makes your grid recognisable before anyone reads your name.</p>
+  </section>
+
+  <!-- 04 -------------------------------------------------------------- -->
+  <section class="stage" id="cut">
+    <div class="stage-head">
+      <span class="stage-num">04</span>
+      <div>
+        <h2 class="stage-title">Cut</h2>
+        <p class="stage-sub">Watch time is the number one ranking signal, and the average Reel is watched for about 8.5 seconds. Every rule here exists to get past that.</p>
+      </div>
+    </div>
+    <ul>
+      <li><strong>First frame is a hard cut into motion.</strong> No fades, no logo, no slow push-in.</li>
+      <li><strong>Shot length 1.5&ndash;3 seconds</strong> for most of the edit. When a shot outlives its information, cut.</li>
+      <li><strong>Cut on motion</strong> &mdash; mid-gesture, mid-step, mid-swing. Cuts on stillness feel like stops.</li>
+      <li><strong>Pattern interrupt every 5&ndash;7 seconds</strong>: speed ramp, sound drop, angle change, text card.</li>
+      <li><strong>Design the loop.</strong> Match your last frame to your first and the replay is seamless &mdash; and replays count as watch time. This is free reach.</li>
+      <li><strong>Burn in captions.</strong> Most people watch muted first. Auto-caption, then fix the proper nouns &mdash; it will mangle LARP terms and place names every time.</li>
+    </ul>
+    <div class="note">
+      <span class="lbl">Sound</span>
+      <p>Your own audio beats trending audio on original content &mdash; nat sound of a shield wall, boots, fire, a crowd is material nobody else has. If you do use a trending track, use it inside the first day or two; after that the boost is gone and you are one of thousands. Always duck music under dialogue.</p>
+    </div>
+  </section>
+
+  <!-- 05 -------------------------------------------------------------- -->
+  <section class="stage" id="publish">
+    <div class="stage-head">
+      <span class="stage-num">05</span>
+      <div>
+        <h2 class="stage-title">Publish</h2>
+        <p class="stage-sub">The step where most quality is quietly thrown away.</p>
+      </div>
+    </div>
+
+    <h3>CapCut export</h3>
+    <div class="tw">
+      <table class="grid">
+        <thead><tr><th>Setting</th><th>Value</th><th>Note</th></tr></thead>
+        <tbody>
+          <tr><td>Resolution</td><td class="v">1080p</td><td>Not 4K. Their downscaler is worse than CapCut&rsquo;s.</td></tr>
+          <tr><td>Frame rate</td><td class="v">30 fps</td><td>60 only if the whole piece is motion.</td></tr>
+          <tr><td>Bitrate</td><td class="v">10&ndash;12 Mbps</td><td>&ldquo;Higher&rdquo; or custom.</td></tr>
+          <tr><td>Codec</td><td class="v">H.264</td><td>MP4 container.</td></tr>
+          <tr><td>Smart HDR</td><td class="v">Off</td><td>HDR metadata Instagram won&rsquo;t honour is the usual cause of a Reel that looks washed out on other people&rsquo;s phones but fine on yours.</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Instagram settings &mdash; set once</h3>
+    <ul>
+      <li>Settings &rarr; Data usage and media quality &rarr; <strong>Upload at highest quality: ON</strong></li>
+      <li><strong>Data Saver: OFF</strong></li>
+      <li><strong>Upload on Wi-Fi.</strong> On a weak connection Instagram compresses harder to push the file through. This is real and very visible.</li>
+    </ul>
+
+    <h3>Covers and the grid</h3>
+    <ul>
+      <li><strong>Choose the cover frame yourself.</strong> Never let Instagram pick. Take the most striking frame &mdash; usually costume, firelight, or a face in character.</li>
+      <li><strong>Keep text out of the bottom third and top-left.</strong> The grid crops covers to a different aspect than the Reel, and the UI covers the edges.</li>
+      <li>A stunning image often beats an image with a headline on it. Test both.</li>
+    </ul>
+
+    <h3>On a laptop</h3>
+    <p>The <span class="mono">ig_export.sh</span> script in the kit does conversion, look, reframe, sharpening and encode in one pass &mdash; at higher quality than any mobile app.</p>
+    <pre><code>./ig_export.sh clip.mp4 \
+  -c ~/Downloads/DJI_DLogM_to_Rec709.cube \
+  -l luts/AK_Forest_LARP.cube \
+  -m fill -f 30 -o reel.mp4</code></pre>
+  </section>
+
+  <!-- 06 -------------------------------------------------------------- -->
+  <section class="stage" id="grow">
+    <div class="stage-head">
+      <span class="stage-num">06</span>
+      <div>
+        <h2 class="stage-title">Grow</h2>
+        <p class="stage-sub">A page grows when it does the same recognisable thing repeatedly, well enough that the algorithm can learn who to show it to. Random good posts don&rsquo;t compound. Formats do.</p>
+      </div>
+    </div>
+
+    <h3>What you are actually optimising for</h3>
+    <p>Reels ranking leans on three signals, unequally weighted: <strong>watch time</strong> first, <strong>sends per reach</strong> second &mdash; DM shares count far above likes for reaching non-followers &mdash; and <strong>likes</strong> a distant third. Reach works as an <em>audition</em>: your Reel goes to a small test pool, and expands only if that pool watches and shares.</p>
+    <p>The practical consequence: stop optimising for likes. &ldquo;Watched to the end&rdquo; and &ldquo;sent to a friend&rdquo; are different jobs needing different tools &mdash; retention editing for the first, caption CTAs for the second.</p>
+
+    <h3>Content pillars</h3>
+    <div class="pillars" id="pillars"></div>
+
+    <div class="note">
+      <span class="lbl">Your unfair advantage</span>
+      <p>LARP is visually novel to almost everyone who sees it. Most creators fight for attention in saturated niches; you are showing people a world they have never seen. Lead with the strangest, most beautiful frame you have and let curiosity do the work. The corollary: <strong>assume no knowledge</strong> &mdash; most of your reach has never heard the word. &ldquo;Explaining this world to outsiders&rdquo; is an infinite pillar on its own.</p>
+    </div>
+
+    <h3>Hooks &mdash; you have about one second</h3>
+    <div class="hooks">
+      <div class="hook"><span class="k">Curiosity gap</span><q>This costs &pound;40 and took 3 months</q><q>Everyone here is in character. Including the bartender.</q></div>
+      <div class="hook"><span class="k">Stakes upfront</span><q>If this shield breaks I&rsquo;m out for the weekend</q><q>One take. 200 people watching.</q></div>
+      <div class="hook"><span class="k">POV / immersion</span><q>POV: you just walked into the wrong tavern</q><q>POV: 6am, day two, everything hurts</q></div>
+      <div class="hook"><span class="k">Transformation &mdash; strongest format on the platform</span><q>From this &rarr; to this in 40 minutes</q><q>Open on the reveal, then cut back to the start</q></div>
+      <div class="hook"><span class="k">Insider knowledge</span><q>Three things nobody tells you before your first event</q><q>What LARPers actually do when it rains</q></div>
+    </div>
+    <p>Text hook on screen from frame one, three to seven words, large and high contrast. Motion in the first frame. Never &ldquo;Hey guys&rdquo; &mdash; you have spent your second.</p>
+
+    <h3>The caption CTA is your highest-leverage line</h3>
+    <p>Sends are weighted enormously and they are the one signal you can directly ask for. Ask <em>specifically</em> &mdash; a named person beats a generic &ldquo;share this&rdquo;.</p>
+    <div class="hooks">
+      <div class="hook"><span class="k">For sends</span><q>Send this to the friend who keeps saying they&rsquo;ll come next time</q><q>Tag the person who&rsquo;d survive about four minutes here</q></div>
+      <div class="hook"><span class="k">For comments &mdash; keep the answer low-effort</span><q>Which character would you actually play? Be honest.</q><q>Sword or bow?</q></div>
+    </div>
+    <p>First caption line is a second hook &mdash; it must earn the tap on &ldquo;more&rdquo;. Write searchable words naturally (Instagram search reads captions now), and use three to five mixed-size hashtags, not thirty.</p>
+
+    <h3>Weekly diagnostic</h3>
+    <div class="tw">
+      <table class="grid">
+        <thead><tr><th>If this is low</th><th>It means</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td>3-second retention</td><td>They swipe immediately</td><td>Your hook. First frame, first line, on-screen text.</td></tr>
+          <tr><td>Average watch time</td><td>They leave mid-video</td><td>Pacing. Cut harder, shorten shots, add interrupts.</td></tr>
+          <tr><td>Sends per reach</td><td>Nobody shares it</td><td>Your CTA &mdash; and whether the video is <em>about</em> somebody.</td></tr>
+          <tr><td>Follows per reach</td><td>They liked the video, not you</td><td>Add more of you. Face, voice, opinion.</td></tr>
+          <tr><td>Saves</td><td>Not useful enough</td><td>Add practical value: costs, how-to, gear specifics.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>Working targets, not laws: 3-second retention above ~60%, average watch time above half the length, sends above ~1% of reach. Your own best post is the benchmark worth beating.</p>
+
+    <h3>Cadence</h3>
+    <ul>
+      <li><strong>4&ndash;5 Reels a week.</strong> Below three you lose momentum; above seven they cannibalise each other&rsquo;s audition window.</li>
+      <li><strong>Never two Reels within a few hours</strong> &mdash; they compete for the same test pool.</li>
+      <li><strong>Be present for the first 90 minutes.</strong> Reply to every comment properly, with more than one word. That activity is itself engagement.</li>
+      <li><strong>Don&rsquo;t delete underperformers.</strong> It doesn&rsquo;t help, and you lose the data.</li>
+    </ul>
+
+    <h3>The 30 days</h3>
+    <div class="plan">
+      <div class="week"><span class="wk">Week 1</span><div><h4>Baseline and system</h4><p>Lock the capture settings and LUT workflow. Four Reels, one per pillar. Don&rsquo;t chase reach &mdash; you&rsquo;re collecting data. Write down the five diagnostic numbers for each.</p></div></div>
+      <div class="week"><span class="wk">Week 2</span><div><h4>Format testing</h4><p>Five Reels across three series formats. Same grade, same caption structure, different formats. You&rsquo;re looking for which <em>format</em> wins, not which topic.</p></div></div>
+      <div class="week"><span class="wk">Week 3</span><div><h4>Double down</h4><p>Take the two best formats and make three more of each. Vary the subject, keep the structure identical. This is where a format becomes a series.</p></div></div>
+      <div class="week"><span class="wk">Week 4</span><div><h4>Scale what works</h4><p>Five Reels, at least three in your proven format. Remake your single best post with a different hook &mdash; reposting a proven concept with a new opening is how every large account works.</p></div></div>
+    </div>
+    <p>By the end you should have a format you can execute without thinking about it. That&rsquo;s the actual deliverable.</p>
+
+    <div class="note warn">
+      <span class="lbl">Don&rsquo;t bother</span>
+      <p>Bought followers and engagement pods poison your audience signal, so Instagram shows your posts to people who don&rsquo;t care and reach falls. Follow/unfollow does the same and gets accounts actioned. Thirty hashtags does nothing. Deleting underperformers does nothing. The only durable lever is making something people watch to the end and send to a friend.</p>
+    </div>
+  </section>
+
+  <footer>
+    <p><strong>The kit</strong> &mdash; six look LUTs, a validating LUT generator, and an ffmpeg export pipeline live in <span class="mono">creator-kit/</span> on the <span class="mono">claude/instagram-growth-video-editing-rswexx</span> branch.</p>
+    <p>Ranking-signal guidance reflects Instagram behaviour as of 2026 and will drift. The capture and colour pipeline won&rsquo;t.</p>
+  </footer>
+</div>
+
+<script>
+// Swatches are the LUTs' real output for six reference patches, computed from
+// the generator rather than picked by eye.
+const LOOKS = [
+  {n:"AK_Neutral_Punch", w:"Daily driver. Clean contrast and colour, nothing stylistic. Use it when the location already looks good.",
+   s:["#C9885D","#557F1C","#6DA7F1","#181B20","#EEE5DA","#E76916"]},
+  {n:"AK_Golden_Vlog", w:"Golden hour, cafés, interiors. Warm midtones against cool shadows, so the warmth reads as sunlight not an orange cast.",
+   s:["#D98855","#5F801A","#7AA8DC","#191C25","#FFEDC5","#EF6B18"]},
+  {n:"AK_Forest_LARP", w:"Woodland. Rolls acid yellow-green foliage toward deep cinematic green and protects skin, so faces stay warm against the forest.",
+   s:["#C68664","#507C34","#71A9F4","#151C29","#F3F1E8","#E15F16"]},
+  {n:"AK_Nordic_Steel", w:"Overcast, combat, winter. Cold, high contrast, desaturated — reads as weight and consequence.",
+   s:["#BB896C","#517D33","#70AAF5","#111827","#EDF4F6","#CE5D10"]},
+  {n:"AK_Film_Halation", w:"Montage and B-roll. Lifted matte blacks, cool shadows, warm highlights. The most ‘edited’ look in the pack.",
+   s:["#C28D6C","#618234","#7CA8EA","#21262F","#F6F1DF","#DE7331"]},
+  {n:"AK_Night_City", w:"Night, bars, streets, torch and firelight. Opens shadows without amplifying the noise floor.",
+   s:["#D39678","#678B38","#84B2F7","#202733","#FCF7F4","#E87B36"]}
+];
+const PATCH = ["skin","foliage","sky","shadow","highlight","firelight"];
+document.getElementById("looks").innerHTML = LOOKS.map(l => `
+  <div class="look">
+    <div class="sw">${l.s.map((c,i)=>
+      `<span style="background:${c}" title="${PATCH[i]} ${c}"></span>`).join("")}</div>
+    <div class="look-body">
+      <p class="look-name">${l.n}</p>
+      <p class="look-when">${l.w}</p>
+    </div>
+  </div>`).join("");
+
+const PILLARS = [
+  {n:"World / immersion", j:"Reach. The visually stunning material nobody has seen.", p:30},
+  {n:"Explainer",         j:"Reach beyond the niche — for people who don’t know what LARP is.", p:25},
+  {n:"Craft / kit",       j:"Saves and authority. Costume, armour, weapons, builds.", p:20},
+  {n:"Human / community", j:"Follows. You, and the people around you.", p:15},
+  {n:"Lifestyle vlog",    j:"Conversion. Turns a viewer of the content into a follower of you.", p:10}
+];
+document.getElementById("pillars").innerHTML = PILLARS.map(x => `
+  <div class="pillar">
+    <div><span class="nm">${x.n}</span><span class="jb">${x.j}</span></div>
+    <span class="pc">${x.p}%</span>
+    <span class="bar-track"><span class="bar-fill" style="width:${x.p*3.33}%"></span></span>
+  </div>`).join("");
+
+// Mark the stage you're reading in the sticky nav.
+const links = [...document.querySelectorAll('nav.stages a')];
+const map = new Map(links.map(a => [a.getAttribute('href').slice(1), a]));
+const obs = new IntersectionObserver(es => {
+  es.forEach(e => {
+    if (e.isIntersecting) {
+      links.forEach(a => a.removeAttribute('aria-current'));
+      const a = map.get(e.target.id);
+      if (a) a.setAttribute('aria-current','true');
+    }
+  });
+}, {rootMargin:'-45% 0px -50% 0px'});
+document.querySelectorAll('section.stage').forEach(s => obs.observe(s));
+</script>
