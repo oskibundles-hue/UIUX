@@ -41,7 +41,7 @@ export const EndCard: React.FC<{ line: string; startSeconds: number }> = ({
         style={{
           display: "inline-block",
           background: theme.accent,
-          color: "#16120A",
+          color: "#FFFFFF",
           fontFamily: "Archivo, Helvetica, sans-serif",
           fontWeight: 700,
           fontSize: 34,

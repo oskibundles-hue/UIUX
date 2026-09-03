@@ -44,7 +44,7 @@ export const Hook: React.FC<{ text: string; holdSeconds?: number }> = ({
         style={{
           width: 92,
           height: 8,
-          background: theme.accent,
+          background: theme.accentAlt,
           borderRadius: 4,
           marginBottom: 26,
         }}

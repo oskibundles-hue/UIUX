@@ -4,8 +4,11 @@
  * grid from the thumbnail before they read the handle.
  */
 export const theme = {
-  accent: "#F0B23C",        // brass. Reads on concrete, chrome and night asphalt.
-  accentDeep: "#C4801B",
+  // Sampled off the shop floor tile in graded footage, so the graphics carry
+  // the same colour as the room rather than a generic "creator yellow".
+  accent: "#E75522",        // tile red
+  accentDeep: "#B23A13",
+  accentAlt: "#F8CC2E",     // tile yellow
   ink: "#FFFFFF",
   inkShadow: "rgba(0,0,0,0.72)",
 
