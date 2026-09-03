@@ -54,6 +54,16 @@ DJI's official conversion is still the more correct starting point. Either way,
 **denoise before it** — stretching a flat log band multiplies whatever
 compression noise is already in the file.
 
+## AK_Garage_Dark — for the build footage
+
+`luts/AK_Garage_Dark.cube` is a second measured rescue, built from real Anti
+Stock garage footage: black walls, dark floor, hard point lights. It stretches
+the shadows harder than `AK_DLogM_Rescue` and cools them, so concrete and steel
+separate from the warm work lights instead of everything sitting in one muddy
+band. Denoise before it, same as the other one.
+
+Use `AK_DLogM_Rescue` for normally-lit scenes and `AK_Garage_Dark` for the shop.
+
 ## The looks
 
 | LUT | For |
