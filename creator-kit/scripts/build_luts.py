@@ -275,31 +275,34 @@ LOOKS = [
         highlight_tint=(0.026, 0.010, -0.020), highlight_strength=0.85, highlight_falloff=2.0,
         saturation=1.08,
         vibrance=0.12,
+        hue_targets=(
+            # Anchor skin so the warm push lifts the room, not faces. Without
+            # this, deep skin tones slide orange and lose their depth.
+            (24.0, 18.0, -4.0, 1.0, 1.0),
+        ),
         black_lift=0.010,
         knee=0.86,
     ),
     Look(
-        "AK_Forest_LARP",
-        "Fantasy woodland grade. Rolls harsh yellow-green foliage toward a "
-        "deeper cinematic green, cools the shadows, and protects skin tones "
-        "so faces stay warm against the forest.",
-        "Outdoor LARP, woodland, costume and character work under tree cover.",
-        temp=-0.04,
-        contrast=0.26,
+        "AK_Garage_Chrome",
+        "Automotive and industrial interiors. Cools the concrete and steel, "
+        "controls the blowout on chrome and paint highlights, and holds skin "
+        "warm and separate from a cold background.",
+        "Garages, workshops, showrooms, car builds, warehouse walkthroughs.",
+        temp=-0.06,
+        contrast=0.24,
         gamma=(1.0, 1.0, 1.02),
-        shadow_tint=(-0.015, 0.004, 0.028), shadow_strength=1.0, shadow_falloff=2.0,
-        highlight_tint=(0.018, 0.008, -0.010), highlight_strength=0.7, highlight_falloff=2.2,
-        saturation=0.96,
+        shadow_tint=(-0.016, 0.002, 0.030), shadow_strength=0.95, shadow_falloff=2.0,
+        highlight_tint=(0.010, 0.006, 0.004), highlight_strength=0.6, highlight_falloff=2.4,
+        saturation=0.98,
         vibrance=0.14,
         hue_targets=(
-            # Foliage: rotate yellow-green toward true green, drop the acid.
-            # Kept narrow and centred above yellow (60 deg) so that pure yellows
-            # - hi-vis kit, lantern light, sand - are not dragged green with it.
-            (105.0, 22.0, 10.0, 0.80, 0.96),
-            # Skin: hold saturation and lift it slightly out of the green.
-            (28.0, 20.0, -2.0, 1.08, 1.02),
+            # Hold skin warm and saturated against the cold room, and keep the
+            # hue from sliding orange - deep skin tones go muddy when a warm
+            # grade drags them toward 30 deg.
+            (24.0, 20.0, -3.0, 1.12, 1.03),
         ),
-        black_lift=0.014,
+        black_lift=0.012,
         knee=0.84,
     ),
     Look(
@@ -332,6 +335,9 @@ LOOKS = [
         highlight_tint=(0.030, 0.014, -0.016), highlight_strength=0.9, highlight_falloff=1.8,
         saturation=0.92,
         vibrance=0.10,
+        hue_targets=(
+            (24.0, 18.0, -4.0, 1.05, 1.0),
+        ),
         black_lift=0.042,
         knee=0.80,
     ),

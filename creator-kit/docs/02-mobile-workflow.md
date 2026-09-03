@@ -47,7 +47,7 @@ conversion, never instead of it.
 |---|---|
 | `AK_Neutral_Punch` | Daily driver. Clean, safe, when in doubt. |
 | `AK_Golden_Vlog` | Golden hour, cafés, interiors, anything warm and inviting. |
-| `AK_Forest_LARP` | Woodland LARP, costume, character work under tree cover. |
+| `AK_Garage_Chrome` | Garages, workshops, showrooms, car builds, walkthroughs. |
 | `AK_Nordic_Steel` | Overcast, combat, winter, dramatic beats. |
 | `AK_Film_Halation` | Montages, B-roll, anything cut to music. |
 | `AK_Night_City` | Night vlogs, bars, streets, torch and firelight. |
@@ -62,7 +62,7 @@ clipping.
 These approximate the same looks using CapCut's Adjust panel. Apply them
 **after** the D-Log M conversion. They are close, not identical.
 
-| | Neutral Punch | Golden Vlog | Forest LARP | Nordic Steel | Film Halation | Night City |
+| | Neutral Punch | Golden Vlog | Garage | Nordic Steel | Film Halation | Night City |
 |---|---|---|---|---|---|---|
 | Brightness | 0 | 0 | 0 | 0 | 0 | +8 |
 | Contrast | +18 | +16 | +22 | +28 | +10 | +12 |
@@ -73,7 +73,7 @@ These approximate the same looks using CapCut's Adjust panel. Apply them
 | Shadows | +5 | +8 | +10 | +8 | +14 | +22 |
 | Fade | 0 | +4 | +5 | +4 | +12 | +8 |
 | Sharpen | +25 | +25 | +25 | +30 | +20 | +15 |
-| HSL | — | — | Green: Hue +10, Sat −20 | Orange: Sat +15 | — | — |
+| HSL | — | — | Blue: Sat +10 | Orange: Sat +15 | — | — |
 
 Save your favourite as a CapCut template so you are not rebuilding it every
 edit. Consistency across posts is itself a growth lever — it makes your grid
@@ -94,7 +94,7 @@ for about **8.5 seconds**. Everything below exists to get past that.
 - **Design the loop.** If your last frame matches your first, the replay is
   seamless and replays count as watch time. This is free reach.
 - **Captions burned in.** Most people watch muted first. CapCut auto-captions,
-  then fix the proper nouns — it will mangle LARP and place names every time.
+  then fix the proper nouns — it will mangle car models and brand names every time.
 
 ## Step 4 — export (do not skip this)
 
@@ -135,7 +135,7 @@ If you have access to a laptop, `scripts/ig_export.sh` in this kit does steps
 ```bash
 ./ig_export.sh clip.mp4 \
   -c ~/Downloads/DJI_DLogM_to_Rec709.cube \
-  -l luts/AK_Forest_LARP.cube \
+  -l luts/AK_Garage_Chrome.cube \
   -m fill -f 30 -o reel.mp4
 ```
 

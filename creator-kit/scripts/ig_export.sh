@@ -31,6 +31,10 @@
 #   -b, --bitrate RATE       max bitrate (default 14M)
 #       --crf N              quality, lower is better (default 17)
 #       --sharpen AMOUNT     0 disables (default 0.7)
+#       --denoise [STRENGTH]  clean compression blocking BEFORE the LUT stretch.
+#                            Use on log footage from a low-bitrate file, where
+#                            stretching the flat band amplifies encoder noise.
+#                            light | medium | heavy  (default medium)
 #       --tonemap            input is HLG/HDR; tonemap to SDR
 #       --assume-hlg         with --tonemap, treat an untagged source as
 #                            HLG/BT.2020 instead of trusting its (missing) tags
@@ -45,6 +49,7 @@ command -v ffmpeg >/dev/null || die "ffmpeg not found on PATH"
 
 IN=""; CONV_LUT=""; LOOK_LUT=""; MODE="fill"; FPS=""; START=""; DUR=""
 BITRATE="14M"; CRF="17"; SHARPEN="0.7"; TONEMAP=0; LOUDNORM=1; OUT=""
+DENOISE=""
 ASSUME_HLG=0
 
 while [[ $# -gt 0 ]]; do
@@ -58,6 +63,8 @@ while [[ $# -gt 0 ]]; do
     -b|--bitrate)     BITRATE="$2"; shift 2 ;;
     --crf)            CRF="$2"; shift 2 ;;
     --sharpen)        SHARPEN="$2"; shift 2 ;;
+    --denoise)        if [[ "${2:-}" =~ ^(light|medium|heavy)$ ]]; then DENOISE="$2"; shift 2
+                      else DENOISE="medium"; shift; fi ;;
     --tonemap)        TONEMAP=1; shift ;;
     --assume-hlg)     ASSUME_HLG=1; TONEMAP=1; shift ;;
     --no-loudnorm)    LOUDNORM=0; shift ;;
@@ -99,6 +106,14 @@ if [[ $TONEMAP -eq 1 ]]; then
   add "tonemap=hable:desat=0"
   add "zscale=t=bt709:m=bt709:p=bt709:r=tv"
 fi
+
+# Denoise before the LUT. A log stretch multiplies whatever noise is already
+# in the file, so cleaning first is far more effective than cleaning after.
+case "$DENOISE" in
+  light)  add "hqdn3d=2:1.5:3:3" ;;
+  medium) add "hqdn3d=3:2:4:4" ;;
+  heavy)  add "hqdn3d=5:3.5:6:6" ;;
+esac
 
 # Work at 16-bit RGB through the LUT stage. LUTs are defined on RGB, and doing
 # this at 8-bit is where banding in skies and shadows comes from.

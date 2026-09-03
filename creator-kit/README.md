@@ -1,14 +1,15 @@
 # Creator Kit — Osmo Action 6 → Instagram
 
-A colour and delivery pipeline for vlog / lifestyle / LARP content shot on a
-DJI Osmo Action 6 in D-Log M, plus the packaging and growth playbook that goes
+A colour and delivery pipeline for vlog / lifestyle / automotive content shot
+on a DJI Osmo Action 6 in D-Log M, plus the packaging and growth playbook that goes
 with it.
 
 ```
 creator-kit/
-├── luts/                  6 creative look LUTs (.cube, 33³)
+├── luts/                  6 look LUTs + 1 measured D-Log M rescue (.cube, 33³)
 ├── scripts/
-│   ├── build_luts.py      regenerates the LUT pack (pure stdlib)
+│   ├── build_luts.py      regenerates the look pack (pure stdlib)
+│   ├── bake_lut.py        bakes any ffmpeg colour chain into a .cube
 │   └── ig_export.sh       Osmo clip → Instagram-ready 1080×1920 master
 └── docs/
     ├── 01-capture-settings.md    what to set on the camera
@@ -33,12 +34,25 @@ DJI does not publish the D-Log M transfer function. A conversion LUT generated
 without it is guesswork, and a wrong conversion is worse than none — it bakes
 in a colour error that every later adjustment amplifies.
 
-So this kit ships **look** LUTs only. They expect footage already in Rec.709 and
-are applied after DJI's official conversion:
+So the look pack ships **look** LUTs only. They expect footage already in
+Rec.709 and are applied after DJI's official conversion:
 
 ```
 D-Log M clip → DJI official conversion → look LUT from this kit
 ```
+
+## AK_DLogM_Rescue — read this before using it
+
+`luts/AK_DLogM_Rescue.cube` is a **measured** D-Log M → Rec.709 stretch, derived
+empirically from real Osmo Action 6 D-Log M footage (black point, white point
+and saturation loss measured off the actual signal), not from DJI's undisclosed
+transfer function. It is deliberately skin-safe: it does **not** push deep skin
+tones orange, which most warm "cinematic" conversions do.
+
+Use it when you cannot get DJI's official LUT into your app. When you can,
+DJI's official conversion is still the more correct starting point. Either way,
+**denoise before it** — stretching a flat log band multiplies whatever
+compression noise is already in the file.
 
 ## The looks
 
@@ -46,7 +60,7 @@ D-Log M clip → DJI official conversion → look LUT from this kit
 |---|---|
 | `AK_Neutral_Punch` | Daily driver. Clean contrast and colour, nothing stylistic. |
 | `AK_Golden_Vlog` | Golden hour, cafés, interiors. Warm midtones, cool shadows. |
-| `AK_Forest_LARP` | Woodland. Deepens foliage, protects skin, cools shadows. |
+| `AK_Garage_Chrome` | Garages, workshops, showrooms, car builds. Cool steel, warm protected skin. |
 | `AK_Nordic_Steel` | Overcast, combat, winter. Cold, high contrast, desaturated. |
 | `AK_Film_Halation` | Montage and B-roll. Lifted matte blacks, faded film feel. |
 | `AK_Night_City` | Low light, firelight, streets. Opens shadows without noise bloom. |
@@ -73,7 +87,7 @@ validation is not written.
 ```bash
 ./scripts/ig_export.sh clip.mp4 \
   -c ~/Downloads/DJI_DLogM_to_Rec709.cube \
-  -l luts/AK_Forest_LARP.cube \
+  -l luts/AK_Garage_Chrome.cube \
   -m fill -f 30 -o reel.mp4
 ```
 
