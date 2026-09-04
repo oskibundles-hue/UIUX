@@ -39,6 +39,32 @@ write binaries. I deliver finished Reels through chat; you file them.
 | Plan | `prep_clip.sh` | Cut plans at four silence thresholds + a grade LUT matched to that clip. |
 | Cut & grade | `autocut.py` | Removes silences, applies the LUT, exports 4K 29.97fps. |
 | Captions | `remotion/` | Matched to your style: `#FDFDFD` base, `#FBD101` active word, 72.6% down frame. |
+| Overlays | `overlay.sh` | Timed logo bugs, lower thirds, CTAs, title cards burned onto the master. |
+
+## Overlays
+
+The Formula Dynamics vertical pack is 86 full-frame 1080x1920 PNGs with alpha,
+plus badges and bars. `overlay.sh` burns them on with timing:
+
+```bash
+./overlay.sh reel.mp4 out.mp4 \
+  "pack/corner-logo-bugs/bug_9x16_top-left_logo-white.png:0" \
+  "pack/lower-thirds/lt_9x16_service_detailing.png:1.5:6" \
+  "pack/cta-captions/cta_9x16_soft_follow-for-more_bar.png:24:30"
+```
+
+Each spec is `PATH:START[:END]` in seconds. Omit END and it runs to the end of
+the video — that is how the logo bug stays up throughout.
+
+**Overlays are 1080x1920 and our masters are 4K**, so each is scaled 2x.
+Tested against a native-1080 composite: on these clean vector-derived PNGs
+lanczos holds up, with only slight softening on letterform edges. Keeping the
+4K master is the better trade than dropping the whole video to 1080 for the
+sake of the graphics.
+
+Use `white` / `logo-white` variants on dark footage, `black` / `light` on
+bright footage. `safe-zone-guide/safe-zones_9x16.png` shows what Instagram's
+UI covers — worth checking any new placement against it.
 
 ## Export target
 
