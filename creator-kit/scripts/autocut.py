@@ -66,8 +66,14 @@ def probe(ff, path):
 
 
 def find_silences(ff, path, noise_db, min_len):
-    """Return [(start, end)] of every detected silence, in seconds."""
-    out = run([ff, "-hide_banner", "-i", path,
+    """Return [(start, end)] of every detected silence, in seconds.
+
+    -vn matters more than it looks. Without it ffmpeg decodes the video stream
+    to find silence in the audio, and on a 4K60 HEVC source that is 0.84x
+    realtime. Sweeping five thresholds to pick a cut rhythm then costs five full
+    4K decodes to read a waveform. Audio-only turns a minutes-long sweep into
+    seconds."""
+    out = run([ff, "-hide_banner", "-vn", "-i", path,
                "-af", "silencedetect=noise=%ddB:d=%s" % (noise_db, min_len),
                "-f", "null", "-"]).stderr
     starts = [float(x) for x in re.findall(r"silence_start: ([\d.]+)", out)]

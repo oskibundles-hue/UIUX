@@ -36,10 +36,32 @@ write binaries. I deliver finished Reels through chat; you file them.
 | Step | Tool | Notes |
 |---|---|---|
 | Index | `index_clip.sh` | Length, exposure, thumbnails. Deletes the clip after — peak disk stays at one file. |
-| Plan | `prep_clip.sh` | Cut plans at four silence thresholds + a grade LUT matched to that clip. |
-| Cut & grade | `autocut.py` | Removes silences, applies the LUT, exports 4K 29.97fps. |
+| **Edit** | **`cut_clip.sh`** | **The whole edit off one download: window, grade, cut, export.** |
 | Captions | `remotion/` | Matched to your style: `#FDFDFD` base, `#FBD101` active word, 72.6% down frame. |
 | Overlays | `overlay.sh` | Timed logo bugs, lower thirds, CTAs, title cards burned onto the master. |
+
+`cut_clip.sh` replaces the old `prep_clip.sh` → `autocut.py` two-step, which
+needed the clip downloaded twice. It makes three decisions from measurement:
+
+**Which 60 seconds.** A nine-minute take silence-cut end to end is a
+seven-minute file. That is not a Reel and you would never upload it.
+`speech_window.py` slides a window over the clip and keeps the one holding the
+most speech, with the edges snapped to phrase boundaries so it does not open
+mid-word. In a build vlog the strongest stretch is where you are talking, not
+where the room is quiet and the camera is drifting.
+
+**Which grade.** Matched per clip against `03 Grade Reference`, because this
+session ran YAVG 90–122 and one fixed curve leaves the bright clips bright.
+
+**Which silence threshold.** Swept −26 to −18 dB, and the plan whose average
+shot length lands closest to your ~4s rhythm wins. −26 dB removes almost
+nothing from a clip recorded next to running tools; −18 dB shreds a quiet
+walkthrough. Sweeping per clip is what holds the pacing steady across a
+session.
+
+Downloading and deleting deliberately stay *outside* the script. Temporary
+Dropbox links last 900 seconds, and a script holding one while it encodes for
+half an hour will fail — which is exactly how an earlier run lost a clip.
 
 ## Which brand?
 
@@ -51,8 +73,19 @@ brand marker — he wears it in the FD shop. Judge by what is happening.
 
 ## Overlays
 
-The Formula Dynamics vertical pack is 86 full-frame 1080x1920 PNGs with alpha,
-plus badges and bars. `overlay.sh` burns them on with timing:
+Two packs, one for each company:
+
+- **Formula Dynamics** — 86 PNGs, supplied. Shop content.
+- **Supercar Experience** — 34 PNGs in `overlays-se/`, built from
+  supercarexp.vip's own tokens. Rental content: pickups, dropoffs, the fleet.
+
+They are geometry-matched, so a video can cut between shop and rental footage
+without the graphics appearing to change size. Bug 331×88 against FD's 315×101;
+lower thirds both 211px tall ending at y=1486; CTA bars both ~110px at y~1362;
+titles both ~400–430px from y~635. `build_se_overlays.py --verify` prints every
+bounding box so this stays checkable rather than trusted.
+
+Both packs are full-frame 1080x1920 PNGs with alpha. `overlay.sh` burns them on with timing:
 
 ```bash
 ./overlay.sh reel.mp4 out.mp4 \
@@ -98,9 +131,30 @@ builds a per-clip LUT to fix that.
 I cannot post to Instagram — no tool for it exists here. TikTok is possible
 through Higgsfield if the `youngomarie` account gets connected.
 
+## What the encode actually costs
+
+Measured on this machine, 4 cores, no GPU:
+
+| | rate |
+|---|---|
+| 4K60 HEVC decode, no filter | 0.84× realtime |
+| 4K60 decode + LUT + x264 | **0.17–0.21× realtime** |
+| Dropbox download | ~42 MB/s |
+
+The x264 preset barely moves that number — `medium`, `fast` and `faster` come
+in at 0.17, 0.19 and 0.21. **The source decode is the bottleneck, not the
+encode**, so there is nothing to buy by dropping quality.
+
+This is why windowing matters. Cutting whole takes would have been about five
+hours for one session. Editing a 60s window means ffmpeg decodes a minute
+instead of nine.
+
+One more that was costing more than everything else combined: `silencedetect`
+without `-vn` decodes the video stream to read a waveform. On a 4K60 source
+that is 183 seconds per pass, and the threshold sweep runs five passes per clip.
+Audio-only takes it under one second. Same numbers, 200× faster.
+
 ## Parked
 
 - Animations in-video (Remotion, or generative via the art skills)
-- Stream-style handle overlays for nq.young / youngomarie
-- A Supercar Experience overlay pack — none exists, and pickup/dropoff footage
-  is coming
+- Stream-style handle overlays for nq.young / youngomarie / youngomarie
