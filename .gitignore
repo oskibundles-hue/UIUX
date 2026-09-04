@@ -52,5 +52,5 @@ out/
 .claude/session-state/
 ui-ux-pro-max-website/*
 
-# Formula Dynamics ad: intermediate overlay frames
-formula-dynamics/.frames/
+# Campaign-ad intermediate overlay frames
+.frames/
