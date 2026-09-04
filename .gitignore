@@ -51,3 +51,6 @@ out/
 .claude/settings.local.json
 .claude/session-state/
 ui-ux-pro-max-website/*
+
+# Formula Dynamics ad: intermediate overlay frames
+formula-dynamics/.frames/
