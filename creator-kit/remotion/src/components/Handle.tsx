@@ -10,7 +10,7 @@ import { theme } from "../theme";
  */
 export const Handle: React.FC<{ handle: string }> = ({ handle }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, height } = useVideoConfig();
   const o = interpolate(frame, [0, fps * 0.5], [0, 0.82], {
     extrapolateLeft: "clamp",
     extrapolateRight: "clamp",
@@ -20,8 +20,8 @@ export const Handle: React.FC<{ handle: string }> = ({ handle }) => {
     <div
       style={{
         position: "absolute",
-        left: theme.safe.left,
-        top: theme.safe.top - 96,
+        left: "6.7%",
+        top: theme.safe.top * height - height * 0.05,
         display: "flex",
         alignItems: "center",
         gap: 12,

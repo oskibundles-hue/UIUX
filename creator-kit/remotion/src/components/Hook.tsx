@@ -14,7 +14,7 @@ export const Hook: React.FC<{ text: string; holdSeconds?: number }> = ({
   holdSeconds = 2.6,
 }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, height } = useVideoConfig();
   const hold = Math.round(holdSeconds * fps);
 
   // Starts at 0.94 rather than 0, so the first frame already reads as text.
@@ -32,9 +32,9 @@ export const Hook: React.FC<{ text: string; holdSeconds?: number }> = ({
     <div
       style={{
         position: "absolute",
-        left: theme.safe.left,
-        right: theme.safe.right - 90,
-        top: theme.hookY,
+        left: "6.7%",
+        right: "14%",
+        top: theme.hookY * height,
         opacity: exit,
         transform: `scale(${scale}) translateY(${(1 - enter) * -14}px)`,
         transformOrigin: "left center",

@@ -15,7 +15,7 @@ export const EndCard: React.FC<{ line: string; startSeconds: number }> = ({
   startSeconds,
 }) => {
   const frame = useCurrentFrame();
-  const { fps } = useVideoConfig();
+  const { fps, height } = useVideoConfig();
   const start = Math.round(startSeconds * fps);
   if (frame < start) return null;
 
@@ -30,9 +30,9 @@ export const EndCard: React.FC<{ line: string; startSeconds: number }> = ({
     <div
       style={{
         position: "absolute",
-        left: theme.safe.left,
-        right: theme.safe.right,
-        top: theme.captionBaselineY - 150,
+        left: "6.7%",
+        right: "17.6%",
+        top: theme.endCardY * height,
         opacity: s,
         transform: `translateY(${(1 - s) * 24}px)`,
       }}

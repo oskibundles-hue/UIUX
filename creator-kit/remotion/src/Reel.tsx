@@ -12,20 +12,26 @@ loadFonts();
 
 export type ReelProps = {
   src: string;
-  hook: string;
-  handle: string;
   phrases: Phrase[];
-  endCard: string;
-  endCardAt: number;
-  showProgress: boolean;
+  /**
+   * Overlays are off by default. The reference edit is footage plus captions
+   * and nothing else - no hook card, no watermark, no progress bar, no end
+   * card. Turn these on only for a deliberately branded variant.
+   */
+  hook?: string;
+  handle?: string;
+  endCard?: string;
+  endCardAt?: number;
+  showProgress?: boolean;
+  /** The reference has no scrim; the grade already carries the contrast. */
+  scrim?: boolean;
 };
 
 export const Reel: React.FC<ReelProps> = ({
-  src, hook, handle, phrases, endCard, endCardAt, showProgress,
+  src, phrases, hook, handle, endCard, endCardAt = 0, showProgress = false, scrim = false,
 }) => {
   const { durationInFrames, fps } = useVideoConfig();
   const words = toWords(phrases);
-  const endAt = endCardAt > 0 ? endCardAt : durationInFrames / fps - 3;
 
   return (
     <AbsoluteFill style={{ backgroundColor: "#000" }}>
@@ -34,21 +40,23 @@ export const Reel: React.FC<ReelProps> = ({
         style={{ width: "100%", height: "100%", objectFit: "cover" }}
       />
 
-      {/* Gradient scrims. Text over moving footage is unreadable about half the
-          time; these buy contrast without dimming the whole frame. */}
-      <AbsoluteFill
-        style={{
-          background:
-            "linear-gradient(to bottom, rgba(0,0,0,.55) 0%, rgba(0,0,0,0) 26%," +
-            " rgba(0,0,0,0) 58%, rgba(0,0,0,.62) 100%)",
-          pointerEvents: "none",
-        }}
-      />
+      {scrim ? (
+        <AbsoluteFill
+          style={{
+            background:
+              "linear-gradient(to bottom, rgba(0,0,0,.5) 0%, rgba(0,0,0,0) 25%," +
+              " rgba(0,0,0,0) 60%, rgba(0,0,0,.55) 100%)",
+            pointerEvents: "none",
+          }}
+        />
+      ) : null}
 
-      <Handle handle={handle} />
-      <Hook text={hook} />
+      {handle ? <Handle handle={handle} /> : null}
+      {hook ? <Hook text={hook} /> : null}
       <Captions words={words} />
-      <EndCard line={endCard} startSeconds={endAt} />
+      {endCard ? (
+        <EndCard line={endCard} startSeconds={endCardAt || durationInFrames / fps - 3} />
+      ) : null}
       {showProgress ? <ProgressBar /> : null}
     </AbsoluteFill>
   );

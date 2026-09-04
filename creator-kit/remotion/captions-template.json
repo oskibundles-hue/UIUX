@@ -1,0 +1,14 @@
+{
+  "_comment": "Segment boundaries of the 32s edit, on the speech pauses the cut was made at. Fill in what you say in each and the captions appear. Times are in the EDITED timeline, not the source.",
+  "src": "clip.mp4",
+  "phrases": [
+    { "text": "", "start": 0.00,  "end": 4.75 },
+    { "text": "", "start": 4.75,  "end": 7.98 },
+    { "text": "", "start": 7.98,  "end": 10.18 },
+    { "text": "", "start": 10.18, "end": 12.34 },
+    { "text": "", "start": 12.34, "end": 16.29 },
+    { "text": "", "start": 16.29, "end": 17.51 },
+    { "text": "", "start": 17.51, "end": 24.57 },
+    { "text": "", "start": 24.57, "end": 32.04 }
+  ]
+}
