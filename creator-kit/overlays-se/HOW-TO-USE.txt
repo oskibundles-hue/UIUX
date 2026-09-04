@@ -1,0 +1,66 @@
+SUPERCAR EXPERIENCE - VERTICAL OVERLAY PACK
+34 files, 1080x1920, transparent PNG
+
+WHICH PACK, WHEN
+----------------
+Formula Dynamics pack  ->  shop content. Builds, installs, exhaust, wheels,
+                           detailing, dyno, anything on the lift.
+Supercar Experience     ->  rental content. Picking up a car, dropping one off,
+(this pack)                 delivery day, fleet walkarounds.
+
+The ANTI STOCK shirt is merch, not a brand marker. What is happening in the
+video decides the pack, not what you are wearing.
+
+The two packs are geometry-matched, so you can cut between them in one video
+without the graphics appearing to change size or move. Measured against the FD
+pack: bug 331x88 vs 315x101, lower thirds both 211px tall ending at y=1486,
+CTA bars both ~110px at y~1362, titles both ~400-430px starting at y~635.
+
+WHAT IS IN HERE
+---------------
+corner-logo-bugs/   8   SUPERCAR EXPERIENCE wordmark, 4 positions x 2 colours.
+                        Use _white on dark footage, _black on bright footage.
+                        Leave one up for the whole video.
+lower-thirds/       6   3 cities (Las Vegas, Scottsdale, Boise) + 3 marques
+                        (Ferrari, Lamborghini, McLaren). 2-5 seconds, once.
+cta-captions/      10   5 messages x bar and panel. Last 4-6 seconds only.
+title-cards/        8   The Pickup, The Dropoff, Delivery Day, The Fleet,
+                        each _dark and _light. Opening 1-2 seconds.
+end-cards/          2   Full-frame scrim, _dark and _light. Final 2-3 seconds.
+
+_dark  = white type,  for dark footage (most of what you shoot)
+_light = ink type,    for a bright frame - a sunlit driveway, a white shop wall
+
+Pick the wrong one and the title washes out. There is no cost to checking.
+
+BURNING THEM IN
+---------------
+  creator-kit/scripts/overlay.sh <video> <out.mp4> "PNG:START[:END]" ...
+
+  ./overlay.sh pickup.mp4 pickup_final.mp4 \
+    "overlays-se/title-cards/se-title_9x16_the-pickup_dark.png:0:2" \
+    "overlays-se/corner-logo-bugs/se-bug_9x16_top-left_white.png:0" \
+    "overlays-se/lower-thirds/se-lt_9x16_pickup_las-vegas.png:3:8" \
+    "overlays-se/cta-captions/se-cta_9x16_book-now_bar.png:24:29"
+
+Omit the END time and the overlay runs to the end of the video - that is what
+you want for the logo bug. overlay.sh reads the output size from the video, so
+these 1080-wide PNGs land correctly on a 4K master.
+
+DO NOT STACK THESE
+------------------
+The bottom-left bug (y 1355-1442), the lower thirds (y 1275-1485) and the CTA
+panels (y 1331-1485) all occupy the same band. Use the top-left or top-right
+bug whenever a lower third or CTA is on screen.
+
+WHY THE GOLD IS ONLY EVER A HAIRLINE
+------------------------------------
+supercarexp.vip uses #BD9457 at 25-30% opacity as a border and nothing else -
+never as a fill, never as type. That restraint is what reads as expensive. If
+you add graphics later, keep it.
+
+Rebuild or extend the pack:
+  python3 creator-kit/scripts/build_se_overlays.py --out overlays-se --verify
+
+--verify prints every overlay's real bounding box so you can check the geometry
+instead of trusting it.
