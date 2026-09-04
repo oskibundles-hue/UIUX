@@ -9,6 +9,8 @@ creator-kit/
 ├── luts/                  6 look LUTs + 1 measured D-Log M rescue (.cube, 33³)
 ├── scripts/
 │   ├── build_luts.py      regenerates the look pack (pure stdlib)
+│   ├── autocut.py         silence-cut + grade + 4K export, one command
+│   ├── match_grade.py     copy a grade from a reference by histogram matching
 │   ├── bake_lut.py        bakes any ffmpeg colour chain into a .cube
 │   └── ig_export.sh       Osmo clip → Instagram-ready 1080×1920 master
 └── docs/
@@ -17,6 +19,40 @@ creator-kit/
     ├── 03-hooks-and-captions.md  hooks, captions, covers
     └── 04-growth-system.md       pillars, cadence, 30-day plan
 ```
+
+## autocut — the one command
+
+```bash
+python3 scripts/autocut.py source.MOV -l luts/AK_NQ_Signature.cube -o reel.mp4
+```
+
+Finds the silences, cuts them out, applies the grade, and exports 4K at
+29.97fps aiming at a 75 MB file — then you upload through Instagram's Edits
+app rather than the Reels composer.
+
+`--dry-run` prints the cut plan without encoding. Tune the cut with
+`--noise` (dB threshold) and `--min-silence`. On this footage `--noise -26
+--min-silence 0.35` removed 20% and left 29 segments at 3.2s average, which
+matches the reference edit's rhythm; the default `-30` only found 6%.
+
+Performance matters on 4K60: raw decode runs at 0.84x realtime and the LUT
+drops it to 0.23x. So it defaults to a single ABR pass. Add `--two-pass` for
+exact size targeting at double the time, and `--fast` to run the LUT after
+the downscale when you are not exporting at native resolution.
+
+## match_grade — copy a look you have no recipe for
+
+```bash
+# sample frames from both, then match
+ffmpeg -ss 20 -i reference.mp4 -frames:v 1 -vf scale=216:384 -pix_fmt rgb24 hm/ref_20.ppm
+ffmpeg -ss 20 -i source.MOV    -frames:v 1 -vf scale=216:384 -pix_fmt rgb24 hm/src_20.ppm
+python3 scripts/match_grade.py --ref "hm/ref_*.ppm" --src "hm/src_*.ppm" --out look.cube
+```
+
+Measures where the reference puts its shadows, mids and highlights per channel
+and builds the curves that move your source onto it. Both sets need to come
+from similar content — same room and lighting — or you transfer the scene's
+colour distribution rather than its grade.
 
 ## Start here
 
