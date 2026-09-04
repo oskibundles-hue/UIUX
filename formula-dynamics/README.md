@@ -1,85 +1,100 @@
-# FORMULA DYNAMICS — 9:16 social ad
+# Formula Dynamics Performance — Brand & Video Asset Kit
 
-A 15.7s vertical ad for a performance tuning shop, built by compositing animated
-typography onto supplied shop footage (McLaren 765LT, doors up, wet floor).
+**Start here.** Everything needed to edit on-brand video lives in this folder,
+organised so you can find a file in seconds and drag it straight onto a CapCut
+timeline.
 
-**Deliverable:** `exports/formula-dynamics-15s-9x16.mp4` — 1080×1920, 30fps, H.264
-high profile, AAC audio from the source clip, `+faststart`. 6.4 MB.
-Poster frame: `exports/poster.jpg`.
+---
 
-## Cut
+## The 30-second version
 
-| Time | Beat | Copy |
+| I need to… | Go to |
+|---|---|
+| Put the logo on a video | `03-overlays/corner-logo-bugs/` — already positioned, just drag |
+| Name a service on screen | `03-overlays/lower-thirds/` |
+| Open with a title | `03-overlays/title-cards/` |
+| Close with contact info | `03-overlays/end-cards/` |
+| Use the logo somewhere else | `02-logos/` |
+| Check a colour or font | `01-brand-core/BRAND-SPEC.md` |
+| Write a caption | `05-copy-library/` |
+| Know how to shoot / edit / export | `06-video-system/` |
+| Burn the overlays into a clip automatically | `06-video-system/AUTO-EDIT.md` |
+| Print or read the whole thing offline | **[`FORMULA-DYNAMICS-BRAND-GUIDE.pdf`](FORMULA-DYNAMICS-BRAND-GUIDE.pdf)** |
+| Download the files to my computer or phone | `08-download-bundles/` |
+
+Full file-by-file listing: **[`ASSET-INDEX.md`](ASSET-INDEX.md)**
+
+**[FORMULA-DYNAMICS-BRAND-GUIDE.pdf](FORMULA-DYNAMICS-BRAND-GUIDE.pdf)** &mdash; the
+whole system as an 18-page printable document: palette, type, logo rules, the
+overlay library, CapCut workflow, export specs, shot formulas and copy. Download
+it, print it, or keep it on your phone in the bay. It is generated from the same
+source of truth as the assets, so it can never fall out of date.
+
+---
+
+## Folder map
+
+```
+formula-dynamics/
+├── 01-brand-core/        The rules. Colours, type, logo spec, swatches.
+├── 02-logos/             Every logo lockup — vector (SVG) + PNG at 3 sizes.
+├── 03-overlays/          Drop-on-timeline video graphics. ← the daily driver
+├── 04-templates/         Safe-zone guides + the campaign posters for reference.
+├── 05-copy-library/      Hooks, captions, hashtags, CTAs, scripts.
+├── 06-video-system/      How to shoot, edit, and export. CapCut workflow.
+├── 07-fonts/             Bebas Neue (bundled) + notes on the accent face.
+├── 08-download-bundles/  Zipped packs, ready to download and unzip.
+├── 99-toolkit/           Scripts that generated everything here.
+└── FORMULA-DYNAMICS-BRAND-GUIDE.pdf    The whole system, printable.
+```
+
+---
+
+## The one rule that saves the most time
+
+**Every full-frame overlay is rendered at the exact pixel size of its canvas.**
+
+A file named `..._9x16.png` is exactly 1080 × 1920. If your CapCut project is
+set to 9:16, that overlay drops onto the timeline already in the right place at
+100% scale. No resizing, no dragging, no drift between clips — so the logo sits
+in *identical* position in every video you ever make.
+
+Pick your canvas first, then only ever use files matching it:
+
+| Suffix | Pixels | Use for |
 |---|---|---|
-| 0.35 – 12.3 | Persistent HUD lockup, hairline draws in under it | `FORMULA DYNAMICS` · `PERFORMANCE ENGINEERING` |
-| 1.05 – 4.3 | Headline A — lines wipe in from the left, staggered, accent rule under | **STOCK IS A / STARTING POINT.** |
-| 4.8 – 8.6 | Spec readout — three rows, values count up from stock to tuned | `STAGE 2 · MCLAREN 765LT` |
-| 9.1 – 12.1 | Headline B | **BUILT ON DATA. / TUNED BY HAND.** |
-| 12.4 – 15.7 | End card — scrim, tach emblem sweeps, wordmark, CTA | `BOOK A DYNO SESSION` · `FORMULADYNAMICS.COM` |
+| `9x16` | 1080 × 1920 | TikTok, Reels, Shorts — **your main format** |
+| `4x5` | 1080 × 1350 | Instagram feed video |
+| `1x1` | 1080 × 1080 | Square feed posts |
+| `16x9` | 1920 × 1080 | YouTube, website, landing hero |
 
-## Design system
+---
 
-- **Display:** Big Shoulders Bold — condensed, uppercase, negative tracking. Headline
-  size auto-fits the type column, so longer copy shrinks instead of overflowing.
-- **Labels / data:** Geist Mono — uppercase, wide tracking, for anything that should
-  read as instrumentation rather than marketing.
-- **Palette:** ink `#EDEAE4`, dim `#96928A`, signal red `#FF3B21`. The red is pulled
-  from the car's tail light bar so the accent belongs to the footage.
-- **Grade:** `contrast 1.05 / saturation 0.95`, vignette. Deliberately restrained —
-  the plate is already dark and heavy grading falls apart under platform re-encode.
-- **Legibility:** gradient scrims under the HUD, the spec block, and the lower type
-  block instead of boxes or drop shadows.
-- **Emblem:** tachometer arc with tick marks and an FD monogram, drawn in code
-  (supersampled 4× then downsampled), sweeping up as the end card resolves.
+## What Formula Dynamics does
 
-## Safe areas
+Upgrades **and** service. Both belong in the content mix.
 
-All type sits inside 96px side margins, below y=150 and above y=1590, clearing the
-Reels / TikTok / Shorts caption band and the right-hand action rail. The spec block
-sits in the upper third specifically to stay clear of the right rail, which occupies
-roughly y=1000–1600.
+**Upgrades** — body kits, exhaust, wheels, tuning (current video focus),
+plus PPF, ceramic coating, paint correction, detailing, suspension.
 
-Check it any time with:
+**Service** — scheduled maintenance, fluids, brakes, diagnostics. Lower
+glamour, high trust. Great for "why us" content.
+
+**Select partners** — NV Forged (wheels), iPE Exhaust (exhaust), Ryft Springs
+(springs, exhaust, blow-off valves).
+See `05-copy-library/services-and-partners.md`.
+
+---
+
+## Regenerating everything
+
+All assets are generated from code, so the kit stays consistent. Change a
+colour, service or contact detail in `99-toolkit/fd_brand.py`, then:
 
 ```bash
-python3 build_ad.py --safe --stills 2.6 6.8 13.9
+cd 99-toolkit
+pip install Pillow numpy potracer cairosvg
+python3 build_all.py
 ```
 
-Cyan = type-safe box, yellow = right action-rail edge.
-
-## ⚠️ Spec figures are placeholders
-
-`SPECS` in `build_ad.py` currently reads 755 → 902 HP, 590 → 701 LB-FT, 2.7 → 2.4 sec.
-The stock column is factory 765LT; **the tuned column is invented for layout purposes.**
-Replace it with real dyno numbers from the actual build sheet before this runs as paid
-media — advertised performance claims need to be ones the shop can substantiate.
-Same for `DOMAIN`, which is a placeholder.
-
-## Rebuilding
-
-```bash
-pip install Pillow imageio-ffmpeg
-python3 build_ad.py                          # full render -> exports/
-python3 build_ad.py --stills 2.6 6.8 13.9    # preview single composited frames
-python3 build_ad.py --crf 23                 # smaller file
-```
-
-Everything editable — copy, timing, spec rows, palette — lives in the `CONFIG` block
-at the top of `build_ad.py`. The drawing code reads from it; don't hardcode strings
-further down.
-
-Render takes ~80s: Pillow writes 471 RGBA overlay frames to `.frames/` (gitignored,
-~23 MB), then ffmpeg composites them over the plate in one pass.
-
-## Files
-
-```
-build_ad.py                      renderer (Pillow overlay + ffmpeg composite)
-source/plate-1080x1920.mp4       graded-neutral footage plate, 30fps (re-render input)
-fonts/                           Big Shoulders + Geist Mono (SIL OFL, licenses included)
-exports/                         the ad, poster, key stills
-```
-
-The plate is a compressed transcode of the original 28 MB ProRes-ish `.mov` so the
-render is reproducible from the repo alone. Re-cut from the camera original if you
-need a higher-quality master.
+Details in `99-toolkit/README.md`.
