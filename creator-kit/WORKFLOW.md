@@ -41,6 +41,14 @@ write binaries. I deliver finished Reels through chat; you file them.
 | Captions | `remotion/` | Matched to your style: `#FDFDFD` base, `#FBD101` active word, 72.6% down frame. |
 | Overlays | `overlay.sh` | Timed logo bugs, lower thirds, CTAs, title cards burned onto the master. |
 
+## Which brand?
+
+Two companies, and it decides the overlays and the language. See `BRANDS.md`.
+Short version: **Formula Dynamics** is the shop (installs, bay work,
+detailing); **Supercar Experience** is the rental side (pickups, dropoffs,
+handovers). The Anti Stock shirt is Supercar Experience merch and is *not* a
+brand marker — he wears it in the FD shop. Judge by what is happening.
+
 ## Overlays
 
 The Formula Dynamics vertical pack is 86 full-frame 1080x1920 PNGs with alpha,
@@ -94,3 +102,5 @@ through Higgsfield if the `youngomarie` account gets connected.
 
 - Animations in-video (Remotion, or generative via the art skills)
 - Stream-style handle overlays for nq.young / youngomarie
+- A Supercar Experience overlay pack — none exists, and pickup/dropoff footage
+  is coming
