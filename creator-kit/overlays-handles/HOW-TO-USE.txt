@@ -1,0 +1,60 @@
+PERSONAL HANDLE OVERLAYS - the Twitch-style social bug
+16 files, 1080x1920, transparent PNG
+
+    nq.young      Instagram
+    youngomarie   YouTube
+    youngomarie   TikTok
+
+These are YOURS. Not Formula Dynamics, not Supercar Experience. The accent is
+#FBD101 - the gold from your own burned-in captions, which is the one colour
+already unmistakably yours across every post. A handle bug wearing a client's
+brand colours reads as an ad for the client.
+
+WHAT IS IN HERE
+---------------
+handle_9x16_<platform>_<position>_<colour>.png   12 files
+    platform  instagram | youtube | tiktok
+    position  bottom-left (the streamer convention) | top-left
+    colour    white for dark footage | black for bright footage
+
+handle_9x16_all-stacked_<colour>.png              2 files
+    All three, stacked, with a FOLLOW label. For an end card or the last few
+    seconds - three rows of text is a lot to leave sitting on the frame.
+
+handle_9x16_all-bar_<colour>.png                  2 files
+    All three on one line, centred. Reads in about a second, which is what you
+    want if it is only up for the last three.
+
+WHICH ONE
+---------
+Posting to Instagram   -> use the instagram single. Showing someone your other
+                          handles on the platform they are already on is wasted
+                          space; the ask is to follow you SOMEWHERE ELSE.
+Posting to TikTok/YT   -> use the instagram single, same logic in reverse.
+Cross-posting one cut  -> the bar, last 3 seconds only.
+End card              -> the stacked panel.
+
+Use top-left when the interesting thing is in the lower half of the frame,
+which - filming a car on a lift - is most of the time.
+
+BURNING THEM IN
+---------------
+  ./overlay.sh reel.mp4 out.mp4 \
+    "overlays-handles/handle_9x16_instagram_bottom-left_white.png:0"
+
+Omit the END time so it stays up for the whole video. That is the point of a
+handle bug: it survives a repost or a screen-record, which is exactly when
+someone cannot tap through to your profile.
+
+GEOMETRY
+--------
+All singles are 88px tall, the same height as the Formula Dynamics and Supercar
+Experience logo bugs, so they sit on the same optical line and can share a
+frame without looking stacked by accident.
+
+Do not run a handle bug bottom-left at the same time as a lower third or a CTA
+panel - they occupy the same band. Move the handle to top-left.
+
+Rebuild:
+  python3 creator-kit/scripts/build_handle_overlays.py \
+      --out overlays-handles --verify
