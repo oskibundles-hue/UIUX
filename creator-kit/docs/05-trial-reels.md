@@ -30,7 +30,7 @@ cd remotion && REMOTION_ALPHA=1 npx remotion render src/index.ts Reel4K out/over
 
 # 5. One pass: footage + look LUT + punch-ins + graphics + logo + sharpen + loudness
 scripts/compose_reel.sh trial/master.mp4 remotion/out/overlay.mov trial/props.json \
-  exports/trial.mp4 --lut luts/AK_Film_Test_Match.cube \
+  exports/trial.mp4 \
   --logo "overlays/FD-00-VERTICAL-STARTER-PACK 3/corner-logo-bugs/bug_9x16_top-right_logo-white.png"
 
 # 6. Pre-flight
