@@ -60,6 +60,23 @@ def speech_in(segs, a, b):
     return sum(max(0.0, min(e, b) - max(s, a)) for s, e in segs)
 
 
+def phrases_in(segs, a, b):
+    """How many separate phrases fall in the window. This matters as much as
+    total speech: a window holding one unbroken 60-second monologue has nothing
+    for the silence cutter to remove, so it exports as a single 60s shot with
+    none of the ~4s rhythm the edit is supposed to reproduce. Scoring on speech
+    alone actively seeks those windows out, because the densest talking is by
+    definition the part with the fewest pauses."""
+    return sum(1 for s, e in segs if e > a and s < b and min(e, b) - max(s, a) > 0.15)
+
+
+def window_score(segs, a, b, want_phrases=8):
+    """Speech, discounted when the window has too few phrases to cut between."""
+    talk = speech_in(segs, a, b)
+    n = phrases_in(segs, a, b)
+    return talk * min(1.0, n / float(want_phrases))
+
+
 def best_window(segs, total, window, step=1.0):
     """Slide a window of `window` seconds and keep the position holding the most
     speech. Ties go to the earlier position, which favours the setup over the
@@ -69,7 +86,7 @@ def best_window(segs, total, window, step=1.0):
     best_t, best_v = 0.0, -1.0
     t = 0.0
     while t + window <= total:
-        v = speech_in(segs, t, t + window)
+        v = window_score(segs, t, t + window)
         if v > best_v + 1e-9:
             best_v, best_t = v, t
         t += step
@@ -84,7 +101,7 @@ def candidates(segs, total, window, step=1.0, k=8):
     scored = []
     t = 0.0
     while t + window <= total:
-        scored.append((speech_in(segs, t, t + window), t))
+        scored.append((window_score(segs, t, t + window), t))
         t += step
     scored.sort(reverse=True)
     picked = []
@@ -174,12 +191,13 @@ def main():
         cands = candidates(segs, total, args.window, args.step)
         best, best_score = None, -1.0
         for c_start, c_len in cands:
-            talk = speech_in(segs, c_start, c_start + c_len)
+            talk = window_score(segs, c_start, c_start + c_len)
+            npf = phrases_in(segs, c_start, c_start + c_len)
             pic = picture_score(ff, args.input, c_start, c_len)
             score = talk * (0.25 + 0.75 * pic)
             if args.report:
-                sys.stderr.write("    candidate %6.1fs: %4.0fs speech, picture %.2f -> %.1f\n"
-                                 % (c_start, talk, pic, score))
+                sys.stderr.write("    candidate %6.1fs: %2d phrases, score %5.1f, picture %.2f -> %.1f\n"
+                                 % (c_start, npf, talk, pic, score))
             if score > best_score:
                 best_score, best = score, (c_start, c_len)
         start, length = best
@@ -192,10 +210,10 @@ def main():
         overall = sum(e - s for s, e in segs)
         sys.stderr.write(
             "    clip %.0fs, %.0fs of speech in %d phrases\n"
-            "    window %.1f-%.1fs holds %.0fs of speech (%.0f%% of the window, "
-            "%.0f%% of everything you said)\n"
+            "    window %.1f-%.1fs holds %.0fs of speech in %d phrases "
+            "(%.0f%% of the window)\n"
             % (total, overall, len(segs), start, start + length, talk,
-               100 * talk / length, 100 * talk / overall if overall else 0))
+               phrases_in(segs, start, start + length), 100 * talk / length))
 
     print("%.3f %.3f" % (start, length))
 

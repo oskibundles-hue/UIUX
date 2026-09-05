@@ -9,6 +9,7 @@ Every file: 2160x3840, 29.97fps, silence-cut at the threshold matching your
 
 | # | what it is | length | size | link |
 |---|---|---|---|---|
+| 01 | garage walkthrough | 55s | 69 MB | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/6a98e4be-61b3-4b5f-9ae0-907087295e27.mp4) |
 | 02 | product to camera | 48s | 77 MB | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/e2d47750-e812-4a22-9aa9-2be97e2b6c99.mp4) |
 | 03 | laying out led trim | 64s | 71 MB | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/b0fcac92-dbed-49fd-ba4c-96ebde143843.mp4) |
 | 04 | quick piece to camera | 8s | 31 MB | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/9d04d289-7245-4dc5-a2e4-f61882716349.mp4) |
@@ -25,7 +26,12 @@ Every file: 2160x3840, 29.97fps, silence-cut at the threshold matching your
 
 ## Not in this batch yet
 
-Clips 01, 06 and 13 are still encoding.
+**06 wall trim install**, **09 gt3 rolling in** and **13 black car bay work**
+are being re-cut. All three came out with only 0-2% removed, because the window
+picker scored on speech alone and so chose the stretches with the fewest pauses
+- exactly the ones the silence cutter has nothing to do with. They exported as
+single 55-60s shots with none of the ~4s rhythm. The picker now discounts a
+window that holds too few phrases to cut between.
 
 **11 mixing epoxy** is held back: its window uses only 88-233 of 256 luma
 levels against 247-256 on a healthy clip, and part of it is effectively black.
