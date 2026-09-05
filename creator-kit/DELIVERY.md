@@ -1,72 +1,68 @@
 # Finished Reels — post in this order
 
-All 18 Reels from the 2026-09-03 shoot. Work top to bottom.
+All 18 from the 2026-09-03 shoot. Work top to bottom.
 
-Tap a link on your phone, save the video, then import it into Instagram's
-**Edits** app and export 4K from there. Posting straight to the Reels
-composer re-encodes harder.
+Tap a link on your phone, save it, then import into Instagram's **Edits**
+app and export 4K from there. Posting straight to the Reels composer
+re-encodes harder.
 
 Every file: 2160x3840, 29.97fps, silences cut at the threshold whose shot
-rhythm lands closest to your own ~4s, graded per-clip against your published
-reference (YAVG 47 vs your 45, blacks at 0, whites at 250 vs your 252).
+rhythm lands closest to your own ~4s, graded per-clip against your
+published reference, and white-balanced to its grey point.
 
-| # | what it is | length | size | brand | link |
+The `grey` column is red-minus-blue measured on near-neutral pixels.
+Your own published grade sits at **+0.3**. Anything within a couple of
+points of that matches you; the set used to run +7 to -6.
+
+| # | what it is | length | size | grey | link |
 |---|---|---|---|---|---|
-| 01 | garage walkthrough | 55s | 69 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/6a98e4be-61b3-4b5f-9ae0-907087295e27.mp4) |
-| 02 | product to camera | 48s | 77 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/e2d47750-e812-4a22-9aa9-2be97e2b6c99.mp4) |
-| 03 | laying out led trim | 64s | 71 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/b0fcac92-dbed-49fd-ba4c-96ebde143843.mp4) |
-| 04 | quick piece to camera | 8s | 31 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/9d04d289-7245-4dc5-a2e4-f61882716349.mp4) |
-| 05 | cutting trim to length | 50s | 72 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/2689b383-64d4-4941-9ddd-e54dba8022db.mp4) |
-| 06 | wall trim install | 57s | 73 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/eec416f3-d6b6-4c70-ba50-ba6182e16b12.mp4) |
-| 07 | building the frame | 32s | 67 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/fffa9008-c0f7-48f9-9ad1-8798d5fe764d.mp4) |
-| 08 | on the forklift | 36s | 73 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/2e2a22b5-fbde-4ce2-9ffa-eab5b3375df0.mp4) |
-| 09 | gt3 rolling in | 50s | 76 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/4316ca75-830a-446b-a372-331b66170085.mp4) |
-| 10 | raising the ceiling beam | 50s | 72 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/619e65c0-afb3-4d01-a346-e93c0358288f.mp4) |
-| 11 | mixing epoxy | 53s | 73 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/a4546a46-04d5-46f6-b1b2-d27e1f7898cd.mp4) |
-| 12 | ceiling panel install | 52s | 73 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/f86d2cf1-9c2d-46c4-8b73-b89c0203c7ea.mp4) |
-| 13 | black car bay work | 56s | 71 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/a9109ac1-4776-414b-a2ce-6aa8fe1f270e.mp4) |
-| 14 | aston martin brakes | 52s | 73 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/68f1151f-85de-4dce-a7ba-0d39586a77eb.mp4) |
-| 15 | fitting ryft wheels | 41s | 72 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/7e743287-f0ea-4622-91c9-8c7c39d87810.mp4) |
-| 16 | wheels off | 18s | 66 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/edf6bcc2-0700-40a8-893e-3a37bee244bb.mp4) |
-| 17 | matte black in the bay | 41s | 72 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/42527081-7cf3-4e18-ae2e-67dec2b39d00.mp4) |
-| 18 | red supercar | 59s | 70 MB | ? | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/e42b5866-9695-452b-84d4-53ebac81a2b7.mp4) |
+| 01 | garage walkthrough | 55s | 69 MB | +2.0 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/6a98e4be-61b3-4b5f-9ae0-907087295e27.mp4) |
+| 02 | product to camera | 48s | 77 MB | -2.0 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/e2d47750-e812-4a22-9aa9-2be97e2b6c99.mp4) |
+| 03 | laying out led trim | 64s | 71 MB | +2.4 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/c1023d76-b532-47ad-9d6c-bbf8f04c697e.mp4) |
+| 04 | quick piece to camera | 8s | 31 MB | +1.8 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/6d850d5b-fc1d-422a-baa4-c76d1e23413a.mp4) |
+| 05 | cutting trim to length | 50s | 72 MB | +1.0 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/2689b383-64d4-4941-9ddd-e54dba8022db.mp4) |
+| 06 | drilling the trim strips | 57s | 73 MB | +0.8 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/5c476a6a-4f42-4576-b1e9-40d29311a514.mp4) |
+| 07 | building the frame | 32s | 67 MB | +0.1 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/3e5547de-7785-469b-9b52-86e03f5852e9.mp4) |
+| 08 | on the forklift | 36s | 73 MB | +1.0 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/1642b096-0ba6-47b2-bfe1-0e945b4001c8.mp4) |
+| 09 | gt3 rolling in | 50s | 76 MB | +0.9 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/945500b9-0356-4dff-852d-9ebc215b42fb.mp4) |
+| 10 | raising the ceiling beam | 50s | 72 MB | -0.4 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/619e65c0-afb3-4d01-a346-e93c0358288f.mp4) |
+| 11 | mixing epoxy | 53s | 73 MB | +1.7 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/a4546a46-04d5-46f6-b1b2-d27e1f7898cd.mp4) |
+| 12 | ceiling panel install | 52s | 73 MB | +0.6 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/84cd13df-f5d9-428c-a130-9dd7202d5f2b.mp4) |
+| 13 | black car on the lift | 56s | 71 MB | +0.8 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/dfa69780-a1d9-4e06-a260-d031f6608e76.mp4) |
+| 14 | aston martin brakes | 52s | 73 MB | +1.5 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/8c72b759-e272-41f7-a351-5dafec5cb209.mp4) |
+| 15 | teal brakes and ryft wheels | 41s | 72 MB | +0.7 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/112bdc87-ac54-4077-be58-bb7645d041fb.mp4) |
+| 16 | wheels off | 18s | 66 MB | +1.3 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/952eba12-540d-43d7-9b98-8f883615088b.mp4) |
+| 17 | matte black wheel work | 41s | 72 MB | +0.4 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/f3a5ffe5-88ef-48b0-8927-b5fb4684c920.mp4) |
+| 18 | red supercar | 59s | 70 MB | -2.1 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/e42b5866-9695-452b-84d4-53ebac81a2b7.mp4) |
 
-## About clip 11
+## Names
 
-It was held back at first and is now fixed. Its original window used 88 of 256
-luma levels in places with a maximum of 109 - effectively black - because the
-picker scored on speech alone and landed on a stretch where the talking is good
-and the camera is pointed at nothing.
-
-Three things had to be ruled out to find it. The raw frames there are healthy
-(spreads of 213-251), so the source was fine. Grading the same slice with the
-per-clip LUT and with the shared one gave 234 and 225 levels, so the grade was
-fine. The dark patch was simply a few real seconds of footage that five samples
-across sixty seconds walked straight past.
-
-The picture check now takes nine samples, weighs the worst frame as heavily as
-the average, and uses thresholds set for log rather than graded footage. The
-window moved to 0-59s: 17 phrases, no dark patch, and a much better clip -
-epoxy buckets coming in at golden hour.
+Every name describes what is in the whole take, checked against a ten-frame
+sample of the entire clip rather than the sixty seconds that got cut. Six were
+wrong the first time round because they were derived from the window only:
+"wall trim install" is nine minutes of laying strips on the floor with a chalk
+line and a drill; "fitting ryft wheels" never fits a wheel, they stay boxed
+against the wall while the work happens on the hub; "porsche on lift" is a GT3
+being backed in and never touches a lift.
 
 ## Worth knowing
 
 - **18 red supercar** is the strongest of the set. Lead with it. It is also the
-  one clip whose brand I cannot call: a red mid-engine car sitting in the FD
-  shop could as easily be Supercar Experience rental stock. You would know.
+  one clip whose brand I cannot call: a red mid-engine car in the FD shop could
+  as easily be Supercar Experience rental stock. You would know.
 - **04 quick piece to camera** is 8s, the whole source clip. Too short to post
   alone - use it as a hook on the front of another cut.
-- **17 matte black in the bay** is a locked-off shot with very little motion.
-  A cutaway, not a post.
-- **16 wheels off** has a near-black stretch about a quarter in.
-- **15 fitting ryft wheels** pairs with the FD pack's lt_9x16_partner_ryft
-  lower third. **14 aston martin brakes** is named for what the calipers say.
+- **17 matte black wheel work** and **13 black car on the lift** are both quiet
+  and observational. Good cutaways, weaker as standalone posts.
+- **15 teal brakes and ryft wheels** pairs with the FD pack's
+  lt_9x16_partner_ryft lower third.
 
 ## Camera setting to fix
 
-**12 ceiling panel install was shot upside down** and the Osmo wrote no
-rotation flag, so nothing in the file said which way was up. It has been
-re-cut with a 180 rotation, but nothing downstream can detect this
-automatically - check the orientation lock before the next shoot.
+**Clip 12 was shot upside down** and the Osmo wrote no rotation flag, so nothing
+in the file said which way was up. It is corrected here, and the rotation now
+lives in creator-kit/clips.conf so it survives being re-cut. But nothing
+downstream can detect it automatically - check the orientation lock before the
+next shoot.
 
 Links are public to anyone holding them and do not expire on their own.
