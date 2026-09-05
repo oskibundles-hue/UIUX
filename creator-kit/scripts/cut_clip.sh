@@ -40,6 +40,7 @@ OUT="${2:?missing output}"
 shift 2
 
 RHYTHM=4.0
+ROTATE=0
 REF="/home/user/footage/hm/ref_*.ppm"
 TARGET_MB=75
 WINDOW=60
@@ -49,6 +50,7 @@ while [ $# -gt 0 ]; do
     --ref)    REF="$2"; shift 2 ;;
     --target-mb) TARGET_MB="$2"; shift 2 ;;
     --window) WINDOW="$2"; shift 2 ;;
+    --rotate) ROTATE="$2"; shift 2 ;;
     *) echo "unknown option: $1" >&2; exit 2 ;;
   esac
 done
@@ -83,13 +85,28 @@ echo "  source   ${secs}s"
 CLIP="$SRC"
 if [ "$secs" -gt "$(python3 -c "print(int($WINDOW*1.4))")" ]; then
   read -r wstart wlen < <(python3 "$HERE/speech_window.py" "$SRC" \
-                          --window "$WINDOW" --noise -22 --report 2>"$WORK/win.txt")
+                          --window "$WINDOW" --noise -22 --check-picture \
+                          --report 2>"$WORK/win.txt")
   sed 's/^/  /' "$WORK/win.txt"
   ffmpeg -y -loglevel error -ss "$wstart" -t "$wlen" -i "$SRC" -c copy "$WORK/window.mov"
   if [ ! -s "$WORK/window.mov" ]; then echo "  FAILED: could not cut the window"; exit 1; fi
   CLIP="$WORK/window.mov"
   secs=$(python3 -c "print(int($wlen))")
   echo "  window   ${wstart}s +${wlen}s"
+fi
+
+# 0b. Some clips come off the camera upside down. The Osmo writes no rotation
+#     flag when its orientation lock is off, so nothing in the file says which
+#     way is up - it has to be passed in. Rotating before the grade keeps this
+#     to a single encode rather than stacking a second generation on a finished
+#     file.
+if [ "$ROTATE" = "180" ]; then
+  echo "  rotate   180 (camera was inverted)"
+  ffmpeg -y -loglevel error -i "$CLIP" -vf "hflip,vflip" \
+         -c:v libx264 -preset veryfast -crf 12 -pix_fmt yuv420p10le \
+         -c:a copy "$WORK/rot.mov"
+  if [ ! -s "$WORK/rot.mov" ]; then echo "  FAILED: rotation failed"; exit 1; fi
+  CLIP="$WORK/rot.mov"
 fi
 
 # 1. Grade matched to this clip. Sample across the whole clip so the histogram

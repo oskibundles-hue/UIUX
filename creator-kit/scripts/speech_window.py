@@ -76,6 +76,62 @@ def best_window(segs, total, window, step=1.0):
     return best_t, window
 
 
+def candidates(segs, total, window, step=1.0, k=8):
+    """The k best window positions by speech, spread out so they are genuinely
+    different sections rather than eight views of the same moment."""
+    if total <= window:
+        return [(0.0, total)]
+    scored = []
+    t = 0.0
+    while t + window <= total:
+        scored.append((speech_in(segs, t, t + window), t))
+        t += step
+    scored.sort(reverse=True)
+    picked = []
+    for v, t in scored:
+        if all(abs(t - p) >= window * 0.5 for p in picked):
+            picked.append(t)
+        if len(picked) >= k:
+            break
+    return [(t, window) for t in picked]
+
+
+def picture_score(ff, path, start, length, samples=5):
+    """Is there anything to look at? Mean brightness and how much of the luma
+    range is in use, averaged over a few frames. A window that is mostly black
+    or mostly flat scores near zero however good the audio is."""
+    import os
+    import tempfile
+    total_score = 0.0
+    with tempfile.TemporaryDirectory() as td:
+        for i in range(samples):
+            t = start + length * (i + 0.5) / samples
+            g = os.path.join(td, "s%d.pgm" % i)
+            subprocess.run([ff, "-v", "error", "-y", "-ss", "%.3f" % t, "-i", path,
+                            "-frames:v", "1", "-vf", "scale=64:114", "-pix_fmt", "gray", g],
+                           capture_output=True)
+            if not os.path.exists(g):
+                continue
+            d = open(g, "rb").read()
+            j, tok = 0, []
+            try:
+                while len(tok) < 4:
+                    nl = d.index(b"\n", j); tok += d[j:nl].split(); j = nl + 1
+            except ValueError:
+                continue
+            px = d[j:]
+            if not px:
+                continue
+            mean = sum(px) / len(px)
+            spread = max(px) - min(px)
+            # Below ~18 mean the frame is essentially unusable on a phone in
+            # daylight; a spread under ~60 is a flat wall or a covered lens.
+            bright = min(1.0, mean / 45.0) if mean < 45 else 1.0
+            contrast = min(1.0, spread / 90.0)
+            total_score += bright * contrast
+    return total_score / samples if samples else 0.0
+
+
 def snap(segs, start, length):
     """Pull the edges onto phrase boundaries so the window neither starts nor
     ends mid-sentence. Only ever shrinks inward, never grows past the window."""
@@ -99,6 +155,8 @@ def main():
     ap.add_argument("--noise", type=int, default=-22, help="silence threshold in dB")
     ap.add_argument("--min-silence", type=float, default=0.25)
     ap.add_argument("--step", type=float, default=1.0, help="slide granularity")
+    ap.add_argument("--check-picture", action="store_true",
+                    help="also sample frames and reject windows with nothing to look at")
     ap.add_argument("--report", action="store_true", help="explain the choice on stderr")
     args = ap.parse_args()
 
@@ -112,7 +170,21 @@ def main():
         print("0.000 %.3f" % min(total, args.window))
         return
 
-    start, length = best_window(segs, total, args.window, args.step)
+    if args.check_picture and total > args.window:
+        cands = candidates(segs, total, args.window, args.step)
+        best, best_score = None, -1.0
+        for c_start, c_len in cands:
+            talk = speech_in(segs, c_start, c_start + c_len)
+            pic = picture_score(ff, args.input, c_start, c_len)
+            score = talk * (0.25 + 0.75 * pic)
+            if args.report:
+                sys.stderr.write("    candidate %6.1fs: %4.0fs speech, picture %.2f -> %.1f\n"
+                                 % (c_start, talk, pic, score))
+            if score > best_score:
+                best_score, best = score, (c_start, c_len)
+        start, length = best
+    else:
+        start, length = best_window(segs, total, args.window, args.step)
     start, length = snap(segs, start, length)
 
     if args.report:
