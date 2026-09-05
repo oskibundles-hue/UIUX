@@ -36,6 +36,13 @@ export type ReelProps = {
    * sparingly; two or three per minute is plenty.
    */
   punches?: { at: number; hold?: number; scale?: number }[];
+  /**
+   * Render only the graphics on a transparent background (prores 4444),
+   * so they can be composited over the master in one ffmpeg pass instead
+   * of re-encoding the footage through the browser. Punch-ins are then
+   * applied to the footage in that pass, not here.
+   */
+  overlayOnly?: boolean;
 };
 
 const punchScale = (t: number, punches: ReelProps["punches"]) => {
@@ -55,18 +62,20 @@ const punchScale = (t: number, punches: ReelProps["punches"]) => {
 };
 
 export const Reel: React.FC<ReelProps> = ({
-  src, phrases, words: given, hook, handle, endCard, endCardAt = 0, showProgress = false, scrim = false, punches,
+  src, phrases, words: given, hook, handle, endCard, endCardAt = 0, showProgress = false, scrim = false, punches, overlayOnly = false,
 }) => {
   const { durationInFrames, fps } = useVideoConfig();
   const zoom = punchScale(useCurrentFrame() / fps, punches);
   const words = given && given.length ? given : toWords(phrases);
 
   return (
-    <AbsoluteFill style={{ backgroundColor: "#000" }}>
-      <OffthreadVideo
-        src={src.startsWith("http") ? src : staticFile(src)}
-        style={{ width: "100%", height: "100%", objectFit: "cover", transform: `scale(${zoom})` }}
-      />
+    <AbsoluteFill style={{ backgroundColor: overlayOnly ? "transparent" : "#000" }}>
+      {overlayOnly ? null : (
+        <OffthreadVideo
+          src={src.startsWith("http") ? src : staticFile(src)}
+          style={{ width: "100%", height: "100%", objectFit: "cover", transform: `scale(${zoom})` }}
+        />
+      )}
 
       {scrim ? (
         <AbsoluteFill

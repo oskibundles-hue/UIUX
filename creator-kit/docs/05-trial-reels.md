@@ -21,19 +21,28 @@ python3 scripts/transcribe.py exports/09*.mp4 exports/14*.mp4 ... -o trial/
 # 3. Join the segments and carry the words onto the new timeline
 python3 scripts/assemble_reel.py trial/plan.json trial/master.mp4 trial/props.json
 
-# 4. Add hook / handle / endCard / punches to props.json, then render captions
-cp trial/master.mp4 remotion/public/trial_master.mp4
-cd remotion && npx remotion render src/index.ts Reel4K out/reel.mp4 \
-  --props=../trial/props.json \
+# 4. Add hook / handle / endCard / punches to props.json, then render the
+#    GRAPHICS ONLY on alpha (set "overlayOnly": true in a copy of the props)
+cd remotion && REMOTION_ALPHA=1 npx remotion render src/index.ts Reel4K out/overlay.mov \
+  --props=../trial/props_overlay.json --codec=prores --prores-profile=4444 \
+  --pixel-format=yuva444p10le --image-format=png \
   --browser-executable=/opt/pw-browsers/chromium_headless_shell-1194/chrome-linux/headless_shell
 
-# 5. Logo bug + loudness + size-targeted delivery encode, one generation
-scripts/finish_reel.sh remotion/out/reel.mp4 exports/trial.mp4 --target-mb 75 \
-  "overlays/FD-00-VERTICAL-STARTER-PACK 3/corner-logo-bugs/bug_9x16_top-right_logo-white.png:0"
+# 5. One pass: footage + look LUT + punch-ins + graphics + logo + sharpen + loudness
+scripts/compose_reel.sh trial/master.mp4 remotion/out/overlay.mov trial/props.json \
+  exports/trial.mp4 --lut luts/AK_Film_Test_Match.cube \
+  --logo "overlays/FD-00-VERTICAL-STARTER-PACK 3/corner-logo-bugs/bug_9x16_top-right_logo-white.png"
 
 # 6. Pre-flight
 python3 scripts/reel_check.py exports/trial.mp4 --props trial/props.json
 ```
+
+Why the graphics are rendered separately: the first version pushed the
+footage itself through Remotion (JPEG frame capture, then another H.264
+encode) and then a size-capped delivery encode. Three lossy generations at
+4K read as soft. Now the footage is decoded from the master once and encoded
+once, at CRF 17 with a 28 Mbps ceiling instead of a 75 MB target; files land
+around 150-200 MB, still inside the 10-35 Mbps upload window.
 
 ## The plan file
 
