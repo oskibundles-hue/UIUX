@@ -3,7 +3,7 @@
 Copy a grade from a reference video by matching histograms.
 
 Given frames from a reference (an already-graded clip whose look you want) and
-frames from a source (raw or log footage), this builds the per-channel tone
+frames from a source (raw or log footage), this builds the tone
 curves that push the source's colour distribution onto the reference's, and
 writes them as a .cube LUT.
 
@@ -117,6 +117,9 @@ def main():
     ap.add_argument("--size", type=int, default=33)
     ap.add_argument("--strength", type=float, default=1.0,
                     help="0 = no change, 1 = full match, >1 exaggerates")
+    ap.add_argument("--per-channel", action="store_true",
+                    help="match R, G and B independently (the old behaviour). "
+                         "Lets scene content drive colour: see the note below.")
     args = ap.parse_args()
 
     ref_paths = sorted(glob.glob(args.ref))
@@ -126,14 +129,54 @@ def main():
     print("reference frames: %d   source frames: %d" % (len(ref_paths), len(src_paths)))
 
     ref_h, src_h = histogram(ref_paths), histogram(src_paths)
-    curves = []
-    for c in range(3):
-        m = build_map(cdf(src_h[c]), cdf(ref_h[c]))
-        m = enforce_monotonic(smooth(m))
+
+    if args.per_channel:
+        curves = []
+        for c in range(3):
+            m = build_map(cdf(src_h[c]), cdf(ref_h[c]))
+            m = enforce_monotonic(smooth(m))
+            if args.strength != 1.0:
+                m = [i + (v - i) * args.strength for i, v in enumerate(m)]
+                m = enforce_monotonic([min(255.0, max(0.0, v)) for v in m])
+            curves.append(m)
+    else:
+        # Tone from the COMBINED histogram, then one gain per channel.
+        #
+        # Matching R, G and B independently lets whatever is in the frame drive
+        # the colour. A red microfiber on the floor or a red tile stripe skews
+        # that clip's red histogram, the matcher "corrects" it, and the whole
+        # Reel goes warm. Measured across an 18-clip session that produced a
+        # red-minus-blue spread of +3.4 to +17.4 against a reference sitting at
+        # +9.5 - the average was right, but individual clips were visibly redder
+        # than the rest of the grid, which is worse than being uniformly off.
+        #
+        # One curve built from all three channels together fixes tonality
+        # without touching balance. The look's warmth is then restored as three
+        # numbers: the gain that puts this clip's channel means where the
+        # reference's are. Three numbers cannot encode scene content, so a red
+        # object in shot no longer tints the whole frame.
+        lum_ref = [ref_h[0][i] + ref_h[1][i] + ref_h[2][i] for i in range(256)]
+        lum_src = [src_h[0][i] + src_h[1][i] + src_h[2][i] for i in range(256)]
+        tone = enforce_monotonic(smooth(build_map(cdf(lum_src), cdf(lum_ref))))
         if args.strength != 1.0:
-            m = [i + (v - i) * args.strength for i, v in enumerate(m)]
-            m = enforce_monotonic([min(255.0, max(0.0, v)) for v in m])
-        curves.append(m)
+            tone = [i + (v - i) * args.strength for i, v in enumerate(tone)]
+            tone = enforce_monotonic([min(255.0, max(0.0, v)) for v in tone])
+
+        def mean_of(hist, curve=None):
+            tot = sum(hist) or 1
+            return sum((curve[i] if curve else i) * hist[i] for i in range(256)) / tot
+
+        curves = []
+        for c in range(3):
+            want = mean_of(ref_h[c])
+            have = mean_of(src_h[c], tone)
+            # Clamp hard: this is a white-balance nudge, not a licence to
+            # re-tint the picture if one clip's content is unusual.
+            gain = 1.0 if have <= 0.5 else min(1.20, max(0.85, want / have))
+            curves.append(enforce_monotonic(
+                [min(255.0, max(0.0, v * gain)) for v in tone]))
+        print("  channel gains: R %.3f  G %.3f  B %.3f" % tuple(
+            (mean_of(ref_h[c]) / max(0.5, mean_of(src_h[c], tone))) for c in range(3)))
 
     for name, m in zip("RGB", curves):
         print("  %s curve: black %5.1f  mid %5.1f  white %5.1f" % (name, m[0], m[128], m[255]))
