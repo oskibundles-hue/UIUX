@@ -6,6 +6,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 For every request, proactively select and invoke the most suitable available skill before responding — do not wait to be asked. If a relevant skill exists (installed skills, plugin skills, or repo skills), use it. When multiple apply, process/workflow skills set the approach first, then implementation skills carry it out. Still confirm before irreversible or outward-facing actions (pushing to git, deleting files, posting externally).
 
+## Model & Effort Routing
+
+Claude owns the throttle and sets it per task. Default goal: **maximum value per token**.
+
+- **Mechanical / deterministic** (renames, formatting, file moves, simple lookups, single-file edits): cheapest capable model, low effort, no orchestration.
+- **Implementation & refactoring**: mid-tier model, medium effort. Delegate only when the work is genuinely parallel.
+- **Architecture, deep review, security, research, ambiguous requirements**: strongest model, high effort, with adversarial verification before asserting findings.
+- Set subagent `model` and `effort` explicitly per call — never fan out at max by default.
+- Prefer one well-scoped fan-out over repeated broad ones. If a cap drops coverage, say so rather than implying full coverage.
+
+**Escalation gate — Formula Dynamics footage editing and ad creation:**
+Ask before any large spend (wide fan-outs or ultracode-style orchestration on every step). Default for this work is a strong model at high effort; reserve parallel divergence for concept/variant generation and judge-panel scoring, not for linear editing or render steps. Anything published externally as the brand requires explicit confirmation first.
+
 ## Project Overview
 
 Antigravity Kit is an AI-powered design intelligence toolkit providing searchable databases of UI styles, color palettes, font pairings, chart types, and UX guidelines. It works as a skill/workflow for AI coding assistants (Claude Code, Windsurf, Cursor, etc.).
