@@ -22,8 +22,22 @@ a background with yellow.
 Solid 1080 × 1080 swatches for use as CapCut backgrounds: `color-swatches/`.
 
 ### The accent stripe
-Red → White → Green → Yellow, left to right, in roughly 42 / 24 / 20 / 14
-proportion. Ready-made bars: `../03-overlays/accent-bars/`.
+**Five** segments, left to right, measured off the master artwork:
+
+| Segment | Share |
+|---|---|
+| Red | 36.7% |
+| Black | 21.4% |
+| White | 19.4% |
+| Green | 17.0% |
+| Yellow | 5.5% |
+
+The stripe carries **both** a black and a white segment. Whichever one matches
+the background reads as a gap — on black footage you see red / gap / white /
+green / yellow; on white you see red / black / gap / green / yellow. That is
+the artwork, not a rendering fault. Do not "simplify" it back to four segments.
+
+Ready-made bars: `../03-overlays/accent-bars/`.
 
 ---
 
@@ -58,6 +72,21 @@ sit at 30% width, comfortably clear.
 ### Variations
 Primary horizontal · Compact stacked · Icon / monogram.
 Which file to use when: `../02-logos/LOGO-USAGE.md`.
+
+### Master artwork — the one rule for anyone regenerating logos
+
+**`logo-source/fd-primary-horizontal_master.png` is the logo.** Every lockup,
+PNG, overlay and end card in this kit is traced from it.
+
+Never trace logo artwork out of `brand-guide-master.png`. That raster carries
+the lockup at 596×250 px and the mark at just 149×114 px. Tracing it and
+scaling up is exactly what produced the soft, round-cornered mark that shipped
+in the first version of this kit — 8.7% mean error against the master, against
+0.84% (the anti-aliasing floor) for a trace of the master itself.
+
+If a new master export arrives, replace that file and re-run
+`99-toolkit/build_logos.py`; it finds the mark, wordmark, stripe and
+PERFORMANCE by occupancy rather than fixed pixel boxes.
 
 ---
 

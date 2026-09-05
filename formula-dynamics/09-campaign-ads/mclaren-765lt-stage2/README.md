@@ -42,18 +42,23 @@ the payoff rather than the last frame, and the end card is a hard cut.
 | Red `#FE0F13`, white, safe zones, canvases | `fd_brand` |
 | CTA caption, end card | `03-overlays/` (full-frame, drop-in) |
 
+All of it renders from the logo artwork traced off
+`01-brand-core/logo-source/fd-primary-horizontal_master.png` — see
+`FIXED-OVERLAYS.md` at the kit root.
+
 The only thing drawn from scratch is the **spec readout** — the three-row
 stock→tuned counter. It is set in Bebas with the brand stripe and red arrows, so
 it belongs to the same system.
 
-## Two deliberate deviations
+## One deliberate deviation
 
-- **Ticker and title block are lifted** from the `fd_hud` defaults (0.845 / 0.705)
-  to **0.775 / 0.665**. At the default the ticker sits inside the 9:16 bottom
-  keep-out band (`SAFE_ZONES_9X16["bottom"] = 0.20`, i.e. below y=1536), where
-  the Reels caption covers it. Everything else about both components is unchanged.
-- **No corner logo bug**, following the Roma look. The FD monogram lives inside
-  the scrimmed title block instead, where it survives every shot.
+**No corner logo bug**, following the Roma look. The FD monogram lives inside
+the scrimmed title block instead, where it survives every shot.
+
+The ad previously overrode the `fd_hud` title-block and ticker positions,
+because the defaults put the ticker inside the 9:16 bottom keep-out band. That
+was fixed upstream in `fd_hud` (0.845 → 0.775 for the ticker, 0.705 → 0.665 for
+the title block), so this ad now just uses the defaults.
 
 ## Callout anchors
 

@@ -24,6 +24,10 @@ timeline.
 
 Full file-by-file listing: **[`ASSET-INDEX.md`](ASSET-INDEX.md)**
 
+> **The overlays were re-cut from sharp logo artwork.** If you downloaded any
+> bundle before this, replace it — the old files carry a soft, round-cornered
+> mark. What changed and why: **[`FIXED-OVERLAYS.md`](FIXED-OVERLAYS.md)**
+
 **[FORMULA-DYNAMICS-BRAND-GUIDE.pdf](FORMULA-DYNAMICS-BRAND-GUIDE.pdf)** &mdash; the
 whole system as an 18-page printable document: palette, type, logo rules, the
 overlay library, CapCut workflow, export specs, shot formulas and copy. Download
@@ -37,6 +41,7 @@ source of truth as the assets, so it can never fall out of date.
 ```
 formula-dynamics/
 ├── 01-brand-core/        The rules. Colours, type, logo spec, swatches.
+│   └── logo-source/      The master logo artwork. Everything is traced from it.
 ├── 02-logos/             Every logo lockup — vector (SVG) + PNG at 3 sizes.
 ├── 03-overlays/          Drop-on-timeline video graphics. ← the daily driver
 ├── 04-templates/         Safe-zone guides + the campaign posters for reference.

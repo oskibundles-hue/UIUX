@@ -55,11 +55,18 @@ INK_COLORS = [RED, WHITE, GREEN, YELLOW]
 
 # The four-colour racing stripe, left to right, as it appears under the
 # wordmark. Widths are proportional, not absolute.
+# Measured off 01-brand-core/logo-source/fd-primary-horizontal_master.png.
+# Five segments, not four: the stripe carries BOTH a black and a white segment,
+# and whichever one matches the background reads as a gap. On black footage you
+# see red / gap / white / green / yellow; on white, red / black / gap / green /
+# yellow. That is the artwork, not a rendering artefact - do not "simplify" it
+# back to four segments.
 ACCENT_STRIPE = [
-    (RED, 0.42),
-    (WHITE, 0.24),
-    (GREEN, 0.20),
-    (YELLOW, 0.14),
+    (RED, 0.367),
+    (BLACK, 0.214),
+    (WHITE, 0.194),
+    (GREEN, 0.170),
+    (YELLOW, 0.055),
 ]
 
 # --------------------------------------------------------------------------

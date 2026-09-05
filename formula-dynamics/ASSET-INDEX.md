@@ -29,6 +29,13 @@ Solid 1080x1080 colour fills. Drag in as a background.
 | `fd-white-FFFFFF.png` | 5 KB |
 | `fd-yellow-FFDE00.png` | 5 KB |
 
+## `01-brand-core/logo-source/`
+
+| File | Size |
+|---|---|
+| `fd-performance-stripe_master.png` | 44 KB |
+| `fd-primary-horizontal_master.png` | 42 KB |
+
 ## `02-logos/`
 
 Logo lockups.
@@ -41,7 +48,7 @@ Logo lockups.
 
 Flat black background, for when transparency misbehaves.
 
-**16 files** (1.1 MB). Examples:
+**16 files** (0.9 MB). Examples:
 
 - `fd-icon--black_on-black.png`
 - `fd-icon--mono-black_on-black.png`
@@ -54,7 +61,7 @@ Flat black background, for when transparency misbehaves.
 
 Flat white background.
 
-**16 files** (1.1 MB). Examples:
+**16 files** (1.0 MB). Examples:
 
 - `fd-icon--black_on-white.png`
 - `fd-icon--mono-black_on-white.png`
@@ -67,7 +74,7 @@ Flat white background.
 
 Transparent PNG at 1000 / 2000 / 4000 px wide. Use in CapCut.
 
-**48 files** (4.6 MB). Examples:
+**48 files** (4.1 MB). Examples:
 
 - `fd-icon--black_1000w.png`
 - `fd-icon--black_2000w.png`
@@ -80,7 +87,7 @@ Transparent PNG at 1000 / 2000 / 4000 px wide. Use in CapCut.
 
 True vector. Use anywhere that accepts SVG.
 
-**16 files** (0.3 MB). Examples:
+**16 files** (0.8 MB). Examples:
 
 - `fd-icon--black.svg`
 - `fd-icon--mono-black.svg`
@@ -148,14 +155,14 @@ Full-frame closing cards with contact details.
 
 | File | Size |
 |---|---|
-| `endcard_16x9_dark.png` | 163 KB |
-| `endcard_16x9_light.png` | 167 KB |
-| `endcard_1x1_dark.png` | 107 KB |
-| `endcard_1x1_light.png` | 109 KB |
-| `endcard_4x5_dark.png` | 135 KB |
-| `endcard_4x5_light.png` | 138 KB |
-| `endcard_9x16_dark.png` | 175 KB |
-| `endcard_9x16_light.png` | 178 KB |
+| `endcard_16x9_dark.png` | 171 KB |
+| `endcard_16x9_light.png` | 174 KB |
+| `endcard_1x1_dark.png` | 91 KB |
+| `endcard_1x1_light.png` | 93 KB |
+| `endcard_4x5_dark.png` | 116 KB |
+| `endcard_4x5_light.png` | 118 KB |
+| `endcard_9x16_dark.png` | 158 KB |
+| `endcard_9x16_light.png` | 160 KB |
 
 ## `03-overlays/lower-thirds/`
 
@@ -243,7 +250,7 @@ Hooks, captions, hashtags, voice, service and partner wording.
 | `README.md` | 0 KB |
 | `cta-captions.md` | 5 KB |
 | `hashtags.md` | 2 KB |
-| `hooks-and-captions.md` | 4 KB |
+| `hooks-and-captions.md` | 5 KB |
 | `services-and-partners.md` | 3 KB |
 | `voice-and-tone.md` | 2 KB |
 
@@ -253,7 +260,7 @@ How to shoot, edit and export.
 
 | File | Size |
 |---|---|
-| `AUTO-EDIT.md` | 5 KB |
+| `AUTO-EDIT.md` | 10 KB |
 | `CAPCUT-WORKFLOW.md` | 4 KB |
 | `EXPORT-SPECS.md` | 2 KB |
 | `SHOT-LISTS.md` | 5 KB |
@@ -275,17 +282,60 @@ Zipped packs ready to download and unzip. Start with the vertical starter pack.
 | File | Size |
 |---|---|
 | `FD-00-VERTICAL-STARTER-PACK.zip` | 2.2 MB |
-| `FD-01-logo-bugs.zip` | 579 KB |
+| `FD-01-logo-bugs.zip` | 528 KB |
 | `FD-02-lower-thirds.zip` | 612 KB |
 | `FD-03-title-cards.zip` | 2.9 MB |
-| `FD-04-end-cards.zip` | 1.1 MB |
+| `FD-04-end-cards.zip` | 1011 KB |
 | `FD-05-cta-captions.zip` | 652 KB |
 | `FD-06-service-badges.zip` | 113 KB |
 | `FD-07-accent-bars.zip` | 4 KB |
-| `FD-08-ALL-OVERLAYS.zip` | 5.9 MB |
-| `FD-09-logos.zip` | 4.0 MB |
+| `FD-08-ALL-OVERLAYS.zip` | 5.7 MB |
+| `FD-09-logos.zip` | 3.6 MB |
 | `README.md` | 2 KB |
+
+## `09-campaign-ads/`
+
+*(empty)*
+
+## `09-campaign-ads/mclaren-765lt-stage2/`
+
+| File | Size |
+|---|---|
+| `README.md` | 5 KB |
+| `build_ad.py` | 13 KB |
+
+## `09-campaign-ads/mclaren-765lt-stage2/.frames/`
+
+**471 files** (40.7 MB). Examples:
+
+- `00000.png`
+- `00001.png`
+- `00002.png`
+- `00003.png`
+- `00004.png`
+- …and 466 more following the same pattern
+
+## `09-campaign-ads/mclaren-765lt-stage2/exports/`
+
+| File | Size |
+|---|---|
+| `formula-dynamics-765lt-15s-9x16.mp4` | 6.1 MB |
+| `poster.jpg` | 136 KB |
+| `still-02_60s.jpg` | 306 KB |
+| `still-09_90s.jpg` | 277 KB |
+
+## `09-campaign-ads/mclaren-765lt-stage2/source/`
+
+| File | Size |
+|---|---|
+| `plate-1080x1920.mp4` | 10.8 MB |
+
+## `__pycache__/`
+
+| File | Size |
+|---|---|
+| `build_ad.cpython-311.pyc` | 30 KB |
 
 ---
 
-**386 files total.**
+**867 files total.**

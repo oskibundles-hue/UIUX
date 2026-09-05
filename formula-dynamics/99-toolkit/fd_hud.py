@@ -86,10 +86,13 @@ def callout(canvas, index, label, anchor, side="left", drop=0.11, run=0.16):
 
 
 # --------------------------------------------------------------------------
-def title_block(canvas, name, subline=None, y=0.705):
+def title_block(canvas, name, subline=None, y=0.665):
     """Persistent lower name plate with a bracket device.
 
-    Sits above the ticker and clears the platform keep-out band.
+    Sits above the ticker and clears the platform keep-out band. The default y
+    was 0.705, which pushed the block's lower edge to ~0.78 and left no room
+    for the ticker above the 9:16 bottom keep-out (0.80). Both defaults were
+    lifted together so the pair fits above the caption band.
     """
     fw, fh = B.CANVASES[canvas]
     im = Image.new("RGBA", (fw, fh), (0, 0, 0, 0))
@@ -127,8 +130,13 @@ def title_block(canvas, name, subline=None, y=0.705):
 
 
 # --------------------------------------------------------------------------
-def ticker(canvas, segments, y=0.845):
-    """Full-width strip of short segments separated by red slashes."""
+def ticker(canvas, segments, y=0.775):
+    """Full-width strip of short segments separated by red slashes.
+
+    The default y was 0.845, which put the strip inside the 9:16 bottom
+    keep-out band (SAFE_ZONES_9X16["bottom"] = 0.20, i.e. below 0.80) where
+    the Reels/TikTok caption covers it. 0.775 clears it.
+    """
     fw, fh = B.CANVASES[canvas]
     im = Image.new("RGBA", (fw, fh), (0, 0, 0, 0))
     s = fw / 1080.0

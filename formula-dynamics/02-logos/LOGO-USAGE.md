@@ -1,5 +1,12 @@
 # Logo Files — which one, when
 
+> **Before adding the logo to anything new — an overlay, an ad, a graphic —
+> use these files.** They are traced from
+> `../01-brand-core/logo-source/fd-primary-horizontal_master.png`, the supplied
+> master artwork. Do not re-trace the logo out of the brand-guide raster and do
+> not redraw the mark: both produce the soft, round-cornered version this kit
+> shipped with originally. See `FIXED-OVERLAYS.md` at the kit root.
+
 ## Pick by background, then by shape
 
 **Step 1 — what is behind the logo?**

@@ -84,12 +84,6 @@ T_CALLOUT = [(8.60, 10.40), (9.40, 10.90)]
 T_CTA = (11.30, 12.75)
 T_END = 12.90                     # hard cut, runs to the last frame
 
-# The kit's title block and ticker defaults (0.705 / 0.845) put the ticker
-# inside the 9:16 bottom keep-out band. Both are lifted so the strip clears
-# the caption zone; see README.
-TITLE_Y = 0.665
-TICKER_Y = 0.775
-
 # Layout, in fractions of the frame. Left margin matches the kit's own
 # title block (0.075); the upper band clears the right-hand action rail.
 X0 = round(W * 0.075)
@@ -156,8 +150,10 @@ _cache = {}
 def layers():
     if _cache:
         return _cache
-    _cache["title"] = HUD.title_block(CANVAS, CAR, BUILD, y=TITLE_Y)
-    _cache["ticker"] = HUD.ticker(CANVAS, TICKER, y=TICKER_Y)
+    # y positions come from the fd_hud defaults, which now clear the
+    # 9:16 bottom keep-out band.
+    _cache["title"] = HUD.title_block(CANVAS, CAR, BUILD)
+    _cache["ticker"] = HUD.ticker(CANVAS, TICKER)
     _cache["callouts"] = [
         HUD.callout(CANVAS, idx, label, anchor, side=side, drop=-0.11, run=0.16)
         for idx, label, anchor, side in CALLOUTS
