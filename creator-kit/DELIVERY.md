@@ -100,9 +100,10 @@ delivery file.
 
 | # | grade | length | size | check | link |
 |---|---|---|---|---|---|
-| T1 | published look | 53s | see chat | 87/100 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/55bd92b7-04b2-439d-9b61-8b37431c300b.mp4) |
+| T1 | published look | 53s | 180 MB | 87/100 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/55bd92b7-04b2-439d-9b61-8b37431c300b%2Emp4) |
 
-Same address as the earlier T1 with the file replaced underneath. If it plays
-an older version, add `?v=3` to the end of the URL.
+The link above is the rebuilt file. It is the earlier T1 address with the
+extension percent-encoded, which gives it a fresh cache entry: the plain
+address may keep serving the previous version for up to a day.
 
 Cover frame (SF90 reveal): [cover.jpg](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/8b22c5ba-a164-4a47-973f-fb89db67aa9d.jpg)
