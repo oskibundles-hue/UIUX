@@ -27,6 +27,8 @@ export const Hook: React.FC<{ text: string; holdSeconds?: number }> = ({
   if (exit <= 0) return null;
 
   const words = text.split(/\s+/);
+  // Sized as a fraction of frame height so 1080 and 4K renders match.
+  const fontSize = Math.round(height * 0.0405);
 
   return (
     <div
@@ -42,22 +44,24 @@ export const Hook: React.FC<{ text: string; holdSeconds?: number }> = ({
     >
       <div
         style={{
-          width: 92,
-          height: 8,
-          background: theme.accentAlt,
+          width: fontSize * 0.9,
+          height: Math.max(4, Math.round(fontSize * 0.08)),
+          background: theme.accent,
           borderRadius: 4,
-          marginBottom: 26,
+          marginBottom: fontSize * 0.25,
         }}
       />
       <div
         style={{
           fontFamily: "Anton, Impact, sans-serif",
-          fontSize: 104,
+          fontSize,
           lineHeight: 0.97,
           letterSpacing: "-0.01em",
           textTransform: "uppercase",
           color: theme.ink,
-          textShadow: `0 5px 0 ${theme.inkShadow}, 0 0 40px rgba(0,0,0,.6)`,
+          WebkitTextStroke: `${Math.max(1, Math.round(fontSize * 0.04))}px rgba(0,0,0,0.9)`,
+          paintOrder: "stroke fill",
+          textShadow: `0 ${Math.round(fontSize * 0.05)}px 0 ${theme.inkShadow}, 0 0 ${fontSize * 0.4}px rgba(0,0,0,.6)`,
         }}
       >
         {words.map((w, i) => {
@@ -74,7 +78,7 @@ export const Hook: React.FC<{ text: string; holdSeconds?: number }> = ({
               key={i}
               style={{
                 display: "inline-block",
-                marginRight: 20,
+                marginRight: fontSize * 0.2,
                 opacity: s,
                 transform: `translateY(${(1 - s) * 18}px)`,
               }}

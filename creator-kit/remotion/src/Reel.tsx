@@ -1,18 +1,22 @@
 import React from "react";
-import { AbsoluteFill, OffthreadVideo, staticFile, useVideoConfig } from "remotion";
+import { AbsoluteFill, OffthreadVideo, staticFile, useVideoConfig, useCurrentFrame, interpolate, Easing } from "remotion";
 import { loadFonts } from "./fonts";
 import { Captions } from "./components/Captions";
 import { Hook } from "./components/Hook";
 import { ProgressBar } from "./components/ProgressBar";
 import { Handle } from "./components/Handle";
 import { EndCard } from "./components/EndCard";
-import { toWords, type Phrase } from "./data/captions";
+import { toWords, type Phrase, type Word } from "./data/captions";
 
 loadFonts();
 
 export type ReelProps = {
   src: string;
   phrases: Phrase[];
+  /** Word-level timings (from a transcription tool) win over `phrases`. */
+  words?: Word[];
+  /** Sizes the composition; see calculateMetadata in Root.tsx. */
+  durationSeconds?: number;
   /**
    * Overlays are off by default. The reference edit is footage plus captions
    * and nothing else - no hook card, no watermark, no progress bar, no end
@@ -25,19 +29,43 @@ export type ReelProps = {
   showProgress?: boolean;
   /** The reference has no scrim; the grade already carries the contrast. */
   scrim?: boolean;
+  /**
+   * Punch-ins: a quick scale-up of the footage on a beat (a name, a reveal),
+   * held, then eased back. `at` in seconds, `hold` in seconds, `scale`
+   * defaults to 1.12. Reads as a zoom cut, which the reference edit uses
+   * sparingly; two or three per minute is plenty.
+   */
+  punches?: { at: number; hold?: number; scale?: number }[];
+};
+
+const punchScale = (t: number, punches: ReelProps["punches"]) => {
+  let s = 1;
+  for (const p of punches ?? []) {
+    const hold = p.hold ?? 1.2, target = p.scale ?? 1.12;
+    if (t < p.at || t > p.at + hold + 0.35) continue;
+    const up = interpolate(t, [p.at, p.at + 0.12], [1, target], {
+      extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.out(Easing.cubic),
+    });
+    const down = interpolate(t, [p.at + hold, p.at + hold + 0.35], [target, 1], {
+      extrapolateLeft: "clamp", extrapolateRight: "clamp", easing: Easing.inOut(Easing.cubic),
+    });
+    s = t < p.at + hold ? up : down;
+  }
+  return s;
 };
 
 export const Reel: React.FC<ReelProps> = ({
-  src, phrases, hook, handle, endCard, endCardAt = 0, showProgress = false, scrim = false,
+  src, phrases, words: given, hook, handle, endCard, endCardAt = 0, showProgress = false, scrim = false, punches,
 }) => {
   const { durationInFrames, fps } = useVideoConfig();
-  const words = toWords(phrases);
+  const zoom = punchScale(useCurrentFrame() / fps, punches);
+  const words = given && given.length ? given : toWords(phrases);
 
   return (
     <AbsoluteFill style={{ backgroundColor: "#000" }}>
       <OffthreadVideo
         src={src.startsWith("http") ? src : staticFile(src)}
-        style={{ width: "100%", height: "100%", objectFit: "cover" }}
+        style={{ width: "100%", height: "100%", objectFit: "cover", transform: `scale(${zoom})` }}
       />
 
       {scrim ? (

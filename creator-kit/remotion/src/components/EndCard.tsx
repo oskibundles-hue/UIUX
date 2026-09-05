@@ -26,6 +26,7 @@ export const EndCard: React.FC<{ line: string; startSeconds: number }> = ({
     durationInFrames: 12,
   });
 
+  const fontSize = Math.round(height * 0.0185);
   return (
     <div
       style={{
@@ -41,13 +42,13 @@ export const EndCard: React.FC<{ line: string; startSeconds: number }> = ({
         style={{
           display: "inline-block",
           background: theme.accent,
-          color: "#FFFFFF",
+          color: "#111111",
           fontFamily: "Archivo, Helvetica, sans-serif",
           fontWeight: 700,
-          fontSize: 34,
+          fontSize,
           letterSpacing: "0.02em",
-          padding: "18px 26px",
-          borderRadius: 6,
+          padding: `${fontSize * 0.55}px ${fontSize * 0.8}px`,
+          borderRadius: fontSize * 0.2,
           boxShadow: "0 10px 40px rgba(0,0,0,.5)",
           maxWidth: "100%",
         }}

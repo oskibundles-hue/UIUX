@@ -1,0 +1,17 @@
+{
+  "fps": 29.97,
+  "fix": {"Astin": "Aston", "Natty": "NATY", "Thanks": "That's", "SF": "SF", "90": "90"},
+  "segments": [
+    {"clip": "exports/09 gt3 rolling in.mp4",   "words": "trial/a09.json", "in": 0.0,   "out": 3.6,  "captions": false},
+    {"clip": "exports/09 gt3 rolling in.mp4",   "words": "trial/a09.json", "in": 38.9,  "out": 42.7},
+    {"clip": "exports/09 gt3 rolling in.mp4",   "words": "trial/a09.json", "in": 45.9,  "out": 50.5},
+    {"clip": "exports/14 aston martin brakes.mp4", "words": "trial/a14.json", "in": 0.0, "out": 5.75},
+    {"clip": "exports/14 aston martin brakes.mp4", "words": "trial/a14.json", "in": 24.9, "out": 31.1},
+    {"clip": "exports/14 aston martin brakes.mp4", "words": "trial/a14.json", "in": 44.15, "out": 47.7},
+    {"clip": "exports/14 aston martin brakes.mp4", "words": "trial/a14.json", "in": 48.4, "out": 50.9},
+    {"clip": "exports/16 wheels off.mp4",       "words": "trial/a16.json", "in": 10.4,  "out": 16.5},
+    {"clip": "exports/18 red supercar.mp4",     "words": "trial/a18.json", "in": 0.0,   "out": 2.6,  "captions": false},
+    {"clip": "exports/18 red supercar.mp4",     "words": "trial/a18.json", "in": 23.8,  "out": 27.4},
+    {"clip": "exports/18 red supercar.mp4",     "words": "trial/a18.json", "in": 37.4,  "out": 48.0}
+  ]
+}

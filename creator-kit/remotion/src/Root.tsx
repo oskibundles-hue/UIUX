@@ -2,8 +2,17 @@ import React from "react";
 import { Composition } from "remotion";
 import { Reel, type ReelProps } from "./Reel";
 
-const FPS = 30;
+const FPS = 29.97;
 const SECONDS = 32.1;
+
+/**
+ * Duration follows the props: `--props=reel.json` carrying `durationSeconds`
+ * (written by scripts/assemble_reel.py) sizes the composition to the footage,
+ * so one composition serves any cut without editing this file.
+ */
+const fromProps = ({ props }: { props: ReelProps }) => ({
+  durationInFrames: Math.round(FPS * (props.durationSeconds ?? SECONDS)),
+});
 
 /**
  * Matches the reference edit: footage plus captions, no other overlays.
@@ -31,6 +40,7 @@ export const RemotionRoot: React.FC = () => (
       durationInFrames={Math.round(FPS * SECONDS)}
       fps={FPS} width={2160} height={3840}
       defaultProps={mimic}
+      calculateMetadata={fromProps}
     />
     <Composition
       id="Reel1080"
@@ -38,6 +48,7 @@ export const RemotionRoot: React.FC = () => (
       durationInFrames={Math.round(FPS * SECONDS)}
       fps={FPS} width={1080} height={1920}
       defaultProps={mimic}
+      calculateMetadata={fromProps}
     />
     <Composition
       id="StyleProof"

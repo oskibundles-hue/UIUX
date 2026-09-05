@@ -24,16 +24,16 @@ export const Handle: React.FC<{ handle: string }> = ({ handle }) => {
         top: theme.safe.top * height - height * 0.05,
         display: "flex",
         alignItems: "center",
-        gap: 12,
+        gap: height * 0.004,
         opacity: o,
       }}
     >
-      <div style={{ width: 5, height: 30, background: theme.accent, borderRadius: 3 }} />
+      <div style={{ width: height * 0.0017, height: height * 0.011, background: theme.accent, borderRadius: 3 }} />
       <span
         style={{
           fontFamily: "Archivo, Helvetica, sans-serif",
           fontWeight: 700,
-          fontSize: 27,
+          fontSize: height * 0.0095,
           letterSpacing: "0.05em",
           color: theme.ink,
           textShadow: "0 2px 10px rgba(0,0,0,.7)",
