@@ -52,7 +52,5 @@ out/
 .claude/session-state/
 ui-ux-pro-max-website/*
 
-# Claude Code plugin runtime state (Ruflo / ECC) — generated, regenerable
+# Ruflo learned runtime state — regenerated every run, intentionally untracked
 .claude-flow/
-.claude/proven-config.json
-.claude/.proven-config-version
