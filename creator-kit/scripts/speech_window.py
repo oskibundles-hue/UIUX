@@ -113,13 +113,20 @@ def candidates(segs, total, window, step=1.0, k=8):
     return [(t, window) for t in picked]
 
 
-def picture_score(ff, path, start, length, samples=5):
+def picture_score(ff, path, start, length, samples=9):
     """Is there anything to look at? Mean brightness and how much of the luma
-    range is in use, averaged over a few frames. A window that is mostly black
-    or mostly flat scores near zero however good the audio is."""
+    range is in use, sampled across the window.
+
+    Two things this had to learn. Five samples over sixty seconds walked straight
+    past a dark stretch that was only a few seconds long but sat at the end of
+    the window, so the count is higher now. And the thresholds are set for LOG
+    footage, not graded: D-Log M sits around mean 90-110 with a wide spread, so
+    "dark" here means well under that, not under mid-grey. The worst frame is
+    weighted as well as the average - one dead patch in an otherwise good window
+    is still a dead patch on screen."""
     import os
     import tempfile
-    total_score = 0.0
+    scores = []
     with tempfile.TemporaryDirectory() as td:
         for i in range(samples):
             t = start + length * (i + 0.5) / samples
@@ -143,10 +150,18 @@ def picture_score(ff, path, start, length, samples=5):
             spread = max(px) - min(px)
             # Below ~18 mean the frame is essentially unusable on a phone in
             # daylight; a spread under ~60 is a flat wall or a covered lens.
-            bright = min(1.0, mean / 45.0) if mean < 45 else 1.0
-            contrast = min(1.0, spread / 90.0)
-            total_score += bright * contrast
-    return total_score / samples if samples else 0.0
+            # Log mid-grey is ~90-110; below ~55 the frame has nothing in it.
+            bright = min(1.0, max(0.0, (mean - 12.0) / 55.0))
+            contrast = min(1.0, spread / 120.0)
+            frame = bright * contrast
+            scores.append(frame)
+    if not scores:
+        return 0.0
+    avg = sum(scores) / len(scores)
+    worst = min(scores)
+    # Half the weight on the average, half on the worst frame: a window that is
+    # good for fifty seconds and black for ten is not a good window.
+    return 0.5 * avg + 0.5 * worst
 
 
 def snap(segs, start, length):

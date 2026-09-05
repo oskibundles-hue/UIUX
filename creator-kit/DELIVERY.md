@@ -1,6 +1,6 @@
 # Finished Reels — post in this order
 
-17 Reels from the 2026-09-03 shoot. Work top to bottom.
+All 18 Reels from the 2026-09-03 shoot. Work top to bottom.
 
 Tap a link on your phone, save the video, then import it into Instagram's
 **Edits** app and export 4K from there. Posting straight to the Reels
@@ -22,6 +22,7 @@ reference (YAVG 47 vs your 45, blacks at 0, whites at 250 vs your 252).
 | 08 | on the forklift | 36s | 73 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/2e2a22b5-fbde-4ce2-9ffa-eab5b3375df0.mp4) |
 | 09 | gt3 rolling in | 50s | 76 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/4316ca75-830a-446b-a372-331b66170085.mp4) |
 | 10 | raising the ceiling beam | 50s | 72 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/619e65c0-afb3-4d01-a346-e93c0358288f.mp4) |
+| 11 | mixing epoxy | 53s | 73 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/a4546a46-04d5-46f6-b1b2-d27e1f7898cd.mp4) |
 | 12 | ceiling panel install | 52s | 73 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/f86d2cf1-9c2d-46c4-8b73-b89c0203c7ea.mp4) |
 | 13 | black car bay work | 56s | 71 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/a9109ac1-4776-414b-a2ce-6aa8fe1f270e.mp4) |
 | 14 | aston martin brakes | 52s | 73 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/68f1151f-85de-4dce-a7ba-0d39586a77eb.mp4) |
@@ -30,14 +31,23 @@ reference (YAVG 47 vs your 45, blacks at 0, whites at 250 vs your 252).
 | 17 | matte black in the bay | 41s | 72 MB | FD | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/42527081-7cf3-4e18-ae2e-67dec2b39d00.mp4) |
 | 18 | red supercar | 59s | 70 MB | ? | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/e42b5866-9695-452b-84d4-53ebac81a2b7.mp4) |
 
-## Held back
+## About clip 11
 
-**11 mixing epoxy** is not shipped. Its window uses 88-233 of 256 luma levels
-against 247-256 on a healthy clip, and part of it is effectively black. The
-window picker chose it on speech alone, landing on a stretch where the talking
-is good and the camera is pointed at nothing. The picture check added since is
-not calibrated yet - it measures the raw log frames, which are flat and
-mid-grey by design, so the problem only shows up after grading.
+It was held back at first and is now fixed. Its original window used 88 of 256
+luma levels in places with a maximum of 109 - effectively black - because the
+picker scored on speech alone and landed on a stretch where the talking is good
+and the camera is pointed at nothing.
+
+Three things had to be ruled out to find it. The raw frames there are healthy
+(spreads of 213-251), so the source was fine. Grading the same slice with the
+per-clip LUT and with the shared one gave 234 and 225 levels, so the grade was
+fine. The dark patch was simply a few real seconds of footage that five samples
+across sixty seconds walked straight past.
+
+The picture check now takes nine samples, weighs the worst frame as heavily as
+the average, and uses thresholds set for log rather than graded footage. The
+window moved to 0-59s: 17 phrases, no dark patch, and a much better clip -
+epoxy buckets coming in at golden hour.
 
 ## Worth knowing
 
