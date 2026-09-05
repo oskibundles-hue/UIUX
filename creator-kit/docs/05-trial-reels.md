@@ -74,5 +74,8 @@ caption coverage of speech, loudness, dark frames, and the delivery spec.
 80+ is post-ready; 60–79 fix the flags; under 60 rework.
 
 It cannot judge whether the content is interesting. Higgsfield's
-`virality_predictor` is the second opinion for that (hook strength, attention,
-retention risk); run it on the hosted file after the local check passes.
+`virality_predictor` would be the second opinion for that (hook strength,
+attention, retention risk), but it needs the Basic plan and accepts only
+clips of 16s or shorter, so the test would be the hook excerpt, not the
+Reel. Not available on the current free account; the local checker is the
+gate until that changes.
