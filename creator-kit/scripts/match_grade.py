@@ -108,6 +108,72 @@ def enforce_monotonic(m):
     return out
 
 
+def grey_point(pixels, curves=None):
+    """Average colour of the near-neutral pixels.
+
+    Whole-frame averages measure content, not cast. A shot with a red microfiber
+    on the floor has a high red mean and nothing is wrong with it. What tells you
+    the GRADE has gone warm is where the greys sit - the concrete, the shop
+    walls, the black panelling. So only low-saturation mid-brightness pixels are
+    counted, and those approximate the grey point.
+
+    Chasing the whole-frame mean instead sent an earlier attempt at this in the
+    wrong direction: it "corrected" clip 14 from +6.8 to +10.8."""
+    tot = [0.0, 0.0, 0.0]
+    cnt = 0
+    for px in pixels:
+        n = len(px) // 3
+        for k in range(n):
+            r, g, b = px[3 * k], px[3 * k + 1], px[3 * k + 2]
+            if curves:
+                r = curves[0][r]; g = curves[1][g]; b = curves[2][b]
+            mx, mn = max(r, g, b), min(r, g, b)
+            if mx - mn <= 26 and 35 <= (r + g + b) / 3.0 <= 210:
+                tot[0] += r; tot[1] += g; tot[2] += b; cnt += 1
+    if cnt < 200:
+        return None
+    return [x / cnt for x in tot]
+
+
+def neutralise(curves, src_paths, ref_paths):
+    """Put this clip's greys where the reference's greys are.
+
+    A white-balance nudge and nothing else: three numbers, clamped, applied on
+    top of the tone curves. It cannot encode scene content, so a red object in
+    shot stays red while the concrete goes back to grey."""
+    src_px = [read_ppm(p) for p in src_paths]
+    ref_px = [read_ppm(p) for p in ref_paths]
+    want = grey_point(ref_px)
+    if not want:
+        print("  neutralise: reference has too few neutral pixels, skipped")
+        return curves
+
+    # Iterate. Each pass is clamped so one odd clip cannot be re-tinted wholesale,
+    # and applying a gain moves which pixels still count as near-neutral - so a
+    # single pass lands short. Three passes took the worst clip of the session
+    # from +6.8 to inside a point of neutral; one pass only reached +3.0.
+    before = None
+    for _ in range(3):
+        have = grey_point(src_px, [[int(round(v)) for v in c] for c in curves])
+        if not have:
+            print("  neutralise: not enough neutral pixels, skipped")
+            return curves
+        if before is None:
+            before = have
+        gains = []
+        for c in range(3):
+            ratio = (want[c] / want[1]) / max(1e-6, have[c] / have[1])
+            gains.append(min(1.15, max(0.87, ratio)))
+        if max(abs(g - 1.0) for g in gains) < 0.005:
+            break
+        curves = [enforce_monotonic([min(255.0, max(0.0, v * gains[c])) for v in curves[c]])
+                  for c in range(3)]
+    after = grey_point(src_px, [[int(round(v)) for v in c] for c in curves]) or before
+    print("  grey point R-B: %+.1f -> %+.1f  (reference %+.1f)"
+          % (before[0] - before[2], after[0] - after[2], want[0] - want[2]))
+    return curves
+
+
 def main():
     ap = argparse.ArgumentParser(description="Copy a grade by histogram matching.")
     ap.add_argument("--ref", required=True, help="glob of reference PPM frames")
@@ -117,6 +183,8 @@ def main():
     ap.add_argument("--size", type=int, default=33)
     ap.add_argument("--strength", type=float, default=1.0,
                     help="0 = no change, 1 = full match, >1 exaggerates")
+    ap.add_argument("--no-neutralise", action="store_true",
+                    help="skip the grey-point white balance pass")
     args = ap.parse_args()
 
     ref_paths = sorted(glob.glob(args.ref))
@@ -134,6 +202,9 @@ def main():
             m = [i + (v - i) * args.strength for i, v in enumerate(m)]
             m = enforce_monotonic([min(255.0, max(0.0, v)) for v in m])
         curves.append(m)
+
+    if not args.no_neutralise:
+        curves = neutralise(curves, src_paths, ref_paths)
 
     for name, m in zip("RGB", curves):
         print("  %s curve: black %5.1f  mid %5.1f  white %5.1f" % (name, m[0], m[128], m[255]))
