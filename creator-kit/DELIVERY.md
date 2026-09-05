@@ -88,15 +88,25 @@ next shoot.
 
 Links are public to anyone holding them and do not expire on their own.
 
-## Trial Reels — 2026-09-05
+## Trial Reels — 2026-09-05 (rebuilt 22:00)
 
 One combined cut (09 → 14 → 16 → 18, shooting order kept), 53s, captions,
-hook card, punch-ins, FD logo bug, end card. Two grades of the same edit:
+hook card, punch-ins, FD logo bug, end card. Two grades of the same edit.
+
+Rebuilt after the first delivery read soft and red. The footage now goes
+through one encode from the master instead of three, at CRF 16 with a
+28 Mbps ceiling, and the film look's warm offsets are gone (greys measure
++1.9 red-minus-blue against the reference's +1.8; the soft version was +8.3).
 
 | # | grade | length | size | check | link |
 |---|---|---|---|---|---|
-| T1 | published look (matched to your grid) | 53s | 74 MB | 87/100 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/55bd92b7-04b2-439d-9b61-8b37431c300b.mp4) |
-| T2 | FILM_LUT reference look (flat mids, half chroma) | 53s | 74 MB | 87/100 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/54ba5371-2a6d-498e-8dbd-807f79f53667.mp4) |
+| T1 | published look (matched to your grid) | 53s | 180 MB | 87/100 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/55bd92b7-04b2-439d-9b61-8b37431c300b.mp4) |
+| T2 | FILM_LUT reference look, neutral greys | 53s | 181 MB | 87/100 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/9f956297-95b6-4b98-9682-c555b6a81753.mp4) |
+
+The T1 link is the same address as before with the file replaced underneath.
+If it plays the old soft version, add `?v=2` to the end of the URL, or wait a
+day for the cache to clear. The T2 link is new. The old red T2 address is
+retired.
 
 Cover frame (SF90 reveal, T1 grade): [cover.jpg](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/8b22c5ba-a164-4a47-973f-fb89db67aa9d.jpg)
 

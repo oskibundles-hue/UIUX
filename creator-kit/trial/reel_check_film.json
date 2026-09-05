@@ -1,28 +1,28 @@
 {
- "score": 86.93894153818387,
+ "score": 86.79518393105104,
  "verdict": "post it",
  "scores": {
   "length": 1.0,
   "hook": 0.7172499999999999,
-  "rhythm": 0.865581818181818,
-  "captions": 0.8050482132728303,
-  "loudness": 0.990375,
+  "rhythm": 0.8587090909090906,
+  "captions": 0.8037148783707335,
+  "loudness": 0.9886249999999999,
   "exposure": 1,
   "spec": 1
  },
  "flags": [
-  "longest shot 10.6s - cut it or put text on it"
+  "longest shot 10.7s - cut it or put text on it"
  ],
  "probe": {
-  "duration": 52.89,
-  "kbps": 11684,
+  "duration": 53.03,
+  "kbps": 28510,
   "codec": "h264",
   "w": 2160,
   "h": 3840,
   "fps": 29.97
  },
- "lufs": -13.89,
- "true_peak": -1.41,
+ "lufs": -13.87,
+ "true_peak": -1.46,
  "first_speech": 3.82,
  "first_cut": 3.6,
  "shots": [
@@ -36,6 +36,6 @@
   6.100000000000001,
   2.6000000000000014,
   3.5999999999999943,
-  10.590000000000003
+  10.730000000000004
  ]
 }
