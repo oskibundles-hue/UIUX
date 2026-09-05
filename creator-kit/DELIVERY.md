@@ -87,3 +87,18 @@ downstream can detect it automatically - check the orientation lock before the
 next shoot.
 
 Links are public to anyone holding them and do not expire on their own.
+
+## Trial Reels — 2026-09-05
+
+One combined cut (09 → 14 → 16 → 18, shooting order kept), 53s, captions,
+hook card, punch-ins, FD logo bug, end card. Two grades of the same edit:
+
+| # | grade | length | size | check | link |
+|---|---|---|---|---|---|
+| T1 | published look (matched to your grid) | 53s | 74 MB | 87/100 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/55bd92b7-04b2-439d-9b61-8b37431c300b.mp4) |
+| T2 | FILM_LUT reference look (flat mids, half chroma) | 53s | 74 MB | 87/100 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/54ba5371-2a6d-498e-8dbd-807f79f53667.mp4) |
+
+Cover frame (SF90 reveal, T1 grade): [cover.jpg](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/8b22c5ba-a164-4a47-973f-fb89db67aa9d.jpg)
+
+Post T2 as the Trial Reel. The check score is structural (length, hook, rhythm,
+captions, loudness, spec) and identical for both because only the grade changed.
