@@ -50,7 +50,7 @@ def main():
     fps = plan.get("fps", 29.97)
     segs = plan["segments"]
 
-    inputs, vparts, aparts, words, cuts = [], [], [], [], []
+    inputs, vparts, aparts, words, cuts, cards = [], [], [], [], [], []
     t = 0.0
     clip_index = {}
     for i, s in enumerate(segs):
@@ -58,6 +58,17 @@ def main():
         if clip not in clip_index:
             clip_index[clip] = len(inputs); inputs.append(clip)
         k = clip_index[clip]
+        if "freeze" in s:
+            # A held frame: the picture pauses, the audio mutes, and a spec
+            # card (rendered by Remotion from props.cards) sits over it.
+            fz = s["freeze"]; hold = float(fz.get("hold", 3.0)); at = float(fz["at"])
+            vparts.append(f"[{k}:v]trim=start={at}:duration=0.04,setpts=PTS-STARTPTS,"
+                          f"tpad=stop_mode=clone:stop_duration={hold-0.04:.3f}[v{i}]")
+            aparts.append(f"[{k}:a]atrim=start={at}:duration={hold},asetpts=PTS-STARTPTS,volume=0[a{i}]")
+            cards.append({"at": round(t, 3), "hold": hold, "title": fz.get("title", ""), "lines": fz.get("lines", [])})
+            cuts.append({"at": round(t, 3), "clip": os.path.basename(clip), "freeze": at})
+            t += hold
+            continue
         d = s["out"] - s["in"]
         if d <= 0: sys.exit(f"segment {i}: out <= in")
         vparts.append(f"[{k}:v]trim=start={s['in']}:end={s['out']},setpts=PTS-STARTPTS[v{i}]")
@@ -94,7 +105,7 @@ def main():
             "-color_trc", "bt709", "-c:a", "aac", "-b:a", "192k", "-movflags", "+faststart", a.out]
 
     props = {"src": os.path.basename(a.out), "words": words, "phrases": [],
-             "durationSeconds": round(t, 3), "cuts": cuts}
+             "durationSeconds": round(t, 3), "cuts": cuts, "cards": cards}
     json.dump(props, open(a.props, "w"), indent=1)
     print(f"{len(segs)} segments, {t:.2f}s, {len(words)} caption words, {len(inputs)} sources")
     if a.dry:

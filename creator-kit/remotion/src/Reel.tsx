@@ -6,6 +6,7 @@ import { Hook } from "./components/Hook";
 import { ProgressBar } from "./components/ProgressBar";
 import { Handle } from "./components/Handle";
 import { EndCard } from "./components/EndCard";
+import { SpecCard, type Card } from "./components/SpecCard";
 import { toWords, type Phrase, type Word } from "./data/captions";
 
 loadFonts();
@@ -43,6 +44,8 @@ export type ReelProps = {
    * applied to the footage in that pass, not here.
    */
   overlayOnly?: boolean;
+  /** Spec cards over held frames; written by assemble_reel.py from freeze segments. */
+  cards?: Card[];
 };
 
 const punchScale = (t: number, punches: ReelProps["punches"]) => {
@@ -62,7 +65,7 @@ const punchScale = (t: number, punches: ReelProps["punches"]) => {
 };
 
 export const Reel: React.FC<ReelProps> = ({
-  src, phrases, words: given, hook, handle, endCard, endCardAt = 0, showProgress = false, scrim = false, punches, overlayOnly = false,
+  src, phrases, words: given, hook, handle, endCard, endCardAt = 0, showProgress = false, scrim = false, punches, overlayOnly = false, cards,
 }) => {
   const { durationInFrames, fps } = useVideoConfig();
   const zoom = punchScale(useCurrentFrame() / fps, punches);
@@ -89,6 +92,7 @@ export const Reel: React.FC<ReelProps> = ({
       ) : null}
 
       {handle ? <Handle handle={handle} /> : null}
+      {(cards ?? []).map((c, i) => <SpecCard key={i} card={c} />)}
       {hook ? <Hook text={hook} /> : null}
       <Captions words={words} />
       {endCard ? (
