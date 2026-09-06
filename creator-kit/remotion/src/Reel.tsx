@@ -7,6 +7,7 @@ import { ProgressBar } from "./components/ProgressBar";
 import { Handle } from "./components/Handle";
 import { EndCard } from "./components/EndCard";
 import { SpecCard, type Card } from "./components/SpecCard";
+import { AnimatedOverlay, type OverlaySpec } from "./components/AnimatedOverlay";
 import { toWords, type Phrase, type Word } from "./data/captions";
 
 loadFonts();
@@ -46,6 +47,8 @@ export type ReelProps = {
   overlayOnly?: boolean;
   /** Spec cards over held frames; written by assemble_reel.py from freeze segments. */
   cards?: Card[];
+  /** Overlay PNGs from the packs, animated in and out. */
+  overlays?: OverlaySpec[];
 };
 
 const punchScale = (t: number, punches: ReelProps["punches"]) => {
@@ -65,7 +68,7 @@ const punchScale = (t: number, punches: ReelProps["punches"]) => {
 };
 
 export const Reel: React.FC<ReelProps> = ({
-  src, phrases, words: given, hook, handle, endCard, endCardAt = 0, showProgress = false, scrim = false, punches, overlayOnly = false, cards,
+  src, phrases, words: given, hook, handle, endCard, endCardAt = 0, showProgress = false, scrim = false, punches, overlayOnly = false, cards, overlays,
 }) => {
   const { durationInFrames, fps } = useVideoConfig();
   const zoom = punchScale(useCurrentFrame() / fps, punches);
@@ -92,6 +95,7 @@ export const Reel: React.FC<ReelProps> = ({
       ) : null}
 
       {handle ? <Handle handle={handle} /> : null}
+      {(overlays ?? []).map((o, i) => <AnimatedOverlay key={i} spec={o} />)}
       {(cards ?? []).map((c, i) => <SpecCard key={i} card={c} />)}
       {hook ? <Hook text={hook} /> : null}
       <Captions words={words} />
