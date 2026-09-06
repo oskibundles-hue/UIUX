@@ -44,6 +44,9 @@ encode) and then a size-capped delivery encode. Three lossy generations at
 once, at CRF 17 with a 28 Mbps ceiling instead of a 75 MB target; files land
 around 150-200 MB, still inside the 10-35 Mbps upload window.
 
+If the source clips are already graded, cut them with `cut_clip.sh --graded`
+first; everything from step 1 on is the same.
+
 ## The plan file
 
 ```json

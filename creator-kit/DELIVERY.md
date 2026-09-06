@@ -86,4 +86,9 @@ The link above is the rebuilt file. It is the earlier T1 address with the
 extension percent-encoded, which gives it a fresh cache entry: the plain
 address may keep serving the previous version for up to a day.
 
+Clips 09, 14, 16 and 18 were re-cut at 35 Mbps for this Reel. Those four
+higher-bitrate exports exist only on the session machine: the hosting
+connector dropped before they could be uploaded, and the 18-clip links above
+are still the earlier 75 MB versions. Ask for them when hosting is back.
+
 Cover frame (SF90 reveal): [cover.jpg](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/8b22c5ba-a164-4a47-973f-fb89db67aa9d.jpg)

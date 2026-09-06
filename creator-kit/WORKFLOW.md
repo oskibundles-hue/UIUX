@@ -31,6 +31,29 @@ post order, so you work down the folder and upload in sequence.
 Step 5 is manual because the Dropbox connector here can read files but cannot
 write binaries. I deliver finished Reels through chat; you file them.
 
+## If you grade it yourself
+
+Drop the graded clips (Rec.709, not D-Log M) into `01 Raw D-Log/<date>/`
+the same way and say they are graded. I run the same edit with the grade
+step turned off (`cut_clip.sh --graded`): window selection, silence cut at
+your rhythm, 4K export at the 35 Mbps ceiling. Nothing touches the colour.
+
+Two things to keep in mind when grading for this pipeline:
+
+- Export from your grading app at the camera's resolution and frame rate
+  (4K, 60 or 30 fps) and at a high bitrate. Every generation after yours is
+  one more encode; a 20 Mbps hand-off lands at Instagram noticeably softer
+  than a 100 Mbps one.
+- Keep the grade consistent across a session. The cut order is the shooting
+  order, so a warm clip next to a cool one shows.
+
+## Trial Reels (combined cuts)
+
+`docs/05-trial-reels.md`. Several exports joined in shooting order into one
+30-60s Reel with captions, hook, logo bug and end card, checked with
+`reel_check.py` before it goes out. Footage takes one encode from the
+assembled master to the delivery file.
+
 ## What I do per clip
 
 | Step | Tool | Notes |

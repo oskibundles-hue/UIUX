@@ -28,7 +28,10 @@
 #
 # Usage:
 #   ./cut_clip.sh <source.mov> <output.mp4> [--rhythm 4.0] [--window 60]
-#                 [--ref 'glob'] [--target-mb 75]
+#                 [--ref 'glob'] [--target-mb 75] [--graded]
+#
+#   --graded   the source is already colour graded (Rec.709, not D-Log M):
+#              skip the grade match and cut/export it as it is.
 #
 # Example:
 #   ./cut_clip.sh work/raw.mov "exports/06 wall trim install.mp4"
@@ -44,8 +47,10 @@ ROTATE=0
 REF="/home/user/footage/hm/ref_*.ppm"
 TARGET_MB=75
 WINDOW=60
+GRADED=0
 while [ $# -gt 0 ]; do
   case "$1" in
+    --graded) GRADED=1; shift ;;
     --rhythm) RHYTHM="$2"; shift 2 ;;
     --ref)    REF="$2"; shift 2 ;;
     --target-mb) TARGET_MB="$2"; shift 2 ;;
@@ -110,7 +115,12 @@ if [ "$ROTATE" = "180" ]; then
 fi
 
 # 1. Grade matched to this clip. Sample across the whole clip so the histogram
-#    reflects the clip and not one moment in it.
+#    reflects the clip and not one moment in it. Skipped for --graded sources:
+#    footage that arrives already graded is cut and exported untouched.
+LUT_ARGS=()
+if [ "$GRADED" = "1" ]; then
+  echo "  grade    source is already graded; no LUT applied"
+else
 for p in 10 25 40 55 70 85; do
   ffmpeg -y -loglevel error -ss $((secs * p / 100)) -i "$CLIP" -frames:v 1 \
          -vf "scale=216:384" -pix_fmt rgb24 "$WORK/f$p.ppm" 2>/dev/null
@@ -124,6 +134,8 @@ LUT="$WORK/grade.cube"
 python3 "$HERE/match_grade.py" --ref "$REF" --src "$WORK/*.ppm" \
         --out "$LUT" --name "AK_${NAME// /_}" 2>&1 | sed 's/^/  /'
 if [ ! -f "$LUT" ]; then echo "  FAILED: no LUT written"; exit 1; fi
+LUT_ARGS=(-l "$LUT")
+fi
 
 # 2. Sweep the silence threshold and take the one closest to the target rhythm.
 echo "  cut plans:"
@@ -144,7 +156,7 @@ done
 echo "  chosen   ${best_n} dB (closest to a ${RHYTHM}s rhythm)"
 
 # 3. Cut, grade, export. One decode of the source for the whole thing.
-python3 "$HERE/autocut.py" "$CLIP" -l "$LUT" -o "$OUT" \
+python3 "$HERE/autocut.py" "$CLIP" "${LUT_ARGS[@]}" -o "$OUT" \
         --noise "$best_n" --min-silence 0.25 --target-mb "$TARGET_MB" 2>&1 | sed 's/^/  /'
 
 if [ ! -f "$OUT" ]; then echo "  FAILED: no output written"; exit 1; fi
