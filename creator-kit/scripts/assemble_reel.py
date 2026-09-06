@@ -97,7 +97,7 @@ def main():
 
     chain = "".join(f"[v{i}][a{i}]" for i in range(len(segs)))
     fc = ";".join(vparts + aparts) + f";{chain}concat=n={len(segs)}:v=1:a=1[v][a]"
-    cmd = ["ffmpeg", "-hide_banner", "-loglevel", "error", "-stats", "-y"]
+    cmd = ["ffmpeg", "-nostdin", "-hide_banner", "-loglevel", "error", "-stats", "-y"]
     for p in inputs: cmd += ["-i", p]
     cmd += ["-filter_complex", fc, "-map", "[v]", "-map", "[a]",
             "-r", str(fps), "-c:v", "libx264", "-preset", "medium", "-crf", str(a.crf),

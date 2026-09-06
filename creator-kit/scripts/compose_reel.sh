@@ -69,7 +69,7 @@ if [ "$SHARPEN" != "0" ]; then
 fi
 vf+=";${last}format=yuv420p[vout];[0:a]loudnorm=I=-14:TP=-1.5:LRA=11[aout]"
 
-ffmpeg -y -hide_banner -loglevel error -stats "${inputs[@]}" -filter_complex "$vf" \
+ffmpeg -nostdin -y -hide_banner -loglevel error -stats "${inputs[@]}" -filter_complex "$vf" \
   -map "[vout]" -map "[aout]" -r "$FPS" \
   -c:v libx264 -preset "$PRESET" -profile:v high -level 5.1 -crf "$CRF" ${MAXRATE:+-maxrate "$MAXRATE" -bufsize "$(( ${MAXRATE%M} * 2 ))M"} \
   -x264-params "aq-mode=3:aq-strength=1.0" \
