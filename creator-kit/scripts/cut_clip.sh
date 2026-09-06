@@ -28,7 +28,10 @@
 #
 # Usage:
 #   ./cut_clip.sh <source.mov> <output.mp4> [--rhythm 4.0] [--window 60]
-#                 [--ref 'glob'] [--target-mb 75] [--graded]
+#                 [--ref 'glob'] [--crf 16 | --target-mb N] [--graded]
+#
+#   Default export is quality-first: CRF 16, no bitrate cap. --target-mb
+#   switches to size targeting (10-35 Mbps) only if a file must hit a size.
 #
 #   --graded   the source is already colour graded (Rec.709, not D-Log M):
 #              skip the grade match and cut/export it as it is.
@@ -45,7 +48,8 @@ shift 2
 RHYTHM=4.0
 ROTATE=0
 REF="/home/user/footage/hm/ref_*.ppm"
-TARGET_MB=75
+TARGET_MB=""     # empty = quality mode (CRF 16, no bitrate cap)
+CRF=16
 WINDOW=60
 GRADED=0
 while [ $# -gt 0 ]; do
@@ -54,6 +58,7 @@ while [ $# -gt 0 ]; do
     --rhythm) RHYTHM="$2"; shift 2 ;;
     --ref)    REF="$2"; shift 2 ;;
     --target-mb) TARGET_MB="$2"; shift 2 ;;
+    --crf) CRF="$2"; shift 2 ;;
     --window) WINDOW="$2"; shift 2 ;;
     --rotate) ROTATE="$2"; shift 2 ;;
     *) echo "unknown option: $1" >&2; exit 2 ;;
@@ -156,8 +161,9 @@ done
 echo "  chosen   ${best_n} dB (closest to a ${RHYTHM}s rhythm)"
 
 # 3. Cut, grade, export. One decode of the source for the whole thing.
+if [ -n "$TARGET_MB" ]; then RATE_ARGS=(--target-mb "$TARGET_MB"); else RATE_ARGS=(--crf "$CRF"); fi
 python3 "$HERE/autocut.py" "$CLIP" "${LUT_ARGS[@]}" -o "$OUT" \
-        --noise "$best_n" --min-silence 0.25 --target-mb "$TARGET_MB" 2>&1 | sed 's/^/  /'
+        --noise "$best_n" --min-silence 0.25 "${RATE_ARGS[@]}" 2>&1 | sed 's/^/  /'
 
 if [ ! -f "$OUT" ]; then echo "  FAILED: no output written"; exit 1; fi
 mb=$(( $(stat -c%s "$OUT") / 1048576 ))

@@ -13,6 +13,8 @@
 # Usage:
 #   compose_reel.sh <master.mp4> <overlay.mov> <props.json> <out.mp4> \
 #       [--lut file.cube] [--logo png] [--crf 16] [--maxrate 28M] [--sharpen 0.6]
+#
+# Default is CRF 16 with no bitrate cap; --maxrate is opt-in.
 #       [--preset faster]
 #
 # Measured on the 4-core box at 4K: x264 medium costs 0.32 s/frame against
@@ -24,7 +26,7 @@
 set -euo pipefail
 die() { echo "error: $*" >&2; exit 1; }
 MASTER="${1:?}"; OVERLAY="${2:?}"; PROPS="${3:?}"; OUT="${4:?}"; shift 4
-LUT=""; LOGO=""; CRF=16; MAXRATE="28M"; SHARPEN=0.6; FPS=29.97; PRESET="faster"
+LUT=""; LOGO=""; CRF=16; MAXRATE=""; SHARPEN=0.6; FPS=29.97; PRESET="faster"
 while [ $# -gt 0 ]; do case "$1" in
   --lut) LUT="$2"; shift 2;; --logo) LOGO="$2"; shift 2;; --crf) CRF="$2"; shift 2;;
   --maxrate) MAXRATE="$2"; shift 2;; --preset) PRESET="$2"; shift 2;; --sharpen) SHARPEN="$2"; shift 2;; --fps) FPS="$2"; shift 2;;
@@ -69,7 +71,7 @@ vf+=";${last}format=yuv420p[vout];[0:a]loudnorm=I=-14:TP=-1.5:LRA=11[aout]"
 
 ffmpeg -y -hide_banner -loglevel error -stats "${inputs[@]}" -filter_complex "$vf" \
   -map "[vout]" -map "[aout]" -r "$FPS" \
-  -c:v libx264 -preset "$PRESET" -profile:v high -level 5.1 -crf "$CRF" -maxrate "$MAXRATE" -bufsize "$(( ${MAXRATE%M} * 2 ))M" \
+  -c:v libx264 -preset "$PRESET" -profile:v high -level 5.1 -crf "$CRF" ${MAXRATE:+-maxrate "$MAXRATE" -bufsize "$(( ${MAXRATE%M} * 2 ))M"} \
   -x264-params "aq-mode=3:aq-strength=1.0" \
   -colorspace bt709 -color_primaries bt709 -color_trc bt709 \
   -c:a aac -b:a 192k -ar 48000 -movflags +faststart "$OUT"

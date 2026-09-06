@@ -134,7 +134,7 @@ def main():
     # 7. Delivery spec.
     spec = 1.0
     if (p["w"], p["h"]) not in [(1080, 1920), (2160, 3840)]: spec -= 0.4; flags.append(f"{p['w']}x{p['h']} is not 9:16 delivery size")
-    if not 9000 <= p["kbps"] <= 36000: spec -= 0.3; flags.append(f"{p['kbps']/1000:.1f} Mbps outside 10-35 Mbps")
+    if p["kbps"] < 9000: spec -= 0.3; flags.append(f"{p['kbps']/1000:.1f} Mbps is starving 4K (floor 10)")
     if abs(p["fps"] - 29.97) > 0.2 and abs(p["fps"] - 30) > 0.2: spec -= 0.3; flags.append(f"{p['fps']} fps")
     scores["spec"] = clamp(spec)
 

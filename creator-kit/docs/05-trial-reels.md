@@ -41,8 +41,8 @@ Why the graphics are rendered separately: the first version pushed the
 footage itself through Remotion (JPEG frame capture, then another H.264
 encode) and then a size-capped delivery encode. Three lossy generations at
 4K read as soft. Now the footage is decoded from the master once and encoded
-once, at CRF 17 with a 28 Mbps ceiling instead of a 75 MB target; files land
-around 150-200 MB, still inside the 10-35 Mbps upload window.
+once, at CRF 16 with no bitrate cap. File size is whatever the picture
+needs; the Edits app takes it.
 
 If the source clips are already graded, cut them with `cut_clip.sh --graded`
 first; everything from step 1 on is the same.

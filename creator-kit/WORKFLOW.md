@@ -36,7 +36,7 @@ write binaries. I deliver finished Reels through chat; you file them.
 Drop the graded clips (Rec.709, not D-Log M) into `01 Raw D-Log/<date>/`
 the same way and say they are graded. I run the same edit with the grade
 step turned off (`cut_clip.sh --graded`): window selection, silence cut at
-your rhythm, 4K export at the 35 Mbps ceiling. Nothing touches the colour.
+your rhythm, 4K export at CRF 16 with no bitrate cap. Nothing touches the colour.
 
 Two things to keep in mind when grading for this pipeline:
 
@@ -132,7 +132,7 @@ UI covers — worth checking any new placement against it.
 
 ## Export target
 
-4K, 29.97fps, 10–35 Mbps, ~75 MB, then **upload through Instagram's Edits app**
+4K, 29.97fps, quality-first (CRF 16, no bitrate cap), then **upload through Instagram's Edits app**
 rather than the Reels composer.
 
 75 MB and the 10 Mbps floor only both hold up to about 60 seconds. Past that,

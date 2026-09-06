@@ -8,7 +8,9 @@ Takes a raw D-Log clip and produces an upload-ready file:
   2. applies your grade LUT
   3. exports 4K 29.97fps, two-pass, hitting a target file size
 
-The export target follows the 4K-upload method: 4K at 29.97fps, 10-35 Mbps,
+The export is 4K at 29.97fps. Default is quality-first (--crf 16, no bitrate
+cap); --target-mb switches to size targeting within 10-35 Mbps if a file has
+to hit a size.
 file around 75 MB, then upload through Instagram's Edits app. Two-pass
 encoding is what lets it hit the size on the nose rather than landing wherever
 a CRF happens to put it.
@@ -170,7 +172,10 @@ def main():
     ap.add_argument("--fps", default="30000/1001", help="output fps (default 29.97)")
     ap.add_argument("--height", type=int, default=3840, help="output height (default 3840)")
     ap.add_argument("--sharpen", default="0", help="unsharp amount, 0 disables")
-    ap.add_argument("--max-mbps", type=float, default=35.0, help="bitrate ceiling (default 35)")
+    ap.add_argument("--max-mbps", type=float, default=35.0, help="bitrate ceiling for --target-mb mode (default 35)")
+    ap.add_argument("--crf", type=float, default=None,
+                    help="quality mode: constant-quality x264 at this CRF, no bitrate cap "
+                         "and no size target (16 is visually lossless for 4K delivery)")
     ap.add_argument("--min-mbps", type=float, default=10.0, help="bitrate floor (default 10)")
     ap.add_argument("--two-pass", action="store_true",
                     help="exact file-size targeting, but twice the encode time")
@@ -244,15 +249,22 @@ def main():
 
 
     maps = ["-map", "[vout]"] + (["-map", "[aout]"] if info["audio"] else [])
+    if args.crf is not None:
+        # Quality mode: the encoder spends what the picture needs. No cap.
+        rate = ["-crf", "%g" % args.crf]
+        print("quality  : CRF %g, no bitrate cap" % args.crf)
+    else:
+        rate = ["-b:v", "%dk" % v_kbps, "-maxrate", "%dk" % int(v_kbps * 1.35),
+                "-bufsize", "%dk" % int(v_kbps * 2.5)]
     common = [
-        "-c:v", "libx264", "-preset", args.preset,
-        "-b:v", "%dk" % v_kbps, "-maxrate", "%dk" % int(v_kbps * 1.35),
-        "-bufsize", "%dk" % int(v_kbps * 2.5),
+        "-c:v", "libx264", "-preset", args.preset] + rate + [
         "-profile:v", "high", "-level", "5.2", "-pix_fmt", "yuv420p",
         "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709",
     ]
     audio = ["-c:a", "aac", "-b:a", "%dk" % audio_kbps, "-ar", "48000", "-ac", "2"] if info["audio"] else ["-an"]
 
+    if args.crf is not None and args.two_pass:
+        args.two_pass = False  # two-pass is a size-targeting tool; CRF has no target
     if not args.two_pass:
         # Single-pass ABR. Lands near the target rather than exactly on it, at
         # half the encode time - the better default for a 4K source, where the
