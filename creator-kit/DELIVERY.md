@@ -69,6 +69,13 @@ next shoot.
 
 Links are public to anyone holding them and do not expire on their own.
 
+## Trial Reel — 2026-09-06 (regraded to the new reference)
+
+Re-cut from the raw D-Log against `03 Grade Reference/2026-09-06 color
+corrected master - grade reference.mov`, no zooms, CRF 16 (452 MB, 71 Mbps).
+The file is on the session machine; the hosting connector is still down, so
+the link below still serves the previous grade until it can be re-uploaded.
+
 ## Trial Reel — 2026-09-05 (rebuilt from raw)
 
 One combined cut (09 → 14 → 16 → 18, shooting order kept), 53s, your
