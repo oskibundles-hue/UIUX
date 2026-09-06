@@ -760,20 +760,5 @@
  "hook": "GT3 IN. SF90 OUT.",
  "handle": "@nq.young",
  "endCard": "Send this to your friend with the SF90",
- "endCardAt": 48.6,
- "punches": [
-  {
-   "at": 6.4,
-   "hold": 1.0
-  },
-  {
-   "at": 36.15,
-   "hold": 1.6,
-   "scale": 1.1
-  },
-  {
-   "at": 41.35,
-   "hold": 0.9
-  }
- ]
+ "endCardAt": 48.6
 }

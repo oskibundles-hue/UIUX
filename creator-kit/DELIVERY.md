@@ -35,27 +35,6 @@ points of that matches you; the set used to run +7 to -6.
 | 17 | matte black wheel work | 41s | 72 MB | +0.4 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/f3a5ffe5-88ef-48b0-8927-b5fb4684c920.mp4) |
 | 18 | red supercar | 59s | 70 MB | -2.1 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/e42b5866-9695-452b-84d4-53ebac81a2b7.mp4) |
 
-## Trial Reel — T1 "GT3 in, SF90 out"
-
-Built from clips 09, 14, 16 and 18 **in shooting order**, 53s, captions
-word-timed from the audio in your style, hook card, three punch-ins, FD logo
-bug, send-aimed end card. Post it as a **Trial Reel** and read the 3s hold
-and sends-per-reach after 72 hours.
-
-| what | link |
-|---|---|
-| Reel, 2160x3840, 29.97fps, 11.7 Mbps, 74 MB, −13.9 LUFS | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/55bd92b7-04b2-439d-9b61-8b37431c300b.mp4) |
-| Cover frame (SF90 reveal at 36.2s), pick it as the cover in Edits | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/8b22c5ba-a164-4a47-973f-fb89db67aa9d.jpg) |
-| 16s hook excerpt, 1080p (for predictors that cap input length) | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/9f956297-95b6-4b98-9682-c555b6a81753.mp4) |
-
-`reel_check.py` score **87/100, post it**. One flag: the closing SF90 shot
-runs 10.6s, but it carries captions, a punch-in and the end card, so it is
-not a static hold.
-
-Higgsfield's Virality Predictor was tried and is not available on the
-current account: it needs the Basic plan, and it only accepts clips of 16s
-or shorter. The local checker is the working virality gate for now.
-
 ## Names
 
 Every name describes what is in the whole take, checked against a ten-frame
@@ -91,7 +70,8 @@ Links are public to anyone holding them and do not expire on their own.
 ## Trial Reel — 2026-09-05 (rebuilt from raw)
 
 One combined cut (09 → 14 → 16 → 18, shooting order kept), 53s, your
-published look, captions, hook card, punch-ins, FD logo bug, end card.
+published look, captions, hook card, FD logo bug, end card. No punch-in
+zooms: on handheld footage they read as softness.
 
 The film-look experiment is dropped. The four source clips were re-cut from
 the raw D-Log at the 35 Mbps ceiling (the first pass used the 75 MB target,
