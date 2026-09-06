@@ -8,7 +8,7 @@ You film. You drop it in Dropbox. I edit. You post.
 /Anti Stock Media/
   01 Raw D-Log/YYYY-MM-DD/   camera originals — you drop here
   02 Published Edits/        posts that already went out
-  03 Grade Reference/        what grades get matched against
+  03 Grade Reference/        what grades get matched against (one file; older ones in _previous/)
   04 Exports/YYYY-MM-DD/     finished Reels — post from here, top to bottom
   05 Overlays/               logos, handle bugs, lower thirds
 ```

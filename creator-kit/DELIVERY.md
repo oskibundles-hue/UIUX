@@ -11,8 +11,10 @@ rhythm lands closest to your own ~4s, graded per-clip against your
 published reference, and white-balanced to its grey point.
 
 The `grey` column is red-minus-blue measured on near-neutral pixels.
-Your own published grade sits at **+0.3**. Anything within a couple of
-points of that matches you; the set used to run +7 to -6.
+These 18 were matched to the earlier reference, whose greys sit at **+0.3**.
+The reference changed on 2026-09-06 to `03 Grade Reference/2026-09-06 color
+corrected master - grade reference.mov` (greys +5.7, slightly green); the
+trial Reel below is matched to that one, the 18 singles are not.
 
 | # | what it is | length | size | grey | link |
 |---|---|---|---|---|---|
