@@ -72,9 +72,18 @@ Links are public to anyone holding them and do not expire on their own.
 ## Trial Reel — 2026-09-06 (regraded to the new reference)
 
 Re-cut from the raw D-Log against `03 Grade Reference/2026-09-06 color
-corrected master - grade reference.mov`, no zooms, CRF 16 (452 MB, 71 Mbps).
-The file is on the session machine; the hosting connector is still down, so
-the link below still serves the previous grade until it can be re-uploaded.
+corrected master - grade reference.mov`, no zooms, CRF 16. Post this one.
+
+| what | length | size | link |
+|---|---|---|---|
+| T1 "GT3 in, SF90 out", new grade | 53s | 452 MB | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/b73a62ba-8bbc-43fb-bbb0-fa109b2f9926.mp4) |
+| 09 gt3 rolling in, new grade | 50s | 296 MB | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/5b029061-7c9f-4b10-92df-5e92f436fa4a.mp4) |
+| 14 aston martin brakes, new grade | 52s | see link | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/89d59dd2-d9ae-4694-b776-1751ac42ab5b.mp4) |
+| 16 wheels off, new grade | 18s | 125 MB | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/e629fbdd-ad90-4a0d-ba02-4bdf27f8939c.mp4) |
+| 18 red supercar, new grade | 59s | 564 MB | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/c3cde7ca-45c2-438c-9ba0-b441e9e0d5a6.mp4) |
+
+The four singles above supersede rows 09, 14, 16 and 18 in the 18-clip table
+(those are still the earlier grade at the 75 MB target).
 
 ## Trial Reel — 2026-09-05 (rebuilt from raw)
 
