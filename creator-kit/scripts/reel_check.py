@@ -86,6 +86,10 @@ def main():
         st, en = speech(a.video)
         first_speech = (en[0] if st and st[0] < 0.2 and en else 0.0)
     cuts = [c["at"] for c in props.get("cuts", [])] or scene_cuts(a.video, dur)
+    # Reels assembled from already silence-cut exports carry only a few
+    # segment boundaries in props; the real shot rhythm lives inside the
+    # segments. Fall back to scene detection when the props cuts are sparse.
+    if len(cuts) > 0 and dur / max(1, len(cuts)) > 15: cuts = scene_cuts(a.video, dur)
     first_cut = next((c for c in cuts if c > 0.3), dur)
     hook = 0.35 if hook_text else 0.0
     hook += 0.35 * clamp(1 - max(0, first_speech - 1.0) / 4)
