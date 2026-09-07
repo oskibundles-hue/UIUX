@@ -37,6 +37,8 @@ Experiments, not part of the series.
 | 2 | T3 · spec-card test (freeze frames on the GT3 and SF90) | 0:60 · 457 MB · the ad-style test you asked for | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/fe868dc8-8081-4b68-b973-94f725a807dd.mp4) |
 | 3 | Side by side · previous grade vs new grade | 0:53 · 175 MB · 1080 per side | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/a496987b-a7aa-4014-a6b2-9553bae150b4.mp4) |
 | 4 | Cover frame · SF90 reveal | JPEG, pick as cover in Edits | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/19ebae55-535e-41f6-be84-3665b99feae0.jpg) |
+| 5 | R9 · first car in the new bay (connector cut) | 0:38 · 4K · reference grade, classic captions, vidIQ hook and music | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/8ada3a5f-ef75-4c92-9056-5cb6553eb117.mp4) |
+| 6 | V1 · same reel, vlog grade + pop captions | 0:38 · 273 MB · 4K · re-graded from the D-Log raws with `--look vlog` (less red, softer, no sharpening), pop caption style, overlays retimed into the pauses | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/6df4926b-2a16-4137-b152-dc8461902cf8.mp4) |
 
 ## Singles · 18 clips, cut and graded, no captions
 
