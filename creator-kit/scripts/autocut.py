@@ -115,7 +115,7 @@ def keep_segments(silences, duration, pad, min_seg):
     return merged
 
 
-def build_filter(segs, lut, fps, out_w, out_h, sharpen, has_audio, lut_after_scale=False):
+def build_filter(segs, lut, fps, out_w, out_h, sharpen, has_audio, lut_after_scale=False, post=None):
     """One filter_complex over a SINGLE decode of the source.
 
     The obvious way to assemble segments is one `-ss/-t -i` per segment plus
@@ -143,6 +143,9 @@ def build_filter(segs, lut, fps, out_w, out_h, sharpen, has_audio, lut_after_sca
         if lut_step:
             chain.append(lut_step)
         chain += [scale_step, "crop=%d:%d" % (out_w, out_h)]
+    if post:
+        # Extra filters after the grade (e.g. eq=saturation=0.92 for a softer look).
+        chain.append(post)
     if sharpen and float(sharpen) > 0:
         chain.append("unsharp=5:5:%s:5:5:0" % sharpen)
     chain.append("fps=%s" % fps)
@@ -172,6 +175,7 @@ def main():
     ap.add_argument("--fps", default="30000/1001", help="output fps (default 29.97)")
     ap.add_argument("--height", type=int, default=3840, help="output height (default 3840)")
     ap.add_argument("--sharpen", default="0", help="unsharp amount, 0 disables")
+    ap.add_argument("--post", default=None, help="extra video filter(s) applied after the grade")
     ap.add_argument("--max-mbps", type=float, default=35.0, help="bitrate ceiling for --target-mb mode (default 35)")
     ap.add_argument("--crf", type=float, default=None,
                     help="quality mode: constant-quality x264 at this CRF, no bitrate cap "
@@ -244,8 +248,8 @@ def main():
     # Pass 1 measures video complexity only. Reusing the full graph leaves the
     # loudnorm branch unconnected, which ffmpeg rejects outright.
     lut_after = args.fast and out_h < info["height"]
-    graph = build_filter(segs, args.lut, args.fps, out_w, out_h, args.sharpen, info["audio"], lut_after)
-    graph_v = build_filter(segs, args.lut, args.fps, out_w, out_h, args.sharpen, False, lut_after)
+    graph = build_filter(segs, args.lut, args.fps, out_w, out_h, args.sharpen, info["audio"], lut_after, args.post)
+    graph_v = build_filter(segs, args.lut, args.fps, out_w, out_h, args.sharpen, False, lut_after, args.post)
 
 
     maps = ["-map", "[vout]"] + (["-map", "[aout]"] if info["audio"] else [])

@@ -135,7 +135,7 @@ def grey_point(pixels, curves=None):
     return [x / cnt for x in tot]
 
 
-def neutralise(curves, src_paths, ref_paths):
+def neutralise(curves, src_paths, ref_paths, grey_target=None):
     """Put this clip's greys where the reference's greys are.
 
     A white-balance nudge and nothing else: three numbers, clamped, applied on
@@ -147,6 +147,13 @@ def neutralise(curves, src_paths, ref_paths):
     if not want:
         print("  neutralise: reference has too few neutral pixels, skipped")
         return curves
+    if grey_target is not None:
+        # Aim the greys at a chosen R-B instead of the reference's own. The
+        # reference sits at about +5.7 (a warm, shop-light look); a vlog grade
+        # wants the concrete closer to grey, so the target is set lower while
+        # the average level of the greys is left where the reference put it.
+        mid = (want[0] + want[2]) / 2.0
+        want = [mid + grey_target / 2.0, want[1], mid - grey_target / 2.0]
 
     # Iterate. Each pass is clamped so one odd clip cannot be re-tinted wholesale,
     # and applying a gain moves which pixels still count as near-neutral - so a
@@ -185,6 +192,12 @@ def main():
                     help="0 = no change, 1 = full match, >1 exaggerates")
     ap.add_argument("--no-neutralise", action="store_true",
                     help="skip the grey-point white balance pass")
+    ap.add_argument("--grey-target", type=float, default=None,
+                    help="R-B of the neutral greys to aim for (default: the reference's own)")
+    ap.add_argument("--lift", type=float, default=0.0,
+                    help="raise the blacks: 0.03 lifts pure black to ~8/255, fading out by the mids")
+    ap.add_argument("--knee", type=float, default=0.0,
+                    help="soften the highlights: 0.1 rolls the top of the curve off gently")
     args = ap.parse_args()
 
     ref_paths = sorted(glob.glob(args.ref))
@@ -204,7 +217,22 @@ def main():
         curves.append(m)
 
     if not args.no_neutralise:
-        curves = neutralise(curves, src_paths, ref_paths)
+        curves = neutralise(curves, src_paths, ref_paths, args.grey_target)
+
+    if args.lift > 0 or args.knee > 0:
+        # Applied after the match so the tone shape is still the reference's;
+        # these only bend the ends. Lift: milky blacks, weighted to the shadows
+        # by (1-x)^2. Knee: pull the top down and ease into it, so bright
+        # panels and reflections stop clipping to flat white.
+        def bend(v):
+            x = v / 255.0
+            x = x + args.lift * (1.0 - x) ** 2
+            if args.knee > 0:
+                k = 1.0 - args.knee
+                if x > k:
+                    x = k + (x - k) / (1.0 + (x - k) / args.knee * 1.5)
+            return min(255.0, max(0.0, x * 255.0))
+        curves = [enforce_monotonic([bend(v) for v in c]) for c in curves]
 
     for name, m in zip("RGB", curves):
         print("  %s curve: black %5.1f  mid %5.1f  white %5.1f" % (name, m[0], m[128], m[255]))

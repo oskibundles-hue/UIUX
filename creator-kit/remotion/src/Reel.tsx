@@ -2,6 +2,7 @@ import React from "react";
 import { AbsoluteFill, OffthreadVideo, staticFile, useVideoConfig, useCurrentFrame, interpolate, Easing } from "remotion";
 import { loadFonts } from "./fonts";
 import { Captions } from "./components/Captions";
+import { CaptionsPop } from "./components/CaptionsPop";
 import { Hook } from "./components/Hook";
 import { ProgressBar } from "./components/ProgressBar";
 import { Handle } from "./components/Handle";
@@ -49,6 +50,8 @@ export type ReelProps = {
   cards?: Card[];
   /** Overlay PNGs from the packs, animated in and out. */
   overlays?: OverlaySpec[];
+  /** "classic" = measured reference style (colour swap); "pop" = pill highlight + line pop. */
+  captionStyle?: "classic" | "pop";
 };
 
 const punchScale = (t: number, punches: ReelProps["punches"]) => {
@@ -68,7 +71,7 @@ const punchScale = (t: number, punches: ReelProps["punches"]) => {
 };
 
 export const Reel: React.FC<ReelProps> = ({
-  src, phrases, words: given, hook, handle, endCard, endCardAt = 0, showProgress = false, scrim = false, punches, overlayOnly = false, cards, overlays,
+  src, phrases, words: given, hook, handle, endCard, endCardAt = 0, showProgress = false, scrim = false, punches, overlayOnly = false, cards, overlays, captionStyle = "classic",
 }) => {
   const { durationInFrames, fps } = useVideoConfig();
   const zoom = punchScale(useCurrentFrame() / fps, punches);
@@ -98,7 +101,7 @@ export const Reel: React.FC<ReelProps> = ({
       {(overlays ?? []).map((o, i) => <AnimatedOverlay key={i} spec={o} />)}
       {(cards ?? []).map((c, i) => <SpecCard key={i} card={c} />)}
       {hook ? <Hook text={hook} /> : null}
-      <Captions words={words} />
+      {captionStyle === "pop" ? <CaptionsPop words={words} /> : <Captions words={words} />}
       {endCard ? (
         <EndCard line={endCard} startSeconds={endCardAt || durationInFrames / fps - 3} />
       ) : null}

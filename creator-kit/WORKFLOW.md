@@ -181,3 +181,18 @@ Audio-only takes it under one second. Same numbers, 200× faster.
 
 - Animations in-video (Remotion, or generative via the art skills)
 - Stream-style handle overlays for nq.young / youngomarie / youngomarie
+
+## Looks and caption styles
+
+Two grades and two caption styles ship in the kit. Both come off the same
+reference frames in `hm/`; the difference is how hard they lean on them.
+
+| flag | what it does |
+|---|---|
+| `cut_clip.sh ... --look match` (default) | copies the reference grade exactly: full tone match, greys at the reference's +5.7 R-B |
+| `cut_clip.sh ... --look vlog` | natural cinematic: 85% tone match, greys aimed at +2.0 R-B (less red), blacks lifted 0.03, highlight knee 0.08, saturation 92%, no sharpening. Pair with `compose_reel.sh ... --sharpen 0` |
+| props `"captionStyle": "classic"` (default) | measured reference style: white line, spoken word turns gold |
+| props `"captionStyle": "pop"` | line pops in with an overshoot, spoken word gets a gold pill with dark type and a small lift |
+
+Under the hood `match_grade.py` grew `--grey-target`, `--lift` and `--knee`,
+and `autocut.py` grew `--post` for an extra filter after the grade.

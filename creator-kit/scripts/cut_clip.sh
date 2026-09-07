@@ -36,6 +36,12 @@
 #   --graded   the source is already colour graded (Rec.709, not D-Log M):
 #              skip the grade match and cut/export it as it is.
 #
+#   --look vlog   a natural, cinematic variant of the reference grade: the
+#              tone match is eased to 85%, greys are aimed at +2 R-B instead
+#              of the reference's +5.7 (less red), blacks lifted a touch,
+#              highlights rolled off, saturation 92%, and no sharpening
+#              anywhere in the chain.
+#
 # Example:
 #   ./cut_clip.sh work/raw.mov "exports/06 wall trim install.mp4"
 
@@ -52,9 +58,11 @@ TARGET_MB=""     # empty = quality mode (CRF 16, no bitrate cap)
 CRF=16
 WINDOW=60
 GRADED=0
+LOOK="match"   # match = copy the reference exactly; vlog = softer, cooler, unsharpened
 while [ $# -gt 0 ]; do
   case "$1" in
     --graded) GRADED=1; shift ;;
+    --look) LOOK="$2"; shift 2 ;;
     --rhythm) RHYTHM="$2"; shift 2 ;;
     --ref)    REF="$2"; shift 2 ;;
     --target-mb) TARGET_MB="$2"; shift 2 ;;
@@ -122,7 +130,7 @@ fi
 # 1. Grade matched to this clip. Sample across the whole clip so the histogram
 #    reflects the clip and not one moment in it. Skipped for --graded sources:
 #    footage that arrives already graded is cut and exported untouched.
-LUT_ARGS=()
+LUT_ARGS=(); POST_ARGS=()
 if [ "$GRADED" = "1" ]; then
   echo "  grade    source is already graded; no LUT applied"
 else
@@ -136,7 +144,13 @@ if [ "$nsrc" -lt 3 ]; then
   exit 1
 fi
 LUT="$WORK/grade.cube"
-python3 "$HERE/match_grade.py" --ref "$REF" --src "$WORK/*.ppm" \
+GRADE_ARGS=()
+if [ "$LOOK" = "vlog" ]; then
+  echo "  look     vlog (85% match, greys +2.0 R-B, lift 0.03, knee 0.08, sat 0.92)"
+  GRADE_ARGS=(--strength 0.85 --grey-target 2.0 --lift 0.03 --knee 0.08)
+  POST_ARGS=(--post "eq=saturation=0.92")
+fi
+python3 "$HERE/match_grade.py" --ref "$REF" --src "$WORK/*.ppm" "${GRADE_ARGS[@]}" \
         --out "$LUT" --name "AK_${NAME// /_}" 2>&1 | sed 's/^/  /'
 if [ ! -f "$LUT" ]; then echo "  FAILED: no LUT written"; exit 1; fi
 LUT_ARGS=(-l "$LUT")
@@ -162,7 +176,7 @@ echo "  chosen   ${best_n} dB (closest to a ${RHYTHM}s rhythm)"
 
 # 3. Cut, grade, export. One decode of the source for the whole thing.
 if [ -n "$TARGET_MB" ]; then RATE_ARGS=(--target-mb "$TARGET_MB"); else RATE_ARGS=(--crf "$CRF"); fi
-python3 "$HERE/autocut.py" "$CLIP" "${LUT_ARGS[@]}" -o "$OUT" \
+python3 "$HERE/autocut.py" "$CLIP" "${LUT_ARGS[@]}" "${POST_ARGS[@]}" -o "$OUT" \
         --noise "$best_n" --min-silence 0.25 "${RATE_ARGS[@]}" 2>&1 | sed 's/^/  /'
 
 if [ ! -f "$OUT" ]; then echo "  FAILED: no output written"; exit 1; fi
