@@ -29,9 +29,25 @@ export const CaptionsPop: React.FC<{ words: Word[] }> = ({ words }) => {
   const line = lines.find((l) => t >= l[0].start && t < l[l.length - 1].end);
   if (!line) return null;
 
+  // Drop out during pauses. A three-word line can straddle a long breath
+  // (the reel's first line spans a six-second gap), and leaving it up over
+  // silence reads as a stuck caption and collides with the overlays that
+  // are timed into those gaps. After PAUSE seconds with nothing spoken the
+  // line hides; it pops back in with the next word.
+  const PAUSE = 1.0;
+  let segStart = line[0].start;
+  let spoken = line[0];
+  for (const w of line) {
+    if (w.start > t) break;
+    if (w.start - spoken.end > PAUSE) segStart = w.start;
+    spoken = w;
+  }
+  const next = line.find((w) => w.start > t);
+  if (t > spoken.end + PAUSE && next && next.start - spoken.end > PAUSE) return null;
+
   const fontSize = theme.captionFontFrac * height * 1.06;
   const stroke = Math.max(1, Math.round(fontSize * 0.05));
-  const lineStart = Math.round(line[0].start * fps);
+  const lineStart = Math.round(segStart * fps);
   const pop = spring({ frame: frame - lineStart, fps, config: { damping: 11, stiffness: 260, mass: 0.7 }, durationInFrames: 12 });
   const lineScale = interpolate(pop, [0, 1], [0.82, 1]);
   const lineRise = interpolate(pop, [0, 1], [fontSize * 0.25, 0]);
