@@ -17,7 +17,7 @@ Claude owns the throttle and sets it per task. Default goal: **maximum value per
 - Prefer one well-scoped fan-out over repeated broad ones. If a cap drops coverage, say so rather than implying full coverage.
 
 **Escalation gate — Formula Dynamics and Supercarexperience footage editing and ad creation:**
-These are the user's employers, so the bar is high. Ask before any large spend (wide fan-outs or ultracode-style orchestration on every step). Default for this work is a strong model at high effort; reserve parallel divergence for concept/variant generation and judge-panel scoring, not for linear editing or render steps. Anything published externally as either company requires explicit confirmation first.
+These are the user's employers; the user holds authority from both to publish as them. Ask before any large spend (wide fan-outs or ultracode-style orchestration on every step). Default for this work is a strong model at high effort; reserve parallel divergence for concept/variant generation and judge-panel scoring, not for linear editing or render steps. Confirm per action before anything is published live as either company — the same standard as the user's personal channel.
 
 ## Project Overview
 
