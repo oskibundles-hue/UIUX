@@ -16,8 +16,8 @@ Claude owns the throttle and sets it per task. Default goal: **maximum value per
 - Set subagent `model` and `effort` explicitly per call — never fan out at max by default.
 - Prefer one well-scoped fan-out over repeated broad ones. If a cap drops coverage, say so rather than implying full coverage.
 
-**Escalation gate — Formula Dynamics footage editing and ad creation:**
-Ask before any large spend (wide fan-outs or ultracode-style orchestration on every step). Default for this work is a strong model at high effort; reserve parallel divergence for concept/variant generation and judge-panel scoring, not for linear editing or render steps. Anything published externally as the brand requires explicit confirmation first.
+**Escalation gate — Formula Dynamics and Supercarexperience footage editing and ad creation:**
+These are the user's employers, so the bar is high. Ask before any large spend (wide fan-outs or ultracode-style orchestration on every step). Default for this work is a strong model at high effort; reserve parallel divergence for concept/variant generation and judge-panel scoring, not for linear editing or render steps. Anything published externally as either company requires explicit confirmation first.
 
 ## Project Overview
 
