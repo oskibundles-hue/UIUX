@@ -19,6 +19,10 @@ Claude owns the throttle and sets it per task. Default goal: **maximum value per
 **Escalation gate — Formula Dynamics and Supercarexperience footage editing and ad creation:**
 These are the user's employers; the user holds authority from both to publish as them. Ask before any large spend (wide fan-outs or ultracode-style orchestration on every step). Default for this work is a strong model at high effort; reserve parallel divergence for concept/variant generation and judge-panel scoring, not for linear editing or render steps. Confirm per action before anything is published live as either company — the same standard as the user's personal channel.
 
+## Priority Connectors
+
+For video, growth, and ad projects, default to **vidIQ** (growth/analytics), **Higgsfield** (production: virality predictor, reframe, ad-multiplier, TikTok publish), and the **context-engineering** plugin (context compression for long sessions). Adobe, Remotion, and Dropbox are fine secondary picks when relevant. If a different connector looks like a better fit for a task, **ask before using it** rather than switching silently.
+
 ## Project Overview
 
 Antigravity Kit is an AI-powered design intelligence toolkit providing searchable databases of UI styles, color palettes, font pairings, chart types, and UX guidelines. It works as a skill/workflow for AI coding assistants (Claude Code, Windsurf, Cursor, etc.).
