@@ -26,13 +26,25 @@ recommended Reels/Stories ad spec, and each sits well under the 4 GB cap.
 R5 is the top-of-funnel/prospecting ad. R1–R4 are service-specific and work
 better for retargeting or interest-targeted sets.
 
-### Built for muted autoplay
+### Built for muted autoplay, with sound design on top
 
 Meta autoplays with sound off, so every reel carries its whole message
-visually — there is no voiceover and no audio track at all. That is
-deliberate, not an omission: you can drop a licensed music bed on in Ads
-Manager or your editor without re-cutting anything, and the reels read
-correctly if the viewer never unmutes.
+visually — no voiceover, nothing that depends on audio. Each reel then ships
+in two versions:
+
+- `FD-Rn-*.mp4` — picture only, no audio track.
+- `FD-Rn-*-SFX.mp4` — the same picture with a sound-design bed built from
+  Formula Dynamics' existing 17-sound SFX pack, cued to the motion (riser on
+  the tach sweep, impact on the redline, a deep impact when the valve opens).
+
+The SFX version peaks at about -3.5 dBFS with a mean near -23 dBFS, so there
+is real headroom to drop a **licensed music bed** underneath without
+re-cutting or clipping. Do not use Instagram's consumer music library on a
+paid ad — it isn't cleared for that.
+
+Rebuild or retime the audio with `python3 tools/build_audio.py`; the cue
+lists sit at the top of that file and use the same beat times the scenes
+animate to.
 
 ### Safe areas
 

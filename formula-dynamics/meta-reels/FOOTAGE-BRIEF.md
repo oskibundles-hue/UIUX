@@ -99,3 +99,31 @@ To match the existing 4K library and drop straight into these reels:
 
 Drop clips in named by subject and I'll cut them into the existing reels
 without changing the graphics or the timing.
+
+There is already a Dropbox file-request link from the earlier session that
+lets you upload straight from your phone without the Dropbox app:
+<https://www.dropbox.com/request/cw52bjv1jh0edz6s4mhf>
+(it points at the Fast Cut folder — either use it and tell me, or make a new
+request against `06 Product B-Roll` and send me that link instead).
+
+## What already exists that I did NOT reuse
+
+The 60 files indexed in the "Anti Stock Downloads" artifact are all vlog
+material — the R1–R8 reel series, the VR1–VR8 vlog cuts, the MR1–MR8 fast
+cuts, and 18 graded singles. Per your brief none of it appears in these ads.
+
+Two things from that library ARE reused here, because they're brand assets
+rather than footage:
+
+- The **SFX pack** (17 synthesised sounds) — now the sound design on all
+  five reels.
+- The **brand spec** (FD red, gold, Anton, the 5-segment stripe), carried
+  through Vertiso Memory from the earlier ad session.
+
+Worth knowing: the artifact's closing note says "the FD overlay pack was
+yours to begin with and is already in Dropbox", but `/Anti Stock Media/05
+Overlays/` is **empty**, and a Dropbox search turns up no image files. The
+creator-kit zip contains a *Supercar Experience* overlay pack, not a Formula
+Dynamics one. That's why I rebuilt the FD mark and overlay set from scratch
+this session. If a real FD overlay pack exists somewhere else, send it and
+I'll match to it instead.

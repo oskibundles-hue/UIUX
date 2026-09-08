@@ -68,11 +68,11 @@ A sensible starting shape for a shop this size:
 - These are cut for **Reels and Stories** (9:16, full bleed). For Feed, run
   `reframe` to get a 1:1 version rather than letting Meta letterbox them.
 - 15s is inside the Reels ad limit and long enough to land hook → proof → CTA.
-- **Add music before you run them.** They're silent by design so you can drop
-  a bed on without re-cutting — but a silent ad reads as broken to some
-  viewers even on muted autoplay, and Meta's own data favours ads with audio.
-  Use a licensed track or `vidiq_generate_music`; do **not** use the
-  Instagram consumer music library on a paid ad.
+- **Run the `-SFX` versions, and add music under them.** Each reel ships
+  twice: picture-only, and with a sound-design bed built from the existing FD
+  SFX pack. The SFX cut peaks around -3.5 dBFS, leaving headroom for a
+  licensed music bed. Use a licensed track or `vidiq_generate_music`; do
+  **not** use the Instagram consumer music library on a paid ad.
 - Set the primary text and headline in Ads Manager to carry the offer — the
   reels carry the message, the ad copy carries the specifics (pricing,
   availability, "book now").
