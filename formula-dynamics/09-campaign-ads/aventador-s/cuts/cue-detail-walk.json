@@ -1,0 +1,92 @@
+{
+  "_comment": "A structurally different cut, not a copy variant: the shots are re-ordered by recut.py into its own plate. Opens on the redline, walks the detail shots, then reveals the car.",
+  "canvas": "9x16",
+  "width": 1080,
+  "height": 1920,
+  "fps": 30,
+  "duration": 11.24,
+  "car": "AVENTADOR S",
+  "build": "FULL BUILD",
+  "ticker": [
+    "FORMULA DYNAMICS",
+    "AVENTADOR S",
+    "PERFORMANCE"
+  ],
+  "hook": [
+    "THE DETAILS",
+    "ARE THE BUILD."
+  ],
+  "_hook_source": "05-copy-library/hooks-and-captions.md, Body kits hooks",
+  "buildHeading": "FITTED IN-HOUSE",
+  "buildRows": [
+    [
+      "01",
+      "AERO KIT",
+      "WING · SKIRTS · LIP"
+    ],
+    [
+      "02",
+      "WHEELS",
+      "FITTED TO SPEC"
+    ],
+    [
+      "03",
+      "STAGE 1 TUNE",
+      "ECU CALIBRATION"
+    ],
+    [
+      "04",
+      "SUSPENSION",
+      "LOWERED"
+    ]
+  ],
+  "_buildRows_note": "Every line confirmed by the shop. No invented figures - the voice guide asks for specifics, and we do not have dyno numbers for this car.",
+  "ctaOverlay": "cta-captions/cta_9x16_booking_book-your-build_bar.png",
+  "endCard": "end-cards/endcard_9x16_dark.png",
+  "beats": {
+    "title": [
+      0.3,
+      6.94
+    ],
+    "ticker": [
+      0.8,
+      6.94
+    ],
+    "hook": [
+      0.6,
+      3.2
+    ],
+    "build": [
+      3.7,
+      6.94
+    ],
+    "cta": [
+      7.54,
+      8.89
+    ],
+    "end": [
+      9.14,
+      11.24
+    ]
+  },
+  "_beats_note": "HUD clears 1.6s before the ask, per 06-video-system/AUTO-EDIT.md. End card is a hard cut, last 2.44s.",
+  "layout": {
+    "marginLeftFrac": 0.075,
+    "marginRightFrac": 0.16,
+    "bandTopFrac": 0.4
+  },
+  "_layout_note": "Hook and build list sit in the mid band (y .40-.60), measured as the stable dark zone: mean 59, max 82 across the clip. The upper third used on the 765LT swings to 239 here (blown desert sky).",
+  "grade": "eq=contrast=1.04:saturation=0.96:gamma=1.0,vignette=angle=PI/5",
+  "cut": "detail-walk",
+  "shotOrder": [
+    8,
+    0,
+    2,
+    3,
+    7,
+    10,
+    11,
+    12
+  ],
+  "plate": "cuts/plate-detail-walk.mp4"
+}

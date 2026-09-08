@@ -40,7 +40,7 @@ import fd_render as R         # noqa: E402
 HERE = os.path.dirname(os.path.abspath(__file__))
 CUE_PATH = os.path.join(HERE, "cue.json")
 CUE = json.load(open(CUE_PATH))
-PLATE = os.path.join(HERE, "source", "plate-1080x1920.mp4")
+PLATE = os.path.join(HERE, CUE.get("plate", "source/plate-1080x1920.mp4"))
 OUT_DIR = os.path.join(HERE, "exports")
 FRAME_DIR = os.path.join(HERE, ".frames")
 OVERLAYS = os.path.join(KIT, "03-overlays")
@@ -60,9 +60,10 @@ SHOW_SAFE = False
 
 def load_cue(path):
     """Swap in a different cue file and reset the layer cache."""
-    global CUE, CUE_PATH, W, H, FPS, DURATION, X0, X1, BAND_TOP
+    global CUE, CUE_PATH, PLATE, W, H, FPS, DURATION, X0, X1, BAND_TOP
     CUE_PATH = path
     CUE = json.load(open(path))
+    PLATE = os.path.join(HERE, CUE.get("plate", "source/plate-1080x1920.mp4"))
     W, H = CUE["width"], CUE["height"]
     FPS, DURATION = CUE["fps"], CUE["duration"]
     lay = CUE["layout"]
@@ -73,6 +74,9 @@ def load_cue(path):
 
 
 def out_name():
+    """Cuts are named for the cut; variants hang off the base cut's name."""
+    if CUE.get("cut"):
+        return f'formula-dynamics-aventador-{CUE["cut"]}-9x16.mp4'
     v = CUE.get("variant", "")
     suffix = "" if not v or v.startswith("a-") else f"-{v}"
     return f"formula-dynamics-aventador-14s-9x16{suffix}.mp4"
@@ -96,6 +100,8 @@ def ease_in_out(x):
 def beat(t, name, fade_in=0.45, fade_out=0.40):
     """(opacity, entrance progress) for a named beat from cue.json."""
     start, end = CUE["beats"][name]
+    if start > DURATION:            # parked beat — this cut does not use it
+        return 0.0, 0.0
     if t < start or t > end:
         return 0.0, 0.0
     p = ease_out((t - start) / fade_in) if fade_in else 1.0
@@ -267,10 +273,13 @@ def cue_sheet():
             ("Build sheet", "build", " · ".join(r[1] for r in CUE["buildRows"])),
             ("CTA", "cta", os.path.basename(CUE["ctaOverlay"])),
             ("End card", "end", os.path.basename(CUE["endCard"]))]
-    v = CUE.get("variant", "base")
-    print(f'\n{CUE["car"]} — {DURATION:.2f}s @ {FPS}fps, {W}x{H}   [{v}]')
+    label = CUE.get("cut") or CUE.get("variant", "base")
+    print(f'\n{CUE["car"]} — {DURATION:.2f}s @ {FPS}fps, {W}x{H}   [{label}]')
+    if CUE.get("shotOrder"):
+        print(f'  shots {CUE["shotOrder"]} — re-cut plate {CUE["plate"]}')
     if CUE.get("variantAngle"):
-        print(f'  {CUE["variantAngle"]}\n')
+        print(f'  {CUE["variantAngle"]}')
+    print()
     print(f"{'ELEMENT':<14}{'IN':>7}{'OUT':>8}{'HOLD':>7}   CONTENT")
     for name, key, content in rows:
         a, b = CUE["beats"][key]
@@ -326,8 +335,9 @@ def main():
 
     if args.all:
         import glob
-        cues = [os.path.join(HERE, "cue.json")] + sorted(
-            glob.glob(os.path.join(HERE, "variants", "*.json")))
+        cues = ([os.path.join(HERE, "cue.json")]
+                + sorted(glob.glob(os.path.join(HERE, "variants", "*.json")))
+                + sorted(glob.glob(os.path.join(HERE, "cuts", "*.json"))))
         for c in cues:
             load_cue(c)
             if args.dry_run:

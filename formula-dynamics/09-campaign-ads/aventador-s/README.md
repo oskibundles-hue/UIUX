@@ -54,9 +54,48 @@ wheels, Stage 1 tune, lowered. No horsepower figures: the voice guide asks for
 specifics, and there is no dyno sheet for this car. Add one and the rows take
 numbers.
 
+## Two kinds of variation
+
+- **`cuts/` — different videos.** Different shot order, length and beat
+  structure, each with its own re-cut plate.
+- **`variants/` — same video, different message.** Only the hook and CTA change.
+
+Both are cue files and both render through `build_ad.py --cue`.
+`python3 build_ad.py --all` renders everything.
+
+## Cuts
+
+`recut.py` is the half `AUTO-EDIT.md` says the overlay tool doesn't do: it cuts
+footage. `shots.json` lists the source's 13 shots (from ffmpeg scene detection,
+confirmed against a contact sheet), so a re-cut is a list of shot **ids** rather
+than timecodes.
+
+| Cut | Length | Shots | Structure |
+|---|---|---|---|
+| base | 14.04s | all, in order | Hook → build sheet → CTA → end card |
+| **detail-walk** | 11.24s | `8,0,2,3,7,10,11,12` | Opens on the **redline**, walks the detail shots — sill, wheel, paddle — then reveals the car. Hook is "THE DETAILS / ARE THE BUILD.", build heading "FITTED IN-HOUSE". |
+| **6s-preroll** | 6.04s | `11,12` | Hero shot into the closer. Hook straight to the ask — no ticker, no build sheet. There is no room for a second idea at six seconds. |
+
+```bash
+python3 recut.py --list                        # the shot list
+python3 recut.py --all                         # build every cut's plate
+python3 build_ad.py --cue cuts/cue-6s-preroll.json
+```
+
+A new cut is a file in `cuts/` with a `shotOrder`, a `plate` path, a `duration`
+matching the shots, and its own `beats`. `recut.py` warns if the duration and
+the shot total disagree. A beat parked at `99` is off for that cut, which is how
+the 6s version drops the ticker and build sheet.
+
+**Audio on a re-cut.** The engine note runs continuously in the source, so
+splicing it with the picture would jump at every cut. The re-cut plates take an
+unbroken audio bed from the head of the source instead, trimmed to length — it
+stays smooth under re-ordered picture, and it is going under music anyway. It is
+deliberately not in sync with the re-ordered shots.
+
 ## Variations
 
-Four cuts of the same ad. **Footage, build sheet, timings and layout are
+Four versions of the base cut. **Footage, build sheet, timings and layout are
 identical** — only the hook and the CTA change, so a test isolates the message
 rather than the edit.
 
