@@ -1,6 +1,7 @@
 import React from "react";
 import { Composition } from "remotion";
 import { Reel, type ReelProps } from "./Reel";
+import { Motion, type MotionProps } from "./Motion";
 
 const FPS = 29.97;
 const SECONDS = 32.1;
@@ -49,6 +50,14 @@ export const RemotionRoot: React.FC = () => (
       fps={FPS} width={1080} height={1920}
       defaultProps={mimic}
       calculateMetadata={fromProps}
+    />
+    <Composition
+      id="Motion4K"
+      component={Motion}
+      durationInFrames={Math.round(FPS * SECONDS)}
+      fps={FPS} width={2160} height={3840}
+      defaultProps={{ src: "clip.mp4", words: [] } as MotionProps}
+      calculateMetadata={({ props }: { props: MotionProps }) => ({ durationInFrames: Math.round(FPS * (props.durationSeconds ?? SECONDS)) })}
     />
     <Composition
       id="StyleProof"
