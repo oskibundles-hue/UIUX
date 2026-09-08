@@ -127,3 +127,57 @@ creator-kit zip contains a *Supercar Experience* overlay pack, not a Formula
 Dynamics one. That's why I rebuilt the FD mark and overlay set from scratch
 this session. If a real FD overlay pack exists somewhere else, send it and
 I'll match to it instead.
+
+---
+
+## Standing practice: harvest audio from our own footage
+
+As footage lands in Dropbox and reels get made, the source clips are also a
+**sound library** — real exhaust notes, shop ambience, tool and impact
+sounds. Formula Dynamics' own audio beats any downloadable library for
+Formula Dynamics' own ads, and it costs nothing but processing.
+
+**Verified 2026-09-08:** the CloudFront masters carry AAC 48 kHz stereo
+192 kbps audio. A probe of "09 gt3 rolling in" measured peak -4.5 dBFS with
+**82.7% of its energy between 30 and 250 Hz** — an engine/exhaust signature,
+not room tone. The material is real.
+
+### Where the usable audio is
+
+| Source | What's in it |
+|---|---|
+| CloudFront car clips (09 gt3 rolling in, 18 red supercar, 13 black car on the lift, 17 matte black wheel work, the SF90 reels) | Engine and exhaust |
+| Dropbox `01 Raw D-Log/` | Shop and tool sounds — drilling, trim cutting, forklift, epoxy |
+| FD campaign ads on `claude/formula-dynamics-ad-qpuh4m` (765LT, Aventador S) | Source clips' own engine audio |
+
+### Method
+
+The masters are 2160×3840 at ~49 Mbps, so files run 250–560 MB and the audio
+is interleaved — the whole file has to come down to get all of it. Two
+practical constraints:
+
+- **Work one file at a time**: download, extract audio, delete the video,
+  move on. Disk is a fixed per-session allowance.
+- **ffmpeg cannot stream these URLs through the agent proxy.** `curl` the
+  file to disk first, then extract. A direct `ffmpeg -i <url>` returns no
+  streams and looks like "no audio" when the audio is fine.
+
+Then find the clean isolated moments, denoise, trim, normalise to -3 dBFS /
+48 kHz, and add them to `sfx/` under an `fd_` prefix so they sit alongside
+the designed and Kenney-sourced groups.
+
+### What to capture on new shoots
+
+Record sound deliberately rather than taking whatever the camera got:
+
+- **Start-up, idle, 2–3 revs**, valve closed then open, from ~10 ft rear
+  quarter. This is the single most valuable recording available.
+- **Cold start** separately — it has character an idle doesn't.
+- **Shop ambience** with nothing happening, 30 s. Useful as a bed under
+  anything.
+- **Tools in isolation** — impact wrench, torque click, ratchet, lift
+  ascending, a wheel nut dropping on concrete.
+- **Door and panel sounds** — an exotic's door closing is a signature.
+
+Away from traffic and compressor noise where possible; a clean recording can
+be layered, a noisy one can only be filtered.
