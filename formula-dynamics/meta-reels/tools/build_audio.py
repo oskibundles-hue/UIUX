@@ -96,6 +96,34 @@ CUES = {
         ("impact_low",    12.42, 0.70),
         ("pop",           13.12, 0.50),
     ],
+    "FD-R6-Wheels-NVForged": [
+        ("riser_air",      0.22, 0.55),
+        ("impact_low",     0.82, 0.80),
+        ("whoosh_short",   3.75, 0.50),
+        ("hit_snap",       4.68, 0.60),   # NV Forged badge
+        ("ui_click_hard",  5.22, 0.38), ("ui_click_hard", 5.52, 0.38),
+        ("ui_click_hard",  5.82, 0.38),
+        ("whoosh_short",   8.78, 0.50),
+        ("impact_deep",    9.62, 0.72),   # the wheel drops into the arch
+        ("ui_click_soft", 10.42, 0.40),
+        ("reverse_whoosh",12.05, 0.45),
+        ("impact_low",    12.42, 0.70),
+        ("pop",           13.12, 0.50),
+    ],
+    "FD-R7-Body-Kits": [
+        ("riser_air",      0.22, 0.55),
+        ("impact_low",     0.82, 0.80),
+        ("whoosh_short",   3.65, 0.50),
+        ("swish",          4.12, 0.48),   # the weave wipes on
+        ("swish",          4.85, 0.36),   # sheen crosses
+        ("whoosh_short",   8.78, 0.50),
+        ("pop",            9.30, 0.42), ("pop", 9.52, 0.42),
+        ("pop",            9.74, 0.42), ("pop", 9.96, 0.42),
+        ("ding",          10.35, 0.50),
+        ("reverse_whoosh",12.05, 0.45),
+        ("impact_low",    12.42, 0.70),
+        ("pop",           13.12, 0.50),
+    ],
 }
 
 DURATION = 15.0

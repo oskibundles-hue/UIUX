@@ -14,7 +14,7 @@ spec, not inferred.
 
 ## The reels
 
-All five are **1080×1920, 30 fps, H.264 High, yuv420p, 15.0s** — Meta's
+All seven are **1080×1920, 30 fps, H.264 High, yuv420p, 15.0s** — Meta's
 recommended Reels/Stories ad spec, and each sits well under the 4 GB cap.
 
 | # | File | Angle | Hook | CTA |
@@ -24,9 +24,12 @@ recommended Reels/Stories ad spec, and each sits well under the 4 GB cap.
 | R3 | `FD-R3-PPF.mp4` | Paint protection film | "The paint is the expensive part." | Book PPF |
 | R4 | `FD-R4-Builds.mp4` | Complete builds | "A build isn't a parts list." | Start a Build |
 | R5 | `FD-R5-20-Years.mp4` | Brand authority | "20+ years. One obsession." | Shop Now |
+| R6 | `FD-R6-Wheels-NVForged.mp4` | Wheels / NV Forged | "Wheels are the first thing anyone sees." | Shop Wheels |
+| R7 | `FD-R7-Body-Kits.mp4` | Body kits / aero | "Aero isn't decoration." | Shop Body Kits |
 
-R5 is the top-of-funnel/prospecting ad. R1–R4 are service-specific and work
-better for retargeting or interest-targeted sets.
+R5 is the top-of-funnel/prospecting ad. The rest are service-specific and
+work better for retargeting or interest-targeted sets. R1, R2, R6 and R7
+cover all four `priorityServices` — exhaust, tuning, wheels and body kits.
 
 ### Built for muted autoplay, with sound design on top
 
@@ -201,19 +204,28 @@ The brightness-survey rule doesn't apply yet — these are generated on a black
 ground, not footage. It becomes the first step the moment product B-roll goes
 in behind them.
 
-## Two gaps worth your call
+## Service coverage and partner claims
 
-**1. Service coverage vs stated priorities.** `brand-tokens.json` lists
-`priorityServices` as **body-kits, exhaust, wheels, tuning**. This set covers
-exhaust and tuning, but I built PPF and Builds instead of **body kits** and
-**wheels**. PPF is a listed service, just not a top-four one. Two more reels
-would close that — say the word.
+All four `priorityServices` are now covered: exhaust (R1), tuning (R2),
+wheels (R6) and body kits (R7). PPF (R3) and complete builds (R4) sit
+alongside them, and R5 carries the brand. The service list is expected to
+grow as the shop does, so `scenes/` is designed to take new reels without
+touching the engine.
 
-**2. Partners.** The kit's `partners` list is NV Forged, iPE Exhaust and Ryft
-Springs. The Instagram bio you sent says "Larini Systems North American
-Distributor", and R1 is built on that. The bio is the more recent source so I
-kept Larini, but the kit's partner list should probably be updated to match —
-or tell me if Larini has been superseded and I'll re-cut R1.
+**Partner claims, confirmed 2026-09-08.** Formula Dynamics offers the full
+service list, but the partner brands actually fitted in real work to date are
+**NV Forged, iPE and Ryft**. That distinction drives two decisions:
+
+- **R6 names NV Forged** and says "fitted in-house by" — a delivered
+  relationship, not a catalogue one.
+- **R7 names no partner at all.** None of the three delivered partners supply
+  aero, so naming one there would outrun the work. Add one when that changes.
+- **R1 keeps Larini**, on the Instagram bio's "Larini Systems North American
+  Distributor". That is a distributorship claim and is accurate as written;
+  it does not assert completed installs.
+
+The kit's `partners` list in `brand-tokens.json` omits Larini. Worth adding
+so the two sources agree.
 
 The kit's official service sublines, for any future reel:
 
