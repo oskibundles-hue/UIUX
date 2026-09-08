@@ -203,3 +203,20 @@ and `autocut.py` grew `--post` for an extra filter after the grade.
 - **To do:** install the `/watch` video plugin (`claude plugin marketplace add bradautomates/claude-video`, then `claude plugin install watch@claude-video`). It costs ~40 tokens a turn in the listing, ~3k when invoked, and ~1.5k per extracted frame. Local-file transcripts need `GROQ_API_KEY` or `OPENAI_API_KEY` in `~/.config/watch/.env`.
 - **Motion graphics preferences (Omarie, 2026-09-08):** keep the chapter bar (start-to-end progress with named chapters), the SF90 spec callouts, the kinetic intro and the card outro. Drop the "send this to your friend" CTA. Captions stay one size: no oversized key word. Grade every new cut in the vlog look.
 - **To do:** replace the grade reference in Dropbox `03 Grade Reference` and rebuild `hm/ref_*.ppm` from it (reminder set for 2026-09-08 20:00 UTC).
+
+## Whose voice is it
+
+`scripts/who_speaks.py` tags every transcript segment as Omarie or someone else using a
+speaker embedding (Resemblyzer) compared to `voice/omarie_profile.json`. The profile was
+built on 2026-09-08 from 14 confirmed segments of his voice; his lines score 0.72–0.89,
+the one other speaker in the session scored 0.64. Threshold 0.70.
+
+```
+python3 scripts/who_speaks.py tag <audio> <transcript.json> --profile voice/omarie_profile.json -o drop.json
+python3 scripts/who_speaks.py build <audio> <transcript.json> --not 8.8-13.3 --profile voice/omarie_profile.json -o voice/omarie_profile.json   # keep teaching it
+```
+
+`drop.json` feeds `rewords.py` so captions only follow his voice. Re-run `build` with
+`--not` ranges whenever he confirms a mis-tag; the profile blends the new segments in.
+Setup on a fresh box: `pip install torch --index-url https://download.pytorch.org/whl/cpu librosa scipy`,
+`pip install --no-deps resemblyzer`, and a stub `webrtcvad.py` (see notes) because the real one needs a compiler.

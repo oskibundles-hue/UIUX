@@ -33,7 +33,7 @@ def embed_all(enc, wav, segs):
 def overlaps(a, b, ranges): return any(lo < b and a < hi for lo, hi in ranges)
 
 ap = argparse.ArgumentParser(); ap.add_argument("mode", choices=["build", "tag"]); ap.add_argument("audio"); ap.add_argument("transcript")
-ap.add_argument("--not", dest="not_ranges", nargs="*", default=[]); ap.add_argument("--profile"); ap.add_argument("--threshold", type=float, default=0.72); ap.add_argument("-o", "--out")
+ap.add_argument("--not", dest="not_ranges", nargs="*", default=[]); ap.add_argument("--profile"); ap.add_argument("--threshold", type=float, default=0.70); ap.add_argument("-o", "--out")
 a = ap.parse_args()
 enc = VoiceEncoder("cpu", verbose=False); wav = load_audio(a.audio); segs = segments(a.transcript); embs = embed_all(enc, wav, segs)
 if a.mode == "build":
