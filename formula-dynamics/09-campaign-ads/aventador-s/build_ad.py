@@ -10,10 +10,15 @@ ticker come from fd_hud, as on the Roma and 765LT edits. No callouts: this clip
 cuts roughly every second, and a leader line anchored to the car goes invalid
 at the next cut.
 
-    python3 build_ad.py                    # full render -> exports/
-    python3 build_ad.py --dry-run          # cue sheet, render nothing
-    python3 build_ad.py --stills 2.4 6.4   # preview composited frames
-    python3 build_ad.py --safe             # add safe-zone guides to stills
+    python3 build_ad.py                       # base cut -> exports/
+    python3 build_ad.py --cue variants/...    # a variant
+    python3 build_ad.py --all                 # base + every variant
+    python3 build_ad.py --dry-run             # cue sheet, render nothing
+    python3 build_ad.py --stills 2.4 6.4      # preview composited frames
+    python3 build_ad.py --safe                # add safe-zone guides to stills
+
+Variants live in variants/. Each is a full cue file that changes only the hook
+and the CTA, so a test isolates the message rather than the edit.
 """
 
 import argparse
@@ -33,7 +38,8 @@ import fd_hud as HUD          # noqa: E402
 import fd_render as R         # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-CUE = json.load(open(os.path.join(HERE, "cue.json")))
+CUE_PATH = os.path.join(HERE, "cue.json")
+CUE = json.load(open(CUE_PATH))
 PLATE = os.path.join(HERE, "source", "plate-1080x1920.mp4")
 OUT_DIR = os.path.join(HERE, "exports")
 FRAME_DIR = os.path.join(HERE, ".frames")
@@ -50,6 +56,26 @@ X1 = round(W * (1 - L["marginRightFrac"]))
 BAND_TOP = round(H * L["bandTopFrac"])
 
 SHOW_SAFE = False
+
+
+def load_cue(path):
+    """Swap in a different cue file and reset the layer cache."""
+    global CUE, CUE_PATH, W, H, FPS, DURATION, X0, X1, BAND_TOP
+    CUE_PATH = path
+    CUE = json.load(open(path))
+    W, H = CUE["width"], CUE["height"]
+    FPS, DURATION = CUE["fps"], CUE["duration"]
+    lay = CUE["layout"]
+    X0 = round(W * lay["marginLeftFrac"])
+    X1 = round(W * (1 - lay["marginRightFrac"]))
+    BAND_TOP = round(H * lay["bandTopFrac"])
+    _cache.clear()
+
+
+def out_name():
+    v = CUE.get("variant", "")
+    suffix = "" if not v or v.startswith("a-") else f"-{v}"
+    return f"formula-dynamics-aventador-14s-9x16{suffix}.mp4"
 
 
 # ---------------------------------------------------------------------------
@@ -241,7 +267,10 @@ def cue_sheet():
             ("Build sheet", "build", " · ".join(r[1] for r in CUE["buildRows"])),
             ("CTA", "cta", os.path.basename(CUE["ctaOverlay"])),
             ("End card", "end", os.path.basename(CUE["endCard"]))]
-    print(f'\n{CUE["car"]} — {DURATION:.2f}s @ {FPS}fps, {W}x{H}\n')
+    v = CUE.get("variant", "base")
+    print(f'\n{CUE["car"]} — {DURATION:.2f}s @ {FPS}fps, {W}x{H}   [{v}]')
+    if CUE.get("variantAngle"):
+        print(f'  {CUE["variantAngle"]}\n')
     print(f"{'ELEMENT':<14}{'IN':>7}{'OUT':>8}{'HOLD':>7}   CONTENT")
     for name, key, content in rows:
         a, b = CUE["beats"][key]
@@ -287,8 +316,25 @@ def main():
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--safe", action="store_true")
     ap.add_argument("--crf", type=int, default=20)
+    ap.add_argument("--cue", help="cue file to render (default cue.json)")
+    ap.add_argument("--all", action="store_true",
+                    help="render the base cut and every file in variants/")
     args = ap.parse_args()
     SHOW_SAFE = args.safe
+    if args.cue:
+        load_cue(os.path.abspath(args.cue))
+
+    if args.all:
+        import glob
+        cues = [os.path.join(HERE, "cue.json")] + sorted(
+            glob.glob(os.path.join(HERE, "variants", "*.json")))
+        for c in cues:
+            load_cue(c)
+            if args.dry_run:
+                cue_sheet()
+            else:
+                render_one(args.crf)
+        return
 
     if args.dry_run:
         cue_sheet()
@@ -303,8 +349,13 @@ def main():
             print(p)
         return
 
+    render_one(args.crf)
+
+
+def render_one(crf):
     if not os.path.exists(PLATE):
         sys.exit(f"missing footage plate: {PLATE}")
+    os.makedirs(OUT_DIR, exist_ok=True)
 
     cue_sheet()
     if os.path.isdir(FRAME_DIR):
@@ -318,10 +369,11 @@ def main():
         if i % 60 == 0:
             print(f"  frame {i}/{n}", flush=True)
 
-    out = os.path.join(OUT_DIR, "formula-dynamics-aventador-14s-9x16.mp4")
+    out = os.path.join(OUT_DIR, out_name())
     print("compositing...")
-    composite(out, crf=args.crf)
-    still(12.6, os.path.join(OUT_DIR, "poster.jpg"))
+    composite(out, crf=crf)
+    if not CUE.get("variant", "").startswith(("b-", "c-", "d-")):
+        still(12.6, os.path.join(OUT_DIR, "poster.jpg"))
     print(out)
 
 

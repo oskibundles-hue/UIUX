@@ -54,6 +54,39 @@ wheels, Stage 1 tune, lowered. No horsepower figures: the voice guide asks for
 specifics, and there is no dyno sheet for this car. Add one and the rows take
 numbers.
 
+## Variations
+
+Four cuts of the same ad. **Footage, build sheet, timings and layout are
+identical** — only the hook and the CTA change, so a test isolates the message
+rather than the edit.
+
+| Variant | Hook | CTA | Angle |
+|---|---|---|---|
+| **a** (base) | FULL AERO. / NOTHING LEFT STOCK. | BOOK YOUR BUILD | Booking — highest intent, for an audience that already knows the shop |
+| **b** | THIS IS WHAT IT / SHOULD HAVE BEEN. | GET A QUOTE | Quote — sold on the look, now wants a number |
+| **c** | THE STANCE / CHANGED EVERYTHING. | WHAT WOULD YOU FIT NEXT? | Engagement — drives comments, which drives reach |
+| **d** | CARBON, FROM / EVERY ANGLE. | SEE WHAT FITS YOUR CAR | Fitment — likes the work, hasn't pictured it on their own car |
+
+Every hook is from the body-kit section of
+`05-copy-library/hooks-and-captions.md`; every CTA is a stock overlay from
+`03-overlays/cta-captions/`, grouped by intent exactly as `fd_brand.CTA_GROUPS`
+describes. Run **c** to widen the audience, then retarget with **a**.
+
+```bash
+python3 build_ad.py --all                              # base + every variant
+python3 build_ad.py --cue variants/cue-b-get-a-quote.json
+python3 build_ad.py --all --dry-run                    # all four cue sheets
+```
+
+Adding a fifth is a new file in `variants/` — copy one, change `hook`,
+`ctaOverlay`, `variant` and `variantAngle`. Nothing else needs touching, and
+Remotion renders the same variants:
+
+```bash
+cd remotion && ./prepare-assets.sh ../variants/cue-c-what-would-you-fit.json
+npm run render
+```
+
 ## Comparing the two renderers
 
 Measured in this container, same 421 frames:
