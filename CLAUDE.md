@@ -127,3 +127,17 @@ positioned by `left: start/duration` and `width: (end-start)/duration`.
 Apply the same treatment to anything else with a time axis — render pipelines,
 build stages, campaign schedules. Where there is no time axis, keep the visual
 language and skip the timeline.
+
+### Keeping the artifact gallery tidy
+
+One page per job. Before publishing a new artifact, check the gallery for one
+that already covers the ground and update that instead — a second page with the
+same links is worse than no page, because the two drift.
+
+When two pages do overlap, fold the unique content into the newer one and say
+plainly which page is now redundant. Never assume overlap from the title: read
+both and compare what they actually list. Two cuts of the same footage are
+different deliverables, not duplicates.
+
+Artifacts cannot be deleted from here — only the account holder can, from the
+gallery. So the merge ends with a named list of what is safe to remove.
