@@ -196,3 +196,8 @@ reference frames in `hm/`; the difference is how hard they lean on them.
 
 Under the hood `match_grade.py` grew `--grey-target`, `--lift` and `--knee`,
 and `autocut.py` grew `--post` for an extra filter after the grade.
+
+## Working notes (2026-09-08)
+
+- **Disk on the remote box is ~8 GB usable.** Rebuilding a series means pulling Dropbox raws in waves (single-use links, 15-minute expiry), cutting, deleting each raw at once, and dropping a local final only after the hosted copy answers HTTP 200 with a matching Content-Length. `cut_clip.sh` is deterministic from the audio, so re-cuts land on the original timeline and the existing transcripts stay valid (checked within 0.2 s on all 18 clips).
+- **To do:** install the `/watch` video plugin (`claude plugin marketplace add bradautomates/claude-video`, then `claude plugin install watch@claude-video`). It costs ~40 tokens a turn in the listing, ~3k when invoked, and ~1.5k per extracted frame. Local-file transcripts need `GROQ_API_KEY` or `OPENAI_API_KEY` in `~/.config/watch/.env`.
