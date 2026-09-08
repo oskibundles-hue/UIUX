@@ -13,14 +13,23 @@ loadFonts();
  * up, the lower third is a skewed bar with a light sweep, and the outro
  * cascades the CTA letter by letter under the end card.
  */
-export type Callout = { at: number; hold: number; x: number; y: number; label: string; value: number; suffix?: string; side?: "left" | "right" };
+export type Callout = { at: number; hold: number; x: number; y: number; label: string; value?: number; text?: string; suffix?: string; side?: "left" | "right" };
+export type LowerThirdSpec = { at: number; hold: number; title: string; sub: string };
+export type Stamp = { at: number; hold: number; text: string };
 export type MotionProps = {
   src: string; words: Word[]; durationSeconds?: number; overlayOnly?: boolean;
   title?: { eyebrow: string; line1: string; line2: string; until: number };
   callouts?: Callout[];
-  lowerThird?: { at: number; hold: number; title: string; sub: string };
+  lowerThird?: LowerThirdSpec;
+  lowerThirds?: LowerThirdSpec[];
+  /** Rubber-stamp pops: rotated double-border badge with an overshoot. */
+  stamps?: Stamp[];
+  /** Diagonal wipe bands at every chapter change after the first. */
+  wipes?: boolean;
+  /** true (default) sets one key word large per phrase; false keeps every word the same size. */
+  keyWord?: boolean;
   chapters?: { at: number; label: string }[];
-  outro?: { at: number; cta: string; endCardSrc?: string };
+  outro?: { at: number; cta?: string; endCardSrc?: string };
   emphasis?: string[];
   /** Timeline positions of the edit's cuts; a caption phrase never spans one. */
   cuts?: { at: number }[];
@@ -70,7 +79,7 @@ const toPhrases = (words: Word[], breaks: number[]) => {
   if (cur.length) out.push(cur);
   return out;
 };
-const KineticCaptions: React.FC<{ words: Word[]; emphasis: string[]; after: number; until: number; breaks: number[] }> = ({ words, emphasis, after, until, breaks }) => {
+const KineticCaptions: React.FC<{ words: Word[]; emphasis: string[]; after: number; until: number; breaks: number[]; keyWord: boolean }> = ({ words, emphasis, after, until, breaks, keyWord }) => {
   const frame = useCurrentFrame(); const { fps, height: H, width: W } = useVideoConfig(); const s = frame / fps;
   if (s >= until) return null;
   const phrases = toPhrases(words.filter((w) => w.start >= after), breaks);
@@ -81,12 +90,12 @@ const KineticCaptions: React.FC<{ words: Word[]; emphasis: string[]; after: numb
   const emph = ph.find((w) => emphasis.includes(clean(w.text))); if (emph) key = emph;
   const end = ph[ph.length - 1].end;
   const out = interpolate(s, [end + 0.15, end + 0.45], [0, 1], { ...clamp, easing: Easing.in(Easing.quad) });
-  const small = H * 0.026, bigF = H * 0.082;
+  const small = keyWord ? H * 0.026 : H * 0.031, bigF = H * 0.082;
   return (
     <div style={{ position: "absolute", left: W * 0.067, right: W * 0.09, top: H * 0.62, display: "flex", flexWrap: "wrap", alignItems: "baseline",
                   gap: `${H * 0.006}px ${W * 0.018}px`, opacity: 1 - out, transform: `translateY(${-out * H * 0.05}px)` }}>
       {ph.map((w, i) => {
-        const isKey = w === key;
+        const isKey = keyWord && w === key;
         const inS = spring({ frame: frame - Math.round(w.start * fps), fps, config: { damping: 12, stiffness: 240, mass: 0.7 }, durationInFrames: 12 });
         const active = s >= w.start && s < w.end;
         const under = active ? interpolate(s, [w.start, Math.max(w.start + 0.12, w.end)], [0, 1], clamp) : s >= w.end ? 1 : 0;
@@ -112,7 +121,8 @@ const CalloutView: React.FC<{ c: Callout }> = ({ c }) => {
   const dot = spring({ frame: f0, fps, config: { damping: 10, stiffness: 300 }, durationInFrames: 10 });
   const line = interpolate(f0, [4, 18], [0, 1], { ...clamp, easing: Easing.out(Easing.cubic) });
   const box = spring({ frame: f0 - 12, fps, config: { damping: 14, stiffness: 160 }, durationInFrames: 16 });
-  const count = f0 >= 40 ? c.value : interpolate(f0, [14, 40], [0, c.value], { ...clamp, easing: Easing.out(Easing.exp) });
+  const val = c.value ?? 0;
+  const count = f0 >= 40 ? val : interpolate(f0, [14, 40], [0, val], { ...clamp, easing: Easing.out(Easing.exp) });
   const out = interpolate(s, [c.at + c.hold, c.at + c.hold + 0.35], [1, 0], clamp);
   const pulse = 1 + 0.25 * Math.sin(f0 / 4);
   const x = c.x * W, y = c.y * H, right = (c.side ?? "right") === "right";
@@ -132,9 +142,13 @@ const CalloutView: React.FC<{ c: Callout }> = ({ c }) => {
                     background: "rgba(10,10,10,.78)", borderLeft: right ? `${r}px solid ${GOLD}` : undefined, borderRight: right ? undefined : `${r}px solid ${GOLD}`,
                     padding: `${num * 0.18}px ${num * 0.35}px`, borderRadius: r, boxShadow: "0 10px 40px rgba(0,0,0,.5)" }}>
         <div style={{ fontFamily: ARCHIVO, fontWeight: 600, fontSize: lab, letterSpacing: "0.16em", textTransform: "uppercase", color: "#cfcfcf" }}>{c.label}</div>
-        <div style={{ fontFamily: ANTON, fontSize: num, lineHeight: 1.05, color: "#fff", fontVariantNumeric: "tabular-nums" }}>
-          {c.value >= 100 ? Math.round(count) : count.toFixed(1)}<span style={{ color: GOLD, fontSize: num * 0.55, marginLeft: num * 0.1 }}>{c.suffix ?? ""}</span>
-        </div>
+        {c.text != null ? (
+          <div style={{ fontFamily: ANTON, fontSize: num * 0.62, lineHeight: 1.1, color: "#fff", textTransform: "uppercase", letterSpacing: "0.02em", whiteSpace: "nowrap" }}>{c.text}</div>
+        ) : (
+          <div style={{ fontFamily: ANTON, fontSize: num, lineHeight: 1.05, color: "#fff", fontVariantNumeric: "tabular-nums" }}>
+            {val >= 100 ? Math.round(count) : count.toFixed(1)}<span style={{ color: GOLD, fontSize: num * 0.55, marginLeft: num * 0.1 }}>{c.suffix ?? ""}</span>
+          </div>
+        )}
       </div>
     </div>
   );
@@ -184,19 +198,19 @@ const ChapterBar: React.FC<{ chapters: { at: number; label: string }[] }> = ({ c
 };
 
 /* ---------- Outro: end card fades up, CTA cascades letter by letter ---------- */
-const Outro: React.FC<{ o: { at: number; cta: string; endCardSrc?: string } }> = ({ o }) => {
+const Outro: React.FC<{ o: { at: number; cta?: string; endCardSrc?: string } }> = ({ o }) => {
   const frame = useCurrentFrame(); const { fps, height: H, width: W } = useVideoConfig(); const s = frame / fps;
   if (s < o.at) return null;
   const f0 = frame - Math.round(o.at * fps);
   const card = interpolate(f0, [0, 18], [0, 1], clamp);
-  const fs = H * 0.034; const g0 = o.cta.indexOf("SF90");
+  const cta = o.cta ?? ""; const fs = H * 0.034; const g0 = cta.indexOf("SF90");
   const wordsOut: { ch: string; i: number }[][] = []; let cur: { ch: string; i: number }[] = [];
-  o.cta.split("").forEach((ch, i) => { if (ch === " ") { wordsOut.push(cur); cur = []; } else cur.push({ ch, i }); }); if (cur.length) wordsOut.push(cur);
+  cta.split("").forEach((ch, i) => { if (ch === " ") { wordsOut.push(cur); cur = []; } else cur.push({ ch, i }); }); if (cur.length) wordsOut.push(cur);
   return (
     <div style={{ position: "absolute", inset: 0 }}>
       <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.62)", opacity: card }} />
       {o.endCardSrc ? <Img src={staticFile(o.endCardSrc)} style={{ position: "absolute", inset: 0, width: W, height: H, opacity: card, transform: "scale(0.84)", transformOrigin: "50% 16%", WebkitMaskImage: "linear-gradient(to bottom, #000 66%, transparent 68.5%), linear-gradient(to right, transparent 0%, #000 7%, #000 93%, transparent 100%)", maskImage: "linear-gradient(to bottom, #000 66%, transparent 68.5%), linear-gradient(to right, transparent 0%, #000 7%, #000 93%, transparent 100%)", WebkitMaskComposite: "source-in", maskComposite: "intersect" }} /> : null}
-      <div style={{ position: "absolute", left: W * 0.067, right: W * 0.09, top: H * 0.665, padding: `${fs * 0.35}px ${fs * 0.5}px`, background: "rgba(8,8,8,.55)", borderLeft: `${fs * 0.16}px solid ${GOLD}`, opacity: card, fontFamily: ANTON, fontSize: fs, justifyContent: "flex-start", textAlign: "left", lineHeight: 1.05, textTransform: "uppercase", color: "#fff",
+      {cta ? <div style={{ position: "absolute", left: W * 0.067, right: W * 0.09, top: H * 0.665, padding: `${fs * 0.35}px ${fs * 0.5}px`, background: "rgba(8,8,8,.55)", borderLeft: `${fs * 0.16}px solid ${GOLD}`, opacity: card, fontFamily: ANTON, fontSize: fs, justifyContent: "flex-start", textAlign: "left", lineHeight: 1.05, textTransform: "uppercase", color: "#fff",
                     WebkitTextStroke: `${fs * 0.04}px rgba(0,0,0,.9)`, paintOrder: "stroke fill", textShadow: "0 8px 30px rgba(0,0,0,.7)", display: "flex", flexWrap: "wrap" }}>
         {wordsOut.map((wd, wi) => (
           <span key={wi} style={{ display: "inline-block", whiteSpace: "nowrap", marginRight: fs * 0.28 }}>
@@ -206,19 +220,52 @@ const Outro: React.FC<{ o: { at: number; cta: string; endCardSrc?: string } }> =
             })}
           </span>
         ))}
-      </div>
+      </div> : null}
     </div>
   );
 };
 
-export const Motion: React.FC<MotionProps> = ({ src, words, overlayOnly = false, title, callouts, lowerThird, chapters, outro, emphasis = [], cuts = [] }) => (
+/* ---------- Wipes: two diagonal bands sweep the frame at each chapter change ---------- */
+const Wipes: React.FC<{ ats: number[] }> = ({ ats }) => {
+  const frame = useCurrentFrame(); const { fps, width: W, height: H } = useVideoConfig(); const s = frame / fps;
+  const a = ats.find((t) => s >= t && s < t + 0.7); if (a == null) return null;
+  const p = (s - a) / 0.7;
+  const x1 = interpolate(p, [0, 1], [-1.4, 1.4], { ...clamp, easing: Easing.inOut(Easing.cubic) });
+  const x2 = interpolate(p, [0.08, 1], [-1.4, 1.4], { ...clamp, easing: Easing.inOut(Easing.cubic) });
+  const band = (x: number, color: string, w: number) => (
+    <div style={{ position: "absolute", top: -H * 0.2, height: H * 1.4, width: W * w, left: x * W, background: color, transform: "skewX(-18deg)", boxShadow: "0 0 80px rgba(0,0,0,.4)" }} />
+  );
+  return <div style={{ position: "absolute", inset: 0, overflow: "hidden", pointerEvents: "none" }}>{band(x2, RED, 0.5)}{band(x1, GOLD, 0.34)}</div>;
+};
+
+/* ---------- Stamp: rotated double-border badge slammed on with an overshoot ---------- */
+const StampView: React.FC<{ st: Stamp }> = ({ st }) => {
+  const frame = useCurrentFrame(); const { fps, width: W, height: H } = useVideoConfig(); const s = frame / fps;
+  if (s < st.at || s > st.at + st.hold + 0.3) return null;
+  const f0 = frame - Math.round(st.at * fps);
+  const k = spring({ frame: f0, fps, config: { damping: 9, stiffness: 320, mass: 0.8 }, durationInFrames: 14 });
+  const out = interpolate(s, [st.at + st.hold, st.at + st.hold + 0.3], [1, 0], clamp);
+  const fs = H * 0.042, pad = fs * 0.45;
+  return (
+    <div style={{ position: "absolute", left: "50%", top: H * 0.47, transform: `translate(-50%,-50%) rotate(-8deg) scale(${1.9 - 0.9 * k})`, opacity: Math.min(k * 1.4, 1) * out,
+                  border: `${fs * 0.12}px solid ${GOLD}`, outline: `${fs * 0.05}px solid ${GOLD}`, outlineOffset: fs * 0.12, padding: `${pad * 0.6}px ${pad}px`, borderRadius: fs * 0.15,
+                  background: "rgba(10,10,10,.35)", boxShadow: "0 20px 60px rgba(0,0,0,.5)", whiteSpace: "nowrap" }}>
+      <div style={{ fontFamily: ANTON, fontSize: fs, lineHeight: 1, color: GOLD, textTransform: "uppercase", letterSpacing: "0.08em", textShadow: "0 4px 18px rgba(0,0,0,.6)" }}>{st.text}</div>
+    </div>
+  );
+};
+
+export const Motion: React.FC<MotionProps> = ({ src, words, overlayOnly = false, title, callouts, lowerThird, lowerThirds, stamps, wipes = false, keyWord = true, chapters, outro, emphasis = [], cuts = [] }) => (
   <AbsoluteFill style={{ backgroundColor: overlayOnly ? "transparent" : "#000" }}>
     {overlayOnly ? null : <OffthreadVideo src={src.startsWith("http") ? src : staticFile(src)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />}
     {chapters?.length ? <ChapterBar chapters={chapters} /> : null}
     {title ? <TitleReveal t={title} /> : null}
-    <KineticCaptions words={words} emphasis={emphasis} after={title?.until ?? 0} until={outro?.at ?? 1e9} breaks={cuts.map((c) => c.at)} />
+    <KineticCaptions words={words} emphasis={emphasis} after={title?.until ?? 0} until={outro?.at ?? 1e9} breaks={cuts.map((c) => c.at)} keyWord={keyWord} />
     {(callouts ?? []).map((c, i) => <CalloutView key={i} c={c} />)}
     {lowerThird ? <LowerThird l={lowerThird} /> : null}
+    {(lowerThirds ?? []).map((l, i) => <LowerThird key={i} l={l} />)}
+    {(stamps ?? []).map((st, i) => <StampView key={i} st={st} />)}
+    {wipes && chapters ? <Wipes ats={chapters.slice(1).map((c) => c.at)} /> : null}
     {outro ? <Outro o={outro} /> : null}
   </AbsoluteFill>
 );
