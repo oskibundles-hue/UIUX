@@ -96,3 +96,34 @@ Never push directly to `main`. Always:
 2. Commit changes
 3. Push branch: `git push -u origin <branch>`
 4. Create PR: `gh pr create`
+
+## Artifact Conventions
+
+Standing preference — applies to every artifact built in this repo, not just
+Formula Dynamics.
+
+**Keep the "fast cut" look.** Dark ground, Bebas Neue display, Barlow body,
+IBM Plex Mono for anything numeric, brand red as the single accent. Mono
+eyebrow labels, hairline rules, tabular figures. Section markers are numbered
+only where the content is genuinely a sequence.
+
+**Any artifact that covers video gets a cue timeline.** Not a list of
+timecodes — an actual timeline: a mono time ruler, one labelled lane per
+element type (HOOK / BUG / PLATE / SPEC / HUD / CALLOUT / CTA / END), and bars
+positioned by `left: start/duration` and `width: (end-start)/duration`.
+
+- Take the numbers from `build_edit.py --dry-run`, never by hand. A timeline
+  that does not match the render is worse than no timeline.
+- Colour follows the element's role and is consistent across every film on the
+  page. Colour is never the only encoding: each bar sits in its own labelled
+  lane and carries its own text.
+- A bar too narrow for its label gets an index (1-5) with the full names in a
+  key line beneath, or its label set outside the bar. Never let a label clip
+  mid-word.
+- The timeline exists to make the layout rules visible as shapes: the hook
+  clears before the HUD, the HUD clears before the ask, the CTA never touches
+  the end card.
+
+Apply the same treatment to anything else with a time axis — render pipelines,
+build stages, campaign schedules. Where there is no time axis, keep the visual
+language and skip the timeline.
