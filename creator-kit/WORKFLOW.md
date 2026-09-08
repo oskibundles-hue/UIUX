@@ -229,3 +229,8 @@ Setup on a fresh box: `pip install torch --index-url https://download.pytorch.or
 - `plan_reel.py` now slides a window back when the only speech sits late in a take, and `--drop-dir` keeps other-voice lines from attracting the window. Before this, MR4 opened on 20 s of silence.
 - Any loop that runs ffmpeg or curl inside `while read` must read from fd 3 (`read -u 3 … done 3< list`) and give the tools `</dev/null`; twice today a tool swallowed the rest of the list.
 - Scores: MR1 96, MR2 97, MR3 91, MR4 85 (low-speech part), MR5 94, MR6 93, MR7 94, MR8 93.
+
+## Delivery format (standing, from 2026-09-08 evening)
+
+- Deliver files through the Downloads page (`motion2/make_hub.py` builds it from DELIVERY.md; artifact https://claude.ai/code/artifact/fb14668e-2db5-4cf4-9e6c-ae9df97b0d82): one row per file, real filename, a Download button beside it, grouped by the Dropbox folder it belongs in. Re-run the generator and republish the same file whenever DELIVERY.md gains rows.
+- Dropbox cannot take binary uploads from the connector; the Downloads page plus the "ALL LINKS" note in 04 Exports is the hand-off. Kit assets ship as one zip (`2026-09-08 CREATOR KIT … .zip`).
