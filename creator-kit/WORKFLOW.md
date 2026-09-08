@@ -222,3 +222,10 @@ Setup on a fresh box: `pip install torch --index-url https://download.pytorch.or
 `pip install --no-deps resemblyzer`, and a stub `webrtcvad.py` (see notes) because the real one needs a compiler.
 - **Motion graphics palette (2026-09-08):** accent red is Formula Dynamics red `#DE1A22` (bars, underlines, wipes, title rule), not the theme orange; gold `#FBD101` for highlights. Uniform captions sit at 70.5% of frame height at 2.35% of height (Archivo 800); he found the earlier 62% / 3.1% too high and too big.
 - **Deliverables PDF:** `motion/index.html` is built from DELIVERY.md and printed with headless Chromium; one file to drop into Dropbox. Regenerate after each delivery round.
+
+## Fast Cut series (2026-09-08, evening)
+
+- Build driver for the MR series lives in `/home/user/footage/motion2/` (driver.sh for waves and cuts, reels2.sh + build_mr.sh per reel, make_page.py for the page, rows.py for DELIVERY rows and the Dropbox note). Presigned upload slots die after roughly two hours, so request each reel's slot when its build starts, not up front.
+- `plan_reel.py` now slides a window back when the only speech sits late in a take, and `--drop-dir` keeps other-voice lines from attracting the window. Before this, MR4 opened on 20 s of silence.
+- Any loop that runs ffmpeg or curl inside `while read` must read from fd 3 (`read -u 3 … done 3< list`) and give the tools `</dev/null`; twice today a tool swallowed the rest of the list.
+- Scores: MR1 96, MR2 97, MR3 91, MR4 85 (low-speech part), MR5 94, MR6 93, MR7 94, MR8 93.

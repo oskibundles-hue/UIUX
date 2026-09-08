@@ -46,7 +46,7 @@ Experiments, not part of the series.
 | 11 | SFX pack · 17 synthesised effects (clicks, thocks, ticks, impacts, whooshes, risers, pop, ding, shutter) + audition | zip 2.5 MB · also in `creator-kit/sfx/` | [zip](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/e92175ec-c8ef-496a-8514-21bdce604b67.zip) · [audition mp3](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/bc0da273-155d-4ef1-9018-bf7a959c5efd.mp3) |
 | 12 | M3 · An SF90 pulls up (definitive: intro + reel, your voice only, Aston Martin Vantage copy) | 1:03 · 454 MB | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/1fe15bb8-96a2-40d2-963e-87afb859e8ea.mp4) |
 | 13 | M3 · An SF90 pulls up (reel only: FD red accent, smaller lower captions, your voice only, Vantage copy) | 0:58 · 431 MB · local score 93 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/aed877d4-f282-4c2d-a47d-7246894bf42e.mp4) |
-| 14 | Deliverables index PDF (everything above, one file for Dropbox) | 170 KB | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/ff40d4ae-3ecf-4bc0-ac11-1f8ac8672f08.pdf) |
+| 14 | Deliverables index PDF (everything in this file, one page set for Dropbox; evening build includes the Fast Cut series) | 185 KB | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/35e77c5d-7896-46f2-9a94-0bc89662edaa.pdf) · [morning build](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/ff40d4ae-3ecf-4bc0-ac11-1f8ac8672f08.pdf) |
 | 6 | M2 · An SF90 pulls up (motion graphics, vlog grade): kinetic title, chapter bar, spec + text callouts, Instagram/YouTube follow cards, two lower thirds, chapter wipes, stamp, card outro | 1:32 · 672 MB · Remotion `Motion4K` | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/cf7a640b-1102-40a5-b99c-9d32e0fb0e52.mp4) |
 | 5 | R9 · first car in the new bay (connector cut) | 0:38 · 4K · reference grade, classic captions, vidIQ hook and music | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/8ada3a5f-ef75-4c92-9056-5cb6553eb117.mp4) |
 | 6 | V1 · same reel, vlog grade + pop captions | 0:38 · 273 MB · 4K · re-graded from the D-Log raws with `--look vlog` (less red, softer, no sharpening), pop caption style, overlays retimed into the pauses | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/6df4926b-2a16-4137-b152-dc8461902cf8.mp4) |
@@ -91,3 +91,20 @@ Same nine timelines as R1–R9, re-cut from the D-Log raws with `--look vlog` (8
 | VR7 · aston martin brake job | 1:30 · 580 MB · score 69 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/22dfa444-c432-45b1-9b5f-372f8fb367b3.mp4) |
 | VR8 · sf90 pulls up | 1:32 · 696 MB · score 58 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/7f6bf83e-bd14-42fe-88d3-2f28ca688f78.mp4) |
 | V1 · first car in the new bay (R9 in the vlog look) | 0:38 · 261 MB · score 76 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/6df4926b-2a16-4137-b152-dc8461902cf8.mp4) |
+
+## Fast Cut · the series in the approved recipe (2026-09-08)
+
+All eight parts rebuilt the way the approved SF90 reel (MR8) was made: under a minute, hook line and auto-fit title, first shot 3 s then shots of 4.5 s or less, captions only on your voice (speaker profile), chapter bar and lower thirds from the take labels, FD red `#DE1A22` and gold `#FBD101`, IG and YT follow cards, wipes, card outro, no CTA, limiter 0.84, no sharpening. Page: https://claude.ai/code/artifact/2d062b1e-12ea-4b9c-b9b2-40d004de92fa. The Vlog Cut and the originals stay listed above for comparison.
+
+| reel | details | link |
+|---|---|---|
+| MR1 · the shop before | 0:55 · 382 MB · score 96 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/a408b7ce-3ad0-4ad3-9ed0-46b748cd1f88.mp4) |
+| MR2 · led trim goes in | 0:58 · 470 MB · score 97 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/78be4b22-1c4f-41f3-88cd-003552e6ec23.mp4) |
+| MR3 · drilling and the frame | 0:54 · 263 MB · score 91 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/fde572df-e255-4829-b3a8-7ba546b83a36.mp4) |
+| MR4 · first car rolls in | 0:55 · 302 MB · score 85 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/121193d2-4094-41ac-93df-796634b2701b.mp4) |
+| MR5 · raising the ceiling | 0:55 · 392 MB · score 94 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/f15c2dfa-a654-47eb-9aee-bac2413eae10.mp4) |
+| MR6 · panels up car on lift | 0:56 · 319 MB · score 93 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/b759eb5b-b07b-40df-8c56-436a34bf3f92.mp4) |
+| MR7 · aston martin brake job | 0:56 · 340 MB · score 94 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/24b932a6-7c50-4032-8615-d1b1edebff0e.mp4) |
+| MR8 · sf90 pulls up (the approved SF90 reel, unchanged) | 0:58 · 431 MB · score 93 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/aed877d4-f282-4c2d-a47d-7246894bf42e.mp4) |
+
+MR4 is the low-speech part (forklift, GT3 rolling in): the checker scores it 85 because captions cover only a fifth of the runtime. MR6's lower third reads "Black car on the lift" from the take label; say the word if that car is the Vantage and I will re-cut it.
