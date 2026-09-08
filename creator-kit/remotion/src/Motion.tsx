@@ -172,7 +172,7 @@ const LowerThird: React.FC<{ l: { at: number; hold: number; title: string; sub: 
   const sweep = ((f0 * 3) % 140) / 100;
   const tf = H * 0.03, sf = H * 0.014;
   return (
-    <div style={{ position: "absolute", left: 0, top: H * 0.755, transform: `translateX(${(-1 + inS + out * -1) * 100}%)` }}>
+    <div style={{ position: "absolute", left: 0, top: H * 0.585, transform: `translateX(${(-1 + inS + out * -1) * 100}%)` }}>
       <div style={{ position: "relative", background: RED, transform: "skewX(-12deg)", transformOrigin: "left bottom", marginLeft: -W * 0.02,
                     padding: `${tf * 0.35}px ${W * 0.06}px ${tf * 0.35}px ${W * 0.09}px`, overflow: "hidden", boxShadow: "0 12px 40px rgba(0,0,0,.45)" }}>
         <div style={{ position: "absolute", top: 0, bottom: 0, width: W * 0.05, left: `${sweep * 100}%`, background: "linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.35),rgba(255,255,255,0))" }} />
