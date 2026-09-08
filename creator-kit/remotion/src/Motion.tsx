@@ -145,7 +145,7 @@ const CalloutView: React.FC<{ c: Callout }> = ({ c }) => {
                     padding: `${num * 0.18}px ${num * 0.35}px`, borderRadius: r, boxShadow: "0 10px 40px rgba(0,0,0,.5)" }}>
         <div style={{ fontFamily: ARCHIVO, fontWeight: 600, fontSize: lab, letterSpacing: "0.16em", textTransform: "uppercase", color: "#cfcfcf" }}>{c.label}</div>
         {c.text != null ? (
-          <div style={{ fontFamily: ANTON, fontSize: num * 0.62, lineHeight: 1.1, color: "#fff", textTransform: "uppercase", letterSpacing: "0.02em", whiteSpace: "nowrap" }}>{c.text}</div>
+          <div style={{ fontFamily: ANTON, fontSize: num * 0.62, lineHeight: 1.1, color: "#fff", textTransform: "uppercase", letterSpacing: "0.02em", maxWidth: W * 0.30, textWrap: "balance" as never }}>{c.text}</div>
         ) : (
           <div style={{ fontFamily: ANTON, fontSize: num, lineHeight: 1.05, color: "#fff", fontVariantNumeric: "tabular-nums" }}>
             {val >= 100 ? Math.round(count) : count.toFixed(1)}<span style={{ color: GOLD, fontSize: num * 0.55, marginLeft: num * 0.1 }}>{c.suffix ?? ""}</span>
@@ -194,7 +194,10 @@ const ChapterBar: React.FC<{ chapters: { at: number; label: string }[] }> = ({ c
         {chapters.map((c, i) => <div key={i} style={{ position: "absolute", left: `${(c.at / total) * 100}%`, top: -h, width: h * 0.8, height: h * 3, background: "#fff", borderRadius: 1 }} />)}
         <div style={{ position: "absolute", left: `${p * 100}%`, top: -h * 2, width: h * 5, height: h * 5, marginLeft: -h * 2.5, borderRadius: "50%", background: "#fff", boxShadow: "0 0 12px rgba(0,0,0,.6)" }} />
       </div>
-      <div style={{ marginTop: h * 3, fontFamily: ARCHIVO, fontWeight: 600, fontSize: H * 0.011, letterSpacing: "0.18em", textTransform: "uppercase", color: "#fff", textShadow: "0 2px 10px rgba(0,0,0,.8)", textAlign: "center" }}>{cur?.label ?? ""}</div>
+      <div style={{ marginTop: h * 3, textAlign: "center" }}>
+        <span style={{ display: "inline-block", fontFamily: ARCHIVO, fontWeight: 600, fontSize: H * 0.011, letterSpacing: "0.18em", textTransform: "uppercase", color: "#fff",
+                       background: "rgba(0,0,0,.45)", padding: `${H * 0.004}px ${H * 0.01}px`, borderRadius: H * 0.01 }}>{cur?.label ?? ""}</span>
+      </div>
     </div>
   );
 };
