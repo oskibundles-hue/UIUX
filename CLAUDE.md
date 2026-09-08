@@ -23,6 +23,10 @@ These are the user's employers; the user holds authority from both to publish as
 
 For video, growth, and ad projects, default to **vidIQ** (growth/analytics), **Higgsfield** (production: virality predictor, reframe, ad-multiplier, TikTok publish), and the **context-engineering** plugin (context compression for long sessions). Adobe, Remotion, and Dropbox are fine secondary picks when relevant. If a different connector looks like a better fit for a task, **ask before using it** rather than switching silently.
 
+## Environment
+
+The user works from the iOS mobile Claude app; sessions run as cloud containers, not a local terminal. Desktop-only tools (macOS notch / menu-bar apps) do not apply. Anything installed inside a session is ephemeral — persistence is via git commits and the user's install scripts.
+
 ## Project Overview
 
 Antigravity Kit is an AI-powered design intelligence toolkit providing searchable databases of UI styles, color palettes, font pairings, chart types, and UX guidelines. It works as a skill/workflow for AI coding assistants (Claude Code, Windsurf, Cursor, etc.).
