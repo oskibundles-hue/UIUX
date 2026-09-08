@@ -220,3 +220,5 @@ python3 scripts/who_speaks.py build <audio> <transcript.json> --not 8.8-13.3 --p
 `--not` ranges whenever he confirms a mis-tag; the profile blends the new segments in.
 Setup on a fresh box: `pip install torch --index-url https://download.pytorch.org/whl/cpu librosa scipy`,
 `pip install --no-deps resemblyzer`, and a stub `webrtcvad.py` (see notes) because the real one needs a compiler.
+- **Motion graphics palette (2026-09-08):** accent red is Formula Dynamics red `#DE1A22` (bars, underlines, wipes, title rule), not the theme orange; gold `#FBD101` for highlights. Uniform captions sit at 70.5% of frame height at 2.35% of height (Archivo 800); he found the earlier 62% / 3.1% too high and too big.
+- **Deliverables PDF:** `motion/index.html` is built from DELIVERY.md and printed with headless Chromium; one file to drop into Dropbox. Regenerate after each delivery round.

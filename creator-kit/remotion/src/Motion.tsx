@@ -37,7 +37,8 @@ export type MotionProps = {
   cuts?: { at: number }[];
 };
 
-const RED = theme.accentAlt, GOLD = theme.accent;
+// Red is the Formula Dynamics / Rosso Corsa red that is actually in the footage, not the theme orange.
+const RED = "#DE1A22", GOLD = theme.accent;
 const ANTON = "Anton, Impact, sans-serif", ARCHIVO = "Archivo, Helvetica, sans-serif";
 const clamp = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 
@@ -92,9 +93,10 @@ const KineticCaptions: React.FC<{ words: Word[]; emphasis: string[]; after: numb
   const emph = ph.find((w) => emphasis.includes(clean(w.text))); if (emph) key = emph;
   const end = ph[ph.length - 1].end;
   const out = interpolate(s, [end + 0.15, end + 0.45], [0, 1], { ...clamp, easing: Easing.in(Easing.quad) });
-  const small = keyWord ? H * 0.026 : H * 0.031, bigF = H * 0.082;
+  // Uniform captions: smaller and lower (72.6% of frame height, his measured caption line).
+  const small = keyWord ? H * 0.026 : H * 0.0235, bigF = H * 0.082;
   return (
-    <div style={{ position: "absolute", left: W * 0.067, right: W * 0.09, top: H * 0.62, display: "flex", flexWrap: "wrap", alignItems: "baseline",
+    <div style={{ position: "absolute", left: W * 0.067, right: W * 0.09, top: keyWord ? H * 0.62 : H * 0.705, display: "flex", flexWrap: "wrap", alignItems: "baseline",
                   gap: `${H * 0.006}px ${W * 0.018}px`, opacity: 1 - out, transform: `translateY(${-out * H * 0.05}px)` }}>
       {ph.map((w, i) => {
         const isKey = keyWord && w === key;
