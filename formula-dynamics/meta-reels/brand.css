@@ -1,0 +1,137 @@
+/* Formula Dynamics — brand tokens
+   Colours carried over from the ad session (FD red, gold) plus the
+   tachometer arc sampled from the official mark. */
+
+@font-face { font-family:'Anton';  src:url('fonts/Anton.ttf') format('truetype'); font-weight:400; }
+@font-face { font-family:'BarlowC'; src:url('fonts/BarlowCondensed-Bold.ttf') format('truetype'); font-weight:700; }
+@font-face { font-family:'BarlowC'; src:url('fonts/BarlowCondensed-Medium.ttf') format('truetype'); font-weight:500; }
+@font-face { font-family:'Inter';  src:url('fonts/Inter.ttf') format('truetype'); font-weight:100 900; }
+
+:root{
+  /* core */
+  --fd-red:      #DE1A22;   /* bars, underlines, wipes */
+  --fd-red-deep: #A81118;
+  --fd-gold:     #FBD101;   /* highlights */
+  --ink:         #0C0F14;   /* ground (matches their IG dark theme) */
+  --ink-2:       #11121F;   /* monogram ink */
+  --panel:       #151A22;
+  --line:        rgba(255,255,255,.14);
+  --white:       #FDFDFD;
+  --mute:        #8A94A6;
+
+  /* tachometer arc */
+  --tach-green:  #57B752;
+  --tach-yellow: #F9FC68;
+  --tach-red:    #E4362B;
+
+  /* canvas */
+  --W: 1080px;
+  --H: 1920px;
+
+  /* Meta Reels safe area: keep critical content inside these */
+  --safe-top:    250px;
+  --safe-bottom: 420px;
+  --gutter:      88px;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html,body{ width:var(--W); height:var(--H); overflow:hidden; background:var(--ink); }
+body{ font-family:'Inter',system-ui,sans-serif; color:var(--white);
+      -webkit-font-smoothing:antialiased; text-rendering:geometricPrecision; }
+
+.stage{ position:relative; width:var(--W); height:var(--H); overflow:hidden;
+        background:var(--ink); }
+
+/* ---- type ---------------------------------------------------------- */
+.h1{ font-family:'Anton'; font-size:132px; line-height:.92; letter-spacing:-.5px;
+     transform:scaleX(.94); transform-origin:left center; text-transform:uppercase; }
+.h2{ font-family:'Anton'; font-size:96px;  line-height:.94; text-transform:uppercase;
+     transform:scaleX(.94); transform-origin:left center; }
+.h3{ font-family:'BarlowC'; font-weight:700; font-size:58px; line-height:1.02;
+     text-transform:uppercase; letter-spacing:.5px; }
+.kicker{ font-family:'BarlowC'; font-weight:700; font-size:34px; letter-spacing:6px;
+         text-transform:uppercase; color:var(--fd-red); }
+.body{ font-family:'Inter'; font-weight:400; font-size:38px; line-height:1.42; color:#C9D1DE; }
+.mono{ font-family:'BarlowC'; font-weight:500; font-size:30px; letter-spacing:3.5px;
+       text-transform:uppercase; color:var(--mute); }
+
+/* ---- brand devices -------------------------------------------------- */
+
+/* the 5-segment stripe */
+.stripe{ display:flex; gap:7px; height:12px; }
+.stripe i{ display:block; width:46px; background:var(--fd-red); border-radius:2px; }
+.stripe i:nth-child(4){ background:var(--fd-gold); }
+.stripe i:nth-child(5){ background:#3B4250; }
+
+.rule{ height:6px; background:var(--fd-red); }
+
+/* corner grid / texture */
+.grid-bg{ position:absolute; inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.030) 1px, transparent 1px),
+                   linear-gradient(90deg, rgba(255,255,255,.030) 1px, transparent 1px);
+  background-size:90px 90px; }
+.vignette{ position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(120% 80% at 50% 38%, transparent 40%, rgba(0,0,0,.62) 100%); }
+.glow{ position:absolute; border-radius:50%; filter:blur(140px); opacity:.5; }
+
+/* ---- overlay pack --------------------------------------------------- */
+
+/* logo bug, top-left */
+.bug{ position:absolute; display:flex; align-items:center; gap:22px; }
+.bug img{ width:104px; height:104px; display:block; }
+.bug .txt{ line-height:1; }
+.bug .n{ font-family:'Anton'; font-size:34px; letter-spacing:.5px; text-transform:uppercase; }
+.bug .s{ font-family:'BarlowC'; font-weight:500; font-size:22px; letter-spacing:4px;
+         color:var(--mute); text-transform:uppercase; margin-top:7px; }
+
+/* handle pill */
+.handle{ display:inline-flex; align-items:center; gap:16px;
+  background:rgba(255,255,255,.07); border:2px solid var(--line);
+  border-radius:999px; padding:18px 34px; backdrop-filter:blur(14px); }
+.handle .ig{ width:38px; height:38px; }
+.handle span{ font-family:'BarlowC'; font-weight:700; font-size:32px; letter-spacing:1.5px; }
+
+/* lower third */
+.lower{ position:absolute; display:flex; }
+.lower .bar{ width:12px; background:var(--fd-red); }
+.lower .in{ background:rgba(12,15,20,.90); backdrop-filter:blur(18px);
+  padding:26px 40px 28px; border:2px solid var(--line); border-left:none; }
+.lower .t{ font-family:'Anton'; font-size:52px; text-transform:uppercase; line-height:1; }
+.lower .s{ font-family:'BarlowC'; font-weight:500; font-size:27px; letter-spacing:3px;
+  color:var(--mute); text-transform:uppercase; margin-top:11px; }
+
+/* spec card */
+.spec{ background:rgba(21,26,34,.94); border:2px solid var(--line);
+  backdrop-filter:blur(18px); padding:34px 40px; min-width:520px; }
+.spec .hd{ font-family:'BarlowC'; font-weight:700; font-size:28px; letter-spacing:4px;
+  color:var(--fd-red); text-transform:uppercase; margin-bottom:22px; }
+.spec .row{ display:flex; justify-content:space-between; gap:40px;
+  padding:15px 0; border-top:1px solid rgba(255,255,255,.10); }
+.spec .row:first-of-type{ border-top:none; }
+.spec .k{ font-family:'BarlowC'; font-weight:500; font-size:30px; letter-spacing:2px;
+  color:var(--mute); text-transform:uppercase; }
+.spec .v{ font-family:'BarlowC'; font-weight:700; font-size:30px; letter-spacing:1px;
+  text-transform:uppercase; }
+
+/* CTA button */
+.cta{ display:inline-flex; align-items:center; gap:22px; background:var(--fd-red);
+  padding:30px 52px; border-radius:6px; }
+.cta b{ font-family:'Anton'; font-size:44px; letter-spacing:1px; text-transform:uppercase; }
+.cta .arrow{ font-family:'Anton'; font-size:44px; }
+
+/* burned-in caption, positioned per the measured 72.6% baseline */
+.caption{ position:absolute; left:var(--gutter); right:var(--gutter);
+  top:72.6%; text-align:center; font-family:'Anton'; font-size:74px; line-height:1.08;
+  text-transform:uppercase; transform:scaleX(.80); }
+.caption em{ font-style:normal; background:var(--fd-gold); color:var(--ink);
+  padding:2px 14px; border-radius:6px; }
+
+/* ---- safe-area composition ------------------------------------------
+   Meta reserves the top ~250px and bottom ~420px of a Reel for its own
+   UI. Every block lives inside .safe and is centred in what's left, so
+   nothing important is ever covered and the frame never reads top-heavy. */
+.safe{ position:absolute; left:0; right:0; top:var(--safe-top);
+       bottom:var(--safe-bottom); }
+.blk{ position:absolute; inset:0; display:flex; flex-direction:column;
+      justify-content:center; padding:0 var(--gutter); }
+.blk.c{ align-items:center; text-align:center; }

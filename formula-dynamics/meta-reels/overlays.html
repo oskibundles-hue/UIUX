@@ -1,0 +1,97 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>FD overlay pack</title>
+<link rel="stylesheet" href="brand.css">
+<style>
+  body{ width:auto; height:auto; overflow:visible; background:#22262e; }
+  .sheet{ display:flex; flex-wrap:wrap; gap:0; }
+  .sheet > .stage{ flex:0 0 auto; }
+  .stage{ background:transparent; }
+  /* a stand-in for footage so the overlays can be judged in context;
+     excluded from the exported transparent PNGs */
+  .plate{ position:absolute; inset:0;
+    background:
+      radial-gradient(60% 40% at 30% 22%, #2A3240 0%, transparent 60%),
+      radial-gradient(70% 45% at 78% 74%, #1C2430 0%, transparent 62%),
+      linear-gradient(160deg,#11151C 0%,#080A0E 100%); }
+  .stage[data-alpha="1"] .plate{ display:none; }
+</style>
+
+<div class="sheet">
+
+  <!-- 1 · LOGO BUG -->
+  <div class="stage" id="ov-bug">
+    <div class="plate"></div>
+    <div class="bug" style="left:88px; top:250px;">
+      <img src="logo/fd_mark.svg">
+      <div class="txt">
+        <div class="n">Formula Dynamics</div>
+        <div class="s">Exotic Car Parts</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2 · HANDLE STACK -->
+  <div class="stage" id="ov-handle">
+    <div class="plate"></div>
+    <div style="position:absolute; left:88px; top:250px; display:flex; flex-direction:column; gap:22px; align-items:flex-start;">
+      <div class="handle">
+        <svg class="ig" viewBox="0 0 24 24" fill="none" stroke="#FDFDFD" stroke-width="2">
+          <rect x="2" y="2" width="20" height="20" rx="6"/>
+          <circle cx="12" cy="12" r="4.6"/><circle cx="17.6" cy="6.4" r="1.3" fill="#FDFDFD" stroke="none"/>
+        </svg>
+        <span>@formuladynamicsperformance</span>
+      </div>
+      <div class="handle" style="background:var(--fd-red); border-color:var(--fd-red);">
+        <span>lpt4.me/formuladynamics</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3 · LOWER THIRD -->
+  <div class="stage" id="ov-lower">
+    <div class="plate"></div>
+    <div class="lower" style="left:88px; bottom:420px;">
+      <div class="bar"></div>
+      <div class="in">
+        <div class="t">Larini Exhaust Systems</div>
+        <div class="s">North American Distributor</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4 · SPEC CARD -->
+  <div class="stage" id="ov-spec">
+    <div class="plate"></div>
+    <div class="spec" style="position:absolute; right:88px; top:640px;">
+      <div class="hd">Build Sheet</div>
+      <div class="row"><span class="k">Exhaust</span><span class="v">Larini Club Sport</span></div>
+      <div class="row"><span class="k">Tune</span><span class="v">FD Stage 1 ECU</span></div>
+      <div class="row"><span class="k">Wheels</span><span class="v">Forged 21&quot;</span></div>
+      <div class="row"><span class="k">Protection</span><span class="v">Full-front PPF</span></div>
+    </div>
+  </div>
+
+  <!-- 5 · END CARD -->
+  <div class="stage" id="ov-end" data-alpha="0">
+    <div class="plate" style="background:linear-gradient(165deg,#12161E 0%,#07090D 100%)"></div>
+    <div class="grid-bg"></div>
+    <div class="glow" style="width:900px;height:900px;left:90px;top:420px;background:#DE1A22;opacity:.20"></div>
+    <div style="position:absolute; inset:0; display:flex; flex-direction:column;
+                align-items:center; justify-content:center; gap:0; padding:0 88px;">
+      <img src="logo/fd_mark.svg" style="width:300px; margin-bottom:56px;">
+      <div class="h2" style="transform:scaleX(.94); text-align:center; font-size:104px;">Formula&nbsp;Dynamics</div>
+      <div class="mono" style="margin-top:26px; letter-spacing:7px;">#1 Maserati Specialists · 20+ Years</div>
+      <div class="stripe" style="margin-top:44px;"><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="cta" style="margin-top:76px;"><b>Shop Now</b><span class="arrow">→</span></div>
+      <div class="handle" style="margin-top:44px;">
+        <svg class="ig" viewBox="0 0 24 24" fill="none" stroke="#FDFDFD" stroke-width="2">
+          <rect x="2" y="2" width="20" height="20" rx="6"/>
+          <circle cx="12" cy="12" r="4.6"/><circle cx="17.6" cy="6.4" r="1.3" fill="#FDFDFD" stroke="none"/>
+        </svg>
+        <span>@formuladynamicsperformance</span>
+      </div>
+    </div>
+  </div>
+
+</div>

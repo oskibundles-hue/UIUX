@@ -1,0 +1,170 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>FD R2 — Tuning</title>
+<link rel="stylesheet" href="../brand.css">
+<script src="../engine.js"></script>
+
+<!--
+  COPY NOTE: this reel deliberately makes no numeric power claim. The dyno
+  plot is drawn unlabelled (POWER vs RPM) and the gain is shown as a shaded
+  delta, not a figure. If Formula Dynamics wants real numbers on screen,
+  fill in NUMBERS below with verified dyno results and set SHOW_NUMBERS.
+-->
+<div class="stage">
+  <div class="grid-bg" id="grid"></div>
+  <div class="glow" id="glowA" style="width:1000px;height:1000px;left:520px;top:420px;background:#DE1A22"></div>
+  <div class="glow" id="glowB" style="width:900px;height:900px;left:-240px;top:1080px;background:#1E63FF;opacity:.20"></div>
+
+  <div class="safe">
+
+    <!-- HOOK -->
+    <div class="blk" id="hook">
+      <div class="kicker" id="hookK">ECU Calibration</div>
+      <div class="h1" id="hookL1" style="margin-top:36px;">Stock is a</div>
+      <div class="h1" id="hookL2" style="margin-top:14px;">starting<br>point.</div>
+      <div class="mono" id="hookS" style="margin-top:52px;">Your car left the factory built for everyone</div>
+    </div>
+
+    <!-- DYNO -->
+    <div class="blk" id="dyno">
+      <div class="kicker" id="dyK">On the dyno</div>
+      <svg id="plot" viewBox="0 0 900 520" style="width:100%;margin-top:44px;">
+        <!-- grid -->
+        <g id="axes" stroke="rgba(255,255,255,.13)" stroke-width="2">
+          <line x1="70" y1="470" x2="880" y2="470"/>
+          <line x1="70" y1="30"  x2="70"  y2="470"/>
+          <line x1="70" y1="360" x2="880" y2="360" stroke="rgba(255,255,255,.07)"/>
+          <line x1="70" y1="250" x2="880" y2="250" stroke="rgba(255,255,255,.07)"/>
+          <line x1="70" y1="140" x2="880" y2="140" stroke="rgba(255,255,255,.07)"/>
+        </g>
+        <!-- shaded gain between the two curves -->
+        <path id="delta" fill="url(#g1)" opacity="0"
+              d="M70,392 C240,356 380,232 560,146 C680,90 780,80 880,112
+                 L880,196 C780,168 680,176 560,232 C380,318 240,396 70,428 Z"/>
+        <defs><linearGradient id="g1" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0%" stop-color="#DE1A22" stop-opacity=".55"/>
+          <stop offset="100%" stop-color="#DE1A22" stop-opacity=".05"/>
+        </linearGradient></defs>
+        <path id="base" fill="none" stroke="#6B7789" stroke-width="9" stroke-linecap="round"
+              d="M70,428 C240,396 380,318 560,232 C680,176 780,168 880,196"/>
+        <path id="tuned" fill="none" stroke="#DE1A22" stroke-width="12" stroke-linecap="round"
+              d="M70,392 C240,356 380,232 560,146 C680,90 780,80 880,112"/>
+        <text id="axY" x="70" y="18" fill="#8A94A6" font-family="BarlowC" font-weight="500"
+              font-size="26" letter-spacing="4">POWER</text>
+        <text id="axX" x="880" y="505" text-anchor="end" fill="#8A94A6" font-family="BarlowC"
+              font-weight="500" font-size="26" letter-spacing="4">RPM</text>
+      </svg>
+      <div id="legend" style="display:flex;gap:44px;margin-top:44px;">
+        <div style="display:flex;align-items:center;gap:16px;">
+          <span style="width:44px;height:9px;background:#6B7789;border-radius:5px;"></span>
+          <span class="mono" style="letter-spacing:3px;">Factory</span></div>
+        <div style="display:flex;align-items:center;gap:16px;">
+          <span style="width:44px;height:9px;background:var(--fd-red);border-radius:5px;"></span>
+          <span class="mono" style="letter-spacing:3px;color:#FDFDFD;">Formula Dynamics</span></div>
+      </div>
+      <div class="h2" id="dyT" style="margin-top:56px;font-size:78px;">More power,<br>right through<br>the range.</div>
+    </div>
+
+    <!-- PROCESS -->
+    <div class="blk" id="proc">
+      <div class="kicker" id="prK">How we do it</div>
+      <div style="margin-top:44px;">
+        <div class="prow"><span class="pn">01</span>
+          <span><b class="h3">Read &amp; baseline</b><i class="ps">Your car on our dyno first</i></span></div>
+        <div class="prow"><span class="pn">02</span>
+          <span><b class="h3">Calibrate to hardware</b><i class="ps">Matched to your exact build</i></span></div>
+        <div class="prow" style="border-bottom:2px solid rgba(255,255,255,.13);"><span class="pn">03</span>
+          <span><b class="h3">Validate &amp; verify</b><i class="ps">Road and dyno tested</i></span></div>
+      </div>
+    </div>
+
+    <!-- END -->
+    <div class="blk c" id="end">
+      <img id="endLogo" src="../logo/fd_mark.svg" style="width:260px;">
+      <div class="h2" id="endT" style="margin-top:50px;font-size:116px;transform:scaleX(.94);">Unlock<br>the car.</div>
+      <div class="stripe big" id="endStripe" style="margin-top:52px;"><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="cta" id="endCta" style="margin-top:66px;"><b>Book a Tune</b><span class="arrow">→</span></div>
+      <div class="handle" id="endH" style="margin-top:42px;">
+        <svg class="ig" viewBox="0 0 24 24" fill="none" stroke="#FDFDFD" stroke-width="2">
+          <rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="4.6"/>
+          <circle cx="17.6" cy="6.4" r="1.3" fill="#FDFDFD" stroke="none"/></svg>
+        <span>@formuladynamicsperformance</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bug" id="bug" style="left:88px;top:250px;">
+    <img src="../logo/fd_mark.svg">
+    <div class="txt"><div class="n">Formula Dynamics</div><div class="s">Exotic Car Parts</div></div>
+  </div>
+  <div class="vignette"></div>
+</div>
+
+<style>
+  .prow{ display:flex; gap:30px; padding:30px 0; align-items:flex-start;
+         border-top:2px solid rgba(255,255,255,.13); }
+  .pn{ font-family:'Anton'; font-size:34px; color:var(--fd-red); width:74px; flex:none; padding-top:6px; }
+  .ps{ display:block; font-style:normal; font-family:'Inter'; font-size:31px;
+       color:#8A94A6; margin-top:12px; }
+  .stripe.big{ height:16px; gap:9px; } .stripe.big i{ width:62px; }
+</style>
+
+<script>
+const S = { HOOK:[0.3,3.5], DYNO:[3.9,9.0], PROC:[9.4,12.0], END:[12.4,15.0] };
+function dash(el,u){ const L=el.getTotalLength(); el.style.strokeDasharray=L; el.style.strokeDashoffset=L*(1-u); }
+
+defineScene({
+  duration: 15.0,
+  build(){ ['base','tuned'].forEach(id=>{ const e=$('#'+id); e.style.strokeDasharray=e.getTotalLength(); }); },
+  frame(t){
+    $('#grid').style.opacity = 0.5 + 0.22*Math.sin(t*0.7);
+    set($('#glowA'), { o: 0.26 + 0.10*Math.sin(t*0.85) });
+    set($('#glowB'), { o: 0.16 + 0.06*Math.cos(t*0.7) });
+    const chrome = p(t,0.5,1.1) * (1 - p(t,S.END[0]-0.3,S.END[0]+0.2));
+    set($('#bug'), { o: chrome, x: lerp(-30,0,p(t,0.5,1.1)) });
+
+    // hook
+    $('#hook').style.opacity = band(t,S.HOOK[0],S.HOOK[1],0.30,0.30);
+    riseIn($('#hookK'), t, S.HOOK[0], 0.45, 30);
+    ['#hookL1','#hookL2'].forEach((sel,i)=>{
+      const u = p(t, S.HOOK[0]+0.22+i*0.22, S.HOOK[0]+0.82+i*0.22, E.out);
+      set($(sel), { o:u, x:lerp(-56,0,u) });
+    });
+    riseIn($('#hookS'), t, S.HOOK[0]+0.9, 0.5, 26);
+
+    // dyno
+    $('#dyno').style.opacity = band(t,S.DYNO[0],S.DYNO[1],0.28,0.32);
+    riseIn($('#dyK'), t, S.DYNO[0], 0.4, 22);
+    set($('#axes'), { o: p(t, S.DYNO[0]+0.15, S.DYNO[0]+0.6) });
+    set($('#axY'),  { o: p(t, S.DYNO[0]+0.3,  S.DYNO[0]+0.8) });
+    set($('#axX'),  { o: p(t, S.DYNO[0]+0.3,  S.DYNO[0]+0.8) });
+    dash($('#base'),  p(t, S.DYNO[0]+0.35, S.DYNO[0]+1.35, E.out));
+    dash($('#tuned'), p(t, S.DYNO[0]+1.15, S.DYNO[0]+2.25, E.out));
+    // the gain area only fills once both curves exist
+    $('#delta').style.opacity = p(t, S.DYNO[0]+2.15, S.DYNO[0]+2.75) * 0.95;
+    $('#delta').style.clipPath = `inset(0 ${(1-p(t,S.DYNO[0]+2.15,S.DYNO[0]+2.95,E.out))*100}% 0 0)`;
+    riseIn($('#legend'), t, S.DYNO[0]+2.5, 0.5, 24);
+    riseIn($('#dyT'),    t, S.DYNO[0]+2.9, 0.55, 34);
+
+    // process
+    $('#proc').style.opacity = band(t,S.PROC[0],S.PROC[1],0.28,0.30);
+    riseIn($('#prK'), t, S.PROC[0], 0.4, 22);
+    $$('.prow').forEach((el,i)=>{
+      const a = S.PROC[0]+0.22+i*0.30;
+      const u = p(t, a, a+0.55, E.out);
+      set(el, { o:u, x:lerp(46,0,u) });
+      el.style.clipPath = `inset(0 ${(1-u)*100}% 0 0)`;
+    });
+
+    // end
+    $('#end').style.opacity = p(t,S.END[0],S.END[0]+0.45);
+    const lu = p(t,S.END[0],S.END[0]+0.6,E.pop);
+    set($('#endLogo'), { o:clamp(lu,0,1), s:lerp(0.7,1,lu) });
+    riseIn($('#endT'), t, S.END[0]+0.22, 0.5, 40);
+    wipeIn($('#endStripe'), t, S.END[0]+0.55, 0.5);
+    const cu = p(t,S.END[0]+0.70,S.END[0]+1.15,E.pop);
+    set($('#endCta'), { o:clamp(cu,0,1), s:lerp(0.84,1,cu) });
+    riseIn($('#endH'), t, S.END[0]+1.0, 0.5, 26);
+  },
+});
+</script>

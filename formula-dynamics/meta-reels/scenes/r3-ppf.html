@@ -1,0 +1,165 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>FD R3 — Paint Protection</title>
+<link rel="stylesheet" href="../brand.css">
+<script src="../engine.js"></script>
+
+<div class="stage">
+  <div class="grid-bg" id="grid"></div>
+  <div class="glow" id="glowA" style="width:980px;height:980px;left:-200px;top:500px;background:#1E63FF;opacity:.26"></div>
+  <div class="glow" id="glowB" style="width:900px;height:900px;left:520px;top:1160px;background:#DE1A22"></div>
+
+  <div class="safe">
+
+    <!-- HOOK -->
+    <div class="blk" id="hook">
+      <div class="kicker" id="hookK">Paint Protection Film</div>
+      <div class="h1" id="hookL1" style="margin-top:36px;">The paint is</div>
+      <div class="h1" id="hookL2" style="margin-top:14px;">the expensive<br>part.</div>
+      <div class="mono" id="hookS" style="margin-top:52px;">Stone chips don't book an appointment</div>
+    </div>
+
+    <!-- LAYER STACK + SELF-HEAL -->
+    <div class="blk" id="layers">
+      <div class="kicker" id="lyK">How the film works</div>
+      <svg id="stack" viewBox="0 0 900 470" style="width:100%;margin-top:48px;">
+        <!-- layers, top to bottom -->
+        <g id="lyTop">
+          <rect x="40" y="40" width="820" height="76" rx="10" fill="#2B6BE8" opacity=".30"/>
+          <rect x="40" y="40" width="820" height="76" rx="10" fill="none" stroke="#5C93FF" stroke-width="3"/>
+        </g>
+        <g id="lyMid">
+          <rect x="40" y="132" width="820" height="96" rx="10" fill="#FDFDFD" opacity=".14"/>
+          <rect x="40" y="132" width="820" height="96" rx="10" fill="none" stroke="#FDFDFD" stroke-width="3"/>
+        </g>
+        <g id="lyGlue">
+          <rect x="40" y="244" width="820" height="52" rx="8" fill="#FBD101" opacity=".18"/>
+          <rect x="40" y="244" width="820" height="52" rx="8" fill="none" stroke="#FBD101" stroke-width="3"/>
+        </g>
+        <g id="lyPaint">
+          <rect x="40" y="312" width="820" height="118" rx="10" fill="#DE1A22" opacity=".26"/>
+          <rect x="40" y="312" width="820" height="118" rx="10" fill="none" stroke="#DE1A22" stroke-width="3"/>
+        </g>
+        <!-- the scratch: appears in the top layer, then heals away -->
+        <path id="scratch" d="M250,52 L470,104" stroke="#FDFDFD" stroke-width="7"
+              stroke-linecap="round" opacity="0"/>
+        <g font-family="BarlowC" font-weight="700" font-size="27" letter-spacing="3" fill="#FDFDFD">
+          <text id="t1" x="66" y="88">SELF-HEALING TOP COAT</text>
+          <text id="t2" x="66" y="188">IMPACT-ABSORBING FILM</text>
+          <text id="t3" x="66" y="277" fill="#FBD101">ADHESIVE LAYER</text>
+          <text id="t4" x="66" y="380" fill="#FF6B70">YOUR PAINT — UNTOUCHED</text>
+        </g>
+      </svg>
+      <div class="h2" id="lyT" style="margin-top:52px;font-size:76px;">Light marks<br>self-heal.</div>
+    </div>
+
+    <!-- COVERAGE -->
+    <div class="blk" id="cov">
+      <div class="kicker" id="coK">Coverage options</div>
+      <div style="margin-top:44px;">
+        <div class="crow"><span class="cn">01</span>
+          <span><b class="h3">Full front</b><i class="cs">Bumper, hood, fenders, mirrors</i></span></div>
+        <div class="crow"><span class="cn">02</span>
+          <span><b class="h3">Track pack</b><i class="cs">Front plus rocker and A-pillar</i></span></div>
+        <div class="crow" style="border-bottom:2px solid rgba(255,255,255,.13);"><span class="cn">03</span>
+          <span><b class="h3">Full body</b><i class="cs">Every painted panel covered</i></span></div>
+      </div>
+    </div>
+
+    <!-- END -->
+    <div class="blk c" id="end">
+      <img id="endLogo" src="../logo/fd_mark.svg" style="width:260px;">
+      <div class="h2" id="endT" style="margin-top:50px;font-size:116px;transform:scaleX(.94);">Protect<br>it first.</div>
+      <div class="stripe big" id="endStripe" style="margin-top:52px;"><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="cta" id="endCta" style="margin-top:66px;"><b>Book PPF</b><span class="arrow">→</span></div>
+      <div class="handle" id="endH" style="margin-top:42px;">
+        <svg class="ig" viewBox="0 0 24 24" fill="none" stroke="#FDFDFD" stroke-width="2">
+          <rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="4.6"/>
+          <circle cx="17.6" cy="6.4" r="1.3" fill="#FDFDFD" stroke="none"/></svg>
+        <span>@formuladynamicsperformance</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bug" id="bug" style="left:88px;top:250px;">
+    <img src="../logo/fd_mark.svg">
+    <div class="txt"><div class="n">Formula Dynamics</div><div class="s">Exotic Car Parts</div></div>
+  </div>
+  <div class="vignette"></div>
+</div>
+
+<style>
+  .crow{ display:flex; gap:30px; padding:30px 0; align-items:flex-start;
+         border-top:2px solid rgba(255,255,255,.13); }
+  .cn{ font-family:'Anton'; font-size:34px; color:var(--fd-red); width:74px; flex:none; padding-top:6px; }
+  .cs{ display:block; font-style:normal; font-family:'Inter'; font-size:31px;
+       color:#8A94A6; margin-top:12px; }
+  .stripe.big{ height:16px; gap:9px; } .stripe.big i{ width:62px; }
+</style>
+
+<script>
+const S = { HOOK:[0.3,3.5], LAY:[3.9,9.2], COV:[9.6,12.0], END:[12.4,15.0] };
+
+defineScene({
+  duration: 15.0,
+  frame(t){
+    $('#grid').style.opacity = 0.5 + 0.22*Math.sin(t*0.7);
+    set($('#glowA'), { o: 0.22 + 0.08*Math.sin(t*0.85) });
+    set($('#glowB'), { o: 0.24 + 0.09*Math.cos(t*0.7) });
+    const chrome = p(t,0.5,1.1) * (1 - p(t,S.END[0]-0.3,S.END[0]+0.2));
+    set($('#bug'), { o: chrome, x: lerp(-30,0,p(t,0.5,1.1)) });
+
+    // hook
+    $('#hook').style.opacity = band(t,S.HOOK[0],S.HOOK[1],0.30,0.30);
+    riseIn($('#hookK'), t, S.HOOK[0], 0.45, 30);
+    ['#hookL1','#hookL2'].forEach((sel,i)=>{
+      const u = p(t, S.HOOK[0]+0.22+i*0.22, S.HOOK[0]+0.82+i*0.22, E.out);
+      set($(sel), { o:u, x:lerp(-56,0,u) });
+    });
+    riseIn($('#hookS'), t, S.HOOK[0]+0.9, 0.5, 26);
+
+    // layer stack — builds bottom-up, the way it's actually applied
+    $('#layers').style.opacity = band(t,S.LAY[0],S.LAY[1],0.28,0.32);
+    riseIn($('#lyK'), t, S.LAY[0], 0.4, 22);
+    const order = [['#lyPaint','#t4'], ['#lyGlue','#t3'], ['#lyMid','#t2'], ['#lyTop','#t1']];
+    order.forEach(([g, tx], i) => {
+      const a = S.LAY[0] + 0.30 + i*0.34;
+      const u = p(t, a, a+0.55, E.out);
+      set($(g),  { o:u, x:lerp(-40,0,u) });
+      set($(tx), { o:p(t, a+0.18, a+0.62) });
+    });
+
+    // a scratch lands on the top coat, then heals
+    const HIT = S.LAY[0] + 2.35;
+    const appear = p(t, HIT, HIT+0.10, E.out);
+    const heal   = p(t, HIT+0.75, HIT+1.75, E.inOut);
+    const sc = $('#scratch');
+    sc.style.opacity = clamp(appear - heal, 0, 1) * 0.95;
+    sc.style.strokeWidth = lerp(7, 1.5, heal);
+    // warmth pulse as it heals, the visual shorthand for self-healing
+    $('#lyTop').style.filter = heal > 0 && heal < 1
+      ? `drop-shadow(0 0 ${lerp(0,26,Math.sin(heal*Math.PI))}px rgba(92,147,255,.85))` : '';
+    riseIn($('#lyT'), t, HIT+1.55, 0.55, 34);
+
+    // coverage
+    $('#cov').style.opacity = band(t,S.COV[0],S.COV[1],0.28,0.30);
+    riseIn($('#coK'), t, S.COV[0], 0.4, 22);
+    $$('.crow').forEach((el,i)=>{
+      const a = S.COV[0]+0.22+i*0.30;
+      const u = p(t, a, a+0.55, E.out);
+      set(el, { o:u, x:lerp(46,0,u) });
+      el.style.clipPath = `inset(0 ${(1-u)*100}% 0 0)`;
+    });
+
+    // end
+    $('#end').style.opacity = p(t,S.END[0],S.END[0]+0.45);
+    const lu = p(t,S.END[0],S.END[0]+0.6,E.pop);
+    set($('#endLogo'), { o:clamp(lu,0,1), s:lerp(0.7,1,lu) });
+    riseIn($('#endT'), t, S.END[0]+0.22, 0.5, 40);
+    wipeIn($('#endStripe'), t, S.END[0]+0.55, 0.5);
+    const cu = p(t,S.END[0]+0.70,S.END[0]+1.15,E.pop);
+    set($('#endCta'), { o:clamp(cu,0,1), s:lerp(0.84,1,cu) });
+    riseIn($('#endH'), t, S.END[0]+1.0, 0.5, 26);
+  },
+});
+</script>
