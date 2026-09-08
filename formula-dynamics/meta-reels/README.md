@@ -38,9 +38,39 @@ visually — no voiceover, nothing that depends on audio. Each reel then ships
 in two versions:
 
 - `FD-Rn-*.mp4` — picture only, no audio track.
-- `FD-Rn-*-SFX.mp4` — the same picture with a sound-design bed built from
-  Formula Dynamics' existing 17-sound SFX pack, cued to the motion (riser on
-  the tach sweep, impact on the redline, a deep impact when the valve opens).
+- `FD-Rn-*-SFX.mp4` — the same picture with a sound-design bed cued to the
+  motion (riser on the tach sweep, metal impact on the redline, a sub drop
+  when the valve opens, a ratchet under the wheel fitment).
+
+### The sound pack
+
+`sfx/` holds 26 sounds, **synthesised from scratch** — original work with no
+third-party licence attached. That is deliberate. These run in paid ads, and
+most "free" SFX libraries either require attribution, exclude advertising
+use, or state no licence at all; a spot check of Archive.org's open audio
+returned items with no stated licence at all, which cannot be cleared.
+
+Each sound is built in three layers — a transient to give the ear a point to
+lock onto, a body carrying the character, and a tail setting the size of the
+space. Impacts add a sub sweep underneath: phone speakers roll off below
+~200 Hz, so that weight is felt through the body's harmonics rather than
+heard directly.
+
+| Group | Sounds |
+|---|---|
+| Impacts | `impact_deep` `impact_low` `impact_tight` `impact_metal` `sub_drop` |
+| Whooshes | `whoosh_short` `whoosh_long` `whoosh_reverse` `whoosh_pass` `swish_fine` |
+| Risers | `riser_air` `riser_tone` `riser_stutter` |
+| UI / mechanical | `click_soft` `click_hard` `tick` `thock` `switch` `ratchet` |
+| Accents | `pop` `ding` `chime_low` `shimmer` `reverse_tail` |
+| Texture | `drone_low` `air_bed` |
+
+48 kHz, 16-bit stereo, peak -3 dBFS. Rebuild with `python3 tools/build_sfx.py`
+— the generator is seeded, so the pack is reproducible byte for byte.
+
+**Want recorded rather than designed sounds?** Freesound and Pixabay both have
+commercially usable material but need an API key; give me one and I can pull
+CC0-filtered results to sit alongside these.
 
 The SFX version peaks at about -3.5 dBFS with a mean near -23 dBFS, so there
 is real headroom to drop a **licensed music bed** underneath without

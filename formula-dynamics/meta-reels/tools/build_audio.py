@@ -16,112 +16,115 @@ import imageio_ffmpeg
 
 FF = imageio_ffmpeg.get_ffmpeg_exe()
 HERE = os.path.dirname(os.path.abspath(__file__))
-SFX = os.path.join(HERE, "assets", "sfx", "sfx")
+SFX = os.path.join(HERE, "assets", "sfx-fd")
 REELS = os.path.join(HERE, "out", "reels")
 
 # (sound, time, gain)
 CUES = {
     "FD-R1-Exhaust-Larini": [
-        ("riser_air",      0.20, 0.55),   # tach sweeps up
-        ("impact_low",     1.36, 0.85),   # redline hit + red flash
+        ("riser_tone",     0.20, 0.38),   # tach sweeps up
+        ("riser_air",      0.55, 0.34),
+        ("impact_metal",   1.36, 0.66),   # redline hit + red flash
         ("whoosh_short",   3.72, 0.50),
-        ("hit_snap",       4.62, 0.60),   # distributor badge
-        ("ui_click_hard",  5.15, 0.38), ("ui_click_hard", 5.45, 0.38),
-        ("ui_click_hard",  5.75, 0.38),
+        ("impact_tight",       4.62, 0.60),   # distributor badge
+        ("click_hard",  5.15, 0.38), ("click_hard", 5.45, 0.38),
+        ("click_hard",  5.75, 0.38),
         ("whoosh_short",   8.55, 0.50),
-        ("ui_click_soft",  9.00, 0.35),
-        ("impact_deep",   10.25, 0.95),   # the valve opens — the big moment
-        ("reverse_whoosh",11.85, 0.45),
-        ("impact_low",    12.22, 0.70),   # end card
+        ("click_soft",  9.00, 0.35),
+        ("sub_drop",      10.25, 0.62),   # the valve opens — the big moment
+        ("whoosh_reverse",11.85, 0.45),
+        ("impact_low",    12.22, 0.70), ("drone_low", 12.10, 0.20),   # end card
         ("pop",           12.92, 0.50),   # CTA
     ],
     "FD-R2-Tuning": [
         ("riser_air",      0.22, 0.55),
         ("impact_low",     0.80, 0.80),
         ("whoosh_short",   3.65, 0.50),
-        ("swish",          4.28, 0.45),   # factory curve draws
-        ("swish",          5.08, 0.50),   # FD curve draws
-        ("impact_deep",    6.08, 0.80),   # the gain area fills
+        ("swish_fine",          4.28, 0.45),   # factory curve draws
+        ("swish_fine",          5.08, 0.50),   # FD curve draws
+        ("sub_drop",       6.08, 0.58),   # the gain area fills
         ("whoosh_short",   9.18, 0.50),
-        ("ui_click_hard",  9.65, 0.38), ("ui_click_hard", 9.95, 0.38),
-        ("ui_click_hard", 10.25, 0.38),
-        ("reverse_whoosh",12.05, 0.45),
-        ("impact_low",    12.42, 0.70),
+        ("click_hard",  9.65, 0.38), ("click_hard", 9.95, 0.38),
+        ("click_hard", 10.25, 0.38),
+        ("whoosh_reverse",12.05, 0.45),
+        ("impact_low",    12.42, 0.70), ("drone_low", 12.30, 0.20),
         ("pop",           13.12, 0.50),
     ],
     "FD-R3-PPF": [
         ("riser_air",      0.22, 0.55),
         ("impact_low",     0.80, 0.80),
         ("whoosh_short",   3.65, 0.50),
-        ("ui_click_soft",  4.22, 0.40), ("ui_click_soft", 4.56, 0.40),
-        ("ui_click_soft",  4.90, 0.40), ("ui_click_soft", 5.24, 0.40),
-        ("hit_snap",       6.26, 0.70),  # the scratch lands
+        ("click_soft",  4.22, 0.40), ("click_soft", 4.56, 0.40),
+        ("click_soft",  4.90, 0.40), ("click_soft", 5.24, 0.40),
+        ("impact_tight",       6.26, 0.70),  # the scratch lands
         ("riser_tone",     7.00, 0.45),  # healing
-        ("ding",           8.05, 0.55),  # healed
+        ("shimmer",        7.95, 0.42),  # healed
+        ("ding",           8.10, 0.44),
         ("whoosh_short",   9.38, 0.50),
-        ("ui_click_hard",  9.85, 0.38), ("ui_click_hard", 10.15, 0.38),
-        ("ui_click_hard", 10.45, 0.38),
-        ("reverse_whoosh",12.05, 0.45),
-        ("impact_low",    12.42, 0.70),
+        ("click_hard",  9.85, 0.38), ("click_hard", 10.15, 0.38),
+        ("click_hard", 10.45, 0.38),
+        ("whoosh_reverse",12.05, 0.45),
+        ("impact_low",    12.42, 0.70), ("drone_low", 12.30, 0.20),
         ("pop",           13.12, 0.50),
     ],
     "FD-R4-Builds": [
         ("riser_air",      0.22, 0.55),
         ("impact_low",     0.80, 0.80),
         ("whoosh_short",   3.65, 0.50),
-        ("shutter",        4.08, 0.55),  # the build sheet lands
-        ("ui_click_soft",  4.68, 0.40), ("ui_click_soft", 5.00, 0.40),
-        ("ui_click_soft",  5.32, 0.40), ("ui_click_soft", 5.64, 0.40),
-        ("ui_click_soft",  5.96, 0.40),
-        ("ding",           6.70, 0.60),  # the tick
+        ("switch",        4.08, 0.55),  # the build sheet lands
+        ("click_soft",  4.68, 0.40), ("click_soft", 5.00, 0.40),
+        ("click_soft",  5.32, 0.40), ("click_soft", 5.64, 0.40),
+        ("click_soft",  5.96, 0.40),
+        ("ding",           6.70, 0.55),  # the tick
         ("whoosh_short",   9.18, 0.50),
-        ("ui_click_hard", 10.18, 0.38), ("ui_click_hard", 10.44, 0.38),
-        ("ui_click_hard", 10.70, 0.38),
-        ("reverse_whoosh",12.05, 0.45),
-        ("impact_low",    12.42, 0.70),
+        ("click_hard", 10.18, 0.38), ("click_hard", 10.44, 0.38),
+        ("click_hard", 10.70, 0.38),
+        ("whoosh_reverse",12.05, 0.45),
+        ("impact_low",    12.42, 0.70), ("drone_low", 12.30, 0.20),
         ("pop",           13.12, 0.50),
     ],
     "FD-R5-20-Years": [
-        ("riser_tone",     0.30, 0.40),  # under the count-up
+        ("riser_stutter",  0.30, 0.42),  # under the count-up
         ("tick",           0.70, 0.30), ("tick", 0.95, 0.30),
         ("tick",           1.20, 0.30),
         ("impact_low",     1.68, 0.66),  # the "+" lands
         ("whoosh_short",   3.95, 0.50),
-        ("impact_deep",    4.45, 0.62),  # #1 MASERATI SPECIALISTS
-        ("hit_snap",       5.55, 0.60),  # Larini badge
+        ("impact_deep",    4.45, 0.60),  # #1 MASERATI SPECIALISTS
+        ("impact_tight",       5.55, 0.60),  # Larini badge
         ("whoosh_short",   8.78, 0.50),
         ("pop",            9.28, 0.42), ("pop", 9.50, 0.42),
         ("pop",            9.72, 0.42), ("pop", 9.94, 0.42),
-        ("reverse_whoosh",12.05, 0.45),
-        ("impact_low",    12.42, 0.70),
+        ("whoosh_reverse",12.05, 0.45),
+        ("impact_low",    12.42, 0.70), ("drone_low", 12.30, 0.20),
         ("pop",           13.12, 0.50),
     ],
     "FD-R6-Wheels-NVForged": [
         ("riser_air",      0.22, 0.55),
         ("impact_low",     0.82, 0.80),
         ("whoosh_short",   3.75, 0.50),
-        ("hit_snap",       4.68, 0.60),   # NV Forged badge
-        ("ui_click_hard",  5.22, 0.38), ("ui_click_hard", 5.52, 0.38),
-        ("ui_click_hard",  5.82, 0.38),
+        ("impact_tight",       4.68, 0.60),   # NV Forged badge
+        ("click_hard",  5.22, 0.38), ("click_hard", 5.52, 0.38),
+        ("click_hard",  5.82, 0.38),
         ("whoosh_short",   8.78, 0.50),
-        ("impact_deep",    9.62, 0.72),   # the wheel drops into the arch
-        ("ui_click_soft", 10.42, 0.40),
-        ("reverse_whoosh",12.05, 0.45),
-        ("impact_low",    12.42, 0.70),
+        ("impact_deep",    9.62, 0.74),   # the wheel drops into the arch
+        ("ratchet",        9.95, 0.30),
+        ("click_soft", 10.42, 0.40),
+        ("whoosh_reverse",12.05, 0.45),
+        ("impact_low",    12.42, 0.70), ("drone_low", 12.30, 0.20),
         ("pop",           13.12, 0.50),
     ],
     "FD-R7-Body-Kits": [
         ("riser_air",      0.22, 0.55),
         ("impact_low",     0.82, 0.80),
         ("whoosh_short",   3.65, 0.50),
-        ("swish",          4.12, 0.48),   # the weave wipes on
-        ("swish",          4.85, 0.36),   # sheen crosses
+        ("swish_fine",          4.12, 0.48),   # the weave wipes on
+        ("swish_fine",          4.85, 0.36),   # sheen crosses
         ("whoosh_short",   8.78, 0.50),
         ("pop",            9.30, 0.42), ("pop", 9.52, 0.42),
         ("pop",            9.74, 0.42), ("pop", 9.96, 0.42),
-        ("ding",          10.35, 0.50),
-        ("reverse_whoosh",12.05, 0.45),
-        ("impact_low",    12.42, 0.70),
+        ("chime_low",     10.35, 0.44),
+        ("whoosh_reverse",12.05, 0.45),
+        ("impact_low",    12.42, 0.70), ("drone_low", 12.30, 0.20),
         ("pop",           13.12, 0.50),
     ],
 }
