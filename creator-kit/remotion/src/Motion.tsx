@@ -186,7 +186,8 @@ const ChapterBar: React.FC<{ chapters: { at: number; label: string }[] }> = ({ c
   const frame = useCurrentFrame(); const { fps, height: H, width: W, durationInFrames } = useVideoConfig(); const s = frame / fps; const total = durationInFrames / fps;
   const p = s / total; const cur = [...chapters].reverse().find((c) => s >= c.at);
   const inS = interpolate(frame, [0, 20], [0, 1], clamp);
-  const left = W * 0.2, width = W * 0.6, top = H * 0.145, h = H * 0.0035;
+  // Left-aligned and short enough to stay clear of the corner logo bug on the right.
+  const left = W * 0.067, width = W * 0.46, top = H * 0.145, h = H * 0.0035;
   return (
     <div style={{ position: "absolute", left, top, width, opacity: inS }}>
       <div style={{ position: "relative", height: h, background: "rgba(255,255,255,.28)", borderRadius: h }}>

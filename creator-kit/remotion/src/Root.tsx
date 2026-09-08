@@ -2,6 +2,7 @@ import React from "react";
 import { Composition } from "remotion";
 import { Reel, type ReelProps } from "./Reel";
 import { Motion, type MotionProps } from "./Motion";
+import { Intro, type IntroProps } from "./Intro";
 
 const FPS = 29.97;
 const SECONDS = 32.1;
@@ -58,6 +59,14 @@ export const RemotionRoot: React.FC = () => (
       fps={FPS} width={2160} height={3840}
       defaultProps={{ src: "clip.mp4", words: [] } as MotionProps}
       calculateMetadata={({ props }: { props: MotionProps }) => ({ durationInFrames: Math.round(FPS * (props.durationSeconds ?? SECONDS)) })}
+    />
+    <Composition
+      id="Intro4K"
+      component={Intro}
+      durationInFrames={Math.round(FPS * 5)}
+      fps={FPS} width={2160} height={3840}
+      defaultProps={{ line1: "Omari'e", line2: "Young", sub: "Anti Stock · Formula Dynamics", handles: ["@nq.young", "@Youngomarie"] } as IntroProps}
+      calculateMetadata={({ props }: { props: IntroProps }) => ({ durationInFrames: Math.round(FPS * (props.durationSeconds ?? 5)) })}
     />
     <Composition
       id="StyleProof"

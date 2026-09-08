@@ -26,10 +26,10 @@
 set -euo pipefail
 die() { echo "error: $*" >&2; exit 1; }
 MASTER="${1:?}"; OVERLAY="${2:?}"; PROPS="${3:?}"; OUT="${4:?}"; shift 4
-LUT=""; LOGO=""; CRF=16; MAXRATE=""; SHARPEN=0.6; FPS=29.97; PRESET="faster"
+LUT=""; LOGO=""; CRF=16; MAXRATE=""; SHARPEN=0.6; FPS=29.97; PRESET="faster"; LIMIT=""
 while [ $# -gt 0 ]; do case "$1" in
   --lut) LUT="$2"; shift 2;; --logo) LOGO="$2"; shift 2;; --crf) CRF="$2"; shift 2;;
-  --maxrate) MAXRATE="$2"; shift 2;; --preset) PRESET="$2"; shift 2;; --sharpen) SHARPEN="$2"; shift 2;; --fps) FPS="$2"; shift 2;;
+  --maxrate) MAXRATE="$2"; shift 2;; --preset) PRESET="$2"; shift 2;; --sharpen) SHARPEN="$2"; shift 2;; --fps) FPS="$2"; shift 2;; --limit) LIMIT="$2"; shift 2;;
   *) die "unknown option $1";; esac; done
 for f in "$MASTER" "$OVERLAY" "$PROPS"; do [ -f "$f" ] || die "not found: $f"; done
 
@@ -67,7 +67,7 @@ fi
 if [ "$SHARPEN" != "0" ]; then
   vf+=";${last}unsharp=5:5:${SHARPEN}:5:5:0[vs]"; last="[vs]"
 fi
-vf+=";${last}format=yuv420p[vout];[0:a]loudnorm=I=-14:TP=-1.5:LRA=11[aout]"
+vf+=";${last}format=yuv420p[vout];[0:a]loudnorm=I=-14:TP=-1.5:LRA=11${LIMIT:+,alimiter=limit=${LIMIT}:attack=5:release=60:level=false}[aout]"
 
 ffmpeg -nostdin -y -hide_banner -loglevel error -stats "${inputs[@]}" -filter_complex "$vf" \
   -map "[vout]" -map "[aout]" -r "$FPS" \
