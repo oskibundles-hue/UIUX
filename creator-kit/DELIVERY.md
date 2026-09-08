@@ -64,3 +64,19 @@ Best 60 seconds of each take, silence-cut at your rhythm, in shooting order.
 | 16 | 16 wheels off | 0:18 · 126 MB · 4K, new grade, cut, no captions | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/0ddafd89-32e9-472e-b939-e6106c1c3c3a.mp4) |
 | 17 | 17 matte black wheel work | 0:40 · 319 MB · 4K, new grade, cut, no captions | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/688d2593-b4b0-4afb-8528-34e80625375d.mp4) |
 | 18 | 18 red supercar | 0:59 · 564 MB · 4K, new grade, cut, no captions | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/f88c7a50-5672-4ac3-a63f-fbcbb9b64f87.mp4) |
+
+## Vlog Cut · the series re-graded natural, pop captions (2026-09-08)
+
+Same nine timelines as R1–R9, re-cut from the D-Log raws with `--look vlog` (85% match, greys +2.0 R−B, lift 0.03, knee 0.08, saturation 92%, no sharpening) and `captionStyle: "pop"`. Page: https://claude.ai/code/artifact/0e99e358-b425-4511-9bf6-265f1acbec54. Originals stay listed above for comparison.
+
+| reel | details | link |
+|---|---|---|
+| VR1 · the shop before | 1:27 · 628 MB · score 73 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/0f85ee0b-20b4-49d8-9deb-e87c5c6172ed.mp4) |
+| VR2 · led trim goes in | 1:32 · 759 MB · score 69 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/be98fa1a-0d5a-48db-aa9b-0a0d05d633cd.mp4) |
+| VR3 · drilling and the frame | 1:29 · 444 MB · score 71 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/ebaf8291-40b8-456e-960a-5ad39e235f49.mp4) |
+| VR4 · first car rolls in | 1:26 · 496 MB · score 61 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/4030c3d7-3297-436d-aac0-a68e84c2fecc.mp4) |
+| VR5 · raising the ceiling | 1:29 · 684 MB · score 68 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/ef35f980-0199-4b7e-9ff9-f6ffede88b4c.mp4) |
+| VR6 · panels up car on lift | 1:27 · 509 MB · score 68 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/650eae23-3fa6-4063-bdc8-743d80827977.mp4) |
+| VR7 · aston martin brake job | 1:30 · 580 MB · score 69 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/22dfa444-c432-45b1-9b5f-372f8fb367b3.mp4) |
+| VR8 · sf90 pulls up | 1:32 · 696 MB · score 58 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/7f6bf83e-bd14-42fe-88d3-2f28ca688f78.mp4) |
+| V1 · first car in the new bay (R9 in the vlog look) | 0:38 · 261 MB · score 76 | [download](https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/6df4926b-2a16-4137-b152-dc8461902cf8.mp4) |
