@@ -286,6 +286,23 @@ Zipped packs ready to download and unzip. Start with the vertical starter pack.
 | `FD-09-logos.zip` | 4.0 MB |
 | `README.md` | 2 KB |
 
+## `10-motion-sfx/`
+
+| File | Size |
+|---|---|
+| `MOTION-AND-SFX.md` | 4 KB |
+
+## `10-motion-sfx/sfx/`
+
+**19 files** (1.3 MB). Examples:
+
+- `MANIFEST.md`
+- `_audition-all.wav`
+- `impact-hard.wav`
+- `impact-soft.wav`
+- `impact-tight.wav`
+- …and 14 more following the same pattern
+
 ---
 
-**386 files total.**
+**406 files total.**
