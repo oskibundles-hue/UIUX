@@ -17,16 +17,22 @@ def dur(p):
     e = subprocess.run(["ffmpeg", "-i", p], capture_output=True, text=True).stderr
     m = re.search(r"Duration: (\d+):(\d+):([\d.]+)", e); return int(m[1])*3600+int(m[2])*60+float(m[3])
 
-def phrases(tpath):
-    return [(s["start"], s["end"], len(s.get("words", []))) for s in json.load(open(tpath))]
+def phrases(tpath, drop=None):
+    """(start, end, words) per phrase; words inside dropped (other-voice) ranges count as 0."""
+    out = []
+    for s in json.load(open(tpath)):
+        n = len(s.get("words", []))
+        if drop and any(a - 0.05 <= s["start"] and s["end"] <= b + 0.05 for a, b in drop): n = 0
+        out.append((s["start"], s["end"], n))
+    return out
 
 def best_window(ph, total, budget):
     if not ph or budget >= total: return 0.0, total
     best, bs = (0.0, min(total, budget)), -1
     starts = [0.0] + [p[0] for p in ph]
     for a in starts:
+        if a + budget > total: a = max(0.0, total - budget)   # late speech: slide the window back, don't skip it
         b = min(total, a + budget)
-        if b - a < budget * 0.8 and a > 0: continue
         w = sum(n for s, e, n in ph if s >= a - 0.05 and e <= b + 0.05)
         if w > bs: bs, best = w, (a, b)
     a, b = best
@@ -40,12 +46,16 @@ def main():
     ap.add_argument("clips", nargs="+"); ap.add_argument("--target", type=float, default=90)
     ap.add_argument("--out", required=True); ap.add_argument("--tdir", default="trial")
     ap.add_argument("--fix", default="{}")
+    ap.add_argument("--drop-dir", default=None, help="dir with drop_NN.json (other-voice ranges) so those words don't attract the window")
     a = ap.parse_args()
     items = []
     for c in a.clips:
         n = re.match(r"(\d{2})", os.path.basename(c))[1]
         t = os.path.join(a.tdir, f"a{n}.json")
-        items.append({"clip": c, "words": t, "dur": dur(c), "ph": phrases(t) if os.path.exists(t) else []})
+        drop = None
+        if a.drop_dir and os.path.exists(os.path.join(a.drop_dir, f"drop_{n}.json")):
+            d = json.load(open(os.path.join(a.drop_dir, f"drop_{n}.json"))); drop = d if isinstance(d, list) else d.get(n, d.get("ranges", []))
+        items.append({"clip": c, "words": t, "dur": dur(c), "ph": phrases(t, drop) if os.path.exists(t) else []})
     total = sum(i["dur"] for i in items)
     segs = []
     if total <= a.target * 1.08:
