@@ -82,12 +82,12 @@ CUES = {
         ("pop",           13.12, 0.50),
     ],
     "FD-R5-20-Years": [
-        ("riser_tone",     0.30, 0.50),  # under the count-up
+        ("riser_tone",     0.30, 0.40),  # under the count-up
         ("tick",           0.70, 0.30), ("tick", 0.95, 0.30),
         ("tick",           1.20, 0.30),
-        ("impact_low",     1.68, 0.85),  # the "+" lands
+        ("impact_low",     1.68, 0.66),  # the "+" lands
         ("whoosh_short",   3.95, 0.50),
-        ("impact_deep",    4.45, 0.80),  # #1 MASERATI SPECIALISTS
+        ("impact_deep",    4.45, 0.62),  # #1 MASERATI SPECIALISTS
         ("hit_snap",       5.55, 0.60),  # Larini badge
         ("whoosh_short",   8.78, 0.50),
         ("pop",            9.28, 0.42), ("pop", 9.50, 0.42),
