@@ -51,7 +51,10 @@ const TitleReveal: React.FC<{ t: { eyebrow: string; line1: string; line2: string
   const bar = spring({ frame: frame - 14, fps, config: { damping: 20, stiffness: 140 }, durationInFrames: 18 });
   const eye = interpolate(frame, [0, 16], [0, 1], clamp);
   const out = interpolate(s, [t.until - 0.4, t.until], [0, 1], { ...clamp, easing: Easing.in(Easing.cubic) });
-  const big = H * 0.155, small = H * 0.07;
+  // Fit each line to the frame: Anton runs about 0.5 em per character.
+  const avail = W * 0.84;
+  const big = Math.min(H * 0.155, avail / (Math.max(t.line1.length, 1) * 0.5));
+  const small = Math.min(H * 0.07, avail / (Math.max(t.line2.length, 1) * 0.5));
   return (
     <div style={{ position: "absolute", left: W * 0.067, top: H * 0.20, right: W * 0.09, opacity: 1 - out, transform: `translateY(${-out * H * 0.06}px)` }}>
       <div style={{ fontFamily: ARCHIVO, fontWeight: 600, fontSize: H * 0.0125, letterSpacing: "0.2em", textTransform: "uppercase", color: "#fff",
