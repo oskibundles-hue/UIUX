@@ -18,6 +18,8 @@ import { continueRender, delayRender, staticFile } from "remotion";
 const FACES = [
   { family: "Anton", file: "fonts/Anton-Regular.ttf", weight: "400" },
   { family: "Archivo", file: "fonts/Archivo.ttf", weight: "100 900" },
+  { family: "Instrument Serif", file: "fonts/InstrumentSerif-Regular.ttf", weight: "400" },
+  { family: "Instrument Serif", file: "fonts/InstrumentSerif-Italic.ttf", weight: "400", style: "italic" },
 ];
 
 let started = false;
@@ -29,7 +31,7 @@ export const loadFonts = () => {
   const style = document.createElement("style");
   style.textContent = FACES.map(
     (f) => `@font-face{font-family:'${f.family}';src:url('${staticFile(f.file)}') format('truetype');` +
-           `font-weight:${f.weight};font-style:normal;font-display:block;}`
+           `font-weight:${f.weight};font-style:${(f as { style?: string }).style ?? "normal"};font-display:block;}`
   ).join("\n");
   document.head.appendChild(style);
 
