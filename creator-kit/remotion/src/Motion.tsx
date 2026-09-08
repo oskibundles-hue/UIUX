@@ -70,8 +70,9 @@ const toPhrases = (words: Word[], breaks: number[]) => {
   if (cur.length) out.push(cur);
   return out;
 };
-const KineticCaptions: React.FC<{ words: Word[]; emphasis: string[]; after: number; breaks: number[] }> = ({ words, emphasis, after, breaks }) => {
+const KineticCaptions: React.FC<{ words: Word[]; emphasis: string[]; after: number; until: number; breaks: number[] }> = ({ words, emphasis, after, until, breaks }) => {
   const frame = useCurrentFrame(); const { fps, height: H, width: W } = useVideoConfig(); const s = frame / fps;
+  if (s >= until) return null;
   const phrases = toPhrases(words.filter((w) => w.start >= after), breaks);
   const ph = phrases.find((p) => s >= p[0].start && s < p[p.length - 1].end + 0.45);
   if (!ph) return null;
@@ -188,16 +189,22 @@ const Outro: React.FC<{ o: { at: number; cta: string; endCardSrc?: string } }> =
   if (s < o.at) return null;
   const f0 = frame - Math.round(o.at * fps);
   const card = interpolate(f0, [0, 18], [0, 1], clamp);
-  const fs = H * 0.034; const letters = o.cta.split(""); const g0 = o.cta.indexOf("SF90");
+  const fs = H * 0.034; const g0 = o.cta.indexOf("SF90");
+  const wordsOut: { ch: string; i: number }[][] = []; let cur: { ch: string; i: number }[] = [];
+  o.cta.split("").forEach((ch, i) => { if (ch === " ") { wordsOut.push(cur); cur = []; } else cur.push({ ch, i }); }); if (cur.length) wordsOut.push(cur);
   return (
     <div style={{ position: "absolute", inset: 0 }}>
-      {o.endCardSrc ? <Img src={staticFile(o.endCardSrc)} style={{ position: "absolute", inset: 0, width: W, height: H, opacity: card, WebkitMaskImage: "linear-gradient(to bottom, #000 56%, transparent 68%)", maskImage: "linear-gradient(to bottom, #000 56%, transparent 68%)" }} /> : null}
-      <div style={{ position: "absolute", left: W * 0.067, right: W * 0.09, top: H * 0.715, padding: `${fs * 0.35}px ${fs * 0.5}px`, background: "rgba(8,8,8,.55)", borderLeft: `${fs * 0.16}px solid ${GOLD}`, opacity: card, fontFamily: ANTON, fontSize: fs, justifyContent: "flex-start", textAlign: "left", lineHeight: 1.05, textTransform: "uppercase", color: "#fff",
+      {o.endCardSrc ? <Img src={staticFile(o.endCardSrc)} style={{ position: "absolute", inset: 0, width: W, height: H, opacity: card, transform: "scale(0.84)", transformOrigin: "50% 16%", WebkitMaskImage: "linear-gradient(to bottom, #000 66%, transparent 71%)", maskImage: "linear-gradient(to bottom, #000 66%, transparent 71%)" }} /> : null}
+      <div style={{ position: "absolute", left: W * 0.067, right: W * 0.09, top: H * 0.665, padding: `${fs * 0.35}px ${fs * 0.5}px`, background: "rgba(8,8,8,.55)", borderLeft: `${fs * 0.16}px solid ${GOLD}`, opacity: card, fontFamily: ANTON, fontSize: fs, justifyContent: "flex-start", textAlign: "left", lineHeight: 1.05, textTransform: "uppercase", color: "#fff",
                     WebkitTextStroke: `${fs * 0.04}px rgba(0,0,0,.9)`, paintOrder: "stroke fill", textShadow: "0 8px 30px rgba(0,0,0,.7)", display: "flex", flexWrap: "wrap" }}>
-        {letters.map((ch, i) => {
-          const k = spring({ frame: f0 - 6 - i * 1.2, fps, config: { damping: 12, stiffness: 260 }, durationInFrames: 10 });
-          return <span key={i} style={{ display: "inline-block", whiteSpace: "pre", opacity: k, transform: `translateY(${(1 - k) * fs * 0.6}px)`, color: g0 >= 0 && i >= g0 && i < g0 + 4 ? GOLD : undefined }}>{ch}</span>;
-        })}
+        {wordsOut.map((wd, wi) => (
+          <span key={wi} style={{ display: "inline-block", whiteSpace: "nowrap", marginRight: fs * 0.28 }}>
+            {wd.map(({ ch, i }) => {
+              const k = spring({ frame: f0 - 6 - i * 1.2, fps, config: { damping: 12, stiffness: 260 }, durationInFrames: 10 });
+              return <span key={i} style={{ display: "inline-block", opacity: k, transform: `translateY(${(1 - k) * fs * 0.6}px)`, color: g0 >= 0 && i >= g0 && i < g0 + 4 ? GOLD : undefined }}>{ch}</span>;
+            })}
+          </span>
+        ))}
       </div>
     </div>
   );
@@ -208,7 +215,7 @@ export const Motion: React.FC<MotionProps> = ({ src, words, overlayOnly = false,
     {overlayOnly ? null : <OffthreadVideo src={src.startsWith("http") ? src : staticFile(src)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />}
     {chapters?.length ? <ChapterBar chapters={chapters} /> : null}
     {title ? <TitleReveal t={title} /> : null}
-    <KineticCaptions words={words} emphasis={emphasis} after={title?.until ?? 0} breaks={cuts.map((c) => c.at)} />
+    <KineticCaptions words={words} emphasis={emphasis} after={title?.until ?? 0} until={outro?.at ?? 1e9} breaks={cuts.map((c) => c.at)} />
     {(callouts ?? []).map((c, i) => <CalloutView key={i} c={c} />)}
     {lowerThird ? <LowerThird l={lowerThird} /> : null}
     {outro ? <Outro o={outro} /> : null}
