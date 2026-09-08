@@ -24,14 +24,15 @@ CUES = {
     "FD-R1-Exhaust-Larini": [
         ("riser_tone",     0.20, 0.38),   # tach sweeps up
         ("riser_air",      0.55, 0.34),
-        ("impact_metal",   1.36, 0.66),   # redline hit + red flash
+        ("k_impact_plate",   1.36, 0.66),   # redline hit + red flash
         ("whoosh_short",   3.72, 0.50),
-        ("impact_tight",       4.62, 0.60),   # distributor badge
-        ("click_hard",  5.15, 0.38), ("click_hard", 5.45, 0.38),
-        ("click_hard",  5.75, 0.38),
+        ("k_impact_metal",       4.62, 0.60),   # distributor badge
+        ("k_click_tight",  5.15, 0.38), ("k_click_tight", 5.45, 0.38),
+        ("k_click_tight",  5.75, 0.38),
         ("whoosh_short",   8.55, 0.50),
-        ("click_soft",  9.00, 0.35),
-        ("sub_drop",      10.25, 0.62),   # the valve opens — the big moment
+        ("k_select",  9.00, 0.35),
+        ("sub_drop",      10.25, 0.58),   # the valve opens — the big moment
+        ("k_impact_sub",  10.25, 0.38),
         ("whoosh_reverse",11.85, 0.45),
         ("impact_low",    12.22, 0.70), ("drone_low", 12.10, 0.20),   # end card
         ("pop",           12.92, 0.50),   # CTA
@@ -44,8 +45,8 @@ CUES = {
         ("swish_fine",          5.08, 0.50),   # FD curve draws
         ("sub_drop",       6.08, 0.58),   # the gain area fills
         ("whoosh_short",   9.18, 0.50),
-        ("click_hard",  9.65, 0.38), ("click_hard", 9.95, 0.38),
-        ("click_hard", 10.25, 0.38),
+        ("k_click_tight",  9.65, 0.38), ("k_click_tight", 9.95, 0.38),
+        ("k_click_tight", 10.25, 0.38),
         ("whoosh_reverse",12.05, 0.45),
         ("impact_low",    12.42, 0.70), ("drone_low", 12.30, 0.20),
         ("pop",           13.12, 0.50),
@@ -54,15 +55,15 @@ CUES = {
         ("riser_air",      0.22, 0.55),
         ("impact_low",     0.80, 0.80),
         ("whoosh_short",   3.65, 0.50),
-        ("click_soft",  4.22, 0.40), ("click_soft", 4.56, 0.40),
-        ("click_soft",  4.90, 0.40), ("click_soft", 5.24, 0.40),
-        ("impact_tight",       6.26, 0.70),  # the scratch lands
+        ("k_select",  4.22, 0.40), ("k_select", 4.56, 0.40),
+        ("k_select",  4.90, 0.40), ("k_select", 5.24, 0.40),
+        ("k_impact_metal",       6.26, 0.70),  # the scratch lands
         ("riser_tone",     7.00, 0.45),  # healing
         ("shimmer",        7.95, 0.42),  # healed
-        ("ding",           8.10, 0.44),
+        ("k_glass",        8.10, 0.40),
         ("whoosh_short",   9.38, 0.50),
-        ("click_hard",  9.85, 0.38), ("click_hard", 10.15, 0.38),
-        ("click_hard", 10.45, 0.38),
+        ("k_click_tight",  9.85, 0.38), ("k_click_tight", 10.15, 0.38),
+        ("k_click_tight", 10.45, 0.38),
         ("whoosh_reverse",12.05, 0.45),
         ("impact_low",    12.42, 0.70), ("drone_low", 12.30, 0.20),
         ("pop",           13.12, 0.50),
@@ -71,26 +72,26 @@ CUES = {
         ("riser_air",      0.22, 0.55),
         ("impact_low",     0.80, 0.80),
         ("whoosh_short",   3.65, 0.50),
-        ("switch",        4.08, 0.55),  # the build sheet lands
-        ("click_soft",  4.68, 0.40), ("click_soft", 5.00, 0.40),
-        ("click_soft",  5.32, 0.40), ("click_soft", 5.64, 0.40),
-        ("click_soft",  5.96, 0.40),
+        ("k_switch_heavy",        4.08, 0.55),  # the build sheet lands
+        ("k_select",  4.68, 0.40), ("k_select", 5.00, 0.40),
+        ("k_select",  5.32, 0.40), ("k_select", 5.64, 0.40),
+        ("k_select",  5.96, 0.40),
         ("ding",           6.70, 0.55),  # the tick
         ("whoosh_short",   9.18, 0.50),
-        ("click_hard", 10.18, 0.38), ("click_hard", 10.44, 0.38),
-        ("click_hard", 10.70, 0.38),
+        ("k_click_tight", 10.18, 0.38), ("k_click_tight", 10.44, 0.38),
+        ("k_click_tight", 10.70, 0.38),
         ("whoosh_reverse",12.05, 0.45),
         ("impact_low",    12.42, 0.70), ("drone_low", 12.30, 0.20),
         ("pop",           13.12, 0.50),
     ],
     "FD-R5-20-Years": [
         ("riser_stutter",  0.30, 0.42),  # under the count-up
-        ("tick",           0.70, 0.30), ("tick", 0.95, 0.30),
-        ("tick",           1.20, 0.30),
+        ("k_tick_metal",           0.70, 0.30), ("k_tick_metal", 0.95, 0.30),
+        ("k_tick_metal",           1.20, 0.30),
         ("impact_low",     1.68, 0.66),  # the "+" lands
         ("whoosh_short",   3.95, 0.50),
         ("impact_deep",    4.45, 0.60),  # #1 MASERATI SPECIALISTS
-        ("impact_tight",       5.55, 0.60),  # Larini badge
+        ("k_impact_metal",       5.55, 0.60),  # Larini badge
         ("whoosh_short",   8.78, 0.50),
         ("pop",            9.28, 0.42), ("pop", 9.50, 0.42),
         ("pop",            9.72, 0.42), ("pop", 9.94, 0.42),
@@ -102,13 +103,13 @@ CUES = {
         ("riser_air",      0.22, 0.55),
         ("impact_low",     0.82, 0.80),
         ("whoosh_short",   3.75, 0.50),
-        ("impact_tight",       4.68, 0.60),   # NV Forged badge
-        ("click_hard",  5.22, 0.38), ("click_hard", 5.52, 0.38),
-        ("click_hard",  5.82, 0.38),
+        ("k_impact_metal",       4.68, 0.60),   # NV Forged badge
+        ("k_click_tight",  5.22, 0.38), ("k_click_tight", 5.52, 0.38),
+        ("k_click_tight",  5.82, 0.38),
         ("whoosh_short",   8.78, 0.50),
         ("impact_deep",    9.62, 0.74),   # the wheel drops into the arch
         ("ratchet",        9.95, 0.30),
-        ("click_soft", 10.42, 0.40),
+        ("k_select", 10.42, 0.40),
         ("whoosh_reverse",12.05, 0.45),
         ("impact_low",    12.42, 0.70), ("drone_low", 12.30, 0.20),
         ("pop",           13.12, 0.50),

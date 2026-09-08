@@ -44,11 +44,25 @@ in two versions:
 
 ### The sound pack
 
-`sfx/` holds 26 sounds, **synthesised from scratch** — original work with no
-third-party licence attached. That is deliberate. These run in paid ads, and
-most "free" SFX libraries either require attribution, exclude advertising
-use, or state no licence at all; a spot check of Archive.org's open audio
-returned items with no stated licence at all, which cannot be cleared.
+`sfx/` holds 37 sounds in two halves.
+
+**Recorded (11)** — curated from Kenney's CC0 libraries. Kenney releases
+everything under Creative Commons Zero: public domain, no attribution
+required, commercial use permitted. Sources and the reason each was picked
+are in `sfx/KENNEY-SOURCES.md`.
+
+**Designed (26)** — synthesised from scratch, original work.
+
+The split is not arbitrary. Kenney's libraries are game assets, and most of
+the 753 files (lasers, footsteps, space engines, casino chips) are wrong for
+a luxury automotive ad. But their *mechanical* recordings beat synthesis
+outright — the irregularity of a real object being struck is exactly what
+synthesis approximates badly, so every switch, click and metal impact here
+is a recording. The reverse holds for the cinematic layer: Kenney has no sub
+drops, long risers or drones, so those stay designed.
+
+Selections were made by measuring duration, peak and spectral centroid
+across 71 candidates, not by filename.
 
 Each sound is built in three layers — a transient to give the ear a point to
 lock onto, a body carrying the character, and a tail setting the size of the
@@ -58,19 +72,28 @@ heard directly.
 
 | Group | Sounds |
 |---|---|
-| Impacts | `impact_deep` `impact_low` `impact_tight` `impact_metal` `sub_drop` |
+| Impacts (designed) | `impact_deep` `impact_low` `sub_drop` |
+| Impacts (recorded) | `k_impact_plate` `k_impact_plate2` `k_impact_metal` `k_impact_sub` |
+| Mechanical (recorded) | `k_switch_heavy` `k_switch_mid` `k_click_tight` `k_click_low` `k_select` `k_tick_metal` `k_glass` |
 | Whooshes | `whoosh_short` `whoosh_long` `whoosh_reverse` `whoosh_pass` `swish_fine` |
 | Risers | `riser_air` `riser_tone` `riser_stutter` |
-| UI / mechanical | `click_soft` `click_hard` `tick` `thock` `switch` `ratchet` |
+| UI (designed) | `click_soft` `click_hard` `tick` `thock` `switch` `ratchet` |
 | Accents | `pop` `ding` `chime_low` `shimmer` `reverse_tail` |
 | Texture | `drone_low` `air_bed` |
 
-48 kHz, 16-bit stereo, peak -3 dBFS. Rebuild with `python3 tools/build_sfx.py`
-— the generator is seeded, so the pack is reproducible byte for byte.
+48 kHz, 16-bit stereo, peak -3 dBFS throughout. Rebuild with:
 
-**Want recorded rather than designed sounds?** Freesound and Pixabay both have
-commercially usable material but need an API key; give me one and I can pull
-CC0-filtered results to sit alongside these.
+```bash
+python3 tools/build_sfx.py     # the 26 designed sounds (seeded, reproducible)
+python3 tools/fetch_sfx.py     # re-download Kenney's CC0 packs
+python3 tools/curate_sfx.py    # re-cut the 11 picks from them
+```
+
+`fetch_sfx.py` checks each pack's page for CC0 before downloading, so a
+licence change upstream surfaces as a skip rather than a silent bad grab.
+
+**More recorded material** is available from Freesound and Pixabay, both of
+which need an API key. Supply one and the same curation approach applies.
 
 The SFX version peaks at about -3.5 dBFS with a mean near -23 dBFS, so there
 is real headroom to drop a **licensed music bed** underneath without
