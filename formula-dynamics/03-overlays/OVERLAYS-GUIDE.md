@@ -92,7 +92,9 @@ Use `dark` on dark footage, `light` on bright footage.
 
 ## `accent-bars/` — the racing stripe
 
-`fd-accent-stripe_{width}w-{thin|bold}.png` — four-colour stripe
+`fd-accent-stripe_{width}w-{thin|bold}.png` — five-colour stripe
+(red / black / white / green / yellow — the black segment is real, it just
+disappears against a black background)
 `fd-red-bar_{width}w-{thin|bold}.png` — solid red
 
 Widths 1080, 1920 and 2160. Uses: underline a title, divide a split screen,

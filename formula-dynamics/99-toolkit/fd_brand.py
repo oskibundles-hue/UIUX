@@ -53,14 +53,26 @@ def rgb(h):
 # background of the extraction source, not an ink).
 INK_COLORS = [RED, WHITE, GREEN, YELLOW]
 
-# The four-colour racing stripe, left to right, as it appears under the
-# wordmark. Widths are proportional, not absolute.
+# The racing stripe, left to right, as it appears under the wordmark.
+# Widths are proportional, not absolute, and were measured off the master
+# artwork rather than eyeballed.
+#
+# FIVE segments, not four. The stripe carries both a black and a white
+# segment, so whichever one matches the background reads as a gap: on a black
+# poster the black segment vanishes and the stripe looks like
+# red / white / green / yellow. It is not - do not drop the black segment to
+# "fix" a stripe that looks short on dark ground. On light ground the white
+# segment disappears instead, which is the same effect in reverse.
 ACCENT_STRIPE = [
-    (RED, 0.42),
-    (WHITE, 0.24),
-    (GREEN, 0.20),
-    (YELLOW, 0.14),
+    (RED, 0.367),
+    (BLACK, 0.214),
+    (WHITE, 0.194),
+    (GREEN, 0.170),
+    (YELLOW, 0.055),
 ]
+
+assert abs(sum(s for _, s in ACCENT_STRIPE) - 1.0) < 1e-9, \
+    "ACCENT_STRIPE shares must sum to 1.0"
 
 # --------------------------------------------------------------------------
 # Typography  (brand guide section 5)

@@ -31,6 +31,7 @@ if __name__ == "__main__":
         ("logo bugs", build_overlays.build_logo_bugs),
         ("lower thirds", build_overlays.build_lower_thirds),
         ("service badges", build_overlays.build_badges),
+        ("CTA captions", build_overlays.build_cta_captions),
         ("title cards", build_overlays.build_title_cards),
         ("end cards", build_overlays.build_end_cards),
         ("safe-zone guides", build_overlays.build_safe_zones),

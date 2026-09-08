@@ -11,7 +11,7 @@ The rules: brand spec, tokens, master guide, colour swatches.
 
 | File | Size |
 |---|---|
-| `BRAND-SPEC.md` | 3 KB |
+| `BRAND-SPEC.md` | 4 KB |
 | `brand-guide-master.png` | 1.5 MB |
 | `brand-tokens.css` | 1 KB |
 | `brand-tokens.json` | 5 KB |
@@ -243,7 +243,7 @@ Hooks, captions, hashtags, voice, service and partner wording.
 | `README.md` | 0 KB |
 | `cta-captions.md` | 5 KB |
 | `hashtags.md` | 2 KB |
-| `hooks-and-captions.md` | 4 KB |
+| `hooks-and-captions.md` | 5 KB |
 | `services-and-partners.md` | 3 KB |
 | `voice-and-tone.md` | 2 KB |
 
@@ -253,7 +253,7 @@ How to shoot, edit and export.
 
 | File | Size |
 |---|---|
-| `AUTO-EDIT.md` | 5 KB |
+| `AUTO-EDIT.md` | 10 KB |
 | `CAPCUT-WORKFLOW.md` | 4 KB |
 | `EXPORT-SPECS.md` | 2 KB |
 | `SHOT-LISTS.md` | 5 KB |

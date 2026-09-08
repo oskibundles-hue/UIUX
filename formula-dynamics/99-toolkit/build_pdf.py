@@ -87,7 +87,7 @@ class Doc:
         self.c.line(x1, y1, x2, y2)
 
     def stripe(self, x, y, w, h=4.5):
-        """The four-colour racing stripe."""
+        """The five-colour racing stripe."""
         cx = x
         for hex_code, share in B.ACCENT_STRIPE:
             seg = w * share
@@ -296,17 +296,37 @@ def page_palette(d):
     d.rect(MARGIN, y - 62, 4, 62, B.RED)
     d.label("IMPORTANT", MARGIN + 20, y - 22, 8, B.RED)
     d.body("<b>Green and yellow are stripe colours, not brand colours.</b> They appear "
-           "only inside the four-colour accent stripe. Never set a headline in green "
+           "only inside the accent stripe. Never set a headline in green "
            "or fill a background with yellow.",
            MARGIN + 20, y - 32, CONTENT_W - 40, 9.4, 13.5)
 
     y -= 92
     d.label("THE ACCENT STRIPE", MARGIN, y, 8, INK)
-    d.stripe(MARGIN, y - 22, CONTENT_W, 10)
-    d.body("Red &rarr; White &rarr; Green &rarr; Yellow, left to right, in roughly "
-           "42 / 24 / 20 / 14 proportion. Ready-made bars live in "
+
+    # Anatomy figure, on a neutral plate. Two of the five segments are black
+    # and white, so on any single-tone ground one of them matches the page and
+    # reads as a gap - which is exactly the trap this figure has to avoid.
+    d.rect(MARGIN, y - 30, CONTENT_W, 22, "#8A8A90")
+    d.stripe(MARGIN, y - 26, CONTENT_W, 14)
+
+    cx = MARGIN
+    for hex_code, share in B.ACCENT_STRIPE:
+        seg = CONTENT_W * share
+        txt = f"{share * 100:.1f}%"
+        tw = len(txt) * 6.4 * 0.66
+        lx = min(max(cx + seg / 2 - tw / 2, MARGIN),
+                 MARGIN + CONTENT_W - tw)
+        d.label(txt, lx, y - 44, 6.4, MUTED, 0.08)
+        cx += seg
+
+    d.body("<b>Five segments, not four.</b> Red, black, white, green, yellow, "
+           "left to right. It carries both a black and a white segment, so "
+           "whichever one matches the background reads as a gap: on a black "
+           "poster the stripe looks like red / white / green / yellow. It is "
+           "not - never delete the black segment to &ldquo;fix&rdquo; a stripe "
+           "that looks short on dark ground. Ready-made bars live in "
            "<b>03-overlays/accent-bars/</b>.",
-           MARGIN, y - 34, CONTENT_W, 9.2, 13)
+           MARGIN, y - 56, CONTENT_W, 9.2, 13)
 
 
 def page_type(d):

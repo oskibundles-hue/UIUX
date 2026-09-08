@@ -3,7 +3,7 @@ Formula Dynamics Performance - shared rendering helpers.
 
 Small, dependency-light utilities used by the overlay builders: logo loading
 from the traced vectors, Bebas Neue text rendering with letter-spacing, and
-the four-colour accent stripe.
+the accent stripe.
 """
 
 import io
@@ -148,14 +148,23 @@ def fit_text(msg, target_width, max_height=None, **kw):
 # Brand furniture
 # --------------------------------------------------------------------------
 def accent_stripe(width, height):
-    """The four-colour racing stripe, left to right, as an RGBA image."""
+    """The five-colour racing stripe, left to right, as an RGBA image.
+
+    Segments are laid out on rounded pixel boundaries so neighbouring colours
+    butt up exactly - a fractional edge leaves a one-pixel seam of whatever
+    was underneath, which on a transparent overlay is a hairline of video.
+    """
     im = Image.new("RGBA", (int(width), max(1, int(height))), (0, 0, 0, 0))
     d = ImageDraw.Draw(im)
-    x = 0.0
+    width = int(width)
+    pos = 0.0
+    x0 = 0
     for hex_color, share in B.ACCENT_STRIPE:
-        w = width * share
-        d.rectangle([x, 0, x + w, height], fill=B.rgb(hex_color) + (255,))
-        x += w
+        pos += share
+        x1 = min(width, round(width * pos))
+        if x1 > x0:
+            d.rectangle([x0, 0, x1 - 1, height], fill=B.rgb(hex_color) + (255,))
+        x0 = x1
     return im
 
 

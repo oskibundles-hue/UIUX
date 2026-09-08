@@ -138,7 +138,7 @@ def build():
          "Red-outlined chips for feature callouts, one per service,\n"
          "plus a ready-made strip of the four lead services."),
         ("FD-07-accent-bars", "accent-bars", "Accent bars",
-         "The four-colour racing stripe and solid red bars.\n"
+         "The five-colour racing stripe and solid red bars.\n"
          "Underline a title, divide a split screen, or keyframe one across\n"
          "the frame over 6-10 frames as your house transition."),
     ]

@@ -55,19 +55,23 @@
   "accentStripe": [
     {
       "color": "#FE0F13",
-      "share": 0.42
+      "share": 0.367
+    },
+    {
+      "color": "#000000",
+      "share": 0.214
     },
     {
       "color": "#FFFFFF",
-      "share": 0.24
+      "share": 0.194
     },
     {
       "color": "#1DB14B",
-      "share": 0.2
+      "share": 0.17
     },
     {
       "color": "#FFDE00",
-      "share": 0.14
+      "share": 0.055
     }
   ],
   "type": {

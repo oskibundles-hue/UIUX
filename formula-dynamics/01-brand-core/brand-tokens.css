@@ -14,13 +14,15 @@
   --fd-logo-min-width: 120px;
 }
 
-/* Four-colour racing stripe */
+/* Five-colour racing stripe. The black and white segments are real:
+   whichever matches the background reads as a gap. */
 .fd-accent-stripe {
   background: linear-gradient(to right,
-    #FE0F13 0% 42%,
-    #FFFFFF 42% 66%,
-    #1DB14B 66% 86%,
-    #FFDE00 86% 100%
+    #FE0F13 0% 37%,
+    #000000 37% 58%,
+    #FFFFFF 58% 77%,
+    #1DB14B 77% 94%,
+    #FFDE00 94% 100%
   );
   height: 6px;
 }

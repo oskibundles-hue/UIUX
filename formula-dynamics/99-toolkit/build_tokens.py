@@ -64,7 +64,8 @@ def build():
         "  --fd-logo-min-width: 120px;",
         "}",
         "",
-        "/* Four-colour racing stripe */",
+        "/* Five-colour racing stripe. The black and white segments are real:",
+        "   whichever matches the background reads as a gap. */",
         ".fd-accent-stripe {",
         "  background: linear-gradient(to right,",
     ]

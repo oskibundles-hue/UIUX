@@ -16,14 +16,30 @@ That image is the authority — this file is the working copy.
 | Yellow | `#FFDE00` | 255, 222, 0 | Racing stripe only. |
 
 **Green and yellow are stripe colours, not brand colours.** They appear only
-inside the four-colour accent stripe. Never set a headline in green, never fill
-a background with yellow.
+inside the accent stripe. Never set a headline in green, never fill a
+background with yellow.
 
 Solid 1080 × 1080 swatches for use as CapCut backgrounds: `color-swatches/`.
 
 ### The accent stripe
-Red → White → Green → Yellow, left to right, in roughly 42 / 24 / 20 / 14
-proportion. Ready-made bars: `../03-overlays/accent-bars/`.
+
+Five segments, left to right, measured off the master artwork:
+
+| # | Colour | Share |
+|---|---|---|
+| 1 | Red `#FE0F13` | 36.7% |
+| 2 | Black `#000000` | 21.4% |
+| 3 | White `#FFFFFF` | 19.4% |
+| 4 | Green `#1DB14B` | 17.0% |
+| 5 | Yellow `#FFDE00` | 5.5% |
+
+**It is five segments, not four.** The stripe carries both a black and a white
+segment, so whichever one matches the background reads as a gap — on a black
+poster the black segment disappears and the stripe looks like red / white /
+green / yellow. On white it is the white segment that vanishes instead. Do not
+"correct" a stripe that looks short on dark ground by deleting the black.
+
+Ready-made bars: `../03-overlays/accent-bars/`.
 
 ---
 
