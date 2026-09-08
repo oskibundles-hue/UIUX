@@ -54,14 +54,43 @@ wheels, Stage 1 tune, lowered. No horsepower figures: the voice guide asks for
 specifics, and there is no dyno sheet for this car. Add one and the rows take
 numbers.
 
-## Two kinds of variation
+## Three kinds of variation
 
+- **`layouts/` — same video, different design.** Same cut, same copy, a
+  different arrangement on the frame.
 - **`cuts/` — different videos.** Different shot order, length and beat
   structure, each with its own re-cut plate.
 - **`variants/` — same video, different message.** Only the hook and CTA change.
 
-Both are cue files and both render through `build_ad.py --cue`.
+All three are cue files and all render through `build_ad.py --cue`.
 `python3 build_ad.py --all` renders everything.
+
+## Layouts
+
+`layouts.py` holds the treatments; a cue picks one with `"layoutStyle"`. Each
+supplies four draw functions — `backdrop`, `identity`, `hook`, `build` — and gets
+a context with the cue, the frame geometry and the kit modules. The CTA caption
+and end card are full-frame kit overlays, so every layout shares them.
+
+| Layout | Treatment | Use it when |
+|---|---|---|
+| **hud** (default) | Bracketed title block bottom-left, ticker under it, left-aligned type in the mid band | The house look — matches the 765LT and the Roma |
+| **centred** | Mark above the hook, everything on the vertical axis, lockup centred at the foot | Quieter, more editorial; suits a single hero shot |
+| **panel** | A solid card in the lower half that swaps its contents; build sheet in two columns of two | **Busy or bright footage** — it ignores what is underneath, so it survives any shot |
+| **rail** | A red rail down the left edge with type hanging off it, build indices set in the rail | When you want structure on screen without a filled panel |
+
+```bash
+python3 build_ad.py --cue layouts/cue-layout-panel.json
+```
+
+Two things worth knowing if you add a fifth:
+
+- **Don't stand the four-colour stripe on end.** It carries a black segment, and
+  vertically on dark footage that reads as a broken line rather than as brand
+  furniture. `rail` uses solid red for the rail and keeps the stripe as a cap.
+- **Check the lockup against the ticker.** The ticker sits at `y=0.775`; a
+  layout that puts its lockup near there will collide, which is why `rail` sits
+  at `0.688` and `centred` at `0.845`.
 
 ## Cuts
 
