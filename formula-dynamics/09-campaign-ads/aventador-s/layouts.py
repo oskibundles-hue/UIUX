@@ -14,6 +14,12 @@ kit overlays and are shared by every layout, so they are not defined here.
     build(ctx, base, t)      the build sheet
 
 Adding a layout means adding one entry to LAYOUTS. Nothing else changes.
+
+APPROVED: "hud" and "centred" are both signed off by the shop and are equal —
+pick per job, on the footage. "panel" and "rail" are available but unapproved;
+reach for "panel" when footage is too busy or bright for anything else to stay
+legible, which is a technical call rather than a preference.
+See ../HOUSE-STYLE.md.
 """
 
 from PIL import Image
@@ -392,28 +398,29 @@ def rail_build(ctx, base, t):
 
 LAYOUTS = {
     "hud": {
-        "note": "Bracketed title block bottom-left, ticker under it, left-aligned "
+        "note": "APPROVED — the house look. Bracketed title block bottom-left, ticker under it, left-aligned "
                 "type in the mid band. The kit's default; matches the 765LT and Roma.",
         "backdrop": hud_backdrop, "identity": hud_identity,
         "hook": hud_hook, "build": hud_build,
     },
     "centred": {
-        "note": "Poster treatment. Mark above the hook, everything on the vertical "
+        "note": "APPROVED — on par with hud. Poster treatment. Mark above the hook, everything on the vertical "
                 "axis, lockup centred at the foot. Quieter and more editorial.",
         "backdrop": centred_backdrop, "identity": centred_identity,
         "hook": centred_hook, "build": centred_build,
     },
     "panel": {
-        "note": "A solid card in the lower half that swaps its contents. Ignores the "
+        "note": "Not signed off; use on busy/bright footage. A solid card in the lower half that swaps its contents. Ignores the "
                 "footage underneath, so it survives any shot - the safest option on "
                 "busy or bright material. Build sheet runs two columns of two.",
         "backdrop": panel_backdrop, "identity": panel_identity,
         "hook": panel_hook, "build": panel_build,
     },
     "rail": {
-        "note": "The four-colour accent stripe stood on end down the left edge with "
-                "the type hanging off it, build indices set in the rail. Uses the "
-                "brand furniture as structure rather than trim.",
+        "note": "Not signed off. A solid red rail down the left edge with the type "
+                "hanging off it and the build indices set in the rail. Solid, not the "
+                "four-colour stripe: that carries a black segment, which reads as a "
+                "broken line when stood on end.",
         "backdrop": rail_backdrop, "identity": rail_identity,
         "hook": rail_hook, "build": rail_build,
     },

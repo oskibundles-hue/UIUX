@@ -19,6 +19,7 @@ timeline.
 | Write a caption | `05-copy-library/` |
 | Know how to shoot / edit / export | `06-video-system/` |
 | Burn the overlays into a clip automatically | `06-video-system/AUTO-EDIT.md` |
+| **Build a new ad** | `09-campaign-ads/HOUSE-STYLE.md` — the approved treatments |
 | Print or read the whole thing offline | **[`FORMULA-DYNAMICS-BRAND-GUIDE.pdf`](FORMULA-DYNAMICS-BRAND-GUIDE.pdf)** |
 | Download the files to my computer or phone | `08-download-bundles/` |
 
@@ -49,6 +50,8 @@ formula-dynamics/
 ├── 06-video-system/      How to shoot, edit, and export. CapCut workflow.
 ├── 07-fonts/             Bebas Neue (bundled) + notes on the accent face.
 ├── 08-download-bundles/  Zipped packs, ready to download and unzip.
+├── 09-campaign-ads/      Finished ads, one folder per car.
+│   └── HOUSE-STYLE.md    ← approved looks. Read before building an ad.
 ├── 99-toolkit/           Scripts that generated everything here.
 └── FORMULA-DYNAMICS-BRAND-GUIDE.pdf    The whole system, printable.
 ```

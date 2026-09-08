@@ -1,5 +1,10 @@
 # Auto-Edit — burning the overlays into a clip
 
+> **Which look to use** is not covered here — see
+> [`../09-campaign-ads/HOUSE-STYLE.md`](../09-campaign-ads/HOUSE-STYLE.md)
+> for the treatments the shop has approved. This file covers timing and
+> the tool.
+
 `99-toolkit/build_edit.py` takes a cut clip and renders a finished, on-brand
 video: title card, logo bug, service plate, feature badge, one CTA, end card —
 timed, animated and positioned automatically.
