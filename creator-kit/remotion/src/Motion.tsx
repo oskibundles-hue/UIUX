@@ -24,6 +24,8 @@ export type MotionProps = {
   lowerThirds?: LowerThirdSpec[];
   /** Rubber-stamp pops: rotated double-border badge with an overshoot. */
   stamps?: Stamp[];
+  /** Instagram / YouTube follow cards. */
+  follows?: FollowSpec[];
   /** Diagonal wipe bands at every chapter change after the first. */
   wipes?: boolean;
   /** true (default) sets one key word large per phrase; false keeps every word the same size. */
@@ -255,7 +257,7 @@ const StampView: React.FC<{ st: Stamp }> = ({ st }) => {
   );
 };
 
-export const Motion: React.FC<MotionProps> = ({ src, words, overlayOnly = false, title, callouts, lowerThird, lowerThirds, stamps, wipes = false, keyWord = true, chapters, outro, emphasis = [], cuts = [] }) => (
+export const Motion: React.FC<MotionProps> = ({ src, words, overlayOnly = false, title, callouts, lowerThird, lowerThirds, stamps, follows, wipes = false, keyWord = true, chapters, outro, emphasis = [], cuts = [] }) => (
   <AbsoluteFill style={{ backgroundColor: overlayOnly ? "transparent" : "#000" }}>
     {overlayOnly ? null : <OffthreadVideo src={src.startsWith("http") ? src : staticFile(src)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />}
     {chapters?.length ? <ChapterBar chapters={chapters} /> : null}
@@ -265,7 +267,50 @@ export const Motion: React.FC<MotionProps> = ({ src, words, overlayOnly = false,
     {lowerThird ? <LowerThird l={lowerThird} /> : null}
     {(lowerThirds ?? []).map((l, i) => <LowerThird key={i} l={l} />)}
     {(stamps ?? []).map((st, i) => <StampView key={i} st={st} />)}
+    {(follows ?? []).map((fl, i) => <FollowCard key={i} f={fl} />)}
     {wipes && chapters ? <Wipes ats={chapters.slice(1).map((c) => c.at)} /> : null}
     {outro ? <Outro o={outro} /> : null}
   </AbsoluteFill>
 );
+
+/* ---------- Follow card: platform pill with avatar ring, handle, count, and a button that gets tapped ---------- */
+export type FollowSpec = { at: number; hold: number; platform: "instagram" | "youtube"; name: string; handle: string; followers: string; avatarSrc: string; y?: number };
+export const FollowCard: React.FC<{ f: FollowSpec }> = ({ f }) => {
+  const frame = useCurrentFrame(); const { fps, width: W, height: H } = useVideoConfig(); const s = frame / fps;
+  if (s < f.at || s > f.at + f.hold + 0.5) return null;
+  const f0 = frame - Math.round(f.at * fps);
+  const inS = spring({ frame: f0, fps, config: { damping: 13, stiffness: 150, mass: 0.9 }, durationInFrames: 22 });
+  const av = spring({ frame: f0 - 6, fps, config: { damping: 10, stiffness: 260 }, durationInFrames: 14 });
+  const out = interpolate(s, [f.at + f.hold, f.at + f.hold + 0.45], [0, 1], { ...clamp, easing: Easing.in(Easing.cubic) });
+  const tapAt = Math.round(fps * 1.6), tap = spring({ frame: f0 - tapAt, fps, config: { damping: 9, stiffness: 400 }, durationInFrames: 12 });
+  const done = f0 >= tapAt + 6;
+  const ig = f.platform === "instagram";
+  const h = H * 0.058, r = h / 2, avatar = h * 0.68, nameF = h * 0.30, subF = h * 0.19, btnF = h * 0.22;
+  const ring = ig ? "conic-gradient(from 210deg, #f9ce34, #ee2a7b, #6228d7, #f9ce34)" : "conic-gradient(#ff0000, #ff5a5a, #ff0000)";
+  const btnBg = done ? "rgba(255,255,255,.14)" : ig ? "#3797F0" : "#FF0000";
+  const btnText = done ? (ig ? "Following ✓" : "Subscribed ✓") : ig ? "Follow" : "Subscribe";
+  const ringSpin = interpolate(f0, [0, 40], [0, 360], clamp);
+  return (
+    <div style={{ position: "absolute", left: W * 0.067, top: (f.y ?? 0.235) * H, opacity: (1 - out) * Math.min(1, inS * 1.5),
+                  transform: `translateX(${(1 - inS) * -W * 0.12 - out * W * 0.12}px) scale(${0.92 + 0.08 * inS})`, transformOrigin: "left center",
+                  display: "flex", alignItems: "center", gap: h * 0.28, height: h, padding: `0 ${h * 0.32}px 0 ${h * 0.16}px`, borderRadius: r,
+                  background: "rgba(22,22,24,.92)", boxShadow: "0 18px 60px rgba(0,0,0,.55), inset 0 0 0 1px rgba(255,255,255,.06)" }}>
+      <div style={{ width: avatar, height: avatar, borderRadius: "50%", padding: avatar * 0.045, background: ring, transform: `scale(${av}) rotate(${ringSpin}deg)`, flex: "none" }}>
+        <Img src={staticFile(f.avatarSrc)} style={{ width: "100%", height: "100%", borderRadius: "50%", objectFit: "cover", transform: `rotate(${-ringSpin}deg)`, border: `${avatar * 0.035}px solid #161618`, boxSizing: "border-box" }} />
+      </div>
+      <div style={{ display: "flex", flexDirection: "column", justifyContent: "center", lineHeight: 1.15, minWidth: h * 2.2, paddingRight: h * 0.2 }}>
+        <div style={{ fontFamily: ARCHIVO, fontWeight: 800, fontSize: nameF, color: "#fff", letterSpacing: "-0.01em", whiteSpace: "nowrap" }}>{f.name}</div>
+        <div style={{ fontFamily: ARCHIVO, fontWeight: 500, fontSize: subF, color: "#a8a8ad", whiteSpace: "nowrap" }}>{f.handle}</div>
+        <div style={{ fontFamily: ARCHIVO, fontWeight: 500, fontSize: subF, color: "#a8a8ad", whiteSpace: "nowrap", fontVariantNumeric: "tabular-nums" }}>{f.followers}</div>
+      </div>
+      <div style={{ position: "relative", background: btnBg, color: "#fff", fontFamily: ARCHIVO, fontWeight: 800, fontSize: btnF, padding: `${btnF * 0.75}px ${btnF * 1.6}px`, borderRadius: r,
+                    transform: `scale(${1 - 0.12 * Math.sin(Math.min(1, Math.max(0, tap)) * Math.PI)})`, whiteSpace: "nowrap", transition: "none" }}>
+        {btnText}
+        {f0 >= tapAt && f0 < tapAt + 14 ? (
+          <div style={{ position: "absolute", left: "50%", top: "50%", width: btnF * 1.2, height: btnF * 1.2, marginLeft: -btnF * 0.6, marginTop: -btnF * 0.6, borderRadius: "50%",
+                        border: `${btnF * 0.08}px solid rgba(255,255,255,.9)`, transform: `scale(${1 + (f0 - tapAt) * 0.35})`, opacity: 1 - (f0 - tapAt) / 14 }} />
+        ) : null}
+      </div>
+    </div>
+  );
+};
