@@ -191,8 +191,8 @@ const Outro: React.FC<{ o: { at: number; cta: string; endCardSrc?: string } }> =
   const fs = H * 0.034; const letters = o.cta.split(""); const g0 = o.cta.indexOf("SF90");
   return (
     <div style={{ position: "absolute", inset: 0 }}>
-      {o.endCardSrc ? <Img src={staticFile(o.endCardSrc)} style={{ position: "absolute", inset: 0, width: W, height: H, opacity: card }} /> : null}
-      <div style={{ position: "absolute", left: W * 0.067, right: W * 0.09, top: H * 0.70, fontFamily: ANTON, fontSize: fs, justifyContent: "center", textAlign: "center", lineHeight: 1.05, textTransform: "uppercase", color: "#fff",
+      {o.endCardSrc ? <Img src={staticFile(o.endCardSrc)} style={{ position: "absolute", inset: 0, width: W, height: H, opacity: card, WebkitMaskImage: "linear-gradient(to bottom, #000 56%, transparent 68%)", maskImage: "linear-gradient(to bottom, #000 56%, transparent 68%)" }} /> : null}
+      <div style={{ position: "absolute", left: W * 0.067, right: W * 0.09, top: H * 0.715, padding: `${fs * 0.35}px ${fs * 0.5}px`, background: "rgba(8,8,8,.55)", borderLeft: `${fs * 0.16}px solid ${GOLD}`, opacity: card, fontFamily: ANTON, fontSize: fs, justifyContent: "flex-start", textAlign: "left", lineHeight: 1.05, textTransform: "uppercase", color: "#fff",
                     WebkitTextStroke: `${fs * 0.04}px rgba(0,0,0,.9)`, paintOrder: "stroke fill", textShadow: "0 8px 30px rgba(0,0,0,.7)", display: "flex", flexWrap: "wrap" }}>
         {letters.map((ch, i) => {
           const k = spring({ frame: f0 - 6 - i * 1.2, fps, config: { damping: 12, stiffness: 260 }, durationInFrames: 10 });
