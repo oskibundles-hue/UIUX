@@ -47,28 +47,27 @@ Ready-made strip: `../03-overlays/service-badges/badge-strip_lead-services_dark.
 |---|---|---|
 | **NV Forged** | Forged wheels | `lt_9x16_partner_nv-forged.png` |
 | **iPE Exhaust** | Titanium / valvetronic exhaust | `lt_9x16_partner_ipe.png` |
-| **Ryft Springs** | Lowering springs, exhaust, blow-off valves | `lt_9x16_partner_ryft.png` |
+| **ryft Springs** | Lowering springs, exhaust, blow-off valves | `lt_9x16_partner_ryft.png` |
 
 ### Casing: prose vs. on-screen
 
-Two brands here use deliberate lowercase styling. Respect it **in writing**:
+Two brands here use deliberate lowercase styling — iPE and ryft. Respect it **in writing**:
 
 | Write in captions | Renders on screen as |
 |---|---|
 | iPE Exhaust | IPE EXHAUST |
-| Ryft Springs | RYFT SPRINGS |
+| ryft Springs | RYFT SPRINGS |
 | NV Forged | NV FORGED |
 
 The on-screen versions are uppercase because every graphic is set in Bebas
 Neue, which has no lowercase — that's a property of the typeface, not a
 misspelling. In captions, bios and written copy, always use the prose column.
 
-### One thing to confirm
+### Confirmed
 
-**Ryft Springs covers springs, exhaust and blow-off valves in this kit** — the
-earlier "RIFT" entry was merged into it, since it appeared to be the same
-brand. If Ryft and Rift are in fact two different suppliers, add the second one
-back to `PARTNERS` in `99-toolkit/fd_brand.py` and re-run `build_all.py`.
+**It is ryft** — one supplier, styled with a lowercase r, covering springs,
+exhaust and blow-off valves. The earlier "RIFT" spelling was a mis-hearing of
+the same brand, not a second one. Confirmed by the shop, 2026-09-08.
 
 To change any partner name or category, edit `PARTNERS` in
 `99-toolkit/fd_brand.py` and re-run `build_all.py`. Every partner lower third

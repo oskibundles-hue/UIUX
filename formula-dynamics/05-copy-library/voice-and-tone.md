@@ -43,5 +43,5 @@ dyno number destroys trust with exactly the customer you want.
 
 ## On partners
 
-Name them properly and consistently: **NV Forged**, **iPE Exhaust**, **Ryft
+Name them properly and consistently: **NV Forged**, **iPE Exhaust**, **ryft
 Springs** — note the lowercase first letter on iPE. Tag their accounts. Never imply an endorsement or a partnership tier that isn't real.

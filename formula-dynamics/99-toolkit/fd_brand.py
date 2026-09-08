@@ -147,7 +147,7 @@ PRIORITY_SERVICES = ["body-kits", "exhaust", "wheels", "tuning"]
 PARTNERS = [
     ("nv-forged", "NV FORGED", "NV Forged", "Forged wheels"),
     ("ipe", "IPE EXHAUST", "iPE Exhaust", "Titanium / valvetronic exhaust"),
-    ("ryft", "RYFT SPRINGS", "Ryft Springs",
+    ("ryft", "RYFT SPRINGS", "ryft Springs",
      "Lowering springs, exhaust, blow-off valves"),
 ]
 

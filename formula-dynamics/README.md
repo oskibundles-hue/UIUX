@@ -80,7 +80,7 @@ plus PPF, ceramic coating, paint correction, detailing, suspension.
 **Service** — scheduled maintenance, fluids, brakes, diagnostics. Lower
 glamour, high trust. Great for "why us" content.
 
-**Select partners** — NV Forged (wheels), iPE Exhaust (exhaust), Ryft Springs
+**Select partners** — NV Forged (wheels), iPE Exhaust (exhaust), ryft Springs
 (springs, exhaust, blow-off valves).
 See `05-copy-library/services-and-partners.md`.
 

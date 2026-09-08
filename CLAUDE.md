@@ -96,3 +96,15 @@ Never push directly to `main`. Always:
 2. Commit changes
 3. Push branch: `git push -u origin <branch>`
 4. Create PR: `gh pr create`
+
+## Artifact Conventions
+
+Keep the "fast cut" look: dark ground, Bebas Neue display, Barlow body, IBM Plex
+Mono for figures, brand red as the only accent.
+
+Any artifact covering video gets a cue timeline — a time ruler, one labelled lane
+per element, bars placed by `left: start/duration`. Take the numbers from
+`build_edit.py --dry-run`, never by hand. Never let a bar's label clip mid-word.
+
+One page per job: update an existing artifact rather than publishing a second one
+that covers the same ground.
