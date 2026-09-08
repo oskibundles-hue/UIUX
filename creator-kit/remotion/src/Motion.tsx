@@ -194,7 +194,8 @@ const Outro: React.FC<{ o: { at: number; cta: string; endCardSrc?: string } }> =
   o.cta.split("").forEach((ch, i) => { if (ch === " ") { wordsOut.push(cur); cur = []; } else cur.push({ ch, i }); }); if (cur.length) wordsOut.push(cur);
   return (
     <div style={{ position: "absolute", inset: 0 }}>
-      {o.endCardSrc ? <Img src={staticFile(o.endCardSrc)} style={{ position: "absolute", inset: 0, width: W, height: H, opacity: card, transform: "scale(0.84)", transformOrigin: "50% 16%", WebkitMaskImage: "linear-gradient(to bottom, #000 66%, transparent 71%)", maskImage: "linear-gradient(to bottom, #000 66%, transparent 71%)" }} /> : null}
+      <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.62)", opacity: card }} />
+      {o.endCardSrc ? <Img src={staticFile(o.endCardSrc)} style={{ position: "absolute", inset: 0, width: W, height: H, opacity: card, transform: "scale(0.84)", transformOrigin: "50% 16%", WebkitMaskImage: "linear-gradient(to bottom, #000 66%, transparent 68.5%), linear-gradient(to right, transparent 0%, #000 7%, #000 93%, transparent 100%)", maskImage: "linear-gradient(to bottom, #000 66%, transparent 68.5%), linear-gradient(to right, transparent 0%, #000 7%, #000 93%, transparent 100%)", WebkitMaskComposite: "source-in", maskComposite: "intersect" } /> : null}
       <div style={{ position: "absolute", left: W * 0.067, right: W * 0.09, top: H * 0.665, padding: `${fs * 0.35}px ${fs * 0.5}px`, background: "rgba(8,8,8,.55)", borderLeft: `${fs * 0.16}px solid ${GOLD}`, opacity: card, fontFamily: ANTON, fontSize: fs, justifyContent: "flex-start", textAlign: "left", lineHeight: 1.05, textTransform: "uppercase", color: "#fff",
                     WebkitTextStroke: `${fs * 0.04}px rgba(0,0,0,.9)`, paintOrder: "stroke fill", textShadow: "0 8px 30px rgba(0,0,0,.7)", display: "flex", flexWrap: "wrap" }}>
         {wordsOut.map((wd, wi) => (
