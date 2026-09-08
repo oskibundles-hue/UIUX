@@ -1,0 +1,6 @@
+node_modules/
+out/
+# Populated by `npm run prepare-assets` — copies of the plate, the bundled font
+# and the kit overlays. Remotion can only serve assets from public/, and these
+# are duplicates of files already tracked elsewhere in the kit.
+public/
