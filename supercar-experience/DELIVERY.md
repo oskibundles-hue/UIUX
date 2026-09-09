@@ -41,11 +41,11 @@ Your own 2160x3840 master of the reel the rental listing runs, 2-17s. The site's
 
 Eighteen seconds, six cars, three seconds each. A rally is a convoy, so the plate is a montage rather than one car: Urus, Tempesta, SF90, F8 Tributo, SF90 again in the poppies, and the mixed-fleet clip.
 
-- `supercar-experience-fall-rally-18s-9x16.mp4` - $2,999. Per car. - Price leads. For the viewer who wants the car and needs the figure. - NOT PUBLISHED
-- `supercar-experience-fall-rally-18s-9x16-b-experience.mp4` - Three iconic destinations. - The site's tagline. Identity over arithmetic. - NOT PUBLISHED
-- `supercar-experience-fall-rally-18s-9x16-c-occasion.mp4` - Nov 13-16. Vegas to the coast. - Weddings, race week, photoshoots - the uses the site names. - NOT PUBLISHED
-- `supercar-experience-fall-rally-18s-9x16-d-offer.mp4` - $500 off. Code RALLY500. - The promo exactly as the site prints it. - NOT PUBLISHED
-- `supercar-experience-fall-rally-18s-9x16-e-engage.mp4` - Who is your co-pilot? - A question that earns comments. Not a sales CTA. - NOT PUBLISHED
+- `supercar-experience-fall-rally-18s-9x16.mp4` - $2,999. Per car. - Price leads. For the viewer who wants the car and needs the figure. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/f96c67f2-611f-475b-a6d8-e60c987cf1f3.mp4
+- `supercar-experience-fall-rally-18s-9x16-b-experience.mp4` - Three iconic destinations. - The site's tagline. Identity over arithmetic. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/02b0a6c0-a5d0-4f96-b4b1-f48d5b31a62e.mp4
+- `supercar-experience-fall-rally-18s-9x16-c-occasion.mp4` - Nov 13-16. Vegas to the coast. - Weddings, race week, photoshoots - the uses the site names. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/fa181cfb-d451-4a29-8fc7-db68f90dd91f.mp4
+- `supercar-experience-fall-rally-18s-9x16-d-offer.mp4` - $500 off. Code RALLY500. - The promo exactly as the site prints it. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/a9360d7a-d7cb-491b-bdeb-6a1c40319395.mp4
+- `supercar-experience-fall-rally-18s-9x16-e-engage.mp4` - Who is your co-pilot? - A question that earns comments. Not a sales CTA. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/8030bb56-7df6-4887-9a61-905471c006a9.mp4
 
 ## 04 Brand and Creative Systems / Supercar Experience
 
