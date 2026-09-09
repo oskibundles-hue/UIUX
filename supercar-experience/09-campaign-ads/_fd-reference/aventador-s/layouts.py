@@ -24,7 +24,7 @@ See ../HOUSE-STYLE.md.
 
 from PIL import Image
 
-import sce_brand as B
+import fd_brand as B
 import fd_hud as HUD
 import fd_render as R
 

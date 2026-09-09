@@ -31,9 +31,9 @@ import sys
 from PIL import Image
 
 KIT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
-sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "99-toolkit"))
+sys.path.insert(0, os.path.join(KIT, "99-toolkit"))
 
-import sce_brand as B          # noqa: E402
+import fd_brand as B          # noqa: E402
 import fd_hud as HUD          # noqa: E402
 import fd_render as R         # noqa: E402
 
@@ -42,17 +42,6 @@ from layouts import LAYOUTS    # noqa: E402
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CUE_PATH = os.path.join(HERE, "cue.json")
-
-# Shared renderer: the car folder comes from argv, and it must be known before
-# anything below reads cue.json. main() re-parses the same flags properly.
-_argv = sys.argv
-if "--car" in _argv:
-    HERE = os.path.abspath(_argv[_argv.index("--car") + 1])
-    CUE_PATH = os.path.join(HERE, "cue.json")
-elif "--cue" in _argv:
-    CUE_PATH = os.path.abspath(_argv[_argv.index("--cue") + 1])
-    _d = os.path.dirname(CUE_PATH)
-    HERE = os.path.dirname(_d) if os.path.basename(_d) in ("variants", "cuts", "layouts") else _d
 CUE = json.load(open(CUE_PATH))
 PLATE = os.path.join(HERE, CUE.get("plate", "source/plate-1080x1920.mp4"))
 OUT_DIR = os.path.join(HERE, "exports")
@@ -127,16 +116,14 @@ def layout():
 
 
 def out_name():
-    """supercar-experience-<slug>-<T>s-9x16[-<variant>].mp4"""
-    slug = CUE.get("slug") or os.path.basename(HERE)
-    t = f"{DURATION:.0f}s"
+    """Cuts are named for the cut; variants hang off the base cut's name."""
     if CUE.get("layoutStyle", "hud") != "hud":
-        return f'supercar-experience-{slug}-{t}-9x16-layout-{CUE["layoutStyle"]}.mp4'
+        return f'formula-dynamics-aventador-14s-9x16-layout-{CUE["layoutStyle"]}.mp4'
     if CUE.get("cut"):
-        return f'supercar-experience-{slug}-{CUE["cut"]}-9x16.mp4'
+        return f'formula-dynamics-aventador-{CUE["cut"]}-9x16.mp4'
     v = CUE.get("variant", "")
     suffix = "" if not v or v.startswith("a-") else f"-{v}"
-    return f"supercar-experience-{slug}-{t}-9x16{suffix}.mp4"
+    return f"formula-dynamics-aventador-14s-9x16{suffix}.mp4"
 
 
 # ---------------------------------------------------------------------------
@@ -305,7 +292,6 @@ def still(t, out_path):
 def main():
     global SHOW_SAFE
     ap = argparse.ArgumentParser()
-    ap.add_argument("--car", help="car folder holding cue.json, variants/ and source/plate-1080x1920.mp4")
     ap.add_argument("--stills", nargs="*", type=float)
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--safe", action="store_true")
@@ -314,11 +300,6 @@ def main():
     ap.add_argument("--all", action="store_true",
                     help="render the base cut and every file in variants/")
     args = ap.parse_args()
-    if args.car:
-        global HERE, CUE_PATH, PLATE
-        HERE = os.path.abspath(args.car)
-        CUE_PATH = os.path.join(HERE, "cue.json")
-        load_cue(CUE_PATH)
     SHOW_SAFE = args.safe
     if args.cue:
         load_cue(os.path.abspath(args.cue))
