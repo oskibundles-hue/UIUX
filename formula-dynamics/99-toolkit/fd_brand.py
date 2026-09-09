@@ -121,7 +121,9 @@ SERVICES = [
 SERVICE_SUBLINE = {
     "tuning": "ECU & TCU CALIBRATION",
     "exhaust": "VALVETRONIC & CATBACK SYSTEMS",
-    "wheels": "FORGED WHEEL FITMENT",
+    # The shop's wheels are forged, but the plate says CUSTOM until the
+    # build sheets get specific enough to name the process per car.
+    "wheels": "CUSTOM WHEEL FITMENT",
     "body-kits": "AERO & CARBON FIBRE",
     "ppf": "PAINT PROTECTION FILM",
     "ceramic-coating": "MULTI-YEAR PAINT PROTECTION",

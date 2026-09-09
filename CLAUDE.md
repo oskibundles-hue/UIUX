@@ -108,3 +108,13 @@ per element, bars placed by `left: start/duration`. Take the numbers from
 
 One page per job: update an existing artifact rather than publishing a second one
 that covers the same ground.
+
+## Video Edits
+
+Whenever a video is cut, ask whether they also want the **SFX motion pack
+version** — `build_edit.py --motion` (which implies `--sfx`). It is a separate
+deliverable, not a replacement, so the plain cut still gets made.
+
+Sound density adapts per clip rather than being fixed: `fd_sfx.py` derives a
+hit from every cue and drops the secondary layers if the result runs busier
+than its cap. Each video is different — judge it, don't hold a number.

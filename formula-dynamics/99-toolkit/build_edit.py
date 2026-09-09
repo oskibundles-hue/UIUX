@@ -31,6 +31,8 @@ from pathlib import Path
 from PIL import Image
 
 import fd_brand as B
+import fd_sfx
+import fd_motion as FM
 
 
 # --------------------------------------------------------------------------
@@ -75,6 +77,13 @@ def ffmpeg_bin():
 def ffprobe_bin():
     exe = shutil.which("ffprobe")
     return exe or ffmpeg_bin().replace("ffmpeg", "ffprobe")
+
+
+def has_audio(path):
+    """True if the clip carries an audio stream."""
+    out = subprocess.run([ffmpeg_bin(), "-i", str(path)],
+                         capture_output=True, text=True).stderr
+    return "Audio:" in out
 
 
 def probe(path):
@@ -284,6 +293,18 @@ def cue_sheet(cues, duration, source):
 FADE = 0.3
 
 
+def seq_cue(name, tmp, canvas, fps, start, end, fn, kwargs, note):
+    """Render an animated component to a PNG sequence and return its cue."""
+    d = Path(tmp) / f"seq-{name}-{start:.2f}".replace(".", "_")
+    d.mkdir(parents=True, exist_ok=True)
+    frames = max(2, int((end - start) * fps))
+    for i in range(frames):
+        fn(canvas, i / (frames - 1), **kwargs).save(d / f"{i:04d}.png")
+    return dict(layer=name, path=str(d / "%04d.png"), start=round(start, 2),
+                end=round(end, 2), anim="seq", note=note, place="full",
+                seq=True)
+
+
 def filter_graph(cues, width, height):
     """Compose the overlay chain. Each cue is one input, faded and gated."""
     parts, last = [], "0:v"
@@ -292,6 +313,18 @@ def filter_graph(cues, width, height):
         s, e = c["start"], c["end"]
         dur = e - s
         f = [f"[{i}:v]format=rgba"]
+
+        if c.get("seq"):
+            # A sequence carries its own animation, so it is not faded - it
+            # is only shifted onto the timeline. Its input clock starts at
+            # zero regardless of where the cue sits.
+            f.append(f"setpts=PTS-STARTPTS+{s:.3f}/TB")
+            parts.append(",".join(f) + f"[{tag}]")
+            out = f"v{i}"
+            parts.append(f"[{last}][{tag}]overlay=x=0:y=0:"
+                         f"enable='between(t,{s:.2f},{e:.2f})':format=auto[{out}]")
+            last = out
+            continue
 
         if c["anim"] == "cut":
             pass
@@ -324,9 +357,13 @@ def filter_graph(cues, width, height):
     return ";".join(parts), last
 
 
-def render(source, out, cues, width, height, fps, duration, bitrate="20M"):
+def render(source, out, cues, width, height, fps, duration, bitrate="20M",
+           bed_wav=None, sfx_gain=1.6):
     cmd = [ffmpeg_bin(), "-y", "-i", str(source)]
     for c in cues:
+        if c.get("seq"):
+            cmd += ["-framerate", str(fps), "-i", c["path"]]
+            continue
         # Each overlay is looped across the full timeline. A still PNG is a
         # single frame at PTS 0, so a fade with st>0 never reaches its start
         # on that input's own clock and the frame stays fully transparent -
@@ -336,8 +373,27 @@ def render(source, out, cues, width, height, fps, duration, bitrate="20M"):
                 "-i", c["path"]]
 
     graph, last = filter_graph(cues, width, height)
-    cmd += ["-filter_complex", graph, "-map", f"[{last}]"]
-    cmd += ["-map", "0:a?", "-c:a", "aac", "-b:a", "320k"]
+
+    if bed_wav:
+        cmd += ["-i", str(bed_wav)]
+        bed_idx = len(cues) + 1
+        has_src = has_audio(source)
+        if has_src:
+            # The effects sit UNDER the clip's own sound. Ducking the source
+            # was tried and measured worse: the sidechain pulls the engine
+            # down, then the summed bus hits the limiter and the effects lose
+            # more than the duck gained.
+            graph += (f";[0:a]pan=mono|c0=.5*c0+.5*c1[srca]"
+                      f";[{bed_idx}:a]volume={sfx_gain}[sfxa]"
+                      f";[srca][sfxa]amix=inputs=2:duration=first:normalize=0,"
+                      f"alimiter=limit=0.85[aout]")
+        else:
+            graph += f";[{bed_idx}:a]volume={sfx_gain},alimiter=limit=0.85[aout]"
+        cmd += ["-filter_complex", graph, "-map", f"[{last}]", "-map", "[aout]"]
+        cmd += ["-c:a", "aac", "-b:a", "320k"]
+    else:
+        cmd += ["-filter_complex", graph, "-map", f"[{last}]"]
+        cmd += ["-map", "0:a?", "-c:a", "aac", "-b:a", "320k"]
     cmd += ["-c:v", "libx264", "-preset", "medium", "-b:v", bitrate,
             "-maxrate", bitrate, "-bufsize", "40M", "-pix_fmt", "yuv420p",
             "-r", str(fps), "-movflags", "+faststart", str(out)]
@@ -392,6 +448,16 @@ def main():
                         help=f"override tone for the {slot}")
     ap.add_argument("--none", action="append", default=[], metavar="LAYER",
                     help="drop a slot, e.g. --none badge")
+    ap.add_argument("--sfx", action="store_true",
+                    help="lay the sound-effect pack under the edit, derived "
+                         "from this cue sheet - every element that appears "
+                         "gets a hit")
+    ap.add_argument("--sfx-gain", type=float, default=1.6,
+                    help="level of the effects against the clip's own audio")
+    ap.add_argument("--motion", action="store_true",
+                    help="animate the opening: a glow burst on the monogram "
+                         "and the hook typed on, instead of the still title "
+                         "card. Implies --sfx.")
     ap.add_argument("--bitrate", default="20M")
     ap.add_argument("--dry-run", action="store_true",
                     help="print the cue sheet without rendering")
@@ -476,7 +542,62 @@ def main():
     cfg["cta_group"] = groups.get(cfg.get("cta"), "booking")
     cfg["cta_style"] = a.cta_style
 
+    if a.motion:
+        a.sfx = True
+
     cues = plan(duration, canvas, a.tone, cfg, a.bug)
+    motion_meta = []
+
+    if a.motion:
+        # Replace the still title card with the animated pair. The hook text
+        # is whatever the title card would have said.
+        l1, _, l2 = (a.title_text or "").partition("|")
+        hook = " ".join(x for x in (l1.strip(), l2.strip()) if x) or B.BRAND_NAME
+        title_cues = [c for c in cues if c["layer"] in ("title", "title scrim")]
+        t_start = min((c["start"] for c in title_cues), default=0.4)
+        t_end = max((c["end"] for c in title_cues), default=3.0)
+        cues = [c for c in cues if c["layer"] != "title"]
+
+        burst_end = t_start + min(1.5, (t_end - t_start) * 0.55)
+        cues.append(seq_cue("glow-burst", tmp, canvas, fps, t_start, burst_end,
+                            FM.glow_burst, dict(text=B.BRAND_NAME, y=0.40),
+                            "Monogram opens behind a red bloom."))
+        cues.append(seq_cue("type-on", tmp, canvas, fps, burst_end + 0.15, t_end,
+                            FM.type_on, dict(text=hook, y=0.42),
+                            f"Hook typed on: {hook}"))
+        motion_meta.append(dict(kind="type-on", text=hook,
+                                start=burst_end + 0.15, end=t_end))
+
+        # A spec panel just before the ask - but only if there is a window
+        # with nothing else in the lower band. On a HUD cut the title block
+        # and ticker already own that band for most of the clip, and the
+        # panel would stack on top of them.
+        chips = [t for t, _ in cfg.get("specs", [])][:3]
+        cta = next((c for c in cues if c["layer"] == "cta"), None)
+        if chips and cta:
+            busy = [(c["start"], c["end"]) for c in cues
+                    if c["layer"].startswith(("title block", "ticker",
+                                              "callout", "lower-third",
+                                              "endcard"))]
+            p_end = cta["start"] - 0.5
+            p_start = max(t_end + 0.5, p_end - 2.6)
+            clear = all(p_end <= bs or p_start >= be for bs, be in busy)
+            if p_end - p_start > 1.4 and clear:
+                name = (a.title_block or "|").partition("|")[0].strip() or hook
+                cues.append(seq_cue(
+                    "panel-rise", tmp, canvas, fps, p_start, p_end,
+                    FM.panel_rise, dict(title=name, chips=chips, y=0.62),
+                    "Spec panel rises, chips land in sequence."))
+                motion_meta.append(dict(kind="panel-rise", chips=chips,
+                                        start=p_start, end=p_end))
+                # The panel IS the spec display - keep the chips as well and
+                # the same words appear twice.
+                cues = [c for c in cues if not c["layer"].startswith("spec")]
+            else:
+                why = "no clear window in the lower band" if not clear \
+                    else "window too short"
+                print(f"  (no spec panel: {why})")
+        cues.sort(key=lambda c: (c["start"], c["layer"]))
 
     print(f"\n  {a.template.upper()}  ·  {TEMPLATES[a.template]['about']}")
     print(f"  Source: {w}x{h} @ {fps}fps  ->  canvas {canvas}")
@@ -485,9 +606,21 @@ def main():
     if a.dry_run:
         return
 
+    bed_wav = None
+    if a.sfx:
+        bed, rep = fd_sfx.build_bed(cues, duration, motion_meta)
+        if rep["missing"]:
+            sys.exit(f"  missing sounds: {', '.join(rep['missing'])}\n"
+                     f"  run: python3 99-toolkit/build_sfx.py")
+        bed_wav = fd_sfx.write_bed(tmp / "sfx-bed.wav", bed)
+        note = (f"  SFX: {rep['hits']} hits, {rep['density']:.1f}/s"
+                + (f" ({rep['dropped']} secondary hits dropped - over the "
+                   f"{fd_sfx.DENSITY_CAP}/s cap)" if rep["dropped"] else ""))
+        print(note)
+
     out = Path(a.output) if a.output else src.with_name(src.stem + "_FD.mp4")
     print(f"  Rendering -> {out} ...")
-    render(src, out, cues, w, h, fps, duration, a.bitrate)
+    render(src, out, cues, w, h, fps, duration, a.bitrate, bed_wav, a.sfx_gain)
     mb = out.stat().st_size / 1_048_576
     print(f"  Done. {out}  ({mb:.1f} MB)\n")
 

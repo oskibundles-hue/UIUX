@@ -276,7 +276,7 @@ Zipped packs ready to download and unzip. Start with the vertical starter pack.
 |---|---|
 | `FD-00-VERTICAL-STARTER-PACK.zip` | 2.2 MB |
 | `FD-01-logo-bugs.zip` | 579 KB |
-| `FD-02-lower-thirds.zip` | 612 KB |
+| `FD-02-lower-thirds.zip` | 613 KB |
 | `FD-03-title-cards.zip` | 2.9 MB |
 | `FD-04-end-cards.zip` | 1.1 MB |
 | `FD-05-cta-captions.zip` | 652 KB |
@@ -290,7 +290,7 @@ Zipped packs ready to download and unzip. Start with the vertical starter pack.
 
 | File | Size |
 |---|---|
-| `MOTION-AND-SFX.md` | 4 KB |
+| `MOTION-AND-SFX.md` | 5 KB |
 
 ## `10-motion-sfx/sfx/`
 
