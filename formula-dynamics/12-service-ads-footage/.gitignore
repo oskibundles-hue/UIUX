@@ -1,0 +1,3 @@
+# The MOTION-SFX cut is one flag away from the plain cut:
+#   build_edit.py <montage> ... --motion
+cuts/*-MOTION-SFX.mp4
