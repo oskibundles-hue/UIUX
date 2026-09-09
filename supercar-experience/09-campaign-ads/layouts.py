@@ -164,7 +164,7 @@ def centred_hook(ctx, base, t):
     mark_p = ctx.ease_out((t - start) / 0.7)
     if mark_p > 0:
         if "mark" not in ctx.cache:
-            ctx.cache["mark"] = R.logo("fd-icon-mark-only--white", width=96)
+            ctx.cache["mark"] = R.logo(B.MARK_WHITE, width=96)
         R.paste(base, ctx.faded(ctx.cache["mark"], o * mark_p),
                 cx, round(ctx.H * 0.315) - (1 - mark_p) * 18, "ct")
 
@@ -219,7 +219,11 @@ def centred_build(ctx, base, t):
 # ===========================================================================
 
 PANEL_TOP = 0.475
-PANEL_H = 0.315
+PANEL_H = 0.280
+# The ticker's own scrim starts at 0.823. The lockup has to finish above that
+# or the two stack on the same line - the collision the house record warns
+# about for any layout that puts a lockup near the ticker.
+PANEL_LOCKUP_Y = 0.762
 
 
 def panel_backdrop(ctx, base, t):
@@ -241,9 +245,12 @@ def panel_backdrop(ctx, base, t):
 def panel_identity(ctx, base, t):
     o, p = ctx.beat(t, "title", 0.55, 0.55)
     if o > 0:
-        y = round(ctx.H * 0.845)
+        y = round(ctx.H * PANEL_LOCKUP_Y)
         if "mark" not in ctx.cache:
-            ctx.cache["mark"] = R.logo("fd-icon-mark-only--white", width=54)
+            ctx.cache["mark"] = R.logo(B.MARK_WHITE, width=54)
+        # The lockup sits on bare footage under the card, so it carries its own
+        # scrim - panel is the layout for bright, busy plates.
+        base.alpha_composite(ctx.faded(_vscrim(ctx, PANEL_LOCKUP_Y - 0.014, 0.066, 170), o))
         x = ctx.X0 + int((1 - p) * -24)
         R.paste(base, ctx.faded(ctx.cache["mark"], o), x, y - 4)
         name = R.text(ctx.CUE["car"], 52, B.WHITE, tracking=0.06)
@@ -337,7 +344,7 @@ def rail_identity(ctx, base, t):
         x = round(ctx.W * RAIL_X)
         y = round(ctx.H * 0.688)      # above the ticker at 0.775
         if "mark" not in ctx.cache:
-            ctx.cache["mark"] = R.logo("fd-icon-mark-only--white", width=50)
+            ctx.cache["mark"] = R.logo(B.MARK_WHITE, width=50)
         R.paste(base, ctx.faded(ctx.cache["mark"], o), x + int((1 - p) * -20), y)
         name = R.text(ctx.CUE["car"], 46, B.WHITE, tracking=0.08)
         R.paste(base, ctx.faded(R.with_shadow(name), o), x + 68, y + 4)

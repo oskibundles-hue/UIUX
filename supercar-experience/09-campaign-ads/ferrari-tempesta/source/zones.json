@@ -1,0 +1,35 @@
+{
+ "zones": {
+  "bug (top 11-19%)": {
+   "mean": 124,
+   "min": 9,
+   "max": 226
+  },
+  "mid band (40-60%)": {
+   "mean": 65,
+   "min": 23,
+   "max": 117
+  },
+  "cta band (62-72%)": {
+   "mean": 47,
+   "min": 14,
+   "max": 96
+  },
+  "lower third (66-80%)": {
+   "mean": 41,
+   "min": 10,
+   "max": 99
+  }
+ },
+ "decision": {
+  "bug (top 11-19%)": "range too wide - scrim or move the element",
+  "mid band (40-60%)": "WHITE type / white logo",
+  "cta band (62-72%)": "WHITE type / white logo",
+  "lower third (66-80%)": "WHITE type / white logo"
+ },
+ "start": 4.0,
+ "dur": 15.0,
+ "look": "none",
+ "crop": null,
+ "raw": "/tmp/claude-0/-home-user-UIUX/bca660b1-ddd0-53c0-87e3-b329cd9a583e/scratchpad/sce/site_tempesta.mp4"
+}

@@ -77,6 +77,8 @@
     "marginRightFrac": 0.16,
     "bandTopFrac": 0.4
   },
+  "layoutStyle": "panel",
+  "_layoutStyle_note": "Chosen from source/zones.json, not by eye. panel = a solid card, for footage whose bands swing too far for type on its own.",
   "grade": "eq=contrast=1.04:saturation=0.96:gamma=1.0,vignette=angle=PI/5",
   "variant": "d-offer",
   "variantAngle": "Offer. The promo exactly as the site prints it."

@@ -16,14 +16,21 @@ from PIL import Image, ImageStat
 HERE = Path(__file__).resolve().parent
 LUTS = HERE / "_grade" / "luts"
 LOOKS = {"rescue": ["AK_DLogM_Rescue"], "golden": ["AK_DLogM_Rescue", "AK_Golden_Vlog"],
-         "signature": ["AK_DLogM_Rescue", "AK_NQ_Signature"], "dark": ["AK_DLogM_Rescue", "AK_Garage_Dark"]}
+         "signature": ["AK_DLogM_Rescue", "AK_NQ_Signature"], "dark": ["AK_DLogM_Rescue", "AK_Garage_Dark"],
+         # "none" is for footage that is already graded - the site's own car reels,
+         # or any delivered master. Applying a D-Log rescue to those double-grades.
+         "none": []}
 
 def run(cmd): subprocess.run(cmd, check=True)
 
-def build(raw, car, start, dur, look, fps=30):
+def build(raw, car, start, dur, look, fps=30, crop=None):
+    """crop is an ffmpeg crop spec (w:h:x:y) applied before the scale - use it to
+    pull a 9:16 window out of a square/ultra-wide source."""
     out = HERE / car / "source" / "plate-1080x1920.mp4"; out.parent.mkdir(parents=True, exist_ok=True)
-    chain = ",".join(f"lut3d={(LUTS / (n + '.cube')).as_posix()}" for n in LOOKS[look])
-    vf = f"{chain},scale=1080:1920:flags=lanczos,fps={fps},format=yuv420p"
+    steps = [f"lut3d={(LUTS / (n + '.cube')).as_posix()}" for n in LOOKS[look]]
+    if crop: steps.insert(0, f"crop={crop}")
+    steps += ["scale=1080:1920:flags=lanczos", f"fps={fps}", "format=yuv420p"]
+    vf = ",".join(steps)
     run(["ffmpeg", "-v", "error", "-y", "-ss", str(start), "-t", str(dur), "-i", str(raw),
          "-vf", vf, "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-an", "-movflags", "+faststart", str(out)])
     return out
@@ -60,12 +67,13 @@ if __name__ == "__main__":
     ap = argparse.ArgumentParser(); ap.add_argument("--raw", required=True); ap.add_argument("--car", required=True)
     ap.add_argument("--start", type=float, required=True); ap.add_argument("--dur", type=float, default=15.0)
     ap.add_argument("--look", choices=LOOKS, default="golden"); ap.add_argument("--measure-only", action="store_true")
+    ap.add_argument("--crop", help="ffmpeg crop spec w:h:x:y, applied before the scale")
     a = ap.parse_args()
     plate = HERE / a.car / "source" / "plate-1080x1920.mp4"
     if not a.measure_only:
-        plate = build(a.raw, a.car, a.start, a.dur, a.look); print("plate:", plate, f"({plate.stat().st_size/1048576:.1f} MB)")
+        plate = build(a.raw, a.car, a.start, a.dur, a.look, crop=a.crop); print("plate:", plate, f"({plate.stat().st_size/1048576:.1f} MB)")
     r, n, dur = measure(plate)
     print(f"measured {n} frames over {dur:.2f}s")
     d = decide(r)
     for z in r: print(f"  {z:<24} mean {r[z]['mean']:>3}  range {r[z]['min']:>3}-{r[z]['max']:<3}  -> {d[z]}")
-    (HERE / a.car / "source" / "zones.json").write_text(json.dumps({"zones": r, "decision": d, "start": a.start, "dur": a.dur, "look": a.look}, indent=1))
+    (HERE / a.car / "source" / "zones.json").write_text(json.dumps({"zones": r, "decision": d, "start": a.start, "dur": a.dur, "look": a.look, "crop": a.crop, "raw": a.raw}, indent=1))

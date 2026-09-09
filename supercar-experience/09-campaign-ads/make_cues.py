@@ -23,10 +23,15 @@ SITE = "supercarexp.vip"
 DEFAULT_T = 15.0   # plate length; build_ad.py overrides from the plate when present
 
 CARS = {
-    "porsche-gt3rs":       dict(name="PORSCHE 911 GT3 RS", year="2025", loc="LAS VEGAS · SCOTTSDALE · BOISE", specs=None),
-    "mclaren-750s-spider": dict(name="MCLAREN 750S SPIDER", year="2026", loc="LAS VEGAS · SCOTTSDALE",        specs=None),
+    # layout is a measured choice, not taste: build the plate, read
+    # source/zones.json, and take panel when the bands come back "range too wide".
+    "porsche-gt3rs":       dict(name="PORSCHE 911 GT3 RS", year="2025", loc="LAS VEGAS · SCOTTSDALE · BOISE", specs=None,
+                                layout="hud"),    # dark garage: every band under 150, white type holds
+    "mclaren-750s-spider": dict(name="MCLAREN 750S SPIDER", year="2026", loc="LAS VEGAS · SCOTTSDALE",        specs=None,
+                                layout="panel"),  # midday tarmac, white car: all four bands swing 25-238
     "ferrari-tempesta":    dict(name="FERRARI TEMPESTA",    year="2025", loc="LAS VEGAS · SCOTTSDALE",
-                                specs="750 HP · 2.7S 0-60 · 205 MPH"),
+                                specs="750 HP · 2.7S 0-60 · 205 MPH",
+                                layout="hud"),    # desert reel: mid/CTA/lower all under 120
 }
 
 def money(n): return f"${n:,}"
@@ -97,6 +102,8 @@ def make(slug, v, T=DEFAULT_T):
         "beats": beats(T),
         "_beats_note": "HUD clears 1.6s before the ask; CTA never touches the end card; end card is a hard cut.",
         "layout": {"marginLeftFrac": 0.075, "marginRightFrac": 0.16, "bandTopFrac": 0.40},
+        "layoutStyle": c["layout"],
+        "_layoutStyle_note": "Chosen from source/zones.json, not by eye. panel = a solid card, for footage whose bands swing too far for type on its own.",
         "grade": "eq=contrast=1.04:saturation=0.96:gamma=1.0,vignette=angle=PI/5",
         "variant": v["variant"], "variantAngle": v["angle"],
     }

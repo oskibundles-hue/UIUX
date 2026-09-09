@@ -29,11 +29,24 @@ BUNDLES = [
  ("SCE-07-accent-bars.zip", "The gold/white rule at every width"),
  ("SCE-09-logos.zip", "12 PNG lockups: horizontal, mark, wordmark, stacked - white, black, gold"),
 ]
-ADS = [("a-price","$1,299. Four hours.","Price leads. For the viewer who wants the car and needs the figure."),
-       ("b-experience","A ride of a lifetime.","The site's tagline. Identity over arithmetic."),
-       ("c-occasion","Vegas this weekend? Arrive in this.","Weddings, race week, photoshoots - the uses the site names."),
-       ("d-offer","50% off day two. Or day three free.","The promo exactly as the site prints it."),
-       ("e-engage","4 hours or 24?","A question that earns comments. Not a sales CTA.")]
+ANGLES = [("a-price","Price leads. For the viewer who wants the car and needs the figure."),
+          ("b-experience","The site's tagline. Identity over arithmetic."),
+          ("c-occasion","Weddings, race week, photoshoots - the uses the site names."),
+          ("d-offer","The promo exactly as the site prints it."),
+          ("e-engage","A question that earns comments. Not a sales CTA.")]
+CARS = [
+ ("porsche-gt3rs", "Porsche 911 GT3 RS", "$1,299 / 4 hrs &middot; $1,799 / 24 hrs",
+  "Shop footage, 84-99s of the GT3 rolling in, NQ Signature grade. Dark throughout, so type sits on the picture."),
+ ("ferrari-tempesta", "Ferrari Tempesta", "$849 / 4 hrs &middot; $1,199 / 24 hrs",
+  "The car reel from its own listing on the site, 4-19s. Already graded, so no LUT on top. No corner logo - that band swings 9 to 226."),
+ ("mclaren-750s-spider", "McLaren 750S Spider", "$1,299 / 4 hrs &middot; $1,799 / 24 hrs",
+  "Shop footage, 7-22s, a 9:16 window cut out of the square frame. Midday sun on pale tarmac, so it runs the panel layout."),
+]
+HOOKS = {
+ "porsche-gt3rs":       {"a-price":"$1,299. Four hours.","b-experience":"A ride of a lifetime.","c-occasion":"Vegas this weekend? Arrive in this.","d-offer":"50% off day two. Or day three free.","e-engage":"4 hours or 24?"},
+ "ferrari-tempesta":    {"a-price":"$849. Four hours.","b-experience":"A ride of a lifetime.","c-occasion":"Vegas this weekend? Arrive in this.","d-offer":"50% off day two. Or day three free.","e-engage":"4 hours or 24?"},
+ "mclaren-750s-spider": {"a-price":"$1,299. Four hours.","b-experience":"A ride of a lifetime.","c-occasion":"Vegas this weekend? Arrive in this.","d-offer":"50% off day two. Or day three free.","e-engage":"4 hours or 24?"},
+}
 STILLS = ["still-02_60s.jpg","still-06_50s.jpg","still-11_50s.jpg","still-13_80s.jpg"]
 STILL_CAP = ["2.6s - hook","6.5s - the deal","11.5s - CTA","13.8s - end card"]
 
@@ -43,11 +56,17 @@ def row(name, desc, size, url, pending=False):
     return f'<li class="row"><div class="f"><code>{html.escape(name)}</code><p>{html.escape(desc)}</p></div><span class="sz">{size}</span>{btn}</li>'
 
 kit_rows = [row(n, d, mb(K/"08-download-bundles"/n), gh(f"08-download-bundles/{n}")) for n,d in BUNDLES]
-ad_rows = []
-for v, hook, angle in ADS:
-    fn = f"supercar-experience-porsche-gt3rs-15s-9x16{'' if v=='a-price' else '-'+v}.mp4"
-    p = K/"09-campaign-ads/porsche-gt3rs/exports"/fn
-    ad_rows.append(row(fn, f"{hook}  {angle}", mb(p) if p.exists() else "-", hosted.get(v)))
+def car_block(slug, title, price, note):
+    rows = []
+    for v, angle in ANGLES:
+        fn = f"supercar-experience-{slug}-15s-9x16{'' if v=='a-price' else '-'+v}.mp4"
+        p = K/"09-campaign-ads"/slug/"exports"/fn
+        url = hosted.get(f"{slug}/{v}") or hosted.get(v if slug == "porsche-gt3rs" else "\0")
+        rows.append(row(fn, f"{HOOKS[slug][v]}  {angle}", mb(p) if p.exists() else "-", url))
+    return (f'<div class="car"><div class="chead"><h3>{title}</h3><span class="price">{price}</span></div>'
+            f'<p class="cnote">{note}</p><ul class="list">{"".join(rows)}</ul></div>')
+ad_blocks = "".join(car_block(*c) for c in CARS)
+n_ads = len(CARS) * len(ANGLES)
 def inline(rel, w=420):
     """Stills are embedded as data URIs (the artifact viewer blocks images from other hosts)."""
     import base64, io
@@ -55,7 +74,10 @@ def inline(rel, w=420):
     im = Image.open(K/rel).convert("RGB"); im.thumbnail((w, w*2))
     b = io.BytesIO(); im.save(b, "JPEG", quality=82, optimize=True)
     return "data:image/jpeg;base64," + base64.b64encode(b.getvalue()).decode()
-stills = "".join(f'<figure><img src="{inline("09-campaign-ads/porsche-gt3rs/exports/"+s)}" alt="{c}"><figcaption>{c}</figcaption></figure>' for s,c in zip(STILLS,STILL_CAP))
+stills = "".join(
+    f'<figure><img src="{inline(f"09-campaign-ads/{slug}/exports/{s}")}" alt="{title} {c}">'
+    f'<figcaption>{title.split()[-1] if slug!="porsche-gt3rs" else "GT3 RS"} &middot; {c}</figcaption></figure>'
+    for slug, title, _, _ in CARS for s, c in zip(STILLS, STILL_CAP))
 n_ov = sum(1 for _ in (K/"03-overlays").rglob("*.png"))
 
 page = f'''<title>Supercar Experience Deliverables</title>
@@ -81,6 +103,10 @@ ul.list{{list-style:none;margin:0;padding:0}}
 .sz{{font:13px var(--mono);color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}}
 .dl{{font:600 13px var(--body);letter-spacing:.06em;text-transform:uppercase;background:var(--gold);color:#000;padding:10px 18px;border-radius:999px;text-decoration:none;white-space:nowrap}}.dl:hover{{background:#fff}}.dl:focus-visible{{outline:2px solid #fff;outline-offset:3px}}
 .dl.pending{{background:transparent;color:var(--ink-3);border:1px solid var(--rule)}}
+.car{{padding:22px 0 4px;border-bottom:1px solid var(--rule)}}.car:last-child{{border-bottom:0}}
+.chead{{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}}.chead h3{{font:400 clamp(24px,3.4vw,34px)/1 var(--display);margin:0}}
+.price{{font:12px var(--mono);color:var(--gold);letter-spacing:.06em}}
+.cnote{{margin:6px 0 10px;font-size:14px;color:var(--ink-2);max-width:66ch}}
 .stills{{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px;margin:18px 0 6px}}.stills figure{{margin:0}}.stills img{{width:100%;display:block;border:1px solid var(--rule)}}.stills figcaption{{font:11px var(--mono);color:var(--ink-3);margin-top:6px;letter-spacing:.06em}}
 .note{{border-left:3px solid var(--gold);background:var(--panel);padding:16px 20px;margin:22px 0;max-width:66ch}}.note .lab{{font:10.5px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--ink-3);display:block;margin-bottom:6px}}.note p{{margin:0 0 .6em;color:var(--ink-2)}}.note p:last-child{{margin:0}}.note b{{color:var(--ink);font-weight:600}}
 footer{{margin-top:64px;border-top:1px solid var(--rule);padding-top:18px;font:11px var(--mono);letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);display:flex;flex-wrap:wrap;gap:8px 24px}}footer a{{color:var(--ink-2);text-decoration-color:var(--gold)}}
@@ -91,16 +117,16 @@ footer{{margin-top:64px;border-top:1px solid var(--rule);padding-top:18px;font:1
 <p class="eyebrow">Supercar Experience <b>//</b> Brand kit &amp; rental ads <b>//</b> 9 Sept 2026</p>
 <h1>Deliverables<span class="sub">Kit &amp; GT3 RS ads</span></h1>
 <div class="stripe" aria-hidden="true"><span></span><span></span></div>
-<p class="lede">A brand kit built on the same toolkit as the Formula Dynamics kit, and five rental ads for the GT3 RS cut from your own footage. Every price, spec and promo on screen was read off supercarexp.vip. One tap per file, real filenames, filed by the Dropbox folder each belongs in.</p>
-<div class="readout"><div><span class="n">{n_ov}</span><span class="k">Overlays</span></div><div><span class="n">18</span><span class="k">Cars priced</span></div><div><span class="n">15</span><span class="k">Ad cues</span></div><div><span class="n">5</span><span class="k">GT3 RS spots</span></div><div><span class="n">11</span><span class="k">Bundles</span></div></div>
+<p class="lede">A brand kit built on the same toolkit as the Formula Dynamics kit, and fifteen rental ads - the GT3 RS, the Tempesta and the 750S Spider, five angles each, cut from your own footage and the site's own reels. Every price, spec and promo on screen was read off supercarexp.vip. One tap per file, real filenames, filed by the Dropbox folder each belongs in.</p>
+<div class="readout"><div><span class="n">{n_ov}</span><span class="k">Overlays</span></div><div><span class="n">18</span><span class="k">Cars priced</span></div><div><span class="n">{n_ads}</span><span class="k">Finished ads</span></div><div><span class="n">3</span><span class="k">Cars cut</span></div><div><span class="n">11</span><span class="k">Bundles</span></div></div>
 </header>
 
 <section>
-<div class="shead"><span class="tag">01 / Ads</span><h2>Porsche 911 GT3 RS - five angles</h2></div>
+<div class="shead"><span class="tag">01 / Ads</span><h2>Three cars, five angles each</h2></div>
 <p class="dest">File under <b>Portfolio / 01 Business Ads / Supercar Experience</b></p>
 <div class="stills">{stills}</div>
-<ul class="list">{"".join(ad_rows)}</ul>
-<div class="note"><span class="lab">What is on screen</span><p><b>$1,299 / 4 hrs and $1,799 / 24 hrs</b> are the GT3 RS's listed prices. Locations, the text number, 21+ / licence / insurance, and "50% off 2nd day or 3rd day free" are all from the site. Plate is 84-99s of "gt3 rolling in", graded with your NQ Signature LUT; the four-look A/B and the zone measurements are in the repo under exports/decision.</p><p>750S Spider and Tempesta cues are written and dry-run clean; they render the moment their plates exist. The 750S runs on the 765LT footage and the Tempesta on the Roma, named as the site lists them.</p></div>
+{ad_blocks}
+<div class="note"><span class="lab">What is on screen</span><p>Every figure is read off supercarexp.vip: the two rates on each car's own listing, the locations, the text number, 21+ / licence / insurance, and "50% off 2nd day or 3rd day free". Nothing is estimated and nothing is rounded.</p><p>Each plate was measured before a layout was chosen - mean and range of the luminance under every band the type lands on. The reports are in the repo at <code>09-campaign-ads/PLATES.md</code>. That is why the McLaren runs a solid card and the other two do not.</p></div>
 </section>
 
 <section>
@@ -116,12 +142,18 @@ footer{{margin-top:64px;border-top:1px solid var(--rule);padding-top:18px;font:1
 out = Path("/tmp/claude-0/-home-user-UIUX/bca660b1-ddd0-53c0-87e3-b329cd9a583e/scratchpad/sce/deliverables.html")
 out.parent.mkdir(parents=True, exist_ok=True); out.write_text(page); print("page:", out, f"{len(page)/1024:.0f} KB")
 
-md = ["# Supercar Experience - DELIVERY", "", "Filed 2026-09-09. Kit and GT3 RS ads. Every on-screen figure from supercarexp.vip.", "",
+md = ["# Supercar Experience - DELIVERY", "",
+      "Filed 2026-09-09. Brand kit and fifteen rental ads - three cars, five angles each.",
+      "Every on-screen figure is read off supercarexp.vip.", "",
       "## 01 Business Ads / Supercar Experience", ""]
-for v, hook, angle in ADS:
-    fn = f"supercar-experience-porsche-gt3rs-15s-9x16{'' if v=='a-price' else '-'+v}.mp4"
-    md.append(f"- `{fn}` - {hook} - {angle}" + (f" - {hosted[v]}" if v in hosted else " - hosting pending"))
+for slug, title, price, note in CARS:
+    md += ["", f"### {title} - {price.replace('&middot;', 'and')}", "", note, ""]
+    for v, angle in ANGLES:
+        fn = f"supercar-experience-{slug}-15s-9x16{'' if v=='a-price' else '-'+v}.mp4"
+        u = hosted.get(f"{slug}/{v}") or (hosted.get(v) if slug == "porsche-gt3rs" else None)
+        md.append(f"- `{fn}` - {HOOKS[slug][v]} - {angle}" + (f" - {u}" if u else " - hosting pending"))
 md += ["", "## 04 Brand and Creative Systems / Supercar Experience", ""]
 md += [f"- `{n}` ({mb(K/'08-download-bundles'/n)}) - {d} - {gh('08-download-bundles/'+n)}" for n,d in BUNDLES]
-md += ["", "## Source", "", f"- {TREE}", "- Rebuild the kit: `python3 99-toolkit/build_all.py`", "- Re-cut an ad: edit `09-campaign-ads/make_cues.py`, then `python3 build_ad.py --car <slug> --all`", ""]
+md += ["", "## Source", "", f"- {TREE}", "- Rebuild the kit: `python3 99-toolkit/build_all.py`", "- Re-cut an ad: edit `09-campaign-ads/make_cues.py`, then `python3 build_ad.py --car <slug> --all`",
+            "- Where each plate came from, and what it measured: `09-campaign-ads/PLATES.md`", ""]
 (K / "DELIVERY.md").write_text("\n".join(md)); print("DELIVERY.md written")

@@ -130,8 +130,12 @@ def out_name():
     """supercar-experience-<slug>-<T>s-9x16[-<variant>].mp4"""
     slug = CUE.get("slug") or os.path.basename(HERE)
     t = f"{DURATION:.0f}s"
-    if CUE.get("layoutStyle", "hud") != "hud":
-        return f'supercar-experience-{slug}-{t}-9x16-layout-{CUE["layoutStyle"]}.mp4'
+    style = CUE.get("layoutStyle", "hud")
+    # A layout demo (layouts/*.json) carries no variant, so the style names the
+    # file. When a car's own cue picks a layout - panel on bright footage, say -
+    # the variant still names the file, or every variant would collide.
+    if style != "hud" and not CUE.get("variant"):
+        return f'supercar-experience-{slug}-{t}-9x16-layout-{style}.mp4'
     if CUE.get("cut"):
         return f'supercar-experience-{slug}-{CUE["cut"]}-9x16.mp4'
     v = CUE.get("variant", "")

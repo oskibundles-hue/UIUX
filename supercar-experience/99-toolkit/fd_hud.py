@@ -111,7 +111,7 @@ def title_block(canvas, name, subline=None, y=0.705):
     lw = max(2, round(3 * s))
     d.line([x0, top, x0, top + bh], fill=B.rgb(B.WHITE) + (255,), width=lw)
     d.line([x0, top, x0 + bw, top], fill=B.rgb(B.WHITE) + (255,), width=lw)
-    mark = R.logo("sce-icon-mark-only--white", width=round(58 * s))
+    mark = R.logo(B.MARK_WHITE, width=round(58 * s))
     R.paste(im, mark, x0 + round(14 * s), top + round(16 * s))
 
     tx = x0 + round(108 * s)

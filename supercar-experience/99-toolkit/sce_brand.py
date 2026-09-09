@@ -14,6 +14,11 @@ from pathlib import Path
 KIT = Path(__file__).resolve().parent.parent
 BRAND_CORE = KIT / "01-brand-core"
 LOGOS = KIT / "02-logos"
+# Logo stems, so a layout never hard-codes another brand's filename.
+MARK_WHITE = "sce-icon-mark-only--white"
+MARK_BLACK = "sce-icon-mark-only--black"
+MARK_GOLD = "sce-icon-mark-only--gold"
+LOCKUP_WHITE = "sce-primary-horizontal--white"
 OVERLAYS = KIT / "03-overlays"
 TEMPLATES = KIT / "04-templates"
 FONTS = KIT / "07-fonts"
