@@ -28,12 +28,39 @@ As a **still** that is precisely what you want. A poster is read in one look, so
 showing the hero and three supporting details simultaneously is the point rather
 than a fight. The components were never wrong — the medium was.
 
+## The caption is glass, not a plate
+
+The first pass laid a solid black band across the foot of the poster with a red
+rule ruled edge to edge along its top. That is a border, and it was rejected for
+the same reason the bordered chip was rejected in the videos: it sits *on* the
+picture instead of belonging to it.
+
+It is now the house treatment — `frost()` crops that region of the poster,
+blurs it, pulls it down to a set brightness and fades its top edge in. The
+photograph carries on behind the words. The only red is a short rule under the
+service name, about a third of its width.
+
+**How dark the glass goes is measured, not fixed.** A plate over dark tarmac
+needs almost nothing; the same plate over sunlit concrete needs a lot, and one
+fixed number is what left the red offer line unreadable on the windshield
+poster. The tile is sampled and aimed at `TARGET_GLASS`.
+
+## The hero is a whole car, and it is sharp
+
+Two separate faults put half a blurred car on the first posters:
+
+**Framing.** The hero filled the canvas, but only its top two thirds was ever
+visible — the detail strip and the caption covered the rest, so a car sitting in
+the middle of the frame got cut in half. The frame is now scaled by just enough
+that lifting it by `hero_y` still reaches the bottom edge: full bleed, car in the
+visible window, and real photograph behind the caption to frost.
+
+**Choice of frame.** Every source was scanned at 2 fps for edge energy, and the
+hero is the sharpest timestamp where the *whole* car is in shot — read off the
+frames, never remembered. The numbers in the config are the output of that scan.
+
 ## Rules it inherits
 
-Same as the ads: no model names, the caption sits on ground rather than over
-picture, conditions are stated, and the five-segment accent stripe signs off
-bottom-right. See `../12-service-ads-footage/COPY-RULES.md`.
-
-Frames are chosen the same way too — read the source at one-second resolution
-first. The first pass put a blurred hand in a detail pane and a blurred interior
-as a hero, because the timestamps were picked from memory rather than looked at.
+Same as the ads: no model names, conditions are stated, no bordered anything,
+and the five-segment accent stripe signs off bottom-right. See
+`../12-service-ads-footage/COPY-RULES.md`.

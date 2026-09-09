@@ -77,12 +77,42 @@ Technology"*, and MFL-03, *"35% lighter than OEM"*.
 
 ---
 
-## Larini
+## Larini — `larinisystems.com`
 
-Formula Dynamics is the **North American distributor**. That is a distribution
-relationship, not a claim about the product, and it is already the backbone of
-the R1 exhaust reel and the R5 authority reel. No URL is published here because
-none has been verified — get the official one from Larini before putting it on
+**The relationship.** Formula Dynamics is the **North American distributor**.
+That is a distribution fact, not a claim about the product, and it is already
+the backbone of the R1 exhaust reel and the R5 authority reel. The shop's own
+Larini store page is `formuladynamics.com/collections/larini`.
+
+**URL now verified.** The official site is **larinisystems.com**, with a North
+American line published on it — so the URL bar may go on screen for a car that
+actually wears a Larini system.
+
+**What they say about themselves.** *"Larini's unique constructions, melodic
+sounds and high aesthetic standards have enthralled drivers"* — the three things
+they lead with are construction, sound and finish, in that order.
+
+**Platforms.** Maserati, Ferrari, Lamborghini, McLaren and other exotics.
+
+**Valve control — the fact worth a graphic.** *"The valves in a Larini 'Valve
+Control' Exhaust System function exactly as per the factory valved exhaust —
+they open and shut at predetermined rev loads, and function via the vehicle's
+pneumatic feed pipes."*
+
+That is a different argument from iPE's, and the difference is the story: iPE
+gives the driver a switch, Larini keeps the factory's own logic and pneumatic
+feed. **Factory behaviour, Larini voice** is an honest line for either.
+
+**Contact published on the site.** UK T: +44 (0) 800 953 1747 · North America:
+1 800 452 5075 · info@larinisystems.com
+
+**Safe on-screen lines**
+- Valve control, factory rev-load behaviour
+- Runs off the car's own pneumatic feed
+- Handmade construction, melodic sound
+
+**Not on the page, so not claimable:** materials by name, weight figures, power
+gains, model-by-model fitment. Get those from Larini before any of it goes on
 screen.
 
 ---

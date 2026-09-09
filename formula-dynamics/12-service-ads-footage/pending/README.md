@@ -6,8 +6,22 @@ Built, not yet approved. Move to `../approved/` once the shop signs them off.
 |---|---|---|---|
 | `SF90-Service-Pricing.mp4` | Oil $1,199 · Brake job $499 · Diagnostics $499 | 22.2 s | Ferrari SF90 |
 | `Roma-FreeTune-RYFT.mp4` | Free ECU tune with a RYFT or Opus exhaust | 25.7 s | Ferrari Roma |
+| `Urus-GradientPPF.mp4` | Custom gradient PPF, ceramic included | 21.8 s | Mansory Urus |
 
-Both have an `-SFX` version.
+All three have an `-SFX` version.
+
+## The Urus is now uncut
+
+The first version skipped 12.4–14.0 s, where the car carries printed
+**SUPERCAR EXPERIENCE ✕ DIPPED AUTO WORKS** lettering across the glass. The shop
+is happy for the collaboration to be on screen, so the cut was rebuilt from the
+full clip: 21.8 s instead of 19.6 s, and the branded section plays.
+
+The panels land at 8.1–10.6 s and 11.3–13.8 s, so the second one is still
+readable across the section rather than fighting it.
+
+**Formula Dynamics did this car.** The gradient PPF is the shop's own work, so
+the ad is a claim it can stand behind.
 
 ## Service Pricing — the à la carte counterpart
 

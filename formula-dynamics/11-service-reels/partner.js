@@ -35,8 +35,11 @@ const PARTNERS = {
     url: 'opusinnovations.com',
     line: 'Inconel · equal-length headers',
   },
-  // Larini intentionally absent — no verified public URL yet.
-  // See PARTNERS.md before adding it.
+  larini: {
+    name: 'Larini',
+    url: 'larinisystems.com',
+    line: 'Valve control · factory rev-load behaviour',
+  },
 };
 
 /** Build the bar once and park it off-frame. Call from scene build(). */

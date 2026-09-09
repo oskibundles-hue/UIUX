@@ -171,15 +171,16 @@ torque wrench, film being squeegeed onto glass, a car on the dyno — any of tho
 would swap straight into these ads as shot 2 or 3 and make them proof rather
 than assertion. The shot lists in `shots.txt` are the swap points.
 
-**Confirm the Roma's exhaust.** If it is a RYFT, the free-tune ad can carry the
-`ryft.co` URL bar from `11-service-reels/partner.js`. Until then the ad states
-the offer without claiming anything about the car in shot.
+**Confirm the Roma's exhaust.** *Closed — it is a RYFT.* The RYFT name is on
+screen in `pending/Roma-FreeTune-RYFT.mp4`, and `ryft.co` may go on any cut
+featuring that car.
 
-**Opus.** Named in the specials, never researched. No claims, no logo, no URL
-for that brand until it is — see `11-service-reels/PARTNERS.md`.
+**Opus.** *Closed —* `opusinnovations.com/exhaust`, researched and written up in
+`11-service-reels/PARTNERS.md`. **Larini too:** `larinisystems.com`.
 
-**Mansory Urus, custom gradient PPF.** Named in the shop's own notes as ad
-material; no footage has come through.
+**Mansory Urus, custom gradient PPF.** *Closed — footage arrived through
+Supercar Experience and the ad is built* (`pending/Urus-GradientPPF.mp4`).
+Formula Dynamics did the car.
 
 **Two more cars are available.** The Aventador S and 765LT plates are committed
 on the campaign branch, so the annual package could take a fourth and fifth
