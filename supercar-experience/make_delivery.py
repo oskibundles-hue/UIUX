@@ -61,7 +61,7 @@ def car_block(slug, title, price, note):
     for v, angle in ANGLES:
         fn = f"supercar-experience-{slug}-15s-9x16{'' if v=='a-price' else '-'+v}.mp4"
         p = K/"09-campaign-ads"/slug/"exports"/fn
-        url = hosted.get(f"{slug}/{v}") or hosted.get(v if slug == "porsche-gt3rs" else "\0")
+        url = hosted.get(f"{slug}/{v}")
         rows.append(row(fn, f"{HOOKS[slug][v]}  {angle}", mb(p) if p.exists() else "-", url))
     return (f'<div class="car"><div class="chead"><h3>{title}</h3><span class="price">{price}</span></div>'
             f'<p class="cnote">{note}</p><ul class="list">{"".join(rows)}</ul></div>')
@@ -150,7 +150,7 @@ for slug, title, price, note in CARS:
     md += ["", f"### {title} - {price.replace('&middot;', 'and')}", "", note, ""]
     for v, angle in ANGLES:
         fn = f"supercar-experience-{slug}-15s-9x16{'' if v=='a-price' else '-'+v}.mp4"
-        u = hosted.get(f"{slug}/{v}") or (hosted.get(v) if slug == "porsche-gt3rs" else None)
+        u = hosted.get(f"{slug}/{v}")
         md.append(f"- `{fn}` - {HOOKS[slug][v]} - {angle}" + (f" - {u}" if u else " - hosting pending"))
 md += ["", "## 04 Brand and Creative Systems / Supercar Experience", ""]
 md += [f"- `{n}` ({mb(K/'08-download-bundles'/n)}) - {d} - {gh('08-download-bundles/'+n)}" for n,d in BUNDLES]
