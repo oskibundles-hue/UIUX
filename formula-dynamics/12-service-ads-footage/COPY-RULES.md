@@ -65,7 +65,10 @@ cut is on hold for exactly this reason.
 
 | Ad | State |
 |---|---|
-| Annual service $3,999 · SF90 | **Approved — finished product** |
-| Full car PPF · Roma | Rebuilt with the service/included split — awaiting confirmation |
-| Windshield PPF $899 · GT3 RS | Rebuilt with the service/included split — awaiting confirmation |
-| Free tune · Aventador | Built on glass — awaiting confirmation |
+| Annual service $3,999 · SF90 | **Approved** |
+| Full car PPF · Roma | **Approved** |
+| Windshield PPF $899 · GT3 RS | **Approved** |
+| Free tune · Aventador | **Approved** |
+
+All four are the finished products. Anything new for these services starts from
+their settings, not from scratch.

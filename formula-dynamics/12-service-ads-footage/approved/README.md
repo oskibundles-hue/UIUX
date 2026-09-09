@@ -10,9 +10,9 @@ no corner logo, plain and `-SFX` (sound-designed) versions.
 | File | Service | Length | State |
 |---|---|---|---|
 | `FD-Annual-Service-3999.mp4` | Annual service package, $3,999 | 22.2 s | **Approved** |
-| `FD-Roma-FullCarPPF.mp4` | Full car PPF | 25.7 s | Awaiting sign-off |
-| `FD-GT3RS-WindshieldPPF.mp4` | Windshield PPF, $899 | 28.7 s | Awaiting sign-off |
-| `FD-Aventador-FreeTune.mp4` | Free ECU tune | 14.0 s | Awaiting sign-off |
+| `Roma-FullCarPPF.mp4` | Full car PPF | 25.7 s | **Approved** |
+| `GT3RS-WindshieldPPF.mp4` | Windshield PPF, $899 | 28.7 s | **Approved** |
+| `Aventador-FreeTune.mp4` | Free ECU tune | 14.0 s | **Approved** |
 
 ## Why the tune ad carries no panels
 
