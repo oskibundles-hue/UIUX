@@ -1,0 +1,9 @@
+# Annual Service Package — $3,999 · 22.5s
+# source            start   dur   what it carries
+sf90.mp4             7.5    4.0   hero, the buyer's car
+gt3.mov              1.9    2.2   forged wheel + yellow caliper -> brake service
+gt3.mov              3.7    2.0   nose and headlight -> inspection
+gt3.mov             15.4    2.8   wheel arch spinning -> suspension
+roma.mov            16.0    4.5   Roma through the canyon -> the range we keep
+gt3.mov             26.4    2.3   GT3 RS rear, wing up
+sf90.mp4            17.5    4.7   SF90 rear badge -> payoff, CTA, end card

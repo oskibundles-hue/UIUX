@@ -1,4 +1,0 @@
-lift 2.0 4.5
-brakes 9.0 4.5
-brakes 29.5 4.0
-lift 41.0 6.0
