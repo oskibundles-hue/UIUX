@@ -12,6 +12,8 @@ same one, so a set of ads can be told apart at a glance.
     rule    word over a red rule, low-left. Quiet; lets footage carry.
     index   numeral hard left, word hard right, hairline between them.
     tab     slim red bar up the left edge, word rotated inside it.
+    panel   frosted glass: the picture behind the words is blurred in place,
+            so the panel is made OF the footage instead of sitting on it.
 
 All return a full-canvas RGBA layer, so the caller composites at 0,0 and the
 layout owns its own position in frame.
@@ -154,4 +156,42 @@ def build(style, canvas, label, n=1, total=1, tone="dark"):
         return tab(canvas, label, tone)
     if style == "rule":
         return rule(canvas, label, tone=tone)
+    if style == "panel":
+        return panel(canvas, label, tone=tone)[0]
     raise ValueError(f"unknown spec style: {style}")
+
+
+# ---------------------------------------------------------------- frosted
+
+# One fixed rectangle for the whole run, so four specs read as one component
+# changing its contents rather than four different objects. It stops short of
+# x=904 because Instagram's action rail starts at 907.
+PANEL_BOX = (54, 1104, 850, 210)
+
+
+def panel(canvas, label, kicker="INCLUDED", tone="dark"):
+    """Text for a frosted-glass panel, plus the rectangle to blur behind it.
+
+    Returns (layer, box). The layer carries type only - no fill, no border.
+    The panel itself is made by the render: that rectangle of the picture is
+    cropped out, blurred, darkened and put back, so the car keeps moving
+    behind the glass. A drawn plate cannot do that, and a bordered chip does
+    the opposite - it announces itself as something stuck on top.
+    """
+    im = _canvas(canvas)
+    x, y, w, h = PANEL_BOX
+    pad = 34
+    ink = B.WHITE if tone == "dark" else B.BLACK
+
+    k = R.text(kicker, 26, B.RED, tracking=0.26)
+    R.paste(im, k, x + pad, y + pad)
+
+    word = R.fit_text(label, w - pad * 2, max_height=int(h * 0.44),
+                      color=ink, tracking=0.03)
+    R.paste(im, word, x + pad, y + pad + k.height + 20)
+
+    # a short red rule along the panel's bottom edge, the only furniture
+    d = ImageDraw.Draw(im)
+    d.rectangle([x, y + h - 6, x + int(w * 0.30), y + h - 1],
+                fill=B.rgb(B.RED) + (255,))
+    return im, PANEL_BOX

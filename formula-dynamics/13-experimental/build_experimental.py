@@ -10,14 +10,9 @@ videos use well and test whether they survive contact with the brand:
                                 exactly as it does in the reference. Plus the
                                 staged build and the circular swipe affordance.
 
-  EXP-2  detail grid            main picture over a strip of three sub-panes
-                                pulled from other moments of the same clip, a
-                                vertical red section tab, and a header bar.
-
 Everything is generated; nothing is traced from the templates themselves.
 
-    python3 build_experimental.py exp1
-    python3 build_experimental.py exp2
+    python3 build_experimental.py exp1 /path/to/clip.mp4
 """
 import os
 import subprocess
@@ -172,69 +167,16 @@ def exp1(source, out):
 
 
 # ------------------------------------------------------------------- EXP  2
-
-def exp2(source, out, picks=(2.0, 3.2, 16.0)):
-    """Main picture over a strip of three detail panes from the same clip."""
-    TMP.mkdir(exist_ok=True)
-    OUT.mkdir(exist_ok=True)
-    R.save(vertical_tab("WINDSHIELD PPF"), TMP / "e2-tab.png")
-    R.save(header_bar("FORMULA DYNAMICS"), TMP / "e2-head.png")
-    R.save(name_block("PORSCHE 911 GT3 RS", "WINDSHIELD PPF  ·  $899  ·  HEADLIGHTS FREE"),
-           TMP / "e2-name.png")
-    R.save(fine_print("SELF-HEALING FILM  ·  HEADLIGHT PPF INCLUDED  ·  FITTED IN HOUSE", W),
-           TMP / "e2-fine.png")
-    # The caption needs its own ground. Laid over picture it fought the Porsche
-    # crest and the carbon; on a plate it reads at a glance.
-    plate_top = int(H * 0.775)
-    plate = Image.new("RGBA", (W, H - plate_top), (10, 10, 12, 255))
-    pd = ImageDraw.Draw(plate)
-    pd.rectangle([0, 0, W, 5], fill=B.rgb(B.RED) + (255,))
-    R.save(plate, TMP / "e2-plate.png")
-
-    # three stills from elsewhere in the same clip, used as the detail strip
-    for i, t in enumerate(picks):
-        run([ff(), "-nostdin", "-y", "-ss", str(t), "-i", str(source),
-             "-frames:v", "1", "-vf",
-             f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H}",
-             str(TMP / f"e2-d{i}.png"), "-loglevel", "error"])
-
-    sw = (W - 2 * 8) // 3            # three panes, 8px gutters
-    sh = int(H * 0.20)
-    sy = int(H * 0.565)
-
-    g = (f"[0:v]scale={W}:{H}:force_original_aspect_ratio=increase,"
-         f"crop={W}:{H},fps=30,setsar=1[base];")
-    for i in range(3):
-        g += (f"[{i+1}:v]scale={sw}:{sh}:force_original_aspect_ratio=increase,"
-              f"crop={sw}:{sh},setsar=1[d{i}];")
-    last = "base"
-    for i in range(3):
-        x = i * (sw + 8)
-        g += (f"[{last}][d{i}]overlay={x}:{sy}:"
-              f"enable='gte(t,{2.4 + i * 0.55:.2f})'[m{i}];")
-        last = f"m{i}"
-    g += (f"[{last}][4:v]overlay=x={int(W*0.05)}:y={int(H*0.255)}:"
-          f"enable='gte(t,1.2)':format=auto[t1];"
-          f"[t1][5:v]overlay=x={W-520-int(W*0.05)}:y={int(H*0.10)}:"
-          f"enable='gte(t,0.6)':format=auto[t2];"
-          f"[t2][6:v]overlay=x=0:y={plate_top}:"
-          f"enable='gte(t,4.2)':format=auto[t3];"
-          f"[t3][7:v]overlay=x={int(W*0.05)}:y={plate_top + 44}:"
-          f"enable='gte(t,4.6)':format=auto[t4];"
-          f"[t4][8:v]overlay=x={int(W*0.05)}:y={plate_top + 252}:"
-          f"enable='gte(t,5.4)':format=auto[vout]")
-
-    cmd = [ff(), "-nostdin", "-y", "-i", str(source)]
-    for i in range(3):
-        cmd += ["-loop", "1", "-i", str(TMP / f"e2-d{i}.png")]
-    for n in ("e2-tab", "e2-head", "e2-plate", "e2-name", "e2-fine"):
-        cmd += ["-loop", "1", "-i", str(TMP / f"{n}.png")]
-    cmd += ["-filter_complex", g, "-map", "[vout]", "-map", "0:a?",
-            "-shortest", "-c:v", "libx264", "-preset", "medium", "-crf", "20",
-            "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k",
-            "-movflags", "+faststart", str(out)]
-    run(cmd)
-    print(f"ok  {out.name}")
+#
+# EXP-2 was a detail grid: hero picture over a strip of three sub-panes pulled
+# from the same clip, with a vertical section tab and a caption plate. It was
+# built, looked at, and thrown away - the strip cut the hero picture in half
+# and the layout read as a brochure page rather than as a piece of film. The
+# vertical tab was the one part worth keeping and it survives on its own as
+# `--spec-style tab` in 99-toolkit/fd_spec.py.
+#
+# Not kept as dead code. If a detail grid is wanted later it should be built
+# against a clip shot for it, not retrofitted onto a rolling beauty shot.
 
 
 if __name__ == "__main__":
@@ -243,5 +185,3 @@ if __name__ == "__main__":
     OUT.mkdir(exist_ok=True)
     if which in ("exp1", "both"):
         exp1(src or Path(os.environ["SF90"]), OUT / "FD-EXP1-Glass-Panels.mp4")
-    if which in ("exp2", "both"):
-        exp2(src or Path(os.environ["GT3"]), OUT / "FD-EXP2-Detail-Grid.mp4")

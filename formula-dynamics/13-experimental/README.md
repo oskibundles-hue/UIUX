@@ -12,6 +12,9 @@ brand kit.
 From the BMW dealer template: twin figure panels, a staged build, a fine-print
 line, and the circular swipe affordance.
 
+The model name has since been dropped from the house ads - these sell a service,
+not a car, and the car is already on screen.
+
 **The panels are real frosted glass, not flat plates.** Each panel's rectangle
 is cropped out of the picture, blurred and darkened, then composited back in
 place, so the car keeps moving behind the glass exactly as it does in the
@@ -26,15 +29,16 @@ The build is staged the way the reference stages it — name, then the price
 panel, then the second panel, then the fine print, then the arrow — so the
 viewer reads one thing at a time instead of meeting a finished layout.
 
-## EXP-2 — Detail grid · GT3 RS · 28.7 s
+## EXP-2 — Detail grid · thrown away
 
-From the Ferrari dealer template: a vertical red section tab, a header bar, and
-a strip of detail panes under the hero picture. The three panes are pulled from
-other moments of the same clip (2.0 s, 3.2 s, 16.0 s) — the chrono, the forged
-wheel, the arch — so one clip does the work of a multi-camera shoot.
+Built, looked at, rejected. Hero picture over a strip of three detail panes
+from the same clip, with a vertical tab and a caption plate. The strip cut the
+hero picture in half and the whole thing read as a brochure page rather than a
+piece of film.
 
-The caption sits on its own dark plate. Laid straight over picture it fought the
-Porsche crest and the carbon weave and neither read; the plate fixed it.
+The vertical tab was the one part worth keeping, and it survives on its own as
+`--spec-style tab`. Nothing else was carried over and the code is gone rather
+than commented out.
 
 ## What is worth keeping
 
@@ -48,6 +52,5 @@ The vertical tab already graduated: it is now `--spec-style tab` in
 ## Rebuild
 
 ```bash
-python3 build_experimental.py exp1 /path/to/sf90.mp4
-python3 build_experimental.py exp2 /path/to/gt3.mov
+python3 build_experimental.py exp1 /path/to/clip.mp4
 ```

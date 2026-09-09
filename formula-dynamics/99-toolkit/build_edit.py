@@ -223,10 +223,13 @@ def plan(duration, canvas, tone, cfg, bug_position="top-left"):  # noqa: C901
         full_frame = cfg.get("spec_style", "chip") != "chip"
         place = "full" if full_frame else "centre-0.585"
         anim = "slide" if cfg.get("spec_style") == "index" else "fade"
+        frost = cfg.get("spec_frost")
         for i, (text, path) in enumerate(specs):
             st = spec_from + i * slot
             add(f"spec {i + 1}", path, st, st + hold, anim,
                 f"Spec: {text}", place=place)
+            if frost:
+                cues[-1]["frost"] = frost
 
     # 4c. HUD furniture - persistent title block and ticker. Both clear the
     #     frame before the CTA appears: the CTA occupies the same lower band,
@@ -339,6 +342,25 @@ def filter_graph(cues, width, height):
             f.append(f"fade=t=out:st={e - fo:.2f}:d={fo:.2f}:alpha=1")
         parts.append(",".join(f) + f"[{tag}]")
 
+        # Frosted glass: lift this rectangle out of the picture, blur and
+        # darken it, then put it straight back. The result moves with the
+        # footage, which is the whole point - a drawn plate cannot, and a
+        # bordered chip reads as something stuck on top.
+        fr = c.get("frost")
+        if fr:
+            fx, fy, fw, fh = fr
+            fade = min(0.30, dur / 4)
+            parts.append(f"[{last}]split=2[fb{i}][fc{i}]")
+            parts.append(
+                f"[fc{i}]crop={fw}:{fh}:{fx}:{fy},boxblur=20:2,"
+                f"eq=brightness=-0.12,format=yuva420p,"
+                f"fade=t=in:st={s:.2f}:d={fade:.2f}:alpha=1,"
+                f"fade=t=out:st={e - fade:.2f}:d={fade:.2f}:alpha=1[fg{i}]")
+            parts.append(
+                f"[fb{i}][fg{i}]overlay={fx}:{fy}:"
+                f"enable='between(t,{s:.2f},{e:.2f})'[fr{i}]")
+            last = f"fr{i}"
+
         place = c.get("place", "full")
         if place.startswith("centre-"):
             base_x, y = "(W-w)/2", f"{float(place.split('-')[1]):.3f}*H"
@@ -430,7 +452,7 @@ def main():
     ap.add_argument("--spec", action="append", default=[], metavar="TEXT",
                     help="spec chip, repeatable: --spec 'STAGE 2 TUNE'")
     ap.add_argument("--spec-style", default="chip",
-                    choices=["chip", "rule", "index", "tab"],
+                    choices=["chip", "rule", "index", "tab", "panel"],
                     help="how a service word is set. chip is the bordered box; "
                          "rule, index and tab are full-frame type treatments "
                          "with no container - see fd_spec.py")
@@ -536,6 +558,10 @@ def main():
                 path = tmp / f"spec-{i}.png"
                 layer.save(path)
                 cfg["specs"].append((text, path))
+            if a.spec_style == "panel":
+                # The glass is made by the render, not by the layer - see
+                # filter_graph. The layer carries only the type.
+                cfg["spec_frost"] = SP.PANEL_BOX
         cfg["spec_style"] = a.spec_style
 
     if a.title_block or a.ticker or a.callout:
@@ -586,15 +612,25 @@ def main():
         t_end = max((c["end"] for c in title_cues), default=3.0)
         cues = [c for c in cues if c["layer"] != "title"]
 
-        burst_end = t_start + min(1.5, (t_end - t_start) * 0.55)
+        # The hook was typing in about a second, which is too fast to read on
+        # a phone. Two changes: the bloom gives back time it did not need, and
+        # the hook runs on past the title card into the gap before whatever
+        # holds the lower band next.
+        burst_end = t_start + min(1.05, (t_end - t_start) * 0.38)
+        nxt = min((c["start"] for c in cues
+                   if c["start"] > t_end
+                   and c["layer"].startswith(("title block", "ticker",
+                                              "lower-third", "spec"))),
+                  default=t_end + 0.6)
+        type_end = min(t_end + 0.6, max(t_end, nxt - 0.12))
         cues.append(seq_cue("glow-burst", tmp, canvas, fps, t_start, burst_end,
                             FM.glow_burst, dict(text=B.BRAND_NAME, y=0.40),
                             "Monogram opens behind a red bloom."))
-        cues.append(seq_cue("type-on", tmp, canvas, fps, burst_end + 0.15, t_end,
-                            FM.type_on, dict(text=hook, y=0.42),
+        cues.append(seq_cue("type-on", tmp, canvas, fps, burst_end + 0.15,
+                            type_end, FM.type_on, dict(text=hook, y=0.42),
                             f"Hook typed on: {hook}"))
         motion_meta.append(dict(kind="type-on", text=hook,
-                                start=burst_end + 0.15, end=t_end))
+                                start=burst_end + 0.15, end=type_end))
 
         # A spec panel just before the ask - but only if there is a window
         # with nothing else in the lower band. On a HUD cut the title block

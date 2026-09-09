@@ -88,22 +88,26 @@ def glow_burst(canvas, p, text=None, y=0.42):
 
 
 # --------------------------------------------------------------------------
+TYPE_FRAC = 0.70          # fraction of the window spent typing; rest holds
+
+
 def type_on(canvas, p, text, y=0.44, size=0.052, color=B.WHITE, cursor=True):
     """Text typed one character at a time, with a block cursor.
 
-    Held on the last character for the final 15% so the line can be read
-    before whatever follows it.
+    Held complete for the final 30% so the line can be read before whatever
+    follows it. That hold used to be 15%, which on a short title window left
+    the hook finishing almost as it disappeared.
     """
     im = _blank(canvas)
     fw, fh = im.size
-    shown = text[:max(0, min(len(text), round(len(text) * min(1.0, p / 0.85))))]
+    shown = text[:max(0, min(len(text), round(len(text) * min(1.0, p / TYPE_FRAC))))]
     if not shown and not cursor:
         return im
 
     size_px = int(fh * size)
     body = R.text(shown, size_px, color, tracking=0.02) if shown else None
     w = body.width if body else 0
-    if cursor and (p < 0.85 or int(p * 14) % 2 == 0):
+    if cursor and (p < TYPE_FRAC or int(p * 14) % 2 == 0):
         cw = int(size_px * 0.46)
         cur = Image.new("RGBA", (cw, int(size_px * 0.94)), B.rgb(B.RED) + (255,))
     else:
