@@ -1,0 +1,227 @@
+{
+  "brand": {
+    "name": "Formula Dynamics Performance",
+    "website": "supercarexp.vip",
+    "instagram": "@supercar_experience_",
+    "email": "(725) 425-3583"
+  },
+  "color": {
+    "gold": {
+      "hex": "#FBD101",
+      "rgb": [
+        251,
+        209,
+        1
+      ],
+      "role": "Single accent. Prices, CTAs, key words, rules, the stripe."
+    },
+    "white": {
+      "hex": "#FFFFFF",
+      "rgb": [
+        255,
+        255,
+        255
+      ],
+      "role": "Primary logo + headline colour on dark footage."
+    },
+    "black": {
+      "hex": "#000000",
+      "rgb": [
+        0,
+        0,
+        0
+      ],
+      "role": "Primary background. Logo colour on light footage."
+    }
+  },
+  "accentStripe": [
+    {
+      "color": "#FBD101",
+      "share": 0.78
+    },
+    {
+      "color": "#FFFFFF",
+      "share": 0.22
+    }
+  ],
+  "type": {
+    "primary": {
+      "family": "Bebas Neue",
+      "use": "headlines",
+      "license": "SIL OFL 1.1",
+      "bundled": true
+    },
+    "accent": {
+      "family": "Michroma",
+      "use": "performance / accent",
+      "license": "commercial",
+      "bundled": false
+    }
+  },
+  "logo": {
+    "clearSpace": "one FD icon height on all sides",
+    "minWidthPx": 120,
+    "minWidthPrintMm": 25
+  },
+  "canvas": {
+    "9x16": {
+      "width": 1080,
+      "height": 1920
+    },
+    "4x5": {
+      "width": 1080,
+      "height": 1350
+    },
+    "1x1": {
+      "width": 1080,
+      "height": 1080
+    },
+    "16x9": {
+      "width": 1920,
+      "height": 1080
+    }
+  },
+  "safeZones": {
+    "9x16": {
+      "top": 0.11,
+      "bottom": 0.2,
+      "right": 0.16,
+      "left": 0.05
+    }
+  },
+  "services": [
+    {
+      "slug": "porsche-gt3rs",
+      "label": "PORSCHE 911 GT3 RS",
+      "description": "2025 - Exotic - Las Vegas, Scottsdale, Boise",
+      "subline": "$1,299 / 4 HRS   -   $1,799 / 24 HRS"
+    },
+    {
+      "slug": "mclaren-750s-spider",
+      "label": "MCLAREN 750S SPIDER",
+      "description": "2026 - Exotic - Las Vegas, Scottsdale",
+      "subline": "$1,299 / 4 HRS   -   $1,799 / 24 HRS"
+    },
+    {
+      "slug": "ferrari-tempesta",
+      "label": "FERRARI TEMPESTA",
+      "description": "2025 - Exotic - Las Vegas, Scottsdale - 750 hp, 0-60 in 2.7s",
+      "subline": "$849 / 4 HRS   -   $1,199 / 24 HRS"
+    },
+    {
+      "slug": "lamborghini-sto",
+      "label": "LAMBORGHINI HURACAN STO",
+      "description": "2023 - Exotic - Las Vegas",
+      "subline": "$999 / 4 HRS   -   $1,599 / 24 HRS"
+    },
+    {
+      "slug": "ferrari-f8-tributo",
+      "label": "FERRARI F8 TRIBUTO",
+      "description": "2022 - Exotic - Las Vegas",
+      "subline": "$999 / 4 HRS   -   $1,599 / 24 HRS"
+    },
+    {
+      "slug": "mansory-urus",
+      "label": "LAMBORGHINI MANSORY URUS",
+      "description": "2025 - Wide body - Las Vegas",
+      "subline": "$999 / 4 HRS   -   $1,399 / 24 HRS"
+    },
+    {
+      "slug": "amg-gt-black-series",
+      "label": "MERCEDES-AMG GT BLACK SERIES",
+      "description": "2021 - Exotic - Las Vegas",
+      "subline": "$899 / 4 HRS   -   $1,299 / 24 HRS"
+    },
+    {
+      "slug": "huracan-evo-spyder-2021",
+      "label": "LAMBORGHINI HURACAN EVO SPYDER",
+      "description": "2021 - Exotic - Las Vegas",
+      "subline": "$899 / 4 HRS   -   $1,299 / 24 HRS"
+    },
+    {
+      "slug": "huracan-evo-spyder-2020",
+      "label": "LAMBORGHINI HURACAN EVO SPYDER",
+      "description": "2020 - Exotic - Las Vegas",
+      "subline": "$899 / 4 HRS   -   $1,299 / 24 HRS"
+    },
+    {
+      "slug": "sce-rally",
+      "label": "SUPERCAR EXPERIENCE RALLY",
+      "description": "2027 - Fall Rally Nov 13-16, 2026",
+      "subline": "$2,999 / 24 HRS"
+    },
+    {
+      "slug": "rolls-royce-cullinan",
+      "label": "ROLLS-ROYCE CULLINAN",
+      "description": "2024 - Luxury - Las Vegas",
+      "subline": "$899 / 4 HRS   -   $1,199 / 24 HRS"
+    },
+    {
+      "slug": "cullinan-black-badge",
+      "label": "ROLLS-ROYCE CULLINAN BLACK BADGE",
+      "description": "2024 - Luxury - Las Vegas",
+      "subline": "$899 / 4 HRS   -   $1,199 / 24 HRS"
+    },
+    {
+      "slug": "novitec-urus",
+      "label": "LAMBORGHINI NOVITEC URUS",
+      "description": "2021 - Wide body - Las Vegas",
+      "subline": "$699 / 4 HRS   -   $949 / 24 HRS"
+    },
+    {
+      "slug": "porsche-911-pure-800",
+      "label": "PORSCHE 911 PURE 800",
+      "description": "2024 - Luxury - Las Vegas",
+      "subline": "$599 / 4 HRS   -   $849 / 24 HRS"
+    },
+    {
+      "slug": "lamborghini-urus",
+      "label": "LAMBORGHINI URUS",
+      "description": "2022 - Luxury - Las Vegas",
+      "subline": "$599 / 4 HRS   -   $849 / 24 HRS"
+    },
+    {
+      "slug": "g63-4x4-squared",
+      "label": "MERCEDES G63 4X4 SQUARED",
+      "description": "2023 - Luxury - Las Vegas",
+      "subline": "$599 / 4 HRS   -   $799 / 24 HRS"
+    },
+    {
+      "slug": "brabus-g63",
+      "label": "BRABUS G63",
+      "description": "2025 - Luxury - Las Vegas",
+      "subline": "$499 / 4 HRS   -   $699 / 24 HRS"
+    },
+    {
+      "slug": "gls600-maybach",
+      "label": "MERCEDES GLS600 MAYBACH",
+      "description": "2024 - Luxury - Las Vegas",
+      "subline": "$449 / 4 HRS   -   $649 / 24 HRS"
+    }
+  ],
+  "priorityServices": [
+    "porsche-gt3rs",
+    "mclaren-750s-spider",
+    "ferrari-tempesta"
+  ],
+  "partners": [
+    {
+      "slug": "las-vegas",
+      "label": "LAS VEGAS",
+      "name": "Las Vegas, Nevada",
+      "category": "NEVADA"
+    },
+    {
+      "slug": "scottsdale",
+      "label": "SCOTTSDALE",
+      "name": "Scottsdale, Arizona",
+      "category": "ARIZONA"
+    },
+    {
+      "slug": "boise",
+      "label": "BOISE",
+      "name": "Boise, Idaho",
+      "category": "IDAHO"
+    }
+  ]
+}

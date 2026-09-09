@@ -1,0 +1,19 @@
+{
+  "_comment": "Shot list of source/plate-1080x1920.mp4, from ffmpeg scene detection at threshold 0.25 and confirmed against a contact sheet. Referenced by index in cuts/*.json, so a re-cut is a list of shot ids rather than timecodes.",
+  "source": "source/plate-1080x1920.mp4",
+  "shots": [
+    { "id": 0,  "in": 0.00,  "out": 0.58,  "label": "carbon sill macro, extreme close" },
+    { "id": 1,  "in": 0.58,  "out": 1.21,  "label": "car receding, front 3/4 far" },
+    { "id": 2,  "in": 1.21,  "out": 2.12,  "label": "rolling front wheel, yellow caliper" },
+    { "id": 3,  "in": 2.12,  "out": 2.54,  "label": "interior, hand on wheel + paddle" },
+    { "id": 4,  "in": 2.54,  "out": 3.88,  "label": "wide, car receding toward mountains" },
+    { "id": 5,  "in": 3.88,  "out": 4.21,  "label": "front tracking, low, headlights" },
+    { "id": 6,  "in": 4.21,  "out": 4.29,  "label": "whip blur — transition frame, unusable alone" },
+    { "id": 7,  "in": 4.29,  "out": 5.88,  "label": "rear 3/4, tail lights + wing (convoy car frame left)" },
+    { "id": 8,  "in": 5.88,  "out": 6.29,  "label": "tachometer cluster, redline" },
+    { "id": 9,  "in": 6.29,  "out": 6.71,  "label": "interior, hand + paddle" },
+    { "id": 10, "in": 6.71,  "out": 8.00,  "label": "rear follow, wing, open road" },
+    { "id": 11, "in": 8.00,  "out": 10.58, "label": "front 3/4 tracking, escarpment — the hero shot" },
+    { "id": 12, "in": 10.58, "out": 14.04, "label": "rear follow into sunset — the closer" }
+  ]
+}
