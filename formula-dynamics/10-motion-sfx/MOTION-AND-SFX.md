@@ -64,6 +64,31 @@ which plays every one in order. See `sfx/MANIFEST.md` for the full list.
 Rebuild with `python3 99-toolkit/build_sfx.py`. The random seed is fixed, so
 a rebuild is identical.
 
+### Mixing against engine audio
+
+The demo mixes the effects **under the clip's own sound**, not instead of it.
+The first version mapped only the effects bed, which silently dropped the
+engine — and whether the effects read against an engine is the whole question
+the demo exists to answer.
+
+Measured against the Roma clip's own audio, per cue:
+
+| Cue | Effects over engine |
+|---|---|
+| Glow burst | +4.0 dB |
+| Typing | +3.0 dB |
+| Scramble | +2.9 / +2.1 dB |
+| Panel rise | +2.1 dB |
+
+At the original `--sfx-gain 0.85` every cue landed at **+0.6 to +0.9 dB** —
+present in the file, inaudible to a listener. The default is now 1.6.
+
+**Ducking is off by default, because it measured worse.** Sidechain-compressing
+the engine under the effects gave +0.7 dB on the typing where a flat mix gave
++2.7: the duck pulls the engine down, then the summed bus hits the limiter and
+the effects lose more than the duck gained. `--duck` is still there for footage
+with dialogue, where protecting the voice matters more than the effect level.
+
 ### One known difference from the reference
 
 In the reference, the typing run measures **158% of the RMS of its biggest

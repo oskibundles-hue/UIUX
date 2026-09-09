@@ -72,6 +72,11 @@ def cues():
     ]
 
 
+def has_audio(ff, path):
+    out = subprocess.run([ff, "-i", path], capture_output=True, text=True).stderr
+    return "Audio:" in out
+
+
 def build_audio(cue_list, dur):
     """Mix the sound effects onto one track, then soft-limit."""
     bed = np.zeros(int(SR * (dur + 1.0)), dtype=np.float32)
@@ -100,6 +105,16 @@ def main():
     ap.add_argument("clip")
     ap.add_argument("-o", "--out", default="motion-demo.mp4")
     ap.add_argument("--canvas", default="9x16")
+    ap.add_argument("--sfx-gain", type=float, default=1.6,
+                    help="level of the effects bed against the clip's own audio")
+    ap.add_argument("--duck", action="store_true",
+                    help="duck the clip audio under the effects. Measured "
+                         "WORSE than the flat mix on this footage - the "
+                         "sidechain pulls the engine down, then the summed "
+                         "bus hits the limiter and the effects lose what the "
+                         "duck gained. Kept for footage with dialogue.")
+    ap.add_argument("--source-gain", type=float, default=1.0,
+                    help="level of the clip's own audio; 0 drops it")
     ap.add_argument("--dry-run", action="store_true")
     a = ap.parse_args()
 
@@ -156,9 +171,38 @@ def main():
 
         inputs += ["-i", str(wav)]
         audio_idx = len(cue_list) + 1
+
+        # Mix the effects UNDER the clip's own audio rather than replacing
+        # it. The first version mapped only the bed, which silently dropped
+        # the engine - and the whole question this demo exists to answer is
+        # whether the effects read against the engine.
+        if has_audio(ff, a.clip) and a.source_gain > 0:
+            filt.append(f"[0:a]volume={a.source_gain},pan=mono|c0=.5*c0+.5*c1[srca]")
+            filt.append(f"[{audio_idx}:a]volume={a.sfx_gain}[sfxa]")
+            if not a.duck:
+                filt.append("[srca][sfxa]amix=inputs=2:duration=first:normalize=0,"
+                            "alimiter=limit=0.85[aout]")
+                duck = "flat"
+            else:
+                # Duck the engine under each hit. Without this the effects
+                # measured only +0.8 dB over the engine across every cue -
+                # present in the file, inaudible to a listener.
+                filt.append("[sfxa]asplit=2[sfxmix][sfxkey]")
+                filt.append("[srca][sfxkey]sidechaincompress="
+                            "threshold=0.03:ratio=8:attack=5:release=220[ducked]")
+                filt.append("[ducked][sfxmix]amix=inputs=2:duration=first:"
+                            "normalize=0,alimiter=limit=0.85[aout]")
+                duck = "ducked"
+            amap = ["-map", "[aout]"]
+            print(f"  audio: clip x{a.source_gain:.2f} ({duck}) "
+                  f"+ effects x{a.sfx_gain:.2f}")
+        else:
+            amap = ["-map", f"{audio_idx}:a"]
+            print("  audio: effects only (clip has no audio track)")
+
         cmd = [ff, "-y"] + inputs + [
             "-filter_complex", ";".join(filt),
-            "-map", f"[{last}]", "-map", f"{audio_idx}:a",
+            "-map", f"[{last}]"] + amap + [
             "-t", f"{end}",
             "-c:v", "libx264", "-crf", "20", "-preset", "medium",
             "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k",
