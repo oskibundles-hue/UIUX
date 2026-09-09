@@ -48,7 +48,14 @@ for v, hook, angle in ADS:
     fn = f"supercar-experience-porsche-gt3rs-15s-9x16{'' if v=='a-price' else '-'+v}.mp4"
     p = K/"09-campaign-ads/porsche-gt3rs/exports"/fn
     ad_rows.append(row(fn, f"{hook}  {angle}", mb(p) if p.exists() else "-", hosted.get(v)))
-stills = "".join(f'<figure><img src="{gh("09-campaign-ads/porsche-gt3rs/exports/"+s)}" alt="{c}"><figcaption>{c}</figcaption></figure>' for s,c in zip(STILLS,STILL_CAP))
+def inline(rel, w=420):
+    """Stills are embedded as data URIs (the artifact viewer blocks images from other hosts)."""
+    import base64, io
+    from PIL import Image
+    im = Image.open(K/rel).convert("RGB"); im.thumbnail((w, w*2))
+    b = io.BytesIO(); im.save(b, "JPEG", quality=82, optimize=True)
+    return "data:image/jpeg;base64," + base64.b64encode(b.getvalue()).decode()
+stills = "".join(f'<figure><img src="{inline("09-campaign-ads/porsche-gt3rs/exports/"+s)}" alt="{c}"><figcaption>{c}</figcaption></figure>' for s,c in zip(STILLS,STILL_CAP))
 n_ov = sum(1 for _ in (K/"03-overlays").rglob("*.png"))
 
 page = f'''<title>Supercar Experience Deliverables</title>
