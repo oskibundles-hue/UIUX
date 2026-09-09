@@ -14,6 +14,15 @@ no corner logo, plain and `-SFX` (sound-designed) versions.
 | `GT3RS-WindshieldPPF.mp4` | Windshield PPF, $899 | 28.7 s | **Approved** |
 | `Aventador-FreeTune.mp4` | Free ECU tune | 14.0 s | **Approved** |
 | `SF90-Service-Pricing.mp4` | Oil $1,199 · Brake $499 · Diagnostics $499 | 22.2 s | **Approved** |
+| `Roma-FreeTune-RYFT.mp4` | Free ECU tune, RYFT named on screen | 25.7 s | **Approved** |
+| `Urus-GradientPPF.mp4` | Custom gradient PPF | 21.8 s | **Approved** |
+
+## Two ways to sell the same tune
+
+`Aventador-FreeTune.mp4` states the offer and claims nothing about the car in
+shot. `Roma-FreeTune-RYFT.mp4` names RYFT, because **that** car's fitment is
+confirmed — a partner name over a car is a claim about that car. Both stay: one
+is the generic statement of the offer, the other is the evidenced version.
 
 ## Pricing sits beside the package on purpose
 

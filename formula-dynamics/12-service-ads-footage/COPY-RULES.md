@@ -101,9 +101,10 @@ overlay should stay clear of those seconds.
 | Windshield PPF $899 · GT3 RS | **Approved** |
 | Free tune · Aventador | **Approved** |
 | Service pricing — oil / brake / diagnostics · SF90 | **Approved** |
-| Free tune, RYFT named · Roma | Awaiting sign-off |
-| Custom gradient PPF · Mansory Urus | Awaiting sign-off |
-| Service posters (4) | Awaiting sign-off |
+| Free tune, RYFT named · Roma | **Approved** |
+| Custom gradient PPF · Mansory Urus | **Approved** |
+| Service posters (4) | **Approved** |
 
-The approved ones are the finished products. Anything new for those services
-starts from their settings, not from scratch.
+All eight are finished products, signed off 9 Sept 2026. Anything new for these
+services starts from their settings, not from scratch. The download sheet lives
+at `/Portfolio/02 Service Ads/Approved Ads/DOWNLOAD SHEET.md` in Dropbox.
