@@ -452,8 +452,14 @@ def main():
                     help="lay the sound-effect pack under the edit, derived "
                          "from this cue sheet - every element that appears "
                          "gets a hit")
-    ap.add_argument("--sfx-gain", type=float, default=1.6,
-                    help="level of the effects against the clip's own audio")
+    ap.add_argument("--sfx-gain", type=float, default=None,
+                    help="level of the effects against the clip's own audio. "
+                         "Left off, it is calibrated from the clip's own "
+                         "loudness so the effects land at the same lift on "
+                         "every clip.")
+    ap.add_argument("--sfx-lift", type=float, default=4.0,
+                    help="target dB the effects sit over the clip's audio "
+                         "(default 4.0)")
     ap.add_argument("--motion", action="store_true",
                     help="animate the opening: a glow burst on the monogram "
                          "and the hook typed on, instead of the still title "
@@ -572,7 +578,7 @@ def main():
         # with nothing else in the lower band. On a HUD cut the title block
         # and ticker already own that band for most of the clip, and the
         # panel would stack on top of them.
-        chips = [t for t, _ in cfg.get("specs", [])][:3]
+        chips = [t for t, _ in cfg.get("specs", [])]
         cta = next((c for c in cues if c["layer"] == "cta"), None)
         if chips and cta:
             busy = [(c["start"], c["end"]) for c in cues
@@ -582,8 +588,9 @@ def main():
             p_end = cta["start"] - 0.5
             p_start = max(t_end + 0.5, p_end - 2.6)
             clear = all(p_end <= bs or p_start >= be for bs, be in busy)
-            if p_end - p_start > 1.4 and clear:
-                name = (a.title_block or "|").partition("|")[0].strip() or hook
+            name = (a.title_block or "|").partition("|")[0].strip() or hook
+            fits = FM.panel_fits(canvas, name, chips)
+            if p_end - p_start > 1.4 and clear and fits:
                 cues.append(seq_cue(
                     "panel-rise", tmp, canvas, fps, p_start, p_end,
                     FM.panel_rise, dict(title=name, chips=chips, y=0.62),
@@ -594,8 +601,10 @@ def main():
                 # the same words appear twice.
                 cues = [c for c in cues if not c["layer"].startswith("spec")]
             else:
-                why = "no clear window in the lower band" if not clear \
-                    else "window too short"
+                why = ("no clear window in the lower band" if not clear
+                       else "window too short" if p_end - p_start <= 1.4
+                       else f"{len(chips)} chips will not fit one row - "
+                            f"keeping the chip rundown")
                 print(f"  (no spec panel: {why})")
         cues.sort(key=lambda c: (c["start"], c["layer"]))
 
@@ -613,6 +622,11 @@ def main():
             sys.exit(f"  missing sounds: {', '.join(rep['missing'])}\n"
                      f"  run: python3 99-toolkit/build_sfx.py")
         bed_wav = fd_sfx.write_bed(tmp / "sfx-bed.wav", bed)
+        if a.sfx_gain is None:
+            src_rms = fd_sfx.source_rms(ffmpeg_bin(), src)
+            a.sfx_gain = fd_sfx.auto_gain(src_rms, bed, a.sfx_lift)
+            print(f"  SFX gain: {a.sfx_gain:.2f} (calibrated for +"
+                  f"{a.sfx_lift:.1f} dB over this clip)")
         note = (f"  SFX: {rep['hits']} hits, {rep['density']:.1f}/s"
                 + (f" ({rep['dropped']} secondary hits dropped - over the "
                    f"{fd_sfx.DENSITY_CAP}/s cap)" if rep["dropped"] else ""))

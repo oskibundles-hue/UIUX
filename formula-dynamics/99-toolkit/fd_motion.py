@@ -202,6 +202,22 @@ def panel_rise(canvas, p, title, chips, y=0.60):
     return im
 
 
+def panel_fits(canvas, title, chips):
+    """Do the title and every chip fit on one row inside the card?
+
+    panel_rise caps the card at 90% of frame width, so chips past that point
+    are clipped rather than wrapped. A five-service build has to keep its
+    chip rundown instead of losing two services inside a panel.
+    """
+    fw, fh = B.CANVASES[canvas]
+    pad = int(fw * 0.055)
+    size_px = int(fh * 0.030)
+    head = R.text(title, size_px, B.WHITE, tracking=0.14)
+    row = sum(R.text(c, int(size_px * 0.86), B.WHITE, tracking=0.10).width + pad
+              for c in chips)
+    return max(head.width, row) + pad * 2 <= int(fw * 0.90)
+
+
 COMPONENTS = {
     "glow-burst": glow_burst,
     "type-on": type_on,

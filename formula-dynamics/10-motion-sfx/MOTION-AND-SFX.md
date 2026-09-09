@@ -83,6 +83,14 @@ Measured against the Roma clip's own audio, per cue:
 At the original `--sfx-gain 0.85` every cue landed at **+0.6 to +0.9 dB** —
 present in the file, inaudible to a listener. The default is now 1.6.
 
+**The gain is calibrated per clip, not fixed.** At a fixed 1.6 the same pack
+measured **+1.1 dB** over the SF90's audio and **+14.2 dB** over the GT3 RS's —
+inaudible on one, jarring on the other — because the GT3 RS is mastered 8.6 dB
+quieter (RMS 0.089 against 0.240). `build_edit.py` now reads the clip's own
+loudness and solves for the gain that puts the effects at `--sfx-lift` dB over
+it, default 4.0. On the three cars that came out at 2.88, 1.02 and 3.18. Pass
+`--sfx-gain` to override.
+
 **Ducking is off by default, because it measured worse.** Sidechain-compressing
 the engine under the effects gave +0.7 dB on the typing where a flat mix gave
 +2.7: the duck pulls the engine down, then the summed bus hits the limiter and

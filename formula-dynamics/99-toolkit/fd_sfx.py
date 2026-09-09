@@ -15,6 +15,8 @@ and the tight impact that sit under a main hit) are dropped first, because
 they are the ones carrying the least information.
 """
 
+import re
+import subprocess
 import wave
 
 import numpy as np
@@ -137,6 +139,37 @@ def build_bed(cues, duration, motion_meta=None, verbose=True):
     report = {"hits": len(hits), "density": density, "dropped": dropped,
               "missing": sorted(missing)}
     return bed, report
+
+
+def source_rms(ffmpeg, path):
+    """Linear RMS of a clip's own audio, or None if it has none.
+
+    Read with ffmpeg's volumedetect rather than decoding the whole track.
+    """
+    out = subprocess.run(
+        [ffmpeg, "-i", str(path), "-map", "0:a?", "-af", "volumedetect",
+         "-f", "null", "-"], capture_output=True, text=True).stderr
+    m = re.search(r"mean_volume:\s*(-?[\d.]+) dB", out)
+    return 10 ** (float(m.group(1)) / 20) if m else None
+
+
+def auto_gain(src_rms, bed, target_lift_db=4.0, lo=0.3, hi=4.0):
+    """Pick an effects gain from the clip's own loudness.
+
+    A fixed gain does not survive different footage. At 1.6 the same pack
+    measured +1.1 dB over the SF90's audio and +14.2 dB over the GT3 RS's -
+    inaudible on one clip and jarring on the other - because the clips are
+    mastered at different levels. This sets the gain so the effects land at
+    roughly the same lift over whatever the clip is doing.
+    """
+    if not src_rms:
+        return 1.0
+    active = bed[np.abs(bed) > 0.005]
+    if active.size < 100:
+        return 1.0
+    bed_rms = float(np.sqrt((active ** 2).mean()))
+    want = (10 ** (target_lift_db / 10) - 1) ** 0.5      # effects/source ratio
+    return float(min(hi, max(lo, want * src_rms / bed_rms)))
 
 
 def write_bed(path, bed):
