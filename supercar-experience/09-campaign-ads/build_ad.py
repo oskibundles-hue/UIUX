@@ -30,7 +30,7 @@ import sys
 
 from PIL import Image
 
-KIT = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", ".."))
+KIT = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))  # shared renderer sits one level below the kit
 sys.path.insert(0, os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "99-toolkit"))
 
 import sce_brand as B          # noqa: E402

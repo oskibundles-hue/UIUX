@@ -1,0 +1,33 @@
+{
+ "zones": {
+  "bug (top 11-19%)": {
+   "mean": 58,
+   "min": 1,
+   "max": 110
+  },
+  "mid band (40-60%)": {
+   "mean": 105,
+   "min": 62,
+   "max": 149
+  },
+  "cta band (62-72%)": {
+   "mean": 83,
+   "min": 14,
+   "max": 190
+  },
+  "lower third (66-80%)": {
+   "mean": 61,
+   "min": 12,
+   "max": 143
+  }
+ },
+ "decision": {
+  "bug (top 11-19%)": "WHITE type / white logo",
+  "mid band (40-60%)": "WHITE type / white logo",
+  "cta band (62-72%)": "range too wide - scrim or move the element",
+  "lower third (66-80%)": "WHITE type / white logo"
+ },
+ "start": 84.0,
+ "dur": 15.0,
+ "look": "signature"
+}
