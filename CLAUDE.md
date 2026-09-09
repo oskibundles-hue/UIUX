@@ -118,3 +118,16 @@ deliverable, not a replacement, so the plain cut still gets made.
 Sound density adapts per clip rather than being fixed: `fd_sfx.py` derives a
 hit from every cue and drops the secondary layers if the result runs busier
 than its cap. Each video is different — judge it, don't hold a number.
+
+## Delivering Downloads
+
+When asked for files to download, always build a **download-page artifact** in
+the fast-cut look: categorised sections, one row per file with its runtime,
+size and a one-tap Download button that saves under the real filename. Never a
+wall of raw URLs in chat.
+
+Verify the links before publishing — count the buttons, check every id against
+a set read off disk. A download page with one wrong link is worse than none.
+
+Files with no public URL get a row too, marked as delivered in chat rather than
+a dead button, and carry the folder path to save them into.
