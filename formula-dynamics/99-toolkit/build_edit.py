@@ -220,10 +220,13 @@ def plan(duration, canvas, tone, cfg, bug_position="top-left"):  # noqa: C901
         # are on screen at once. On a short clip with several specs the slot
         # gets tight, so the floor is clamped rather than applied blindly.
         hold = min(2.8, max(1.0, slot * 0.8), slot - 0.2)
+        full_frame = cfg.get("spec_style", "chip") != "chip"
+        place = "full" if full_frame else "centre-0.585"
+        anim = "slide" if cfg.get("spec_style") == "index" else "fade"
         for i, (text, path) in enumerate(specs):
             st = spec_from + i * slot
-            add(f"spec {i + 1}", path, st, st + hold, "fade",
-                f"Spec: {text}", place="centre-0.585")
+            add(f"spec {i + 1}", path, st, st + hold, anim,
+                f"Spec: {text}", place=place)
 
     # 4c. HUD furniture - persistent title block and ticker. Both clear the
     #     frame before the CTA appears: the CTA occupies the same lower band,
@@ -426,6 +429,11 @@ def main():
                     help="custom two-line title, e.g. 'GT3 RS|BUILD'")
     ap.add_argument("--spec", action="append", default=[], metavar="TEXT",
                     help="spec chip, repeatable: --spec 'STAGE 2 TUNE'")
+    ap.add_argument("--spec-style", default="chip",
+                    choices=["chip", "rule", "index", "tab"],
+                    help="how a service word is set. chip is the bordered box; "
+                         "rule, index and tab are full-frame type treatments "
+                         "with no container - see fd_spec.py")
     ap.add_argument("--spec-scale", type=float, default=1.3,
                     help="size multiplier for spec chips (default 1.3 - the "
                          "stock chip is sized for a static poster, not a phone)")
@@ -504,17 +512,31 @@ def main():
         cfg["title_custom"] = tmp / "title-custom.png"
         card.save(cfg["title_custom"])
     if a.spec:
-        import build_overlays as BO
         cfg["specs"] = []
-        for i, text in enumerate(a.spec):
-            chip = BO.badge(text, cfg.get("badge_tone") or a.tone)
-            if a.spec_scale != 1.0:
-                chip = chip.resize(
-                    (round(chip.width * a.spec_scale),
-                     round(chip.height * a.spec_scale)), Image.LANCZOS)
-            path = tmp / f"spec-{i}.png"
-            chip.save(path)
-            cfg["specs"].append((text, path))
+        tone = cfg.get("badge_tone") or a.tone
+        if a.spec_style == "chip":
+            import build_overlays as BO
+            for i, text in enumerate(a.spec):
+                chip = BO.badge(text, tone)
+                if a.spec_scale != 1.0:
+                    chip = chip.resize(
+                        (round(chip.width * a.spec_scale),
+                         round(chip.height * a.spec_scale)), Image.LANCZOS)
+                path = tmp / f"spec-{i}.png"
+                chip.save(path)
+                cfg["specs"].append((text, path))
+        else:
+            # The type treatments are full-canvas layers: each owns its own
+            # position in frame, so they composite at 0,0 and ignore
+            # --spec-scale, which only ever meant "make the chip bigger".
+            import fd_spec as SP
+            for i, text in enumerate(a.spec):
+                layer = SP.build(a.spec_style, canvas, text,
+                                 n=i + 1, total=len(a.spec), tone=tone)
+                path = tmp / f"spec-{i}.png"
+                layer.save(path)
+                cfg["specs"].append((text, path))
+        cfg["spec_style"] = a.spec_style
 
     if a.title_block or a.ticker or a.callout:
         import fd_hud as HUD
