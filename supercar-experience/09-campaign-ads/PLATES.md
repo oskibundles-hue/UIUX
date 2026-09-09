@@ -12,20 +12,26 @@ its own record.
 
 | | |
 |---|---|
-| Source | Dropbox `Anti Stock Media/01 Raw D-Log/2026-09-03/2026-09-03 23-10-09 gt3 rolling in.mov` |
-| Camera | 2160×3840, 60 fps, HEVC, D-Log M |
-| Window | 84 s → 99 s — side profile into wheel into front 3/4, no hands in frame |
-| Look | `signature` (D-Log rescue → NQ Signature) |
-| Layout | `hud` |
+| Source | `supercarexp.vip/cars/2025-porsche-gt3rs-las-vegas` — the car reel on the listing |
+| Camera | 720x1280, 24 fps, already graded; upscaled to 1080x1920 |
+| Window | 12 s → 27 s — rear wing, side rolling, front 3/4, the head-on highway pass |
+| Look | `none` — already graded |
+| Layout | `panel` |
 
 ```
-bug (top 11-19%)    mean  58   range   1-110   white type
-mid band (40-60%)   mean 105   range  62-149   white type
-cta band (62-72%)   mean  83   range  14-190   wide, but the bar CTA is opaque
-lower third         mean  61   range  12-143   white type
+bug (top 11-19%)    mean 180   range  91-246   too wide -> no corner logo
+mid band (40-60%)   mean 104   range  54-156   white with shadow
+cta band (62-72%)   mean  79   range  21-167   too wide
+lower third         mean  89   range  28-154   white with shadow
 ```
 
-Dark garage throughout, so type sits straight on the picture.
+Open desert sky behind the type, so this car runs `panel` as well. The window
+stops before the Supercar Experience card the reel ends on.
+
+**This replaced an earlier cut.** The first version used Formula Dynamics shop
+footage of a GT3 RS, but that is a different car from the one on the rental
+listing. Rental ads run on the rental car — the shop clip is a Formula Dynamics
+asset, not a Supercar Experience one.
 
 ## Ferrari Tempesta
 
@@ -72,6 +78,20 @@ swings too far for type on its own, so this car runs the `panel` layout — a
 solid card behind the copy — and the lockup under it carries its own scrim.
 That is the one place the panel needed fixing: its lockup used to sit at 0.845,
 the same line as the ticker, and the two stacked. It now sits at 0.762.
+
+## What the site can and cannot supply
+
+Every car listing on supercarexp.vip carries its own reel, and 21 of the 22 are
+usable — 5 to 229 MB, mostly 720x1280. They are the safest source for a rental
+ad because they show the actual rental car.
+
+The exception is the **McLaren 750S Spider**: its video is 124x224 at 15 fps,
+468 KB. That is a broken upload, not a low-quality one, and no amount of
+upscaling makes a 1080x1920 ad out of it. That car is on hold until real
+footage exists.
+
+There is also a Rally reel on the site, `supercar-experience-presents-the-rally`,
+15 MB — enough for a Rally spot when one is wanted.
 
 ## Rebuilding a plate
 

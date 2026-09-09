@@ -36,11 +36,11 @@ ANGLES = [("a-price","Price leads. For the viewer who wants the car and needs th
           ("e-engage","A question that earns comments. Not a sales CTA.")]
 CARS = [
  ("porsche-gt3rs", "Porsche 911 GT3 RS", "$1,299 / 4 hrs &middot; $1,799 / 24 hrs",
-  "Shop footage, 84-99s of the GT3 rolling in, NQ Signature grade. Dark throughout, so type sits on the picture."),
+  "The car reel from its own listing on the site, 12-27s. This is the rental GT3 RS - an earlier cut used a Formula Dynamics shop car, which is a different Porsche."),
  ("ferrari-tempesta", "Ferrari Tempesta", "$849 / 4 hrs &middot; $1,199 / 24 hrs",
   "The car reel from its own listing on the site, 4-19s. Already graded, so no LUT on top. No corner logo - that band swings 9 to 226."),
  ("mclaren-750s-spider", "McLaren 750S Spider", "$1,299 / 4 hrs &middot; $1,799 / 24 hrs",
-  "Shop footage, 7-22s, a 9:16 window cut out of the square frame. Midday sun on pale tarmac, so it runs the panel layout."),
+  "ON HOLD. The site's video for this car is 124x224 at 468 KB - a broken upload, not a low-quality one. The cut that exists runs on a different McLaren, so it is not published."),
 ]
 HOOKS = {
  "porsche-gt3rs":       {"a-price":"$1,299. Four hours.","b-experience":"A ride of a lifetime.","c-occasion":"Vegas this weekend? Arrive in this.","d-offer":"50% off day two. Or day three free.","e-engage":"4 hours or 24?"},
@@ -52,21 +52,24 @@ STILL_CAP = ["2.6s - hook","6.5s - the deal","11.5s - CTA","13.8s - end card"]
 
 def row(name, desc, size, url, pending=False):
     btn = (f'<a class="dl" href="{url}" target="_blank" rel="noopener">Download</a>' if url
-           else '<span class="dl pending">Hosting pending</span>')
+           else '<span class="dl pending">Not published</span>')
     return f'<li class="row"><div class="f"><code>{html.escape(name)}</code><p>{html.escape(desc)}</p></div><span class="sz">{size}</span>{btn}</li>'
 
 kit_rows = [row(n, d, mb(K/"08-download-bundles"/n), gh(f"08-download-bundles/{n}")) for n,d in BUNDLES]
+HELD = {"mclaren-750s-spider"}
+
 def car_block(slug, title, price, note):
     rows = []
     for v, angle in ANGLES:
         fn = f"supercar-experience-{slug}-15s-9x16{'' if v=='a-price' else '-'+v}.mp4"
         p = K/"09-campaign-ads"/slug/"exports"/fn
-        url = hosted.get(f"{slug}/{v}")
+        url = None if slug in HELD else hosted.get(f"{slug}/{v}")
         rows.append(row(fn, f"{HOOKS[slug][v]}  {angle}", mb(p) if p.exists() else "-", url))
-    return (f'<div class="car"><div class="chead"><h3>{title}</h3><span class="price">{price}</span></div>'
+    flag = '<span class="held">Held</span>' if slug in HELD else ''
+    return (f'<div class="car"><div class="chead"><h3>{title}</h3><span class="price">{price}</span>{flag}</div>'
             f'<p class="cnote">{note}</p><ul class="list">{"".join(rows)}</ul></div>')
 ad_blocks = "".join(car_block(*c) for c in CARS)
-n_ads = len(CARS) * len(ANGLES)
+n_ads = (len(CARS) - len(HELD)) * len(ANGLES)
 def inline(rel, w=420):
     """Stills are embedded as data URIs (the artifact viewer blocks images from other hosts)."""
     import base64, io
@@ -103,6 +106,8 @@ ul.list{{list-style:none;margin:0;padding:0}}
 .sz{{font:13px var(--mono);color:var(--ink-3);font-variant-numeric:tabular-nums;white-space:nowrap}}
 .dl{{font:600 13px var(--body);letter-spacing:.06em;text-transform:uppercase;background:var(--gold);color:#000;padding:10px 18px;border-radius:999px;text-decoration:none;white-space:nowrap}}.dl:hover{{background:#fff}}.dl:focus-visible{{outline:2px solid #fff;outline-offset:3px}}
 .dl.pending{{background:transparent;color:var(--ink-3);border:1px solid var(--rule)}}
+.dl.pending::after{{content:''}}
+.held{{font:10.5px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:#000;background:var(--gold);padding:3px 9px;border-radius:3px}}
 .car{{padding:22px 0 4px;border-bottom:1px solid var(--rule)}}.car:last-child{{border-bottom:0}}
 .chead{{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}}.chead h3{{font:400 clamp(24px,3.4vw,34px)/1 var(--display);margin:0}}
 .price{{font:12px var(--mono);color:var(--gold);letter-spacing:.06em}}
@@ -117,7 +122,7 @@ footer{{margin-top:64px;border-top:1px solid var(--rule);padding-top:18px;font:1
 <p class="eyebrow">Supercar Experience <b>//</b> Brand kit &amp; rental ads <b>//</b> 9 Sept 2026</p>
 <h1>Deliverables<span class="sub">Kit &amp; GT3 RS ads</span></h1>
 <div class="stripe" aria-hidden="true"><span></span><span></span></div>
-<p class="lede">A brand kit built on the same toolkit as the Formula Dynamics kit, and fifteen rental ads - the GT3 RS, the Tempesta and the 750S Spider, five angles each, cut from your own footage and the site's own reels. Every price, spec and promo on screen was read off supercarexp.vip. One tap per file, real filenames, filed by the Dropbox folder each belongs in.</p>
+<p class="lede">A brand kit built on the same toolkit as the Formula Dynamics kit, and ten rental ads - the GT3 RS and the Tempesta, five angles each, cut from each car's own reel on supercarexp.vip so the ad shows the car someone actually rents. The 750S Spider is held: the site's video for it is broken. Every price, spec and promo on screen was read off supercarexp.vip. One tap per file, real filenames, filed by the Dropbox folder each belongs in.</p>
 <div class="readout"><div><span class="n">{n_ov}</span><span class="k">Overlays</span></div><div><span class="n">18</span><span class="k">Cars priced</span></div><div><span class="n">{n_ads}</span><span class="k">Finished ads</span></div><div><span class="n">3</span><span class="k">Cars cut</span></div><div><span class="n">11</span><span class="k">Bundles</span></div></div>
 </header>
 
@@ -143,15 +148,16 @@ out = Path("/tmp/claude-0/-home-user-UIUX/bca660b1-ddd0-53c0-87e3-b329cd9a583e/s
 out.parent.mkdir(parents=True, exist_ok=True); out.write_text(page); print("page:", out, f"{len(page)/1024:.0f} KB")
 
 md = ["# Supercar Experience - DELIVERY", "",
-      "Filed 2026-09-09. Brand kit and fifteen rental ads - three cars, five angles each.",
+      "Filed 2026-09-09. Brand kit and ten published rental ads - two cars, five angles each,",
+      "plus a third car held pending footage.",
       "Every on-screen figure is read off supercarexp.vip.", "",
       "## 01 Business Ads / Supercar Experience", ""]
 for slug, title, price, note in CARS:
     md += ["", f"### {title} - {price.replace('&middot;', 'and')}", "", note, ""]
     for v, angle in ANGLES:
         fn = f"supercar-experience-{slug}-15s-9x16{'' if v=='a-price' else '-'+v}.mp4"
-        u = hosted.get(f"{slug}/{v}")
-        md.append(f"- `{fn}` - {HOOKS[slug][v]} - {angle}" + (f" - {u}" if u else " - hosting pending"))
+        u = None if slug in HELD else hosted.get(f"{slug}/{v}")
+        md.append(f"- `{fn}` - {HOOKS[slug][v]} - {angle}" + (f" - {u}" if u else " - NOT PUBLISHED"))
 md += ["", "## 04 Brand and Creative Systems / Supercar Experience", ""]
 md += [f"- `{n}` ({mb(K/'08-download-bundles'/n)}) - {d} - {gh('08-download-bundles/'+n)}" for n,d in BUNDLES]
 md += ["", "## Source", "", f"- {TREE}", "- Rebuild the kit: `python3 99-toolkit/build_all.py`", "- Re-cut an ad: edit `09-campaign-ads/make_cues.py`, then `python3 build_ad.py --car <slug> --all`",

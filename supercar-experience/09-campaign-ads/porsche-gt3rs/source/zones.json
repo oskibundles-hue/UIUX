@@ -1,33 +1,35 @@
 {
  "zones": {
   "bug (top 11-19%)": {
-   "mean": 58,
-   "min": 1,
-   "max": 110
+   "mean": 180,
+   "min": 91,
+   "max": 246
   },
   "mid band (40-60%)": {
-   "mean": 105,
-   "min": 62,
-   "max": 149
+   "mean": 104,
+   "min": 54,
+   "max": 156
   },
   "cta band (62-72%)": {
-   "mean": 83,
-   "min": 14,
-   "max": 190
+   "mean": 79,
+   "min": 21,
+   "max": 167
   },
   "lower third (66-80%)": {
-   "mean": 61,
-   "min": 12,
-   "max": 143
+   "mean": 89,
+   "min": 28,
+   "max": 154
   }
  },
  "decision": {
-  "bug (top 11-19%)": "WHITE type / white logo",
-  "mid band (40-60%)": "WHITE type / white logo",
+  "bug (top 11-19%)": "range too wide - scrim or move the element",
+  "mid band (40-60%)": "white, with shadow",
   "cta band (62-72%)": "range too wide - scrim or move the element",
-  "lower third (66-80%)": "WHITE type / white logo"
+  "lower third (66-80%)": "white, with shadow"
  },
- "start": 84.0,
+ "start": 12.0,
  "dur": 15.0,
- "look": "signature"
+ "look": "none",
+ "crop": null,
+ "raw": "/tmp/claude-0/-home-user-UIUX/bca660b1-ddd0-53c0-87e3-b329cd9a583e/scratchpad/sce/site_gt3_lv.mov"
 }

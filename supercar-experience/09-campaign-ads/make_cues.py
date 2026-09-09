@@ -26,7 +26,7 @@ CARS = {
     # layout is a measured choice, not taste: build the plate, read
     # source/zones.json, and take panel when the bands come back "range too wide".
     "porsche-gt3rs":       dict(name="PORSCHE 911 GT3 RS", year="2025", loc="LAS VEGAS · SCOTTSDALE · BOISE", specs=None,
-                                layout="hud"),    # dark garage: every band under 150, white type holds
+                                layout="panel"),  # desert highway under open sky: bands swing 18-250
     "mclaren-750s-spider": dict(name="MCLAREN 750S SPIDER", year="2026", loc="LAS VEGAS · SCOTTSDALE",        specs=None,
                                 layout="panel"),  # midday tarmac, white car: all four bands swing 25-238
     "ferrari-tempesta":    dict(name="FERRARI TEMPESTA",    year="2025", loc="LAS VEGAS · SCOTTSDALE",
