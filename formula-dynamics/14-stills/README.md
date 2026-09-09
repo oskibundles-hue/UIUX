@@ -45,6 +45,17 @@ needs almost nothing; the same plate over sunlit concrete needs a lot, and one
 fixed number is what left the red offer line unreadable on the windshield
 poster. The tile is sampled and aimed at `TARGET_GLASS`.
 
+## The section tab and the name bar are glass too
+
+Both started as solid red blocks with the type reversed out. A field of flat
+brand colour laid over a photograph is the same mistake as a bordered chip — it
+stops being part of the picture. Both are now cut out of the picture the same
+way the caption is, and the red survives as an accent: a short foot under the
+section tab, a tick at the corner of the name bar.
+
+The foot gets its **own height** at the bottom of the bar rather than being
+drawn over it. Drawn on top, it ate the first letter of every label.
+
 ## The hero is a whole car, and it is sharp
 
 Two separate faults put half a blurred car on the first posters:

@@ -56,20 +56,39 @@ def grab(src, t, out):
 
 # ----------------------------------------------------------------- components
 
-def vertical_tab(label):
+def vertical_tab(base, label, x, y):
+    """Section marker up the left edge — glass, not a red block.
+
+    It was a solid red bar with the section reversed out of it. A field of flat
+    brand colour laid over the picture is the same mistake as a bordered chip:
+    it stops being part of the photograph. The bar is now cut out of the
+    picture the same way the caption is, and the red is a short cap at its foot.
+    """
     word = R.text(label, 58, B.WHITE, tracking=0.24)
-    pad = 40
-    bar = Image.new("RGBA", (word.width + pad * 2, word.height + pad * 2),
-                    B.rgb(B.RED) + (255,))
-    R.paste(bar, word, bar.width // 2, bar.height // 2, anchor="cm")
-    return bar.rotate(90, expand=True)
+    pad = 38
+    cap = 26                                      # the red foot, below the type
+    w = word.height + pad * 2                     # bar runs vertically
+    h = word.width + pad * 2 + cap
+
+    bar = frost(base, (x, y, w, h), darken=0.46, feather=0)
+    R.paste(bar, R.with_shadow(word.rotate(90, expand=True)),
+            w // 2, (h - cap) // 2, anchor="cm")
+
+    # the cap gets its own height at the foot, so it can never sit over the
+    # first letter - which is what ate the A of ANNUAL on the first pass
+    d = ImageDraw.Draw(bar)
+    d.rectangle([0, h - cap, w - 1, h - 1], fill=B.rgb(B.RED) + (255,))
+    return bar, (x, y, w, h)
 
 
-def header_bar(label="FORMULA DYNAMICS", width=520, height=60):
-    im = Image.new("RGBA", (width, height), B.rgb(B.RED) + (255,))
-    R.paste(im, R.text(label, 29, B.WHITE, tracking=0.22),
+def header_bar(base, x, y, label="FORMULA DYNAMICS", width=520, height=60):
+    """The shop's name, top right — glass with a red tick, not a red block."""
+    im = frost(base, (x, y, width, height), darken=0.46, feather=0)
+    R.paste(im, R.with_shadow(R.text(label, 29, B.WHITE, tracking=0.22)),
             width // 2, height // 2, anchor="cm")
-    return im
+    d = ImageDraw.Draw(im)
+    d.rectangle([0, 0, int(width * 0.16), 5], fill=B.rgb(B.RED) + (255,))
+    return im, (x, y, width, height)
 
 
 def frost(base, box, darken=0.42, feather=52):
@@ -176,10 +195,14 @@ def poster(name, src, hero_t, hero_y, detail_ts, tab, service, offer, fine):
 
     im = canvas.convert("RGBA")
     im.alpha_composite(caption_plate(canvas, service, offer, fine, plate_h))
-    im.alpha_composite(header_bar(),
-                       (W - 520 - int(W * SAFE["left"]), int(H * 0.09)))
-    t = vertical_tab(tab)
-    im.alpha_composite(t, (int(W * SAFE["left"]), int(H * 0.30)))
+
+    hb, (hx, hy, _, _) = header_bar(
+        canvas, W - 520 - int(W * SAFE["left"]), int(H * 0.09))
+    im.alpha_composite(hb, (hx, hy))
+
+    vt, (vx, vy, _, _) = vertical_tab(
+        canvas, tab, int(W * SAFE["left"]), int(H * 0.30))
+    im.alpha_composite(vt, (vx, vy))
 
     path = OUT / f"{name}.png"
     im.convert("RGB").save(path, quality=95)
