@@ -135,14 +135,14 @@ footer{{margin-top:64px;border-top:1px solid var(--rule);padding-top:18px;font:1
 <div class="wrap">
 <header>
 <p class="eyebrow">Supercar Experience <b>//</b> Brand kit &amp; rental ads <b>//</b> 9 Sept 2026</p>
-<h1>Deliverables<span class="sub">Kit &amp; GT3 RS ads</span></h1>
+<h1>Deliverables<span class="sub">Kit &amp; fleet ads</span></h1>
 <div class="stripe" aria-hidden="true"><span></span><span></span></div>
-<p class="lede">A brand kit built on the same toolkit as the Formula Dynamics kit, and ten rental ads - the GT3 RS and the Tempesta, five angles each, cut from each car's own reel on supercarexp.vip so the ad shows the car someone actually rents. The 750S Spider is held: the site's video for it is broken. Every price, spec and promo on screen was read off supercarexp.vip. One tap per file, real filenames, filed by the Dropbox folder each belongs in.</p>
-<div class="readout"><div><span class="n">{n_ov}</span><span class="k">Overlays</span></div><div><span class="n">18</span><span class="k">Cars priced</span></div><div><span class="n">{n_ads}</span><span class="k">Finished ads</span></div><div><span class="n">3</span><span class="k">Cars cut</span></div><div><span class="n">1</span><span class="k">Rally spot set</span></div><div><span class="n">11</span><span class="k">Bundles</span></div></div>
+<p class="lede">A brand kit built on the same toolkit as the Formula Dynamics kit, and forty ads - seven rental cars and the Fall Rally, five angles each. Every car runs on its own footage: the GT3 RS, Tempesta and 750S Spider from their listings on supercarexp.vip, the F8, STO, Black Series and Novitec Urus from your own masters. So the ad always shows the car someone actually rents. Every price, spec and promo on screen was read off supercarexp.vip. One tap per file, real filenames, filed by the Dropbox folder each belongs in.</p>
+<div class="readout"><div><span class="n">{n_ov}</span><span class="k">Overlays</span></div><div><span class="n">18</span><span class="k">Cars priced</span></div><div><span class="n">{n_ads}</span><span class="k">Finished ads</span></div><div><span class="n">7</span><span class="k">Cars cut</span></div><div><span class="n">1</span><span class="k">Rally spot set</span></div><div><span class="n">11</span><span class="k">Bundles</span></div></div>
 </header>
 
 <section>
-<div class="shead"><span class="tag">01 / Ads</span><h2>Three cars, five angles each</h2></div>
+<div class="shead"><span class="tag">01 / Ads</span><h2>Seven cars, five angles each</h2></div>
 <p class="dest">File under <b>Portfolio / 01 Business Ads / Supercar Experience</b></p>
 <div class="stills">{stills}</div>
 {ad_blocks}
@@ -163,8 +163,8 @@ out = Path("/tmp/claude-0/-home-user-UIUX/bca660b1-ddd0-53c0-87e3-b329cd9a583e/s
 out.parent.mkdir(parents=True, exist_ok=True); out.write_text(page); print("page:", out, f"{len(page)/1024:.0f} KB")
 
 md = ["# Supercar Experience - DELIVERY", "",
-      "Filed 2026-09-09. Brand kit and ten published rental ads - two cars, five angles each,",
-      "plus a third car held pending footage.",
+      f"Filed 2026-09-09. Brand kit and {n_ads} published ads - {len(CARS)} campaigns, five angles each.",
+      "Seven rental cars plus the Fall Rally 2026 spot.",
       "Every on-screen figure is read off supercarexp.vip.", "",
       "## 01 Business Ads / Supercar Experience", ""]
 for slug, title, price, secs, note in CARS:
