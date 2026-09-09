@@ -41,6 +41,14 @@ CARS = [
   "The car reel from its own listing on the site, 4-19s. Already graded, so no LUT on top. No corner logo - that band swings 9 to 226."),
  ("mclaren-750s-spider", "McLaren 750S Spider", "$1,299 / 4 hrs &middot; $1,799 / 24 hrs", 15,
   "Your own 2160x3840 master of the reel the rental listing runs, 2-17s. The site's copy of it is a broken 124x224 upload; this is the real thing."),
+ ("ferrari-f8-tributo", "Ferrari F8 Tributo", "$999 / 4 hrs &middot; $1,599 / 24 hrs", 15,
+  "Your own graded master, the whole 15.6s of it. Copy sits on the card: three of four bands measured too wide for type on its own."),
+ ("lamborghini-sto", "Lamborghini Hurac&aacute;n STO", "$999 / 4 hrs &middot; $1,599 / 24 hrs", 15,
+  "Your own master, 6-21s, the Strip run past the static opening frames. Night footage, but the lower bands spike over 220 where the lights pass, so the copy is on a card."),
+ ("amg-gt-black-series", "AMG GT Black Series", "$899 / 4 hrs &middot; $1,299 / 24 hrs", 15,
+  "Your own master, 2-17s. The only one of the four dark enough for type direct on the picture - every band under 115. Corner logo bug is safe here."),
+ ("novitec-urus", "Lamborghini Novitec Urus", "$699 / 4 hrs &middot; $949 / 24 hrs", 15,
+  "Your own master of the purple wide body, 0.5-15.5s. Matched to the Novitec listing by hero image: the Mansory is silver, the 2022 red, the Urus S black."),
  ("fall-rally", "Fall Rally 2026", "$2,999 per car &middot; NOV 13-16", 18,
   "Eighteen seconds, six cars, three seconds each. A rally is a convoy, so the plate is a montage rather than one car: Urus, Tempesta, SF90, F8 Tributo, SF90 again in the poppies, and the mixed-fleet clip."),
 ]
@@ -48,6 +56,10 @@ HOOKS = {
  "fall-rally":          {"a-price":"$2,999. Per car.","b-experience":"Three iconic destinations.","c-occasion":"Nov 13-16. Vegas to the coast.","d-offer":"$500 off. Code RALLY500.","e-engage":"Who is your co-pilot?"},
  "porsche-gt3rs":       {"a-price":"$1,299. Four hours.","b-experience":"A ride of a lifetime.","c-occasion":"Vegas this weekend? Arrive in this.","d-offer":"50% off day two. Or day three free.","e-engage":"4 hours or 24?"},
  "ferrari-tempesta":    {"a-price":"$849. Four hours.","b-experience":"A ride of a lifetime.","c-occasion":"Vegas this weekend? Arrive in this.","d-offer":"50% off day two. Or day three free.","e-engage":"4 hours or 24?"},
+ "ferrari-f8-tributo":    {"a-price":"$999. Four hours.","b-experience":"A ride of a lifetime.","c-occasion":"Vegas this weekend? Arrive in this.","d-offer":"50% off day two. Or day three free.","e-engage":"4 hours or 24?"},
+ "lamborghini-sto":       {"a-price":"$999. Four hours.","b-experience":"A ride of a lifetime.","c-occasion":"Vegas this weekend? Arrive in this.","d-offer":"50% off day two. Or day three free.","e-engage":"4 hours or 24?"},
+ "amg-gt-black-series":   {"a-price":"$899. Four hours.","b-experience":"A ride of a lifetime.","c-occasion":"Vegas this weekend? Arrive in this.","d-offer":"50% off day two. Or day three free.","e-engage":"4 hours or 24?"},
+ "novitec-urus":          {"a-price":"$699. Four hours.","b-experience":"A ride of a lifetime.","c-occasion":"Vegas this weekend? Arrive in this.","d-offer":"50% off day two. Or day three free.","e-engage":"4 hours or 24?"},
  "mclaren-750s-spider": {"a-price":"$1,299. Four hours.","b-experience":"A ride of a lifetime.","c-occasion":"Vegas this weekend? Arrive in this.","d-offer":"50% off day two. Or day three free.","e-engage":"4 hours or 24?"},
 }
 STILLS = ["still-02_60s.jpg","still-06_50s.jpg","still-11_50s.jpg","still-13_80s.jpg"]

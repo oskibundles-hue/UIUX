@@ -128,6 +128,98 @@ python3 make_montage.py --car fall-rally --fps 30 \
 python3 make_plate.py --car fall-rally --measure-only --dur 18
 ```
 
+## Ferrari F8 Tributo
+
+| | |
+|---|---|
+| Source | Dropbox `Supercar Experience/01 Car Footage/SCE_Ferrari-F8-Tributo_black_no-branding.mov` |
+| Camera | delivered graded, 15.6 s — the whole clip is used |
+| Window | 0.3 s → 15.3 s |
+| Look | `none` — Omarie's own grade |
+| Layout | `panel` |
+
+```
+bug (top 11-19%)    mean 159   range  54-250   too wide -> no corner logo
+mid band (40-60%)   mean  79   range  21-144   white type
+cta band (62-72%)   mean  84   range  14-191   too wide
+lower third         mean  96   range   6-184   too wide
+```
+
+Three of four bands come back too wide, so the copy sits on the card. The edit
+cuts about once a second and several of those cuts are detail shots — a seat,
+a wheel arch, asphalt — which is exactly the case the panel exists for. The
+master is 15.6 s and the plate is 15 s, so there is no better window to pick;
+the clip's closing fade to black lands under the end card.
+
+## Lamborghini STO
+
+| | |
+|---|---|
+| Source | Dropbox `Supercar Experience/01 Car Footage/SCE_Lamborghini-Huracan-STO_green_no-branding.mp4` |
+| Camera | delivered graded, 24.8 s |
+| Window | 6.0 s → 21.0 s — the Strip run, past the opening static frames |
+| Look | `none` |
+| Layout | `panel` |
+
+```
+bug (top 11-19%)    mean  74   range  14-167   too wide -> no corner logo
+mid band (40-60%)   mean  94   range  53-130   white type
+cta band (62-72%)   mean  55   range  16-221   too wide
+lower third         mean  50   range  11-220   too wide
+```
+
+Night footage, so the means are low, but the two lower bands top out over 220
+where the sun catches the rear wing and the street lights pass. A low mean with
+a 200-point swing is the worst case for type on its own: it reads for most of
+the cut and then disappears. Card.
+
+## AMG GT Black Series
+
+| | |
+|---|---|
+| Source | Dropbox `Supercar Experience/01 Car Footage/SCE_Mercedes-AMG-GT-Black-Series_no-branding.mov` |
+| Camera | delivered graded, 17.9 s |
+| Window | 2.0 s → 17.0 s |
+| Look | `none` |
+| Layout | `hud` |
+
+```
+bug (top 11-19%)    mean  25   range   2-96    white type
+mid band (40-60%)   mean  48   range  15-91    white type
+cta band (62-72%)   mean  37   range   4-85    white type
+lower third         mean  37   range   3-115   white type
+```
+
+The only one of the four that takes type direct on the picture. Every band
+stays under 115 and no mean goes over 96 — night shooting, with the car lit
+against dark ground rather than sky. The corner logo bug is safe here,
+unlike the other three.
+
+## Lamborghini Novitec Urus
+
+| | |
+|---|---|
+| Source | Dropbox `Supercar Experience/01 Car Footage/SCE_Lamborghini-Urus_purple_scottsdale_no-branding.mp4` |
+| Camera | delivered graded, 16.9 s |
+| Window | 0.5 s → 15.5 s |
+| Look | `none` |
+| Layout | `panel` |
+
+```
+bug (top 11-19%)    mean  90   range  21-169   too wide -> no corner logo
+mid band (40-60%)   mean  54   range  24-108   white type
+cta band (62-72%)   mean  85   range  13-171   too wide
+lower third         mean 115   range  14-199   too wide
+```
+
+The lower third is the brightest of any plate in this set — mean 115 — because
+the desert road fills the bottom of frame under open sky. That is the band the
+price rows live in, so the card is not optional here.
+
+Matching the master to a listing took a check: Supercar Experience rents four
+Urus variants, and only the Novitec Wide Body is purple. The Mansory is silver,
+the 2022 is red, the Urus S is black. Confirmed against each listing's hero image.
+
 ## What the site can and cannot supply
 
 Every car listing on supercarexp.vip carries its own reel, and 21 of the 22 are

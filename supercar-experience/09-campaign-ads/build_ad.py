@@ -296,7 +296,10 @@ def composite(out_path, crf=20):
 
 
 def still(t, out_path):
-    tmp = os.path.join(OUT_DIR, ".still_bg.png")
+    # Per-process name. Two builds of the same car once shared ".still_bg.png";
+    # one removed it while the other was reading, which surfaced as PIL
+    # "image file is truncated" and killed a whole variant batch.
+    tmp = os.path.join(OUT_DIR, f".still_bg-{os.getpid()}.png")
     subprocess.run([ffmpeg_bin(), "-y", "-hide_banner", "-loglevel", "error",
                     "-ss", str(t), "-i", PLATE, "-frames:v", "1",
                     "-vf", CUE["grade"], tmp], check=True)
