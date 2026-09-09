@@ -1,0 +1,35 @@
+{
+ "zones": {
+  "bug (top 11-19%)": {
+   "mean": 159,
+   "min": 54,
+   "max": 250
+  },
+  "mid band (40-60%)": {
+   "mean": 79,
+   "min": 21,
+   "max": 144
+  },
+  "cta band (62-72%)": {
+   "mean": 84,
+   "min": 14,
+   "max": 191
+  },
+  "lower third (66-80%)": {
+   "mean": 96,
+   "min": 6,
+   "max": 184
+  }
+ },
+ "decision": {
+  "bug (top 11-19%)": "range too wide - scrim or move the element",
+  "mid band (40-60%)": "WHITE type / white logo",
+  "cta band (62-72%)": "range too wide - scrim or move the element",
+  "lower third (66-80%)": "range too wide - scrim or move the element"
+ },
+ "start": 0.3,
+ "dur": 15.0,
+ "look": "none",
+ "crop": null,
+ "raw": "/tmp/claude-0/-home-user-UIUX/bca660b1-ddd0-53c0-87e3-b329cd9a583e/scratchpad/sce/car_f8.mov"
+}

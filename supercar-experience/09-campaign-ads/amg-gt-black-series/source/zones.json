@@ -1,0 +1,35 @@
+{
+ "zones": {
+  "bug (top 11-19%)": {
+   "mean": 25,
+   "min": 2,
+   "max": 96
+  },
+  "mid band (40-60%)": {
+   "mean": 48,
+   "min": 15,
+   "max": 91
+  },
+  "cta band (62-72%)": {
+   "mean": 37,
+   "min": 4,
+   "max": 85
+  },
+  "lower third (66-80%)": {
+   "mean": 37,
+   "min": 3,
+   "max": 115
+  }
+ },
+ "decision": {
+  "bug (top 11-19%)": "WHITE type / white logo",
+  "mid band (40-60%)": "WHITE type / white logo",
+  "cta band (62-72%)": "WHITE type / white logo",
+  "lower third (66-80%)": "WHITE type / white logo"
+ },
+ "start": 2.0,
+ "dur": 15.0,
+ "look": "none",
+ "crop": null,
+ "raw": "/tmp/claude-0/-home-user-UIUX/bca660b1-ddd0-53c0-87e3-b329cd9a583e/scratchpad/sce/car_blackseries.mov"
+}

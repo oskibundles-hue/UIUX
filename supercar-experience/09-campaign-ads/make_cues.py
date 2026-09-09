@@ -34,13 +34,13 @@ CARS = {
                                 layout="hud"),    # desert reel: mid/CTA/lower all under 120
     # Cut from Omarie's own masters, 9 Sept. Layouts set after measuring.
     "ferrari-f8-tributo":  dict(name="FERRARI F8 TRIBUTO",     year="2022", loc="LAS VEGAS · SCOTTSDALE", specs=None,
-                                layout="hud"),
+                                layout="panel"),  # bug 54-250, CTA 14-191, lower 6-184: three bands too wide
     "lamborghini-sto":     dict(name="LAMBORGHINI STO",        year="2023", loc="LAS VEGAS · SCOTTSDALE · BOISE", specs=None,
-                                layout="hud"),
+                                layout="panel"),  # CTA 16-221, lower 11-220: sun off the rear wing
     "amg-gt-black-series": dict(name="AMG GT BLACK SERIES",    year="2021", loc="LAS VEGAS · SCOTTSDALE", specs=None,
-                                layout="hud"),
+                                layout="hud"),    # every band under 115 and never over 96 mean: type sits direct
     "novitec-urus":        dict(name="LAMBORGHINI NOVITEC URUS", year="2021", loc="LAS VEGAS · SCOTTSDALE", specs=None,
-                                layout="hud"),
+                                layout="panel"),  # lower third mean 115, range 14-199: showroom lights
 }
 
 def money(n): return f"${n:,}"

@@ -1,0 +1,35 @@
+{
+ "zones": {
+  "bug (top 11-19%)": {
+   "mean": 74,
+   "min": 14,
+   "max": 167
+  },
+  "mid band (40-60%)": {
+   "mean": 94,
+   "min": 53,
+   "max": 130
+  },
+  "cta band (62-72%)": {
+   "mean": 55,
+   "min": 16,
+   "max": 221
+  },
+  "lower third (66-80%)": {
+   "mean": 50,
+   "min": 11,
+   "max": 220
+  }
+ },
+ "decision": {
+  "bug (top 11-19%)": "range too wide - scrim or move the element",
+  "mid band (40-60%)": "WHITE type / white logo",
+  "cta band (62-72%)": "range too wide - scrim or move the element",
+  "lower third (66-80%)": "range too wide - scrim or move the element"
+ },
+ "start": 6.0,
+ "dur": 15.0,
+ "look": "none",
+ "crop": null,
+ "raw": "/tmp/claude-0/-home-user-UIUX/bca660b1-ddd0-53c0-87e3-b329cd9a583e/scratchpad/sce/car_sto.mp4"
+}
