@@ -45,3 +45,28 @@ the panels.**
 
 Rule of thumb from the whole set: **a panel run needs about 20 seconds of clip.**
 Under that, put the offer in the title plate.
+
+## How these actually get downloaded
+
+Worth writing down, because it cost a round trip. **Nothing generated in a
+session has a public URL.** The live Download buttons on the download page point
+at the shop's *own uploaded footage*, which sits on a CDN a link can reach;
+anything built here is a chat attachment and nothing more. Minting a link for it
+is not possible — the Dropbox connector takes UTF-8 text only, and Google Drive
+would need each file base64'd through the conversation, which for 304 MB of video
+is not a real option.
+
+**The route that works:** the files go into Dropbox once by hand, then a Dropbox
+link with `?dl=1` serves them. That is better than the CDN anyway, because a
+Dropbox link saves under the **true filename** where the CDN saves under a random
+id.
+
+Two gotchas:
+
+- A shared link created through the connector is locked to audience **no one** —
+  it works for the account owner while signed in, and shows a permission wall to
+  everyone else. Opening it up is a one-time thing in the Dropbox UI: Share →
+  *Anyone with the link · Can view*.
+- A **folder** link with `?dl=1` makes Dropbox zip the folder, which is one tap
+  for a whole set instead of one tap per file. The download page carries that as
+  a `Download all` row above the file rows.
