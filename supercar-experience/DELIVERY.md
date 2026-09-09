@@ -29,13 +29,23 @@ The car reel from its own listing on the site, 4-19s. Already graded, so no LUT 
 
 ### McLaren 750S Spider - $1,299 / 4 hrs and $1,799 / 24 hrs
 
-ON HOLD. The site's video for this car is 124x224 at 468 KB - a broken upload, not a low-quality one. The cut that exists runs on a different McLaren, so it is not published.
+Your own 2160x3840 master of the reel the rental listing runs, 2-17s. The site's copy of it is a broken 124x224 upload; this is the real thing.
 
-- `supercar-experience-mclaren-750s-spider-15s-9x16.mp4` - $1,299. Four hours. - Price leads. For the viewer who wants the car and needs the figure. - NOT PUBLISHED
-- `supercar-experience-mclaren-750s-spider-15s-9x16-b-experience.mp4` - A ride of a lifetime. - The site's tagline. Identity over arithmetic. - NOT PUBLISHED
-- `supercar-experience-mclaren-750s-spider-15s-9x16-c-occasion.mp4` - Vegas this weekend? Arrive in this. - Weddings, race week, photoshoots - the uses the site names. - NOT PUBLISHED
-- `supercar-experience-mclaren-750s-spider-15s-9x16-d-offer.mp4` - 50% off day two. Or day three free. - The promo exactly as the site prints it. - NOT PUBLISHED
-- `supercar-experience-mclaren-750s-spider-15s-9x16-e-engage.mp4` - 4 hours or 24? - A question that earns comments. Not a sales CTA. - NOT PUBLISHED
+- `supercar-experience-mclaren-750s-spider-15s-9x16.mp4` - $1,299. Four hours. - Price leads. For the viewer who wants the car and needs the figure. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/f2fefab6-6191-416a-bdf2-5f74c8c83e7a.mp4
+- `supercar-experience-mclaren-750s-spider-15s-9x16-b-experience.mp4` - A ride of a lifetime. - The site's tagline. Identity over arithmetic. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/8c9f361a-f740-4bb7-9ac8-8e5d7e87393b.mp4
+- `supercar-experience-mclaren-750s-spider-15s-9x16-c-occasion.mp4` - Vegas this weekend? Arrive in this. - Weddings, race week, photoshoots - the uses the site names. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/91264ffe-f785-4ccb-aa9e-cfe06c67ef88.mp4
+- `supercar-experience-mclaren-750s-spider-15s-9x16-d-offer.mp4` - 50% off day two. Or day three free. - The promo exactly as the site prints it. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/7f00c90e-0956-413e-b03e-7e88d8080fae.mp4
+- `supercar-experience-mclaren-750s-spider-15s-9x16-e-engage.mp4` - 4 hours or 24? - A question that earns comments. Not a sales CTA. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/e47b155b-d5d0-4da3-a899-99337eed3331.mp4
+
+### Fall Rally 2026 - $2,999 per car and NOV 13-16
+
+Eighteen seconds, six cars, three seconds each. A rally is a convoy, so the plate is a montage rather than one car: Urus, Tempesta, SF90, F8 Tributo, SF90 again in the poppies, and the mixed-fleet clip.
+
+- `supercar-experience-fall-rally-18s-9x16.mp4` - $2,999. Per car. - Price leads. For the viewer who wants the car and needs the figure. - NOT PUBLISHED
+- `supercar-experience-fall-rally-18s-9x16-b-experience.mp4` - Three iconic destinations. - The site's tagline. Identity over arithmetic. - NOT PUBLISHED
+- `supercar-experience-fall-rally-18s-9x16-c-occasion.mp4` - Nov 13-16. Vegas to the coast. - Weddings, race week, photoshoots - the uses the site names. - NOT PUBLISHED
+- `supercar-experience-fall-rally-18s-9x16-d-offer.mp4` - $500 off. Code RALLY500. - The promo exactly as the site prints it. - NOT PUBLISHED
+- `supercar-experience-fall-rally-18s-9x16-e-engage.mp4` - Who is your co-pilot? - A question that earns comments. Not a sales CTA. - NOT PUBLISHED
 
 ## 04 Brand and Creative Systems / Supercar Experience
 

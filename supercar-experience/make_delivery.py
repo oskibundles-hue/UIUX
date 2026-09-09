@@ -35,14 +35,17 @@ ANGLES = [("a-price","Price leads. For the viewer who wants the car and needs th
           ("d-offer","The promo exactly as the site prints it."),
           ("e-engage","A question that earns comments. Not a sales CTA.")]
 CARS = [
- ("porsche-gt3rs", "Porsche 911 GT3 RS", "$1,299 / 4 hrs &middot; $1,799 / 24 hrs",
+ ("porsche-gt3rs", "Porsche 911 GT3 RS", "$1,299 / 4 hrs &middot; $1,799 / 24 hrs", 15,
   "The car reel from its own listing on the site, 12-27s. This is the rental GT3 RS - an earlier cut used a Formula Dynamics shop car, which is a different Porsche."),
- ("ferrari-tempesta", "Ferrari Tempesta", "$849 / 4 hrs &middot; $1,199 / 24 hrs",
+ ("ferrari-tempesta", "Ferrari Tempesta", "$849 / 4 hrs &middot; $1,199 / 24 hrs", 15,
   "The car reel from its own listing on the site, 4-19s. Already graded, so no LUT on top. No corner logo - that band swings 9 to 226."),
- ("mclaren-750s-spider", "McLaren 750S Spider", "$1,299 / 4 hrs &middot; $1,799 / 24 hrs",
+ ("mclaren-750s-spider", "McLaren 750S Spider", "$1,299 / 4 hrs &middot; $1,799 / 24 hrs", 15,
   "Your own 2160x3840 master of the reel the rental listing runs, 2-17s. The site's copy of it is a broken 124x224 upload; this is the real thing."),
+ ("fall-rally", "Fall Rally 2026", "$2,999 per car &middot; NOV 13-16", 18,
+  "Eighteen seconds, six cars, three seconds each. A rally is a convoy, so the plate is a montage rather than one car: Urus, Tempesta, SF90, F8 Tributo, SF90 again in the poppies, and the mixed-fleet clip."),
 ]
 HOOKS = {
+ "fall-rally":          {"a-price":"$2,999. Per car.","b-experience":"Three iconic destinations.","c-occasion":"Nov 13-16. Vegas to the coast.","d-offer":"$500 off. Code RALLY500.","e-engage":"Who is your co-pilot?"},
  "porsche-gt3rs":       {"a-price":"$1,299. Four hours.","b-experience":"A ride of a lifetime.","c-occasion":"Vegas this weekend? Arrive in this.","d-offer":"50% off day two. Or day three free.","e-engage":"4 hours or 24?"},
  "ferrari-tempesta":    {"a-price":"$849. Four hours.","b-experience":"A ride of a lifetime.","c-occasion":"Vegas this weekend? Arrive in this.","d-offer":"50% off day two. Or day three free.","e-engage":"4 hours or 24?"},
  "mclaren-750s-spider": {"a-price":"$1,299. Four hours.","b-experience":"A ride of a lifetime.","c-occasion":"Vegas this weekend? Arrive in this.","d-offer":"50% off day two. Or day three free.","e-engage":"4 hours or 24?"},
@@ -58,10 +61,10 @@ def row(name, desc, size, url, pending=False):
 kit_rows = [row(n, d, mb(K/"08-download-bundles"/n), gh(f"08-download-bundles/{n}")) for n,d in BUNDLES]
 HELD = set()
 
-def car_block(slug, title, price, note):
+def car_block(slug, title, price, secs, note):
     rows = []
     for v, angle in ANGLES:
-        fn = f"supercar-experience-{slug}-15s-9x16{'' if v=='a-price' else '-'+v}.mp4"
+        fn = f"supercar-experience-{slug}-{secs}s-9x16{'' if v=='a-price' else '-'+v}.mp4"
         p = K/"09-campaign-ads"/slug/"exports"/fn
         url = None if slug in HELD else hosted.get(f"{slug}/{v}")
         rows.append(row(fn, f"{HOOKS[slug][v]}  {angle}", mb(p) if p.exists() else "-", url))
@@ -80,7 +83,7 @@ def inline(rel, w=420):
 stills = "".join(
     f'<figure><img src="{inline(f"09-campaign-ads/{slug}/exports/{s}")}" alt="{title} {c}">'
     f'<figcaption>{title.split()[-1] if slug!="porsche-gt3rs" else "GT3 RS"} &middot; {c}</figcaption></figure>'
-    for slug, title, _, _ in CARS for s, c in zip(STILLS, STILL_CAP))
+    for slug, title, _, _, _ in CARS if slug != "fall-rally" for s, c in zip(STILLS, STILL_CAP))
 n_ov = sum(1 for _ in (K/"03-overlays").rglob("*.png"))
 
 page = f'''<title>Supercar Experience Deliverables</title>
@@ -123,7 +126,7 @@ footer{{margin-top:64px;border-top:1px solid var(--rule);padding-top:18px;font:1
 <h1>Deliverables<span class="sub">Kit &amp; GT3 RS ads</span></h1>
 <div class="stripe" aria-hidden="true"><span></span><span></span></div>
 <p class="lede">A brand kit built on the same toolkit as the Formula Dynamics kit, and ten rental ads - the GT3 RS and the Tempesta, five angles each, cut from each car's own reel on supercarexp.vip so the ad shows the car someone actually rents. The 750S Spider is held: the site's video for it is broken. Every price, spec and promo on screen was read off supercarexp.vip. One tap per file, real filenames, filed by the Dropbox folder each belongs in.</p>
-<div class="readout"><div><span class="n">{n_ov}</span><span class="k">Overlays</span></div><div><span class="n">18</span><span class="k">Cars priced</span></div><div><span class="n">{n_ads}</span><span class="k">Finished ads</span></div><div><span class="n">3</span><span class="k">Cars cut</span></div><div><span class="n">11</span><span class="k">Bundles</span></div></div>
+<div class="readout"><div><span class="n">{n_ov}</span><span class="k">Overlays</span></div><div><span class="n">18</span><span class="k">Cars priced</span></div><div><span class="n">{n_ads}</span><span class="k">Finished ads</span></div><div><span class="n">3</span><span class="k">Cars cut</span></div><div><span class="n">1</span><span class="k">Rally spot set</span></div><div><span class="n">11</span><span class="k">Bundles</span></div></div>
 </header>
 
 <section>
@@ -152,10 +155,10 @@ md = ["# Supercar Experience - DELIVERY", "",
       "plus a third car held pending footage.",
       "Every on-screen figure is read off supercarexp.vip.", "",
       "## 01 Business Ads / Supercar Experience", ""]
-for slug, title, price, note in CARS:
+for slug, title, price, secs, note in CARS:
     md += ["", f"### {title} - {price.replace('&middot;', 'and')}", "", note, ""]
     for v, angle in ANGLES:
-        fn = f"supercar-experience-{slug}-15s-9x16{'' if v=='a-price' else '-'+v}.mp4"
+        fn = f"supercar-experience-{slug}-{secs}s-9x16{'' if v=='a-price' else '-'+v}.mp4"
         u = None if slug in HELD else hosted.get(f"{slug}/{v}")
         md.append(f"- `{fn}` - {HOOKS[slug][v]} - {angle}" + (f" - {u}" if u else " - NOT PUBLISHED"))
 md += ["", "## 04 Brand and Creative Systems / Supercar Experience", ""]

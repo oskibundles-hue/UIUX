@@ -85,6 +85,49 @@ Note the layout flipped from `panel` to `hud` when the footage changed. That is
 the process working: the shop footage was midday sun on pale tarmac and needed a
 card behind the type; this one is a dark car on a dark road and does not.
 
+## Fall Rally 2026 — a montage, not a plate
+
+| | |
+|---|---|
+| Source | six clips from Dropbox `Supercar Experience/01 Car Footage/` |
+| Built by | `make_montage.py`, not `make_plate.py` |
+| Length | 18 s — six cuts of 3 s |
+| Look | `none` — every clip is already graded |
+| Layout | `panel` |
+
+Cut order, and why:
+
+| # | Clip | In | Why here |
+|---|---|---|---|
+| 1 | Urus | 0.0 | Two cars on a desert road. A rally is a convoy, so the first frame says so. |
+| 2 | Tempesta (Roma) | 12.0 | Red car on open road, sun low. |
+| 3 | SF90 gold | 2.5 | Highway roll, different colour and direction from cut 2. |
+| 4 | F8 Tributo black | 0.0 | Black against pale sky, the strongest contrast in the set. |
+| 5 | SF90 gold | 20.0 | Gold car through poppies at golden hour — the best image in the folder, so the CTA beat lands on it. |
+| 6 | Mixed fleet | 7.5 | Runs under the end card, so it carries the least. |
+
+```
+bug (top 11-19%)    mean 181   range  88-250   too wide -> no corner logo
+mid band (40-60%)   mean 100   range  50-178   white with shadow
+cta band (62-72%)   mean  68   range   8-121   white type
+lower third         mean  69   range  15-119   white type
+```
+
+A montage cuts under the type every three seconds, so the copy sits on the
+`panel` card regardless of what any single band measures.
+
+**Cut 5 was moved on purpose.** In the first assembly the poppy-field shot was
+last, which put it almost entirely behind the end card. Swapping cuts 5 and 6
+puts it under the call to action instead.
+
+Rebuild it with:
+
+```bash
+python3 make_montage.py --car fall-rally --fps 30 \
+    --clip "<file>@<in>:<dur>" ...     # repeat, in cut order
+python3 make_plate.py --car fall-rally --measure-only --dur 18
+```
+
 ## What the site can and cannot supply
 
 Every car listing on supercarexp.vip carries its own reel, and 21 of the 22 are

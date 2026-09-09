@@ -188,7 +188,22 @@ PROMOS = [
     ("price-match", "PRICE MATCH", "GUARANTEE"),
     ("rally500", "CODE RALLY500", "$500 OFF THE RALLY"),
 ]
-RALLY = dict(name="FALL RALLY", dates="NOV 13-16, 2026", code="RALLY500", off=500)
+# Fall Rally - every figure read off supercarexp.vip/rally on 2026-09-09.
+RALLY = dict(
+    name="FALL RALLY", year="2026",
+    dates="NOV 13-16, 2026",
+    route=["LAS VEGAS", "SAN DIEGO", "SANTA BARBARA", "LAS VEGAS"],
+    route_short="LAS VEGAS · SAN DIEGO · SANTA BARBARA",
+    price=2999, unit="PER CAR",
+    code="RALLY500", off=500,
+    # The site's own tagline. It says three days while the dates span four;
+    # printed here as written rather than corrected.
+    tagline="THREE ICONIC DESTINATIONS.",
+    includes=["HOTELS EVERY NIGHT", "CO-PILOT INCLUDED",
+              "CHECKPOINTS · SUPPORT CARS", "SWAG · AWARDS"],
+    spots="LIMITED SPOTS AVAILABLE",
+    start_venue="SUPERCAR EXPERIENCE LV",
+)
 
 # --------------------------------------------------------------------------
 # Call-to-action captions   (slug, lead, accent, group)

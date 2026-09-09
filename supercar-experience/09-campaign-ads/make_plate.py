@@ -64,12 +64,14 @@ def decide(r):
     return out
 
 if __name__ == "__main__":
-    ap = argparse.ArgumentParser(); ap.add_argument("--raw", required=True); ap.add_argument("--car", required=True)
-    ap.add_argument("--start", type=float, required=True); ap.add_argument("--dur", type=float, default=15.0)
+    ap = argparse.ArgumentParser(); ap.add_argument("--raw", help="source clip; not needed with --measure-only"); ap.add_argument("--car", required=True)
+    ap.add_argument("--start", type=float, default=0.0); ap.add_argument("--dur", type=float, default=15.0)
     ap.add_argument("--look", choices=LOOKS, default="golden"); ap.add_argument("--measure-only", action="store_true")
     ap.add_argument("--crop", help="ffmpeg crop spec w:h:x:y, applied before the scale")
     a = ap.parse_args()
     plate = HERE / a.car / "source" / "plate-1080x1920.mp4"
+    if not a.measure_only and not a.raw:
+        ap.error("--raw is required unless --measure-only")
     if not a.measure_only:
         plate = build(a.raw, a.car, a.start, a.dur, a.look, crop=a.crop); print("plate:", plate, f"({plate.stat().st_size/1048576:.1f} MB)")
     r, n, dur = measure(plate)

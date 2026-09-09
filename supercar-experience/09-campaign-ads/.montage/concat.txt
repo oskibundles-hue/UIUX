@@ -1,0 +1,6 @@
+file '/home/user/UIUX/supercar-experience/09-campaign-ads/.montage/seg_00.mp4'
+file '/home/user/UIUX/supercar-experience/09-campaign-ads/.montage/seg_01.mp4'
+file '/home/user/UIUX/supercar-experience/09-campaign-ads/.montage/seg_02.mp4'
+file '/home/user/UIUX/supercar-experience/09-campaign-ads/.montage/seg_03.mp4'
+file '/home/user/UIUX/supercar-experience/09-campaign-ads/.montage/seg_04.mp4'
+file '/home/user/UIUX/supercar-experience/09-campaign-ads/.montage/seg_05.mp4'
