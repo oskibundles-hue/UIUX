@@ -96,3 +96,28 @@ Never push directly to `main`. Always:
 2. Commit changes
 3. Push branch: `git push -u origin <branch>`
 4. Create PR: `gh pr create`
+
+## Artifacts & Deliverables: Archive, Never Delete
+
+Standing rule when cleaning up, organizing, or reviewing artifacts, download
+indexes, video libraries, or deliverables — in scheduled routines and ad-hoc
+work alike.
+
+**Archive rather than delete.**
+
+- Move superseded items into a clearly labelled Archive section on the page,
+  stating what superseded them and when. Do not remove the rows.
+- Keep links live and files in place. An archived item must still be reachable.
+- Never retire a whole page. Add a "reference / superseded" banner and stop
+  linking it as a live option instead.
+- The only exception is a genuinely dead pointer — a link to something that no
+  longer exists. There is nothing to preserve, so repoint or annotate it.
+
+**Why:** superseded grades, earlier iterations and trial cuts are provenance —
+they are what lets a decision be traced back later. The `FD Ad Room` artifact
+already sets the pattern with its "Earlier iterations — Superseded. Kept so a
+decision can be traced back" group. That is the house convention.
+
+**Still ask first** before any bulk archive sweep, and before moving files
+between folders in Dropbox or other storage. Archiving a page section is
+reversible; moving master files is not.
