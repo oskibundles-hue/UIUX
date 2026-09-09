@@ -30,8 +30,13 @@ const PARTNERS = {
     url: 'ipeofficial.com',
     line: 'Valvetronic · on / off / auto',
   },
-  // Larini and Opus intentionally absent — no verified public URL yet.
-  // See PARTNERS.md before adding either.
+  opus: {
+    name: 'Opus',
+    url: 'opusinnovations.com',
+    line: 'Inconel · equal-length headers',
+  },
+  // Larini intentionally absent — no verified public URL yet.
+  // See PARTNERS.md before adding it.
 };
 
 /** Build the bar once and park it off-frame. Call from scene build(). */

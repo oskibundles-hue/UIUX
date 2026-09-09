@@ -35,6 +35,9 @@ carries.
 - Handmade
 - Distinctive acoustic signature
 
+**Fitment confirmed:** the shop's **Ferrari Roma carries a RYFT exhaust.** That is what lets the Roma free-tune ad name RYFT on screen — a partner
+name over a car is a claim about that car, and this one is now backed.
+
 ---
 
 ## iPE — Innotech Performance Exhaust — `ipeofficial.com`
@@ -84,10 +87,31 @@ screen.
 
 ---
 
-## Opus
+## Opus — `opusinnovations.com/exhaust`
 
-Named in the current specials (*free tune with a RYFT or Opus exhaust*) but not
-yet researched. No claims, no URL, no logo until that is done.
+**Materials.** *"Inconel, titanium, aerospace-grade stainless."* Headers are
+hand-formed; runners are heat-shielded.
+
+**The engineering claim worth using.** *"Equal-length headers derived from
+motorsport research"* — the point being synchronised exhaust pulses across the
+cylinders. High-flow catalytic converters *"wrapped in thermal mesh"* hold
+temperature.
+
+**Sound.** Every muffler chamber is *"acoustically mapped and tuned to harmonic
+perfection."* They call the result *"raw, refined, and utterly intoxicating."*
+
+**Build quality.** Built to order — *"tailored to your vehicle, your vision, and
+your obsession"* — with *"each weld bead inspected under magnification"* and gas
+channelling they describe as *"zero turbulence."*
+
+**Safe on-screen lines**
+- Inconel · titanium · aerospace-grade stainless
+- Equal-length headers
+- Hand-formed, built to order
+
+**Not on the page, so not claimable:** model names, weight savings, valve
+control, platform coverage, warranty terms. Get those from Opus before any of it
+goes on screen.
 
 ---
 
