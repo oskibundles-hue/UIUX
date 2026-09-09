@@ -150,14 +150,16 @@ STYLES = {"rule": rule, "index": index, "tab": tab}
 
 def build(style, canvas, label, n=1, total=1, tone="dark"):
     """Render one spec layer in the named style."""
+    kick, lab = split_label(label)
     if style == "index":
-        return index(canvas, label, n, total, tone)
+        return index(canvas, lab, n, total, tone)
     if style == "tab":
-        return tab(canvas, label, tone)
+        return tab(canvas, lab, tone)
     if style == "rule":
-        return rule(canvas, label, tone=tone)
+        return rule(canvas, lab, kicker=kick, tone=tone)
     if style == "panel":
-        return panel(canvas, label, tone=tone)[0]
+        kick, lab = split_label(label)
+        return panel(canvas, lab, kicker=kick, tone=tone)[0]
     raise ValueError(f"unknown spec style: {style}")
 
 
@@ -167,6 +169,20 @@ def build(style, canvas, label, n=1, total=1, tone="dark"):
 # changing its contents rather than four different objects. It stops short of
 # x=904 because Instagram's action rail starts at 907.
 PANEL_BOX = (54, 1104, 850, 210)
+
+
+def split_label(text, default="INCLUDED"):
+    """Pull an optional kicker off a spec value: "SERVICE|FULL CAR PPF".
+
+    The kicker is what makes the hierarchy readable. A service and the things
+    thrown in with it are not the same kind of thing, and a run of identically
+    labelled panels says they are. "SERVICE" then "INCLUDED" says: this is the
+    job, and this comes with it.
+    """
+    if "|" in text:
+        kick, _, lab = text.partition("|")
+        return kick.strip().upper(), lab.strip()
+    return default, text
 
 
 def panel(canvas, label, kicker="INCLUDED", tone="dark"):
