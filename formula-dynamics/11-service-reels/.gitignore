@@ -1,0 +1,4 @@
+# The -SFX cuts are derived from the picture masters in seconds:
+#   python3 tools/build_audio.py
+# The masters are what's expensive (Chromium frame capture), so those are tracked.
+renders/*-SFX.mp4

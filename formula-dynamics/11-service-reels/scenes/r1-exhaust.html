@@ -1,0 +1,204 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>FD R1 — Exhaust / Larini</title>
+<link rel="stylesheet" href="../brand.css">
+<script src="../engine.js"></script>
+
+<div class="stage">
+  <div class="grid-bg" id="grid"></div>
+  <div class="glow" id="glowA" style="width:1000px;height:1000px;left:-200px;top:600px;background:#FE0F13"></div>
+  <div class="glow" id="glowB" style="width:820px;height:820px;left:560px;top:1200px;background:#3E4CFF;opacity:.22"></div>
+
+  <div class="safe">
+
+    <!-- HOOK -->
+    <div class="blk" id="hook">
+      <svg id="tach" viewBox="0 0 420 250" style="width:420px;margin-bottom:52px;">
+        <g fill="none" stroke-width="17" stroke-linecap="round">
+          <path id="tachTrack" d="M28,222 A182,182 0 1 1 392,222" stroke="#2A2724" opacity=".55"/>
+          <path id="tachG" d="M28,222 A182,182 0 0 1 118,74"  stroke="#6E6A63"/>
+          <path id="tachY" d="M118,74 A182,182 0 0 1 302,74"  stroke="#B9B4AC"/>
+          <path id="tachR" d="M302,74 A182,182 0 0 1 392,222" stroke="var(--fd-red)"/>
+        </g>
+        <line id="needle" x1="210" y1="222" x2="210" y2="96" stroke="#FFFFFF"
+              stroke-width="10" stroke-linecap="round"/>
+        <circle cx="210" cy="222" r="16" fill="#FFFFFF"/>
+      </svg>
+      <div class="kicker" id="hookK">Exhaust Systems</div>
+      <div class="h1" id="hookL1" style="margin-top:36px;">They hear you</div>
+      <div class="h1" id="hookL2" style="margin-top:14px;">before they<br>see you.</div>
+    </div>
+
+    <!-- LARINI -->
+    <div class="blk" id="larini">
+      <div class="mono" id="larK">Formula Dynamics is the</div>
+      <div class="h1" id="larT" style="margin-top:24px;font-size:158px;">Larini</div>
+      <div class="h1" id="larT2" style="font-size:158px;">Systems</div>
+      <div id="larBadge" style="align-self:flex-start;margin-top:36px;background:var(--fd-red);
+           padding:20px 38px;border-radius:5px;">
+        <span style="font-family:'BarlowC';font-weight:700;font-size:36px;letter-spacing:4px;
+                     text-transform:uppercase;">North American Distributor</span>
+      </div>
+      <div style="margin-top:70px;">
+        <div class="lrow"><span class="ln">01</span><span class="h3">Valved sound control</span></div>
+        <div class="lrow"><span class="ln">02</span><span class="h3">Stainless &amp; titanium</span></div>
+        <div class="lrow" style="border-bottom:2px solid rgba(255,255,255,.13);">
+          <span class="ln">03</span><span class="h3">Built for your platform</span></div>
+      </div>
+    </div>
+
+    <!-- VALVED SOUND -->
+    <div class="blk" id="schem">
+      <div class="kicker" id="scK">Valved sound control</div>
+      <div id="stateRow" style="display:flex;align-items:baseline;gap:26px;margin-top:26px;">
+        <div class="h1" id="scState" style="font-size:112px;">Closed</div>
+        <div class="mono" id="scSub">Neighbour friendly</div>
+      </div>
+      <div id="wave" style="display:flex;align-items:center;gap:9px;height:360px;margin-top:56px;"></div>
+      <div class="mono" id="scRow" style="margin-top:52px;">
+        One system · Two personalities · Switchable on demand
+      </div>
+    </div>
+
+    <!-- END CARD -->
+    <div class="blk c" id="end">
+      <img id="endLogo" src="../brandkit/fd-horizontal-white.png" style="width:660px;">
+      <div class="h2" id="endT" style="margin-top:50px;font-size:116px;">Upgrade<br>the sound.</div>
+      <div class="stripe big" id="endStripe" style="margin-top:52px;"><i class="s1"></i><i class="s2"></i><i class="s3"></i><i class="s4"></i><i class="s5"></i></div>
+      <div class="cta" id="endCta" style="margin-top:66px;"><b>Shop Exhaust</b><span class="arrow">→</span></div>
+      <div class="handle" id="endH" style="margin-top:42px;">
+        <svg class="ig" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2">
+          <rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="4.6"/>
+          <circle cx="17.6" cy="6.4" r="1.3" fill="#FFFFFF" stroke="none"/></svg>
+        <span>@formuladynamicsperformance</span>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="bug" id="bug" style="left:54px;top:211px;"><img src="../brandkit/fd-icon-white.png"></div>
+
+  <div class="vignette"></div>
+  <div id="flash" style="position:absolute;inset:0;background:#FE0F13;opacity:0;"></div>
+</div>
+
+<style>
+  .lrow{ display:flex; align-items:center; gap:30px; padding:26px 0;
+         border-top:2px solid rgba(255,255,255,.13); }
+  .ln{ font-family:'Bebas'; font-size:34px; color:var(--fd-red); width:74px; }
+</style>
+
+<script>
+const S = { HOOK:[0.35,3.6], LAR:[4.0,8.4], SCH:[8.8,11.8], END:[12.2,15.0] };
+
+function dash(el, u){
+  const L = el.getTotalLength();
+  el.style.strokeDasharray = L;
+  el.style.strokeDashoffset = L * (1 - u);
+}
+
+defineScene({
+  duration: 15.0,
+  build(){
+    ['tachG','tachY','tachR','tachTrack']
+      .forEach(id => { const e = $('#'+id); e.style.strokeDasharray = e.getTotalLength(); });
+    // 34 waveform bars; the seeded shape keeps every render identical
+    const w = $('#wave');
+    for (let i = 0; i < 34; i++) {
+      const b = document.createElement('i');
+      b.style.cssText = 'display:block;flex:1;border-radius:5px;background:#39414F;';
+      w.appendChild(b);
+    }
+    this.bars = Array.from(w.children);
+    this.seed = this.bars.map((_, i) => {
+      // a symmetrical envelope so the waveform reads as one shape, not noise
+      const x = (i / 33) * 2 - 1;
+      const env = Math.pow(Math.cos(x * 1.34), 2);
+      const detail = 0.55 + 0.45 * Math.abs(Math.sin(i * 2.399 + 1.1));
+      return Math.max(0.10, env * detail);
+    });
+  },
+
+  frame(t){
+    // ambience
+    $('#grid').style.opacity = 0.5 + 0.25 * Math.sin(t * 0.7);
+    set($('#glowA'), { o: 0.28 + 0.10 * Math.sin(t * 0.9), s: 1 + 0.05 * Math.sin(t * 0.6) });
+    set($('#glowB'), { o: 0.17 + 0.07 * Math.cos(t * 0.8) });
+
+    const chrome = p(t, 0.5, 1.1) * (1 - p(t, S.END[0] - 0.3, S.END[0] + 0.2));
+    set($('#bug'), { o: chrome, x: lerp(-30, 0, p(t, 0.5, 1.1)) });
+
+    // tachometer, inside the hook block
+    const sweep = p(t, 0.15, 1.5, E.inOut);
+    dash($('#tachTrack'), p(t, 0.1, 0.9));
+    dash($('#tachG'), clamp(sweep * 3, 0, 1));
+    dash($('#tachY'), clamp(sweep * 3 - 1, 0, 1));
+    dash($('#tachR'), clamp(sweep * 3 - 2, 0, 1));
+    const nAng = lerp(-128, 108, p(t, 0.2, 1.45, E.inOut)) + (t > 1.45 ? Math.sin(t * 9) * 2.0 : 0);
+    $('#needle').setAttribute('transform', `rotate(${nAng} 210 222)`);
+    $('#flash').style.opacity = band(t, 1.36, 1.58, 0.05, 0.17) * 0.16;
+
+    // hook
+    $('#hook').style.opacity = band(t, S.HOOK[0], S.HOOK[1], 0.30, 0.30);
+    set($('#tach'), { o: p(t, 0.12, 0.55) });
+    riseIn($('#hookK'), t, S.HOOK[0], 0.45, 30);
+    ['#hookL1', '#hookL2'].forEach((sel, i) => {
+      const u = p(t, S.HOOK[0] + 0.25 + i * 0.22, S.HOOK[0] + 0.85 + i * 0.22, E.out);
+      set($(sel), { o: u, x: lerp(-56, 0, u) });
+    });
+
+    // larini
+    $('#larini').style.opacity = band(t, S.LAR[0], S.LAR[1], 0.28, 0.32);
+    riseIn($('#larK'), t, S.LAR[0], 0.4, 24);
+    ['#larT', '#larT2'].forEach((sel, i) => {
+      const u = p(t, S.LAR[0] + 0.15 + i * 0.16, S.LAR[0] + 0.72 + i * 0.16, E.out);
+      set($(sel), { o: u, x: lerp(-64, 0, u), sx: lerp(1.10, 0.94, u) });
+    });
+    const bu = p(t, S.LAR[0] + 0.62, S.LAR[0] + 1.05, E.pop);
+    set($('#larBadge'), { o: clamp(bu, 0, 1), s: lerp(0.86, 1, bu) });
+    $$('.lrow').forEach((el, i) => {
+      const a = S.LAR[0] + 1.15 + i * 0.30;
+      const u = p(t, a, a + 0.55, E.out);
+      set(el, { o: u, x: lerp(48, 0, u) });
+      el.style.clipPath = `inset(0 ${(1 - u) * 100}% 0 0)`;
+    });
+
+    // valved sound
+    $('#schem').style.opacity = band(t, S.SCH[0], S.SCH[1], 0.28, 0.30);
+    riseIn($('#scK'), t, S.SCH[0], 0.4, 22);
+    riseIn($('#stateRow'), t, S.SCH[0] + 0.18, 0.45, 30);
+
+    // the valve opens partway through the beat: amplitude and colour jump
+    const OPEN = S.SCH[0] + 1.45;
+    const open = p(t, OPEN, OPEN + 0.42, E.pop);
+    $('#scState').textContent = t >= OPEN + 0.12 ? 'Open' : 'Closed';
+    $('#scSub').textContent   = t >= OPEN + 0.12 ? 'Full song' : 'Neighbour friendly';
+    $('#scState').style.color = t >= OPEN + 0.12 ? 'var(--fd-red)' : 'var(--white)';
+
+    const grow = p(t, S.SCH[0] + 0.42, S.SCH[0] + 1.05, E.out);
+    this.bars.forEach((b, i) => {
+      const s0 = this.seed[i];
+      // idle shimmer so the wave is alive, then a real jump when the valve opens
+      const shimmer = 1 + 0.16 * Math.sin(t * 7.5 + i * 0.55);
+      const amp = lerp(0.34, 1.0, clamp(open, 0, 1));
+      const h = clamp(s0 * amp * shimmer, 0.07, 1) * 360 * grow;
+      b.style.height = h.toFixed(1) + 'px';
+      b.style.background = open > 0.5
+        ? (s0 > 0.62 ? 'var(--fd-red)' : s0 > 0.34 ? '#C7343A' : '#8B857C')
+        : '#2A2724';
+      b.style.opacity = grow;
+    });
+    riseIn($('#scRow'), t, S.SCH[0] + 1.95, 0.5, 26);
+
+    // end card
+    $('#end').style.opacity = p(t, S.END[0], S.END[0] + 0.45);
+    const lu = p(t, S.END[0], S.END[0] + 0.6, E.pop);
+    set($('#endLogo'), { o: clamp(lu, 0, 1), s: lerp(0.7, 1, lu) });
+    riseIn($('#endT'), t, S.END[0] + 0.22, 0.5, 40);
+    wipeIn($('#endStripe'), t, S.END[0] + 0.55, 0.5);
+    const cu = p(t, S.END[0] + 0.70, S.END[0] + 1.15, E.pop);
+    set($('#endCta'), { o: clamp(cu, 0, 1), s: lerp(0.84, 1, cu) });
+    riseIn($('#endH'), t, S.END[0] + 1.0, 0.5, 26);
+  },
+});
+</script>

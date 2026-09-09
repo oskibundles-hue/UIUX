@@ -1,0 +1,172 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>FD R6 — Wheels / NV Forged</title>
+<link rel="stylesheet" href="../brand.css">
+<script src="../engine.js"></script>
+
+<!--
+  Partner claim: NV Forged is named because it is a partner the shop has
+  actually fitted (confirmed 2026-09-08), not just a catalogue relationship.
+  The fitment diagram is unlabelled by design — no width, offset or diameter
+  figure appears, because those are per-car.
+-->
+<div class="stage">
+  <div class="grid-bg" id="grid"></div>
+  <div class="glow" id="glowA" style="width:1020px;height:1020px;left:-200px;top:640px;background:#FE0F13"></div>
+  <div class="glow" id="glowB" style="width:880px;height:880px;left:560px;top:300px;background:#1E63FF;opacity:.18"></div>
+
+  <div class="safe">
+
+    <!-- HOOK -->
+    <div class="blk" id="hook">
+      <div class="kicker" id="hookK">Forged wheel fitment</div>
+      <div class="h1" id="hookL1" style="margin-top:36px;">Wheels are</div>
+      <div class="h1" id="hookL2" style="margin-top:12px;">the first thing<br>anyone sees.</div>
+      <div class="mono" id="hookS" style="margin-top:52px;">And the first thing that gets it wrong</div>
+    </div>
+
+    <!-- NV FORGED -->
+    <div class="blk" id="nv">
+      <div class="mono" id="nvK">Fitted in-house by</div>
+      <div class="h1" id="nvT" style="margin-top:22px;font-size:172px;">NV</div>
+      <div class="h1" id="nvT2" style="font-size:172px;">Forged</div>
+      <div id="nvBadge" style="align-self:flex-start;margin-top:36px;background:var(--fd-red);
+           padding:20px 38px;border-radius:4px;">
+        <span style="font-family:'BarlowC';font-weight:700;font-size:36px;letter-spacing:4px;
+                     text-transform:uppercase;">Forged wheels · Fitted &amp; delivered</span>
+      </div>
+      <div style="margin-top:64px;">
+        <div class="wrow"><span class="wn">01</span><span class="h3">Monoblock &amp; multi-piece</span></div>
+        <div class="wrow"><span class="wn">02</span><span class="h3">Sized to your arches</span></div>
+        <div class="wrow" style="border-bottom:2px solid rgba(255,255,255,.13);">
+          <span class="wn">03</span><span class="h3">Finish specified by you</span></div>
+      </div>
+    </div>
+
+    <!-- FITMENT -->
+    <div class="blk" id="fit">
+      <div class="kicker" id="ftK">Fitment is the job</div>
+      <svg id="wheelSvg" viewBox="0 0 900 520" style="width:100%;margin-top:46px;">
+        <!-- arch line -->
+        <path id="arch" d="M120,410 C120,190 330,120 450,120 C570,120 780,190 780,410"
+              fill="none" stroke="#3A3733" stroke-width="7" stroke-linecap="round"/>
+        <!-- tyre + rim, front view -->
+        <g id="wheelG">
+          <circle cx="450" cy="300" r="168" fill="none" stroke="#6E6A63" stroke-width="26"/>
+          <circle cx="450" cy="300" r="128" fill="#0A0A0B" stroke="#FFFFFF" stroke-width="7"/>
+          <g id="spokes" stroke="#FFFFFF" stroke-width="11" stroke-linecap="round">
+            <line x1="450" y1="300" x2="450" y2="180"/>
+            <line x1="450" y1="300" x2="564" y2="337"/>
+            <line x1="450" y1="300" x2="520" y2="397"/>
+            <line x1="450" y1="300" x2="380" y2="397"/>
+            <line x1="450" y1="300" x2="336" y2="337"/>
+          </g>
+          <circle cx="450" cy="300" r="26" fill="var(--fd-red)"/>
+        </g>
+        <!-- width + offset callouts, deliberately unlabelled numerically -->
+        <g id="dims" stroke="var(--fd-red)" stroke-width="5" fill="none">
+          <line x1="282" y1="470" x2="618" y2="470"/>
+          <line x1="282" y1="452" x2="282" y2="488"/>
+          <line x1="618" y1="452" x2="618" y2="488"/>
+        </g>
+        <text id="dimT" x="450" y="508" text-anchor="middle" fill="#8B857C"
+              font-family="BarlowC" font-weight="700" font-size="27" letter-spacing="4">WIDTH · OFFSET · SPACING</text>
+      </svg>
+      <div class="mono" id="ftRow" style="margin-top:52px;">
+        Measured on your car · Not guessed from a chart
+      </div>
+    </div>
+
+    <!-- END -->
+    <div class="blk c" id="end">
+      <img id="endLogo" src="../brandkit/fd-horizontal-white.png" style="width:660px;">
+      <div class="h2" id="endT" style="margin-top:50px;font-size:116px;">Get the<br>stance right.</div>
+      <div class="stripe big" id="endStripe" style="margin-top:52px;">
+        <i class="s1"></i><i class="s2"></i><i class="s3"></i><i class="s4"></i><i class="s5"></i></div>
+      <div class="cta" id="endCta" style="margin-top:66px;"><b>Shop Wheels</b><span class="arrow">→</span></div>
+      <div class="handle" id="endH" style="margin-top:42px;">
+        <svg class="ig" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2">
+          <rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="4.6"/>
+          <circle cx="17.6" cy="6.4" r="1.3" fill="#FFFFFF" stroke="none"/></svg>
+        <span>@formuladynamicsperformance</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bug" id="bug" style="left:54px;top:211px;"><img src="../brandkit/fd-icon-white.png"></div>
+  <div class="vignette"></div>
+</div>
+
+<style>
+  .wrow{ display:flex; align-items:center; gap:30px; padding:26px 0;
+         border-top:2px solid rgba(255,255,255,.13); }
+  .wn{ font-family:'Bebas'; font-size:38px; color:var(--fd-red); width:74px; flex:none; }
+</style>
+
+<script>
+const S = { HOOK:[0.3,3.6], NV:[4.0,8.6], FIT:[9.0,12.0], END:[12.4,15.0] };
+function dash(el,u){ const L=el.getTotalLength(); el.style.strokeDasharray=L; el.style.strokeDashoffset=L*(1-u); }
+
+defineScene({
+  duration: 15.0,
+  build(){ ['arch'].forEach(id=>{ const e=$('#'+id); e.style.strokeDasharray=e.getTotalLength(); }); },
+  frame(t){
+    $('#grid').style.opacity = 0.5 + 0.22*Math.sin(t*0.7);
+    set($('#glowA'), { o: 0.24 + 0.09*Math.sin(t*0.85) });
+    set($('#glowB'), { o: 0.15 + 0.06*Math.cos(t*0.7) });
+    const chrome = p(t,0.5,1.1) * (1 - p(t,S.END[0]-0.3,S.END[0]+0.2));
+    set($('#bug'), { o: chrome, x: lerp(-30,0,p(t,0.5,1.1)) });
+
+    // hook
+    $('#hook').style.opacity = band(t,S.HOOK[0],S.HOOK[1],0.30,0.30);
+    riseIn($('#hookK'), t, S.HOOK[0], 0.45, 30);
+    ['#hookL1','#hookL2'].forEach((sel,i)=>{
+      const u = p(t, S.HOOK[0]+0.22+i*0.22, S.HOOK[0]+0.82+i*0.22, E.out);
+      set($(sel), { o:u, x:lerp(-56,0,u) });
+    });
+    riseIn($('#hookS'), t, S.HOOK[0]+0.9, 0.5, 26);
+
+    // NV Forged
+    $('#nv').style.opacity = band(t,S.NV[0],S.NV[1],0.28,0.32);
+    riseIn($('#nvK'), t, S.NV[0], 0.4, 24);
+    ['#nvT','#nvT2'].forEach((sel,i)=>{
+      const u = p(t, S.NV[0]+0.15+i*0.16, S.NV[0]+0.75+i*0.16, E.out);
+      set($(sel), { o:u, x:lerp(-64,0,u) });
+    });
+    const bu = p(t, S.NV[0]+0.65, S.NV[0]+1.10, E.pop);
+    set($('#nvBadge'), { o:clamp(bu,0,1), s:lerp(0.86,1,bu) });
+    $$('.wrow').forEach((el,i)=>{
+      const a = S.NV[0]+1.20+i*0.30;
+      const u = p(t, a, a+0.55, E.out);
+      set(el, { o:u, x:lerp(48,0,u) });
+      el.style.clipPath = `inset(0 ${(1-u)*100}% 0 0)`;
+    });
+
+    // fitment
+    $('#fit').style.opacity = band(t,S.FIT[0],S.FIT[1],0.28,0.30);
+    riseIn($('#ftK'), t, S.FIT[0], 0.4, 22);
+    dash($('#arch'), p(t, S.FIT[0]+0.18, S.FIT[0]+0.85, E.out));
+    // the wheel drops into the arch and settles
+    const wu = p(t, S.FIT[0]+0.55, S.FIT[0]+1.25, E.pop);
+    $('#wheelG').style.transformOrigin = '450px 300px';
+    set($('#wheelG'), { o:clamp(wu,0,1), y:lerp(-70,0,clamp(wu,0,1)), s:lerp(0.82,1,clamp(wu,0,1)) });
+    // slow rotation, so the wheel reads as a wheel rather than a diagram
+    $('#spokes').style.transformOrigin = '450px 300px';
+    $('#spokes').style.transform = `rotate(${(t-S.FIT[0])*16}deg)`;
+    const du = p(t, S.FIT[0]+1.35, S.FIT[0]+1.85, E.out);
+    set($('#dims'), { o:du });
+    set($('#dimT'), { o:p(t, S.FIT[0]+1.55, S.FIT[0]+2.05) });
+    riseIn($('#ftRow'), t, S.FIT[0]+1.95, 0.5, 26);
+
+    // end
+    $('#end').style.opacity = p(t,S.END[0],S.END[0]+0.45);
+    const lu = p(t,S.END[0],S.END[0]+0.6,E.pop);
+    set($('#endLogo'), { o:clamp(lu,0,1), s:lerp(0.7,1,lu) });
+    riseIn($('#endT'), t, S.END[0]+0.22, 0.5, 40);
+    wipeIn($('#endStripe'), t, S.END[0]+0.55, 0.5);
+    const cu = p(t,S.END[0]+0.70,S.END[0]+1.15,E.pop);
+    set($('#endCta'), { o:clamp(cu,0,1), s:lerp(0.84,1,cu) });
+    riseIn($('#endH'), t, S.END[0]+1.0, 0.5, 26);
+  },
+});
+</script>
