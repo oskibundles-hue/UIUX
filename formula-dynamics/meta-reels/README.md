@@ -44,7 +44,12 @@ in two versions:
 
 ### The sound pack
 
-`sfx/` holds 37 sounds in two halves.
+`sfx/` holds 44 sounds in three groups.
+
+**Formula Dynamics' own (7)** — harvested from the shop's own footage on
+2026-09-09. Real engine and exhaust from the GT3 clip, plus room tone, lift
+and wheels-off sounds. No licence involved: it is Formula Dynamics' material.
+Details in `sfx/FD-RECORDINGS.md`.
 
 **Recorded (11)** — curated from Kenney's CC0 libraries. Kenney releases
 everything under Creative Commons Zero: public domain, no attribution
@@ -52,6 +57,10 @@ required, commercial use permitted. Sources and the reason each was picked
 are in `sfx/KENNEY-SOURCES.md`.
 
 **Designed (26)** — synthesised from scratch, original work.
+
+The FD recordings take priority wherever they fit. R1's valved-sound beat now
+runs a quiet engine bed while the valve reads CLOSED and the real exhaust when
+it opens — the clip's own car doing the thing the ad is selling.
 
 The split is not arbitrary. Kenney's libraries are game assets, and most of
 the 753 files (lasers, footsteps, space engines, casino chips) are wrong for
@@ -72,6 +81,7 @@ heard directly.
 
 | Group | Sounds |
 |---|---|
+| **Formula Dynamics' own** | `fd_engine_peak` `fd_engine_steady` `fd_engine_settle` `fd_engine_low` `fd_shop_room` `fd_lift_low` `fd_wheels_work` |
 | Impacts (designed) | `impact_deep` `impact_low` `sub_drop` |
 | Impacts (recorded) | `k_impact_plate` `k_impact_plate2` `k_impact_metal` `k_impact_sub` |
 | Mechanical (recorded) | `k_switch_heavy` `k_switch_mid` `k_click_tight` `k_click_low` `k_select` `k_tick_metal` `k_glass` |
@@ -84,6 +94,8 @@ heard directly.
 48 kHz, 16-bit stereo, peak -3 dBFS throughout. Rebuild with:
 
 ```bash
+python3 tools/harvest_audio.py # pull audio from the CloudFront car clips
+python3 tools/cut_fd_sfx.py    # cut the usable segments out of it
 python3 tools/build_sfx.py     # the 26 designed sounds (seeded, reproducible)
 python3 tools/fetch_sfx.py     # re-download Kenney's CC0 packs
 python3 tools/curate_sfx.py    # re-cut the 11 picks from them

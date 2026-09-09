@@ -31,8 +31,10 @@ CUES = {
         ("k_click_tight",  5.75, 0.38),
         ("whoosh_short",   8.55, 0.50),
         ("k_select",  9.00, 0.35),
-        ("sub_drop",      10.25, 0.58),   # the valve opens — the big moment
-        ("k_impact_sub",  10.25, 0.38),
+        ("fd_engine_low",  8.95, 0.20),   # valve CLOSED — our own engine, held back
+        ("sub_drop",      10.25, 0.50),   # the valve opens — the big moment
+        ("fd_engine_peak",10.18, 0.62),   # ...carried by the real exhaust
+        ("k_impact_sub",  10.25, 0.30),
         ("whoosh_reverse",11.85, 0.45),
         ("impact_low",    12.22, 0.70), ("drone_low", 12.10, 0.20),   # end card
         ("pop",           12.92, 0.50),   # CTA
