@@ -1,0 +1,8 @@
+# Footage never goes in git - plates are rebuilt from the raw with make_plate.py
+*/source/*.mp4
+*/source/*.mov
+# Rendered spots are delivered as downloads, not committed; stills and posters are kept
+*/exports/*.mp4
+.frames/
+.measure/
+__pycache__/
