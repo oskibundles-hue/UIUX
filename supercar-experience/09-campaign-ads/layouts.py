@@ -224,6 +224,10 @@ PANEL_H = 0.280
 # or the two stack on the same line - the collision the house record warns
 # about for any layout that puts a lockup near the ticker.
 PANEL_LOCKUP_Y = 0.762
+# Card opacity, top edge to bottom edge. Keep the bottom above ~185 or the
+# small right-hand values in the build rows start to fail on bright plates.
+PANEL_ALPHA_TOP = 132
+PANEL_ALPHA_BOTTOM = 198
 
 
 def panel_backdrop(ctx, base, t):
@@ -234,7 +238,20 @@ def panel_backdrop(ctx, base, t):
         card = Image.new("RGBA", (ctx.W, ctx.H), (0, 0, 0, 0))
         y0 = round(ctx.H * PANEL_TOP)
         h = round(ctx.H * PANEL_H)
-        card.paste(Image.new("RGBA", (ctx.W, h), (5, 5, 6, 242)), (0, y0))
+        # The card is a smoked pane, not a lid. It used to be alpha 242, which
+        # is opaque enough to cut the car out of its own ad. It now ramps
+        # PANEL_ALPHA_TOP -> PANEL_ALPHA_BOTTOM so the body reads through the
+        # top of the card and the rows still sit on the darkest part.
+        # Worst measured case is a 231-luminance sky under the mid band: at
+        # alpha 150 that composites to about 85, and white type carries a
+        # shadow on this layout, so it holds.
+        ramp = Image.new("RGBA", (1, h))
+        px = ramp.load()
+        for y in range(h):
+            k = y / max(1, h - 1)
+            px[0, y] = (5, 5, 6, round(PANEL_ALPHA_TOP +
+                                       (PANEL_ALPHA_BOTTOM - PANEL_ALPHA_TOP) * k))
+        card.paste(ramp.resize((ctx.W, h)), (0, y0))
         card.paste(Image.new("RGBA", (ctx.W, 6), B.rgb(B.RED) + (255,)), (0, y0))
         stripe = R.accent_stripe(ctx.W, 7)
         card.alpha_composite(stripe, (0, y0 + h - 7))
@@ -272,8 +289,7 @@ def panel_hook(ctx, base, t):
         return
     start = ctx.CUE["beats"]["hook"][0]
     y = _panel_inner_top(ctx)
-    for i, ln in enumerate(_fit_lines(ctx, ctx.CUE["hook"], ctx.X1 - ctx.X0, 0.075,
-                                      shadow=False)):
+    for i, ln in enumerate(_fit_lines(ctx, ctx.CUE["hook"], ctx.X1 - ctx.X0, 0.075)):
         lp = ctx.ease_out((t - start - i * 0.14) / 0.6)
         if lp > 0:
             R.paste(base, ctx.faded(ln, o * lp), ctx.X0 - int((1 - lp) * 26), y)
@@ -287,7 +303,7 @@ def panel_build(ctx, base, t):
         return
     start = ctx.CUE["beats"]["build"][0]
     top = _panel_inner_top(ctx) - 8
-    head = R.text(ctx.CUE["buildHeading"], 28, B.RED, tracking=0.20)
+    head = R.with_shadow(R.text(ctx.CUE["buildHeading"], 28, B.RED, tracking=0.20))
     R.paste(base, ctx.faded(head, o), ctx.X0, top)
 
     col_w = (ctx.X1 - ctx.X0) // 2
@@ -299,9 +315,9 @@ def panel_build(ctx, base, t):
         cy = top + round(ctx.H * 0.036) + (i // 2) * round(ctx.H * 0.072)
         cy += (1 - rp) * 14
         ro = o * rp
-        R.paste(base, ctx.faded(R.text(idx, 24, B.RED, tracking=0.14), ro), cx, cy + 8)
-        R.paste(base, ctx.faded(R.text(label, 50, B.WHITE, tracking=0.03), ro), cx + 46, cy)
-        R.paste(base, ctx.faded(R.text(sub, 23, B.WHITE, tracking=0.13), ro * 0.62),
+        R.paste(base, ctx.faded(R.with_shadow(R.text(idx, 24, B.RED, tracking=0.14)), ro), cx, cy + 8)
+        R.paste(base, ctx.faded(R.with_shadow(R.text(label, 50, B.WHITE, tracking=0.03)), ro), cx + 46, cy)
+        R.paste(base, ctx.faded(R.with_shadow(R.text(sub, 23, B.WHITE, tracking=0.13)), ro * 0.80),
                 cx + 46, cy + 46)
 
 

@@ -32,6 +32,15 @@ CARS = {
     "ferrari-tempesta":    dict(name="FERRARI TEMPESTA",    year="2025", loc="LAS VEGAS · SCOTTSDALE",
                                 specs="750 HP · 2.7S 0-60 · 205 MPH",
                                 layout="hud"),    # desert reel: mid/CTA/lower all under 120
+    # Cut from Omarie's own masters, 9 Sept. Layouts set after measuring.
+    "ferrari-f8-tributo":  dict(name="FERRARI F8 TRIBUTO",     year="2022", loc="LAS VEGAS · SCOTTSDALE", specs=None,
+                                layout="hud"),
+    "lamborghini-sto":     dict(name="LAMBORGHINI STO",        year="2023", loc="LAS VEGAS · SCOTTSDALE · BOISE", specs=None,
+                                layout="hud"),
+    "amg-gt-black-series": dict(name="AMG GT BLACK SERIES",    year="2021", loc="LAS VEGAS · SCOTTSDALE", specs=None,
+                                layout="hud"),
+    "novitec-urus":        dict(name="LAMBORGHINI NOVITEC URUS", year="2021", loc="LAS VEGAS · SCOTTSDALE", specs=None,
+                                layout="hud"),
 }
 
 def money(n): return f"${n:,}"
