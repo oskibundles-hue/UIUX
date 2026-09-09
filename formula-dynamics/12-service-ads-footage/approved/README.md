@@ -13,6 +13,14 @@ no corner logo, plain and `-SFX` (sound-designed) versions.
 | `Roma-FullCarPPF.mp4` | Full car PPF | 25.7 s | **Approved** |
 | `GT3RS-WindshieldPPF.mp4` | Windshield PPF, $899 | 28.7 s | **Approved** |
 | `Aventador-FreeTune.mp4` | Free ECU tune | 14.0 s | **Approved** |
+| `SF90-Service-Pricing.mp4` | Oil $1,199 · Brake $499 · Diagnostics $499 | 22.2 s | **Approved** |
+
+## Pricing sits beside the package on purpose
+
+`SF90-Service-Pricing.mp4` is the à la carte counterpart to the annual package,
+and it is deliberately on the **same car**. Together they read as one menu: pay
+per job, or buy the year for $3,999. The conditions carry over unchanged —
+**oil included, pads not included.**
 
 ## Why the tune ad carries no panels
 
