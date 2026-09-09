@@ -181,6 +181,7 @@ Audio-only takes it under one second. Same numbers, 200× faster.
 
 - Animations in-video (Remotion, or generative via the art skills)
 - Stream-style handle overlays for nq.young / youngomarie / youngomarie
+- Channel intro (montage typewriter, IntroCut.tsx + intro_sfx.py): dropped on 2026-09-09 at Omarie's call. Tests stay hosted; do not raise it again unless he does.
 
 ## Looks and caption styles
 
