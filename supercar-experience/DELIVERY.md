@@ -1,6 +1,7 @@
 # Supercar Experience - DELIVERY
 
-Filed 2026-09-09. Brand kit and fifteen rental ads - three cars, five angles each.
+Filed 2026-09-09. Brand kit and ten published rental ads - two cars, five angles each,
+plus a third car held pending footage.
 Every on-screen figure is read off supercarexp.vip.
 
 ## 01 Business Ads / Supercar Experience
@@ -8,13 +9,13 @@ Every on-screen figure is read off supercarexp.vip.
 
 ### Porsche 911 GT3 RS - $1,299 / 4 hrs and $1,799 / 24 hrs
 
-Shop footage, 84-99s of the GT3 rolling in, NQ Signature grade. Dark throughout, so type sits on the picture.
+The car reel from its own listing on the site, 12-27s. This is the rental GT3 RS - an earlier cut used a Formula Dynamics shop car, which is a different Porsche.
 
-- `supercar-experience-porsche-gt3rs-15s-9x16.mp4` - $1,299. Four hours. - Price leads. For the viewer who wants the car and needs the figure. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/49404380-f6e5-4228-bcd6-57a9259273d2.mp4
-- `supercar-experience-porsche-gt3rs-15s-9x16-b-experience.mp4` - A ride of a lifetime. - The site's tagline. Identity over arithmetic. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/c9ac0843-e236-48e8-ae61-8b953633a1d3.mp4
-- `supercar-experience-porsche-gt3rs-15s-9x16-c-occasion.mp4` - Vegas this weekend? Arrive in this. - Weddings, race week, photoshoots - the uses the site names. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/7b210cd7-4ce6-4803-86c7-42bd15e3e488.mp4
-- `supercar-experience-porsche-gt3rs-15s-9x16-d-offer.mp4` - 50% off day two. Or day three free. - The promo exactly as the site prints it. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/b0fce7df-9cf3-4189-8ae2-02f214300a91.mp4
-- `supercar-experience-porsche-gt3rs-15s-9x16-e-engage.mp4` - 4 hours or 24? - A question that earns comments. Not a sales CTA. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/3756c9f5-d526-4423-a5b8-492c266c24de.mp4
+- `supercar-experience-porsche-gt3rs-15s-9x16.mp4` - $1,299. Four hours. - Price leads. For the viewer who wants the car and needs the figure. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/1d545c5c-5cff-44d0-a320-fccf3b6e7201.mp4
+- `supercar-experience-porsche-gt3rs-15s-9x16-b-experience.mp4` - A ride of a lifetime. - The site's tagline. Identity over arithmetic. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/ac8e8143-d67f-43ad-89c1-161bbc885343.mp4
+- `supercar-experience-porsche-gt3rs-15s-9x16-c-occasion.mp4` - Vegas this weekend? Arrive in this. - Weddings, race week, photoshoots - the uses the site names. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/03494bba-9489-4744-840f-18ec82ba0fb6.mp4
+- `supercar-experience-porsche-gt3rs-15s-9x16-d-offer.mp4` - 50% off day two. Or day three free. - The promo exactly as the site prints it. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/d8635da6-84d7-481a-a950-bbefa468695f.mp4
+- `supercar-experience-porsche-gt3rs-15s-9x16-e-engage.mp4` - 4 hours or 24? - A question that earns comments. Not a sales CTA. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/ce3b3711-c247-427b-8531-18630ea1d2cd.mp4
 
 ### Ferrari Tempesta - $849 / 4 hrs and $1,199 / 24 hrs
 
@@ -28,13 +29,13 @@ The car reel from its own listing on the site, 4-19s. Already graded, so no LUT 
 
 ### McLaren 750S Spider - $1,299 / 4 hrs and $1,799 / 24 hrs
 
-Shop footage, 7-22s, a 9:16 window cut out of the square frame. Midday sun on pale tarmac, so it runs the panel layout.
+ON HOLD. The site's video for this car is 124x224 at 468 KB - a broken upload, not a low-quality one. The cut that exists runs on a different McLaren, so it is not published.
 
-- `supercar-experience-mclaren-750s-spider-15s-9x16.mp4` - $1,299. Four hours. - Price leads. For the viewer who wants the car and needs the figure. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/7986ed48-fbd4-45dc-b8d0-7b8189b3f98d.mp4
-- `supercar-experience-mclaren-750s-spider-15s-9x16-b-experience.mp4` - A ride of a lifetime. - The site's tagline. Identity over arithmetic. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/d4da59ec-cbc2-42ea-b30d-fdbed53ef572.mp4
-- `supercar-experience-mclaren-750s-spider-15s-9x16-c-occasion.mp4` - Vegas this weekend? Arrive in this. - Weddings, race week, photoshoots - the uses the site names. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/e521a48f-d174-4541-8288-589dd108b018.mp4
-- `supercar-experience-mclaren-750s-spider-15s-9x16-d-offer.mp4` - 50% off day two. Or day three free. - The promo exactly as the site prints it. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/a4bbacc8-c934-4385-88d6-63dfbc55f8ef.mp4
-- `supercar-experience-mclaren-750s-spider-15s-9x16-e-engage.mp4` - 4 hours or 24? - A question that earns comments. Not a sales CTA. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/9ed3d081-6cb5-4ba2-9664-203d4b24b008.mp4
+- `supercar-experience-mclaren-750s-spider-15s-9x16.mp4` - $1,299. Four hours. - Price leads. For the viewer who wants the car and needs the figure. - NOT PUBLISHED
+- `supercar-experience-mclaren-750s-spider-15s-9x16-b-experience.mp4` - A ride of a lifetime. - The site's tagline. Identity over arithmetic. - NOT PUBLISHED
+- `supercar-experience-mclaren-750s-spider-15s-9x16-c-occasion.mp4` - Vegas this weekend? Arrive in this. - Weddings, race week, photoshoots - the uses the site names. - NOT PUBLISHED
+- `supercar-experience-mclaren-750s-spider-15s-9x16-d-offer.mp4` - 50% off day two. Or day three free. - The promo exactly as the site prints it. - NOT PUBLISHED
+- `supercar-experience-mclaren-750s-spider-15s-9x16-e-engage.mp4` - 4 hours or 24? - A question that earns comments. Not a sales CTA. - NOT PUBLISHED
 
 ## 04 Brand and Creative Systems / Supercar Experience
 
