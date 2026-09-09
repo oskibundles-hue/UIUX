@@ -121,3 +121,9 @@ decision can be traced back" group. That is the house convention.
 **Still ask first** before any bulk archive sweep, and before moving files
 between folders in Dropbox or other storage. Archiving a page section is
 reversible; moving master files is not.
+
+### Out of scope
+
+The `Joey's Loudest 20` artifact (Elder Scrolls Online stream VOD) is excluded
+from artifacts review and organization. Do not list it, organize it, propose
+changes to it, or raise questions about it. Leave it untouched.
