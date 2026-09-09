@@ -1,0 +1,58 @@
+# Every ad is cut from ONE car. Footage is never mixed between cars.
+# columns: source  start  duration  what the shot carries
+
+=== FD-Annual-Service-3999-SF90 (21.8s) · bug DROPPED (measured) ===
+sf90.mp4    7.0  3.6   front 3/4 under the overpass — hero
+sf90.mp4   11.8  2.6   wheel + red caliper, rolling — brake service
+sf90.mp4    0.0  2.2   cockpit, rev lights on the wheel — diagnostics
+sf90.mp4   15.8  2.4   wheel arch and panel — suspension
+sf90.mp4    9.6  3.4   side rolling, highway
+sf90.mp4   16.8  2.8   rear, mountains
+sf90.mp4   18.8  3.4   Ferrari badge close
+sf90.mp4   20.8  1.4   rolling past the flowers — payoff
+
+=== FD-Annual-Service-3999-GT3RS (21.8s) · BLACK logo (measured) ===
+gt3.mov     7.6  3.4   Porsche crest into front rolling — hero
+gt3.mov     1.6  2.4   forged wheel + yellow caliper — brake service
+gt3.mov     3.4  2.0   nose and headlight — inspection
+gt3.mov    15.4  2.6   wheel arch spinning — suspension
+gt3.mov    12.6  3.0   side rolling, GT3 RS livery
+gt3.mov    18.6  2.4   hand on the carbon wheel
+gt3.mov    21.0  3.4   rolling
+gt3.mov    26.2  2.6   rear 3/4, wing up — payoff
+
+=== FD-Annual-Service-3999-Roma (20.1s) · bug DROPPED (measured) ===
+roma.mov   14.6  4.2   front rolling — hero
+roma.mov   18.5  2.0   wheel spinning
+roma.mov    8.5  2.4   interior, wheel and stitching — diagnostics
+roma.mov   10.9  2.6   rear, quad exhaust
+roma.mov    3.8  3.4   parked on the desert road
+roma.mov   20.6  2.8   rear/side rolling
+roma.mov   23.0  3.0   beauty — payoff
+
+=== FD-Windshield-PPF-899-GT3RS (19.8s) · BLACK logo (measured) ===
+gt3.mov     7.6  4.0   front rolling, windshield square on — hero
+gt3.mov     3.2  2.2   headlight close — the free headlight PPF
+gt3.mov    22.2  3.0   front on, rolling
+gt3.mov    18.4  2.6   hand on the wheel, seen through glass
+gt3.mov    13.0  3.0   side rolling
+gt3.mov     5.2  2.4   rear wing, parked
+gt3.mov    26.2  3.2   rear 3/4 — payoff
+
+=== FD-Free-Tune-Exhaust-Roma (20.1s) · bug DROPPED (measured) ===
+roma.mov   10.9  3.8   rear, quad exhaust — opens ON the exhaust
+roma.mov   14.6  3.6   front rolling
+roma.mov    8.5  2.0   interior
+roma.mov   19.0  2.2   wheel spinning
+roma.mov    3.8  2.8   parked
+roma.mov   20.6  3.0   rolling
+roma.mov   23.0  3.0   beauty — payoff
+
+=== FD-Roma-Full-Car-PPF (21.1s) ===
+roma.mov    3.8  2.8   parked on the desert road — establishing
+roma.mov    6.5  3.4   satin panel, roofline, mirror — THE FILM (hero)
+roma.mov    8.7  1.9   interior — interior ceramic is included
+roma.mov    9.9  3.4   rear, quad exhaust — film over complex curves
+roma.mov   13.4  2.4   wide canyon road
+roma.mov   18.4  2.4   wheel, low and spinning
+roma.mov   20.8  4.8   rolling into the sun — payoff

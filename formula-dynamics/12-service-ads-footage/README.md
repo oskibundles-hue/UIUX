@@ -8,6 +8,12 @@ brand kit, same overlay set, real cars.
 Use these for the specials. A motion-graphic reel explains an offer; footage of
 a real car carries it.
 
+**One car per ad. Footage is never mixed between cars.** A cut that jumps from
+a Ferrari to a Porsche to another Ferrari reads as a showreel, not as an ad for
+one offer — and it quietly implies the shop is showing you someone else's car.
+Each offer instead gets a variation per car, so the same special can be run
+against three different audiences.
+
 ---
 
 ## There is no footage of the services themselves
@@ -107,6 +113,25 @@ assert ink.max() <= W*0.84    # IG action rail
 Put the segment that must survive **first**, on the left, where nothing covers
 it.
 
+**Measure the logo corner; don't assume a tone.** Sampling the bug's own
+rectangle (x 54–360, y 211–320) four times a second across each montage, then
+counting the frames where each colour would be lost:
+
+| Cut | White logo fails | Black logo fails | Decision |
+|---|---|---|---|
+| Annual · SF90 | 14.9% | 23.0% | **Drop the bug** |
+| Annual · GT3 RS | 58.6% | 8.0% | **Black logo** |
+| Annual · Roma | 22.2% | 29.6% | **Drop the bug** |
+| Windshield PPF · GT3 RS | 53.2% | 7.6% | **Black logo** |
+| Free tune · Roma | 29.6% | 25.9% | **Drop the bug** |
+
+The white GT3 RS lives against bright sky, so a white logo is gone in more than
+half the frames and a black one is safe — the same conclusion the original
+GT3 RS car ad reached. The Ferraris cut between near-black interiors and blown
+sky, so neither colour survives and the corner logo comes off entirely; the
+monogram still appears in the title block and on the end card, so nothing is
+lost. This is exactly what the Roma and Aventador ads already do.
+
 **Set `--bitrate 9M`.** The 20M default put 42 MB behind 19 seconds. 9M is
 13 MB for the same picture.
 
@@ -114,57 +139,63 @@ it.
 
 ## Built
 
-### Annual Service Package — $3,999
+Six ads across four offers. Shot lists for all of them are in `shots.txt`.
 
-`FD-Annual-Service-3999.mp4` · 22.5 s · SF90, GT3 RS and Roma
+### Annual Service Package — $3,999 · three variations
 
-| | Shot | Carries |
-|---|---|---|
-| 1 | SF90 gold rolling on the highway | The buyer's car |
-| 2 | Forged wheel, yellow ceramic caliper | Brake service |
-| 3 | GT3 RS nose and headlight | Inspection |
-| 4 | Wheel arch, wheel spinning | Suspension |
-| 5 | Roma rolling through the canyon | The range of cars we keep |
-| 6 | GT3 RS rear, wing up | — |
-| 7 | SF90 rear, Ferrari badge | Payoff, CTA and end card |
+| File | Car | Length | Logo |
+|---|---|---|---|
+| `FD-Annual-Service-3999-SF90.mp4` | Ferrari SF90 | 21.8 s | dropped |
+| `FD-Annual-Service-3999-GT3RS.mp4` | Porsche GT3 RS | 21.8 s | black |
+| `FD-Annual-Service-3999-Roma.mp4` | Ferrari Roma | 20.1 s | dropped |
 
-Three cars rather than one, deliberately: the package is not about a single
-car, it is about the shop keeping cars of this kind for a year.
+Same copy on all three, so they can be A/B tested against each other with only
+the car changing. Each carries its own brake shot (SF90 red caliper, GT3 RS
+yellow caliper, Roma wheel), its own cockpit shot for diagnostics, and its own
+arch shot for suspension. Conditions run in the ticker: **oil included, pads
+not included.** The 10%-off line is a spec chip so the ticker stays clear of
+Instagram's action rail.
 
-Conditions run in the ticker — **oil included, pads not included** — where they
-hold long enough to be read. The 10%-off line moved to a spec chip so the ticker
-stays short enough to clear the action rail.
+### Full Car PPF — ceramic included · Roma
 
-### Full Car PPF — ceramic coating included
+`FD-Roma-Full-Car-PPF.mp4` · 21.1 s. The shop's own note said *"Using Roma
+Video. PPF focused video."* Opens on the paint rather than the car, because the
+paint is what the product protects. Copy avoids "gloss" — that car is satin.
 
-`FD-Roma-Full-Car-PPF.mp4` · 21.1 s · Roma throughout
+### Windshield PPF — $899, headlights free · GT3 RS
 
-The shop's own note said *"Using Roma Video. PPF focused video."* This is it.
+`FD-Windshield-PPF-899-GT3RS.mp4` · 19.8 s. Second shot is a headlight close-up,
+which is the free half of the offer. The white car against sky is the one case
+where the measurement said keep the logo, in black.
 
-| | Shot | Carries |
-|---|---|---|
-| 1 | Parked on the desert road | Establishing |
-| 2 | Satin red panel, roofline, mirror | **The film itself — the hero shot** |
-| 3 | Interior, wheel and red stitching | Interior ceramic is included |
-| 4 | Rear, quad exhaust, diffuser | Film over complex curves |
-| 5 | Wide canyon road | Breath |
-| 6 | Wheel, low and spinning | Detail |
-| 7 | Rolling into the sun | Payoff, CTA and end card |
+### Free ECU tune with a RYFT or Opus exhaust · Roma
 
-It opens on the paint rather than on the car, because the paint is what the
-product protects. The copy avoids the word "gloss" — this car is satin, and the
-film is the point, not the shine.
+`FD-Free-Tune-Exhaust-Roma.mp4` · 20.1 s. Opens on the quad exhaust.
 
----
+**No partner URL on this one.** `partner.js` can put `ryft.co` on screen, but
+only where that exhaust is actually fitted, and this Roma's exhaust has not been
+confirmed as RYFT. The ad states the offer — which is true regardless of what is
+on this car — without making a claim about the car in shot. Confirm the fitment
+and the URL bar can go on.
 
-## Still to build
+## Still open
 
-| Special | Footage it needs | Have it? |
-|---|---|---|
-| Free tune with a RYFT or Opus exhaust | Exhaust work, dyno, or a RYFT part on camera | The Roma rear with quad exhaust could carry it; "teal brakes and ryft wheels" is RYFT-branded but is wheels |
-| Windshield PPF 899 + free headlights | Film onto glass, a headlight | No |
+**Footage of the work itself.** Everything here is beauty footage. A lift, a
+torque wrench, film being squeegeed onto glass, a car on the dyno — any of those
+would swap straight into these ads as shot 2 or 3 and make them proof rather
+than assertion. The shot lists in `shots.txt` are the swap points.
 
-The exhaust special is the one that wants the partner URL graphic from
-`11-service-reels/partner.js` — `ryft.co` typed on while a RYFT part is on
-screen. A URL bar over a wheel shot is a claim about the wrong product, so that
-one waits for exhaust footage or a confirmed RYFT exhaust car.
+**Confirm the Roma's exhaust.** If it is a RYFT, the free-tune ad can carry the
+`ryft.co` URL bar from `11-service-reels/partner.js`. Until then the ad states
+the offer without claiming anything about the car in shot.
+
+**Opus.** Named in the specials, never researched. No claims, no logo, no URL
+for that brand until it is — see `11-service-reels/PARTNERS.md`.
+
+**Mansory Urus, custom gradient PPF.** Named in the shop's own notes as ad
+material; no footage has come through.
+
+**Two more cars are available.** The Aventador S and 765LT plates are committed
+on the campaign branch, so the annual package could take a fourth and fifth
+variation without new footage. The 765LT's own ad is on hold for invented spec
+figures, but its plate footage is clean.

@@ -1,9 +1,0 @@
-# Full Car PPF, ceramic included — Roma throughout · 21.1s
-# source            start   dur   what it carries
-roma.mov             3.8    2.8   parked on the desert road -> establishing
-roma.mov             6.5    3.4   satin panel, roofline, mirror -> THE FILM (hero)
-roma.mov             8.7    1.9   interior, wheel, red stitching -> interior ceramic
-roma.mov             9.9    3.4   rear, quad exhaust, diffuser -> film on complex curves
-roma.mov            13.4    2.4   wide canyon road -> breath
-roma.mov            18.4    2.4   wheel, low and spinning -> detail
-roma.mov            20.8    4.8   rolling into the sun -> payoff, CTA, end card
