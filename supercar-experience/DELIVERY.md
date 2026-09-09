@@ -4,11 +4,11 @@ Filed 2026-09-09. Kit and GT3 RS ads. Every on-screen figure from supercarexp.vi
 
 ## 01 Business Ads / Supercar Experience
 
-- `supercar-experience-porsche-gt3rs-15s-9x16.mp4` - $1,299. Four hours. - Price leads. For the viewer who wants the car and needs the figure. - hosting pending
-- `supercar-experience-porsche-gt3rs-15s-9x16-b-experience.mp4` - A ride of a lifetime. - The site's tagline. Identity over arithmetic. - hosting pending
-- `supercar-experience-porsche-gt3rs-15s-9x16-c-occasion.mp4` - Vegas this weekend? Arrive in this. - Weddings, race week, photoshoots - the uses the site names. - hosting pending
-- `supercar-experience-porsche-gt3rs-15s-9x16-d-offer.mp4` - 50% off day two. Or day three free. - The promo exactly as the site prints it. - hosting pending
-- `supercar-experience-porsche-gt3rs-15s-9x16-e-engage.mp4` - 4 hours or 24? - A question that earns comments. Not a sales CTA. - hosting pending
+- `supercar-experience-porsche-gt3rs-15s-9x16.mp4` - $1,299. Four hours. - Price leads. For the viewer who wants the car and needs the figure. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/49404380-f6e5-4228-bcd6-57a9259273d2.mp4
+- `supercar-experience-porsche-gt3rs-15s-9x16-b-experience.mp4` - A ride of a lifetime. - The site's tagline. Identity over arithmetic. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/c9ac0843-e236-48e8-ae61-8b953633a1d3.mp4
+- `supercar-experience-porsche-gt3rs-15s-9x16-c-occasion.mp4` - Vegas this weekend? Arrive in this. - Weddings, race week, photoshoots - the uses the site names. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/7b210cd7-4ce6-4803-86c7-42bd15e3e488.mp4
+- `supercar-experience-porsche-gt3rs-15s-9x16-d-offer.mp4` - 50% off day two. Or day three free. - The promo exactly as the site prints it. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/b0fce7df-9cf3-4189-8ae2-02f214300a91.mp4
+- `supercar-experience-porsche-gt3rs-15s-9x16-e-engage.mp4` - 4 hours or 24? - A question that earns comments. Not a sales CTA. - https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/3756c9f5-d526-4423-a5b8-492c266c24de.mp4
 
 ## 04 Brand and Creative Systems / Supercar Experience
 

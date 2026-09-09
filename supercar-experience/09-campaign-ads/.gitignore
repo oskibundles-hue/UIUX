@@ -6,3 +6,4 @@
 .frames/
 .measure/
 __pycache__/
+.hosting/
