@@ -1,35 +1,35 @@
 {
  "zones": {
   "bug (top 11-19%)": {
-   "mean": 121,
-   "min": 25,
-   "max": 238
+   "mean": 130,
+   "min": 56,
+   "max": 211
   },
   "mid band (40-60%)": {
-   "mean": 160,
-   "min": 106,
-   "max": 221
+   "mean": 63,
+   "min": 12,
+   "max": 115
   },
   "cta band (62-72%)": {
-   "mean": 103,
-   "min": 34,
-   "max": 193
+   "mean": 54,
+   "min": 6,
+   "max": 136
   },
   "lower third (66-80%)": {
-   "mean": 136,
-   "min": 37,
-   "max": 203
+   "mean": 57,
+   "min": 4,
+   "max": 155
   }
  },
  "decision": {
   "bug (top 11-19%)": "range too wide - scrim or move the element",
-  "mid band (40-60%)": "range too wide - scrim or move the element",
-  "cta band (62-72%)": "range too wide - scrim or move the element",
+  "mid band (40-60%)": "WHITE type / white logo",
+  "cta band (62-72%)": "WHITE type / white logo",
   "lower third (66-80%)": "range too wide - scrim or move the element"
  },
- "start": 7.0,
+ "start": 2.0,
  "dur": 15.0,
- "look": "rescue",
- "crop": "1728:3072:1056:768",
- "raw": "/tmp/claude-0/-home-user-UIUX/bca660b1-ddd0-53c0-87e3-b329cd9a583e/scratchpad/sce/mac_out.mp4"
+ "look": "none",
+ "crop": null,
+ "raw": "/tmp/claude-0/-home-user-UIUX/bca660b1-ddd0-53c0-87e3-b329cd9a583e/scratchpad/sce/mac750.mov"
 }

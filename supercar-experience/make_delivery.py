@@ -40,7 +40,7 @@ CARS = [
  ("ferrari-tempesta", "Ferrari Tempesta", "$849 / 4 hrs &middot; $1,199 / 24 hrs",
   "The car reel from its own listing on the site, 4-19s. Already graded, so no LUT on top. No corner logo - that band swings 9 to 226."),
  ("mclaren-750s-spider", "McLaren 750S Spider", "$1,299 / 4 hrs &middot; $1,799 / 24 hrs",
-  "ON HOLD. The site's video for this car is 124x224 at 468 KB - a broken upload, not a low-quality one. The cut that exists runs on a different McLaren, so it is not published."),
+  "Your own 2160x3840 master of the reel the rental listing runs, 2-17s. The site's copy of it is a broken 124x224 upload; this is the real thing."),
 ]
 HOOKS = {
  "porsche-gt3rs":       {"a-price":"$1,299. Four hours.","b-experience":"A ride of a lifetime.","c-occasion":"Vegas this weekend? Arrive in this.","d-offer":"50% off day two. Or day three free.","e-engage":"4 hours or 24?"},
@@ -56,7 +56,7 @@ def row(name, desc, size, url, pending=False):
     return f'<li class="row"><div class="f"><code>{html.escape(name)}</code><p>{html.escape(desc)}</p></div><span class="sz">{size}</span>{btn}</li>'
 
 kit_rows = [row(n, d, mb(K/"08-download-bundles"/n), gh(f"08-download-bundles/{n}")) for n,d in BUNDLES]
-HELD = {"mclaren-750s-spider"}
+HELD = set()
 
 def car_block(slug, title, price, note):
     rows = []

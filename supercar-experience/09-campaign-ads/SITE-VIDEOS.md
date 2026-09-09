@@ -35,3 +35,13 @@ the McLaren 750S Spider's is 124x224 and unusable.
 Base URL: `https://d386o6lydm3ea6.cloudfront.net/supercar-experience/videos/`
 
 70 listings, 22 distinct videos.
+
+## Omarie's own masters — better than these
+
+On 9 Sept 2026 Omarie uploaded 16 clean, unbranded clips to Dropbox at
+`Supercar Experience/01 Car Footage/`, indexed in `_INDEX.md` there. Several are
+full 4K vertical masters of the very reels this page lists, including the
+McLaren 750S Spider whose site copy is broken.
+
+**Prefer the Dropbox folder over the site.** Use a site video only when the
+folder has nothing for that car.

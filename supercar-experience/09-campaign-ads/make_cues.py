@@ -28,7 +28,7 @@ CARS = {
     "porsche-gt3rs":       dict(name="PORSCHE 911 GT3 RS", year="2025", loc="LAS VEGAS · SCOTTSDALE · BOISE", specs=None,
                                 layout="panel"),  # desert highway under open sky: bands swing 18-250
     "mclaren-750s-spider": dict(name="MCLAREN 750S SPIDER", year="2026", loc="LAS VEGAS · SCOTTSDALE",        specs=None,
-                                layout="panel"),  # midday tarmac, white car: all four bands swing 25-238
+                                layout="hud"),    # desert road, dark car: mid and CTA bands stay under 140
     "ferrari-tempesta":    dict(name="FERRARI TEMPESTA",    year="2025", loc="LAS VEGAS · SCOTTSDALE",
                                 specs="750 HP · 2.7S 0-60 · 205 MPH",
                                 layout="hud"),    # desert reel: mid/CTA/lower all under 120

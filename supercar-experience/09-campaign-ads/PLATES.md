@@ -59,25 +59,31 @@ title block instead. Same call as the Ferrari edit in the Formula Dynamics recor
 
 | | |
 |---|---|
-| Source | Dropbox `Anti Stock Media/01 Raw D-Log/2026-09-04/DJI_20260904140634_0006_D.MP4` |
-| Camera | 3840×3840 square, 60 fps, HEVC, D-Log M |
-| Window | 7 s → 22 s — rear 3/4, front 3/4, doors up, side |
-| Crop | `1728:3072:1056:768` — a 9:16 window out of the square frame, bottom-weighted so the car sits high and the tarmac carries the type |
-| Look | `rescue` (D-Log rescue only — `signature` turned the tarmac orange and the car is white) |
-| Layout | `panel` |
+| Source | Dropbox `Supercar Experience/01 Car Footage/SCE_McLaren-750S_no-branding.mov` |
+| Camera | 2160x3840, 24 fps, already graded, no on-screen branding |
+| Window | 2 s -> 17 s - front 3/4 past the rocks, wheel, the bridge, the head-on desert pass |
+| Look | `none` - already graded |
+| Layout | `hud` |
 
 ```
-bug (top 11-19%)    mean 121   range  25-238   too wide
-mid band (40-60%)   mean 160   range 106-221   too wide
-cta band (62-72%)   mean 103   range  34-193   too wide
-lower third         mean 136   range  37-203   too wide
+bug (top 11-19%)    mean 130   range  56-211   too wide -> no corner logo
+mid band (40-60%)   mean  63   range  12-115   white type
+cta band (62-72%)   mean  54   range   6-136   white type
+lower third         mean  57   range   4-155   scrimmed by the title block
 ```
 
-Midday sun on pale tarmac with a white car and a black shop doorway: every band
-swings too far for type on its own, so this car runs the `panel` layout — a
-solid card behind the copy — and the lockup under it carries its own scrim.
-That is the one place the panel needed fixing: its lockup used to sit at 0.845,
-the same line as the ticker, and the two stacked. It now sits at 0.762.
+This is the master of the reel the rental listing runs - same dark car, same
+canyon road - at full 4K vertical, so it downscales to 1080x1920 instead of
+being upscaled. It is the best source of the three.
+
+**This replaced two earlier attempts.** The first ran on Formula Dynamics shop
+footage of a white McLaren, which is a different car. The second could not be
+made at all: the video on the rental listing is 124x224 at 468 KB, a broken
+upload. Omarie supplied the master on 9 Sept and the car was unblocked.
+
+Note the layout flipped from `panel` to `hud` when the footage changed. That is
+the process working: the shop footage was midday sun on pale tarmac and needed a
+card behind the type; this one is a dark car on a dark road and does not.
 
 ## What the site can and cannot supply
 
