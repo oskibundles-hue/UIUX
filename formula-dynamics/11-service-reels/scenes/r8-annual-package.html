@@ -1,0 +1,152 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>FD R8 — Annual Service Package</title>
+<link rel="stylesheet" href="../brand.css">
+<script src="../engine.js"></script>
+
+<!--
+  COPY NOTE — this reel puts a price on screen, so every line has to survive
+  the service counter.
+
+    $3,999 / year          confirmed by the shop
+    2x oil service         OIL IS INCLUDED in the price
+    1x brake service       PADS ARE NOT INCLUDED — stated on screen, not buried
+    2x diagnostics
+    suspension work        "any suspension work" per the specials sheet
+    10% off performance upgrades
+
+  The "pads not included" line is deliberate. An exclusion the customer finds
+  out about at pickup costs more than the one they read in the ad.
+-->
+<div class="stage">
+  <div class="grid-bg" id="grid"></div>
+  <div class="glow" id="glowA" style="width:1040px;height:1040px;left:480px;top:380px;background:#FE0F13"></div>
+  <div class="glow" id="glowB" style="width:900px;height:900px;left:-260px;top:1160px;background:#1DB14B;opacity:.14"></div>
+
+  <div class="safe">
+
+    <!-- HOOK -->
+    <div class="blk" id="hook">
+      <div class="kicker" id="hookK">Annual Service Package</div>
+      <div class="h1" id="hookL1" style="margin-top:36px;">A year of</div>
+      <div class="h1" id="hookL2" style="margin-top:14px;">service,<br>bought once.</div>
+      <div class="mono" id="hookS" style="margin-top:52px;">Scheduled, priced and booked in one go</div>
+    </div>
+
+    <!-- PRICE -->
+    <div class="blk" id="price">
+      <div class="kicker" id="prK">The whole year</div>
+      <div id="prNum" class="bignum" style="margin-top:30px;">$0</div>
+      <div class="stripe big" id="prStripe" style="margin-top:34px;"><i class="s1"></i><i class="s2"></i><i class="s3"></i><i class="s4"></i><i class="s5"></i></div>
+      <div class="h2" id="prT" style="margin-top:44px;font-size:82px;">One price.<br>All year.</div>
+      <div class="mono" id="prS" style="margin-top:38px;">One car · booked once · no surprises</div>
+    </div>
+
+    <!-- WHAT IS IN IT -->
+    <div class="blk" id="inc">
+      <div class="kicker" id="inK">What's in it</div>
+      <div style="margin-top:36px;">
+        <div class="irow"><span class="q">2&times;</span>
+          <span><b class="h3">Oil service</b><i class="is">Oil included</i></span></div>
+        <div class="irow"><span class="q">1&times;</span>
+          <span><b class="h3">Brake service</b><i class="is">Labour and fluid &mdash; pads not included</i></span></div>
+        <div class="irow"><span class="q">2&times;</span>
+          <span><b class="h3">Diagnostics</b><i class="is">Full system scan</i></span></div>
+        <div class="irow"><span class="q any">Any</span>
+          <span><b class="h3">Suspension work</b><i class="is">Any suspension job, covered</i></span></div>
+        <div class="irow last"><span class="q r">10%</span>
+          <span><b class="h3">Performance upgrades</b><i class="is">10% off exhaust, tuning, wheels and aero</i></span></div>
+      </div>
+    </div>
+
+    <!-- END -->
+    <div class="blk c" id="end">
+      <img id="endLogo" src="../brandkit/fd-horizontal-white.png" style="width:660px;">
+      <div class="h2" id="endT" style="margin-top:50px;font-size:112px;">We service<br>what we<br>build.</div>
+      <div class="stripe big" id="endStripe" style="margin-top:48px;"><i class="s1"></i><i class="s2"></i><i class="s3"></i><i class="s4"></i><i class="s5"></i></div>
+      <div class="cta" id="endCta" style="margin-top:60px;"><b>Reserve Your Package</b><span class="arrow">&rarr;</span></div>
+      <div class="handle" id="endH" style="margin-top:40px;">
+        <svg class="ig" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2">
+          <rect x="2" y="2" width="20" height="20" rx="6"/><circle cx="12" cy="12" r="4.6"/>
+          <circle cx="17.6" cy="6.4" r="1.3" fill="#FFFFFF" stroke="none"/></svg>
+        <span>@formuladynamicsperformance</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="bug" id="bug" style="left:54px;top:211px;"><img src="../brandkit/fd-icon-white.png"></div>
+  <div class="vignette"></div>
+</div>
+
+<style>
+  .bignum{ font-family:'Bebas'; font-size:250px; line-height:.86; letter-spacing:1px;
+           font-variant-numeric:tabular-nums; }
+  .irow{ display:flex; gap:28px; padding:26px 0; align-items:flex-start;
+         border-top:2px solid rgba(255,255,255,.13); }
+  .irow.last{ border-bottom:2px solid rgba(255,255,255,.13); }
+  .q{ font-family:'Bebas'; font-size:46px; color:var(--fd-red); width:112px; flex:none;
+      padding-top:4px; letter-spacing:1px; }
+  .q.r{ font-size:40px; }
+  .q.any{ font-size:38px; }
+  .is{ display:block; font-style:normal; font-family:'Inter'; font-size:29px;
+       color:#8B857C; margin-top:10px; line-height:1.3; }
+</style>
+
+<script>
+const S = { HOOK:[0.30,3.40], PRICE:[3.80,7.00], INC:[7.40,12.10], END:[12.50,15.00] };
+
+defineScene({
+  duration: 15.0,
+
+  frame(t){
+    $('#grid').style.opacity = 0.5 + 0.22*Math.sin(t*0.7);
+    set($('#glowA'), { o: 0.26 + 0.10*Math.sin(t*0.85) });
+    set($('#glowB'), { o: 0.13 + 0.05*Math.cos(t*0.7) });
+
+    const chrome = p(t,0.5,1.1) * (1 - p(t, S.END[0]-0.3, S.END[0]+0.2));
+    set($('#bug'), { o: chrome, x: lerp(-30,0,p(t,0.5,1.1)) });
+
+    // ---- HOOK ----
+    const hk = band(t, S.HOOK[0], S.HOOK[1], 0.30, 0.30);
+    $('#hook').style.opacity = hk;
+    riseIn($('#hookK'),  t, 0.35, 0.45, 30);
+    riseIn($('#hookL1'), t, 0.55, 0.55, 54);
+    riseIn($('#hookL2'), t, 0.72, 0.60, 54);
+    riseIn($('#hookS'),  t, 1.30, 0.50, 30);
+    if (hk === 0) $('#hook').style.opacity = 0;
+
+    // ---- PRICE ----
+    // The number is the moment: it ramps, the stripe wipes under it, then the
+    // claim lands. Nothing else moves while it counts.
+    const pb = band(t, S.PRICE[0], S.PRICE[1], 0.30, 0.30);
+    $('#price').style.opacity = pb;
+    riseIn($('#prK'), t, S.PRICE[0]+0.05, 0.40, 26);
+    countTo($('#prNum'), t, S.PRICE[0]+0.30, 1.25, 3999,
+            v => '$' + Math.round(v).toLocaleString('en-US'));
+    set($('#prNum'), { o: p(t, S.PRICE[0]+0.25, S.PRICE[0]+0.55),
+                       y: lerp(34, 0, p(t, S.PRICE[0]+0.25, S.PRICE[0]+0.75)) });
+    wipeIn($('#prStripe'), t, S.PRICE[0]+1.55, 0.45);
+    riseIn($('#prT'), t, S.PRICE[0]+1.75, 0.55, 44);
+    riseIn($('#prS'), t, S.PRICE[0]+2.25, 0.45, 26);
+
+    // ---- WHAT'S IN IT ----
+    const ib = band(t, S.INC[0], S.INC[1], 0.30, 0.30);
+    $('#inc').style.opacity = ib;
+    riseIn($('#inK'), t, S.INC[0]+0.05, 0.40, 26);
+    $$('#inc .irow').forEach((row, i) => {
+      riseIn(row, t, S.INC[0]+0.45 + i*0.52, 0.50, 40);
+    });
+
+    // ---- END ----
+    const eb = p(t, S.END[0], S.END[0]+0.35);
+    $('#end').style.opacity = eb;
+    set($('#endLogo'), { o: p(t, S.END[0]+0.05, S.END[0]+0.50),
+                         s: lerp(0.94, 1, p(t, S.END[0]+0.05, S.END[0]+0.60)) });
+    riseIn($('#endT'), t, S.END[0]+0.30, 0.55, 46);
+    wipeIn($('#endStripe'), t, S.END[0]+0.72, 0.45);
+    set($('#endCta'), { o: p(t, S.END[0]+0.95, S.END[0]+1.30),
+                        s: lerp(0.92, 1, p(t, S.END[0]+0.95, S.END[0]+1.35, E.pop)) });
+    riseIn($('#endH'), t, S.END[0]+1.30, 0.45, 26);
+  }
+});
+</script>

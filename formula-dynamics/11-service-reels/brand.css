@@ -1,0 +1,146 @@
+/* Formula Dynamics — brand tokens
+   Authority: formula-dynamics/01-brand-core/BRAND-SPEC.md and brand-tokens.json
+   on branch claude/formula-dynamics-ad-qpuh4m. Values below are transcribed
+   from that spec, not inferred. */
+
+@font-face { font-family:'Bebas'; src:url('fonts/BebasNeue-Regular.ttf') format('truetype'); font-weight:400; }
+@font-face { font-family:'BarlowC'; src:url('fonts/BarlowCondensed-Bold.ttf') format('truetype'); font-weight:700; }
+@font-face { font-family:'BarlowC'; src:url('fonts/BarlowCondensed-Medium.ttf') format('truetype'); font-weight:500; }
+@font-face { font-family:'Inter';  src:url('fonts/Inter.ttf') format('truetype'); font-weight:100 900; }
+
+:root{
+  /* palette — the five brand colours, exactly as specified */
+  --fd-red:   #FE0F13;   /* primary accent: CTAs, key words, underlines */
+  --fd-white: #FFFFFF;   /* logo + headline on dark footage */
+  --fd-black: #000000;   /* primary background */
+  --fd-green: #1DB14B;   /* accent stripe ONLY — never a headline or ground */
+  --fd-yellow:#FFDE00;   /* accent stripe ONLY — never a headline or ground */
+
+  /* working neutrals derived from the black ground */
+  --ink:    #000000;
+  --panel:  #141416;
+  --raised: #1B1B1E;
+  --dim:    #8B857C;
+  --faint:  #5C5852;
+  --line:   rgba(255,255,255,.14);
+
+  /* canvas */
+  --W: 1080px;
+  --H: 1920px;
+
+  /* 9x16 safe zones, from brand-tokens.json safeZones.
+     Right is wider than left because Instagram's action rail lives there. */
+  --safe-top:    211px;  /* 0.11 */
+  --safe-bottom: 384px;  /* 0.20 */
+  --safe-left:    54px;  /* 0.05 */
+  --safe-right:  173px;  /* 0.16 */
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html,body{ width:var(--W); height:var(--H); overflow:hidden; background:var(--ink); }
+body{ font-family:'Inter',system-ui,sans-serif; color:var(--fd-white);
+      -webkit-font-smoothing:antialiased; text-rendering:geometricPrecision; }
+
+.stage{ position:relative; width:var(--W); height:var(--H); overflow:hidden;
+        background:var(--ink); }
+
+/* ---- type -----------------------------------------------------------
+   Bebas Neue is uppercase-only by design; set caps with slight tracking.
+   It is already condensed, so no scaleX squeeze is applied. */
+.h1{ font-family:'Bebas'; font-size:150px; line-height:.90; letter-spacing:2px;
+     text-transform:uppercase; }
+.h2{ font-family:'Bebas'; font-size:112px; line-height:.92; letter-spacing:2px;
+     text-transform:uppercase; }
+.h3{ font-family:'Bebas'; font-size:64px; line-height:1.0; letter-spacing:1.5px;
+     text-transform:uppercase; }
+.kicker{ font-family:'BarlowC'; font-weight:700; font-size:34px; letter-spacing:6px;
+         text-transform:uppercase; color:var(--fd-red); }
+.body{ font-family:'Inter'; font-weight:400; font-size:38px; line-height:1.42; color:#C9C4BC; }
+.mono{ font-family:'BarlowC'; font-weight:500; font-size:30px; letter-spacing:3.5px;
+       text-transform:uppercase; color:var(--dim); }
+
+/* ---- the accent stripe ----------------------------------------------
+   FIVE segments at the measured shares: red 36.7 / black 21.4 / white 19.4 /
+   green 17.0 / yellow 5.5. On a black ground the black segment reads as a
+   gap — that is the artwork, not a bug. Never stand it on end. */
+.stripe{ display:flex; height:12px; width:420px; }
+.stripe i{ display:block; height:100%; }
+.stripe .s1{ width:36.7%; background:var(--fd-red); }
+.stripe .s2{ width:21.4%; background:var(--fd-black); }
+.stripe .s3{ width:19.4%; background:var(--fd-white); }
+.stripe .s4{ width:17.0%; background:var(--fd-green); }
+.stripe .s5{ width: 5.5%; background:var(--fd-yellow); }
+.stripe.big{ height:18px; width:560px; }
+
+.rule{ height:6px; background:var(--fd-red); }
+
+/* ---- ground texture -------------------------------------------------- */
+.grid-bg{ position:absolute; inset:0;
+  background-image:linear-gradient(rgba(255,255,255,.026) 1px, transparent 1px),
+                   linear-gradient(90deg, rgba(255,255,255,.026) 1px, transparent 1px);
+  background-size:90px 90px; }
+.vignette{ position:absolute; inset:0; pointer-events:none;
+  background:radial-gradient(120% 80% at 50% 38%, transparent 42%, rgba(0,0,0,.72) 100%); }
+.glow{ position:absolute; border-radius:50%; filter:blur(140px); opacity:.5; }
+
+/* ---- safe-area composition ------------------------------------------- */
+.safe{ position:absolute; left:0; right:0; top:var(--safe-top); bottom:var(--safe-bottom); }
+.blk{ position:absolute; inset:0; display:flex; flex-direction:column;
+      justify-content:center; padding-left:var(--safe-left); padding-right:var(--safe-right); }
+.blk.c{ align-items:center; text-align:center;
+        padding-left:var(--safe-left); padding-right:var(--safe-left); }
+
+/* ---- overlay pack ---------------------------------------------------- */
+.bug{ position:absolute; display:flex; align-items:center; }
+.bug img{ height:96px; display:block; }
+
+.handle{ display:inline-flex; align-items:center; gap:16px;
+  background:rgba(255,255,255,.07); border:2px solid var(--line);
+  border-radius:999px; padding:18px 34px; backdrop-filter:blur(14px); }
+.handle .ig{ width:38px; height:38px; }
+.handle span{ font-family:'BarlowC'; font-weight:700; font-size:32px; letter-spacing:1.5px; }
+
+.lower{ position:absolute; display:flex; }
+.lower .bar{ width:12px; background:var(--fd-red); }
+.lower .in{ background:rgba(0,0,0,.90); backdrop-filter:blur(18px);
+  padding:26px 40px 28px; border:2px solid var(--line); border-left:none; }
+.lower .t{ font-family:'Bebas'; font-size:62px; letter-spacing:1.5px;
+  text-transform:uppercase; line-height:1; }
+.lower .s{ font-family:'BarlowC'; font-weight:500; font-size:27px; letter-spacing:3px;
+  color:var(--dim); text-transform:uppercase; margin-top:11px; }
+
+.spec{ background:rgba(20,20,22,.94); border:2px solid var(--line);
+  backdrop-filter:blur(18px); padding:34px 40px; min-width:520px; }
+.spec .hd{ font-family:'BarlowC'; font-weight:700; font-size:28px; letter-spacing:4px;
+  color:var(--fd-red); text-transform:uppercase; margin-bottom:22px; }
+.spec .row{ display:flex; justify-content:space-between; gap:40px;
+  padding:15px 0; border-top:1px solid rgba(255,255,255,.10); }
+.spec .row:first-of-type{ border-top:none; }
+.spec .k{ font-family:'BarlowC'; font-weight:500; font-size:30px; letter-spacing:2px;
+  color:var(--dim); text-transform:uppercase; }
+.spec .v{ font-family:'BarlowC'; font-weight:700; font-size:30px; letter-spacing:1px;
+  text-transform:uppercase; }
+
+.cta{ display:inline-flex; align-items:center; gap:22px; background:var(--fd-red);
+  padding:30px 52px; border-radius:4px; }
+.cta b{ font-family:'Bebas'; font-size:54px; letter-spacing:2px; text-transform:uppercase; }
+.cta .arrow{ font-family:'Bebas'; font-size:54px; }
+
+/* ---- partner URL lower-third ------------------------------------------
+   Set in our own type, never a partner logo — their marks are third-party
+   IP. Built by partner.js; see PARTNERS.md for what each brand may claim. */
+.purl{ position:absolute; display:flex; align-items:stretch; }
+.purl .pbar{ width:12px; background:var(--fd-red); flex:none;
+             transform-origin:top center; }
+.purl .pin{ background:rgba(0,0,0,.90); backdrop-filter:blur(18px);
+            border:2px solid var(--line); border-left:none;
+            padding:24px 40px 26px; }
+.purl .pname{ font-family:'Bebas'; font-size:58px; letter-spacing:2px;
+              text-transform:uppercase; line-height:1; }
+.purl .purlrow{ display:flex; align-items:center; margin-top:12px; }
+.purl .plink{ font-family:'BarlowC'; font-weight:700; font-size:34px;
+              letter-spacing:2.5px; color:var(--fd-red); text-transform:lowercase; }
+.purl .plink.caret::after{ content:'_'; color:var(--fd-red); }
+.purl .pline{ font-family:'BarlowC'; font-weight:500; font-size:26px;
+              letter-spacing:3px; color:var(--dim); text-transform:uppercase;
+              margin-top:12px; }

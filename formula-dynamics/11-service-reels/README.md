@@ -1,6 +1,7 @@
 # Service Reels — R1–R7
 
-Seven 15-second vertical service reels, one per service line. Rendered from
+Eight 15-second vertical service reels — one per service line, plus the annual
+service package. Rendered from
 HTML scenes through headless Chromium, then muxed with a sound-design bed cut
 from the FD SFX pack.
 
@@ -15,6 +16,7 @@ from the FD SFX pack.
 | R5 | 20 years / authority | "Years. One obsession." | 3.0 MB | 3.2 MB · 17 cues |
 | R6 | Forged wheels — NV Forged | "Wheels are the first thing anyone sees." | 2.7 MB | 2.9 MB · 15 cues |
 | R7 | Body kits — aero & carbon | "Aero isn't decoration." | 2.2 MB | 2.5 MB · 15 cues |
+| R8 | **Annual service package, $3,999** | "A year of service, bought once." | 1.9 MB | 2.6 MB · 17 cues |
 
 ## Two versions, on purpose
 
@@ -25,6 +27,44 @@ hand to an editor or drop into Ads Manager with a licensed music bed under them.
 impacts, key clicks, the engine one-shots — placed against the same beat times
 the scenes animate to, so every hit lands on the motion. Still no music: the bed
 is built to sit *under* a track, not to replace one. Limited to -1.5 dBTP.
+
+## R8 is the first one that carries a price
+
+R1–R7 make no price or performance claim at all, deliberately: nothing was
+verified when they were written. R8 puts **$3,999** on screen because the shop
+confirmed it, and it counts up rather than cutting in — the number is the reel's
+whole argument, so it gets the moment.
+
+Two inclusions are stated on screen rather than buried:
+
+- **Oil service — oil included.**
+- **Brake service — labour and fluid, pads not included.**
+
+That second line is unusual in an ad and it stays. An exclusion a customer
+discovers at pickup costs more than the one they read before booking.
+
+## The partner URL graphic
+
+`partner.js` mounts a lower-third carrying an exhaust manufacturer's name and
+their own public URL, typed on character by character. Facts and addresses come
+from `PARTNERS.md`, which was taken off the manufacturers' own sites.
+
+```js
+mountPartner('ryft');        // in build()
+partnerUrl(t, 6.4, 10.2);    // in frame(t)
+```
+
+Two rules it enforces by construction:
+
+- **Only on a video where that exhaust actually appears.** A URL bar on a cut
+  that doesn't feature the product is noise. R8 has no exhaust in it, so R8
+  doesn't carry one.
+- **Type, never a partner logo.** Manufacturer marks are third-party IP and are
+  not generated in this kit — `mountPartner` throws for any brand without a
+  verified entry rather than guessing a URL.
+
+Currently verified: **RYFT** (`ryft.co`) and **iPE** (`ipeofficial.com`). Larini
+and Opus have no published entry yet — see `PARTNERS.md`.
 
 ## Rebuilding
 

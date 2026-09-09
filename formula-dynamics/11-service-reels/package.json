@@ -1,0 +1,15 @@
+{
+  "name": "mr",
+  "version": "1.0.0",
+  "description": "Five business-driven vertical reels for paid Meta placement, plus a Formula Dynamics Instagram overlay pack. Everything here is **generated motion graphics** — no vlog footage is used, and none of the \"Anti Stock Media\" cut footage appears in any reel.",
+  "main": "engine.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "playwright-core": "^1.63.0"
+  }
+}

@@ -131,6 +131,26 @@ CUES = {
         ("impact_low",    12.42, 0.70), ("drone_low", 12.30, 0.20),
         ("pop",           13.12, 0.50),
     ],
+    "FD-R8-Annual-Package": [
+        ("riser_air",      0.22, 0.55),
+        ("impact_low",     0.80, 0.80),   # the hook lands
+        ("whoosh_short",   3.65, 0.50),   # into the price
+        # The count-up is the moment. A tone rises under the ramping number,
+        # then the plate hit lands exactly as it settles on 3,999 and the
+        # stripe wipes under it.
+        ("riser_tone",     4.10, 0.42),
+        ("k_impact_plate", 5.35, 0.66),
+        ("sub_drop",       5.35, 0.45),
+        ("swish_fine",     5.58, 0.40),   # "Six services. One price."
+        ("whoosh_short",   7.30, 0.50),   # into the list
+        # one tick per row, on the row's own entrance
+        ("k_click_tight",  7.85, 0.40), ("k_click_tight", 8.37, 0.40),
+        ("k_click_tight",  8.89, 0.40), ("k_click_tight", 9.41, 0.40),
+        ("k_select",       9.93, 0.46),   # the 10%-off row is the payoff
+        ("whoosh_reverse",12.15, 0.45),
+        ("impact_low",    12.52, 0.70), ("drone_low", 12.40, 0.20),
+        ("pop",           13.45, 0.50),   # CTA
+    ],
 }
 
 DURATION = 15.0
