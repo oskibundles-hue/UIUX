@@ -32,50 +32,36 @@ rebuilt.
 
 ## How one gets made
 
-Three steps, and only the first needs judgement.
+**The footage is not re-cut.** Each source clip plays whole, in its own order,
+exactly as shot. Variations change the overlay and nothing else — see
+`STYLES.md`. A montage assembled from re-ordered shots was tried and dropped: it
+made every variation a different edit, so nothing could be compared, and mixing
+cars in one cut read as a showreel rather than an ad.
 
-**1. Read the source at one-second resolution, then pick shots.**
+Two steps:
+
+**1. Survey the clip.** Read it at one-second resolution to know what is in it,
+and measure the bug corner to decide the logo:
 
 ```bash
-ffmpeg -nostdin -y -i gt3.mov -vf "fps=1,scale=150:-1,tile=10x3" -frames:v 1 sheet.png
+ffmpeg -nostdin -y -i car.mov -vf "fps=1,scale=150:-1,tile=10x3" -frames:v 1 sheet.png
 ```
 
-A sheet at two-second intervals is not precise enough — shots picked off one
-landed on the wrong frames twice. Every second, or the choice is a guess.
-
-**2. Cut the shots and concatenate, re-encoding.**
+**2. Burn the overlays on, once per style.**
 
 ```bash
-while read src st du; do
-  ffmpeg -nostdin -y -ss $st -i $src -t $du \
-    -vf "scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,fps=30,setsar=1" \
-    -c:v libx264 -crf 17 -c:a aac -video_track_timescale 30000 seg$n.mp4
-done < shots.txt
-ffmpeg -nostdin -y -f concat -safe 0 -i list.txt -c:v libx264 -crf 18 ... out.mp4
-```
-
-`-nostdin` matters: without it ffmpeg swallows the shot list and the remaining
-shots vanish silently. And **do not `-c copy` the concat** — copying segments
-whose sources have different timebases yields a file with the right duration
-and a broken frame timeline.
-
-**3. Burn the overlays on, then again with `--motion`.**
-
-```bash
-python3 ../99-toolkit/build_edit.py montage.mp4 -t service \
+python3 ../99-toolkit/build_edit.py car.mov -t service --service service \
   --title-text 'ANNUAL SERVICE|$3,999' --title-scrim \
   --title-block 'ANNUAL SERVICE PACKAGE|$3,999 PER YEAR' \
   --ticker 'OIL INCLUDED|PADS NOT INCLUDED' \
   --spec '2 OIL SERVICES' --spec '1 BRAKE SERVICE' \
   --spec '2 DIAGNOSTICS' --spec '10% OFF UPGRADES' \
-  --none badge --bitrate 9M -o out.mp4
+  --none badge --none bug --bitrate 9M -o out.mp4
 ```
 
-The `--motion` pass is a separate deliverable, not a replacement — the plain
-cut still ships. Always `--dry-run` first; the cue sheet is where the problems
-are visible.
-
----
+Add `--motion` for the sound-designed version — a separate deliverable, not a
+replacement. Always `--dry-run` first; the cue sheet is where the problems are
+visible.
 
 ## What we learned building these
 
