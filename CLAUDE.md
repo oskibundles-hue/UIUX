@@ -96,3 +96,28 @@ Never push directly to `main`. Always:
 2. Commit changes
 3. Push branch: `git push -u origin <branch>`
 4. Create PR: `gh pr create`
+
+---
+
+# Omarie's video work (read this first)
+
+This repo is also the working home for Omarie Young's short-form video editing. That work has nothing to do with the Antigravity Kit above; it lives in `creator-kit/`. If the session is about footage, reels, grading, captions or delivery, this section applies and the toolkit sections do not.
+
+**Read these before starting:**
+
+- `creator-kit/WORKFLOW.md` — the pipeline, looks, caption styles, voice matching, and hard-won gotchas.
+- `creator-kit/DELIVERY.md` — every hosted file with its link, grouped by series.
+- Dropbox, `/Anti Stock Media/00 PROJECT MEMORY (backup until Oct 1).md` — the full standing brief: the approved recipe in detail, connector policy, Dropbox layout, open items. Claude's memory store is full until 1 October, so that file is the source of truth in the meantime.
+
+**The approved reel format is the "Fast Cut" recipe.** Under 60 seconds, 4K vertical 2160x3840 at 29.97 fps, hook line plus auto-fitting title, first shot 3.0 s then 4.5 s or less, vlog grade at 85% match, captions uniform at 70.5% frame height in Archivo 800 with no gold pill and no oversized key word, Formula Dynamics red `#DE1A22` with gold `#FBD101`, only Omarie's voice captioned via `creator-kit/voice/omarie_profile.json`, card outro, no call to action, -14 LUFS with a 0.84 limiter. The older "pop" caption style is superseded; do not use it.
+
+**Standing rules:**
+
+- Never push to `main`. Work on `claude/instagram-growth-video-editing-rswexx`.
+- Ask before any Dropbox change that moves, renames or deletes.
+- Report token usage after each task.
+- New concepts get a NEW artifact page. Never overwrite an old one; he keeps them to compare.
+- Deliver files through the Downloads page, not raw links: https://claude.ai/code/artifact/fb14668e-2db5-4cf4-9e6c-ae9df97b0d82 (rebuilt by `motion2/make_hub.py` from DELIVERY.md).
+- Write to memory only at end of day, listed first and approved by him.
+
+**Known limitation:** the Dropbox connector writes text files but not video, and this environment cannot reach Dropbox's upload page. Video is handed over as links.
