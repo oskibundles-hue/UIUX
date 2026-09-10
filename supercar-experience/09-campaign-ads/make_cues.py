@@ -54,13 +54,13 @@ def beats(T):
 
 def variants(slug):
     c = CARS[slug]; f = B.FLEET[slug]
-    # Two rates, and each one carries the city it belongs to. The 4-hour rate is
-    # a Las Vegas rate; /locations/scottsdale lists a day rate only. Printing the
-    # 4-hour figure on a Scottsdale-labelled ad without naming Las Vegas beside it
-    # would advertise a booking Scottsdale does not sell.
+    # Both rates, no city on either. The 4-hour figure is the Las Vegas rate and
+    # /locations/scottsdale lists a day rate only, so these two lines come from
+    # different location pages. Omitting the cities is the client's call: one
+    # company, one price list, and the ads carry Scottsdale as the location.
     p4, day = money(f["hr4"]), money(f["hr24"])
-    hrs_row = ["4 HRS · LAS VEGAS", p4]
-    day_row = ["FULL DAY · SCOTTSDALE", day]
+    hrs_row = ["4 HOURS", p4]
+    day_row = ["FULL DAY", day]
     req = ["21+", "LICENSE · INSURANCE"]
     call = ["TO BOOK", f"CALL {B.PHONE}"]
     spec_row = ["THE CAR", c["specs"]] if c["specs"] else ["THE CAR", f"{c['year']} {c['name']}"]
@@ -70,7 +70,7 @@ def variants(slug):
              build=f"FROM {p4} / 4 HRS", hook=[f"{p4}.", "FOUR HOURS."],
              heading="THE DEAL",
              rows=[["01", *hrs_row], ["02", *day_row], ["03", "DAY TWO", "50% OFF"], ["04", *call]],
-             src="4-hour rate from the Las Vegas listing; day rate and phone from supercarexp.vip/locations/scottsdale."),
+             src="4-hour rate from the car's Las Vegas listing; day rate and phone from supercarexp.vip/locations/scottsdale."),
         dict(variant="b-experience", cta="booking_reserve-your-ride",
              angle="Experience. The site's own tagline; identity over arithmetic.",
              build="A RIDE OF A LIFETIME", hook=["A RIDE OF", "A LIFETIME."],
@@ -95,7 +95,7 @@ def variants(slug):
              build="FOUR HOURS OR ALL DAY", hook=["FOUR HOURS", "OR ALL DAY?"],
              heading="YOU PICK",
              rows=[["01", *hrs_row], ["02", *day_row], ["03", "WHICH ONE?", "COMMENT BELOW"], ["04", *req]],
-             src="Both rates as listed: 4 hours in Las Vegas, the day rate in Scottsdale."),
+             src="Both rates as listed on supercarexp.vip: the 4-hour rate and the day rate."),
     ]
 
 def make(slug, v, T=DEFAULT_T):
