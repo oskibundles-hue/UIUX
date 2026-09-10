@@ -35,6 +35,44 @@ Each has a matching `-SFX` file. **Post the SFX version** — the sound sits on
 the animation's own beats and carries no music, so a licensed track drops under
 it cleanly.
 
+## Every panel earns its place
+
+Learned the hard way, in this order:
+
+**The panel is glass, and the blur is what breaks it.** It read as a black box
+laid over the car, but measured on a frame it sat only 11 shades darker than the
+picture above it — the car had vanished because `boxblur=20:2` destroyed the
+shape, not because the plate was dark. At 7:1 with a light tint the body line,
+the road and the grille mesh all read through. Legibility moved to the type,
+which carries its own shadow now.
+
+**The label is sized against the room left, not a fraction of the box.** A price
+overflowed the glass by up to 21px, hanging the digits onto raw picture and into
+the red rule. Capped against `h - pad - kicker - gap - rule clearance` nothing
+can outgrow its container, and the box grows upward to 240 so a figure still
+gets 128px and a word up to 92px.
+
+**No layer repeats another.** Every ad used to name the service twice — panel on
+top, title block underneath. Each layer has one job:
+
+| Layer | Job |
+|---|---|
+| Title block, persistent | Names the service and makes the argument |
+| Panels, transient | The line items and the price — what the block does not say |
+| Ticker, persistent | The terms and the properties |
+
+The annual package is the one deliberate exception: `ANY OIL SERVICE / ANY BRAKE
+SERVICE / ANY SUSPENSION WORK / ANY DIAGNOSTIC` is a list, the repetition is the
+argument, and none of it repeats the block.
+
+**Panel count follows clip length, always off the dry run.** Four panels on the
+21.8 s Urus gave 1.27 s each, under what can be read on a phone; it takes three.
+The 31.8 s Ferrari 296 carries four at 2.80 s. Read it before choosing the car.
+
+**The line items are on record.** See `../SERVICE-LINE-ITEMS.md` — the shop
+asked for invented detail, so roughly twelve of the entries now on screen are
+written rather than sourced, and that file says which is which.
+
 ## The annual ad was rebuilt
 
 `../superseded/FD-Annual-Service-3999-v1-price-in-hook.mp4` opened on
