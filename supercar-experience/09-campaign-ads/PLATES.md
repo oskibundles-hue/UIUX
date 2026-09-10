@@ -85,48 +85,43 @@ Note the layout flipped from `panel` to `hud` when the footage changed. That is
 the process working: the shop footage was midday sun on pale tarmac and needed a
 card behind the type; this one is a dark car on a dark road and does not.
 
-## Fall Rally 2026 — a montage, not a plate
+## Fall Rally 2026 - a montage, not a plate
 
 | | |
 |---|---|
-| Source | six clips from Dropbox `Supercar Experience/01 Car Footage/` |
-| Built by | `make_montage.py`, not `make_plate.py` |
-| Length | 18 s — six cuts of 3 s |
-| Look | `none` — every clip is already graded |
+| Source | Dropbox `Supercar Experience/02 Rally Footage/` - the client's own rally videos |
+| Camera | 2160x3840 vertical, 60 fps, 24-bit audio, already graded |
+| Look | `none` |
 | Layout | `panel` |
 
-Cut order, and why:
+Seven cuts, built by `make_montage.py`. Every band measures "too wide" (the mid
+band swings 52-215), which is what the card is for.
 
-| # | Clip | In | Why here |
-|---|---|---|---|
-| 1 | Urus | 0.0 | Two cars on a desert road. A rally is a convoy, so the first frame says so. |
-| 2 | Tempesta (Roma) | 12.0 | Red car on open road, sun low. |
-| 3 | SF90 gold | 2.5 | Highway roll, different colour and direction from cut 2. |
-| 4 | F8 Tributo black | 0.0 | Black against pale sky, the strongest contrast in the set. |
-| 5 | SF90 gold | 20.0 | Gold car through poppies at golden hour — the best image in the folder, so the CTA beat lands on it. |
-| 6 | Mixed fleet | 7.5 | Runs under the end card, so it carries the least. |
+| # | Clip | In | Dur | Why here |
+|---|---|---|---|---|
+| 1 | Day 1 | 2.0 | 2.5 | Aerial of the field parked up. Opens on the whole convoy. |
+| 2 | Recap | 12.4 | 2.0 | Aerial, red car on a tree-lined road. Lands under the hook. |
+| 3 | Day 2 | 12.5 | 3.0 | Two cars running the desert highway. |
+| 4 | Day 1 | 7.0 | 3.0 | RYFT car, close. |
+| 5 | Day 3 | 8.0 | 3.0 | Orange car, hero angle. |
+| 6 | Day 3 | 4.5 | 3.0 | Carries the CTA beat. |
+| 7 | Day 2 | 5.0 | 1.5 | Runs under the end card, so it carries the least. |
 
-```
-bug (top 11-19%)    mean 181   range  88-250   too wide -> no corner logo
-mid band (40-60%)   mean 100   range  50-178   white with shadow
-cta band (62-72%)   mean  68   range   8-121   white type
-lower third         mean  69   range  15-119   white type
-```
+**The captions are the constraint.** Every source clip has burned-in titles - a
+day number and a city, e.g. `Day 2 / SEDONA TO SCOTTSDALE`, and in the recap a
+place name like `SCOTTSDALE` mid-frame. They sit where our own type goes, so
+every window above is chosen to miss them. Check any new window before using it:
+the day clips caption roughly 0-2s and again 2.5-5s, the recap on each new city.
 
-A montage cuts under the type every three seconds, so the copy sits on the
-`panel` card regardless of what any single band measures.
+**The recap cuts fast.** It is a vlog edit, so a 3s window usually contains
+three shots and most of them are people rather than cars. Sample at half-second
+steps before trusting a window; sampling at 3s intervals will mislead you.
 
-**Cut 5 was moved on purpose.** In the first assembly the poppy-field shot was
-last, which put it almost entirely behind the end card. Swapping cuts 5 and 6
-puts it under the call to action instead.
-
-Rebuild it with:
-
-```bash
-python3 make_montage.py --car fall-rally --fps 30 \
-    --clip "<file>@<in>:<dur>" ...     # repeat, in cut order
-python3 make_plate.py --car fall-rally --measure-only --dur 18
-```
+**The route does not match the ad.** This footage is the 1st Annual Rally, which
+ran Las Vegas to Sedona to Scottsdale to Palm Springs. The Fall Rally 2026 the
+ads sell runs Las Vegas, San Diego, Santa Barbara, Las Vegas. Using last year's
+footage to sell this year's event is ordinary, but the `c-occasion` variant
+prints the route as four rows, so that one is the odd pairing.
 
 ## Ferrari F8 Tributo
 

@@ -1,34 +1,34 @@
 {
  "zones": {
   "bug (top 11-19%)": {
-   "mean": 181,
-   "min": 88,
-   "max": 250
+   "mean": 143,
+   "min": 4,
+   "max": 231
   },
   "mid band (40-60%)": {
-   "mean": 100,
-   "min": 50,
-   "max": 178
+   "mean": 107,
+   "min": 52,
+   "max": 215
   },
   "cta band (62-72%)": {
-   "mean": 68,
-   "min": 8,
-   "max": 121
+   "mean": 98,
+   "min": 25,
+   "max": 211
   },
   "lower third (66-80%)": {
-   "mean": 69,
-   "min": 15,
-   "max": 119
+   "mean": 104,
+   "min": 19,
+   "max": 209
   }
  },
  "decision": {
   "bug (top 11-19%)": "range too wide - scrim or move the element",
-  "mid band (40-60%)": "white, with shadow",
-  "cta band (62-72%)": "WHITE type / white logo",
-  "lower third (66-80%)": "WHITE type / white logo"
+  "mid band (40-60%)": "range too wide - scrim or move the element",
+  "cta band (62-72%)": "range too wide - scrim or move the element",
+  "lower third (66-80%)": "range too wide - scrim or move the element"
  },
  "start": 0.0,
- "dur": 18.0,
+ "dur": 15.0,
  "look": "golden",
  "crop": null,
  "raw": null
