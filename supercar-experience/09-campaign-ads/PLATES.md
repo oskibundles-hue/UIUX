@@ -234,6 +234,17 @@ footage exists.
 There is also a Rally reel on the site, `supercar-experience-presents-the-rally`,
 15 MB — enough for a Rally spot when one is wanted.
 
+## Audio
+
+Plates carry the source audio. `make_plate.py` and `make_montage.py` used to pass
+`-an`, which stripped it, so every ad rendered silent even though `build_ad.py`
+was already mapping `0:a?` and encoding AAC. Every master has a track, most of
+them 24-bit, and the rendered ads now measure between -7 and -19 dB mean.
+
+That spread is the masters' own, not something the pipeline introduces. Nothing
+here normalises loudness; if the set ever needs to be level-matched, do it as a
+pass over the finished files rather than by touching the plates.
+
 ## Rebuilding a plate
 
 ```bash
