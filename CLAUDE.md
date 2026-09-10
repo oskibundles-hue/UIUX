@@ -101,23 +101,49 @@ Never push directly to `main`. Always:
 
 # Omarie's video work (read this first)
 
-This repo is also the working home for Omarie Young's short-form video editing. That work has nothing to do with the Antigravity Kit above; it lives in `creator-kit/`. If the session is about footage, reels, grading, captions or delivery, this section applies and the toolkit sections do not.
+This repo is the working home for Omarie Young's video work. It is unrelated to the Antigravity Kit above. If the session is about footage, reels, ads, grading, captions or delivery, this section applies and the toolkit sections do not.
 
-**Read these before starting:**
+There are **three separate workstreams**. Establish which one you are in before touching anything, because they use different pipelines, different branches and different brand rules.
 
-- `creator-kit/WORKFLOW.md` — the pipeline, looks, caption styles, voice matching, and hard-won gotchas.
-- `creator-kit/DELIVERY.md` — every hosted file with its link, grouped by series.
-- Dropbox, `/Anti Stock Media/00 PROJECT MEMORY (backup until Oct 1).md` — the full standing brief: the approved recipe in detail, connector policy, Dropbox layout, open items. Claude's memory store is full until 1 October, so that file is the source of truth in the meantime.
+| workstream | who for | lives in | branch |
+|---|---|---|---|
+| Anti Stock | Omarie's own channel, @nq.young | `creator-kit/` | `claude/instagram-growth-video-editing-rswexx` |
+| Formula Dynamics | client, luxury car shop | `formula-dynamics/` | `claude/formula-dynamics-assets-bnlnkm` |
+| Supercar Experience | client, fleet rentals | see its own index | `claude/skills-download-ai3m6a` |
 
-**The approved reel format is the "Fast Cut" recipe.** Under 60 seconds, 4K vertical 2160x3840 at 29.97 fps, hook line plus auto-fitting title, first shot 3.0 s then 4.5 s or less, vlog grade at 85% match, captions uniform at 70.5% frame height in Archivo 800 with no gold pill and no oversized key word, Formula Dynamics red `#DE1A22` with gold `#FBD101`, only Omarie's voice captioned via `creator-kit/voice/omarie_profile.json`, card outro, no call to action, -14 LUFS with a 0.84 limiter. The older "pop" caption style is superseded; do not use it.
+**One index for everything delivered:** https://claude.ai/code/artifact/c2501ca3-40ac-4b1d-833e-1b7c98f9abad — 79 files across Anti Stock and Formula Dynamics, with save paths. Supercar Experience is deliberately indexed separately at https://claude.ai/code/artifact/9bca62e7-2acb-437d-af68-da260daf2fdb so the two clients cannot drift. Do not start a third index.
 
-**Standing rules:**
+## Anti Stock — the personal channel
 
-- Never push to `main`. Work on `claude/instagram-growth-video-editing-rswexx`.
+Pipeline is `creator-kit/`: cut and grade with `cut_clip.sh`, transcribe, match his voice, plan shots, render overlays in Remotion, compose with ffmpeg. Read `creator-kit/WORKFLOW.md` and `creator-kit/DELIVERY.md` first.
+
+**The approved format is the Fast Cut recipe.** Under 60 s, 4K vertical 2160x3840 at 29.97 fps, hook line plus auto-fitting title, first shot 3.0 s then 4.5 s or less, vlog grade at 85% match, captions uniform at 70.5% frame height in Archivo 800 with no gold pill and no oversized key word, only Omarie's voice captioned via `creator-kit/voice/omarie_profile.json`, card outro, no call to action, -14 LUFS with a 0.84 limiter. The older "pop" caption style is superseded.
+
+**Open defect:** the eight delivered reels use `#DE1A22` as the Formula Dynamics red. The real brand red, measured off Omarie's own overlay pack and confirmed by the FD brand kit, is `#FE0F13`. Fix `RED` in `creator-kit/remotion/src/Motion.tsx` before the next build, and re-render the series when he asks.
+
+**Open defect:** caption coverage is low on three reels — MR4 at 18% of speech, MR3 at 51%, MR6 at 53%. On muted autoplay that is most of the dialogue lost. The cause is the his-voice filter dropping other speakers; the fix is more of his own speech in the window, not looser voice matching.
+
+## Formula Dynamics — client ads
+
+Completely different pipeline. **Pillow plus ffmpeg, not Remotion**, driven by `99-toolkit/build_all.py` from one constants file, `fd_brand.py`. Overlays render as full-frame PNGs and burn onto cue windows. A Remotion project exists only as a cross-check; do not make it the pipeline.
+
+- Brand red `#FE0F13`. The accent stripe has **five** segments: red 36.7%, black 21.4%, white 19.4%, green 17.0%, yellow 5.5%.
+- Measure before choosing. Sample luminance under a graphic's own zone across the whole clip and pick tone from the range, not the mean.
+- Verify a composited still before rendering. Every anchor error in that project was caught or missed at that step.
+- Keep-out zones on 9:16: top 11%, bottom 20%, right 16%, left 5%.
+- Partner logos (NV Forged, iPE, RYFT) are their property and are deliberately not generated.
+- Only put a performance figure on screen if it can be substantiated. The McLaren 765LT cut is **on hold** because its counter carries invented placeholder figures.
+
+Full engineering record, fault log and cue timelines: https://claude.ai/code/artifact/ac280c47-c977-4500-a946-d8d22e8eb58c
+
+## Standing rules, all workstreams
+
+- Never push to `main`. Use the workstream's own branch.
 - Ask before any Dropbox change that moves, renames or deletes.
 - Report token usage after each task.
-- New concepts get a NEW artifact page. Never overwrite an old one; he keeps them to compare.
-- Deliver files through the Downloads page, not raw links: https://claude.ai/code/artifact/fb14668e-2db5-4cf4-9e6c-ae9df97b0d82 (rebuilt by `motion2/make_hub.py` from DELIVERY.md).
+- New concepts get a NEW artifact page; never overwrite one he keeps for comparison. But do not create a second index of the same thing.
+- Archive, never delete. Superseded cuts stay reachable with a note saying what replaced them.
 - Write to memory only at end of day, listed first and approved by him.
+- Claude's memory store is full until 1 October. Until then the standing brief is Dropbox, `/Anti Stock Media/00 PROJECT MEMORY (backup until Oct 1).md`.
 
-**Known limitation:** the Dropbox connector writes text files but not video, and this environment cannot reach Dropbox's upload page. Video is handed over as links.
+**Known limitation:** the Dropbox connector writes text but not video, and this environment cannot reach Dropbox's upload page. Video is handed over as links or attached in chat.
