@@ -97,6 +97,46 @@ Never push directly to `main`. Always:
 3. Push branch: `git push -u origin <branch>`
 4. Create PR: `gh pr create`
 
+## Working Style
+
+Standing instructions from the shop, not preferences.
+
+**Take a list one item at a time** when asked to. Deliver the first item, show
+it, wait. A batch of six changes lands as six things to argue with at once.
+
+**Fact-check before building, and measure rather than remember.** Frame
+timestamps, text widths against the Instagram action rail, panel hold times off
+the dry run, brightness before choosing a logo tone. A number read off the file
+beats a number recalled from an earlier session every time.
+
+**Say when the ask and the facts disagree.** "Any oil service" next to a package
+price reads as unlimited when the package is two. Flag it, propose wording that
+keeps the shop's voice and stays true, and keep building — do not silently
+"correct" their language or silently ship the overreach.
+
+**Give an opinion.** Which cut is stronger, which line is weaker, what you would
+drop. Say it plainly with the reason, then do what they decide.
+
+**Cross-reference before starting.** The copy rules, the approved settings, the
+partner file, prior sessions' artifacts. A new ad starts from an approved ad's
+settings, never from scratch.
+
+**Improve the prompt when it helps.** If a request would come out better stated
+a different way, say so and use the better version — do not just execute a
+looser reading in silence.
+
+## Ad Copy Order
+
+**Benefit first, price late, never in the opening.** A price in the hook filters
+people out before the value is made. Lead with what the service does for the car
+— keeps it dependable, reliable, up to date — then name the work, then the ask.
+For a high-ticket package, a DM-for-pricing CTA converts better than a figure on
+screen: it lets the shop sell instead of letting the number decide.
+
+**One service, one ad.** Each service earns its own cut with its own reason to
+care — brake service is about stopping, suspension about how it rides. A bundle
+ad and a single-service ad are different jobs, and both exist.
+
 ## Artifact Conventions
 
 Keep the "fast cut" look: dark ground, Bebas Neue display, Barlow body, IBM Plex
