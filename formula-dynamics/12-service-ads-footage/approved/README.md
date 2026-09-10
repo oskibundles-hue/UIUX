@@ -7,15 +7,46 @@ are in `../COPY-RULES.md`.
 All 1080×1920, footage untouched and in its own order, frosted-glass panels,
 no corner logo, plain and `-SFX` (sound-designed) versions.
 
-| File | Service | Length | State |
+Every file is mastered to **-14 LUFS / -1 dBTP, stereo, 48 kHz** — run
+`99-toolkit/fd_master.py` over a delivery folder before it goes out.
+
+### One service, one ad
+
+| File | Service | Car | Length |
 |---|---|---|---|
-| `FD-Annual-Service-3999.mp4` | Annual service package, $3,999 | 22.2 s | **Approved** |
-| `Roma-FullCarPPF.mp4` | Full car PPF | 25.7 s | **Approved** |
-| `GT3RS-WindshieldPPF.mp4` | Windshield PPF, $899 | 28.7 s | **Approved** |
-| `Aventador-FreeTune.mp4` | Free ECU tune | 14.0 s | **Approved** |
-| `SF90-Service-Pricing.mp4` | Oil $1,199 · Brake $499 · Diagnostics $499 | 22.2 s | **Approved** |
-| `Roma-FreeTune-RYFT.mp4` | Free ECU tune, RYFT named on screen | 25.7 s | **Approved** |
-| `Urus-GradientPPF.mp4` | Custom gradient PPF | 21.8 s | **Approved** |
+| `FD-Annual-Service-3999.mp4` | Annual package, $3,999 | Ferrari SF90 | 22.2 s |
+| `GT3RS-BrakeService.mp4` | Brake service, $499 | Porsche 911 GT3 RS | 28.7 s |
+| `Ferrari296-OilService.mp4` | Oil service, $1,199 | Ferrari 296 | 31.8 s |
+| `Roma-Suspension.mp4` | Suspension work | Ferrari Roma | 25.7 s |
+| `Urus-Diagnostics.mp4` | Diagnostics, $499 | Mansory Urus | 21.8 s |
+
+### PPF and tuning
+
+| File | Service | Car | Length |
+|---|---|---|---|
+| `Roma-FullCarPPF.mp4` | Full car PPF, ceramic included | Ferrari Roma | 25.7 s |
+| `GT3RS-WindshieldPPF.mp4` | Windshield PPF $899, headlights free | GT3 RS | 28.7 s |
+| `Urus-GradientPPF.mp4` | Custom gradient PPF | Mansory Urus | 21.8 s |
+| `Roma-FreeTune-RYFT.mp4` | Free tune, RYFT named | Ferrari Roma | 25.7 s |
+| `Aventador-FreeTune.mp4` | Free tune, offer only | Aventador S | 14.0 s |
+| `SF90-Service-Pricing.mp4` | Oil / brake / diagnostics prices | Ferrari SF90 | 22.2 s |
+
+Each has a matching `-SFX` file. **Post the SFX version** — the sound sits on
+the animation's own beats and carries no music, so a licensed track drops under
+it cleanly.
+
+## The annual ad was rebuilt
+
+`../superseded/FD-Annual-Service-3999-v1-price-in-hook.mp4` opened on
+**ANNUAL SERVICE / $3,999** — a price in the first three seconds, which filters
+people out before the value is made. The current cut opens on
+**KEEP YOUR EXOTIC / UP TO DATE**, names the four services as *any oil service,
+any brake service, any suspension work, any diagnostic*, and lands the figure on
+the fifth panel at 13.5 s.
+
+The counts moved to the ticker, because "any oil service" beside a package price
+reads as unlimited when the package is two. The panels keep the shop's word and
+the ticker keeps it true.
 
 ## Two ways to sell the same tune
 

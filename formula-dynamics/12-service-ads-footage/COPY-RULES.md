@@ -120,14 +120,21 @@ long ones were width-bound anyway.
 
 | Ad | State |
 |---|---|
-| Annual service $3,999 · SF90 | **Approved** |
+| Annual service $3,999 · SF90 | **Approved** (rebuilt, benefit-led) |
+| Brake service $499 · GT3 RS | **Approved** |
+| Oil service $1,199 · Ferrari 296 | **Approved** |
+| Suspension · Roma | **Approved** |
+| Diagnostics $499 · Mansory Urus | **Approved** |
 | Full car PPF · Roma | **Approved** |
 | Windshield PPF $899 · GT3 RS | **Approved** |
-| Free tune · Aventador | **Approved** |
-| Service pricing — oil / brake / diagnostics · SF90 | **Approved** |
-| Free tune, RYFT named · Roma | **Approved** |
 | Custom gradient PPF · Mansory Urus | **Approved** |
+| Free tune, RYFT named · Roma | **Approved** |
+| Free tune · Aventador | **Approved** |
+| Service pricing · SF90 | **Approved** |
 | Service posters (4) | **Approved** |
+
+Eleven ads across nine services, plus four posters. Anything new starts from an
+approved ad's settings, not from scratch.
 
 All eight are finished products, signed off 9 Sept 2026. Anything new for these
 services starts from their settings, not from scratch. The download sheet lives
