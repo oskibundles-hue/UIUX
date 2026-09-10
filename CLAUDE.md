@@ -125,6 +125,18 @@ settings, never from scratch.
 a different way, say so and use the better version — do not just execute a
 looser reading in silence.
 
+## Retired For Good
+
+**The pure motion-graphic reels are dead.** The R1–R8 series in
+`formula-dynamics/11-service-reels/renders/` was built when there was no car
+footage to cut against. There is footage now, and the shop's verdict on the
+reels is that they are useless. Do not offer them, do not include them in a
+download sheet or a send-to-boss folder, do not suggest re-rendering them. They
+stay on disk as history and nothing more.
+
+The service-ad system that replaced them is `12-service-ads-footage/`: the
+shop's own video with the graphic set burned onto it.
+
 ## Ad Copy Order
 
 **Benefit first, price late, never in the opening.** A price in the hook filters
