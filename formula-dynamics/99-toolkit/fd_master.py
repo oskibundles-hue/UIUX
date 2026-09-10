@@ -77,10 +77,17 @@ def master(path, out=None):
     before_i, before_tp = st["input_i"], st["input_tp"]
     dest = Path(out) if out else path.with_suffix(".mastered.mp4")
 
+    # loudnorm in linear mode applies a flat gain and does NOT limit, so a file
+    # whose measured true peak was optimistic can still land above 0 dBFS - two
+    # did, at +1.7 and +0.5. A brick-wall limiter after it makes the ceiling
+    # real. It only ever pulls peaks down, so the integrated level it was just
+    # set to survives.
+    ceiling = 10 ** (TARGET_TP / 20.0)
     af = (f"loudnorm=I={TARGET_I}:TP={TARGET_TP}:LRA={TARGET_LRA}"
           f":measured_I={st['input_i']}:measured_TP={st['input_tp']}"
           f":measured_LRA={st['input_lra']}:measured_thresh={st['input_thresh']}"
-          f":offset={st['target_offset']}:linear=true:print_format=summary")
+          f":offset={st['target_offset']}:linear=true:print_format=summary,"
+          f"alimiter=limit={ceiling:.4f}:attack=5:release=50:level=disabled")
 
     subprocess.run(
         [ffmpeg(), "-nostdin", "-y", "-i", str(path),
