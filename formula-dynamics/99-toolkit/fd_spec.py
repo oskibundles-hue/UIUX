@@ -168,7 +168,12 @@ def build(style, canvas, label, n=1, total=1, tone="dark"):
 # One fixed rectangle for the whole run, so four specs read as one component
 # changing its contents rather than four different objects. It stops short of
 # x=904 because Instagram's action rail starts at 907.
-PANEL_BOX = (54, 1104, 850, 210)
+# The box grows UPWARD from a fixed bottom edge. At 210 tall, once the label is
+# capped against the room genuinely left under the kicker, a price could only
+# reach 98px and a word 70px - smaller than before, which is the wrong trade.
+# 240 gives the figure 128px and a word 92px with real clearance under both,
+# and holding the bottom edge at 1314 preserves the 40px gap to the title block.
+PANEL_BOX = (54, 1074, 850, 240)
 
 
 def split_label(text, default="INCLUDED"):
@@ -196,21 +201,27 @@ def panel(canvas, label, kicker="INCLUDED", tone="dark"):
     """
     im = _canvas(canvas)
     x, y, w, h = PANEL_BOX
-    pad = 34
+    # rule_room is generous because fit_text reports a box, not ink: a figure
+    # sized to the last available pixel still landed 1px off the red rule.
+    pad, gap, rule_room = 34, 18, 52
     ink = B.WHITE if tone == "dark" else B.BLACK
 
     k = R.text(kicker, 26, B.RED, tracking=0.26)
-    R.paste(im, R.with_shadow(k), x + pad, y + pad)
 
-    # A figure is the payoff of the panel it sits in, so it is allowed to be
-    # taller than a word. Everything is capped at 0.44 of the panel, which put
-    # "$499" at exactly the same 91px as "FULL DIAGNOSTIC" - the pricing ad was
-    # documented as setting the figure large and never actually did. A price
-    # gets 0.62; words keep the old cap, and long ones are width-bound anyway.
-    cap = 0.62 if label.strip().startswith("$") else 0.44
-    word = R.fit_text(label, w - pad * 2, max_height=int(h * cap),
+    # The label is capped against the room actually LEFT under the kicker, not
+    # against a fraction of the whole box. Capping at a fraction let a price -
+    # which is allowed to be taller than a word, because a figure is the payoff
+    # of the panel it sits in - overflow the glass by up to 21px, hanging the
+    # digits onto raw picture and into the red rule beneath them.
+    room = h - pad - k.height - gap - rule_room
+    cap = room if label.strip().startswith("$") else int(room * 0.72)
+    word = R.fit_text(label, w - pad * 2, max_height=cap,
                       color=ink, tracking=0.03)
-    R.paste(im, R.with_shadow(word), x + pad, y + pad + k.height + 20)
+
+    # Top-aligned, never centred: the panels replace each other inside one
+    # fixed rectangle, so the kicker has to land on the same line every time.
+    R.paste(im, R.with_shadow(k), x + pad, y + pad)
+    R.paste(im, R.with_shadow(word), x + pad, y + pad + k.height + gap)
 
     # a short red rule along the panel's bottom edge, the only furniture
     d = ImageDraw.Draw(im)
