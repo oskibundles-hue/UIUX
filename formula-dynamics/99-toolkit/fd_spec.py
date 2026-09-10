@@ -200,7 +200,7 @@ def panel(canvas, label, kicker="INCLUDED", tone="dark"):
     ink = B.WHITE if tone == "dark" else B.BLACK
 
     k = R.text(kicker, 26, B.RED, tracking=0.26)
-    R.paste(im, k, x + pad, y + pad)
+    R.paste(im, R.with_shadow(k), x + pad, y + pad)
 
     # A figure is the payoff of the panel it sits in, so it is allowed to be
     # taller than a word. Everything is capped at 0.44 of the panel, which put
@@ -210,7 +210,7 @@ def panel(canvas, label, kicker="INCLUDED", tone="dark"):
     cap = 0.62 if label.strip().startswith("$") else 0.44
     word = R.fit_text(label, w - pad * 2, max_height=int(h * cap),
                       color=ink, tracking=0.03)
-    R.paste(im, word, x + pad, y + pad + k.height + 20)
+    R.paste(im, R.with_shadow(word), x + pad, y + pad + k.height + 20)
 
     # a short red rule along the panel's bottom edge, the only furniture
     d = ImageDraw.Draw(im)

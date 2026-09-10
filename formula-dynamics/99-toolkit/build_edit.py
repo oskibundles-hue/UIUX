@@ -346,14 +346,20 @@ def filter_graph(cues, width, height):
         # darken it, then put it straight back. The result moves with the
         # footage, which is the whole point - a drawn plate cannot, and a
         # bordered chip reads as something stuck on top.
+        # Glass, not a black box. boxblur=20:2 smeared the car inside the
+        # rectangle to nothing - the panel measured only 11 shades darker than
+        # the picture above it, yet the car had vanished, because it was the
+        # BLUR destroying the shape rather than the darkness hiding it. 7:1
+        # keeps the car readable through the panel; the type carries a shadow
+        # of its own instead of relying on the plate being dark.
         fr = c.get("frost")
         if fr:
             fx, fy, fw, fh = fr
             fade = min(0.30, dur / 4)
             parts.append(f"[{last}]split=2[fb{i}][fc{i}]")
             parts.append(
-                f"[fc{i}]crop={fw}:{fh}:{fx}:{fy},boxblur=20:2,"
-                f"eq=brightness=-0.12,format=yuva420p,"
+                f"[fc{i}]crop={fw}:{fh}:{fx}:{fy},boxblur=7:1,"
+                f"eq=brightness=-0.05:saturation=0.92,format=yuva420p,"
                 f"fade=t=in:st={s:.2f}:d={fade:.2f}:alpha=1,"
                 f"fade=t=out:st={e - fade:.2f}:d={fade:.2f}:alpha=1[fg{i}]")
             parts.append(
