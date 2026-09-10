@@ -40,7 +40,7 @@ def segment(src, start, dur, out, fps, lut=None):
         vf = f"lut3d={lut}," + vf
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-ss", str(start), "-t", str(dur),
                     "-i", str(src), "-vf", vf, "-c:v", "libx264", "-preset", "medium",
-                    "-crf", "16", "-an", str(out)], check=True)
+                    "-crf", "16", str(out)], check=True)
 
 
 def main():
@@ -75,7 +75,7 @@ def main():
     plate.parent.mkdir(parents=True, exist_ok=True)
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-f", "concat", "-safe", "0",
                     "-i", str(listing), "-c:v", "libx264", "-preset", "slow",
-                    "-crf", "18", "-an", "-movflags", "+faststart", str(plate)],
+                    "-crf", "18", "-movflags", "+faststart", str(plate)],
                    check=True)
     print(f"plate: {plate} ({plate.stat().st_size/1048576:.1f} MB, "
           f"{len(parts)} cuts, {total:.1f}s)")

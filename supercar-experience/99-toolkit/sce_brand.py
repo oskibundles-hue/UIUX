@@ -121,19 +121,20 @@ SERVICES = [
 ]
 
 # Numeric prices, for the rental builders and the ad cue files.
-# hr4 None = the site lists a day rate only.
+# hr4 = the Las Vegas 4-hour rate. hr24 = the Scottsdale day rate
+# (/locations/scottsdale, read 10 Sept 2026, lists a day rate only).
 FLEET = {
-    "porsche-gt3rs":          dict(year=2025, cat="EXOTIC", hr4=1299, hr24=1799, hp=None,
+    "porsche-gt3rs":          dict(year=2025, cat="EXOTIC", hr4=1299, hr24=1699, hp=None,
                                    url="/cars/2025-porsche-gt3rs-las-vegas"),
-    "mclaren-750s-spider":    dict(year=2026, cat="EXOTIC", hr4=1299, hr24=1799, hp=None,
+    "mclaren-750s-spider":    dict(year=2026, cat="EXOTIC", hr4=1299, hr24=1699, hp=None,
                                    url="/cars/2026-mclaren-750s-spider-las-vegas"),
     "ferrari-tempesta":       dict(year=2025, cat="EXOTIC", hr4=849,  hr24=1199, hp=750,
                                    zero60="2.7", top="205", engine="3.0L TWIN-TURBO V6 HYBRID",
                                    url="/cars/2023-ferrari-tempesta-las-vegas"),
-    "lamborghini-sto":        dict(year=2023, cat="EXOTIC", hr4=999,  hr24=1599),
-    "ferrari-f8-tributo":     dict(year=2022, cat="EXOTIC", hr4=999,  hr24=1599),
-    "mansory-urus":           dict(year=2025, cat="EXOTIC", hr4=999,  hr24=1399),
-    "amg-gt-black-series":    dict(year=2021, cat="EXOTIC", hr4=899,  hr24=1299),
+    "lamborghini-sto":        dict(year=2023, cat="EXOTIC", hr4=999,  hr24=1399),
+    "ferrari-f8-tributo":     dict(year=2022, cat="EXOTIC", hr4=999,  hr24=1399),
+    "mansory-urus":           dict(year=2025, cat="EXOTIC", hr4=None, hr24=1299),
+    "amg-gt-black-series":    dict(year=2021, cat="EXOTIC", hr4=899,  hr24=1199),
     "huracan-evo-spyder-2021": dict(year=2021, cat="EXOTIC", hr4=899, hr24=1299),
     "huracan-evo-spyder-2020": dict(year=2020, cat="EXOTIC", hr4=899, hr24=1299),
     "sce-rally":              dict(year=2027, cat="EXOTIC", hr4=None, hr24=2999),
@@ -224,7 +225,7 @@ CTA_CAPTIONS = [
 
     # Wants dates / a number.
     ("dm-for-dates", "DM FOR", "DATES", "quote"),
-    ("text-us", "TEXT", "(725) 425-3583", "quote"),
+    ("call-us", "CALL", "(888) 678-6079", "quote"),
 
     # Engagement - drives comments, which drives reach.
     ("which-one-first", "WHICH ONE", "FIRST?", "engagement"),
@@ -255,7 +256,7 @@ CTA_GROUPS = {
 # --------------------------------------------------------------------------
 WEBSITE = "supercarexp.vip"
 INSTAGRAM = "@supercar_experience_"
-PHONE = "(725) 425-3583"
+PHONE = "(888) 678-6079"
 EMAIL = PHONE                 # the site books by text; any EMAIL slot shows the number
 BRAND_NAME = "SUPERCAR EXPERIENCE"
 BRAND_SUFFIX = "LAS VEGAS - SCOTTSDALE - BOISE"

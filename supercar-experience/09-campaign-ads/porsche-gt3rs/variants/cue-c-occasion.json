@@ -9,14 +9,14 @@
   "duration": 15.0,
   "plate": "source/plate-1080x1920.mp4",
   "car": "PORSCHE 911 GT3 RS",
-  "build": "LAS VEGAS · SCOTTSDALE · BOISE",
+  "build": "SCOTTSDALE",
   "ticker": [
     "SUPERCAR EXPERIENCE",
     "PORSCHE 911 GT3 RS",
-    "LAS VEGAS"
+    "SCOTTSDALE"
   ],
   "hook": [
-    "VEGAS THIS WEEKEND?",
+    "SCOTTSDALE THIS WEEKEND?",
     "ARRIVE IN THIS."
   ],
   "buildHeading": "MADE FOR",
@@ -38,8 +38,8 @@
     ],
     [
       "04",
-      "FROM",
-      "$1,299 / 4 HRS"
+      "FULL DAY · SCOTTSDALE",
+      "$1,699"
     ]
   ],
   "_buildRows_note": "Every line is on supercarexp.vip. No invented figures.",

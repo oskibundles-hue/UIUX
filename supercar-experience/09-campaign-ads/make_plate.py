@@ -32,7 +32,7 @@ def build(raw, car, start, dur, look, fps=30, crop=None):
     steps += ["scale=1080:1920:flags=lanczos", f"fps={fps}", "format=yuv420p"]
     vf = ",".join(steps)
     run(["ffmpeg", "-v", "error", "-y", "-ss", str(start), "-t", str(dur), "-i", str(raw),
-         "-vf", vf, "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-an", "-movflags", "+faststart", str(out)])
+         "-vf", vf, "-c:v", "libx264", "-preset", "medium", "-crf", "18", "-movflags", "+faststart", str(out)])
     return out
 
 def measure(plate, samples=24):

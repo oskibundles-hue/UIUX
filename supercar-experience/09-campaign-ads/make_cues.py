@@ -25,21 +25,21 @@ DEFAULT_T = 15.0   # plate length; build_ad.py overrides from the plate when pre
 CARS = {
     # layout is a measured choice, not taste: build the plate, read
     # source/zones.json, and take panel when the bands come back "range too wide".
-    "porsche-gt3rs":       dict(name="PORSCHE 911 GT3 RS", year="2025", loc="LAS VEGAS · SCOTTSDALE · BOISE", specs=None,
+    "porsche-gt3rs":       dict(name="PORSCHE 911 GT3 RS", year="2025", loc="SCOTTSDALE", specs=None,
                                 layout="panel"),  # desert highway under open sky: bands swing 18-250
-    "mclaren-750s-spider": dict(name="MCLAREN 750S SPIDER", year="2026", loc="LAS VEGAS · SCOTTSDALE",        specs=None,
+    "mclaren-750s-spider": dict(name="MCLAREN 750S SPIDER", year="2026", loc="SCOTTSDALE",        specs=None,
                                 layout="hud"),    # desert road, dark car: mid and CTA bands stay under 140
-    "ferrari-tempesta":    dict(name="FERRARI TEMPESTA",    year="2025", loc="LAS VEGAS · SCOTTSDALE",
+    "ferrari-tempesta":    dict(name="FERRARI TEMPESTA",    year="2025", loc="SCOTTSDALE",
                                 specs="750 HP · 2.7S 0-60 · 205 MPH",
                                 layout="hud"),    # desert reel: mid/CTA/lower all under 120
     # Cut from Omarie's own masters, 9 Sept. Layouts set after measuring.
-    "ferrari-f8-tributo":  dict(name="FERRARI F8 TRIBUTO",     year="2022", loc="LAS VEGAS · SCOTTSDALE", specs=None,
+    "ferrari-f8-tributo":  dict(name="FERRARI F8 TRIBUTO",     year="2022", loc="SCOTTSDALE", specs=None,
                                 layout="panel"),  # bug 54-250, CTA 14-191, lower 6-184: three bands too wide
-    "lamborghini-sto":     dict(name="LAMBORGHINI STO",        year="2023", loc="LAS VEGAS · SCOTTSDALE · BOISE", specs=None,
+    "lamborghini-sto":     dict(name="LAMBORGHINI STO",        year="2023", loc="SCOTTSDALE", specs=None,
                                 layout="panel"),  # CTA 16-221, lower 11-220: sun off the rear wing
-    "amg-gt-black-series": dict(name="AMG GT BLACK SERIES",    year="2021", loc="LAS VEGAS · SCOTTSDALE", specs=None,
+    "amg-gt-black-series": dict(name="AMG GT BLACK SERIES",    year="2021", loc="SCOTTSDALE", specs=None,
                                 layout="hud"),    # every band under 115 and never over 96 mean: type sits direct
-    "novitec-urus":        dict(name="LAMBORGHINI NOVITEC URUS", year="2021", loc="LAS VEGAS · SCOTTSDALE", specs=None,
+    "novitec-urus":        dict(name="LAMBORGHINI NOVITEC URUS", year="2021", loc="SCOTTSDALE", specs=None,
                                 layout="panel"),  # lower third mean 115, range 14-199: showroom lights
 }
 
@@ -54,42 +54,48 @@ def beats(T):
 
 def variants(slug):
     c = CARS[slug]; f = B.FLEET[slug]
-    p4, p24 = money(f["hr4"]), money(f["hr24"])
+    # Two rates, and each one carries the city it belongs to. The 4-hour rate is
+    # a Las Vegas rate; /locations/scottsdale lists a day rate only. Printing the
+    # 4-hour figure on a Scottsdale-labelled ad without naming Las Vegas beside it
+    # would advertise a booking Scottsdale does not sell.
+    p4, day = money(f["hr4"]), money(f["hr24"])
+    hrs_row = ["4 HRS · LAS VEGAS", p4]
+    day_row = ["FULL DAY · SCOTTSDALE", day]
     req = ["21+", "LICENSE · INSURANCE"]
-    text = ["TO BOOK", f"TEXT {B.PHONE}"]
+    call = ["TO BOOK", f"CALL {B.PHONE}"]
     spec_row = ["THE CAR", c["specs"]] if c["specs"] else ["THE CAR", f"{c['year']} {c['name']}"]
     return [
         dict(variant="a-price", cta="booking_book-now",
              angle="Price. The number leads; for the viewer who already wants the car and needs the figure.",
              build=f"FROM {p4} / 4 HRS", hook=[f"{p4}.", "FOUR HOURS."],
              heading="THE DEAL",
-             rows=[["01", "4 HOURS", p4], ["02", "24 HOURS", p24], ["03", "LOCATION", c["loc"]], ["04", *text]],
-             src="Prices, locations and phone from the car page and site footer."),
+             rows=[["01", *hrs_row], ["02", *day_row], ["03", "DAY TWO", "50% OFF"], ["04", *call]],
+             src="4-hour rate from the Las Vegas listing; day rate and phone from supercarexp.vip/locations/scottsdale."),
         dict(variant="b-experience", cta="booking_reserve-your-ride",
              angle="Experience. The site's own tagline; identity over arithmetic.",
              build="A RIDE OF A LIFETIME", hook=["A RIDE OF", "A LIFETIME."],
              heading="WHAT YOU GET",
-             rows=[["01", *spec_row], ["02", "4 HRS / 24 HRS", f"{p4} / {p24}"], ["03", *req], ["04", "BOOK", SITE.upper()]],
-             src="Tagline verbatim from the homepage; specs from the car page (Tempesta only); requirements from the booking section."),
+             rows=[["01", *spec_row], ["02", *hrs_row], ["03", *day_row], ["04", *req]],
+             src="Tagline verbatim from the homepage; rates from the Las Vegas listing and the Scottsdale location page; requirements from the booking section."),
         dict(variant="c-occasion", cta="booking_book-the-weekend",
              angle="Occasion. The use-cases the site names - weddings, race week, photoshoots.",
-             build=c["loc"], hook=["VEGAS THIS WEEKEND?", "ARRIVE IN THIS."],
+             build=c["loc"], hook=["SCOTTSDALE THIS WEEKEND?", "ARRIVE IN THIS."],
              heading="MADE FOR",
              rows=[["01", "WEDDINGS", "ARRIVE IN STYLE"], ["02", "RACE WEEK", "F1 WEEK RENTALS"],
-                   ["03", "PHOTOSHOOTS", "EDITORIAL · AUTOMOTIVE"], ["04", "FROM", f"{p4} / 4 HRS"]],
+                   ["03", "PHOTOSHOOTS", "EDITORIAL · AUTOMOTIVE"], ["04", *day_row]],
              src="Weddings, F1 race week and photoshoot rentals are listed under Services and on the blog."),
         dict(variant="d-offer", cta="offer_third-day-free",
              angle="Offer. The promo exactly as the site prints it.",
              build="3RD DAY FREE", hook=["50% OFF DAY TWO.", "OR DAY THREE FREE."],
              heading="THE OFFER",
-             rows=[["01", "DAY ONE", p24], ["02", "DAY TWO", "50% OFF"], ["03", "OR DAY THREE", "FREE"], ["04", "PRICE MATCH", "GUARANTEE"]],
-             src='"50% Off 2nd Day or 3rd Day Free" and "Price Match Guarantee" appear on every fleet card.'),
+             rows=[["01", "DAY ONE", day], ["02", "DAY TWO", "50% OFF"], ["03", "OR DAY THREE", "FREE"], ["04", "PRICE MATCH", "GUARANTEE"]],
+             src='"50% Off 2nd Day or 3rd Day Free" and "Price Match Guarantee" appear on every fleet card. Day one is the Scottsdale day rate.'),
         dict(variant="e-engage", cta="engagement_which-one-first",
              angle="Engagement. A question that earns comments, which earns reach. Not a sales CTA.",
-             build="4 HOURS OR 24", hook=["4 HOURS", "OR 24?"],
+             build="FOUR HOURS OR ALL DAY", hook=["FOUR HOURS", "OR ALL DAY?"],
              heading="YOU PICK",
-             rows=[["01", "4 HOURS", p4], ["02", "24 HOURS", p24], ["03", "WHICH ONE?", "COMMENT BELOW"], ["04", *req]],
-             src="Both durations and prices from the car page."),
+             rows=[["01", *hrs_row], ["02", *day_row], ["03", "WHICH ONE?", "COMMENT BELOW"], ["04", *req]],
+             src="Both rates as listed: 4 hours in Las Vegas, the day rate in Scottsdale."),
     ]
 
 def make(slug, v, T=DEFAULT_T):
@@ -103,7 +109,7 @@ def make(slug, v, T=DEFAULT_T):
         "canvas": "9x16", "width": 1080, "height": 1920, "fps": 30, "duration": T,
         "plate": "source/plate-1080x1920.mp4",
         "car": c["name"], "build": v["build"],
-        "ticker": [B.BRAND_NAME, c["name"], "LAS VEGAS"],
+        "ticker": [B.BRAND_NAME, c["name"], "SCOTTSDALE"],
         "hook": v["hook"],
         "buildHeading": v["heading"], "buildRows": v["rows"],
         "_buildRows_note": "Every line is on supercarexp.vip. No invented figures.",
