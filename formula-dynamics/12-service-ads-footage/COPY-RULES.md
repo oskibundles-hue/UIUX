@@ -90,6 +90,30 @@ Urus carries **SUPERCAR EXPERIENCE ✕ DIPPED AUTO WORKS** across the glass from
 cut the section; the collaboration is welcome on screen. It only means the
 overlay should stay clear of those seconds.
 
+## 7. Measure the frame, not the intention
+
+Three things went out wrong this session because a number was assumed rather
+than read. All three are now checked in code, not in someone's memory.
+
+**The action rail.** Instagram's icons start at **x = 907** on a 1080 canvas.
+The title block's accent stripe was a fixed 30% of frame placed after the
+subline, so a long subline pushed it to x=1034 — the last two segments sat
+under the like and comment buttons on every ad in the set. It is now sized to
+the room that is actually left, and drops to its own line when there is none.
+`SAFE_RIGHT_EDGE` in `fd_hud.py` is the one place that number lives.
+
+**Panel legibility is a function of clip length.** The window is derived from
+duration, so the same three panels hold 2.8 s on a 28.7 s clip and 0.59 s on a
+15.7 s one. Under about 1.3 s a two-line panel is not readable on a phone.
+**Read it off the dry run before choosing the car.** A clip under 20 s either
+takes fewer panels or none at all, with the offer in the title plate instead.
+
+**A price is not a word.** Every panel label was capped at 0.44 of the panel
+height, which set `$499` at exactly the same 91 px as `FULL DIAGNOSTIC` — so
+the pricing ad, documented as setting the figure large, never did. A label
+starting with `$` now gets 0.62, landing at 116 px. Words are unchanged, and
+long ones were width-bound anyway.
+
 ---
 
 ## Status

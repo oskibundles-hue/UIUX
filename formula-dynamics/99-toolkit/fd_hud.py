@@ -17,6 +17,12 @@ import fd_brand as B
 import fd_render as R
 
 
+# Instagram's action rail starts at x = 0.84 of frame (907px on a 1080
+# canvas, measured on a real screenshot). Nothing that has to be read or
+# seen whole may cross it.
+SAFE_RIGHT_EDGE = 0.824
+
+
 # --------------------------------------------------------------------------
 def _scrim(canvas, top, height, strength=150, blur=0.05):
     """Soft band used behind persistent furniture so it survives any shot."""
@@ -120,9 +126,24 @@ def title_block(canvas, name, subline=None, y=0.705):
     y2 = top - round(6 * s) + name_im.height + round(12 * s)
     if sub_im:
         R.paste(im, sub_im, tx, y2)
-        # The brand stripe replaces the template's hatched rule.
-        R.paste(im, R.accent_stripe(round(fw * 0.30), round(9 * s)),
-                tx + sub_im.width + round(24 * s), y2 + round(10 * s))
+        # The brand stripe replaces the template's hatched rule. It is sized to
+        # what is left rather than a fixed 30% of frame: at a fixed width a long
+        # subline pushed it to x=1034, past the x=907 where Instagram's action
+        # rail begins, so its last two segments were sitting under the like and
+        # comment icons. Measured on a rendered frame, not guessed. Below 90px
+        # there is no stripe worth drawing, so it is dropped instead of stubbed.
+        sx = tx + sub_im.width + round(24 * s)
+        room = round(fw * SAFE_RIGHT_EDGE) - sx
+        bar = round(fw * 0.30)
+        if room >= round(90 * s):
+            R.paste(im, R.accent_stripe(min(bar, room), round(9 * s)),
+                    sx, y2 + round(10 * s))
+        else:
+            # A long subline leaves no room beside it. The stripe drops to its
+            # own line rather than being cut - it is the brand sign-off, so
+            # losing it is worse than spending 18px of height on it.
+            R.paste(im, R.accent_stripe(bar, round(9 * s)),
+                    tx, y2 + sub_im.height + round(14 * s))
     return im
 
 

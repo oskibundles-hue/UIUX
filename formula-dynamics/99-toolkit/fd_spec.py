@@ -202,7 +202,13 @@ def panel(canvas, label, kicker="INCLUDED", tone="dark"):
     k = R.text(kicker, 26, B.RED, tracking=0.26)
     R.paste(im, k, x + pad, y + pad)
 
-    word = R.fit_text(label, w - pad * 2, max_height=int(h * 0.44),
+    # A figure is the payoff of the panel it sits in, so it is allowed to be
+    # taller than a word. Everything is capped at 0.44 of the panel, which put
+    # "$499" at exactly the same 91px as "FULL DIAGNOSTIC" - the pricing ad was
+    # documented as setting the figure large and never actually did. A price
+    # gets 0.62; words keep the old cap, and long ones are width-bound anyway.
+    cap = 0.62 if label.strip().startswith("$") else 0.44
+    word = R.fit_text(label, w - pad * 2, max_height=int(h * cap),
                       color=ink, tracking=0.03)
     R.paste(im, word, x + pad, y + pad + k.height + 20)
 

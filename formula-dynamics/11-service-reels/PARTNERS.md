@@ -35,8 +35,16 @@ carries.
 - Handmade
 - Distinctive acoustic signature
 
-**Fitment confirmed:** the shop's **Ferrari Roma carries a RYFT exhaust.** That is what lets the Roma free-tune ad name RYFT on screen — a partner
-name over a car is a claim about that car, and this one is now backed.
+**Fitment confirmed on two cars.**
+
+| Car | Evidence | What it unlocks |
+|---|---|---|
+| **Ferrari Roma** | Confirmed by the shop | The Roma free-tune ad names RYFT on screen |
+| **McLaren 750S** (`SCE_McLaren-750S_no-branding.mov`) | **RYFT is stamped in gold on both exhaust tips, legible at 5.4 s.** Read off a zoomed frame, not inferred | A second evidenced RYFT cut — and this clip runs 24.4 s, long enough for a full panel run |
+
+A partner name over a car is a claim about that car, so both of these are now
+backed and nothing else is. The 750S find is the stronger of the two: the proof
+is *in the shot*, so the ad can put the name and the part on screen together.
 
 ---
 
