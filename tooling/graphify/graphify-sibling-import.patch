@@ -1,0 +1,120 @@
+From 40c9b66311a8c81148150f9516dc48784f533e53 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Thu, 10 Sep 2026 03:42:56 +0000
+Subject: [PATCH] fix(python): resolve absolute sibling imports to the
+ importing file's directory
+
+`from layouts import LAYOUTS` in a script that puts its own directory on
+sys.path produced no edge at all when another file in the scan shared the
+basename `layouts.py`.
+
+_import_python used the bare module name as the target id for absolute
+from-imports. That id matches a file node only when the basename is unique
+across the scan. With a live module plus a vendored reference copy of the
+same name, the target matched nothing, the edge dangled and was pruned, and
+a real dependency vanished from the graph. The symbol-level pass did not
+cover it either: it resolves imported functions and classes, and LAYOUTS is
+a module-level dict, so `from m import CONST` left no trace while
+`from m import func` in the same file resolved normally.
+
+Probe the importing file's own directory before falling back to the bare
+name. That is exactly how the import resolves at runtime for a script that
+does sys.path.insert(0, dirname(__file__)), which is the ordinary way a
+standalone script imports a sibling. Existence-gated, so a genuine external
+import is unaffected, and guarded against binding a file to itself, which
+would otherwise fabricate a self-loop for a module that shares its name with
+an external package it imports (tests/test_import_self_loops.py).
+
+Found on a repo of build scripts where the renderer imported the module
+that controls its entire visual layout; the graph showed that module with
+zero incoming edges. The fix adds 12 edges across that 261-file repo.
+
+Test fails before the change and passes after. Full suite unchanged:
+5359 passed / 16 pre-existing failures, identical with and without.
+---
+ graphify/extract.py                    | 27 ++++++++++++++++++++-
+ tests/test_python_import_resolution.py | 33 ++++++++++++++++++++++++++
+ 2 files changed, 59 insertions(+), 1 deletion(-)
+
+diff --git a/graphify/extract.py b/graphify/extract.py
+index 32c5948..28e5e68 100644
+--- a/graphify/extract.py
++++ b/graphify/extract.py
+@@ -374,7 +374,32 @@ def _import_python(node, source: bytes, file_nid: str, stem: str, edges: list, s
+                     target_path = base / rel
+                 tgt_nid = _make_id(str(target_path))
+             else:
+-                tgt_nid = _make_id(raw)
++                # Absolute form, e.g. `from layouts import LAYOUTS`. Probe the
++                # importing file's own directory first: a script that does
++                # sys.path.insert(0, dirname(__file__)) - the normal way a
++                # standalone script imports a sibling - resolves exactly this
++                # way at runtime. Without the probe the target id is the bare
++                # module name, which matches no file node whenever more than
++                # one file in the repo shares that basename (a live module plus
++                # vendored reference copies, say). The ambiguous id then dangles
++                # and the edge is dropped, so a real dependency goes missing.
++                sibling = Path(str_path).parent / (raw.replace(".", "/") + ".py")
++                try:
++                    # Never resolve to the importing file itself: a module named
++                    # contracting.py doing `from contracting import constants` is
++                    # importing the external package of that name, not itself, and
++                    # linking it to itself would fabricate a self-loop (#3050).
++                    sibling_exists = (
++                        sibling.is_file()
++                        and sibling.resolve() != Path(str_path).resolve()
++                    )
++                except OSError:
++                    sibling_exists = False
++                if sibling_exists:
++                    target_path = sibling
++                    tgt_nid = _make_id(str(target_path))
++                else:
++                    tgt_nid = _make_id(raw)
+             edge = {
+                 "source": file_nid,
+                 "target": tgt_nid,
+diff --git a/tests/test_python_import_resolution.py b/tests/test_python_import_resolution.py
+index 5de9e5a..4869ff4 100644
+--- a/tests/test_python_import_resolution.py
++++ b/tests/test_python_import_resolution.py
+@@ -150,3 +150,36 @@ def test_python_parameter_return_and_generic_contexts(tmp_path: Path):
+     assert ("process()", "Payload", "parameter_type") in pairs
+     assert ("process()", "Result", "return_type") in pairs
+     assert ("process_many()", "Payload", "generic_arg") in pairs
++
++
++def test_absolute_sibling_import_resolves_to_the_importing_files_directory(tmp_path: Path):
++    """`from layouts import LAYOUTS` in a script that puts its own directory on
++    sys.path must bind to the sibling module, not to a bare module-name id.
++
++    The bare name is ambiguous as soon as a second file in the scan shares the
++    basename (a live module plus a vendored reference copy, say). The ambiguous
++    target then matches no file node, the edge dangles, and a real dependency
++    disappears from the graph.
++    """
++    live_target = _write(
++        tmp_path / "live" / "layouts.py",
++        "LAYOUTS = {'hud': 1, 'panel': 2}\n",
++    )
++    vendored = _write(
++        tmp_path / "vendor" / "layouts.py",
++        "LAYOUTS = {'hud': 1}\n",
++    )
++    source = _write(
++        tmp_path / "live" / "build.py",
++        "import os, sys\n"
++        "sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))\n"
++        "from layouts import LAYOUTS\n",
++    )
++
++    result = extract([source, live_target, vendored], cache_root=tmp_path)
++    source_file = _node_id(result, "build.py", "live/build.py")
++    live_file = _node_id(result, "layouts.py", "live/layouts.py")
++    vendored_file = _node_id(result, "layouts.py", "vendor/layouts.py")
++
++    assert _has_edge(result, source_file, live_file, "imports_from")
++    assert not _has_edge(result, source_file, vendored_file, "imports_from")
+-- 
+2.43.0
+
