@@ -1,0 +1,32 @@
+{
+  "audio": "/tmp/claude-0/-home-user-UIUX/bca660b1-ddd0-53c0-87e3-b329cd9a583e/scratchpad/rally/phonk.wav",
+  "bpm": 103.36,
+  "every": 2,
+  "audio_start": 22.0,
+  "duration": 18.0,
+  "cuts": [
+    0.0,
+    1.463,
+    2.624,
+    3.785,
+    4.946,
+    6.107,
+    7.268,
+    8.429,
+    9.59,
+    10.751,
+    11.912,
+    13.073,
+    14.234,
+    15.395,
+    16.556
+  ],
+  "clips": [
+    "/tmp/claude-0/-home-user-UIUX/bca660b1-ddd0-53c0-87e3-b329cd9a583e/scratchpad/rally/d3.mov@4.5",
+    "/tmp/claude-0/-home-user-UIUX/bca660b1-ddd0-53c0-87e3-b329cd9a583e/scratchpad/rally/d2.mov@12.5",
+    "/tmp/claude-0/-home-user-UIUX/bca660b1-ddd0-53c0-87e3-b329cd9a583e/scratchpad/rally/recap.mp4@12.4",
+    "/tmp/claude-0/-home-user-UIUX/bca660b1-ddd0-53c0-87e3-b329cd9a583e/scratchpad/rally/d1.mov@2.0",
+    "/tmp/claude-0/-home-user-UIUX/bca660b1-ddd0-53c0-87e3-b329cd9a583e/scratchpad/rally/d3.mov@8.0",
+    "/tmp/claude-0/-home-user-UIUX/bca660b1-ddd0-53c0-87e3-b329cd9a583e/scratchpad/rally/d1.mov@7.0"
+  ]
+}
