@@ -117,6 +117,8 @@ There are **three separate workstreams**. Establish which one you are in before 
 
 Pipeline is `creator-kit/`: cut and grade with `cut_clip.sh`, transcribe, match his voice, plan shots, render overlays in Remotion, compose with ffmpeg. Read `creator-kit/WORKFLOW.md` and `creator-kit/DELIVERY.md` first.
 
+**To build a reel, follow `creator-kit/fastcut/RUNBOOK.md`.** It reproduces MR8, the reference reel, from raw footage: cut and grade, transcribe, match his voice, then one command per reel. The build script is `creator-kit/fastcut/build_reel.sh` and takes no hardcoded paths.
+
 **The approved format is the Fast Cut recipe.** Under 60 s, 4K vertical 2160x3840 at 29.97 fps, hook line plus auto-fitting title, first shot 3.0 s then 4.5 s or less, vlog grade at 85% match, captions uniform at 70.5% frame height in Archivo 800 with no gold pill and no oversized key word, only Omarie's voice captioned via `creator-kit/voice/omarie_profile.json`, card outro, no call to action, -14 LUFS with a 0.84 limiter. The older "pop" caption style is superseded.
 
 **Open defect:** the eight delivered reels use `#DE1A22` as the Formula Dynamics red. The real brand red, measured off Omarie's own overlay pack and confirmed by the FD brand kit, is `#FE0F13`. Fix `RED` in `creator-kit/remotion/src/Motion.tsx` before the next build, and re-render the series when he asks.
