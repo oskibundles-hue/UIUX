@@ -23,6 +23,39 @@ These are the user's employers; the user holds authority from both to publish as
 
 For video, growth, and ad projects, default to **vidIQ** (growth/analytics), **Higgsfield** (production: virality predictor, reframe, ad-multiplier, TikTok publish), and the **context-engineering** plugin (context compression for long sessions). Adobe, Remotion, and Dropbox are fine secondary picks when relevant. If a different connector looks like a better fit for a task, **ask before using it** rather than switching silently.
 
+## Delivering Video Sets
+
+Whenever handing over **more than one video**, package them as a zip and give a
+download link. Never send a stream of individual file cards, and never hand over
+raw per-file hosted URLs — those save under their storage UUIDs, so the user ends
+up with a folder of unrecognisable filenames. The user works from an iOS phone, so
+a link beats a large chat attachment.
+
+The approved method (`supercar-experience/09-campaign-ads/build_deliverables.py`
+is the working reference):
+
+1. **Rename for a human, not for the pipeline.**
+   `SCE_Ferrari-F8-Tributo_3-Occasion_15s-9x16.mp4` — brand, subject, variant, then
+   specs. Identity first, so the name survives truncation in a phone's Files app.
+   Variants get plain-English names and a number, not pipeline letter codes.
+2. **A numbered folder per subject**, most important first, so the order holds on
+   any device.
+3. **A `README.txt` inside** saying what each variant leads with, plus the key
+   figures (prices, phone, location).
+4. **`zip -0`** — store, don't deflate. Video is already compressed, so compression
+   only costs time.
+5. **Host it**: Higgsfield `media_upload` (zip is a whitelisted general-file
+   extension) → PUT the bytes → `media_confirm(type="file")` → permanent URL.
+6. **Verify before claiming delivery**: compare the remote content-length against
+   the local file.
+7. **Where approval status differs, ship two zips** — a client copy carrying only
+   approved material, and our copy adding anything held, inside a folder whose name
+   says it is not approved. This is what keeps unapproved cuts from being forwarded
+   by accident.
+
+Build the trees with hardlinks rather than copies; the renders are large and the
+zip reads the content either way.
+
 ## Environment
 
 The user works from the iOS mobile Claude app; sessions run as cloud containers, not a local terminal. Desktop-only tools (macOS notch / menu-bar apps) do not apply. Anything installed inside a session is ephemeral — persistence is via git commits and the user's install scripts.
