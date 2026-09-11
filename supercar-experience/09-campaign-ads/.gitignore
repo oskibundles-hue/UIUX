@@ -7,3 +7,7 @@
 .measure/
 __pycache__/
 .hosting/
+
+# Built by build_deliverables.py: hardlink trees of the gitignored renders,
+# plus their zips. Rebuild with `python3 build_deliverables.py`.
+_deliverables/

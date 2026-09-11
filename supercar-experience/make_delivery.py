@@ -125,6 +125,12 @@ ul.list{{list-style:none;margin:0;padding:0}}
 .dl.pending{{background:transparent;color:var(--ink-3);border:1px solid var(--rule)}}
 .dl.pending::after{{content:''}}
 .held{{font:10.5px var(--mono);letter-spacing:.16em;text-transform:uppercase;color:#000;background:var(--gold);padding:3px 9px;border-radius:3px}}
+.zips{{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:12px;margin:18px 0 14px}}
+.zip{{display:flex;flex-direction:column;gap:5px;padding:16px 18px;border:1px solid var(--rule);background:var(--panel);text-decoration:none;border-left:3px solid var(--gold)}}
+.zip:hover{{border-left-color:#fff;background:#16161a}}.zip:focus-visible{{outline:2px solid #fff;outline-offset:2px}}
+.zn{{font:500 14px var(--mono);color:var(--gold);word-break:break-all}}
+.zd{{font-size:14px;color:var(--ink-2)}}
+.zs{{font:11px var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--ink-3)}}
 .car{{padding:22px 0 4px;border-bottom:1px solid var(--rule)}}.car:last-child{{border-bottom:0}}
 .chead{{display:flex;align-items:baseline;gap:14px;flex-wrap:wrap}}.chead h3{{font:400 clamp(24px,3.4vw,34px)/1 var(--display);margin:0}}
 .price{{font:12px var(--mono);color:var(--gold);letter-spacing:.06em}}
@@ -145,6 +151,14 @@ footer{{margin-top:64px;border-top:1px solid var(--rule);padding-top:18px;font:1
 
 <section>
 <div class="shead"><span class="tag">01 / Ads</span><h2>Seven cars, five angles each</h2></div>
+<div class="zips">
+<a class="zip" href="https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/905b8c26-8749-400e-8315-33723dbe65c9.zip">
+<span class="zn">EXPVIP.zip</span><span class="zd">The 35 approved ads, renamed and sorted into a folder per car. This is the one to forward.</span><span class="zs">281 MB &middot; 35 files</span></a>
+<a class="zip" href="https://d2ol7oe51mr4n9.cloudfront.net/user_3EmIbqAsNEPTa3GqLOpFdlVHf2Z/8222feb4-85bf-4569-97fa-a63fe447474b.zip">
+<span class="zn">Supercar-Experience-Ads.zip</span><span class="zd">The same 35, plus the five held rally cuts in a folder marked not approved. Our copy.</span><span class="zs">375 MB &middot; 40 files</span></a>
+</div>
+<p class="dest">Inside each: <b>01 Porsche 911 GT3 RS / SCE_Porsche-911-GT3-RS_1-Price_15s-9x16.mp4</b> &mdash; brand, car, angle, length, ratio. Readable in a phone's Files app without opening it.</p>
+
 <p class="dest">File under <b>Portfolio / 01 Business Ads / Supercar Experience</b></p>
 <div class="stills">{stills}</div>
 {ad_blocks}
