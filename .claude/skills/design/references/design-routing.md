@@ -8,7 +8,7 @@ When to use each design sub-skill.
 |-------|---------|-----------|
 | brand | Brand identity, voice, assets | SKILL.md + 10 references + 3 scripts |
 | design-system | Token architecture, specs | SKILL.md + 7 references + 2 scripts |
-| ui-styling | Component implementation | SKILL.md + 7 references + 2 scripts |
+| ui-ux-pro-max | Component implementation, styles, palettes, font pairings | SKILL.md + data/ |
 | logo-design | AI logo generation (55 styles, 30 palettes) | SKILL.md + 4 references + 2 scripts |
 | cip-design | Corporate Identity Program (50 deliverables) | SKILL.md + 3 references + 3 scripts |
 | slides | HTML presentations with Chart.js | SKILL.md + 4 references |
@@ -38,7 +38,7 @@ When to use each design sub-skill.
 - Document state and variants
 
 ### Implementation Tasks
-**→ ui-styling**
+**→ ui-ux-pro-max**
 
 - Add shadcn/ui components
 - Style with Tailwind classes
@@ -94,10 +94,10 @@ When to use each design sub-skill.
 |----------|-------|
 | "What color should this be?" | brand |
 | "How do I create a token for X?" | design-system |
-| "How do I build a button component?" | ui-styling |
+| "How do I build a button component?" | ui-ux-pro-max |
 | "Is this on-brand?" | brand |
 | "Should I use a CSS variable here?" | design-system |
-| "How do I add dark mode?" | ui-styling |
+| "How do I add dark mode?" | ui-ux-pro-max |
 | "Create a logo for my brand" | logo-design |
 | "Generate business card mockups" | cip-design |
 | "Create a pitch deck" | slides |
@@ -121,7 +121,7 @@ When to use each design sub-skill.
 2. design-system → Create tokens
    - Primitive, semantic, component
 
-3. ui-styling → Implement
+3. ui-ux-pro-max → Implement
    - Configure Tailwind, add components
 ```
 
@@ -134,7 +134,7 @@ When to use each design sub-skill.
 2. design-system → Formalize tokens
    - Create three-layer architecture
 
-3. ui-styling → Update code
+3. ui-ux-pro-max → Update code
    - Replace hardcoded values
 ```
 
@@ -144,7 +144,7 @@ When to use each design sub-skill.
 1. design-system → Reference specs
    - Button states, sizes, variants
 
-2. ui-styling → Implement
+2. ui-ux-pro-max → Implement
    - Build with shadcn/ui + Tailwind
 ```
 
@@ -155,7 +155,7 @@ brand
     ↓ (colors, typography)
 design-system
     ↓ (tokens, specs)
-ui-styling
+ui-ux-pro-max
     ↓ (components)
 Application Code
 ```
@@ -184,7 +184,7 @@ npx shadcn@latest add button card input
 Use **all eight** when:
 - Complete brand package from scratch (logo → CIP → presentation)
 
-Use **brand + design-system + ui-styling** when:
+Use **brand + design-system + ui-ux-pro-max** when:
 - Design system setup and implementation
 
 Use **logo-design + cip-design** when:
@@ -202,6 +202,6 @@ Use **icon-design + design-system** when:
 Use **brand + design-system** when:
 - Defining design language without implementation
 
-Use **design-system + ui-styling** when:
+Use **design-system + ui-ux-pro-max** when:
 - Implementing existing brand in code
 - Building component library
