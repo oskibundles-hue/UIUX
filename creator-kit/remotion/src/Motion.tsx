@@ -37,8 +37,9 @@ export type MotionProps = {
   cuts?: { at: number }[];
 };
 
-// Red is the Formula Dynamics / Rosso Corsa red that is actually in the footage, not the theme orange.
-const RED = "#DE1A22", GOLD = theme.accent;
+// Formula Dynamics brand red, measured off the overlay pack (fd-red-bar_1080w) and confirmed by the FD brand kit.
+// Reels MR1-MR8 were delivered with the earlier, wrong value #DE1A22 and need re-rendering.
+const RED = "#FE0F13", GOLD = theme.accent;
 const ANTON = "Anton, Impact, sans-serif", ARCHIVO = "Archivo, Helvetica, sans-serif";
 const clamp = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 

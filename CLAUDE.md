@@ -121,7 +121,7 @@ Pipeline is `creator-kit/`: cut and grade with `cut_clip.sh`, transcribe, match 
 
 **The approved format is the Fast Cut recipe.** Under 60 s, 4K vertical 2160x3840 at 29.97 fps, hook line plus auto-fitting title, first shot 3.0 s then 4.5 s or less, vlog grade at 85% match, captions uniform at 70.5% frame height in Archivo 800 with no gold pill and no oversized key word, only Omarie's voice captioned via `creator-kit/voice/omarie_profile.json`, card outro, no call to action, -14 LUFS with a 0.84 limiter. The older "pop" caption style is superseded.
 
-**Open defect:** the eight delivered reels use `#DE1A22` as the Formula Dynamics red. The real brand red, measured off Omarie's own overlay pack and confirmed by the FD brand kit, is `#FE0F13`. Fix `RED` in `creator-kit/remotion/src/Motion.tsx` before the next build, and re-render the series when he asks.
+**Colour is fixed in the pipeline, wrong in the delivered files.** `RED` in `creator-kit/remotion/src/Motion.tsx` is now `#FE0F13`, the real brand red measured off Omarie's own overlay pack and confirmed by the FD brand kit. Reels MR1-MR8 were built before that fix (2026-09-12) and still carry the old `#DE1A22`, so anything you build now will not colour-match them. Re-render the series when he asks; do not quietly mix the two.
 
 **Open defect:** caption coverage is low on three reels — MR4 at 18% of speech, MR3 at 51%, MR6 at 53%. On muted autoplay that is most of the dialogue lost. The cause is the his-voice filter dropping other speakers; the fix is more of his own speech in the window, not looser voice matching.
 
@@ -146,6 +146,31 @@ Full engineering record, fault log and cue timelines: https://claude.ai/code/art
 - New concepts get a NEW artifact page; never overwrite one he keeps for comparison. But do not create a second index of the same thing.
 - Archive, never delete. Superseded cuts stay reachable with a note saying what replaced them.
 - Write to memory only at end of day, listed first and approved by him.
-- Claude's memory store is full until 1 October. Until then the standing brief is Dropbox, `/Anti Stock Media/00 PROJECT MEMORY (backup until Oct 1).md`.
+- Claude's memory store is full until 1 October. Until then the standing brief is this file plus Dropbox, `/Anti Stock Media/00 PROJECT MEMORY (backup until Oct 1).md`.
+
+## Memory, and why it lives here
+
+The Vertiso Memory store is at its write limit (20/20) and refuses every write until **1 October 2026**.
+Do not keep asking him to approve saves that cannot happen. **This file is the memory** in the meantime:
+it loads automatically in every session in this repo, which the memory store does not. When something
+durable is decided, write it into this file and commit it.
+
+Queued for 1 October, already assessed with him and needing no further approval:
+
+| memory | action on 1 Oct |
+|---|---|
+| 34453 "pop captions" | rewrite — Fast Cut replaced pop |
+| 34455 pipeline as of 7 Sept | rewrite — vlog look right, captions wrong |
+| 34407 priority connectors | rewrite — superseded by keep-5/pause-7 (34456) |
+| 34394 "the companies he works for" | rewrite — they are three separate workstreams, see the table above |
+| 34430 /watch needs a Whisper key | archive — never used |
+| 34395 token spend analysis | archive — one-off |
+| 34342 Ruflo resolver lesson | archive — different project |
+| 34454 Vlog Cut links V1/VR1-VR8 | archive with a pointer to the MR series; links still resolve |
+| 34456, 34452, 34408, 34341, 34340, 34339 | keep as is |
+
+New items to write on 1 October: the Fast Cut build is reproducible from the runbook; three workstreams
+not one; the red correction and which files carry which value; the caption-coverage defect; the index
+hierarchy (one master, one per client); and that this file is the channel that actually loads.
 
 **Known limitation:** the Dropbox connector writes text but not video, and this environment cannot reach Dropbox's upload page. Video is handed over as links or attached in chat.

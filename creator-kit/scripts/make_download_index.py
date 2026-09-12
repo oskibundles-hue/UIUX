@@ -50,7 +50,7 @@ body=''.join(f'<section id="g{i}"><h2>{html.escape(g[0])}</h2><p class="d">{html
 page=f'''<title>Anti Stock Downloads</title>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..125,400..900&family=IBM+Plex+Mono:wght@400;500&display=swap">
 <style>
-:root{{--bg:#F2F0EB;--panel:#FBFAF7;--ink:#151618;--mute:#63655F;--line:#D8D5CC;--red:#DE1A22;--gold:#FBD101;--goldink:#141414}}
+:root{{--bg:#F2F0EB;--panel:#FBFAF7;--ink:#151618;--mute:#63655F;--line:#D8D5CC;--red:#FE0F13;--gold:#FBD101;--goldink:#141414}}
 @media (prefers-color-scheme: dark){{:root:not([data-theme="light"]){{--bg:#121316;--panel:#1A1B1F;--ink:#F3F2ED;--mute:#A4A59E;--line:#2C2D33;--red:#E8272F;--gold:#FBD101;--goldink:#141414}}}}
 :root[data-theme="dark"]{{--bg:#121316;--panel:#1A1B1F;--ink:#F3F2ED;--mute:#A4A59E;--line:#2C2D33;--red:#E8272F;--gold:#FBD101;--goldink:#141414}}
 *{{box-sizing:border-box}} body{{background:var(--bg);color:var(--ink);font-family:Archivo,"Helvetica Neue",Arial,sans-serif;font-size:15px;line-height:1.45;margin:0}}

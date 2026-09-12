@@ -21,8 +21,8 @@ Under 60 seconds, target 56. 4K vertical 2160x3840 at 29.97 fps.
 | Outro | card outro 3 s from the end. **No call to action** |
 | Audio | −14 LUFS, limiter at 0.84 |
 
-`Motion.tsx` currently ships `RED = "#DE1A22"`, which is wrong — it does not match the FD logo bug.
-Set it to `#FE0F13` before building anything new.
+The accent red is `#FE0F13`, set in `Motion.tsx`. This is the measured FD brand red. Reels MR1-MR8
+were built before the fix and carry `#DE1A22`; anything you build now will not match them.
 
 ## Prerequisites
 
