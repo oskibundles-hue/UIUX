@@ -135,4 +135,9 @@ Never push directly to `main`. Always:
 1. Create a new branch: `git checkout -b feat/...` or `fix/...`
 2. Commit changes
 3. Push branch: `git push -u origin <branch>`
-4. Create PR: `gh pr create`
+4. Open a PR only if asked. `gh pr create` works where the GitHub CLI is
+   installed; cloud sessions on claude.ai/code have no `gh`, so use the GitHub
+   MCP tools (`mcp__github__create_pull_request`) there instead.
+
+Standing git rules that apply in every repo, not just this one, live in
+`~/.claude/CLAUDE.md` (backup: `.claude/user-CLAUDE.md`).

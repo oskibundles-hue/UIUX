@@ -12,6 +12,49 @@ Edit this file and re-run that command; do not edit only the copy in `~`.
 
 ---
 
+## Standing Rules
+
+Set by the user across sessions. These apply everywhere, not just in one repo.
+
+### Publishing and approvals
+
+- **Formula Dynamics** and **Supercar Experience** are the user's employers, and the
+  user holds standing authority from both to publish as them. Even so, **confirm per
+  action before anything goes live** as either company — the same standard the user
+  applies to their own personal channel. Authority to publish is not a blanket
+  approval of any particular post.
+- Hosting a file behind a link, or publishing a private artifact page, is **not**
+  publishing. Posting to a public feed, channel or account is. Don't ask permission
+  for the former; always ask for the latter.
+- **Only state figures that can be substantiated from a named source.** No invented
+  prices, specs, statistics or testimonials, in creative work or anywhere else. If a
+  figure can't be sourced, say so rather than filling the gap.
+- Approval of one item is not approval of the next. Where a batch is part-approved,
+  keep the unapproved part physically separate so it can't go out by accident.
+
+### Git
+
+- **Never push directly to `main`.** Work on a branch and push there.
+- Don't open a pull request unless the user asks for one.
+
+### Connected accounts
+
+- **Ask before any move, rename or delete** in Dropbox or other connected storage.
+  Reading, listing and downloading are fine without asking.
+- Prefer the connectors the user has chosen for a job. If a different one looks like
+  a better fit, ask rather than switching silently.
+
+### Artifacts
+
+- A **new concept gets a new artifact page.** Never overwrite an existing page with
+  unrelated content — republish to the same URL only when updating that same
+  deliverable.
+
+### Reporting
+
+- **Report approximate token usage after each task.**
+- Memory writes at end of day, not continuously through a session.
+
 ## Delivering Video Sets
 
 Whenever handing over **more than one video**, package them as a zip and give a
