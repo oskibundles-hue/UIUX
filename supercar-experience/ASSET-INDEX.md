@@ -20,7 +20,7 @@ matches reality. Re-run after adding anything.
 
 | File | Size |
 |---|---|
-| `state.json` | 100 KB |
+| `state.json` | 107 KB |
 
 ## `01-brand-core/`
 
@@ -252,6 +252,55 @@ Two-line opening titles.
 - `title_16x9_fall-rally_dark.png`
 - …and 35 more following the same pattern
 
+## `03-overlays/vlog/`
+
+*(empty)*
+
+## `03-overlays/vlog/chapters/`
+
+**49 files** (0.9 MB). Examples:
+
+- `chapter_16x9_01_the-pickup_dark.png`
+- `chapter_16x9_01_the-pickup_light.png`
+- `chapter_16x9_02_walkaround_dark.png`
+- `chapter_16x9_02_walkaround_light.png`
+- `chapter_16x9_03_first-start_dark.png`
+- …and 44 more following the same pattern
+
+## `03-overlays/vlog/follow-bugs/`
+
+**16 files** (0.2 MB). Examples:
+
+- `bug_16x9_follow_bottom-left.png`
+- `bug_16x9_follow_bottom-right.png`
+- `bug_16x9_subscribe_bottom-left.png`
+- `bug_16x9_subscribe_bottom-right.png`
+- `bug_1x1_follow_bottom-left.png`
+- …and 11 more following the same pattern
+
+## `03-overlays/vlog/music/`
+
+| File | Size |
+|---|---|
+| `music_16x9_run-run-run_dark.png` | 41 KB |
+
+## `03-overlays/vlog/names/`
+
+| File | Size |
+|---|---|
+| `name_16x9_omarie.png` | 25 KB |
+
+## `03-overlays/vlog/stamps/`
+
+**25 files** (0.4 MB). Examples:
+
+- `stamp_16x9_boise_dark.png`
+- `stamp_16x9_boise_light.png`
+- `stamp_16x9_las-vegas_dark.png`
+- `stamp_16x9_las-vegas_light.png`
+- `stamp_16x9_scottsdale_dark.png`
+- …and 20 more following the same pattern
+
 ## `04-templates/`
 
 Reference material.
@@ -304,9 +353,10 @@ Zipped packs ready to download and unzip. Start with the vertical starter pack.
 | `SCE-05-cta-captions.zip` | 635 KB |
 | `SCE-06-service-badges.zip` | 333 KB |
 | `SCE-07-accent-bars.zip` | 4 KB |
-| `SCE-08-ALL-OVERLAYS.zip` | 8.1 MB |
+| `SCE-08-ALL-OVERLAYS.zip` | 9.1 MB |
 | `SCE-09-logos.zip` | 523 KB |
 | `SCE-10-rental-overlays.zip` | 1.3 MB |
+| `SCE-11-vlog-overlays.zip` | 1.0 MB |
 
 ## `09-campaign-ads/`
 
@@ -334,7 +384,7 @@ Zipped packs ready to download and unzip. Start with the vertical starter pack.
 
 | File | Size |
 |---|---|
-| `state.json` | 303 KB |
+| `state.json` | 305 KB |
 
 ## `09-campaign-ads/.hosting/`
 
@@ -1325,4 +1375,4 @@ Zipped packs ready to download and unzip. Start with the vertical starter pack.
 
 ---
 
-**6088 files total.**
+**6181 files total.**

@@ -19,6 +19,7 @@ def gh(rel): return f"{RAW}/{rel}"
 BUNDLES = [
  ("SCE-00-VERTICAL-STARTER-PACK.zip", "The 9:16 set on its own - bugs, lower thirds, CTAs, titles, end cards"),
  ("SCE-08-ALL-OVERLAYS.zip", "Every overlay in every format, plus the safe-zone guides"),
+ ("SCE-11-vlog-overlays.zip", "Long-form furniture: name bar, chapter markers, place-and-date stamp, track credit, follow bug"),
  ("SCE-10-rental-overlays.zip", "Price stacks and pills for all 18 cars, requirements, locations, promos, Tempesta specs, Rally plate"),
  ("SCE-02-lower-thirds.zip", "Car name + listed price, 18 cars, 9:16 and 16:9"),
  ("SCE-01-logo-bugs.zip", "Wordmark and mark, white and black, every corner, four canvases"),

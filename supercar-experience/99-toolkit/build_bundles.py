@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Formula Dynamics Performance - downloadable ZIP bundles.
+Supercar Experience - downloadable ZIP bundles.
 
 Packages the kit into bundles you can download and unzip straight into a
 CapCut media folder or a phone album, instead of pulling the whole repository.
@@ -23,7 +23,7 @@ OUT = B.KIT / "08-download-bundles"
 FIXED_DATE = (1980, 1, 1, 0, 0, 0)
 
 
-HOW_TO = """FORMULA DYNAMICS PERFORMANCE
+HOW_TO = """{brand}
 {title}
 ================================================================
 
@@ -52,7 +52,7 @@ READING THE FILENAMES
 CONTENTS
 {contents}
 
-Full documentation: FORMULA-DYNAMICS-BRAND-GUIDE.pdf
+Every file in the kit: ASSET-INDEX.md
 {website}
 """
 
@@ -72,8 +72,8 @@ def write_bundle(name, title, blurb, files):
 
     files = sorted(files, key=lambda f: f[1])
     listing = "\n".join(f"  {arc}" for _, arc in files[:400])
-    readme = HOW_TO.format(title=title, blurb=blurb, contents=listing,
-                           website=B.WEBSITE)
+    readme = HOW_TO.format(brand=B.BRAND_NAME, title=title, blurb=blurb,
+                           contents=listing, website=B.WEBSITE)
 
     with zipfile.ZipFile(target, "w", zipfile.ZIP_DEFLATED) as zf:
         info = zipfile.ZipInfo("HOW-TO-USE.txt", date_time=FIXED_DATE)
@@ -90,6 +90,13 @@ def in_dir(folder, prefix=None):
     src = B.OVERLAYS / folder
     return [(p, f"{prefix or folder}/{p.name}")
             for p in src.iterdir() if p.is_file() and p.suffix == ".png"]
+
+
+def in_tree(folder):
+    """Like in_dir, but for a folder with sub-folders - keeps them in the zip."""
+    src = B.OVERLAYS / folder
+    return [(p, f"{folder}/{p.relative_to(src)}")
+            for p in sorted(src.rglob("*.png")) if p.is_file()]
 
 
 def build():
@@ -111,6 +118,22 @@ def build():
         "If you only download one bundle, make it this one.",
         essentials))
 
+    # 1b. Long-form / vlog furniture.
+    results.append(write_bundle(
+        "SCE-11-vlog-overlays",
+        "Vlog and long-form overlays",
+        "Furniture the ad overlays cannot stand in for: a name bar for\n"
+        "whoever is on camera, numbered chapter markers, a place-and-date\n"
+        "stamp, a track credit and a follow bug.\n"
+        "\n"
+        "The site is the only address on screen - no handles - so these do\n"
+        "not go stale if an account name changes.\n"
+        "\n"
+        "For a name, chapter, stamp or track that is not in here, generate it:\n"
+        "  python3 99-toolkit/build_vlog.py name --name \"OMARIE\" --role \"HOST\"\n"
+        "  python3 99-toolkit/build_vlog.py chapter --index 02 --label \"WALKAROUND\"",
+        in_tree("vlog")))
+
     # 2. One bundle per overlay type.
     per_type = [
         ("SCE-01-logo-bugs", "corner-logo-bugs", "Logo bugs",
@@ -122,7 +145,7 @@ def build():
          "Name plates for services, partners and calls to action.\n"
          "Bring in around 1-2 s, hold 3-4 s, then out."),
         ("SCE-03-title-cards", "title-cards", "Title cards",
-         "Two-line openers. White or black top line, red italic beneath.\n"
+         "Two-line openers. White or black top line, gold beneath.\n"
          "Use 'dark' on dark footage, 'light' on bright footage."),
         ("SCE-04-end-cards", "end-cards", "End cards",
          "Full-frame closing cards with logo, tagline and contact details.\n"
@@ -130,15 +153,15 @@ def build():
          "Hold for 1.5-2.5 seconds."),
         ("SCE-05-cta-captions", "cta-captions", "CTA captions",
          "Sixteen calls to action in two styles.\n"
-         "'bar' is the solid red default. 'panel' is black with the key word\n"
-         "in red - use it when the footage is RED, because a red bar over red\n"
-         "paint disappears.\n"
+         "'bar' is the solid gold default. 'panel' is black with the key word\n"
+         "in gold - use it when the shot is bright or yellow, because a gold\n"
+         "bar on a sunlit wall or a gold car disappears.\n"
          "One CTA per video, held 2-3 seconds, on the payoff shot."),
         ("SCE-06-service-badges", "service-badges", "Service badges",
-         "Red-outlined chips for feature callouts, one per service,\n"
+         "Gold-outlined chips for feature callouts, one per car,\n"
          "plus a ready-made strip of the four lead services."),
         ("SCE-07-accent-bars", "accent-bars", "Accent bars",
-         "The five-colour racing stripe and solid red bars.\n"
+         "The two-tone accent stripe and solid gold bars.\n"
          "Underline a title, divide a split screen, or keyframe one across\n"
          "the frame over 6-10 frames as your house transition."),
     ]
@@ -157,7 +180,7 @@ def build():
 
     # 3. Everything, for archiving or a one-shot import.
     every = []
-    every = list(every) + rental
+    every = list(every) + rental + in_tree("vlog")
     for folder in ("corner-logo-bugs", "lower-thirds", "title-cards",
                    "end-cards", "cta-captions", "service-badges", "accent-bars"):
         every += in_dir(folder)
