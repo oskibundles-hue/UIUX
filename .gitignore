@@ -51,3 +51,9 @@ out/
 .claude/settings.local.json
 .claude/session-state/
 ui-ux-pro-max-website/*
+
+# Derived ad-ratio renders — rebuild with 99-toolkit/fd_reframe.py
+formula-dynamics/15-ad-ratios/4x5/
+formula-dynamics/15-ad-ratios/1x1/
+formula-dynamics/15-ad-ratios/_brand-src/
+formula-dynamics/15-ad-ratios/*.log
