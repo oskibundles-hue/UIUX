@@ -13,13 +13,14 @@ matches reality. Re-run after adding anything.
 
 | File | Size |
 |---|---|
+| `patterns.json` | 11 KB |
 | `stats.json` | 0 KB |
 
 ## `.claude-flow/policy/`
 
 | File | Size |
 |---|---|
-| `state.json` | 6 KB |
+| `state.json` | 100 KB |
 
 ## `01-brand-core/`
 
@@ -109,14 +110,14 @@ Logo pre-positioned on a full-size transparent frame. No scaling needed.
 
 Calls to action in two styles. Use 'panel' when the footage is red.
 
-**64 files** (1.0 MB). Examples:
+**68 files** (1.1 MB). Examples:
 
 - `cta_16x9_booking_book-now_bar.png`
 - `cta_16x9_booking_book-now_panel.png`
 - `cta_16x9_booking_book-the-weekend_bar.png`
 - `cta_16x9_booking_book-the-weekend_panel.png`
 - `cta_16x9_booking_reserve-your-ride_bar.png`
-- …and 59 more following the same pattern
+- …and 63 more following the same pattern
 
 ## `03-overlays/end-cards/`
 
@@ -300,17 +301,1028 @@ Zipped packs ready to download and unzip. Start with the vertical starter pack.
 | `SCE-02-lower-thirds.zip` | 1.1 MB |
 | `SCE-03-title-cards.zip` | 3.2 MB |
 | `SCE-04-end-cards.zip` | 949 KB |
-| `SCE-05-cta-captions.zip` | 583 KB |
+| `SCE-05-cta-captions.zip` | 635 KB |
 | `SCE-06-service-badges.zip` | 333 KB |
 | `SCE-07-accent-bars.zip` | 4 KB |
-| `SCE-08-ALL-OVERLAYS.zip` | 8.0 MB |
+| `SCE-08-ALL-OVERLAYS.zip` | 8.1 MB |
 | `SCE-09-logos.zip` | 523 KB |
 | `SCE-10-rental-overlays.zip` | 1.3 MB |
 
 ## `09-campaign-ads/`
 
+**15 files** (0.1 MB). Examples:
+
+- `.gitignore`
+- `HOUSE-STYLE.md`
+- `PLATES.md`
+- `README.md`
+- `SITE-VIDEOS.md`
+- …and 10 more following the same pattern
+
+## `09-campaign-ads/.claude-flow/`
+
 *(empty)*
+
+## `09-campaign-ads/.claude-flow/neural/`
+
+| File | Size |
+|---|---|
+| `patterns.json` | 110 KB |
+| `stats.json` | 0 KB |
+
+## `09-campaign-ads/.claude-flow/policy/`
+
+| File | Size |
+|---|---|
+| `state.json` | 303 KB |
+
+## `09-campaign-ads/.hosting/`
+
+| File | Size |
+|---|---|
+| `urls.txt` | 10 KB |
+| `urls.v2.bak` | 10 KB |
+
+## `09-campaign-ads/.measure/`
+
+**24 files** (0.5 MB). Examples:
+
+- `s_001.jpg`
+- `s_002.jpg`
+- `s_003.jpg`
+- `s_004.jpg`
+- `s_005.jpg`
+- …and 19 more following the same pattern
+
+## `09-campaign-ads/.montage/`
+
+| File | Size |
+|---|---|
+| `concat.txt` | 1 KB |
+| `seg_00.mp4` | 5.5 MB |
+| `seg_01.mp4` | 11.6 MB |
+| `seg_02.mp4` | 7.5 MB |
+| `seg_03.mp4` | 6.3 MB |
+| `seg_04.mp4` | 6.1 MB |
+| `seg_05.mp4` | 7.7 MB |
+| `seg_06.mp4` | 3.1 MB |
+
+## `09-campaign-ads/__pycache__/`
+
+| File | Size |
+|---|---|
+| `build_ad.cpython-311.pyc` | 26 KB |
+| `layouts.cpython-311.pyc` | 32 KB |
+| `make_beatcut.cpython-311.pyc` | 17 KB |
+| `make_cues.cpython-311.pyc` | 9 KB |
+
+## `09-campaign-ads/_deliverables/`
+
+| File | Size |
+|---|---|
+| `EXPVIP.zip` | 281.3 MB |
+| `Supercar-Experience-Ads.zip` | 375.2 MB |
+
+## `09-campaign-ads/_deliverables/.claude-flow/`
+
+*(empty)*
+
+## `09-campaign-ads/_deliverables/.claude-flow/neural/`
+
+| File | Size |
+|---|---|
+| `stats.json` | 0 KB |
+
+## `09-campaign-ads/_deliverables/.claude-flow/policy/`
+
+| File | Size |
+|---|---|
+| `state.json` | 7 KB |
+
+## `09-campaign-ads/_deliverables/EXPVIP/`
+
+| File | Size |
+|---|---|
+| `README.txt` | 1 KB |
+
+## `09-campaign-ads/_deliverables/EXPVIP/01 Porsche 911 GT3 RS/`
+
+| File | Size |
+|---|---|
+| `SCE_Porsche-911-GT3-RS_1-Price_15s-9x16.mp4` | 6.7 MB |
+| `SCE_Porsche-911-GT3-RS_2-Experience_15s-9x16.mp4` | 6.7 MB |
+| `SCE_Porsche-911-GT3-RS_3-Occasion_15s-9x16.mp4` | 6.7 MB |
+| `SCE_Porsche-911-GT3-RS_4-Offer_15s-9x16.mp4` | 6.7 MB |
+| `SCE_Porsche-911-GT3-RS_5-Question_15s-9x16.mp4` | 6.7 MB |
+
+## `09-campaign-ads/_deliverables/EXPVIP/02 McLaren 750S Spider/`
+
+| File | Size |
+|---|---|
+| `SCE_McLaren-750S-Spider_1-Price_15s-9x16.mp4` | 10.3 MB |
+| `SCE_McLaren-750S-Spider_2-Experience_15s-9x16.mp4` | 10.2 MB |
+| `SCE_McLaren-750S-Spider_3-Occasion_15s-9x16.mp4` | 10.2 MB |
+| `SCE_McLaren-750S-Spider_4-Offer_15s-9x16.mp4` | 10.2 MB |
+| `SCE_McLaren-750S-Spider_5-Question_15s-9x16.mp4` | 10.2 MB |
+
+## `09-campaign-ads/_deliverables/EXPVIP/03 Ferrari F8 Tributo/`
+
+| File | Size |
+|---|---|
+| `SCE_Ferrari-F8-Tributo_1-Price_15s-9x16.mp4` | 10.0 MB |
+| `SCE_Ferrari-F8-Tributo_2-Experience_15s-9x16.mp4` | 10.0 MB |
+| `SCE_Ferrari-F8-Tributo_3-Occasion_15s-9x16.mp4` | 10.0 MB |
+| `SCE_Ferrari-F8-Tributo_4-Offer_15s-9x16.mp4` | 10.0 MB |
+| `SCE_Ferrari-F8-Tributo_5-Question_15s-9x16.mp4` | 10.0 MB |
+
+## `09-campaign-ads/_deliverables/EXPVIP/04 Lamborghini Huracan STO/`
+
+| File | Size |
+|---|---|
+| `SCE_Lamborghini-Huracan-STO_1-Price_15s-9x16.mp4` | 7.1 MB |
+| `SCE_Lamborghini-Huracan-STO_2-Experience_15s-9x16.mp4` | 7.1 MB |
+| `SCE_Lamborghini-Huracan-STO_3-Occasion_15s-9x16.mp4` | 7.1 MB |
+| `SCE_Lamborghini-Huracan-STO_4-Offer_15s-9x16.mp4` | 7.1 MB |
+| `SCE_Lamborghini-Huracan-STO_5-Question_15s-9x16.mp4` | 7.1 MB |
+
+## `09-campaign-ads/_deliverables/EXPVIP/05 AMG GT Black Series/`
+
+| File | Size |
+|---|---|
+| `SCE_Mercedes-AMG-GT-Black-Series_1-Price_15s-9x16.mp4` | 8.6 MB |
+| `SCE_Mercedes-AMG-GT-Black-Series_2-Experience_15s-9x16.mp4` | 8.6 MB |
+| `SCE_Mercedes-AMG-GT-Black-Series_3-Occasion_15s-9x16.mp4` | 8.7 MB |
+| `SCE_Mercedes-AMG-GT-Black-Series_4-Offer_15s-9x16.mp4` | 8.7 MB |
+| `SCE_Mercedes-AMG-GT-Black-Series_5-Question_15s-9x16.mp4` | 8.6 MB |
+
+## `09-campaign-ads/_deliverables/EXPVIP/06 Ferrari Tempesta/`
+
+| File | Size |
+|---|---|
+| `SCE_Ferrari-Tempesta_1-Price_15s-9x16.mp4` | 4.8 MB |
+| `SCE_Ferrari-Tempesta_2-Experience_15s-9x16.mp4` | 4.8 MB |
+| `SCE_Ferrari-Tempesta_3-Occasion_15s-9x16.mp4` | 4.8 MB |
+| `SCE_Ferrari-Tempesta_4-Offer_15s-9x16.mp4` | 4.8 MB |
+| `SCE_Ferrari-Tempesta_5-Question_15s-9x16.mp4` | 4.8 MB |
+
+## `09-campaign-ads/_deliverables/EXPVIP/07 Lamborghini Novitec Urus/`
+
+| File | Size |
+|---|---|
+| `SCE_Lamborghini-Novitec-Urus_1-Price_15s-9x16.mp4` | 8.8 MB |
+| `SCE_Lamborghini-Novitec-Urus_2-Experience_15s-9x16.mp4` | 8.8 MB |
+| `SCE_Lamborghini-Novitec-Urus_3-Occasion_15s-9x16.mp4` | 8.9 MB |
+| `SCE_Lamborghini-Novitec-Urus_4-Offer_15s-9x16.mp4` | 8.8 MB |
+| `SCE_Lamborghini-Novitec-Urus_5-Question_15s-9x16.mp4` | 8.8 MB |
+
+## `09-campaign-ads/_deliverables/Supercar Experience Ads/`
+
+| File | Size |
+|---|---|
+| `README.txt` | 1 KB |
+
+## `09-campaign-ads/_deliverables/Supercar Experience Ads/01 Porsche 911 GT3 RS/`
+
+| File | Size |
+|---|---|
+| `SCE_Porsche-911-GT3-RS_1-Price_15s-9x16.mp4` | 6.7 MB |
+| `SCE_Porsche-911-GT3-RS_2-Experience_15s-9x16.mp4` | 6.7 MB |
+| `SCE_Porsche-911-GT3-RS_3-Occasion_15s-9x16.mp4` | 6.7 MB |
+| `SCE_Porsche-911-GT3-RS_4-Offer_15s-9x16.mp4` | 6.7 MB |
+| `SCE_Porsche-911-GT3-RS_5-Question_15s-9x16.mp4` | 6.7 MB |
+
+## `09-campaign-ads/_deliverables/Supercar Experience Ads/02 McLaren 750S Spider/`
+
+| File | Size |
+|---|---|
+| `SCE_McLaren-750S-Spider_1-Price_15s-9x16.mp4` | 10.3 MB |
+| `SCE_McLaren-750S-Spider_2-Experience_15s-9x16.mp4` | 10.2 MB |
+| `SCE_McLaren-750S-Spider_3-Occasion_15s-9x16.mp4` | 10.2 MB |
+| `SCE_McLaren-750S-Spider_4-Offer_15s-9x16.mp4` | 10.2 MB |
+| `SCE_McLaren-750S-Spider_5-Question_15s-9x16.mp4` | 10.2 MB |
+
+## `09-campaign-ads/_deliverables/Supercar Experience Ads/03 Ferrari F8 Tributo/`
+
+| File | Size |
+|---|---|
+| `SCE_Ferrari-F8-Tributo_1-Price_15s-9x16.mp4` | 10.0 MB |
+| `SCE_Ferrari-F8-Tributo_2-Experience_15s-9x16.mp4` | 10.0 MB |
+| `SCE_Ferrari-F8-Tributo_3-Occasion_15s-9x16.mp4` | 10.0 MB |
+| `SCE_Ferrari-F8-Tributo_4-Offer_15s-9x16.mp4` | 10.0 MB |
+| `SCE_Ferrari-F8-Tributo_5-Question_15s-9x16.mp4` | 10.0 MB |
+
+## `09-campaign-ads/_deliverables/Supercar Experience Ads/04 Lamborghini Huracan STO/`
+
+| File | Size |
+|---|---|
+| `SCE_Lamborghini-Huracan-STO_1-Price_15s-9x16.mp4` | 7.1 MB |
+| `SCE_Lamborghini-Huracan-STO_2-Experience_15s-9x16.mp4` | 7.1 MB |
+| `SCE_Lamborghini-Huracan-STO_3-Occasion_15s-9x16.mp4` | 7.1 MB |
+| `SCE_Lamborghini-Huracan-STO_4-Offer_15s-9x16.mp4` | 7.1 MB |
+| `SCE_Lamborghini-Huracan-STO_5-Question_15s-9x16.mp4` | 7.1 MB |
+
+## `09-campaign-ads/_deliverables/Supercar Experience Ads/05 AMG GT Black Series/`
+
+| File | Size |
+|---|---|
+| `SCE_Mercedes-AMG-GT-Black-Series_1-Price_15s-9x16.mp4` | 8.6 MB |
+| `SCE_Mercedes-AMG-GT-Black-Series_2-Experience_15s-9x16.mp4` | 8.6 MB |
+| `SCE_Mercedes-AMG-GT-Black-Series_3-Occasion_15s-9x16.mp4` | 8.7 MB |
+| `SCE_Mercedes-AMG-GT-Black-Series_4-Offer_15s-9x16.mp4` | 8.7 MB |
+| `SCE_Mercedes-AMG-GT-Black-Series_5-Question_15s-9x16.mp4` | 8.6 MB |
+
+## `09-campaign-ads/_deliverables/Supercar Experience Ads/06 Ferrari Tempesta/`
+
+| File | Size |
+|---|---|
+| `SCE_Ferrari-Tempesta_1-Price_15s-9x16.mp4` | 4.8 MB |
+| `SCE_Ferrari-Tempesta_2-Experience_15s-9x16.mp4` | 4.8 MB |
+| `SCE_Ferrari-Tempesta_3-Occasion_15s-9x16.mp4` | 4.8 MB |
+| `SCE_Ferrari-Tempesta_4-Offer_15s-9x16.mp4` | 4.8 MB |
+| `SCE_Ferrari-Tempesta_5-Question_15s-9x16.mp4` | 4.8 MB |
+
+## `09-campaign-ads/_deliverables/Supercar Experience Ads/07 Lamborghini Novitec Urus/`
+
+| File | Size |
+|---|---|
+| `SCE_Lamborghini-Novitec-Urus_1-Price_15s-9x16.mp4` | 8.8 MB |
+| `SCE_Lamborghini-Novitec-Urus_2-Experience_15s-9x16.mp4` | 8.8 MB |
+| `SCE_Lamborghini-Novitec-Urus_3-Occasion_15s-9x16.mp4` | 8.9 MB |
+| `SCE_Lamborghini-Novitec-Urus_4-Offer_15s-9x16.mp4` | 8.8 MB |
+| `SCE_Lamborghini-Novitec-Urus_5-Question_15s-9x16.mp4` | 8.8 MB |
+
+## `09-campaign-ads/_deliverables/Supercar Experience Ads/HOLD - Fall Rally 2026 (not approved)/`
+
+| File | Size |
+|---|---|
+| `SCE_Fall-Rally-2026_1-Price_18s-9x16.mp4` | 18.9 MB |
+| `SCE_Fall-Rally-2026_2-Experience_18s-9x16.mp4` | 18.8 MB |
+| `SCE_Fall-Rally-2026_3-Occasion_18s-9x16.mp4` | 18.8 MB |
+| `SCE_Fall-Rally-2026_4-Offer_18s-9x16.mp4` | 18.7 MB |
+| `SCE_Fall-Rally-2026_5-Question_18s-9x16.mp4` | 18.7 MB |
+
+## `09-campaign-ads/_fd-reference/`
+
+*(empty)*
+
+## `09-campaign-ads/_fd-reference/.claude-flow/`
+
+*(empty)*
+
+## `09-campaign-ads/_fd-reference/.claude-flow/neural/`
+
+| File | Size |
+|---|---|
+| `stats.json` | 0 KB |
+
+## `09-campaign-ads/_fd-reference/.claude-flow/policy/`
+
+| File | Size |
+|---|---|
+| `state.json` | 2 KB |
+
+## `09-campaign-ads/_fd-reference/aventador-s/`
+
+| File | Size |
+|---|---|
+| `README.md` | 11 KB |
+| `build_ad.py` | 12 KB |
+| `cue.json` | 2 KB |
+| `layouts.py` | 17 KB |
+| `recut.py` | 4 KB |
+| `shots.json` | 1 KB |
+
+## `09-campaign-ads/_fd-reference/aventador-s/.claude-flow/`
+
+*(empty)*
+
+## `09-campaign-ads/_fd-reference/aventador-s/.claude-flow/neural/`
+
+| File | Size |
+|---|---|
+| `stats.json` | 0 KB |
+
+## `09-campaign-ads/_fd-reference/aventador-s/.claude-flow/policy/`
+
+| File | Size |
+|---|---|
+| `state.json` | 2 KB |
+
+## `09-campaign-ads/_fd-reference/aventador-s/cuts/`
+
+| File | Size |
+|---|---|
+| `cue-6s-preroll.json` | 2 KB |
+| `cue-detail-walk.json` | 2 KB |
+
+## `09-campaign-ads/_fd-reference/aventador-s/layouts/`
+
+| File | Size |
+|---|---|
+| `cue-layout-centred.json` | 2 KB |
+| `cue-layout-panel.json` | 2 KB |
+| `cue-layout-rail.json` | 2 KB |
+
+## `09-campaign-ads/_fd-reference/aventador-s/variants/`
+
+| File | Size |
+|---|---|
+| `cue-b-get-a-quote.json` | 2 KB |
+| `cue-c-what-would-you-fit.json` | 2 KB |
+| `cue-d-see-what-fits.json` | 2 KB |
+
+## `09-campaign-ads/_fd-reference/mclaren-765lt/`
+
+| File | Size |
+|---|---|
+| `cue.json` | 0 KB |
+
+## `09-campaign-ads/_fd-reference/mclaren-765lt-stage2/`
+
+| File | Size |
+|---|---|
+| `README.md` | 5 KB |
+| `build_ad.py` | 13 KB |
+
+## `09-campaign-ads/_grade/`
+
+| File | Size |
+|---|---|
+| `WORKFLOW.md` | 13 KB |
+| `autocut.py` | 14 KB |
+| `cut_clip.sh` | 8 KB |
+| `match_grade.py` | 10 KB |
+
+## `09-campaign-ads/_grade/luts/`
+
+| File | Size |
+|---|---|
+| `AK_DLogM_Rescue.cube` | 948 KB |
+| `AK_Garage_Dark.cube` | 948 KB |
+| `AK_Golden_Vlog.cube` | 948 KB |
+| `AK_NQ_Signature.cube` | 948 KB |
+| `AK_Neutral_Punch.cube` | 948 KB |
+
+## `09-campaign-ads/amg-gt-black-series/`
+
+| File | Size |
+|---|---|
+| `cue.json` | 2 KB |
+
+## `09-campaign-ads/amg-gt-black-series/.frames/`
+
+**450 files** (34.7 MB). Examples:
+
+- `00000.png`
+- `00001.png`
+- `00002.png`
+- `00003.png`
+- `00004.png`
+- …and 445 more following the same pattern
+
+## `09-campaign-ads/amg-gt-black-series/exports/`
+
+| File | Size |
+|---|---|
+| `poster.jpg` | 107 KB |
+| `still-02_60s.jpg` | 236 KB |
+| `still-06_50s.jpg` | 171 KB |
+| `still-11_50s.jpg` | 162 KB |
+| `still-13_80s.jpg` | 107 KB |
+| `supercar-experience-amg-gt-black-series-15s-9x16-b-experience.mp4` | 8.6 MB |
+| `supercar-experience-amg-gt-black-series-15s-9x16-c-occasion.mp4` | 8.7 MB |
+| `supercar-experience-amg-gt-black-series-15s-9x16-d-offer.mp4` | 8.7 MB |
+| `supercar-experience-amg-gt-black-series-15s-9x16-e-engage.mp4` | 8.6 MB |
+| `supercar-experience-amg-gt-black-series-15s-9x16.mp4` | 8.6 MB |
+
+## `09-campaign-ads/amg-gt-black-series/exports/.claude-flow/`
+
+*(empty)*
+
+## `09-campaign-ads/amg-gt-black-series/exports/.claude-flow/neural/`
+
+| File | Size |
+|---|---|
+| `stats.json` | 0 KB |
+
+## `09-campaign-ads/amg-gt-black-series/exports/.claude-flow/policy/`
+
+| File | Size |
+|---|---|
+| `state.json` | 3 KB |
+
+## `09-campaign-ads/amg-gt-black-series/source/`
+
+| File | Size |
+|---|---|
+| `plate-1080x1920.mp4` | 16.9 MB |
+| `zones.json` | 1 KB |
+
+## `09-campaign-ads/amg-gt-black-series/variants/`
+
+| File | Size |
+|---|---|
+| `cue-a-price.json` | 2 KB |
+| `cue-b-experience.json` | 2 KB |
+| `cue-c-occasion.json` | 2 KB |
+| `cue-d-offer.json` | 2 KB |
+| `cue-e-engage.json` | 2 KB |
+
+## `09-campaign-ads/fall-rally/`
+
+| File | Size |
+|---|---|
+| `cue.json` | 2 KB |
+
+## `09-campaign-ads/fall-rally/.frames/`
+
+**540 files** (39.5 MB). Examples:
+
+- `00000.png`
+- `00001.png`
+- `00002.png`
+- `00003.png`
+- `00004.png`
+- …and 535 more following the same pattern
+
+## `09-campaign-ads/fall-rally/exports/`
+
+| File | Size |
+|---|---|
+| `poster.jpg` | 176 KB |
+| `supercar-experience-fall-rally-18s-9x16-b-experience.mp4` | 18.8 MB |
+| `supercar-experience-fall-rally-18s-9x16-c-occasion.mp4` | 18.8 MB |
+| `supercar-experience-fall-rally-18s-9x16-d-offer.mp4` | 18.7 MB |
+| `supercar-experience-fall-rally-18s-9x16-e-engage.mp4` | 18.7 MB |
+| `supercar-experience-fall-rally-18s-9x16.mp4` | 18.9 MB |
+
+## `09-campaign-ads/fall-rally/exports/.claude-flow/`
+
+*(empty)*
+
+## `09-campaign-ads/fall-rally/exports/.claude-flow/neural/`
+
+| File | Size |
+|---|---|
+| `stats.json` | 0 KB |
+
+## `09-campaign-ads/fall-rally/exports/.claude-flow/policy/`
+
+| File | Size |
+|---|---|
+| `state.json` | 3 KB |
+
+## `09-campaign-ads/fall-rally/source/`
+
+| File | Size |
+|---|---|
+| `plate-1080x1920.mp4` | 37.6 MB |
+| `zones.json` | 1 KB |
+
+## `09-campaign-ads/fall-rally/variants/`
+
+| File | Size |
+|---|---|
+| `cue-a-price.json` | 2 KB |
+| `cue-b-experience.json` | 2 KB |
+| `cue-c-occasion.json` | 2 KB |
+| `cue-d-offer.json` | 2 KB |
+| `cue-e-engage.json` | 2 KB |
+
+## `09-campaign-ads/fall-rally-beatcut/`
+
+| File | Size |
+|---|---|
+| `cue.json` | 2 KB |
+
+## `09-campaign-ads/fall-rally-beatcut/.frames/`
+
+**540 files** (39.1 MB). Examples:
+
+- `00000.png`
+- `00001.png`
+- `00002.png`
+- `00003.png`
+- `00004.png`
+- …and 535 more following the same pattern
+
+## `09-campaign-ads/fall-rally-beatcut/exports/`
+
+| File | Size |
+|---|---|
+| `supercar-experience-fall-rally-beatcut-18s-9x16-b-experience.mp4` | 20.9 MB |
+
+## `09-campaign-ads/fall-rally-beatcut/source/`
+
+| File | Size |
+|---|---|
+| `beatcut.json` | 1 KB |
+| `plate-1080x1920.mp4` | 38.8 MB |
+
+## `09-campaign-ads/fall-rally-beatcut/source/_beatcut/`
+
+| File | Size |
+|---|---|
+| `00.mp4` | 4.4 MB |
+| `01.mp4` | 9.5 MB |
+| `02.mp4` | 4.9 MB |
+| `03.mp4` | 3.8 MB |
+| `04.mp4` | 3.1 MB |
+| `05.mp4` | 2.6 MB |
+| `06.mp4` | 2.8 MB |
+| `07.mp4` | 8.9 MB |
+| `08.mp4` | 3.1 MB |
+| `09.mp4` | 3.2 MB |
+| `10.mp4` | 1.9 MB |
+| `_video.mp4` | 48.1 MB |
+| `list.txt` | 0 KB |
+
+## `09-campaign-ads/fall-rally-beatcut-2/`
+
+| File | Size |
+|---|---|
+| `cue.json` | 2 KB |
+
+## `09-campaign-ads/fall-rally-beatcut-2/.frames/`
+
+**540 files** (38.3 MB). Examples:
+
+- `00000.png`
+- `00001.png`
+- `00002.png`
+- `00003.png`
+- `00004.png`
+- …and 535 more following the same pattern
+
+## `09-campaign-ads/fall-rally-beatcut-2/exports/`
+
+| File | Size |
+|---|---|
+| `poster.jpg` | 165 KB |
+| `supercar-experience-fall-rally-beatcut-2-18s-9x16.mp4` | 20.8 MB |
+
+## `09-campaign-ads/fall-rally-beatcut-2/source/`
+
+| File | Size |
+|---|---|
+| `beatcut.json` | 1 KB |
+| `plate-1080x1920.mp4` | 39.3 MB |
+
+## `09-campaign-ads/fall-rally-beatcut-2/source/_beatcut/`
+
+**17 files** (97.6 MB). Examples:
+
+- `00.mp4`
+- `01.mp4`
+- `02.mp4`
+- `03.mp4`
+- `04.mp4`
+- …and 12 more following the same pattern
+
+## `09-campaign-ads/fall-rally-beatcut-3/`
+
+| File | Size |
+|---|---|
+| `cue.json` | 2 KB |
+
+## `09-campaign-ads/fall-rally-beatcut-3/.frames/`
+
+**540 files** (44.2 MB). Examples:
+
+- `00000.png`
+- `00001.png`
+- `00002.png`
+- `00003.png`
+- `00004.png`
+- …and 535 more following the same pattern
+
+## `09-campaign-ads/fall-rally-beatcut-3/exports/`
+
+| File | Size |
+|---|---|
+| `poster.jpg` | 276 KB |
+| `supercar-experience-fall-rally-beatcut-3-18s-9x16-e-engage.mp4` | 20.1 MB |
+
+## `09-campaign-ads/fall-rally-beatcut-3/source/`
+
+| File | Size |
+|---|---|
+| `beatcut.json` | 1 KB |
+| `plate-1080x1920.mp4` | 40.8 MB |
+
+## `09-campaign-ads/fall-rally-beatcut-3/source/_beatcut/`
+
+| File | Size |
+|---|---|
+| `00.mp4` | 16.4 MB |
+| `01.mp4` | 5.3 MB |
+| `02.mp4` | 5.3 MB |
+| `03.mp4` | 6.4 MB |
+| `04.mp4` | 5.0 MB |
+| `05.mp4` | 4.5 MB |
+| `06.mp4` | 6.5 MB |
+| `07.mp4` | 1.9 MB |
+| `_video.mp4` | 51.2 MB |
+| `list.txt` | 0 KB |
+
+## `09-campaign-ads/ferrari-f8-tributo/`
+
+| File | Size |
+|---|---|
+| `cue.json` | 2 KB |
+
+## `09-campaign-ads/ferrari-f8-tributo/.frames/`
+
+**450 files** (32.3 MB). Examples:
+
+- `00000.png`
+- `00001.png`
+- `00002.png`
+- `00003.png`
+- `00004.png`
+- …and 445 more following the same pattern
+
+## `09-campaign-ads/ferrari-f8-tributo/exports/`
+
+| File | Size |
+|---|---|
+| `poster.jpg` | 107 KB |
+| `still-02_60s.jpg` | 253 KB |
+| `still-06_50s.jpg` | 208 KB |
+| `still-11_50s.jpg` | 212 KB |
+| `still-13_80s.jpg` | 107 KB |
+| `supercar-experience-ferrari-f8-tributo-15s-9x16-b-experience.mp4` | 10.0 MB |
+| `supercar-experience-ferrari-f8-tributo-15s-9x16-c-occasion.mp4` | 10.0 MB |
+| `supercar-experience-ferrari-f8-tributo-15s-9x16-d-offer.mp4` | 10.0 MB |
+| `supercar-experience-ferrari-f8-tributo-15s-9x16-e-engage.mp4` | 10.0 MB |
+| `supercar-experience-ferrari-f8-tributo-15s-9x16.mp4` | 10.0 MB |
+
+## `09-campaign-ads/ferrari-f8-tributo/exports/.claude-flow/`
+
+*(empty)*
+
+## `09-campaign-ads/ferrari-f8-tributo/exports/.claude-flow/neural/`
+
+| File | Size |
+|---|---|
+| `stats.json` | 0 KB |
+
+## `09-campaign-ads/ferrari-f8-tributo/exports/.claude-flow/policy/`
+
+| File | Size |
+|---|---|
+| `state.json` | 3 KB |
+
+## `09-campaign-ads/ferrari-f8-tributo/source/`
+
+| File | Size |
+|---|---|
+| `plate-1080x1920.mp4` | 19.0 MB |
+| `zones.json` | 1 KB |
+
+## `09-campaign-ads/ferrari-f8-tributo/variants/`
+
+| File | Size |
+|---|---|
+| `cue-a-price.json` | 2 KB |
+| `cue-b-experience.json` | 2 KB |
+| `cue-c-occasion.json` | 2 KB |
+| `cue-d-offer.json` | 2 KB |
+| `cue-e-engage.json` | 2 KB |
+
+## `09-campaign-ads/ferrari-tempesta/`
+
+| File | Size |
+|---|---|
+| `cue.json` | 2 KB |
+
+## `09-campaign-ads/ferrari-tempesta/.frames/`
+
+**450 files** (33.4 MB). Examples:
+
+- `00000.png`
+- `00001.png`
+- `00002.png`
+- `00003.png`
+- `00004.png`
+- …and 445 more following the same pattern
+
+## `09-campaign-ads/ferrari-tempesta/exports/`
+
+| File | Size |
+|---|---|
+| `poster.jpg` | 107 KB |
+| `still-02_60s.jpg` | 283 KB |
+| `still-06_50s.jpg` | 253 KB |
+| `still-11_50s.jpg` | 120 KB |
+| `still-13_80s.jpg` | 107 KB |
+| `supercar-experience-ferrari-tempesta-15s-9x16-b-experience.mp4` | 4.8 MB |
+| `supercar-experience-ferrari-tempesta-15s-9x16-c-occasion.mp4` | 4.8 MB |
+| `supercar-experience-ferrari-tempesta-15s-9x16-d-offer.mp4` | 4.8 MB |
+| `supercar-experience-ferrari-tempesta-15s-9x16-e-engage.mp4` | 4.8 MB |
+| `supercar-experience-ferrari-tempesta-15s-9x16.mp4` | 4.8 MB |
+
+## `09-campaign-ads/ferrari-tempesta/exports/.claude-flow/`
+
+*(empty)*
+
+## `09-campaign-ads/ferrari-tempesta/exports/.claude-flow/neural/`
+
+| File | Size |
+|---|---|
+| `stats.json` | 0 KB |
+
+## `09-campaign-ads/ferrari-tempesta/exports/.claude-flow/policy/`
+
+| File | Size |
+|---|---|
+| `state.json` | 4 KB |
+
+## `09-campaign-ads/ferrari-tempesta/source/`
+
+| File | Size |
+|---|---|
+| `plate-1080x1920.mp4` | 7.6 MB |
+| `zones.json` | 1 KB |
+
+## `09-campaign-ads/ferrari-tempesta/variants/`
+
+| File | Size |
+|---|---|
+| `cue-a-price.json` | 2 KB |
+| `cue-b-experience.json` | 2 KB |
+| `cue-c-occasion.json` | 2 KB |
+| `cue-d-offer.json` | 2 KB |
+| `cue-e-engage.json` | 2 KB |
+
+## `09-campaign-ads/lamborghini-sto/`
+
+| File | Size |
+|---|---|
+| `cue.json` | 2 KB |
+
+## `09-campaign-ads/lamborghini-sto/.frames/`
+
+**450 files** (32.7 MB). Examples:
+
+- `00000.png`
+- `00001.png`
+- `00002.png`
+- `00003.png`
+- `00004.png`
+- …and 445 more following the same pattern
+
+## `09-campaign-ads/lamborghini-sto/exports/`
+
+| File | Size |
+|---|---|
+| `poster.jpg` | 107 KB |
+| `still-02_60s.jpg` | 234 KB |
+| `still-06_50s.jpg` | 169 KB |
+| `still-11_50s.jpg` | 146 KB |
+| `still-13_80s.jpg` | 107 KB |
+| `supercar-experience-lamborghini-sto-15s-9x16-b-experience.mp4` | 7.1 MB |
+| `supercar-experience-lamborghini-sto-15s-9x16-c-occasion.mp4` | 7.1 MB |
+| `supercar-experience-lamborghini-sto-15s-9x16-d-offer.mp4` | 7.1 MB |
+| `supercar-experience-lamborghini-sto-15s-9x16-e-engage.mp4` | 7.1 MB |
+| `supercar-experience-lamborghini-sto-15s-9x16.mp4` | 7.1 MB |
+
+## `09-campaign-ads/lamborghini-sto/exports/.claude-flow/`
+
+*(empty)*
+
+## `09-campaign-ads/lamborghini-sto/exports/.claude-flow/neural/`
+
+| File | Size |
+|---|---|
+| `stats.json` | 0 KB |
+
+## `09-campaign-ads/lamborghini-sto/exports/.claude-flow/policy/`
+
+| File | Size |
+|---|---|
+| `state.json` | 3 KB |
+
+## `09-campaign-ads/lamborghini-sto/source/`
+
+| File | Size |
+|---|---|
+| `plate-1080x1920.mp4` | 13.7 MB |
+| `zones.json` | 1 KB |
+
+## `09-campaign-ads/lamborghini-sto/variants/`
+
+| File | Size |
+|---|---|
+| `cue-a-price.json` | 2 KB |
+| `cue-b-experience.json` | 2 KB |
+| `cue-c-occasion.json` | 2 KB |
+| `cue-d-offer.json` | 2 KB |
+| `cue-e-engage.json` | 2 KB |
+
+## `09-campaign-ads/mclaren-750s-spider/`
+
+| File | Size |
+|---|---|
+| `cue.json` | 2 KB |
+
+## `09-campaign-ads/mclaren-750s-spider/.frames/`
+
+**450 files** (35.3 MB). Examples:
+
+- `00000.png`
+- `00001.png`
+- `00002.png`
+- `00003.png`
+- `00004.png`
+- …and 445 more following the same pattern
+
+## `09-campaign-ads/mclaren-750s-spider/exports/`
+
+| File | Size |
+|---|---|
+| `poster.jpg` | 107 KB |
+| `still-02_60s.jpg` | 261 KB |
+| `still-06_50s.jpg` | 322 KB |
+| `still-11_50s.jpg` | 253 KB |
+| `still-13_80s.jpg` | 107 KB |
+| `supercar-experience-mclaren-750s-spider-15s-9x16-b-experience.mp4` | 10.2 MB |
+| `supercar-experience-mclaren-750s-spider-15s-9x16-c-occasion.mp4` | 10.2 MB |
+| `supercar-experience-mclaren-750s-spider-15s-9x16-d-offer.mp4` | 10.2 MB |
+| `supercar-experience-mclaren-750s-spider-15s-9x16-e-engage.mp4` | 10.2 MB |
+| `supercar-experience-mclaren-750s-spider-15s-9x16.mp4` | 10.3 MB |
+
+## `09-campaign-ads/mclaren-750s-spider/exports/.claude-flow/`
+
+*(empty)*
+
+## `09-campaign-ads/mclaren-750s-spider/exports/.claude-flow/neural/`
+
+| File | Size |
+|---|---|
+| `stats.json` | 0 KB |
+
+## `09-campaign-ads/mclaren-750s-spider/exports/.claude-flow/policy/`
+
+| File | Size |
+|---|---|
+| `state.json` | 9 KB |
+
+## `09-campaign-ads/mclaren-750s-spider/source/`
+
+| File | Size |
+|---|---|
+| `plate-1080x1920.mp4` | 19.7 MB |
+| `zones.json` | 1 KB |
+
+## `09-campaign-ads/mclaren-750s-spider/variants/`
+
+| File | Size |
+|---|---|
+| `cue-a-price.json` | 2 KB |
+| `cue-b-experience.json` | 2 KB |
+| `cue-c-occasion.json` | 2 KB |
+| `cue-d-offer.json` | 2 KB |
+| `cue-e-engage.json` | 2 KB |
+
+## `09-campaign-ads/novitec-urus/`
+
+| File | Size |
+|---|---|
+| `cue.json` | 2 KB |
+
+## `09-campaign-ads/novitec-urus/.frames/`
+
+**450 files** (34.3 MB). Examples:
+
+- `00000.png`
+- `00001.png`
+- `00002.png`
+- `00003.png`
+- `00004.png`
+- …and 445 more following the same pattern
+
+## `09-campaign-ads/novitec-urus/exports/`
+
+| File | Size |
+|---|---|
+| `poster.jpg` | 107 KB |
+| `still-02_60s.jpg` | 193 KB |
+| `still-06_50s.jpg` | 197 KB |
+| `still-11_50s.jpg` | 179 KB |
+| `still-13_80s.jpg` | 107 KB |
+| `supercar-experience-novitec-urus-15s-9x16-b-experience.mp4` | 8.8 MB |
+| `supercar-experience-novitec-urus-15s-9x16-c-occasion.mp4` | 8.9 MB |
+| `supercar-experience-novitec-urus-15s-9x16-d-offer.mp4` | 8.8 MB |
+| `supercar-experience-novitec-urus-15s-9x16-e-engage.mp4` | 8.8 MB |
+| `supercar-experience-novitec-urus-15s-9x16.mp4` | 8.8 MB |
+
+## `09-campaign-ads/novitec-urus/exports/.claude-flow/`
+
+*(empty)*
+
+## `09-campaign-ads/novitec-urus/exports/.claude-flow/neural/`
+
+| File | Size |
+|---|---|
+| `stats.json` | 0 KB |
+
+## `09-campaign-ads/novitec-urus/exports/.claude-flow/policy/`
+
+| File | Size |
+|---|---|
+| `state.json` | 3 KB |
+
+## `09-campaign-ads/novitec-urus/source/`
+
+| File | Size |
+|---|---|
+| `plate-1080x1920.mp4` | 18.1 MB |
+| `zones.json` | 1 KB |
+
+## `09-campaign-ads/novitec-urus/variants/`
+
+| File | Size |
+|---|---|
+| `cue-a-price.json` | 2 KB |
+| `cue-b-experience.json` | 2 KB |
+| `cue-c-occasion.json` | 2 KB |
+| `cue-d-offer.json` | 2 KB |
+| `cue-e-engage.json` | 2 KB |
+
+## `09-campaign-ads/porsche-gt3rs/`
+
+| File | Size |
+|---|---|
+| `cue.json` | 2 KB |
+
+## `09-campaign-ads/porsche-gt3rs/.frames/`
+
+**450 files** (33.1 MB). Examples:
+
+- `00000.png`
+- `00001.png`
+- `00002.png`
+- `00003.png`
+- `00004.png`
+- …and 445 more following the same pattern
+
+## `09-campaign-ads/porsche-gt3rs/exports/`
+
+| File | Size |
+|---|---|
+| `poster.jpg` | 107 KB |
+| `still-02_60s.jpg` | 185 KB |
+| `still-06_50s.jpg` | 179 KB |
+| `still-08_00s.jpg` | 225 KB |
+| `still-11_50s.jpg` | 181 KB |
+| `still-13_80s.jpg` | 107 KB |
+| `supercar-experience-porsche-gt3rs-15s-9x16-b-experience.mp4` | 6.7 MB |
+| `supercar-experience-porsche-gt3rs-15s-9x16-c-occasion.mp4` | 6.7 MB |
+| `supercar-experience-porsche-gt3rs-15s-9x16-d-offer.mp4` | 6.7 MB |
+| `supercar-experience-porsche-gt3rs-15s-9x16-e-engage.mp4` | 6.7 MB |
+| `supercar-experience-porsche-gt3rs-15s-9x16.mp4` | 6.7 MB |
+
+## `09-campaign-ads/porsche-gt3rs/exports/.claude-flow/`
+
+*(empty)*
+
+## `09-campaign-ads/porsche-gt3rs/exports/.claude-flow/neural/`
+
+| File | Size |
+|---|---|
+| `stats.json` | 0 KB |
+
+## `09-campaign-ads/porsche-gt3rs/exports/.claude-flow/policy/`
+
+| File | Size |
+|---|---|
+| `state.json` | 11 KB |
+
+## `09-campaign-ads/porsche-gt3rs/exports/decision/`
+
+| File | Size |
+|---|---|
+| `look-ab_t90s.jpg` | 224 KB |
+| `zones.json` | 1 KB |
+
+## `09-campaign-ads/porsche-gt3rs/source/`
+
+| File | Size |
+|---|---|
+| `plate-1080x1920.mp4` | 11.8 MB |
+| `zones.json` | 1 KB |
+
+## `09-campaign-ads/porsche-gt3rs/variants/`
+
+| File | Size |
+|---|---|
+| `cue-a-price.json` | 2 KB |
+| `cue-b-experience.json` | 2 KB |
+| `cue-c-occasion.json` | 2 KB |
+| `cue-d-offer.json` | 2 KB |
+| `cue-e-engage.json` | 2 KB |
 
 ---
 
-**393 files total.**
+**6088 files total.**
