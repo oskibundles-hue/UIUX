@@ -123,7 +123,7 @@ Pipeline is `creator-kit/`: cut and grade with `cut_clip.sh`, transcribe, match 
 
 **Colour is fixed in the pipeline, wrong in the delivered files.** `RED` in `creator-kit/remotion/src/Motion.tsx` is now `#FE0F13`, the real brand red measured off Omarie's own overlay pack and confirmed by the FD brand kit. Reels MR1-MR8 were built before that fix (2026-09-12) and still carry the old `#DE1A22`, so anything you build now will not colour-match them. Re-render the series when he asks; do not quietly mix the two.
 
-**Open defect:** caption coverage is low on three reels — MR4 at 18% of speech, MR3 at 51%, MR6 at 53%. On muted autoplay that is most of the dialogue lost. The cause is the his-voice filter dropping other speakers; the fix is more of his own speech in the window, not looser voice matching.
+**Caption coverage, measured 2026-09-13.** The flagged reels are MR4 at 18% of speech, MR3 at 51%, MR6 at 53%. Counting his words in the source shows most of this is the footage, not the edit: MR4's two takes hold 55 of his words in 86 s and the reel already captions 48 of them, so it cannot be rebuilt above roughly 20%. MR3 sits at 155 of 221 against a ceiling of 161 — not worth a rebuild. Only MR6 has real headroom, 128 of 200 against 143, which `plan_reel.py --weight 0.7` now reaches by giving the talky take more of the 56 s. Do not loosen the voice threshold to raise the number; it captions other people as him.
 
 ## Formula Dynamics — client ads
 
