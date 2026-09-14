@@ -280,6 +280,17 @@ def contact_line(base, y, centre=True):
     return t.height
 
 
+def contact_block(im, x, y, size=28):
+    """Phone and handle on top, address and site beneath. One place, so the
+    five layouts cannot drift apart as details change."""
+    a = R.text(f"{PHONE}     {HANDLE}", size, B.WHITE, tracking=0.08)
+    put(im, a, x, y)
+    b = R.text(f"{ADDRESS}     {SITE}", int(size * 0.79), "#A9A8AF",
+               tracking=0.12)
+    put(im, b, x, y + a.height + 14)
+    return a.height + 14 + b.height
+
+
 def headline(base, x, y, l1, l2, size=132, gap=6):
     a = R.fit_text(l1, SAFE_RIGHT - x, max_height=size, color=B.WHITE,
                    tracking=0.01)
@@ -296,6 +307,9 @@ def headline(base, x, y, l1, l2, size=132, gap=6):
 PHONE = "(702) 430-1040"
 ADDRESS = "4790 POLARIS AVE  ·  LAS VEGAS, NV"
 SITE = "formuladynamics.com"
+# Confirmed by the shop 14 Sept: @formuladynamicsperformance is current and
+# @formuladynamicsusa is the old one, being taken off the website.
+HANDLE = "@formuladynamicsperformance"
 QUALIFIER = ("EXOTICS  ·  LUXURY  ·  PERFORMANCE", "ALL MAKES  ·  ALL MODELS")
 FOOT = ("PERFORMANCE", "PROTECTION", "MAINTENANCE", "AND BEYOND")
 
@@ -362,10 +376,7 @@ def layout_spec(photo, s):
     put(im, c1, SAFE_RIGHT - c1.width, H - 326)
     put(im, c2, SAFE_RIGHT - c2.width, H - 326 + c1.height + 4)
 
-    ph = R.text(f"{PHONE}     {SITE}", 30, B.WHITE, tracking=0.10)
-    put(im, ph, MARGIN, H - 168)
-    ad = R.text(ADDRESS, 24, "#9A99A0", tracking=0.14)
-    put(im, ad, MARGIN, H - 168 + ph.height + 16)
+    contact_block(im, MARGIN, H - 172, 29)
     footer(im, FOOT, H - 62)
     return im
 
@@ -421,8 +432,8 @@ def layout_band(photo, s):
     R.paste(im, cta, MARGIN + (SAFE_RIGHT - MARGIN - cta.width) // 2,
             bar_y + (76 - cta.height) // 2)
 
-    ph = R.text(f"{PHONE}     {SITE}", 28, B.WHITE, tracking=0.10)
-    R.paste(im, ph, (W - ph.width) // 2, H - 92)
+    cb = R.text(f"{PHONE}   {HANDLE}   {SITE}", 25, B.WHITE, tracking=0.08)
+    put(im, cb, (W - cb.width) // 2, H - 96)
     footer(im, FOOT, H - 52)
     return im
 
@@ -473,10 +484,7 @@ def layout_rail(photo, s):
     R.paste(im, c1, SAFE_RIGHT - c1.width, H - 288)
     R.paste(im, c2, SAFE_RIGHT - c2.width, H - 288 + c1.height + 4)
 
-    ph = R.text(f"{PHONE}     {SITE}", 27, B.WHITE, tracking=0.10)
-    R.paste(im, ph, x, H - 132)
-    ad = R.text(ADDRESS, 22, "#A9A8AF", tracking=0.14)
-    put(im, ad, x, H - 132 + ph.height + 14)
+    contact_block(im, x, H - 140, 26)
     return im
 
 
@@ -533,10 +541,7 @@ def layout_job(photo, s):
     put(im, c1, SAFE_RIGHT - c1.width, y + 6)
     put(im, c2, SAFE_RIGHT - c2.width, y + 6 + c1.height + 6)
 
-    ph = R.text(f"{PHONE}     {SITE}", 27, B.WHITE, tracking=0.10)
-    put(im, ph, MARGIN, H - 150)
-    ad = R.text(ADDRESS, 22, "#8B8A91", tracking=0.14)
-    put(im, ad, MARGIN, H - 150 + ph.height + 14)
+    contact_block(im, MARGIN, H - 154, 26)
     footer(im, FOOT, H - 58)
     return im
 
@@ -592,10 +597,7 @@ def layout_telemetry(photo, s):
     put(im, c1, SAFE_RIGHT - c1.width, py + 10)
     put(im, c2, SAFE_RIGHT - c2.width, py + 10 + c1.height + 6)
 
-    ph = R.text(f"{PHONE}     {SITE}", 28, B.WHITE, tracking=0.10)
-    put(im, ph, MARGIN, H - 156)
-    ad = R.text(ADDRESS, 22, "#A9A8AF", tracking=0.14)
-    put(im, ad, MARGIN, H - 156 + ph.height + 14)
+    contact_block(im, MARGIN, H - 160, 27)
     footer(im, FOOT, H - 60)
     return im
 
