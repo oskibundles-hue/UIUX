@@ -31,6 +31,8 @@ import fd_brand as B                            # noqa: E402
 import fd_render as R                           # noqa: E402
 
 OUT = HERE / "service-posters"
+PHOTOS = HERE / "photos"
+APPROVED_LAYOUT = "J"   # signed off 14 Sept; every service is built on it
 W, H = B.CANVASES["9x16"]
 
 # Instagram's action rail starts at x = 907 on a 1080 canvas. Nothing that has
@@ -319,6 +321,7 @@ FOOT = ("PERFORMANCE", "PROTECTION", "MAINTENANCE", "AND BEYOND")
 # --------------------------------------------------------------------------
 SERVICE_POSTERS = {
     "brakes": dict(
+        photo="DSC00075.JPEG",
         eyebrow="BRAKE SERVICE",
         # Benefit first, price late - the shop's own copy rule. The service
         # name is the eyebrow; the headline is what it does for the car.
@@ -331,7 +334,10 @@ SERVICE_POSTERS = {
             ("pad",     "BRAKE",      "UPGRADES AVAILABLE"),
         ],
         price="$499",
-        fine="PADS SOLD SEPARATELY",
+        # "Parts", not "pads": the list names rotors and pads both, so the
+        # narrower word under-declared what the customer may still owe for.
+        # Shop's own wording, 14 Sept.
+        fine="PARTS SOLD SEPARATELY",
         cta=("BOOK YOUR", "BRAKE SERVICE"),
     ),
 }
@@ -611,20 +617,24 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("service", help="key in SERVICE_POSTERS, or 'all'")
     ap.add_argument("--photo", help="hero photograph; omit for a marked slot")
-    ap.add_argument("--layout", default="all", help="A-E or all")
+    ap.add_argument("--layout", default=APPROVED_LAYOUT,
+                    help="letter, or all. Default is the approved layout.")
     ap.add_argument("--fx", type=float, default=0.5,
                     help="horizontal crop aim, 0 left .. 1 right")
     a = ap.parse_args()
 
     OUT.mkdir(parents=True, exist_ok=True)
-    photo = Image.open(a.photo) if a.photo else placeholder(W, H)
     keys = list(SERVICE_POSTERS) if a.service == "all" else [a.service]
     want = list(LAYOUTS) if a.layout == "all" else [a.layout.upper()]
 
     for key in keys:
+        cfg = SERVICE_POSTERS[key]
+        # Each service names its own frame; --photo overrides for a one-off.
+        src = a.photo or (PHOTOS / cfg["photo"] if cfg.get("photo") else None)
+        photo = Image.open(src) if src else placeholder(W, H)
         for L in want:
             tag, fn = LAYOUTS[L]
-            im = fn(photo, SERVICE_POSTERS[key])
+            im = fn(photo, cfg)
             path = OUT / f"{key}-{L}-{tag}.png"
             im.convert("RGB").save(path)
             print(f"  {path.name}  {im.width}x{im.height}  "
@@ -697,7 +707,21 @@ def offer_block(im, x, y, s, price_size=150):
     return lab.height + 14 + pr.height + 20 + note.height
 
 
-def cta_block(im, x, y, s, size=54, right=False):
+def cta_block(im, x, y, s, size=54, right=False, avoid_x=None):
+    if right and avoid_x is not None:
+        while size > MIN_TYPE:
+            w = max(R.text(l, size, B.WHITE, tracking=0.05).width
+                    for l in s["cta"])
+            if SAFE_RIGHT - w >= avoid_x + 24:
+                break
+            size -= 2
+        else:
+            w = max(R.text(l, MIN_TYPE, B.WHITE, tracking=0.05).width
+                    for l in s["cta"])
+            if SAFE_RIGHT - w < avoid_x + 24:
+                raise ValueError(
+                    f'CTA "{s["cta"][0]} {s["cta"][1]}" cannot clear the offer '
+                    f"at {MIN_TYPE}px - shorten it")
     a = t(s["cta"][0], size, B.WHITE, tracking=0.05)
     b = t(s["cta"][1], size, B.RED, tracking=0.05)
     ax = SAFE_RIGHT - a.width if right else x
@@ -950,13 +974,21 @@ def price_hero(im, x, y, s, cap=190, right=False):
     lab = t(s["offer_label"], 40, "#C9C8CF", tracking=0.18)
     lx = SAFE_RIGHT - lab.width if right else x
     put(im, lab, lx, y)
-    pr = R.fit_text(s["price"], SAFE_RIGHT - x, max_height=cap, color=B.WHITE,
-                    tracking=0.0)
+    # No published price means no invented one. The offer takes the slot, set
+    # in words rather than digits, so it still reads as the big promise.
+    if s.get("price"):
+        pr = R.fit_text(s["price"], SAFE_RIGHT - x, max_height=cap,
+                        color=B.WHITE, tracking=0.0)
+    else:
+        pr = R.fit_text(s.get("big_offer", DM), int((SAFE_RIGHT - x) * 0.56),
+                        max_height=int(cap * 0.52), color=B.WHITE,
+                        tracking=0.02)
     px = SAFE_RIGHT - pr.width if right else x
     put(im, pr, px, y + lab.height + 10)
     note = t(s["fine"], 34, B.RED, tracking=0.16)
     nx = SAFE_RIGHT - note.width if right else x
     put(im, note, nx, y + lab.height + 10 + pr.height + 16)
+    price_hero.right = px + pr.width
     return lab.height + 10 + pr.height + 16 + note.height
 
 
@@ -978,8 +1010,10 @@ def layout_service_first(photo, s):
     c.y = icon_rows(im, MARGIN, c.y, s, icon=68, lead=42, sub=34, pitch=100)
     c.advance(0, 26)
 
-    c.advance(price_hero(im, MARGIN, c.y, s, cap=170), 8)
-    cta_block(im, MARGIN, c.y - 168, s, size=48, right=True)
+    py = c.y
+    c.advance(price_hero(im, MARGIN, py, s, cap=170), 8)
+    cta_block(im, MARGIN, py + 30, s, size=48, right=True,
+               avoid_x=price_hero.right)
     c.advance(0, 30)
 
     contact_compact(im, MARGIN, c.y); c.advance(90, 0)
@@ -1006,8 +1040,10 @@ def layout_service_band(photo, s):
     c.y = icon_rows(im, MARGIN, c.y, s, icon=64, lead=40, sub=34, pitch=88)
     c.advance(0, 24)
 
-    c.advance(price_hero(im, MARGIN, c.y, s, cap=135), 6)
-    cta_block(im, MARGIN, c.y - 135, s, size=46, right=True)
+    py = c.y
+    c.advance(price_hero(im, MARGIN, py, s, cap=135), 6)
+    cta_block(im, MARGIN, py + 24, s, size=46, right=True,
+               avoid_x=price_hero.right)
     c.advance(0, 26)
 
     contact_compact(im, MARGIN, c.y); c.advance(90, 0)
@@ -1036,8 +1072,10 @@ def layout_service_split(photo, s):
     c2 = Cursor(plate_top + 46, H - 92, "L-plate")
     c2.y = icon_rows(im, MARGIN, c2.y, s, icon=56, lead=38, sub=34, pitch=76)
     c2.advance(0, 14)
-    c2.advance(price_hero(im, MARGIN, c2.y, s, cap=128), 4)
-    cta_block(im, MARGIN, c2.y - 128, s, size=46, right=True)
+    py = c2.y
+    c2.advance(price_hero(im, MARGIN, py, s, cap=128), 4)
+    cta_block(im, MARGIN, py + 22, s, size=46, right=True,
+                avoid_x=price_hero.right)
     c2.advance(0, 22)
     contact_compact(im, MARGIN, c2.y); c2.advance(90, 0)
     footer_big(im, FOOT, H - 52)
@@ -1047,6 +1085,158 @@ def layout_service_split(photo, s):
 LAYOUTS.update({"J": ("service-first", layout_service_first),
                 "K": ("service-band", layout_service_band),
                 "L": ("service-split", layout_service_split)})
+
+
+
+# ==========================================================================
+# The rest of the menu, on the approved layout.
+#
+# Every line item below is lifted from SERVICE-LINE-ITEMS.md rather than
+# written fresh, so the ticks and the open boxes in that file still describe
+# exactly what is on screen. Where a service has three lines, it gets three -
+# the layout takes a short list without complaint, and padding one out would
+# mean inventing claims the shop has not seen.
+#
+# Services with no published price do not get a made-up one. They carry
+# DM FOR PRICING, which is the shop's own stated preference for high-ticket
+# work: it lets them sell rather than letting the number decide.
+# ==========================================================================
+def icon_shield(d, s, c):
+    w = max(2, int(s * 0.055))
+    d.polygon([(s*.5, s*.08), (s*.88, s*.24), (s*.88, s*.56),
+               (s*.5, s*.92), (s*.12, s*.56), (s*.12, s*.24)],
+              outline=c, width=w)
+    d.line([(s*.32, s*.48), (s*.45, s*.62), (s*.70, s*.34)], fill=c,
+           width=max(3, int(s*.075)), joint="curve")
+
+
+def icon_chip(d, s, c):
+    w = max(2, int(s * 0.055))
+    d.rounded_rectangle([s*.24, s*.24, s*.76, s*.76], radius=s*.08,
+                        outline=c, width=w)
+    d.rectangle([s*.40, s*.40, s*.60, s*.60], fill=c)
+    for i in range(3):
+        o = s * (0.34 + i * 0.16)
+        for a, b, cc, dd in ((o, s*.08, o, s*.24), (o, s*.76, o, s*.92),
+                             (s*.08, o, s*.24, o), (s*.76, o, s*.92, o)):
+            d.line([(a, b), (cc, dd)], fill=c, width=w)
+
+
+def icon_spring(d, s, c):
+    w = max(3, int(s * 0.07))
+    d.line([(s*.5, s*.06), (s*.5, s*.18)], fill=c, width=w)
+    d.line([(s*.5, s*.82), (s*.5, s*.94)], fill=c, width=w)
+    for i in range(4):
+        y = s * (0.20 + i * 0.155)
+        d.line([(s*.24, y), (s*.76, y + s*.075)], fill=c, width=w)
+        d.line([(s*.76, y + s*.075), (s*.24, y + s*.155)], fill=c, width=w)
+
+
+def icon_wrench(d, s, c):
+    w = max(3, int(s * 0.10))
+    d.line([(s*.30, s*.70), (s*.72, s*.28)], fill=c, width=w)
+    d.ellipse([s*.14, s*.54, s*.44, s*.86], outline=c, width=max(2, int(s*.06)))
+    d.ellipse([s*.60, s*.14, s*.88, s*.42], outline=c, width=max(2, int(s*.06)))
+
+
+def icon_calendar(d, s, c):
+    w = max(2, int(s * 0.055))
+    d.rounded_rectangle([s*.12, s*.20, s*.88, s*.88], radius=s*.07,
+                        outline=c, width=w)
+    d.line([(s*.12, s*.40), (s*.88, s*.40)], fill=c, width=w)
+    d.line([(s*.32, s*.08), (s*.32, s*.26)], fill=c, width=w)
+    d.line([(s*.68, s*.08), (s*.68, s*.26)], fill=c, width=w)
+    d.rectangle([s*.30, s*.54, s*.46, s*.70], fill=c)
+
+
+ICONS.update(shield=icon_shield, chip=icon_chip, spring=icon_spring,
+             wrench=icon_wrench, calendar=icon_calendar)
+
+DM = "DM FOR PRICING"
+
+MENU = {
+ "oil": dict(
+   photo="DSC08985-Edit.JPEG", big=("OIL", "SERVICE"),
+   support="THE OIL ITSELF, NOT JUST THE LABOR.",
+   includes5=[("fluid", "OIL & FILTER", "REPLACED"),
+              ("check", "MULTI-POINT", "INSPECTION"),
+              ("gauge", "FLUIDS", "TOPPED OFF")],
+   offer_label="OIL SERVICE FROM", price="$1,199",
+   fine="THE OIL IS INCLUDED", cta=("BOOK YOUR OIL", "SERVICE TODAY")),
+
+ "suspension": dict(
+   photo="DSC07635-Edit.JPEG", big=("SUSPENSION", "SERVICE"),
+   support="RIDES THE WAY IT LEFT THE FACTORY.",
+   includes5=[("spring", "RIDE HEIGHT", "SET"),
+              ("wrench", "BUSHINGS", "CHECKED"),
+              ("gauge", "FOUR-WHEEL", "ALIGNMENT")],
+   offer_label="SUSPENSION SERVICE", price=None, big_offer=DM,
+   fine="IN THE ANNUAL PACKAGE", cta=("BOOK YOUR", "SERVICE TODAY")),
+
+ "diagnostics": dict(
+   photo="DSC06522.JPEG", big=("FULL", "DIAGNOSTICS"),
+   support="KNOW WHAT IT NEEDS BEFORE IT BREAKS.",
+   includes5=[("chip", "FULL ECU", "SCAN"),
+              ("check", "WRITTEN", "REPORT")],
+   offer_label="DIAGNOSTICS FROM", price="$499",
+   fine="TWO IN THE ANNUAL PACKAGE", cta=("BOOK YOUR", "DIAGNOSTICS TODAY")),
+
+ "fullppf": dict(
+   photo="DSC05931.JPEG", big=("FULL CAR", "PPF"),
+   support="THE PAINT IS THE EXPENSIVE PART.",
+   includes5=[("shield", "EVERY PAINTED", "PANEL"),
+              ("shield", "EDGES & JAMBS", "WRAPPED"),
+              ("fluid", "EXTERIOR CERAMIC", "COATING"),
+              ("fluid", "INTERIOR CERAMIC", "COATING")],
+   offer_label="FULL CAR PPF", price=None, big_offer=DM,
+   fine="SELF-HEALING FILM", cta=("BOOK YOUR", "PPF TODAY")),
+
+ "windshieldppf": dict(
+   photo="DSC08987.JPEG", big=("WINDSHIELD", "PPF"),
+   support="EDGE TO EDGE, OPTICALLY CLEAR.",
+   includes5=[("shield", "ROCK CHIP", "PROTECTION"),
+              ("shield", "EDGE-TO-EDGE", "COVERAGE"),
+              ("check", "HEADLIGHT PPF", "FREE")],
+   offer_label="WINDSHIELD PPF", price="$899",
+   fine="HEADLIGHTS INCLUDED FREE", cta=("BOOK YOUR", "WINDSHIELD TODAY")),
+
+ "tune": dict(
+   photo="DSC02047.JPEG", big=("ECU", "TUNE"),
+   support="STOCK IS A STARTING POINT.",
+   includes5=[("chip", "CUSTOM", "CALIBRATION"),
+              ("gauge", "ROAD", "TESTED"),
+              ("wrench", "RYFT TITANIUM", "FITTED HERE")],
+   offer_label="ECU TUNE", price="FREE",
+   fine="WITH A RYFT OR OPUS EXHAUST", cta=("BOOK YOUR", "TUNE TODAY")),
+
+ "gradientppf": dict(
+   photo="DSC05812.JPEG", big=("CUSTOM", "GRADIENT PPF"),
+   support="A COLOUR NOBODY ELSE IS RUNNING.",
+   includes5=[("shield", "COLOR MATCHED", "TO YOU"),
+              ("shield", "EVERY PANEL", "WRAPPED"),
+              ("fluid", "CERAMIC", "COATING")],
+   offer_label="CUSTOM GRADIENT PPF", price=None, big_offer=DM,
+   fine="FITTED IN HOUSE", cta=("BOOK YOUR", "WRAP TODAY")),
+
+ "annual": dict(
+   photo="DSC05802.JPEG", big=("ANNUAL", "SERVICE PACKAGE"),
+   support="A YEAR OF SERVICE, BOUGHT ONCE.",
+   includes5=[("fluid", "TWO OIL", "SERVICES"),
+              ("rotor", "ONE BRAKE", "SERVICE"),
+              ("chip", "TWO", "DIAGNOSTICS"),
+              ("spring", "ANY SUSPENSION", "SERVICE"),
+              ("calendar", "10% OFF", "UPGRADES")],
+   offer_label="ANNUAL PACKAGE", price="$3,999",
+   fine="PER YEAR  ·  PARTS SOLD SEPARATELY",
+   cta=("ASK ABOUT THE", "ANNUAL PACKAGE")),
+}
+
+for _k, _v in MENU.items():
+    _v.setdefault("for_line", SERVICE_POSTERS["brakes"]["for_line"])
+    _v.setdefault("eyebrow", _v["big"][0] + " " + _v["big"][1])
+    _v.setdefault("tagline", (_v["support"], ""))
+    _v.setdefault("includes", _v["includes5"][:4])
+    SERVICE_POSTERS[_k] = _v
 
 if __name__ == "__main__":
     main()

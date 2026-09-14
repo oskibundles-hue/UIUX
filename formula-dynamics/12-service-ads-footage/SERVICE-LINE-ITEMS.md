@@ -25,12 +25,33 @@ Until then this file is the record of what is asserted and on whose authority.
 
 ## Brake service · $499 · Porsche 911 GT3 RS
 
+### Video ad
+
 | On screen | Verified? |
 |---|---|
 | Rotors inspected | ☐ |
 | Fluid flushed and bled | ☐ |
 | Calipers cleaned | ☐ |
-| Pads sold separately *(ticker)* | ✅ shop's own correction, 9 Sept |
+| Parts sold separately *(ticker)* | ✅ shop's own wording, 14 Sept |
+
+### Poster — layout J, approved 14 Sept
+
+The poster carries five lines where the video carries three. Four of the five
+are still the writer's wording, not the lane's.
+
+| On screen | Verified? |
+|---|---|
+| Rotors — inspected & measured | ☐ |
+| Brake fluid — flushed & bled | ☐ |
+| Calipers — cleaned & checked | ☐ |
+| Pads — factory & performance | ✅ from formuladynamics.com, "Brake Upgrades" |
+| Full safety inspection | ☐ |
+| Brake service **from** $499 | ✅ "from" is accurate — parts are extra |
+| Parts sold separately | ✅ shop's own wording, 14 Sept — replaced "pads", which under-declared it |
+
+**The design is approved; four of these claims are not.** Approval of the
+layout is not verification of the copy, and the four boxes above still want a
+minute with whoever runs the lane.
 
 ## Suspension · Ferrari Roma
 

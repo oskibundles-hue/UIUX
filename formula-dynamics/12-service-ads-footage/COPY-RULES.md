@@ -116,10 +116,34 @@ long ones were width-bound anyway.
 
 ---
 
+## Posters
+
+**Layout J — "Service First" — is the approved poster template, 14 Sept.**
+Every service poster is built on it. The hierarchy is fixed and is the point
+of the layout:
+
+1. **The service name** at full width, two lines, white over red.
+2. **Who it is for** on a full-bleed red bar directly under it —
+   FOR EXOTICS · LUXURY · PERFORMANCE.
+3. **The price**, sized at roughly four times body size, with **from** in
+   front of it wherever parts are extra.
+
+The benefit line supports at 44px; it does not lead. That is the reverse of
+the benefit-first rule the video ads follow, and it is deliberate — a promo
+poster and a service ad are different jobs, and both exist.
+
+**Type floor: 34px.** A 1080px poster renders about 390pt wide in a phone
+feed, a scale of 0.361, so 34px is 12.3pt and anything under it is decoration
+rather than copy. The builder raises rather than drawing smaller.
+
+**Say "parts sold separately", not "pads".** The list names rotors and pads
+both, so the narrower word under-declared what the customer may still owe for.
+
 ## Status
 
 | Ad | State |
 |---|---|
+| **Poster — brake service · layout J** | **Approved 14 Sept** |
 | Annual service $3,999 · SF90 | **Approved** (rebuilt, benefit-led) |
 | Brake service $499 · GT3 RS | **Approved** |
 | Oil service $1,199 · Ferrari 296 | **Approved** |
