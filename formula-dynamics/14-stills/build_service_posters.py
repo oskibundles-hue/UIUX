@@ -934,10 +934,13 @@ def service_head(im, x, y, s, width=None, bar=True, cap=210):
         return y2 - y
     # A solid red bar is the one place the brand shouts, and it is carrying the
     # qualifier rather than decoration - it says the shop is for this car.
-    bh = 74
-    ImageDraw.Draw(im).rectangle([x, y2 + 26, SAFE_RIGHT, y2 + 26 + bh],
-                                 fill=B.RED)
-    fl = t(s["for_line"], 40, B.WHITE, tracking=0.14)
+    # Edge to edge, not inset to the text column: the bar reads as a band the
+    # poster is wearing rather than another block in the stack. 44px is the
+    # largest step up that still lands clear of Instagram's action rail - it
+    # ends at x=827 against the rail at 890, where 48px would cross it.
+    bh = 82
+    ImageDraw.Draw(im).rectangle([0, y2 + 26, W, y2 + 26 + bh], fill=B.RED)
+    fl = t(s["for_line"], 44, B.WHITE, tracking=0.14)
     R.paste(im, fl, x + 26, y2 + 26 + (bh - fl.height) // 2)
     return y2 + 26 + bh - y
 
