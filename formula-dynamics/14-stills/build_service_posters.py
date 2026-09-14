@@ -19,13 +19,14 @@ Layouts
 from __future__ import annotations
 
 import argparse
+import os
 import sys
 from pathlib import Path
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE.parent / "99-toolkit"))
 
-from PIL import Image, ImageDraw, ImageFilter  # noqa: E402
+from PIL import Image, ImageDraw, ImageFilter, ImageStat  # noqa: E402
 import fd_brand as B                            # noqa: E402
 import fd_render as R                           # noqa: E402
 
@@ -135,19 +136,48 @@ def placeholder(w, h, note="ADD PHOTO"):
     return im
 
 
-def cover(src, w, h, focus=0.5):
+def cover(src, w, h, focus=0.5, fx=0.5):
     """Scale to cover the box and crop, keeping `focus` of the height."""
     im = src.convert("RGB")
     f = max(w / im.width, h / im.height)
     im = im.resize((max(w, round(im.width * f)), max(h, round(im.height * f))),
                    Image.LANCZOS)
-    x = (im.width - w) // 2
+    x = int((im.width - w) * fx)
     y = int((im.height - h) * focus)
     return im.crop((x, y, x + w, y + h)).convert("RGBA")
 
 
-def scrim(base, box, top=0, bottom=210, feather=True):
+# White type needs the ground under it below roughly this luminance. A fixed
+# scrim is set for one car and fails on the next: the white GT3 RS measured 124
+# under the headline where a dark Cullinan measures single figures. So the
+# scrim SOLVES for the target instead of being dialled in by eye.
+TARGET_LUMA = 40
+DEBUG = bool(os.environ.get("FD_POSTER_DEBUG"))
+
+
+def solve_alpha(base, box, target=TARGET_LUMA, floor=8):
+    """How much to blend toward black so this box reads at `target`."""
+    box = (max(0, box[0]), max(0, box[1]), min(base.width, box[2]),
+           min(base.height, box[3]))
+    if box[2] <= box[0] or box[3] <= box[1]:
+        return 0.0
+    mean = ImageStat.Stat(base.crop(box).convert("L")).mean[0]
+    if mean <= target:
+        if DEBUG:
+            print(f"      ground {box[1]:>4}-{box[3]:<4} {mean:6.1f} -> already clear")
+        return 0.0
+    a = min(0.92, (mean - target) / max(1.0, mean - floor))
+    if DEBUG:
+        print(f"      ground {box[1]:>4}-{box[3]:<4} {mean:6.1f} -> "
+              f"{mean * (1 - a) + floor * a:5.1f}  (alpha {a:.2f})")
+    return a
+
+
+def scrim(base, box, top=0, bottom=210, feather=True, adapt=True):
     """Darken a band so type can sit on a photograph and still be read."""
+    if adapt:
+        need = solve_alpha(base, box)
+        bottom = max(bottom, int(255 * need))
     x0, y0, x1, y1 = box
     band = Image.new("L", (1, max(1, y1 - y0)))
     for i in range(band.height):
@@ -159,8 +189,42 @@ def scrim(base, box, top=0, bottom=210, feather=True):
     base.paste(Image.new("RGB", (x1 - x0, y1 - y0), (6, 6, 8)), (x0, y0), mask)
 
 
+def top_scrim(base, y_full, y_end, target=TARGET_LUMA):
+    """Hold strong from the top edge to y_full, then fade out by y_end.
+
+    The mirror of base_scrim. A top gradient that is strongest at y=0 leaves the
+    headline - which starts 200px down - in the weak tail, which is how the
+    white GT3 RS measured 124 under it.
+    """
+    need = solve_alpha(base, (0, 0, base.width, y_full), target)
+    if need <= 0:
+        return
+    scrim(base, (0, 0, base.width, y_full), top=int(255 * need),
+          bottom=int(255 * need), feather=False, adapt=False)
+    scrim(base, (0, y_full, base.width, y_end), top=int(255 * need),
+          bottom=0, adapt=False)
+
+
+def base_scrim(base, y_start, y_full, target=TARGET_LUMA):
+    """Ramp in from y_start, then hold flat to the foot.
+
+    A single gradient to the bottom edge leaves the middle of the band - which
+    is exactly where the inclusion list sits - at a third of full strength. The
+    ramp buys the soft edge; the flat section below it does the actual work, and
+    its strength is solved from what is under it.
+    """
+    need = solve_alpha(base, (0, y_full, base.width, base.height), target)
+    if need <= 0:
+        return
+    scrim(base, (0, y_start, base.width, y_full), top=0,
+          bottom=int(255 * need), adapt=False)
+    scrim(base, (0, y_full, base.width, base.height), top=int(255 * need),
+          bottom=int(255 * need), feather=False, adapt=False)
+
+
 def glass(base, box, darken=0.46, blur=16):
     """Frost cut from the picture itself. Translucent, never bordered."""
+    darken = max(darken, solve_alpha(base, box))
     x0, y0, x1, y1 = box
     patch = base.crop(box).convert("RGB").filter(ImageFilter.GaussianBlur(blur))
     patch = Image.blend(patch, Image.new("RGB", patch.size, (8, 8, 10)), darken)
@@ -264,8 +328,8 @@ SERVICE_POSTERS = {
 # --------------------------------------------------------------------------
 def layout_spec(photo, s):
     im = cover(photo, W, H, focus=0.55)
-    scrim(im, (0, 0, W, 520), top=200, bottom=30)
-    scrim(im, (0, 900, W, H), top=0, bottom=245)
+    top_scrim(im, 600, 760)
+    base_scrim(im, 840, 1000)
 
     brandmark(im, MARGIN, 72)
     qualifier(im, 78, QUALIFIER)
@@ -416,15 +480,138 @@ def layout_rail(photo, s):
     return im
 
 
+
+
+# --------------------------------------------------------------------------
+# Layout D - JOB SHEET. The work order the car actually leaves with.
+# Lifted from the Precision Workshop direction in the overlay pick, where the
+# job-sheet title card was called the best single piece of all three looks.
+# The photo is a LANDSCAPE band so a 3:2 shop frame is not cropped to ribbons.
+# --------------------------------------------------------------------------
+def layout_job(photo, s):
+    band_h = 760
+    im = Image.new("RGBA", (W, H), (10, 10, 12, 255))
+    im.paste(cover(photo, W, band_h, focus=0.52), (0, 0))
+    scrim(im, (0, 0, W, 240), top=190, bottom=0)
+
+    brandmark(im, MARGIN, 64)
+    qualifier(im, 70, QUALIFIER)
+
+    ImageDraw.Draw(im).rectangle([0, band_h, W, band_h + 6], fill=B.RED)
+
+    y = band_h + 58
+    eb = R.text("WORK ORDER", 26, B.RED, tracking=0.34)
+    put(im, eb, MARGIN, y)
+    job = R.text("FD-BRK-01", 26, "#8B8A91", tracking=0.20)
+    put(im, job, SAFE_RIGHT - job.width, y)
+
+    y = headline(im, MARGIN, y + eb.height + 26, s["h1"], s["h2"], size=98)
+
+    # Ruled docket rows - a hairline per line item, ticked, priced at the foot.
+    y += 54
+    d = ImageDraw.Draw(im)
+    for kind, a, b in s["includes"]:
+        d.line([(MARGIN, y), (SAFE_RIGHT, y)], fill=(42, 40, 46), width=2)
+        R.paste(im, badge(kind, 44), MARGIN + 4, y + 22)
+        ta = R.text(f"{a}  {b}", 30, B.WHITE, tracking=0.06)
+        R.paste(im, ta, MARGIN + 66, y + 30)
+        tick = R.text("DONE", 22, B.RED, tracking=0.22)
+        R.paste(im, tick, SAFE_RIGHT - tick.width, y + 34)
+        y += 92
+    d.line([(MARGIN, y), (SAFE_RIGHT, y)], fill=(42, 40, 46), width=2)
+
+    y += 44
+    lbl = R.text("TOTAL", 26, "#8B8A91", tracking=0.26)
+    R.paste(im, lbl, MARGIN, y + 34)
+    pr = R.text(s["price"], 92, B.WHITE, tracking=0.01)
+    put(im, pr, MARGIN + 150, y)
+    fn = R.text(s["fine"], 22, "#8B8A91", tracking=0.16)
+    R.paste(im, fn, MARGIN + 152, y + pr.height + 14)
+
+    c1 = R.text(s["cta"][0], 34, B.WHITE, tracking=0.06)
+    c2 = R.text(s["cta"][1], 34, B.RED, tracking=0.06)
+    put(im, c1, SAFE_RIGHT - c1.width, y + 6)
+    put(im, c2, SAFE_RIGHT - c2.width, y + 6 + c1.height + 6)
+
+    ph = R.text(f"{PHONE}     {SITE}", 27, B.WHITE, tracking=0.10)
+    put(im, ph, MARGIN, H - 150)
+    ad = R.text(ADDRESS, 22, "#8B8A91", tracking=0.14)
+    put(im, ad, MARGIN, H - 150 + ph.height + 14)
+    footer(im, FOOT, H - 58)
+    return im
+
+
+# --------------------------------------------------------------------------
+# Layout E - TELEMETRY. The overlay pick's own favourite, as a still: a ruler
+# down the edge, one red needle on the number that matters, frosted haze
+# rather than boxes, and red used only as the live signal.
+# --------------------------------------------------------------------------
+def layout_telemetry(photo, s):
+    im = cover(photo, W, H, focus=0.5, fx=0.5)
+    top_scrim(im, 580, 740)
+    base_scrim(im, 1020, 1140)
+
+    brandmark(im, MARGIN, 72)
+    qualifier(im, 78, QUALIFIER)
+
+    # A measurement ruler down the right edge - the shop measures things.
+    d = ImageDraw.Draw(im)
+    rx = SAFE_RIGHT + 26
+    for i in range(34):
+        ty = 430 + i * 30
+        long_tick = (i % 5 == 0)
+        d.line([(rx, ty), (rx + (26 if long_tick else 13), ty)],
+               fill=(255, 255, 255, 150 if long_tick else 70),
+               width=3 if long_tick else 2)
+
+    y = 210
+    eb = R.text(s["eyebrow"], 28, B.RED, tracking=0.34)
+    put(im, eb, MARGIN, y)
+    y = headline(im, MARGIN, y + eb.height + 20, s["h1"], s["h2"], size=116)
+
+    # The inclusions read as a readout, not a bulleted list.
+    y = 1160
+    for kind, a, b in s["includes"]:
+        R.paste(im, badge(kind, 46), MARGIN, y)
+        ta = R.text(a, 28, B.WHITE, tracking=0.10)
+        tb = R.text(b, 28, "#A9A8AF", tracking=0.06)
+        put(im, ta, MARGIN + 66, y + 8)
+        put(im, tb, MARGIN + 66 + 250, y + 8)
+        y += 64
+
+    # The needle: red only where the live value is.
+    py = H - 336
+    d.rectangle([MARGIN, py - 14, MARGIN + 7, py + 128], fill=B.RED)
+    pr = R.text(s["price"], 108, B.WHITE, tracking=0.01)
+    put(im, pr, MARGIN + 30, py)
+    fn = R.text(s["fine"], 22, "#A9A8AF", tracking=0.16)
+    put(im, fn, MARGIN + 32, py + pr.height + 16)
+
+    c1 = R.text(s["cta"][0], 36, B.WHITE, tracking=0.06)
+    c2 = R.text(s["cta"][1], 36, B.RED, tracking=0.06)
+    put(im, c1, SAFE_RIGHT - c1.width, py + 10)
+    put(im, c2, SAFE_RIGHT - c2.width, py + 10 + c1.height + 6)
+
+    ph = R.text(f"{PHONE}     {SITE}", 28, B.WHITE, tracking=0.10)
+    put(im, ph, MARGIN, H - 156)
+    ad = R.text(ADDRESS, 22, "#A9A8AF", tracking=0.14)
+    put(im, ad, MARGIN, H - 156 + ph.height + 14)
+    footer(im, FOOT, H - 60)
+    return im
+
+
 LAYOUTS = {"A": ("spec", layout_spec), "B": ("band", layout_band),
-           "C": ("rail", layout_rail)}
+           "C": ("rail", layout_rail), "D": ("job", layout_job),
+           "E": ("telemetry", layout_telemetry)}
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("service", help="key in SERVICE_POSTERS, or 'all'")
     ap.add_argument("--photo", help="hero photograph; omit for a marked slot")
-    ap.add_argument("--layout", default="all", help="A, B, C or all")
+    ap.add_argument("--layout", default="all", help="A-E or all")
+    ap.add_argument("--fx", type=float, default=0.5,
+                    help="horizontal crop aim, 0 left .. 1 right")
     a = ap.parse_args()
 
     OUT.mkdir(parents=True, exist_ok=True)
