@@ -57,3 +57,6 @@ formula-dynamics/15-ad-ratios/4x5/
 formula-dynamics/15-ad-ratios/1x1/
 formula-dynamics/15-ad-ratios/_brand-src/
 formula-dynamics/15-ad-ratios/*.log
+
+# Service poster renders are derived - rebuild with build_service_posters.py
+formula-dynamics/14-stills/service-posters/
