@@ -996,7 +996,7 @@ def price_hero(im, x, y, s, cap=190, right=False):
 # J - SERVICE FIRST.  Full-bleed photo. Name, qualifier, price, in that order.
 # --------------------------------------------------------------------------
 def layout_service_first(photo, s):
-    im = cover(photo, W, H, focus=0.58)
+    im = cover(photo, W, H, focus=0.58, fx=auto_fx(photo))
     top_scrim(im, 780, 920)
     base_scrim(im, 620, 760)
 
@@ -1237,6 +1237,34 @@ for _k, _v in MENU.items():
     _v.setdefault("tagline", (_v["support"], ""))
     _v.setdefault("includes", _v["includes5"][:4])
     SERVICE_POSTERS[_k] = _v
+
+
+
+def auto_fx(img, tw=W, th=H, steps=41):
+    """Aim the crop at the wheel by finding the busiest column window.
+
+    Every shop frame is 3:2 landscape, so a 9:16 crop keeps roughly 30% of the
+    width. Centring it is a coin flip - on half these photographs the wheel
+    sits right of centre and a centred crop cuts it. Spokes, tyre lettering and
+    caliper edges are the highest-frequency detail in the frame, so the window
+    with the most edge energy is the wheel. Same technique the poster heroes
+    used to pick their frames off the footage.
+    """
+    from PIL import ImageFilter
+    im = img.convert("L").filter(ImageFilter.FIND_EDGES)
+    scale = 420 / im.width
+    im = im.resize((420, max(1, round(im.height * scale))))
+    win = max(1, round(im.height * tw / th))
+    if win >= im.width:
+        return 0.5
+    col = [sum(im.crop((x, 0, x + 1, im.height)).getdata()) for x in range(im.width)]
+    run = sum(col[:win])
+    best, best_x = run, 0
+    for x in range(1, im.width - win):
+        run += col[x + win - 1] - col[x - 1]
+        if run > best:
+            best, best_x = run, x
+    return best_x / (im.width - win)
 
 if __name__ == "__main__":
     main()
