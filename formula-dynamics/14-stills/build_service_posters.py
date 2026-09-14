@@ -631,5 +631,277 @@ def main():
                   f"{path.stat().st_size / 1e6:.1f} MB")
 
 
+
+
+# ==========================================================================
+# v2 - the sale-driven set
+#
+# The boss picked A and B, asked for bigger type, a sale-driven read and a
+# composition closer to the reference ad. All three are measured decisions:
+#
+# TYPE. A 1080px poster renders about 390pt wide in an iPhone feed - a scale of
+# 0.361. The v1 posters ran type down to 21px, which lands at 7.6pt on a phone
+# against an ~11pt readable floor. Nothing here goes below MIN_TYPE.
+#
+# SALE. "From $499" rather than "$499": pads are sold separately, so $499 is
+# genuinely the floor rather than the price, and the honest wording is also the
+# one that reads as an offer.
+#
+# REFERENCE. Five inclusions rather than four, a supporting tagline under the
+# headline, glyphs on the phone and address, and a CTA that ends in TODAY - the
+# structural moves from the ad the shop brought in, in our own type and colour.
+# ==========================================================================
+MIN_TYPE = 34          # 12.3pt on a phone; below this is decoration, not copy
+PHONE_SCALE = 390.0 / 1080.0
+
+
+def t(msg, size, color=B.WHITE, tracking=0.0, floor=True):
+    """Text with the mobile floor enforced, so it cannot regress by accident."""
+    if floor and size < MIN_TYPE:
+        raise ValueError(f"{size}px = {size * PHONE_SCALE:.1f}pt on a phone; "
+                         f"floor is {MIN_TYPE}px")
+    return R.text(msg, size, color, tracking=tracking)
+
+
+def glyph_phone(size=40, color=B.RED):
+    im = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    w = max(3, int(size * 0.13))
+    d.rounded_rectangle([size * .16, size * .06, size * .42, size * .40],
+                        radius=size * .10, fill=color)
+    d.rounded_rectangle([size * .58, size * .58, size * .84, size * .92],
+                        radius=size * .10, fill=color)
+    d.arc([size * .10, size * .10, size * .90, size * .90], 20, 70,
+          fill=color, width=w)
+    return im
+
+
+def glyph_pin(size=40, color=B.RED):
+    im = Image.new("RGBA", (size, size), (0, 0, 0, 0))
+    d = ImageDraw.Draw(im)
+    d.ellipse([size * .18, size * .08, size * .82, size * .72], fill=color)
+    d.polygon([(size * .5, size * .95), (size * .30, size * .58),
+               (size * .70, size * .58)], fill=color)
+    d.ellipse([size * .38, size * .28, size * .62, size * .52], fill=(10, 10, 12))
+    return im
+
+
+def offer_block(im, x, y, s, price_size=150):
+    """The sale, read as an offer rather than a bare number."""
+    lab = t(s["offer_label"], 38, "#C9C8CF", tracking=0.20)
+    put(im, lab, x, y)
+    pr = R.text(s["price"], price_size, B.WHITE, tracking=0.01)
+    put(im, pr, x, y + lab.height + 14)
+    note = t(s["fine"], 34, B.RED, tracking=0.16)
+    put(im, note, x, y + lab.height + 14 + pr.height + 20)
+    return lab.height + 14 + pr.height + 20 + note.height
+
+
+def cta_block(im, x, y, s, size=54, right=False):
+    a = t(s["cta"][0], size, B.WHITE, tracking=0.05)
+    b = t(s["cta"][1], size, B.RED, tracking=0.05)
+    ax = SAFE_RIGHT - a.width if right else x
+    bx = SAFE_RIGHT - b.width if right else x
+    put(im, a, ax, y)
+    put(im, b, bx, y + a.height + 8)
+    return a.height + 8 + b.height
+
+
+def contact_big(im, x, y):
+    """Phone and address with glyphs, at a size that survives a phone screen."""
+    g = glyph_phone(44)
+    R.paste(im, g, x, y + 2)
+    ph = t(PHONE, 46, B.WHITE, tracking=0.06)
+    put(im, ph, x + 60, y)
+    hd = t(HANDLE, 34, "#C9C8CF", tracking=0.08)
+    put(im, hd, x + 60, y + ph.height + 12)
+    y2 = y + ph.height + 12 + hd.height + 20
+    g2 = glyph_pin(40)
+    R.paste(im, g2, x + 2, y2 + 2)
+    ad = t(ADDRESS.replace("  ·  ", ", ").title().upper(), 34, B.WHITE,
+           tracking=0.08)
+    put(im, ad, x + 60, y2)
+    st = t(SITE, 34, "#C9C8CF", tracking=0.08)
+    put(im, st, x + 60, y2 + ad.height + 12)
+    return y2 + ad.height + 12 + st.height - y
+
+
+def footer_big(im, words, y):
+    ft = t("   |   ".join(words), 26, "#8B8A91", tracking=0.20, floor=False)
+    R.paste(im, ft, (W - ft.width) // 2, y)
+
+
+def icon_rows(im, x, y, s, icon=92, lead=52, sub=40, pitch=136):
+    """The reference's five-row inclusion list, at phone-legible sizes."""
+    for kind, a, b in s["includes5"]:
+        R.paste(im, badge(kind, icon), x, y + 6)
+        ta = t(a, lead, B.WHITE, tracking=0.04)
+        tb = t(b, sub, "#C9C8CF", tracking=0.06)
+        put(im, ta, x + icon + 30, y)
+        put(im, tb, x + icon + 30, y + ta.height + 10)
+        y += pitch
+    return y
+
+
+SERVICE_POSTERS["brakes"].update(
+    offer_label="BRAKE SERVICE FROM",
+    # "From" is both the sale framing and the accurate one: pads are extra, so
+    # 499 is the floor rather than the price.
+    includes5=[
+        ("rotor",   "ROTORS",      "INSPECTED & MEASURED"),
+        ("fluid",   "BRAKE FLUID", "FLUSHED & BLED"),
+        ("caliper", "CALIPERS",    "CLEANED & CHECKED"),
+        ("pad",     "PADS",        "FACTORY & PERFORMANCE"),
+        ("check",   "FULL SAFETY", "INSPECTION"),
+    ],
+    cta=("BOOK YOUR BRAKE", "SERVICE TODAY"),
+)
+
+
+class Cursor:
+    """Vertical layout with a floor, so an overrun is an error not a surprise.
+
+    Three collisions were found by eye in the v1 layouts because blocks were
+    placed at H-minus-a-constant and the content above was free to grow into
+    them. Here every block reports its height and the cursor refuses to pass
+    the floor.
+    """
+
+    def __init__(self, y, floor, name):
+        self.y, self.floor, self.name = y, floor, name
+
+    def advance(self, h, gap=0):
+        self.y += h + gap
+        if self.y > self.floor:
+            raise ValueError(f"{self.name}: content reached y={self.y:.0f}, "
+                             f"floor is {self.floor}")
+        return self.y
+
+
+def qualifier_big(im, y):
+    for i, ln in enumerate(QUALIFIER):
+        tx = t(ln, 34 if i == 0 else 30, B.WHITE if i == 0 else "#C9C8CF",
+               tracking=0.12, floor=False)
+        put(im, tx, SAFE_RIGHT - tx.width, y + i * 42)
+
+
+def contact_compact(im, x, y):
+    a = t(f"{PHONE}    {HANDLE}", 40, B.WHITE, tracking=0.06)
+    put(im, a, x, y)
+    b = t(f"{ADDRESS}    {SITE}", 34, "#C9C8CF", tracking=0.08)
+    put(im, b, x, y + a.height + 14)
+    return a.height + 14 + b.height
+
+
+# --------------------------------------------------------------------------
+# F - OFFER SPEC.  A, grown to phone sizes and given the reference's five-row
+# inclusion list, tagline and TODAY call to action.
+# --------------------------------------------------------------------------
+def layout_offer_spec(photo, s):
+    im = cover(photo, W, H, focus=0.55)
+    top_scrim(im, 640, 800)
+    base_scrim(im, 620, 700)
+
+    brandmark(im, MARGIN, 66, 58)
+    qualifier_big(im, 72)
+
+    c = Cursor(196, H - 120, "F")
+    eb = t(s["eyebrow"], 38, B.RED, tracking=0.30)
+    put(im, eb, MARGIN, c.y); c.advance(eb.height, 22)
+    c.y = headline(im, MARGIN, c.y, s["h1"], s["h2"], size=112); c.advance(0, 26)
+    for ln in s["tagline"]:
+        tl = t(ln, 42, B.WHITE, tracking=0.05)
+        put(im, tl, MARGIN, c.y); c.advance(tl.height, 10)
+    c.advance(0, 20)
+    R.paste(im, R.accent_stripe(round(W * 0.28), 10), MARGIN, c.y); c.advance(10, 40)
+
+    c.y = icon_rows(im, MARGIN, c.y, s, icon=88, lead=50, sub=38, pitch=126)
+    c.advance(0, 26)
+
+    offer_block(im, MARGIN, c.y, s, price_size=132)
+    cta_block(im, MARGIN, c.y + 16, s, size=50, right=True)
+    c.advance(238, 40)
+
+    contact_big(im, MARGIN, c.y); c.advance(192, 0)
+    footer_big(im, FOOT, H - 62)
+    return im
+
+
+# --------------------------------------------------------------------------
+# G - OFFER BAND.  B, with the sale carried on a banner across the foot of the
+# picture so the offer lands before the copy does.
+# --------------------------------------------------------------------------
+def layout_offer_band(photo, s):
+    # 730 not 780: the five rows plus the CTA and contact need the height more
+    # than the picture does, and the Cursor floor proved it by 53px.
+    band = 690
+    im = Image.new("RGBA", (W, H), (10, 10, 12, 255))
+    im.paste(cover(photo, W, band, focus=0.5), (0, 0))
+    top_scrim(im, 300, 430)
+
+    brandmark(im, MARGIN, 66, 58)
+    qualifier_big(im, 72)
+
+    # The offer banner sits ON the picture - the sale reads first.
+    by = band - 132
+    ImageDraw.Draw(im).rectangle([0, by, W, band], fill=B.RED)
+    ol = t(s["offer_label"], 40, "#FFD9DA", tracking=0.18)
+    put(im, ol, MARGIN, by + 24)
+    op = R.text(s["price"], 78, B.WHITE, tracking=0.01)
+    put(im, op, MARGIN + ol.width + 34, by + 18)
+    c = Cursor(band + 26, H - 100, "G")
+    on = t(s["fine"], 34, B.RED, tracking=0.14)
+    put(im, on, MARGIN, c.y); c.advance(on.height, 22)
+    eb = t(s["eyebrow"], 38, B.RED, tracking=0.30)
+    put(im, eb, MARGIN, c.y); c.advance(eb.height, 18)
+    c.y = headline(im, MARGIN, c.y, s["h1"], s["h2"], size=92); c.advance(0, 26)
+
+    c.y = icon_rows(im, MARGIN, c.y, s, icon=76, lead=44, sub=34, pitch=100)
+    c.advance(0, 30)
+
+    cta_block(im, MARGIN, c.y, s, size=52); c.advance(120, 30)
+    contact_compact(im, MARGIN, c.y); c.advance(90, 0)
+    footer_big(im, FOOT, H - 58)
+    return im
+
+
+# --------------------------------------------------------------------------
+# H - OFFER LED.  The most sale-driven of the three: the number is the hero and
+# the service name sits under it.
+# --------------------------------------------------------------------------
+def layout_offer_led(photo, s):
+    im = cover(photo, W, H, focus=0.58)
+    top_scrim(im, 900, 1040)
+    base_scrim(im, 880, 1000)
+
+    brandmark(im, MARGIN, 66, 58)
+    qualifier_big(im, 72)
+
+    c = Cursor(214, H - 120, "H")
+    lab = t(s["offer_label"], 44, "#C9C8CF", tracking=0.18)
+    put(im, lab, MARGIN, c.y); c.advance(lab.height, 6)
+    pr = R.fit_text(s["price"], SAFE_RIGHT - MARGIN, max_height=250,
+                    color=B.WHITE, tracking=0.0)
+    put(im, pr, MARGIN, c.y); c.advance(pr.height, 8)
+    note = t(s["fine"], 36, B.RED, tracking=0.16)
+    put(im, note, MARGIN, c.y); c.advance(note.height, 34)
+
+    R.paste(im, R.accent_stripe(round(W * 0.34), 10), MARGIN, c.y)
+    c.advance(10, 34)
+    c.y = headline(im, MARGIN, c.y, s["h1"], s["h2"], size=84); c.advance(0, 30)
+
+    c.y = icon_rows(im, MARGIN, c.y, s, icon=74, lead=44, sub=34, pitch=104)
+    c.advance(0, 30)
+
+    cta_block(im, MARGIN, c.y, s, size=52); c.advance(120, 26)
+    contact_compact(im, MARGIN, c.y); c.advance(90, 0)
+    footer_big(im, FOOT, H - 58)
+    return im
+
+
+LAYOUTS.update({"F": ("offer-spec", layout_offer_spec),
+                "G": ("offer-band", layout_offer_band),
+                "H": ("offer-led", layout_offer_led)})
+
 if __name__ == "__main__":
     main()
