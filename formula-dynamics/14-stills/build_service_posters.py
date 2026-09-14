@@ -903,5 +903,147 @@ LAYOUTS.update({"F": ("offer-spec", layout_offer_spec),
                 "G": ("offer-band", layout_offer_band),
                 "H": ("offer-led", layout_offer_led)})
 
+
+
+# ==========================================================================
+# v3 - service first, exotic second, price third.
+#
+# The hierarchy was upside down: the benefit line was the biggest thing on the
+# poster and the service name was a 38px red eyebrow. Now the three things the
+# shop wants seen - WHAT it is, WHO it is for, WHAT it costs - are the three
+# largest elements, and the benefit line supports them instead of leading.
+# ==========================================================================
+SERVICE_POSTERS["brakes"].update(
+    big=("BRAKE", "SERVICE"),
+    for_line="FOR EXOTICS  ·  LUXURY  ·  PERFORMANCE",
+    support="STOPS WHEN YOU NEED IT TO.",
+)
+
+
+def service_head(im, x, y, s, width=None, bar=True, cap=210):
+    """The service name at full width, then who it is for on a red bar."""
+    width = width or (SAFE_RIGHT - x)
+    a = R.fit_text(s["big"][0], width, max_height=cap, color=B.WHITE,
+                   tracking=0.0)
+    put(im, a, x, y)
+    b = R.fit_text(s["big"][1], width, max_height=cap, color=B.RED,
+                   tracking=0.0)
+    put(im, b, x, y + a.height + 4)
+    y2 = y + a.height + 4 + b.height
+    if not bar:
+        return y2 - y
+    # A solid red bar is the one place the brand shouts, and it is carrying the
+    # qualifier rather than decoration - it says the shop is for this car.
+    bh = 74
+    ImageDraw.Draw(im).rectangle([x, y2 + 26, SAFE_RIGHT, y2 + 26 + bh],
+                                 fill=B.RED)
+    fl = t(s["for_line"], 40, B.WHITE, tracking=0.14)
+    R.paste(im, fl, x + 26, y2 + 26 + (bh - fl.height) // 2)
+    return y2 + 26 + bh - y
+
+
+def price_hero(im, x, y, s, cap=190, right=False):
+    """The number, sized to be unmissable rather than tucked in a corner."""
+    lab = t(s["offer_label"], 40, "#C9C8CF", tracking=0.18)
+    lx = SAFE_RIGHT - lab.width if right else x
+    put(im, lab, lx, y)
+    pr = R.fit_text(s["price"], SAFE_RIGHT - x, max_height=cap, color=B.WHITE,
+                    tracking=0.0)
+    px = SAFE_RIGHT - pr.width if right else x
+    put(im, pr, px, y + lab.height + 10)
+    note = t(s["fine"], 34, B.RED, tracking=0.16)
+    nx = SAFE_RIGHT - note.width if right else x
+    put(im, note, nx, y + lab.height + 10 + pr.height + 16)
+    return lab.height + 10 + pr.height + 16 + note.height
+
+
+# --------------------------------------------------------------------------
+# J - SERVICE FIRST.  Full-bleed photo. Name, qualifier, price, in that order.
+# --------------------------------------------------------------------------
+def layout_service_first(photo, s):
+    im = cover(photo, W, H, focus=0.58)
+    top_scrim(im, 780, 920)
+    base_scrim(im, 620, 760)
+
+    brandmark(im, MARGIN, 62, 54)
+
+    c = Cursor(170, H - 96, "J")
+    c.advance(service_head(im, MARGIN, c.y, s), 30)
+    sup = t(s["support"], 44, B.WHITE, tracking=0.05)
+    put(im, sup, MARGIN, c.y); c.advance(sup.height, 36)
+
+    c.y = icon_rows(im, MARGIN, c.y, s, icon=68, lead=42, sub=34, pitch=100)
+    c.advance(0, 26)
+
+    c.advance(price_hero(im, MARGIN, c.y, s, cap=170), 8)
+    cta_block(im, MARGIN, c.y - 168, s, size=48, right=True)
+    c.advance(0, 30)
+
+    contact_compact(im, MARGIN, c.y); c.advance(90, 0)
+    footer_big(im, FOOT, H - 56)
+    return im
+
+
+# --------------------------------------------------------------------------
+# K - SERVICE BAND.  Photo band, then name and price on solid ground, so both
+# run at full size with nothing competing behind them.
+# --------------------------------------------------------------------------
+def layout_service_band(photo, s):
+    band = 415
+    im = Image.new("RGBA", (W, H), (10, 10, 12, 255))
+    im.paste(cover(photo, W, band, focus=0.5), (0, 0))
+    top_scrim(im, 210, 330)
+    brandmark(im, MARGIN, 58, 52)
+
+    c = Cursor(band + 48, H - 96, "K")
+    c.advance(service_head(im, MARGIN, c.y, s, cap=175), 26)
+    sup = t(s["support"], 42, "#C9C8CF", tracking=0.05)
+    put(im, sup, MARGIN, c.y); c.advance(sup.height, 34)
+
+    c.y = icon_rows(im, MARGIN, c.y, s, icon=64, lead=40, sub=34, pitch=88)
+    c.advance(0, 24)
+
+    c.advance(price_hero(im, MARGIN, c.y, s, cap=135), 6)
+    cta_block(im, MARGIN, c.y - 135, s, size=46, right=True)
+    c.advance(0, 26)
+
+    contact_compact(im, MARGIN, c.y); c.advance(90, 0)
+    footer_big(im, FOOT, H - 54)
+    return im
+
+
+# --------------------------------------------------------------------------
+# L - SERVICE SPLIT.  Name over the picture at the top, price on its own dark
+# plate at the foot - the two biggest things at opposite ends of the frame.
+# --------------------------------------------------------------------------
+def layout_service_split(photo, s):
+    im = cover(photo, W, H, focus=0.52)
+    top_scrim(im, 720, 880)
+
+    plate_top = 1045
+    glass(im, (0, plate_top, W, H), darken=0.62, blur=22)
+
+    brandmark(im, MARGIN, 62, 54)
+
+    c = Cursor(180, plate_top - 40, "L")
+    c.advance(service_head(im, MARGIN, c.y, s), 28)
+    sup = t(s["support"], 44, B.WHITE, tracking=0.05)
+    put(im, sup, MARGIN, c.y); c.advance(sup.height, 0)
+
+    c2 = Cursor(plate_top + 46, H - 92, "L-plate")
+    c2.y = icon_rows(im, MARGIN, c2.y, s, icon=56, lead=38, sub=34, pitch=76)
+    c2.advance(0, 14)
+    c2.advance(price_hero(im, MARGIN, c2.y, s, cap=128), 4)
+    cta_block(im, MARGIN, c2.y - 128, s, size=46, right=True)
+    c2.advance(0, 22)
+    contact_compact(im, MARGIN, c2.y); c2.advance(90, 0)
+    footer_big(im, FOOT, H - 52)
+    return im
+
+
+LAYOUTS.update({"J": ("service-first", layout_service_first),
+                "K": ("service-band", layout_service_band),
+                "L": ("service-split", layout_service_split)})
+
 if __name__ == "__main__":
     main()
