@@ -34,6 +34,11 @@ def run(cmd, **kw):
         raise SystemExit(f"failed: {cmd if isinstance(cmd, str) else ' '.join(cmd)}")
     return r
 
+def dur_of(shot, fps):
+    """A shot's length: exact frames when given, otherwise seconds."""
+    return shot["frames"] / fps if "frames" in shot else shot["dur"]
+
+
 def shot_cmd(src, tin, dur, W, H, fps, g, out):
     """One piece of footage, scaled to the canvas and graded down to near-mono."""
     vf = (f"scale={W}:{H}:force_original_aspect_ratio=increase,crop={W}:{H},"
@@ -90,12 +95,13 @@ def main():
     parts, prev = [], None
     for i, s in enumerate(spec["shots"]):
         p = os.path.join(a.work, f"s{i:03d}.mp4")
+        d = dur_of(s, fps)
         if s.get("fx") == "smear":
-            smear(prev, s["dur"], s.get("angle", 0), W, H, fps, a.work, i, p)
+            smear(prev, d, s.get("angle", 0), W, H, fps, a.work, i, p)
         elif s.get("fx") == "flash":
-            run(flash_cmd(s["dur"], W, H, fps, p))
+            run(flash_cmd(d, W, H, fps, p))
         else:
-            run(shot_cmd(os.path.join(a.footage, s["clip"]), s["in"], s["dur"],
+            run(shot_cmd(os.path.join(a.footage, s["clip"]), s["in"], d,
                          W, H, fps, spec["grade"], p))
             prev = p
         parts.append(p)
@@ -105,7 +111,7 @@ def main():
     run(["ffmpeg", "-y", "-f", "concat", "-safe", "0", "-i", lst,
          "-c:v", "libx264", "-crf", "14", "-pix_fmt", "yuv420p", "-loglevel", "error", cuts])
 
-    total = sum(s["dur"] for s in spec["shots"])
+    total = sum(dur_of(s, fps) for s in spec["shots"])
 
     # 2. the overlay layer: bars, bug and type, one PNG per frame
     tdir = os.path.join(a.work, "type")
@@ -121,6 +127,16 @@ def main():
     vf = "[0:v][1:v]overlay=0:0[v]"
     cmd = ["ffmpeg", "-y", "-i", cuts,
            "-framerate", str(fps), "-i", os.path.join(tdir, "%05d.png")]
+    if spec.get("audio_track"):
+        cmd += ["-i", spec["audio_track"]]
+        af = "[2:a]anull[a]"
+        cmd += ["-filter_complex", vf + ";" + af, "-map", "[v]", "-map", "[a]",
+                "-t", f"{total}", "-c:v", "libx264", "-crf", "16", "-preset", "slow",
+                "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "192k",
+                "-movflags", "+faststart", "-loglevel", "error", a.out]
+        run(cmd)
+        print(f"{a.out}  {total:.2f}s  {len(spec['shots'])} shots")
+        return
     amix, ai = [], 2
     for seg in spec["audio"]:
         cmd += ["-ss", f"{seg['in']}", "-t", f"{seg['dur']}", "-i",

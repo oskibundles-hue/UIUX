@@ -1,0 +1,12 @@
+[
+ {"lines": ["WHAT", "DO", "YOU", "PLAN", "TO DO"],
+  "words_at": [94, 97, 100, 103, 107, 107], "until_f": 118},
+
+ {"lines": ["IF", "THIS WHOLE", "DREAM", "OF YOURS DOESN'T", "WORK OUT?"],
+  "words_at": [122, 136, 136, 136, 143, 143, 159, 159, 159], "until_f": 169,
+  "accent": "DREAM", "accent_color": "#D8232A"},
+
+ {"lines": ["THAT", "DOESN'T", "EVEN ENTER", "MY", "CONSCIOUSNESS"],
+  "words_at": [169, 172, 176, 182, 188, 230], "until_f": 266,
+  "accent": "CONSCIOUSNESS", "accent_color": "#39C6DA"}
+]

@@ -34,8 +34,17 @@ def load_font(path, size, weight):
         pass
     return f
 
-def band_at(keys, t, H):
-    """Piecewise-linear band edges in pixels at time t."""
+def band_at(keys, t, H, frame=None):
+    """
+    Band edges in pixels. `steps` snaps between fixed values at given frames,
+    which is what a reference edit usually does; `top` eases between keyframes.
+    """
+    if "steps" in keys:
+        top = keys["steps"][0][1]
+        for f0, v in keys["steps"]:
+            if frame is not None and frame >= f0:
+                top = v
+        return int(H * top), int(H * keys["bottom"])
     ks = keys["top"]
     top = ks[-1][1]
     if t <= ks[0][0]:
@@ -52,10 +61,16 @@ def indents(n, step):
     """Staircase: each line steps right, and the last drops back to the margin."""
     return [i * step for i in range(n - 1)] + [0] if n > 1 else [0]
 
+def hex_rgb(h):
+    return tuple(int(h[i:i + 2], 16) for i in (1, 3, 5))
+
+
 def draw_block(img, blk, shown, font, W, band, margin, step, accent_rgb):
     d = ImageDraw.Draw(img)
     lines = blk["lines"]
     accent = blk.get("accent", "").upper()
+    if blk.get("accent_color"):
+        accent_rgb = hex_rgb(blk["accent_color"])
     ind = indents(len(lines), step)
     lh = int(font.size * 1.12)
     top = band[0] + (band[1] - band[0] - lh * len(lines)) // 2
@@ -105,14 +120,14 @@ def main():
         bug = bug.resize((bw, int(bug.height * bw / bug.width)), Image.LANCZOS)
     margin = int(a.width * a.margin)
     step = int(a.width * a.step)
-    accent = tuple(int(a.accent[i:i + 2], 16) for i in (1, 3, 5))
+    accent = hex_rgb(a.accent)
     os.makedirs(a.out, exist_ok=True)
 
     n = int(round(a.seconds * a.fps))
     for i in range(n):
         t = i / a.fps
         img = Image.new("RGBA", (a.width, a.height), (0, 0, 0, 0))
-        top, bot = band_at(keys, t, a.height)
+        top, bot = band_at(keys, t, a.height, frame=i)
         d = ImageDraw.Draw(img)
         d.rectangle([0, 0, a.width, top], fill=(0, 0, 0, 255))
         d.rectangle([0, bot, a.width, a.height], fill=(0, 0, 0, 255))
@@ -120,12 +135,18 @@ def main():
             img.alpha_composite(bug, ((a.width - bug.width) // 2, int(a.height * a.bug_y)))
         band = (top, bot)
         for blk in blocks:
-            if not (blk["at"] <= t < blk["until"]):
-                continue
             words = sum(len(l.split()) for l in blk["lines"])
-            # words land over the first 70% of the block, then the full line holds
-            build = (blk["until"] - blk["at"]) * 0.7
-            shown = words if t >= blk["at"] + build else int(words * (t - blk["at"]) / build) + 1
+            if "words_at" in blk:
+                # every word has its own frame, measured off a reference edit
+                if not (blk["words_at"][0] <= i < blk["until_f"]):
+                    continue
+                shown = sum(1 for wf in blk["words_at"] if wf <= i)
+            else:
+                if not (blk["at"] <= t < blk["until"]):
+                    continue
+                # words land over the first 70% of the block, then the line holds
+                build = (blk["until"] - blk["at"]) * 0.7
+                shown = words if t >= blk["at"] + build else int(words * (t - blk["at"]) / build) + 1
             draw_block(img, blk, shown, font, a.width, band, margin, step, accent)
         img.save(os.path.join(a.out, f"{i:05d}.png"))
     print(f"{n} frames -> {a.out}")
