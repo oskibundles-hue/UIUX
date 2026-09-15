@@ -28,15 +28,29 @@ def main():
     ap.add_argument("--flash-bright", type=float, default=0.55, help="above this fraction of near-white the slot is a flash")
     ap.add_argument("--spacing", type=float, default=3.0, help="seconds to keep clear around a used moment")
     ap.add_argument("--fps", type=float, default=30)
+    ap.add_argument("--flash-frames", default=None,
+                    help="JSON list of reference frame numbers that are a single white frame")
+    ap.add_argument("--card-from", type=int, default=None,
+                    help="reference frame where the piece cuts to a flat end card")
+    ap.add_argument("--card-colour", default="0x3E3E3E")
     a = ap.parse_args()
 
     ref = json.load(open(a.ref))
     lib = json.load(open(a.lib))
+    flashes = set(json.load(open(a.flash_frames))) if a.flash_frames else set()
     used = []                      # (clip, t) already spent
     shots, angle = [], 0
 
     for r in ref:
         frames = int(round(r["dur"] * a.fps))
+        if a.card_from is not None and r["f"] >= a.card_from:
+            shots.append({"fx": "card", "frames": frames, "colour": a.card_colour})
+            continue
+        # a single white frame on the cut: the reference does this at most cuts in
+        # the strobe, and it is most of why the strobe reads as an assault
+        if r["f"] in flashes and frames > 1 and r["bright"] < a.flash_bright:
+            shots.append({"fx": "flash", "frames": 1})
+            frames -= 1
         if r["bright"] >= a.flash_bright:
             shots.append({"fx": "flash", "frames": frames})
             continue

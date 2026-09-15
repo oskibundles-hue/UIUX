@@ -108,6 +108,8 @@ def main():
     ap.add_argument("--band-keys", required=True, help="JSON with the band keyframes")
     ap.add_argument("--bug", default=None, help="handle bug PNG, centred in the top bar")
     ap.add_argument("--bug-y", type=float, default=0.155, help="bug top as a fraction of height")
+    ap.add_argument("--bug-centre-from", type=int, default=None,
+                    help="from this frame the bug sits centred in the band instead of in the top bar")
     ap.add_argument("--accent", default="#FE0F13")
     a = ap.parse_args()
 
@@ -132,7 +134,9 @@ def main():
         d.rectangle([0, 0, a.width, top], fill=(0, 0, 0, 255))
         d.rectangle([0, bot, a.width, a.height], fill=(0, 0, 0, 255))
         if bug:
-            img.alpha_composite(bug, ((a.width - bug.width) // 2, int(a.height * a.bug_y)))
+            centred = a.bug_centre_from is not None and i >= a.bug_centre_from
+            by = (top + bot - bug.height) // 2 if centred else int(a.height * a.bug_y)
+            img.alpha_composite(bug, ((a.width - bug.width) // 2, by))
         band = (top, bot)
         for blk in blocks:
             words = sum(len(l.split()) for l in blk["lines"])

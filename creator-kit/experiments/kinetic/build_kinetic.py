@@ -71,6 +71,13 @@ def smear(prev, dur, angle, W, H, fps, work, idx, out):
          "-loglevel", "error", out])
 
 
+def card_cmd(dur, colour, W, H, fps, out):
+    """A flat colour card. The reference ends on one, not on footage."""
+    return ["ffmpeg", "-y", "-f", "lavfi", "-i", f"color=c={colour}:s={W}x{H}:r={fps}",
+            "-t", f"{dur}", "-c:v", "libx264", "-crf", "14", "-pix_fmt", "yuv420p",
+            "-loglevel", "error", out]
+
+
 def flash_cmd(dur, W, H, fps, out):
     return ["ffmpeg", "-y", "-f", "lavfi", "-i", f"color=c=white:s={W}x{H}:r={fps}",
             "-t", f"{dur}", "-c:v", "libx264", "-crf", "14", "-pix_fmt", "yuv420p",
@@ -100,6 +107,8 @@ def main():
             smear(prev, d, s.get("angle", 0), W, H, fps, a.work, i, p)
         elif s.get("fx") == "flash":
             run(flash_cmd(d, W, H, fps, p))
+        elif s.get("fx") == "card":
+            run(card_cmd(d, s.get("colour", "0x3E3E3E"), W, H, fps, p))
         else:
             run(shot_cmd(os.path.join(a.footage, s["clip"]), s["in"], d,
                          W, H, fps, spec["grade"], p))
@@ -121,7 +130,8 @@ def main():
          "--script", spec["type_script"], "--out", tdir, "--seconds", f"{total}",
          "--width", str(W), "--height", str(H), "--fps", str(fps),
          "--font", spec["font"], "--band-keys", bkeys, "--bug", spec["bug"],
-         "--accent", spec["accent"]])
+         "--accent", spec["accent"]]
+        + (["--bug-centre-from", str(spec["bug_centre_from"])] if spec.get("bug_centre_from") else []))
 
     # 3. lay the overlay over the cuts and place the audio
     vf = "[0:v][1:v]overlay=0:0[v]"

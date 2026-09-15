@@ -54,14 +54,22 @@
  "audio_track": "/home/user/footage/kinetic/ref_audio.wav",
  "shots": [
   {
+   "fx": "flash",
+   "frames": 1
+  },
+  {
    "clip": "05 cutting trim to length.mp4",
    "in": 11.5,
-   "frames": 6
+   "frames": 5
+  },
+  {
+   "fx": "flash",
+   "frames": 1
   },
   {
    "clip": "09 gt3 rolling in.mp4",
    "in": 15.0,
-   "frames": 8
+   "frames": 7
   },
   {
    "clip": "11 mixing epoxy.mp4",
@@ -84,19 +92,31 @@
    "frames": 3
   },
   {
-   "fx": "smear",
-   "frames": 2,
-   "angle": 0
+   "fx": "flash",
+   "frames": 1
   },
   {
    "fx": "smear",
-   "frames": 2,
+   "frames": 1,
+   "angle": 0
+  },
+  {
+   "fx": "flash",
+   "frames": 1
+  },
+  {
+   "fx": "smear",
+   "frames": 1,
    "angle": 1
+  },
+  {
+   "fx": "flash",
+   "frames": 1
   },
   {
    "clip": "14 aston martin brakes.mp4",
    "in": 11.0,
-   "frames": 3
+   "frames": 2
   },
   {
    "clip": "17 matte black wheel work.mp4",
@@ -114,9 +134,13 @@
    "frames": 35
   },
   {
-   "clip": "09 gt3 rolling in.mp4",
-   "in": 27.5,
-   "frames": 18
+   "fx": "flash",
+   "frames": 1
+  },
+  {
+   "clip": "07 building the frame.mp4",
+   "in": 26.0,
+   "frames": 17
   },
   {
    "clip": "13 black car on the lift.mp4",
@@ -139,18 +163,30 @@
    "frames": 24
   },
   {
+   "fx": "flash",
+   "frames": 1
+  },
+  {
    "fx": "smear",
-   "frames": 2,
+   "frames": 1,
    "angle": 0
   },
   {
-   "fx": "smear",
-   "frames": 2,
-   "angle": 1
+   "fx": "flash",
+   "frames": 1
   },
   {
    "fx": "smear",
-   "frames": 2,
+   "frames": 1,
+   "angle": 1
+  },
+  {
+   "fx": "flash",
+   "frames": 1
+  },
+  {
+   "fx": "smear",
+   "frames": 1,
    "angle": 0
   },
   {
@@ -169,19 +205,31 @@
    "frames": 11
   },
   {
-   "fx": "smear",
-   "frames": 2,
-   "angle": 1
+   "fx": "flash",
+   "frames": 1
   },
   {
    "fx": "smear",
-   "frames": 2,
+   "frames": 1,
+   "angle": 1
+  },
+  {
+   "fx": "flash",
+   "frames": 1
+  },
+  {
+   "fx": "smear",
+   "frames": 1,
    "angle": 0
+  },
+  {
+   "fx": "flash",
+   "frames": 1
   },
   {
    "clip": "09 gt3 rolling in.mp4",
    "in": 20.0,
-   "frames": 9
+   "frames": 8
   },
   {
    "clip": "14 aston martin brakes.mp4",
@@ -199,8 +247,12 @@
    "frames": 2
   },
   {
+   "fx": "flash",
+   "frames": 1
+  },
+  {
    "fx": "smear",
-   "frames": 2,
+   "frames": 1,
    "angle": 1
   },
   {
@@ -209,44 +261,76 @@
    "frames": 17
   },
   {
+   "fx": "flash",
+   "frames": 1
+  },
+  {
    "clip": "01 garage walkthrough.mp4",
    "in": 33.0,
-   "frames": 6
+   "frames": 5
+  },
+  {
+   "fx": "flash",
+   "frames": 1
   },
   {
    "clip": "18 red supercar.mp4",
    "in": 4.5,
-   "frames": 4
+   "frames": 3
+  },
+  {
+   "fx": "flash",
+   "frames": 1
   },
   {
    "clip": "10 raising the ceiling beam.mp4",
    "in": 25.0,
-   "frames": 6
+   "frames": 5
+  },
+  {
+   "fx": "flash",
+   "frames": 1
   },
   {
    "clip": "18 red supercar.mp4",
    "in": 9.5,
-   "frames": 8
+   "frames": 7
+  },
+  {
+   "fx": "flash",
+   "frames": 1
   },
   {
    "clip": "09 gt3 rolling in.mp4",
    "in": 40.5,
-   "frames": 8
+   "frames": 7
+  },
+  {
+   "fx": "flash",
+   "frames": 1
   },
   {
    "clip": "05 cutting trim to length.mp4",
    "in": 7.5,
-   "frames": 6
+   "frames": 5
   },
   {
-   "clip": "11 mixing epoxy.mp4",
-   "in": 26.5,
-   "frames": 9
+   "fx": "flash",
+   "frames": 1
+  },
+  {
+   "clip": "05 cutting trim to length.mp4",
+   "in": 4.0,
+   "frames": 8
+  },
+  {
+   "fx": "flash",
+   "frames": 1
   },
   {
    "clip": "05 cutting trim to length.mp4",
    "in": 46.0,
-   "frames": 5
+   "frames": 4
   },
   {
    "clip": "13 black car on the lift.mp4",
@@ -263,18 +347,30 @@
    "frames": 4
   },
   {
-   "clip": "12 ceiling panel install.mp4",
-   "in": 7.5,
-   "frames": 4
+   "fx": "flash",
+   "frames": 1
   },
   {
-   "clip": "03 laying out led trim.mp4",
-   "in": 4.0,
+   "clip": "12 ceiling panel install.mp4",
+   "in": 7.5,
    "frames": 3
   },
   {
+   "fx": "flash",
+   "frames": 1
+  },
+  {
+   "clip": "12 ceiling panel install.mp4",
+   "in": 32.5,
+   "frames": 2
+  },
+  {
+   "fx": "flash",
+   "frames": 1
+  },
+  {
    "fx": "smear",
-   "frames": 2,
+   "frames": 1,
    "angle": 0
   },
   {
@@ -293,39 +389,67 @@
    "frames": 19
   },
   {
+   "fx": "flash",
+   "frames": 1
+  },
+  {
    "clip": "14 aston martin brakes.mp4",
    "in": 20.5,
-   "frames": 15
+   "frames": 14
+  },
+  {
+   "fx": "flash",
+   "frames": 1
   },
   {
    "clip": "16 wheels off.mp4",
    "in": 12.0,
-   "frames": 4
+   "frames": 3
+  },
+  {
+   "fx": "flash",
+   "frames": 1
   },
   {
    "clip": "03 laying out led trim.mp4",
    "in": 48.5,
-   "frames": 6
+   "frames": 5
+  },
+  {
+   "fx": "flash",
+   "frames": 1
   },
   {
    "clip": "14 aston martin brakes.mp4",
    "in": 35.5,
-   "frames": 15
+   "frames": 14
   },
   {
-   "clip": "07 building the frame.mp4",
-   "in": 26.0,
-   "frames": 18
+   "fx": "flash",
+   "frames": 1
+  },
+  {
+   "clip": "09 gt3 rolling in.mp4",
+   "in": 28.0,
+   "frames": 17
+  },
+  {
+   "fx": "flash",
+   "frames": 1
   },
   {
    "clip": "15 teal brakes and ryft wheels.mp4",
    "in": 15.5,
-   "frames": 6
+   "frames": 5
+  },
+  {
+   "fx": "flash",
+   "frames": 1
   },
   {
    "clip": "02 product to camera.mp4",
    "in": 3.5,
-   "frames": 13
+   "frames": 12
   },
   {
    "clip": "07 building the frame.mp4",
@@ -343,9 +467,10 @@
    "frames": 14
   },
   {
-   "clip": "13 black car on the lift.mp4",
-   "in": 40.0,
-   "frames": 121
+   "fx": "card",
+   "frames": 121,
+   "colour": "0x3E3E3E"
   }
- ]
+ ],
+ "bug_centre_from": 518
 }
