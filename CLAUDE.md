@@ -147,6 +147,7 @@ Full engineering record, fault log and cue timelines: https://claude.ai/code/art
 - Archive, never delete. Superseded cuts stay reachable with a note saying what replaced them.
 - Write to memory only at end of day, listed first and approved by him.
 - Claude's memory store is full until 1 October. Until then the standing brief is this file plus Dropbox, `/Anti Stock Media/00 PROJECT MEMORY (backup until Oct 1).md`.
+- At the start of any task-oriented session — any interaction where you will use tools and produce deliverables — invoke the `task-observer` skill (`.claude/skills/task-observer/`) before beginning work, so corrections and repeated patterns get logged to `skill-observations/log.md`. When loading any skill, check that log for OPEN observations tagged to it and apply them even if the skill file hasn't been updated yet.
 
 ## Memory, and why it lives here
 
@@ -172,5 +173,7 @@ Queued for 1 October, already assessed with him and needing no further approval:
 New items to write on 1 October: the Fast Cut build is reproducible from the runbook; three workstreams
 not one; the red correction and which files carry which value; the caption-coverage defect; the index
 hierarchy (one master, one per client); and that this file is the channel that actually loads.
+
+**Tools assessed 16 Sept 2026 (from three TikToks he sent).** Installed: `task-observer` (Eoghan Henn, CC BY 4.0 — a SKILL.md only, no code, no hooks). Rejected after sandbox install and code read: **OmniRoute** ("Omni") — routes the Claude Code login through a local proxy and mirrors other providers' models under `claude/` names; account risk, solves a cost problem we don't have. **claude-mem / Grok Mem** — needs bun, calls the Anthropic API itself, PostHog telemetry, paid-tier funnel; redundant with this file. The Instagram-analysis workflow from the third video is already available through the vidIQ connector (`vidiq_ig_profile_reels`, outlier search); no download needed. Full notes: Dropbox `/Anti Stock Media/00 Claude memory backup (2026-09-14)/task-observer.INSTALL.md`.
 
 **Known limitation:** the Dropbox connector writes text but not video, and this environment cannot reach Dropbox's upload page. Video is handed over as links or attached in chat.
