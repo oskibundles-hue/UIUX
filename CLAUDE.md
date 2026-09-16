@@ -123,6 +123,12 @@ Pipeline is `creator-kit/`: cut and grade with `cut_clip.sh`, transcribe, match 
 
 **Colour is fixed in the pipeline, wrong in the delivered files.** `RED` in `creator-kit/remotion/src/Motion.tsx` is now `#FE0F13`, the real brand red measured off Omarie's own overlay pack and confirmed by the FD brand kit. Reels MR1-MR8 were built before that fix (2026-09-12) and still carry the old `#DE1A22`, so anything you build now will not colour-match them. Re-render the series when he asks; do not quietly mix the two.
 
+**A second look exists: the Kinetic Cut** (`creator-kit/experiments/kinetic/`). Monochrome, letterboxed, strobing, with staircase type that lands one word at a time. It is NOT a replacement for Fast Cut — it is a separate format for a different kind of post, and it has its own builder. `build_kinetic.py` is spec-driven: shot list, band keyframes, grade and audio placement all live in one JSON, so a new piece is a new spec rather than new code. Two are built: K1 (his own words, from the take about working with Alex and Nate) and K2 (a reference edit he sent, rebuilt frame for frame on his footage).
+
+`match_reference.py` is the general tool behind K2: measure any reference edit's shots, band, flashes and word timings, then fill every slot with the moment from his own clips that best matches its light and movement. That is how to answer "make this, but with my footage".
+
+**Two traps found building it.** ffmpeg's `drawbox` has no timestamp variable — its `t` is box thickness — so an animated letterbox written as a drawbox expression silently fills the frame black. Draw moving bars per frame in Pillow instead. And shot-level averaging hides single-frame flashes: the reference put 40 one-frame white flashes on its cuts, which is most of why its strobe reads as an assault, and measuring per shot found one.
+
 **Caption coverage, measured 2026-09-13.** The flagged reels are MR4 at 18% of speech, MR3 at 51%, MR6 at 53%. Counting his words in the source shows most of this is the footage, not the edit: MR4's two takes hold 55 of his words in 86 s and the reel already captions 48 of them, so it cannot be rebuilt above roughly 20%. MR3 sits at 155 of 221 against a ceiling of 161 — not worth a rebuild. Only MR6 has real headroom, 128 of 200 against 143, which `plan_reel.py --weight 0.7` now reaches by giving the talky take more of the 56 s. Do not loosen the voice threshold to raise the number; it captions other people as him.
 
 ## Formula Dynamics — client ads
@@ -172,8 +178,20 @@ Queued for 1 October, already assessed with him and needing no further approval:
 
 New items to write on 1 October: the Fast Cut build is reproducible from the runbook; three workstreams
 not one; the red correction and which files carry which value; the caption-coverage defect; the index
-hierarchy (one master, one per client); and that this file is the channel that actually loads.
+hierarchy (one master, one per client); and that this file is the channel that actually loads. Add from
+15 Sept: the Kinetic Cut as a second format with its own builder; the outlier finding that music-only
+dominates his niche while every reel he has is voice-only; and what Higgsfield is and is not worth.
 
 **Tools assessed 16 Sept 2026 (from three TikToks he sent).** Installed: `task-observer` (Eoghan Henn, CC BY 4.0 — a SKILL.md only, no code, no hooks). Rejected after sandbox install and code read: **OmniRoute** ("Omni") — routes the Claude Code login through a local proxy and mirrors other providers' models under `claude/` names; account risk, solves a cost problem we don't have. **claude-mem / Grok Mem** — needs bun, calls the Anthropic API itself, PostHog telemetry, paid-tier funnel; redundant with this file. The Instagram-analysis workflow from the third video is already available through the vidIQ connector (`vidiq_ig_profile_reels`, outlier search); no download needed. Full notes: Dropbox `/Anti Stock Media/00 Claude memory backup (2026-09-14)/task-observer.INSTALL.md`.
+
+**What is actually working in his niche (vidIQ outlier search, 15 Sept).** Ten reels that beat their own creator's median by 16x to 312x, in car-shop and detailing content. Three patterns worth building to:
+
+- **Music carries it.** Six of ten were music-only, two voice-plus-music, none voice-only. Every reel he has is voice-only with no bed. This is the biggest structural gap between his work and what wins.
+- **Transformation beats process.** The two largest (8.2M and 2.1M views) were both dirty-to-clean restoration montages. He has the strongest possible version of this and has not used it: `01 garage walkthrough` is the empty shop and the later clips are finished bays. Right now that arc is buried inside chronological edits.
+- **Six of ten loop.** His all end on a card outro.
+
+Follower count is not the gate: one of these did 131K views on 5.5K followers.
+
+**What Higgsfield is worth here (assessed 15 Sept).** Most of it is built for someone making footage that does not exist, which is the opposite of his problem. Generated car footage would also cost him the one thing his channel has, which is that it is visibly real. Three parts earn their place: **hosting** (the presigned upload plus CloudFront link is how every finished reel actually reaches him, since the Dropbox connector cannot take video), the **Virality Predictor**, and **TikTok trending music and publishing**. Skip video/image generation, Soul avatars, 3D, the website builder, and especially voice cloning, which would break the his-voice-only rule. It cannot generate music at all — its audio tool is speech-only.
 
 **Known limitation:** the Dropbox connector writes text but not video, and this environment cannot reach Dropbox's upload page. Video is handed over as links or attached in chat.
