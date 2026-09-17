@@ -129,6 +129,19 @@ Pipeline is `creator-kit/`: cut and grade with `cut_clip.sh`, transcribe, match 
 
 **Two traps found building it.** ffmpeg's `drawbox` has no timestamp variable — its `t` is box thickness — so an animated letterbox written as a drawbox expression silently fills the frame black. Draw moving bars per frame in Pillow instead. And shot-level averaging hides single-frame flashes: the reference put 40 one-frame white flashes on its cuts, which is most of why its strobe reads as an assault, and measuring per shot found one.
 
+**The channel's own numbers question the Fast Cut format (reported 2026-09-16).** A vidIQ pull of
+@nq.young's last 12 reels, run by another session, found the only two with real reach are 14-20 s
+car-only shots with a question hook in the caption ("can you name this car"), at 2.2K and 1.3K plays.
+Every talking-head vlog cut — the format the Fast Cut recipe reproduces — sits at 50-150 plays, and
+every reel over 60 s is under 80. Followers are 3.7K, so even the best reel is reaching well under
+the audience. **This contradicts the standing rule that Fast Cut is the approved format**, which was
+set from MR8 as a taste reference without checking MR8's own performance. It also points the same way
+as the external outlier search below: away from long talking-head cuts.
+
+Nothing has been changed on the strength of this. It is one pull by one session and has not been
+re-verified. **Do not re-render MR1-MR8 for the red fix until Omarie has settled the format question**,
+because that is a day of compute spent on a format the numbers do not currently support.
+
 **Caption coverage, measured 2026-09-13.** The flagged reels are MR4 at 18% of speech, MR3 at 51%, MR6 at 53%. Counting his words in the source shows most of this is the footage, not the edit: MR4's two takes hold 55 of his words in 86 s and the reel already captions 48 of them, so it cannot be rebuilt above roughly 20%. MR3 sits at 155 of 221 against a ceiling of 161 — not worth a rebuild. Only MR6 has real headroom, 128 of 200 against 143, which `plan_reel.py --weight 0.7` now reaches by giving the talky take more of the 56 s. Do not loosen the voice threshold to raise the number; it captions other people as him.
 
 ## Formula Dynamics — client ads
@@ -149,6 +162,7 @@ Full engineering record, fault log and cue timelines: https://claude.ai/code/art
 - Never push to `main`. Use the workstream's own branch.
 - Ask before any Dropbox change that moves, renames or deletes.
 - Report token usage after each task.
+- Paid renders: there is no Higgsfield balance tool (the connector has exposed 37 of 88 tools on every reconnect this week, and `show_plans_and_credits` is a sales widget with no number). So quote the per-render cost instead — `get_cost:true` where the model supports it, otherwise the preset's listed price — and get an explicit go before each paid call. He checks the balance in the Higgsfield app himself. Confirm the target against a contact sheet before spending: the wrong-beat renders cost credits through misreading the reference, not through price.
 - New concepts get a NEW artifact page; never overwrite one he keeps for comparison. But do not create a second index of the same thing.
 - Archive, never delete. Superseded cuts stay reachable with a note saying what replaced them.
 - Write to memory only at end of day, listed first and approved by him.
