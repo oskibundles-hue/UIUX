@@ -1,0 +1,5 @@
+Supercar Experience official logo files (copied 2026-09-14, renamed without spaces; file contents unchanged).
+se-logo-white.svg   <- work/se_redesign/brand/site_logos/logos/Logos/SVG/SE Logo White.svg   (viewBox 732.75 x 102.92, 7.12:1)
+se-logo-black.svg   <- work/se_redesign/brand/site_logos/logos/Logos/SVG/SE Logo Black.svg   (spare, for light plates)
+se-marque-white.svg <- work/se_redesign/brand/site_logos/logos/Logos/SVG/SE-Marque-White.svg (viewBox 161.85 x 101.01)
+Drawn in Motion4K with Remotion <Img> (brand "se-booking"); never inline two of them (shared .cls-1 style).

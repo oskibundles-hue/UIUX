@@ -16,3 +16,6 @@ if (!alpha) {
 // plays washed out on some devices and oversaturated on others.
 Config.setColorSpace("bt709");
 if (!alpha) Config.setPixelFormat("yuv420p");
+
+// 2026-09-14: 4K alpha frames under 5-way concurrency can take >30 s to seek (07 overlay timed out at frame 2180).
+Config.setDelayRenderTimeoutInMilliseconds(120000);

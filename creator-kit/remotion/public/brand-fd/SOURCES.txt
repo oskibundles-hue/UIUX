@@ -1,0 +1,4 @@
+Formula Dynamics logo files (copied 2026-09-14, contents unchanged).
+fd-icon-mark-only--white.svg <- work/fd_redesign/brand/logos/svg/fd-icon-mark-only--white.svg (185 x 122; corner bug)
+fd-stacked--white.svg        <- work/fd_redesign/brand/logos/svg/fd-stacked--white.svg        (157 x 161; end card)
+Both are traces of the brand-guide raster (0.84% mean pixel error), not the designer's master vector.

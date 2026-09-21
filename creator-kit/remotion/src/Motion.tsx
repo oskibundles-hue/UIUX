@@ -3,6 +3,7 @@ import { AbsoluteFill, Img, OffthreadVideo, staticFile, useCurrentFrame, useVide
 import { loadFonts } from "./fonts";
 import { theme } from "./theme";
 import type { Word } from "./data/captions";
+import { BrandMotion, type BrandProps } from "./brand/BrandMotion";
 
 loadFonts();
 
@@ -13,10 +14,20 @@ loadFonts();
  * up, the lower third is a skewed bar with a light sweep, and the outro
  * cascades the CTA letter by letter under the end card.
  */
-export type Callout = { at: number; hold: number; x: number; y: number; label: string; value?: number; text?: string; suffix?: string; side?: "left" | "right" };
+/**
+ * `x`/`y` place the dot and anchor the leader elbow and label box (0-1 of the frame).
+ * Optional `path` makes the dot follow a moving target: `t` is seconds on the reel
+ * timeline, `x`/`y` are 0-1 of the frame, linear between points and clamped at the
+ * ends. With a path, `x`/`y` stay the fixed anchor for the elbow and box (set them to
+ * the path position at `at`, or the path mean) so the text never moves with the dot.
+ */
+export type CalloutPathPoint = { t: number; x: number; y: number };
+export type Callout = { at: number; hold: number; x: number; y: number; label: string; value?: number; text?: string; suffix?: string; side?: "left" | "right"; path?: CalloutPathPoint[] };
 export type LowerThirdSpec = { at: number; hold: number; title: string; sub: string };
-export type Stamp = { at: number; hold: number; text: string };
-export type MotionProps = {
+/** `y` (se-booking only): vertical centre as 0-1 of the frame height; absent = 0.47 (the original position). Legacy ignores it. */
+export type Stamp = { at: number; hold: number; text: string; y?: number };
+/** Brand fields (brand, logo, ...) live in src/brand/types.ts; absent `brand` = today's look. */
+export type MotionProps = BrandProps & {
   src: string; words: Word[]; durationSeconds?: number; overlayOnly?: boolean;
   title?: { eyebrow: string; line1: string; line2: string; until: number };
   callouts?: Callout[];
@@ -121,6 +132,16 @@ const KineticCaptions: React.FC<{ words: Word[]; emphasis: string[]; after: numb
 };
 
 /* ---------- Callout: pulsing dot, drawn leader line, rolling counter ---------- */
+/** Position on a callout path at reel time s: linear between points, clamped at both ends. */
+const pathAt = (path: CalloutPathPoint[], s: number): { x: number; y: number } => {
+  const p = [...path].sort((a, b) => a.t - b.t);
+  if (s <= p[0].t) return { x: p[0].x, y: p[0].y };
+  const last = p[p.length - 1];
+  if (s >= last.t) return { x: last.x, y: last.y };
+  let i = 1; while (p[i].t < s) i++;
+  const a = p[i - 1], b = p[i], k = b.t > a.t ? (s - a.t) / (b.t - a.t) : 1;
+  return { x: a.x + (b.x - a.x) * k, y: a.y + (b.y - a.y) * k };
+};
 const CalloutView: React.FC<{ c: Callout }> = ({ c }) => {
   const frame = useCurrentFrame(); const { fps, height: H, width: W } = useVideoConfig(); const s = frame / fps;
   if (s < c.at || s > c.at + c.hold + 0.4) return null;
@@ -132,17 +153,22 @@ const CalloutView: React.FC<{ c: Callout }> = ({ c }) => {
   const count = f0 >= 40 ? val : interpolate(f0, [14, 40], [0, val], { ...clamp, easing: Easing.out(Easing.exp) });
   const out = interpolate(s, [c.at + c.hold, c.at + c.hold + 0.35], [1, 0], clamp);
   const pulse = 1 + 0.25 * Math.sin(f0 / 4);
-  const x = c.x * W, y = c.y * H, right = (c.side ?? "right") === "right";
+  // Anchor (c.x, c.y) fixes the elbow and label box; the dot follows c.path when given.
+  const ax = c.x * W, ay = c.y * H, right = (c.side ?? "right") === "right";
+  const pt = c.path?.length ? pathAt(c.path, s) : null;
+  const x = pt ? pt.x * W : ax, y = pt ? pt.y * H : ay;
   const dx = right ? W * 0.16 : -W * 0.16, dy = -H * 0.07;
-  const bx = x + dx * line, by = y + dy * line;
+  const bx = ax + dx * line, by = ay + dy * line;
+  // Leader tip: grows from the dot to the fixed elbow, so it meets the elbow once drawn (line = 1).
+  const tx = pt ? x + (ax + dx - x) * line : bx, ty = pt ? y + (ay + dy - y) * line : by;
   const r = H * 0.006, lab = H * 0.012, num = H * 0.05;
   return (
     <div style={{ position: "absolute", inset: 0, opacity: out, pointerEvents: "none" }}>
       <svg width={W} height={H} style={{ position: "absolute", left: 0, top: 0 }}>
         <circle cx={x} cy={y} r={r * 2.6 * pulse} fill="none" stroke={GOLD} strokeWidth={r * 0.35} opacity={0.6 * dot} />
         <circle cx={x} cy={y} r={r * dot} fill={GOLD} />
-        <line x1={x} y1={y} x2={bx} y2={by} stroke="#fff" strokeWidth={r * 0.45} strokeLinecap="round" />
-        <line x1={bx} y1={by} x2={bx + (right ? W * 0.05 : -W * 0.05) * line} y2={by} stroke="#fff" strokeWidth={r * 0.45} strokeLinecap="round" />
+        <line x1={x} y1={y} x2={tx} y2={ty} stroke="#fff" strokeWidth={r * 0.45} strokeLinecap="round" />
+        <line x1={tx} y1={ty} x2={tx + (right ? W * 0.05 : -W * 0.05) * line} y2={ty} stroke="#fff" strokeWidth={r * 0.45} strokeLinecap="round" />
       </svg>
       <div style={{ position: "absolute", left: right ? bx + W * 0.055 : undefined, right: right ? undefined : W - bx + W * 0.055, top: by - num * 0.9,
                     transform: `scale(${0.85 + 0.15 * box})`, transformOrigin: right ? "left center" : "right center", opacity: box,
@@ -266,7 +292,7 @@ const StampView: React.FC<{ st: Stamp }> = ({ st }) => {
   );
 };
 
-export const Motion: React.FC<MotionProps> = ({ src, words, overlayOnly = false, title, callouts, lowerThird, lowerThirds, stamps, follows, wipes = false, keyWord = true, chapters, outro, emphasis = [], cuts = [] }) => (
+const LegacyMotion: React.FC<MotionProps> = ({ src, words, overlayOnly = false, title, callouts, lowerThird, lowerThirds, stamps, follows, wipes = false, keyWord = true, chapters, outro, emphasis = [], cuts = [] }) => (
   <AbsoluteFill style={{ backgroundColor: overlayOnly ? "transparent" : "#000" }}>
     {overlayOnly ? null : <OffthreadVideo src={src.startsWith("http") ? src : staticFile(src)} style={{ width: "100%", height: "100%", objectFit: "cover" }} />}
     {chapters?.length ? <ChapterBar chapters={chapters} /> : null}
@@ -281,6 +307,9 @@ export const Motion: React.FC<MotionProps> = ({ src, words, overlayOnly = false,
     {outro ? <Outro o={outro} /> : null}
   </AbsoluteFill>
 );
+
+/** No `brand` (absent or null): today's look, above. Any `brand` value: src/brand/BrandMotion.tsx, which throws on unknown keys. */
+export const Motion: React.FC<MotionProps> = (props) => (props.brand == null ? <LegacyMotion {...props} /> : <BrandMotion {...props} Legacy={LegacyMotion} />);
 
 /* ---------- Follow card: platform pill with avatar ring, handle, count, and a button that gets tapped ---------- */
 export type FollowSpec = { at: number; hold: number; platform: "instagram" | "youtube"; name: string; handle: string; followers: string; avatarSrc: string; y?: number };
