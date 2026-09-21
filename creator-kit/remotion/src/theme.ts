@@ -31,6 +31,9 @@ export const theme = {
   captionScaleX: 0.80,
   hookY: 0.22,
   endCardY: 0.60,
+  // Chapter card (src/components/Chapter.tsx): sits well clear of the hook (0.22) and the caption line (0.726),
+  // just inside the top of safe.top (0.135) so it never crowds the corner logo bug either.
+  chapterY: 0.16,
 
   safe: { top: 0.135, bottom: 0.245, left: 0.067, right: 0.176 },
 } as const;

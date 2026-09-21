@@ -1,7 +1,7 @@
 import React from "react";
 import { useCurrentFrame, useVideoConfig, spring, interpolate } from "remotion";
 import { theme } from "../theme";
-import { toLines, type Word } from "../data/captions";
+import { toLines, captionYAt, type Word, type CaptionPosition } from "../data/captions";
 
 /**
  * "Pop" captions - the second caption style in the kit.
@@ -19,8 +19,10 @@ import { toLines, type Word } from "../data/captions";
  *
  * Nothing fades: entrances are springs, exits are hard swaps, because the
  * classic style's hard swaps are what keeps the caption on the beat.
+ *
+ * `positions` (optional): face-aware placement overrides from story/caption_faces.py, same contract as Captions.tsx.
  */
-export const CaptionsPop: React.FC<{ words: Word[] }> = ({ words }) => {
+export const CaptionsPop: React.FC<{ words: Word[]; positions?: CaptionPosition[] }> = ({ words, positions }) => {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const t = frame / fps;
@@ -51,6 +53,7 @@ export const CaptionsPop: React.FC<{ words: Word[] }> = ({ words }) => {
   const pop = spring({ frame: frame - lineStart, fps, config: { damping: 11, stiffness: 260, mass: 0.7 }, durationInFrames: 12 });
   const lineScale = interpolate(pop, [0, 1], [0.82, 1]);
   const lineRise = interpolate(pop, [0, 1], [fontSize * 0.25, 0]);
+  const centreY = captionYAt(t, positions, theme.captionCentreY, theme.safe.top, theme.safe.bottom);
 
   return (
     <div
@@ -58,7 +61,7 @@ export const CaptionsPop: React.FC<{ words: Word[] }> = ({ words }) => {
         position: "absolute",
         left: 0,
         width,
-        top: theme.captionCentreY * height - fontSize * 0.72,
+        top: centreY * height - fontSize * 0.72,
         display: "flex",
         justifyContent: "center",
         alignItems: "center",

@@ -1,7 +1,7 @@
 import React from "react";
 import { useCurrentFrame, useVideoConfig } from "remotion";
 import { theme } from "../theme";
-import { toLines, type Word } from "../data/captions";
+import { toLines, captionYAt, type Word, type CaptionPosition } from "../data/captions";
 
 /**
  * Captions matched to the reference edit.
@@ -12,8 +12,11 @@ import { toLines, type Word } from "../data/captions";
  *
  * No scale or slide animation on the active word: the reference simply swaps
  * the colour, and adding movement reads as a different, busier style.
+ *
+ * `positions` (optional): face-aware placement overrides from story/caption_faces.py -- a line whose default
+ * position overlaps a detected face moves to its override Y instead, clamped inside theme.safe.
  */
-export const Captions: React.FC<{ words: Word[] }> = ({ words }) => {
+export const Captions: React.FC<{ words: Word[]; positions?: CaptionPosition[] }> = ({ words, positions }) => {
   const frame = useCurrentFrame();
   const { fps, width, height } = useVideoConfig();
   const t = frame / fps;
@@ -24,6 +27,7 @@ export const Captions: React.FC<{ words: Word[] }> = ({ words }) => {
 
   const fontSize = theme.captionFontFrac * height;
   const stroke = Math.max(1, Math.round(fontSize * 0.055));
+  const centreY = captionYAt(t, positions, theme.captionCentreY, theme.safe.top, theme.safe.bottom);
 
   return (
     <div
@@ -31,7 +35,7 @@ export const Captions: React.FC<{ words: Word[] }> = ({ words }) => {
         position: "absolute",
         left: 0,
         width,
-        top: theme.captionCentreY * height - fontSize * 0.72,
+        top: centreY * height - fontSize * 0.72,
         display: "flex",
         justifyContent: "center",
         flexWrap: "wrap",

@@ -4,12 +4,13 @@ import { loadFonts } from "./fonts";
 import { Captions } from "./components/Captions";
 import { CaptionsPop } from "./components/CaptionsPop";
 import { Hook } from "./components/Hook";
+import { Chapter, type ChapterMark } from "./components/Chapter";
 import { ProgressBar } from "./components/ProgressBar";
 import { Handle } from "./components/Handle";
 import { EndCard } from "./components/EndCard";
 import { SpecCard, type Card } from "./components/SpecCard";
 import { AnimatedOverlay, type OverlaySpec } from "./components/AnimatedOverlay";
-import { toWords, type Phrase, type Word } from "./data/captions";
+import { toWords, type Phrase, type Word, type CaptionPosition } from "./data/captions";
 
 loadFonts();
 
@@ -52,6 +53,10 @@ export type ReelProps = {
   overlays?: OverlaySpec[];
   /** "classic" = measured reference style (colour swap); "pop" = pill highlight + line pop. */
   captionStyle?: "classic" | "pop";
+  /** Face-aware caption placement overrides; written by story/caption_faces.py. */
+  captionPositions?: CaptionPosition[];
+  /** Chapter cards; written by story/chapter_markers.py from real structural phrases + a labels.json car/job change. */
+  chapters?: ChapterMark[];
 };
 
 const punchScale = (t: number, punches: ReelProps["punches"]) => {
@@ -71,7 +76,7 @@ const punchScale = (t: number, punches: ReelProps["punches"]) => {
 };
 
 export const Reel: React.FC<ReelProps> = ({
-  src, phrases, words: given, hook, handle, endCard, endCardAt = 0, showProgress = false, scrim = false, punches, overlayOnly = false, cards, overlays, captionStyle = "classic",
+  src, phrases, words: given, hook, handle, endCard, endCardAt = 0, showProgress = false, scrim = false, punches, overlayOnly = false, cards, overlays, captionStyle = "classic", captionPositions, chapters,
 }) => {
   const { durationInFrames, fps } = useVideoConfig();
   const zoom = punchScale(useCurrentFrame() / fps, punches);
@@ -101,7 +106,8 @@ export const Reel: React.FC<ReelProps> = ({
       {(overlays ?? []).map((o, i) => <AnimatedOverlay key={i} spec={o} />)}
       {(cards ?? []).map((c, i) => <SpecCard key={i} card={c} />)}
       {hook ? <Hook text={hook} /> : null}
-      {captionStyle === "pop" ? <CaptionsPop words={words} /> : <Captions words={words} />}
+      {chapters?.length ? <Chapter chapters={chapters} /> : null}
+      {captionStyle === "pop" ? <CaptionsPop words={words} positions={captionPositions} /> : <Captions words={words} positions={captionPositions} />}
       {endCard ? (
         <EndCard line={endCard} startSeconds={endCardAt || durationInFrames / fps - 3} />
       ) : null}

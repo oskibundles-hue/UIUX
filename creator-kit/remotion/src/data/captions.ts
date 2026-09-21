@@ -39,3 +39,28 @@ export const toLines = (words: Word[], max = 3): Word[][] => {
   for (let i = 0; i < words.length; i += max) lines.push(words.slice(i, i + max));
   return lines;
 };
+
+/**
+ * Face-aware caption placement (story/caption_faces.py): a per-segment vertical override, in seconds and a
+ * fraction of frame height. story/caption_faces.py samples frames across each caption line's span with the same
+ * YuNet detector bridges.py uses for T2, and writes one entry here only for a line whose default position
+ * (theme.captionCentreY) overlaps a detected face -- most often handheld/chest-mounted footage where the face
+ * sits low in frame, the same place captions default to. `y` is always inside theme.safe (caption_faces.py's
+ * ALT_Y is computed from theme.safe.top with its own band-height margin); captionYAt clamps again here as a
+ * second, defensive check, in case a hand-written position prop is fed in some other way.
+ */
+export type CaptionPosition = { start: number; end: number; y: number };
+
+/** The caption centre-Y to use at time `t`: an override active at `t`, clamped inside theme.safe, else the
+ * theme default. Overrides never stack; the first one whose [start, end) contains `t` wins. */
+export const captionYAt = (
+  t: number,
+  positions: CaptionPosition[] | undefined,
+  defaultY: number,
+  safeTop: number,
+  safeBottom: number
+): number => {
+  const hit = (positions ?? []).find((p) => t >= p.start && t < p.end);
+  if (!hit) return defaultY;
+  return Math.min(Math.max(hit.y, safeTop), 1 - safeBottom);
+};
