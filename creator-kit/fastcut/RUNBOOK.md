@@ -21,8 +21,8 @@ Under 60 seconds, target 56. 4K vertical 2160x3840 at 29.97 fps.
 | Outro | card outro 3 s from the end. **No call to action** |
 | Audio | −14 LUFS, limiter at 0.84 |
 
-`Motion.tsx` currently ships `RED = "#DE1A22"`, which is wrong — it does not match the FD logo bug.
-Set it to `#FE0F13` before building anything new.
+The accent red is `#FE0F13`, set in `Motion.tsx`. This is the measured FD brand red. Reels MR1-MR8
+were built before the fix and carry `#DE1A22`; anything you build now will not match them.
 
 ## Prerequisites
 
@@ -85,6 +85,9 @@ before you deliver anything.
 
 1. `plan_reel.py --target 56` picks the best window of each take by speech density, sliding the
    window back when the only speech sits late, and ignoring other people's lines when choosing.
+   `--weight` decides how the 56 s is split between takes: 0 splits by clip length, 1 by how many
+   words he says in each, and the default 0.7 blends them. Leave it alone unless the checker
+   flags coverage; MR1-MR8 were built at 0.
 2. `split_plan.py` breaks the plan into shots: first 3.0 s, the rest 4.5 s or less.
 3. `assemble_reel.py` concatenates the shots into a master and records where every cut lands.
 4. `rewords.py` maps word timings through the plan and removes the other-voice ranges.
@@ -103,9 +106,13 @@ before you deliver anything.
   starts, not up front for the whole batch.
 - **Never run two builds of the same reel at once.** They write the same master file and the
   render reads a half-written file.
-- **Low caption coverage is a planning problem, not a captioning problem.** If the checker says
-  captions cover under half the speech, the window landed on a stretch where other people are
-  talking. Pick a different window. Do not loosen the voice threshold.
+- **Low caption coverage is usually the footage, not the planner.** Before re-planning, count
+  how many words he actually says in the takes: a reel cannot caption speech that was never
+  recorded. MR4 holds 55 of his words across 86 s of footage and captions 48 of them, so its
+  18% coverage is close to the ceiling. Where one take carries the talking and another is
+  near-silent, raise `--weight` and the budget shifts toward the talky one (MR6: 128 -> 143 of
+  200 at 0.7, costing 7 s off its second chapter). Never loosen the voice threshold to raise the
+  number; that captions other people as him.
 
 ## Scores from the reference batch
 

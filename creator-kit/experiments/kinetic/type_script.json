@@ -1,0 +1,6 @@
+[
+ {"at": 5.0,  "until": 9.10, "lines": ["YOU CAN'T BE", "SELFISH WHEN", "YOU'RE DOING THIS"], "accent": "SELFISH"},
+ {"at": 9.4,  "until": 13.10, "lines": ["YOU GUYS ARE", "MAKING THE", "MAGIC HAPPEN"], "accent": "MAGIC"},
+ {"at": 13.4, "until": 16.00, "lines": ["I'M JUST HERE", "TO HELP MAKE", "IT HAPPEN"]},
+ {"at": 16.3, "until": 18.80, "lines": ["IT JUST HELPS", "EVERYONE OUT"], "accent": "EVERYONE"}
+]
