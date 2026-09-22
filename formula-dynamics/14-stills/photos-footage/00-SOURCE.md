@@ -1,6 +1,6 @@
 # Poster frames cut from the shop's own footage
 
-Twelve frames pulled 22 Sept from the vlog rushes in Dropbox
+Twenty-three frames pulled 22 Sept from the vlog rushes in Dropbox
 `/NQ Studio/raw footage/`. They exist because the stills library is entirely
 wheel and brake photography, which the shop rejected for the oil set.
 
@@ -31,6 +31,17 @@ library shows a job in progress.
 | ASTON_029 | 2026-09-03 23-44-19 aston martin brakes.mov | 58 | gloved hand on a bare rotor, daylight |
 | TEALBRK_019 | 2026-09-03 23-55-54 teal brakes and ryft wheels.mov | 38 | underside, suspension and exhaust |
 | TEALBRK_022 | 2026-09-03 23-55-54 teal brakes and ryft wheels.mov | 44 | wheel off, hub and rotor |
+| ASTON_009 | 2026-09-03 23-44-19 aston martin brakes.mov | 18 | hand and rotor together |
+| ASTON_010 | 2026-09-03 23-44-19 aston martin brakes.mov | 20 | rotor and teal caliper, wheel off |
+| ASTON_012 | 2026-09-03 23-44-19 aston martin brakes.mov | 24 | rotor and caliper, wheel arch |
+| ASTON_020 | 2026-09-03 23-44-19 aston martin brakes.mov | 40 | hub and rotor with the tyre |
+| ASTON_021 | 2026-09-03 23-44-19 aston martin brakes.mov | 42 | teal caliper and rotor, close |
+| ASTON_044 | 2026-09-03 23-44-19 aston martin brakes.mov | 88 | matte car in the bay, wheel off |
+| TEALBRK_048 | 2026-09-03 23-55-54 teal brakes and ryft wheels.mov | 96 | rotor and teal caliper on the red mats |
+| TEALBRK_052 | 2026-09-03 23-55-54 teal brakes and ryft wheels.mov | 104 | caliper and wheel arch |
+| TEALBRK_062 | 2026-09-03 23-55-54 teal brakes and ryft wheels.mov | 124 | rotor and teal caliper |
+| TEALBRK_063 | 2026-09-03 23-55-54 teal brakes and ryft wheels.mov | 126 | same, wider |
+| TEALBRK_093 | 2026-09-03 23-55-54 teal brakes and ryft wheels.mov | 186 | car in the bay, wheel off |
 
 Saved as JPEG at quality 94 with no chroma subsampling. They are already at
 poster resolution, so re-encoding them further loses detail that cannot be got
@@ -68,3 +79,16 @@ oil ad about oil.
 Anyone recognisable in a frame is a permission question before it is a design
 one. The picks above favour gloved hands and cars over faces, but the wider
 rushes are full of staff and the shop should clear a face before it runs.
+
+## Added with the footage brake set (22 Sept)
+
+Eleven more frames, all from the two brake clips, chosen by sharpness ranked
+**within each clip**. Ranking the two together was wrong: a global median kept
+6 of 46 Aston frames against 87 of 140 teal ones, which threw the Aston
+material away rather than judging it. The teal clip is simply sharper.
+
+The daylight trade is worth knowing before picking from these. Measured under
+the headline the brake frames average 142-164 luminance where the studio stills
+average 25-50, so the scrim works about three times harder and the picture
+reads darker than the photograph is. The layout was built for dark car
+photography; a bright shop frame pays for the white type.
