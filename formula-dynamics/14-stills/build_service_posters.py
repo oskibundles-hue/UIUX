@@ -154,24 +154,61 @@ def cover(src, w, h, focus=0.5, fx=0.5):
 # under the headline where a dark Cullinan measures single figures. So the
 # scrim SOLVES for the target instead of being dialled in by eye.
 TARGET_LUMA = 40
+
+# A mean is the wrong statistic for a night garage frame. The shop is a black
+# car under hard point lights: the average sits on target while the lights
+# themselves punch straight through the scrim, and white type laid over one
+# disappears. Measured on the lift footage, the ground under the fine print
+# averages 29-52 against a target of 40 - correct - while its brightest 3%
+# reaches 179-222.
+#
+# The ceiling below is not chosen, it is read off the work that already reads.
+# Across the approved stills the same brightest-3% figure runs 80-123, so 120
+# is where a highlight stops being legible ground and starts being a hole in
+# the type. The scrim now solves for the mean AND for that tail, and takes
+# whichever asks for more.
+HIGHLIGHT_PCT = 97
+TARGET_HIGHLIGHT = 120
 DEBUG = bool(os.environ.get("FD_POSTER_DEBUG"))
 
 
+def percentile_luma(im, pct):
+    """The luminance the brightest (100-pct)% of this patch sits above."""
+    hist = im.convert("L").histogram()
+    cut = sum(hist) * pct / 100.0
+    run = 0
+    for value, count in enumerate(hist):
+        run += count
+        if run >= cut:
+            return float(value)
+    return 255.0
+
+
 def solve_alpha(base, box, target=TARGET_LUMA, floor=8):
-    """How much to blend toward black so this box reads at `target`."""
+    """How much to blend toward black so this box reads at `target`.
+
+    Blending is linear - a pixel at v lands at v(1-a) + floor*a - so the same
+    arithmetic solves for either statistic. The stronger requirement wins.
+    """
     box = (max(0, box[0]), max(0, box[1]), min(base.width, box[2]),
            min(base.height, box[3]))
     if box[2] <= box[0] or box[3] <= box[1]:
         return 0.0
-    mean = ImageStat.Stat(base.crop(box).convert("L")).mean[0]
-    if mean <= target:
-        if DEBUG:
-            print(f"      ground {box[1]:>4}-{box[3]:<4} {mean:6.1f} -> already clear")
-        return 0.0
-    a = min(0.92, (mean - target) / max(1.0, mean - floor))
+    patch = base.crop(box)
+    mean = ImageStat.Stat(patch.convert("L")).mean[0]
+    peak = percentile_luma(patch, HIGHLIGHT_PCT)
+
+    need = lambda have, want: ((have - want) / max(1.0, have - floor)
+                               if have > want else 0.0)
+    a_mean = need(mean, target)
+    a_peak = need(peak, TARGET_HIGHLIGHT)
+    a = min(0.92, max(a_mean, a_peak))
+
     if DEBUG:
-        print(f"      ground {box[1]:>4}-{box[3]:<4} {mean:6.1f} -> "
-              f"{mean * (1 - a) + floor * a:5.1f}  (alpha {a:.2f})")
+        drive = "peak" if a_peak > a_mean else "mean"
+        print(f"      ground {box[1]:>4}-{box[3]:<4} mean {mean:6.1f} "
+              f"p{HIGHLIGHT_PCT} {peak:6.1f} -> {mean * (1 - a) + floor * a:5.1f} "
+              f"/ {peak * (1 - a) + floor * a:5.1f}  (alpha {a:.2f}, {drive})")
     return a
 
 
