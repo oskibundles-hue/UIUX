@@ -1,6 +1,6 @@
 # Poster frames cut from the shop's own footage
 
-Twenty-three frames pulled 22 Sept from the vlog rushes in Dropbox
+Thirty-one frames pulled 22 Sept from the vlog rushes in Dropbox
 `/NQ Studio/raw footage/`. They exist because the stills library is entirely
 wheel and brake photography, which the shop rejected for the oil set.
 
@@ -92,3 +92,57 @@ the headline the brake frames average 142-164 luminance where the studio stills
 average 25-50, so the scrim works about three times harder and the picture
 reads darker than the photograph is. The layout was built for dark car
 photography; a bright shop frame pays for the white type.
+
+## Added with the oil set (22 Sept) - the oil-change footage
+
+Eight frames from two phone clips shot 17 Sept, in `Mobile Uploads/2026-09-17/`:
+`Video Sep 17 2026, 4 13 12 PM.mov` (red 911 on the lift, "Oil change going
+down") and `Video Sep 17 2026, 4 22 49 PM.mov` (oil bottles, extraction rig,
+white 911, "All your oil change needs in house").
+
+| frame | carries |
+|---|---|
+| P1613_001 P1613_002 P1613_003 | red Porsche 911 up on the lift, shop behind |
+| P1622_001 | a bench of oil jugs - the literal subject |
+| P1622_002 | the orange extraction rig and a gloved hand |
+| P1622_003 | white 911 rear in the bay (**customer plate CBS112 is readable**) |
+| P1622_004 P1622_006 | white car panels, a tech working |
+
+**The bottom 18% of each is cropped.** Both clips carry a burned-in story
+caption near the foot of frame. Verified by eye across twelve renders that no
+caption survives the crop. Clean exports without the overlay would give back
+18% of the picture.
+
+**P1613 is 720x1280**, upscaled 1.5x to fill a 1080x1920 poster. Every other
+frame here is at or above poster size and `cars()` refuses anything smaller;
+this is a deliberate override because no other clip has the subject. It holds
+at phone size and will look soft next to the 4K frames.
+
+## How the clips were found, and the index worth building
+
+Phone files are named only by timestamp, so neither clip could be found by
+name. They were found by scoring every frame for **dominant colour** and
+searching pink/magenta: the two oil clips scored 21.2% and 19.8% of frame
+area, everything else that day under 7%. Pure arithmetic - no model, no
+network.
+
+That generalises. Cheap per-frame signals that need only numpy and PIL, and
+would have saved most of the searching done today:
+
+| signal | answers |
+|---|---|
+| dominant hues | "the pink car", "the red one", "teal calipers" |
+| sharpness (edge stddev) | skip motion blur - already used to pick the brake set |
+| mean and 97th-percentile luma | night clip or daylight, and how hard the scrim will work |
+| orientation | is it poster-native 9:16 |
+| frame-to-frame difference | a static bench shot against a walkthrough |
+| skin fraction | which clips have people in them, which is the permission question |
+
+Plus one contact sheet per clip, stored once. Sixteen clips were downloaded
+today - about 11 GB - to learn things a stored sheet would have answered in a
+glance, such as that the 09-09 "shop work" day is a tape measure on a bench.
+
+Object recognition on top of this needs CLIP or similar. Not possible in this
+container - no torch, no cv2, no transformers, and installing them would die
+with the session - so that column has to be filled by a one-time job on a
+machine that persists. The CSV is designed to take it later without rework.
