@@ -621,7 +621,12 @@ def main():
                     help="letter, or all. Default is the approved layout.")
     ap.add_argument("--fx", type=float, default=0.5,
                     help="horizontal crop aim, 0 left .. 1 right")
+    ap.add_argument("--cars", action="store_true",
+                    help="render the service against every car in photos/")
     a = ap.parse_args()
+
+    if a.cars:
+        return cars(a.service, a.layout.upper())
 
     OUT.mkdir(parents=True, exist_ok=True)
     keys = list(SERVICE_POSTERS) if a.service == "all" else [a.service]
@@ -996,7 +1001,8 @@ def price_hero(im, x, y, s, cap=190, right=False):
 # J - SERVICE FIRST.  Full-bleed photo. Name, qualifier, price, in that order.
 # --------------------------------------------------------------------------
 def layout_service_first(photo, s):
-    im = cover(photo, W, H, focus=0.58, fx=auto_fx(photo))
+    im = cover(photo, W, H, focus=0.58,
+               fx=auto_fx(photo, prefer=s.get("crop", "detail")))
     top_scrim(im, 780, 920)
     base_scrim(im, 620, 760)
 
@@ -1157,7 +1163,7 @@ DM = "DM FOR PRICING"
 MENU = {
  "oil": dict(
    photo="DSC08985-Edit.JPEG", big=("OIL", "SERVICE"),
-   support="THE OIL ITSELF, NOT JUST THE LABOR.",
+   support="THE OIL ITSELF, NOT JUST THE LABOR.", crop="body",
    includes5=[("fluid", "OIL & FILTER", "REPLACED"),
               ("check", "MULTI-POINT", "INSPECTION"),
               ("gauge", "FLUIDS", "TOPPED OFF")],
@@ -1240,7 +1246,7 @@ for _k, _v in MENU.items():
 
 
 
-def auto_fx(img, tw=W, th=H, steps=41):
+def auto_fx(img, tw=W, th=H, steps=41, prefer="detail"):
     """Aim the crop at the wheel by finding the busiest column window.
 
     Every shop frame is 3:2 landscape, so a 9:16 crop keeps roughly 30% of the
@@ -1258,13 +1264,67 @@ def auto_fx(img, tw=W, th=H, steps=41):
     if win >= im.width:
         return 0.5
     col = [sum(im.crop((x, 0, x + 1, im.height)).getdata()) for x in range(im.width)]
+    # prefer="detail" takes the busiest window - the wheel, which is the
+    # subject of a brake ad. prefer="body" takes the calmest, which lands on
+    # panel and paint instead. An oil ad that crops to a brake caliper is
+    # telling the customer the wrong story, and the same photograph can serve
+    # either service depending only on where the window sits.
     run = sum(col[:win])
     best, best_x = run, 0
     for x in range(1, im.width - win):
         run += col[x + win - 1] - col[x - 1]
-        if run > best:
+        if (run > best) if prefer == "detail" else (run < best):
             best, best_x = run, x
     return best_x / (im.width - win)
+
+
+# ==========================================================================
+# The car sets - one approved poster per photograph in the library.
+#
+# The design is settled, so the variable is the car. Every frame in photos/
+# gets the same layout J, which is what turns one approved ad into a set the
+# shop can post through.
+#
+# CROP. auto_fx has two aims. "detail" takes the busiest window - spokes,
+# tyre lettering, caliper edges - which is the subject of a brake ad. "body"
+# takes the calmest, which lands on paint and panel instead, because an oil
+# ad that crops to a brake caliper tells the customer the wrong story.
+#
+# Neither rule is right on all fifteen. Read off a side-by-side of both modes,
+# body-aim wins on the frames where the calm part of the picture is the car -
+# a Ferrari shield on a black panel, a clean flank - and loses on the frames
+# where the calm part is empty asphalt or a studio wall. Those go back to
+# detail aim. The set below is that judgement, per photograph, not a rule.
+# ==========================================================================
+CROP_DETAIL = {"DSC00075", "DSC05799", "DSC05802", "DSC05812",
+               "DSC06522", "DSC06603", "DSC07649-Edit"}
+
+
+def cars(key, layout=APPROVED_LAYOUT):
+    """Render one service against every photograph in the library."""
+    cfg = dict(SERVICE_POSTERS[key])
+    tag, fn = LAYOUTS[layout]
+    title = " ".join(w.title() for w in cfg["big"])
+    out = OUT / f"{key}-cars"
+    out.mkdir(parents=True, exist_ok=True)
+
+    for src in sorted(PHOTOS.glob("*.JPEG")):
+        shot_im = Image.open(src)
+        # A poster is 1920 tall. Three frames in the library are 1000x667 web
+        # exports, which would be blown up 2.9x to fill it - that is mush on a
+        # phone, not a photograph. Skip anything that cannot fill the canvas
+        # without upscaling.
+        if shot_im.height < H:
+            print(f"  skip {src.stem}  {shot_im.width}x{shot_im.height} "
+                  f"- under the {W}x{H} canvas")
+            continue
+        aim = "detail" if src.stem in CROP_DETAIL else cfg.get("crop", "detail")
+        shot = dict(cfg, crop=aim)
+        im = fn(shot_im, shot)
+        path = out / f"{title} - {src.stem}.png"
+        im.convert("RGB").save(path)
+        print(f"  {path.name}  {aim:6s}  "
+              f"{path.stat().st_size / 1e6:.1f} MB")
 
 if __name__ == "__main__":
     main()
