@@ -16,17 +16,34 @@ against three different audiences.
 
 ---
 
-## There is no footage of the services themselves
+## Service footage exists now (corrected 22 Sept)
 
-No oil change on camera, no brake job, no film going onto glass. So the
-services are explained **through the cars**: the hero clips carry the argument,
-the spec chips name the work, and the ticker carries the conditions. The cars
-are the reason someone buys a $3,999 package in the first place, so leading
-with them is not a compromise.
+**This section used to say there was none.** That was true when it was written
+and it is not true any more — it was written before anyone had searched the
+vlog rushes. There is an oil change on camera and there is a brake job:
 
-When service footage does exist — a lift, a torque wrench, film being squeegeed
-onto a windshield — these same ads get stronger by swapping shots, not by being
-rebuilt.
+| what | where |
+|---|---|
+| oil change, red 911 on the lift | `Mobile Uploads/2026-09-17/Video Sep 17 2026, 4 13 12 PM.mov` |
+| oil bottles, extraction rig, white 911 | `Mobile Uploads/2026-09-17/Video Sep 17 2026, 4 22 49 PM.mov` |
+| brake job, wheel off, bare rotor | `raw footage/2026-09-03/23-44-19 aston martin brakes.mov` |
+| brake job, teal calipers fitted | `raw footage/2026-09-03/23-55-54 teal brakes and ryft wheels.mov` |
+| car raised on the lift | `raw footage/2026-09-03/23-40-46 black car on the lift.mov` |
+
+The ads built before that discovery explain the services **through the cars**,
+because that was the only material there was: the hero clips carry the
+argument, the spec chips name the work, the ticker carries the conditions. That
+is still a sound ad and those cuts stand.
+
+But the original claim behind it — that leading with the cars is not a
+compromise — was made without the alternative existing. Now that it does, an ad
+that shows the wheel off and the rotor bare makes the case that a rolling shot
+cannot. Swap shots into these ads rather than rebuilding them.
+
+**Two things the phone clips need before use.** Both oil clips carry a burned-in
+story caption near the foot of frame, so the bottom 18% has to be cropped away.
+And the red 911 clip is 720x1280 against a 1080x1920 canvas — a 1.5x upscale,
+fine on a phone, soft anywhere else.
 
 ---
 
