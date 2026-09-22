@@ -16,12 +16,50 @@ Until then this file is the record of what is asserted and on whose authority.
 
 ## Oil service · $1,199 · Ferrari 296
 
+### Video ad
+
 | On screen | Verified? |
 |---|---|
 | Oil and filter | ☐ |
 | Multi-point inspection | ☐ |
 | Fluids topped off | ☐ |
 | Oil, not just labor *(ticker)* | ✅ shop's own correction, 9 Sept |
+
+### Poster — layout J approved 22 Sept, photography rejected
+
+| On screen | Verified? |
+|---|---|
+| Oil & filter — replaced | ☐ |
+| Multi-point inspection | ☐ |
+| Fluids — topped off | ☐ |
+| Oil service **from** $1,199 | ✅ "from" is accurate |
+| The oil is included | ✅ shop's own correction, 9 Sept |
+
+**The layout is approved; the pictures are not, and neither are three of these
+claims.** All fifteen renders are built on brake photography, which the shop
+rejected on 22 Sept: a wheel and a caliper above the words OIL SERVICE tells
+the customer the wrong story. The crop was given a second aim that hunts panel
+and paint instead of spokes, which fixed eight of the fifteen; eight is not a
+set, and `DSC07650` is a caliper edge to edge with nothing else in frame to
+find. **Nothing in `/Portfolio/10 Oil Service Ads/` is cleared to post.**
+
+What unblocks it: an engine bay, an oil fill cap, a drain plug, a car on the
+lift, oil pouring, a tech at the bay. The template does not change - new frames
+drop into `build_service_posters.py oil --cars` and the set re-renders.
+
+**The vlog footage is a source of exactly those frames** (Omarie, 22 Sept).
+`/NQ Studio/raw footage/2026-09-03/23-40-46 black car on the lift.mov` is a car
+raised on the lift with no brake hardware in frame, and the 09-09 day is
+indexed as "shop work, blue car on the lift". Two things make this better than
+shooting stills: the clips are already 2160x3840 vertical, so a poster is a
+straight 2:1 downscale with no crop to aim, and the shop already owns them.
+
+One defect measured before anything is cut from it: these are night garage
+frames, a black car under hard point lights, and the scrim solves on mean
+luminance. The mean lands on target (29-52 against a target of 40) while the
+brightest 3% reaches 179-222, against 80-123 for the stills library. Fine print
+disappears into a tail light and lens flares land on the phone number. The
+scrim has to solve on the bright tail before any of this footage ships.
 
 ## Brake service · $499 · Porsche 911 GT3 RS
 

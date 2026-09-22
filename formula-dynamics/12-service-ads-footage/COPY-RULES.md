@@ -139,11 +139,19 @@ rather than copy. The builder raises rather than drawing smaller.
 **Say "parts sold separately", not "pads".** The list names rotors and pads
 both, so the narrower word under-declared what the customer may still owe for.
 
+**The layout and the photograph are approved separately.** On 22 Sept the shop
+approved layout J for the oil set and rejected every frame in it: the picture
+has to match the service, and the whole library is wheel and brake photography.
+A poster is not cleared to post until both halves are signed off. Cropping
+cannot rescue a wrong subject - it was tried, it improved eight of fifteen, and
+eight of fifteen is still not a set.
+
 ## Status
 
 | Ad | State |
 |---|---|
 | **Poster — brake service · layout J** | **Approved 14 Sept** |
+| **Poster — oil service · layout J** | **Layout approved 22 Sept · photography rejected — do not post** |
 | Annual service $3,999 · SF90 | **Approved** (rebuilt, benefit-led) |
 | Brake service $499 · GT3 RS | **Approved** |
 | Oil service $1,199 · Ferrari 296 | **Approved** |
