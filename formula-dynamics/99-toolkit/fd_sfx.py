@@ -56,6 +56,11 @@ LAYER_SFX = {
                     ("ui-tick-2", -1.0, 0.85, True)],       # -1.0 = at the lock
     "panel-rise":  [("whoosh-in", 0.00, 0.70, True),
                     ("sub-drop", 0.10, 0.55, False)],
+    # One tick per word, placed at the swap rather than at the cue start -
+    # hits_for handles that below, the same way scramble lands on its lock.
+    "swap-in-place": [("ui-tick-2", 0.00, 0.70, True)],
+    "scale-pop":   [("impact-tight", 0.00, 0.85, True),
+                    ("sub-thump", 0.00, 0.45, False)],
 }
 
 # Layers that make no sound: they are always on screen, or they are scrim.
@@ -239,6 +244,16 @@ def hits_for(cues, motion_meta=None, kit="signature"):
                     continue
                 hits.append((meta["start"] + 0.05 + i * step,
                              f"key-click-{1 + i % 3}", 1.0, True))
+        elif meta["kind"] == "swap-in-place":
+            # A hit on each swap, not one at the cue start. The slot holds for
+            # 88% of each turn, so the sound marks the change and then gets out
+            # of the way - the alternative is a tick under a word that is not
+            # moving.
+            n = max(1, len(meta["chips"]))
+            span = meta["end"] - meta["start"]
+            for i in range(n):
+                hits.append((meta["start"] + span * i / n,
+                             f"ui-tick-{1 + i % 3}", 0.72, i == 0))
         elif meta["kind"] == "panel-rise":
             dur = meta["end"] - meta["start"]
             for i in range(len(meta["chips"])):

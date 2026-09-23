@@ -494,6 +494,9 @@ def main():
                          "Left off, it is calibrated from the clip's own "
                          "loudness so the effects land at the same lift on "
                          "every clip.")
+    ap.add_argument("--pop", metavar="FIGURE",
+                    help="one figure punched in before the ask, e.g. '$1,199'. "
+                         "A figure only - a sentence will not fit at this size.")
     ap.add_argument("--sfx-kit", default="signature",
                     choices=("signature", "auto") + fd_sfx.KITS[1:],
                     help="which voicing the overlays speak with. signature is "
@@ -685,6 +688,65 @@ def main():
                        else f"{len(chips)} chips will not fit one row - "
                             f"keeping the chip rundown")
                 print(f"  (no spec panel: {why})")
+
+                # A panel needs a row; a swap needs one slot. So when the cut
+                # is too short to lay the facts out side by side, run them
+                # through a single slot instead of dropping them. Measured on
+                # the reference: 63-71% of the motion in one band with the
+                # frame locked around it. See VISUAL-GRAMMAR.md.
+                # Collision is judged against the CENTRE band, not the lower
+                # one the panel uses. The swap sits at y=0.44 because that is
+                # where the reference puts it; a ticker along the bottom is not
+                # in its way, and testing it against the panel's busy list was
+                # silently killing every swap on a HUD cut.
+                mid_busy = [(c["start"], c["end"]) for c in cues
+                            if c["layer"].startswith(("type-on", "glow-burst",
+                                                      "scramble", "scale-pop",
+                                                      "title "))
+                            and not c["layer"].startswith("title block")]
+                s_end = cta["start"] - 0.35
+                s_start = max(t_end + 0.35, s_end - 3.2)
+                s_clear = all(s_end <= bs or s_start >= be
+                              for bs, be in mid_busy)
+                per = (s_end - s_start) / max(1, len(chips))
+                if s_clear and per >= 0.55:
+                    cues.append(seq_cue(
+                        "swap-in-place", tmp, canvas, fps, s_start, s_end,
+                        FM.swap_in_place, dict(lines=chips, y=0.44),
+                        f"{len(chips)} facts through one slot, "
+                        f"{per:.2f}s each - no room for a row."))
+                    motion_meta.append(dict(kind="swap-in-place", chips=chips,
+                                            start=s_start, end=s_end))
+                    cues = [c for c in cues if not c["layer"].startswith("spec")]
+                    print(f"  (swap-in-place instead: {len(chips)} facts, "
+                          f"{per:.2f}s each)")
+                elif not s_clear:
+                    print(f"  (no swap either: the centre band is occupied "
+                          f"between {s_start:.2f}s and {s_end:.2f}s)")
+                else:
+                    print(f"  (no swap either: {per:.2f}s a fact is under the "
+                          f"0.55s floor - the cut is too short for {len(chips)})")
+
+        # A single figure, punched in. Only ever one - a sentence will not fit
+        # at this size and the move reads as a mistake.
+        if a.pop:
+            cta = next((c for c in cues if c["layer"] == "cta"), None)
+            anchor = cta["start"] if cta else duration * 0.72
+            q_end = min(duration - 0.2, anchor - 0.15)
+            q_start = max(0.0, q_end - 1.5)
+            busy2 = [(c["start"], c["end"]) for c in cues
+                     if c["layer"].startswith(("swap-in-place", "panel-rise",
+                                               "type-on", "glow-burst"))]
+            if q_end - q_start > 0.8 and all(q_end <= bs or q_start >= be
+                                             for bs, be in busy2):
+                cues.append(seq_cue(
+                    "scale-pop", tmp, canvas, fps, q_start, q_end,
+                    FM.scale_pop, dict(text=a.pop, y=0.46),
+                    f"Figure punched in: {a.pop}"))
+                motion_meta.append(dict(kind="scale-pop", start=q_start,
+                                        end=q_end))
+            else:
+                print(f"  (no scale-pop: nothing clear before the ask)")
         cues.sort(key=lambda c: (c["start"], c["layer"]))
 
     print(f"\n  {a.template.upper()}  ·  {TEMPLATES[a.template]['about']}")
