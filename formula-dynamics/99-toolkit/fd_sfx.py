@@ -61,6 +61,108 @@ LAYER_SFX = {
 # Layers that make no sound: they are always on screen, or they are scrim.
 SILENT = ("bug", "title scrim", "safe")
 
+# --------------------------------------------------------------------------
+# Variation
+#
+# LAYER_SFX above is one fixed voicing per layer, so every ad the shop has ever
+# cut opens on riser-short into impact-hard and closes the same way. Eleven ads
+# that sound identical read as one ad run eleven times.
+#
+# ALTERNATES gives a layer more than one way to speak. A kit picks between
+# them, so the character is chosen rather than rolled: "signature" is exactly
+# what the approved ads already use and re-renders them unchanged, and the rest
+# are real alternatives built from sounds already in the kit. No new assets.
+#
+# Pitch does the rest of the work. Seventeen wavs is not much, but a hit
+# resampled a couple of semitones is a different hit, so the same kit does not
+# repeat itself across a cut.
+# --------------------------------------------------------------------------
+ALTERNATES = {
+    "title": {
+        "signature": [("riser-short", -0.34, 0.65, True),
+                      ("impact-hard", 0.00, 1.00, True),
+                      ("sub-thump", 0.00, 0.55, False)],
+        "deep":      [("riser-long", -0.55, 0.50, True),
+                      ("impact-hard", 0.00, 0.95, True),
+                      ("sub-drop", 0.02, 0.70, False)],
+        "tight":     [("whoosh-in", -0.18, 0.60, True),
+                      ("impact-tight", 0.00, 1.00, True),
+                      ("key-click-1", 0.09, 0.40, False)],
+        "minimal":   [("impact-soft", 0.00, 0.80, True)],
+    },
+    "cta": {
+        "signature": [("riser-short", -0.30, 0.60, True),
+                      ("impact-hard", 0.00, 1.00, True),
+                      ("sub-thump", 0.00, 0.55, False)],
+        "deep":      [("riser-long", -0.50, 0.48, True),
+                      ("sub-drop", 0.00, 0.80, True),
+                      ("impact-soft", 0.02, 0.70, False)],
+        "tight":     [("whoosh-in", -0.16, 0.62, True),
+                      ("impact-tight", 0.00, 0.95, True)],
+        "minimal":   [("impact-soft", 0.00, 0.75, True)],
+    },
+    "title block": {
+        "signature": [("whoosh-in", 0.00, 0.55, True),
+                      ("sub-drop", 0.06, 0.45, False)],
+        "deep":      [("sub-drop", 0.00, 0.60, True),
+                      ("ui-tick-soft", 0.10, 0.35, False)],
+        "tight":     [("whoosh-out", 0.00, 0.50, True),
+                      ("key-click-2", 0.08, 0.45, False)],
+        "minimal":   [("ui-tick-soft", 0.00, 0.50, True)],
+    },
+    "endcard": {
+        "signature": [("impact-soft", 0.00, 0.75, True),
+                      ("sub-drop", 0.00, 0.65, True)],
+        "deep":      [("sub-drop", 0.00, 0.80, True),
+                      ("riser-long", -0.40, 0.35, False)],
+        "tight":     [("impact-tight", 0.00, 0.70, True),
+                      ("sub-thump", 0.00, 0.55, True)],
+        "minimal":   [("impact-soft", 0.00, 0.60, True)],
+    },
+    "spec": {
+        "signature": [("ui-tick-2", 0.00, 0.85, True),
+                      ("impact-tight", 0.00, 0.35, False)],
+        "deep":      [("ui-tick-soft", 0.00, 0.80, True),
+                      ("sub-thump", 0.00, 0.30, False)],
+        "tight":     [("key-click-2", 0.00, 0.90, True),
+                      ("impact-tight", 0.00, 0.30, False)],
+        "minimal":   [("key-click-3", 0.00, 0.70, True)],
+    },
+    "lower-third": {
+        "signature": [("whoosh-in", 0.00, 0.70, True),
+                      ("ui-tick-1", 0.14, 0.65, False)],
+        "deep":      [("whoosh-in", 0.00, 0.62, True),
+                      ("sub-thump", 0.12, 0.40, False)],
+        "tight":     [("whoosh-out", 0.00, 0.66, True),
+                      ("key-click-1", 0.12, 0.60, False)],
+        "minimal":   [("whoosh-in", 0.00, 0.55, True)],
+    },
+}
+
+KITS = ("signature", "deep", "tight", "minimal")
+
+# Semitones of resampling jitter per hit, by kit. "signature" is deliberately
+# zero so an approved ad re-renders byte-for-byte as before.
+KIT_JITTER = {"signature": 0.0, "deep": 1.2, "tight": 1.6, "minimal": 0.8}
+
+
+def _rng(seed, *parts):
+    """A deterministic generator per hit, so a render is repeatable."""
+    h = hash((seed, *parts)) & 0xFFFFFFFF
+    return np.random.default_rng(h)
+
+
+def resample_semitones(a, semis):
+    """Shift a short hit by resampling. Changes length as well as pitch,
+    which is right for percussive material and wrong for anything tonal -
+    every sound in this kit is percussive."""
+    if abs(semis) < 0.01:
+        return a
+    ratio = 2.0 ** (semis / 12.0)
+    n = max(1, int(len(a) / ratio))
+    return np.interp(np.linspace(0, len(a) - 1, n),
+                     np.arange(len(a)), a).astype(np.float32)
+
 
 def _family(layer):
     for key in LAYER_SFX:
@@ -69,7 +171,18 @@ def _family(layer):
     return None
 
 
-def hits_for(cues, motion_meta=None):
+def voicing_for(fam, kit):
+    """The sound list a layer speaks with under this kit.
+
+    Falls back to LAYER_SFX whenever a layer has no alternate written for it,
+    so a kit is a partial override rather than a second table to keep in sync.
+    """
+    if kit != "signature" and fam in ALTERNATES:
+        return ALTERNATES[fam].get(kit, LAYER_SFX[fam])
+    return LAYER_SFX[fam]
+
+
+def hits_for(cues, motion_meta=None, kit="signature"):
     """Expand a cue sheet into (time, sound, gain, essential) hits."""
     hits = []
     for c in cues:
@@ -79,7 +192,7 @@ def hits_for(cues, motion_meta=None):
         fam = _family(layer)
         if not fam:
             continue
-        for name, off, gain, essential in LAYER_SFX[fam]:
+        for name, off, gain, essential in voicing_for(fam, kit):
             if off == -1.0:
                 # "at the lock" - scramble resolves at 80% of its window.
                 at = c["start"] + (c["end"] - c["start"]) * 0.80
@@ -107,7 +220,8 @@ def hits_for(cues, motion_meta=None):
     return sorted(hits)
 
 
-def build_bed(cues, duration, motion_meta=None, verbose=True, cap=None):
+def build_bed(cues, duration, motion_meta=None, verbose=True, cap=None,
+              kit="signature", seed=0):
     """Mix the hits into one mono track. Returns (samples, report).
 
     `cap` overrides DENSITY_CAP for one clip. The default of 4.5 was set
@@ -118,7 +232,7 @@ def build_bed(cues, duration, motion_meta=None, verbose=True, cap=None):
     than retune a constant every past render depends on, the caller can hand a
     tighter one down for the clip in front of it.
     """
-    hits = hits_for(cues, motion_meta)
+    hits = hits_for(cues, motion_meta, kit)
     density = len(hits) / max(1e-6, duration)
     dropped = 0
     if density > (DENSITY_CAP if cap is None else cap):
@@ -129,7 +243,8 @@ def build_bed(cues, duration, motion_meta=None, verbose=True, cap=None):
 
     bed = np.zeros(int(SR * (duration + 1.0)), dtype=np.float32)
     missing = set()
-    for at, name, gain, _ in hits:
+    jitter = KIT_JITTER.get(kit, 0.0)
+    for k, (at, name, gain, _) in enumerate(hits):
         p = SFX / f"{name}.wav"
         if not p.exists():
             missing.add(name)
@@ -137,7 +252,14 @@ def build_bed(cues, duration, motion_meta=None, verbose=True, cap=None):
         with wave.open(str(p)) as w:
             a = np.frombuffer(w.readframes(w.getnframes()),
                               dtype=np.int16).astype(np.float32) / 32768
-        i = int(at * SR)
+        if jitter:
+            # Per hit, not per sound: the point is that the third ui-tick in a
+            # run does not land on the same note as the first.
+            r = _rng(seed, kit, name, k)
+            a = resample_semitones(a, r.uniform(-jitter, jitter))
+            gain = gain * float(r.uniform(0.92, 1.08))
+            at = at + float(r.uniform(-0.012, 0.012))
+        i = max(0, int(at * SR))
         n = min(len(a), len(bed) - i)
         if n > 0:
             bed[i:i + n] += a[:n] * gain
@@ -147,6 +269,7 @@ def build_bed(cues, duration, motion_meta=None, verbose=True, cap=None):
 
     report = {"hits": len(hits), "density": density, "dropped": dropped,
               "cap": DENSITY_CAP if cap is None else cap,
+              "kit": kit, "seed": seed,
               "missing": sorted(missing)}
     return bed, report
 

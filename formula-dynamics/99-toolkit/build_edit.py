@@ -25,6 +25,7 @@ import json
 import tempfile
 import shutil
 import subprocess
+import zlib
 import sys
 from pathlib import Path
 
@@ -493,6 +494,15 @@ def main():
                          "Left off, it is calibrated from the clip's own "
                          "loudness so the effects land at the same lift on "
                          "every clip.")
+    ap.add_argument("--sfx-kit", default="signature",
+                    choices=("signature", "auto") + fd_sfx.KITS[1:],
+                    help="which voicing the overlays speak with. signature is "
+                         "what every approved ad uses and re-renders them "
+                         "unchanged; auto picks one from the output filename "
+                         "so a set of ads stops sounding identical.")
+    ap.add_argument("--sfx-seed", type=int, default=0,
+                    help="seed for the per-hit pitch and gain jitter; same "
+                         "seed, same render")
     ap.add_argument("--sfx-density", type=float, default=None, metavar="PER_SEC",
                     help="drop the non-essential hits above this rate. The "
                          "built-in cap suits a 20-30s cut; a short one needs "
@@ -686,8 +696,16 @@ def main():
 
     bed_wav = None
     if a.sfx:
+        kit, seed = a.sfx_kit, a.sfx_seed
+        if kit == "auto":
+            # Derive both from the output name so each ad sounds like itself,
+            # differs from its neighbours, and re-renders identically.
+            stem = Path(out).stem
+            digest = zlib.crc32(stem.encode())
+            kit = fd_sfx.KITS[1:][digest % (len(fd_sfx.KITS) - 1)]
+            seed = digest
         bed, rep = fd_sfx.build_bed(cues, duration, motion_meta,
-                                    cap=a.sfx_density)
+                                    cap=a.sfx_density, kit=kit, seed=seed)
         if rep["missing"]:
             sys.exit(f"  missing sounds: {', '.join(rep['missing'])}\n"
                      f"  run: python3 99-toolkit/build_sfx.py")

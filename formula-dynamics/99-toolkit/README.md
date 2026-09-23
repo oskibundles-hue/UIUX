@@ -72,3 +72,53 @@ The brand guide is a raster, so `build_logos.py` reconstructs vectors from it:
 
 The monogram is taken from the primary lockup rather than the small icon
 swatch, where it is rendered about 25% larger.
+
+
+## SFX kits (23 Sept)
+
+Every approved ad opens on `riser-short` into `impact-hard` and closes the same
+way, because `LAYER_SFX` in `fd_sfx.py` is one fixed voicing per layer. Eleven
+ads that sound identical read as one ad run eleven times.
+
+`ALTERNATES` gives the loud layers - title, CTA, title block, endcard, spec,
+lower-third - more than one way to speak, built entirely from the seventeen
+sounds already in the kit. No new assets.
+
+| kit | character |
+|---|---|
+| `signature` | exactly what the approved ads use. The default. |
+| `deep` | long riser, sub-drop over impact. Heavier, slower. |
+| `tight` | whoosh and `impact-tight`, key-clicks instead of ui-ticks. Drier. |
+| `minimal` | one soft hit per cue. For a short cut or a quiet clip. |
+| `auto` | derives kit and seed from the output filename, so a set of ads differs and each still re-renders identically. |
+
+    --sfx-kit auto            # recommended for a set
+    --sfx-kit deep --sfx-seed 7
+
+**Pitch does the rest.** Seventeen wavs is not much, so each hit is resampled a
+little (±0.8 to ±1.6 semitones by kit) with a deterministic per-hit seed. The
+third ui-tick in a run no longer lands on the same note as the first. Gain
+moves ±8% and timing ±12 ms with it.
+
+### Measured
+
+Spectral distance on the SFX bed alone, where voicing is the only variable:
+
+| | |
+|---|---|
+| `deep` vs `minimal` | 0.297 |
+| `deep` vs `tight` | 0.256 |
+| `signature` vs `deep` | 0.198 |
+| two entirely different approved ads (whole mix) | 0.272 - 0.476 |
+| same kit, different seed | 0.019 - 0.029 |
+| **`signature`, any seed** | **0.000** |
+
+`deep` against `minimal` moves the bed further than the gap between two
+approved ads that share nothing - different car, footage, length and music.
+Seed alone is deliberately subtle: it breaks repetition inside a cut, it does
+not change the character.
+
+**`signature` is bit-identical to the old behaviour**, and provably so rather
+than by inspection: `voicing_for(fam, "signature")` returns the original
+`LAYER_SFX` object itself and `KIT_JITTER["signature"]` is 0.0, so no resample,
+gain or timing shift runs. Re-rendering an approved ad cannot change its sound.
