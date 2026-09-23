@@ -150,6 +150,15 @@ eight of fifteen is still not a set.
 the oil poster `P1622_003`. The shop's call on 23 Sept is to run it unblurred.
 Recorded so it is not raised again as an open question.
 
+**The lift footage is not an oil change, and the annual cut made from it was
+not asked for.** `lift.mp4` (2026-09-03, black car raised on a lift) was used
+for an oil ad because it was dark enough for the ember opener to work - which
+is choosing footage to suit an effect rather than to suit the service. When
+that was pointed out it was re-cut as an annual-package ad instead, on an offer
+to do so that the shop had not sought. Both are dead. The clip may be good
+footage; it is not a brief, and an effect wanting a dark ground is not a reason
+to make an ad.
+
 **Every ad ships twice.** `01 Sound designed (post these)` carries the SFX
 motion pack; `02 Picture only (for editors)` carries the identical picture with
 the clip's own audio and no sound design. Same folder names the shop already
@@ -168,7 +177,7 @@ would have been a frame out.
 | **Poster — brake service · layout J** | **Approved 14 Sept** |
 | **Poster — oil service · layout J** | **Layout approved 22 Sept · photography rejected — do not post** |
 | **Video — oil service · white 911, real oil-change footage** | **Approved 23 Sept** — the starter for the new series |
-| Video — annual package · black car on the lift | Built 23 Sept, awaiting the shop |
+| Video — annual package · black car on the lift | **Not wanted** — built 23 Sept without being asked for. Do not offer it again. |
 | Annual service $3,999 · SF90 | **Approved** (rebuilt, benefit-led) |
 | Brake service $499 · GT3 RS | **Approved** |
 | Oil service $1,199 · Ferrari 296 | **Approved** |
