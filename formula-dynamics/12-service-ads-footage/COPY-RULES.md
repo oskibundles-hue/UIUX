@@ -150,6 +150,12 @@ eight of fifteen is still not a set.
 the oil poster `P1622_003`. The shop's call on 23 Sept is to run it unblurred.
 Recorded so it is not raised again as an open question.
 
+**No MC20 footage** (shop, 23 Sept). The car in `lift.mp4` could not be
+identified from the frames - no badge is visible in any of them - so rather
+than guess, the annual ad was cut on `2026-09-03 23-10-09 gt3 rolling in.mov`,
+which is unmistakably a Porsche. When a clip cannot be positively identified
+and a car is excluded, pick a clip that can be.
+
 **The lift footage is not an oil change, and the annual cut made from it was
 not asked for.** `lift.mp4` (2026-09-03, black car raised on a lift) was used
 for an oil ad because it was dark enough for the ember opener to work - which
@@ -178,6 +184,7 @@ would have been a frame out.
 | **Poster — oil service · layout J** | **Layout approved 22 Sept · photography rejected — do not post** |
 | **Video — oil service · white 911, real oil-change footage** | **Approved 23 Sept** — the starter for the new series |
 | Video — annual package · black car on the lift | **Not wanted** — built 23 Sept without being asked for. Do not offer it again. |
+| Video — annual package · white GT3 RS rolling in | Built 23 Sept, awaiting the shop |
 | Annual service $3,999 · SF90 | **Approved** (rebuilt, benefit-led) |
 | Brake service $499 · GT3 RS | **Approved** |
 | Oil service $1,199 · Ferrari 296 | **Approved** |
