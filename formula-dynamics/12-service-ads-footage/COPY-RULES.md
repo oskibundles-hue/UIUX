@@ -150,12 +150,25 @@ eight of fifteen is still not a set.
 the oil poster `P1622_003`. The shop's call on 23 Sept is to run it unblurred.
 Recorded so it is not raised again as an open question.
 
+**Every ad ships twice.** `01 Sound designed (post these)` carries the SFX
+motion pack; `02 Picture only (for editors)` carries the identical picture with
+the clip's own audio and no sound design. Same folder names the shop already
+uses in `/Portfolio/02 Service Ads/Approved Ads/`.
+
+The picture must be byte-identical between the two, and is checked rather than
+assumed: both are hashed with `-map 0:v -f md5` and must match. The first
+attempt used `-shortest` when muxing the source audio back, which clipped the
+video by one frame - 11.27s against 11.31s - and an editor conforming to it
+would have been a frame out.
+
 ## Status
 
 | Ad | State |
 |---|---|
 | **Poster — brake service · layout J** | **Approved 14 Sept** |
 | **Poster — oil service · layout J** | **Layout approved 22 Sept · photography rejected — do not post** |
+| **Video — oil service · white 911, real oil-change footage** | **Approved 23 Sept** — the starter for the new series |
+| Video — annual package · black car on the lift | Built 23 Sept, awaiting the shop |
 | Annual service $3,999 · SF90 | **Approved** (rebuilt, benefit-led) |
 | Brake service $499 · GT3 RS | **Approved** |
 | Oil service $1,199 · Ferrari 296 | **Approved** |
