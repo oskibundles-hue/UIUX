@@ -341,11 +341,19 @@ def headline(base, x, y, l1, l2, size=132, gap=6):
 
 
 # --------------------------------------------------------------------------
-# Shop facts - read off formuladynamics.com, not remembered
+# Shop facts - read off the live site, not remembered
 # --------------------------------------------------------------------------
 PHONE = "(702) 430-1040"
 ADDRESS = "4790 POLARIS AVE  ·  LAS VEGAS, NV"
-SITE = "formuladynamics.com"
+
+# Two live sites, two businesses, and these posters were pointing at the wrong
+# one. formuladynamics.com titles itself "Maserati & Ferrari Exotic
+# Performance Parts" - the parts store. formuladynamicsperformance.com is
+# "Exotic Performance Upgrades Las Vegas ... performance upgrades, service,
+# and maintenance", which is what a brake or oil service ad sells and what the
+# address on the poster belongs to. The videos already used the service site;
+# only the posters disagreed. Shop's call, 23 Sept.
+SITE = B.WEBSITE
 # Confirmed by the shop 14 Sept: @formuladynamicsperformance is current and
 # @formuladynamicsusa is the old one, being taken off the website.
 HANDLE = "@formuladynamicsperformance"
