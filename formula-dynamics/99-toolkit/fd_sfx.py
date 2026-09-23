@@ -107,12 +107,21 @@ def hits_for(cues, motion_meta=None):
     return sorted(hits)
 
 
-def build_bed(cues, duration, motion_meta=None, verbose=True):
-    """Mix the hits into one mono track. Returns (samples, report)."""
+def build_bed(cues, duration, motion_meta=None, verbose=True, cap=None):
+    """Mix the hits into one mono track. Returns (samples, report).
+
+    `cap` overrides DENSITY_CAP for one clip. The default of 4.5 was set
+    against 20-30 second cuts and in practice never fires: measured across the
+    eleven approved SFX ads the audible onset rate runs 0.64-1.15 per second.
+    A short cut carries nearly the same cue count in half the time, so the same
+    mapping lands well outside that band while staying under the cap. Rather
+    than retune a constant every past render depends on, the caller can hand a
+    tighter one down for the clip in front of it.
+    """
     hits = hits_for(cues, motion_meta)
     density = len(hits) / max(1e-6, duration)
     dropped = 0
-    if density > DENSITY_CAP:
+    if density > (DENSITY_CAP if cap is None else cap):
         keep = [h for h in hits if h[3]]
         dropped = len(hits) - len(keep)
         hits = keep
@@ -137,6 +146,7 @@ def build_bed(cues, duration, motion_meta=None, verbose=True):
         bed *= 0.89 / peak
 
     report = {"hits": len(hits), "density": density, "dropped": dropped,
+              "cap": DENSITY_CAP if cap is None else cap,
               "missing": sorted(missing)}
     return bed, report
 

@@ -493,6 +493,11 @@ def main():
                          "Left off, it is calibrated from the clip's own "
                          "loudness so the effects land at the same lift on "
                          "every clip.")
+    ap.add_argument("--sfx-density", type=float, default=None, metavar="PER_SEC",
+                    help="drop the non-essential hits above this rate. The "
+                         "built-in cap suits a 20-30s cut; a short one needs "
+                         "a tighter number. Measure against the approved ads "
+                         "rather than guessing.")
     ap.add_argument("--sfx-lift", type=float, default=4.0,
                     help="target dB the effects sit over the clip's audio "
                          "(default 4.0)")
@@ -681,7 +686,8 @@ def main():
 
     bed_wav = None
     if a.sfx:
-        bed, rep = fd_sfx.build_bed(cues, duration, motion_meta)
+        bed, rep = fd_sfx.build_bed(cues, duration, motion_meta,
+                                    cap=a.sfx_density)
         if rep["missing"]:
             sys.exit(f"  missing sounds: {', '.join(rep['missing'])}\n"
                      f"  run: python3 99-toolkit/build_sfx.py")
@@ -693,7 +699,7 @@ def main():
                   f"{a.sfx_lift:.1f} dB over this clip)")
         note = (f"  SFX: {rep['hits']} hits, {rep['density']:.1f}/s"
                 + (f" ({rep['dropped']} secondary hits dropped - over the "
-                   f"{fd_sfx.DENSITY_CAP}/s cap)" if rep["dropped"] else ""))
+                   f"{rep['cap']}/s cap)" if rep["dropped"] else ""))
         print(note)
 
     out = Path(a.output) if a.output else src.with_name(src.stem + "_FD.mp4")
