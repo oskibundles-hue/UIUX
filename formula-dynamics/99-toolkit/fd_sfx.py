@@ -49,6 +49,10 @@ LAYER_SFX = {
     "endcard":     [("impact-soft", 0.00, 0.75, True),
                     ("sub-drop", 0.00, 0.65, True)],
     # Animated components.
+    # Same voice as the glow it replaces - it is the same beat in the cut.
+    "ember-burst": [("riser-short", 0.00, 0.60, True),
+                    ("impact-hard", 0.38, 1.00, True),
+                    ("tk-sub-rumble-1", 0.38, 0.55, False)],
     "glow-burst":  [("riser-short", 0.00, 0.60, True),
                     ("impact-hard", 0.38, 1.00, True),
                     ("sub-thump", 0.38, 0.60, False)],

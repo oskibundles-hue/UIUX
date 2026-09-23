@@ -36,13 +36,30 @@ region over time:
 
 | clip | left wander | right wander | width trend | move |
 |---|---|---|---|---|
-| `tk01` | 0.032 | 0.156 | **+0.51** | **type-on** - anchored left, grows right |
+| `tk01` | 0.032 | 0.156 | **+0.51** | ~~type-on~~ **misread - see below** |
 | `watermark5` | 0.084 | 0.112 | **+0.39** | **scale-pop** - grows from the middle |
 | `tk02` `tk07` | ~0.20 | ~0.20 | -0.08 | **swap-in-place** - content replaces itself |
 
 A reveal anchors one edge. A slide moves both edges together. Growing from the
 centre moves both apart. Content swapping moves both, randomly, without the
 width trending anywhere. That is enough to separate them without looking.
+
+## One of these readings was wrong
+
+**`tk01` is a screen recording of After Effects**, not a motion graphic. It has
+a "Render:" label over a preview window and a "Timeline:" label over the AE
+timeline, and it ends on a TikTok card. The left-anchored reveal measured in
+its lower band was **the timeline UI scrolling**, not a graphic animating.
+
+Caught on 23 Sept when the shop sent the clip over and it was looked at rather
+than only measured. The lesson is narrow and worth keeping: these measurements
+separate *shapes of change*, and they cannot tell a designed graphic from a
+piece of software's own interface. Look at the clip before trusting the row.
+
+What is actually worth taking from it is inside the preview window - a particle
+burst resolving into a glowing wordmark on a dark ground. `glow_burst` was the
+nearest thing the kit had and it is not that: a hard-edged disc that scales,
+with visible banding. `ember_burst` is our version of the real move.
 
 ## When and why to use each
 
@@ -54,6 +71,7 @@ much room the cut gives it and what the footage underneath is already doing.
 | **type-on** | the hook | Being written is itself attention - the viewer waits for the end of the sentence. | Never for a figure. A price that types out reads as uncertain. |
 | **swap-in-place** | a list of facts | Four facts through one slot cost one slot's worth of screen. This is the move that survives a short cut, where sequential chips do not. | Never for one item. A slot that swaps once looks broken. |
 | **scale-pop** | a single number | Growing in place says *this is the thing*, and a figure is short enough to carry 8.5% of frame height. | Never for a sentence - it will not fit and the move reads as a mistake. |
+| **ember-burst** | the open, on a dark clip | Sparks resolving into the wordmark earn the first second without saying anything. Needs a dark ground - the bloom is additive and disappears on a bright frame. | Never mid-cut. It is an opening, and a second one reads as a mistake. |
 | **hold still** | busy footage | When the picture is already moving, a moving graphic competes with it and both lose. | - |
 
 Two constraints from our own measurements, not from the reference:

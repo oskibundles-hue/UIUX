@@ -309,3 +309,97 @@ def scale_pop(canvas, p, text, y=0.46, size=0.085, color=B.WHITE,
 
 
 COMPONENTS.update({"swap-in-place": swap_in_place, "scale-pop": scale_pop})
+
+
+def ember_burst(canvas, p, text=None, y=0.42, seed=7, sparks=150,
+                color=None, hold=0.55):
+    """Sparks thrown from the centre, settling into a wordmark behind a bloom.
+
+    Built after the shop pointed at a reference clip whose graphic is a
+    particle burst resolving into glowing type. `glow_burst` was the nearest
+    thing the kit had and it is not that: a hard-edged disc that scales, with
+    visible banding on its gradient and no particulate at all.
+
+    Everything here is numpy rather than drawn shapes, which is what removes
+    the banding - the bloom is an actual radial falloff evaluated per pixel,
+    not a stack of concentric ellipses.
+
+    The sparks carry drag, so they fly hard and then hang, and they die on a
+    square law so the frame clears for the wordmark instead of fighting it.
+    """
+    import numpy as np
+    from PIL import Image
+
+    W, H = B.CANVASES[canvas]
+    cx, cy = W * 0.5, H * y
+    r, g, b = color or B.rgb(B.RED)[:3]
+
+    # --- bloom: rises fast, then eases back to a resting glow -------------
+    if p < 0.30:
+        bloom = _ease_out(p / 0.30)
+    else:
+        bloom = 1.0 - 0.45 * _ease_in_out(min(1.0, (p - 0.30) / 0.70))
+    radius = (0.10 + 0.32 * _ease_out(min(1.0, p / 0.45))) * H
+
+    yy, xx = np.ogrid[0:H, 0:W]
+    d = np.sqrt((xx - cx) ** 2 + (yy - cy) ** 2) / max(1.0, radius)
+    # Tight and restrained. At 0.85 with a wide falloff the bloom simply ate
+    # the sparks - they measured as present and read as grain.
+    field = np.exp(-(d ** 2) * 3.4) * bloom * 0.42
+
+    # --- sparks ----------------------------------------------------------
+    rng = np.random.default_rng(seed)
+    ang = rng.uniform(0, 2 * np.pi, sparks)
+    speed = rng.uniform(0.18, 1.0, sparks) ** 1.6 * H * 0.60
+    life = rng.uniform(0.45, 1.0, sparks)
+    t = np.clip(p / np.maximum(1e-6, life), 0.0, 1.0)
+    travel = (1.0 - np.exp(-2.6 * t)) / (1.0 - np.exp(-2.6))   # drag
+    sx = cx + np.cos(ang) * speed * travel
+    sy = cy + np.sin(ang) * speed * travel * 0.82              # flatter throw
+    bright = np.clip(1.0 - t, 0.0, 1.0) ** 2
+
+    # Each spark is drawn as a short trail back along its own path, not as a
+    # point. A point at this scale is indistinguishable from sensor noise; the
+    # trail is what makes the burst read as moving outward.
+    spark = np.zeros((H, W), np.float32)
+    TRAIL = 6
+    for k in range(TRAIL):
+        back = travel * (1.0 - k * 0.055)
+        tx = cx + np.cos(ang) * speed * back
+        ty = cy + np.sin(ang) * speed * back * 0.82
+        ix, iy = np.round(tx).astype(int), np.round(ty).astype(int)
+        w = bright * (1.0 - k / TRAIL) ** 1.5
+        ok = ((ix >= 1) & (ix < W - 1) & (iy >= 1) & (iy < H - 1)
+              & (w > 0.01))
+        if ok.any():
+            np.add.at(spark, (iy[ok], ix[ok]), w[ok])
+    sp = spark.copy()
+    for dy in (-1, 0, 1):
+        for dx in (-1, 0, 1):
+            if dx or dy:
+                sp += np.roll(np.roll(spark, dy, 0), dx, 1) * 0.45
+    field = field + sp * 2.2
+
+    field = np.clip(field, 0.0, 1.6)
+    rgb = np.empty((H, W, 3), np.float32)
+    rgb[..., 0] = np.clip(field * r + field ** 3 * (255 - r), 0, 255)
+    rgb[..., 1] = np.clip(field * g + field ** 3 * (255 - g), 0, 255)
+    rgb[..., 2] = np.clip(field * b + field ** 3 * (255 - b), 0, 255)
+    alpha = np.clip(field * 255.0 * 1.15, 0, 255)
+
+    im = Image.fromarray(
+        np.dstack([rgb, alpha[..., None]]).astype(np.uint8), "RGBA")
+
+    # --- the wordmark, arriving as the sparks die ------------------------
+    if text and p > hold:
+        q = _ease_out(min(1.0, (p - hold) / (1 - hold)))
+        body = R.text(str(text), int(H * 0.052), B.WHITE, tracking=0.10)
+        if q < 1.0:
+            body = body.copy()
+            body.putalpha(body.getchannel("A").point(lambda v: int(v * q)))
+        R.paste(im, body, (W - body.width) // 2,
+                int(H * y) - body.height // 2)
+    return im
+
+
+COMPONENTS["ember-burst"] = ember_burst

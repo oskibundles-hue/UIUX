@@ -438,6 +438,25 @@ def render(source, out, cues, width, height, fps, duration, bitrate="20M",
 
 
 # --------------------------------------------------------------------------
+def opener_ground(ffmpeg, path, start=0.4, span=0.7):
+    """Mean luminance under the opening beat, or None if it cannot be read.
+
+    ember_burst composites additively, so it lives or dies on how dark the
+    frame under it is. Measured rather than assumed: the night-garage clips
+    read 59-63 and the burst carries; the bright warehouse oil clip reads 133
+    and it vanishes entirely.
+    """
+    import numpy as np
+    out = subprocess.run(
+        [ffmpeg, "-nostdin", "-v", "quiet", "-ss", str(start), "-t", str(span),
+         "-i", str(path), "-vf", "fps=6,scale=96:171", "-pix_fmt", "gray",
+         "-f", "rawvideo", "-"], capture_output=True).stdout
+    n = len(out) // (96 * 171)
+    if not n:
+        return None
+    return float(np.frombuffer(out[:n * 96 * 171], np.uint8).mean())
+
+
 def main():
     ap = argparse.ArgumentParser(
         description="Burn the Formula Dynamics overlay set into a video.")
@@ -494,6 +513,10 @@ def main():
                          "Left off, it is calibrated from the clip's own "
                          "loudness so the effects land at the same lift on "
                          "every clip.")
+    ap.add_argument("--opener", choices=("glow", "ember"), default="glow",
+                    help="what opens the cut. ember throws sparks that settle "
+                         "into the wordmark; it needs a dark first second, "
+                         "because the bloom is additive.")
     ap.add_argument("--pop", metavar="FIGURE",
                     help="one figure punched in before the ask, e.g. '$1,199'. "
                          "A figure only - a sentence will not fit at this size.")
@@ -629,6 +652,8 @@ def main():
     if a.motion:
         # Replace the still title card with the animated pair. The hook text
         # is whatever the title card would have said.
+        opener_luma = (opener_ground(ffmpeg_bin(), src)
+                       if a.opener == "ember" else None)
         l1, _, l2 = (a.title_text or "").partition("|")
         hook = " ".join(x for x in (l1.strip(), l2.strip()) if x) or B.BRAND_NAME
         title_cues = [c for c in cues if c["layer"] in ("title", "title scrim")]
@@ -647,9 +672,20 @@ def main():
                                               "lower-third", "spec"))),
                   default=t_end + 0.6)
         type_end = min(t_end + 0.6, max(t_end, nxt - 0.12))
-        cues.append(seq_cue("glow-burst", tmp, canvas, fps, t_start, burst_end,
-                            FM.glow_burst, dict(text=B.BRAND_NAME, y=0.40),
-                            "Monogram opens behind a red bloom."))
+        if a.opener == "ember" and opener_luma is not None and opener_luma >= 70:
+            print(f"  (ember opener skipped: the first second measures "
+                  f"luma {opener_luma:.0f} and the bloom is additive - it "
+                  f"disappears above about 70. Using the glow instead.)")
+        if a.opener == "ember" and (opener_luma is None or opener_luma < 70):
+            cues.append(seq_cue(
+                "ember-burst", tmp, canvas, fps, t_start, burst_end,
+                FM.ember_burst, dict(text=B.BRAND_NAME, y=0.40),
+                "Sparks thrown out, settling into the wordmark."))
+        else:
+            cues.append(seq_cue(
+                "glow-burst", tmp, canvas, fps, t_start, burst_end,
+                FM.glow_burst, dict(text=B.BRAND_NAME, y=0.40),
+                "Monogram opens behind a red bloom."))
         cues.append(seq_cue("type-on", tmp, canvas, fps, burst_end + 0.15,
                             type_end, FM.type_on, dict(text=hook, y=0.42),
                             f"Hook typed on: {hook}"))
