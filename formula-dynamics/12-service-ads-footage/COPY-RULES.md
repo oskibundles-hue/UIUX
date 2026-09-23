@@ -146,6 +146,10 @@ A poster is not cleared to post until both halves are signed off. Cropping
 cannot rescue a wrong subject - it was tried, it improved eight of fifteen, and
 eight of fifteen is still not a set.
 
+**A customer plate may appear.** The white 911's plate, CBS112, is readable in
+the oil poster `P1622_003`. The shop's call on 23 Sept is to run it unblurred.
+Recorded so it is not raised again as an open question.
+
 ## Status
 
 | Ad | State |

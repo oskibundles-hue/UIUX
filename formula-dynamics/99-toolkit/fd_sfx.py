@@ -139,11 +139,40 @@ ALTERNATES = {
     },
 }
 
-KITS = ("signature", "deep", "tight", "minimal")
+# Two more kits, built on the 21 sounds lifted out of the shop's own reference
+# clips (rights confirmed 23 Sept). "street" is the TikTok vocabulary the shop
+# is actually scrolling past - a hard transition hit and a sub under it.
+# "cut" is the dry version: a tick on, a whoosh off, nothing sustained.
+ALTERNATES["title"]["street"] = [("tk-whoosh-out-1", -0.42, 0.55, True),
+                                 ("tk-impact-hard-1", 0.00, 1.00, True),
+                                 ("tk-sub-drop-1", 0.02, 0.70, False)]
+ALTERNATES["title"]["cut"] = [("tk-tick-bright-1", -0.10, 0.60, True),
+                              ("tk-impact-hard-6", 0.00, 0.95, True)]
+ALTERNATES["cta"]["street"] = [("tk-whoosh-out-2", -0.34, 0.58, True),
+                               ("tk-impact-hard-2", 0.00, 1.00, True),
+                               ("tk-sub-rumble-2", 0.02, 0.60, False)]
+ALTERNATES["cta"]["cut"] = [("tk-tick-bright-2", -0.08, 0.60, True),
+                            ("tk-impact-hard-4", 0.00, 0.95, True)]
+ALTERNATES["title block"]["street"] = [("tk-whoosh-out-3", 0.00, 0.55, True),
+                                       ("tk-sub-thump-1", 0.08, 0.45, False)]
+ALTERNATES["title block"]["cut"] = [("tk-tick-soft-1", 0.00, 0.55, True)]
+ALTERNATES["endcard"]["street"] = [("tk-impact-soft-1", 0.00, 0.75, True),
+                                   ("tk-sub-rumble-1", 0.00, 0.60, True)]
+ALTERNATES["endcard"]["cut"] = [("tk-impact-hard-5", 0.00, 0.70, True),
+                                ("tk-sub-thump-3", 0.00, 0.50, True)]
+ALTERNATES["spec"]["street"] = [("tk-tick-bright-2", 0.00, 0.85, True),
+                                ("tk-sub-thump-3", 0.00, 0.30, False)]
+ALTERNATES["spec"]["cut"] = [("tk-tick-soft-2", 0.00, 0.80, True)]
+ALTERNATES["lower-third"]["street"] = [("tk-whoosh-out-3", 0.00, 0.68, True),
+                                       ("tk-tick-soft-2", 0.12, 0.55, False)]
+ALTERNATES["lower-third"]["cut"] = [("tk-whoosh-out-2", 0.00, 0.60, True)]
+
+KITS = ("signature", "deep", "tight", "minimal", "street", "cut")
 
 # Semitones of resampling jitter per hit, by kit. "signature" is deliberately
 # zero so an approved ad re-renders byte-for-byte as before.
-KIT_JITTER = {"signature": 0.0, "deep": 1.2, "tight": 1.6, "minimal": 0.8}
+KIT_JITTER = {"signature": 0.0, "deep": 1.2, "tight": 1.6, "minimal": 0.8,
+              "street": 1.4, "cut": 1.0}
 
 
 def _rng(seed, *parts):
