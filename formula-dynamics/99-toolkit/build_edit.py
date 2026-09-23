@@ -750,12 +750,13 @@ def main():
                         "swap-in-place", tmp, canvas, fps, s_start, s_end,
                         FM.swap_in_place, dict(lines=chips, y=0.44),
                         f"{len(chips)} facts through one slot, "
-                        f"{per:.2f}s each - no room for a row."))
+                        f"{per:.2f}s each - {why}."))
                     motion_meta.append(dict(kind="swap-in-place", chips=chips,
                                             start=s_start, end=s_end))
                     cues = [c for c in cues if not c["layer"].startswith("spec")]
                     print(f"  (swap-in-place instead: {len(chips)} facts, "
-                          f"{per:.2f}s each)")
+                          f"{per:.2f}s each - the panel wanted a row and "
+                          f"{why})")
                 elif not s_clear:
                     print(f"  (no swap either: the centre band is occupied "
                           f"between {s_start:.2f}s and {s_end:.2f}s)")
