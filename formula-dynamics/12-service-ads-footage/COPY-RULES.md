@@ -176,13 +176,26 @@ attempt used `-shortest` when muxing the source audio back, which clipped the
 video by one frame - 11.27s against 11.31s - and an editor conforming to it
 would have been a frame out.
 
+**Instagram feed ratio, 23 Sept.** The approved oil cut now ships at 4x5
+(1080x1350) alongside the 9x16 master, via `fd_reframe.py 4x5` - the same
+reframe the 9 Sept series uses. The graphics are burned in and sit low (spec
+panel y 1074-1314, title block under it), so a crop would take the panel or the
+bug; the whole frame is scaled to fit instead and the rails filled with a
+blurred copy. Real picture is 758px, 70% of the canvas. That is consistent with
+the series, but a true full-bleed 4x5 - graphics laid out for 1350 height - is
+the stronger feed post and is renderer work, not a reframe. 1x1 drops to 56%
+picture and 16x9 to 32%, which is too thin to post.
+
+Picture parity is checked across the ratio too: the 4x5 sound-designed and
+picture-only files hash identical on `-map 0:v -f md5`.
+
 ## Status
 
 | Ad | State |
 |---|---|
 | **Poster — brake service · layout J** | **Approved 14 Sept** |
 | **Poster — oil service · layout J** | **Layout approved 22 Sept · photography rejected — do not post** |
-| **Video — oil service · white 911, real oil-change footage** | **Approved 23 Sept** — the starter for the new series |
+| **Video — oil service · white 911, real oil-change footage** | **Approved 23 Sept** — the starter for the new series. Shipped 9x16 + 4x5, both ratios in sound-designed and picture-only |
 | Video — annual package · black car on the lift | **Not wanted** — built 23 Sept without being asked for. Do not offer it again. |
 | Video — annual package · white GT3 RS rolling in | Built 23 Sept, awaiting the shop |
 | Annual service $3,999 · SF90 | **Approved** (rebuilt, benefit-led) |
