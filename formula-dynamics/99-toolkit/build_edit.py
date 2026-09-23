@@ -694,16 +694,20 @@ def main():
     if a.dry_run:
         return
 
+    # Settled here rather than just before the render, because --sfx-kit auto
+    # reads the output name to choose a voicing.
+    out = Path(a.output) if a.output else src.with_name(src.stem + "_FD.mp4")
+
     bed_wav = None
     if a.sfx:
         kit, seed = a.sfx_kit, a.sfx_seed
         if kit == "auto":
             # Derive both from the output name so each ad sounds like itself,
             # differs from its neighbours, and re-renders identically.
-            stem = Path(out).stem
-            digest = zlib.crc32(stem.encode())
+            digest = zlib.crc32(out.stem.encode())
             kit = fd_sfx.KITS[1:][digest % (len(fd_sfx.KITS) - 1)]
             seed = digest
+            print(f"  SFX kit: {kit} (auto, from the output name)")
         bed, rep = fd_sfx.build_bed(cues, duration, motion_meta,
                                     cap=a.sfx_density, kit=kit, seed=seed)
         if rep["missing"]:
@@ -720,7 +724,6 @@ def main():
                    f"{rep['cap']}/s cap)" if rep["dropped"] else ""))
         print(note)
 
-    out = Path(a.output) if a.output else src.with_name(src.stem + "_FD.mp4")
     print(f"  Rendering -> {out} ...")
     render(src, out, cues, w, h, fps, duration, a.bitrate, bed_wav, a.sfx_gain)
     mb = out.stat().st_size / 1_048_576
