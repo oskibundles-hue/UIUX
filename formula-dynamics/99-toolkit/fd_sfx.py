@@ -180,6 +180,22 @@ KIT_JITTER = {"signature": 0.0, "deep": 1.2, "tight": 1.6, "minimal": 0.8,
               "street": 1.4, "cut": 1.0}
 
 
+# The typing sound. key-click-1..3 sit at 6.8-7.3 kHz with a 5 ms decay -
+# bright and brittle, and the thing the shop heard as "weird". tk-tick-soft-2
+# is from the shop's own reference material at 5 kHz and 91 ms, which has the
+# attack without the glass.
+TYPE_CLICK = "tk-tick-soft-2"
+
+
+def sound_seconds(name):
+    """Length of a kit sound, read off the file rather than assumed."""
+    p = SFX / f"{name}.wav"
+    if not p.exists():
+        return 0.08
+    with wave.open(str(p)) as w:
+        return w.getnframes() / float(w.getframerate())
+
+
 def _rng(seed, *parts):
     """A deterministic generator per hit, so a render is repeatable."""
     h = hash((seed, *parts)) & 0xFFFFFFFF
@@ -237,13 +253,27 @@ def hits_for(cues, motion_meta=None, kit="signature"):
     # Per-character clicks for a typed line, and per-chip ticks for a panel.
     for meta in (motion_meta or []):
         if meta["kind"] == "type-on":
+            # One click per character was 23.5 a second on a 25-character hook
+            # in a 1.25 s window. key-click is 75 ms long, so consecutive
+            # clicks overlapped by 44% and the run read as a buzz rather than
+            # as typing - and being marked essential, the density cap could
+            # never thin them: 21 of the 33 hits in the cut were this.
+            #
+            # The stride now comes from the sound's own length instead of a
+            # number: clicks are spaced at least 1.4x the sample so they never
+            # run into each other. Only the first is essential.
             n = len(meta["text"])
-            step = (meta["end"] - meta["start"]) * 0.85 / max(1, n)
-            for i in range(n):
+            span = (meta["end"] - meta["start"]) * 0.85
+            step = span / max(1, n)
+            floor = sound_seconds(TYPE_CLICK) * 1.4
+            stride = max(1, int(round(floor / max(1e-6, step))))
+            first = True
+            for i in range(0, n, stride):
                 if meta["text"][i] == " ":
                     continue
                 hits.append((meta["start"] + 0.05 + i * step,
-                             f"key-click-{1 + i % 3}", 1.0, True))
+                             TYPE_CLICK, 0.85, first))
+                first = False
         elif meta["kind"] == "swap-in-place":
             # A hit on each swap, not one at the cue start. The slot holds for
             # 88% of each turn, so the sound marks the change and then gets out
