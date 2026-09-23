@@ -149,6 +149,35 @@ screen: it lets the shop sell instead of letting the number decide.
 care — brake service is about stopping, suspension about how it rides. A bundle
 ad and a single-service ad are different jobs, and both exist.
 
+## Finding Footage
+
+**Search the index before downloading anything.** The library is 164 GB of
+clips named by timestamp, so a name tells you nothing about what is in the
+frame. `formula-dynamics/99-toolkit/video-index/` holds `INDEX.csv` and one
+contact sheet per clip, both committed, so every session has them without
+touching Dropbox.
+
+    python3 formula-dynamics/99-toolkit/fd_index.py search \
+        formula-dynamics/99-toolkit/video-index --colour pink --min 8
+
+Colour is the one that does the work: "the white/pink Porsche", "the teal
+calipers", "the red one". Also `--sharp`, `--bright`, `--dark`, `--vertical`,
+`--no-people`, `--clip`. Look at the clip's sheet in `sheets/` before pulling
+it — a sheet is about 100 KB against gigabytes for the clip, and it answers
+most questions on its own.
+
+Finding one clip by description cost about 11 GB of downloads and a question to
+the shop before this existed. Do not repeat that.
+
+**Index new footage when it lands**, so the next session inherits it:
+
+    python3 formula-dynamics/99-toolkit/fd_index.py index <folder> \
+        -o formula-dynamics/99-toolkit/video-index
+
+Then commit the CSV and the new sheets. The `objects` column is deliberately
+empty — filling it needs CLIP on a machine that persists, and the cloud
+container has no torch, cv2 or transformers.
+
 ## Artifact Conventions
 
 Keep the "fast cut" look: dark ground, Bebas Neue display, Barlow body, IBM Plex

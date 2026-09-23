@@ -236,15 +236,37 @@ def index(paths: list[Path], out: Path, every: float):
 def search(out: Path, args):
     rows = list(csv.DictReader((out / "INDEX.csv").open()))
     hits = rows
+
+    def frac(r, names):
+        """Combined share of the frame held by any of these hues.
+
+        Several hues rather than one because a car can sit on a boundary and
+        get split. The red 911 that this index was built to find scores
+        pink:8.9 red:8.4 - neither half clears a sensible single-hue
+        threshold, and the car is honestly both colours. `--colour pink red`
+        puts it back together.
+        """
+        total = 0.0
+        for part in r["colours"].split():
+            k, _, v = part.partition(":")
+            if k in names:
+                total += float(v)
+        return total
+
     if args.colour:
-        def frac(r):
-            for part in r["colours"].split():
-                k, _, v = part.partition(":")
-                if k == args.colour:
-                    return float(v)
-            return 0.0
-        hits = [r for r in hits if frac(r) >= args.min]
-        hits.sort(key=frac, reverse=True)
+        want = set(args.colour)
+        if args.all:
+            # Every named hue must be present. This is the query that finds a
+            # car sitting on a hue boundary: the red 911 is pink:8.9 red:8.4,
+            # and demanding both excludes the red floor mats and tail lights
+            # that dominate a summed search at 40%+ of a frame.
+            hits = [r for r in hits
+                    if all(frac(r, {c}) >= args.min for c in want)]
+            hits.sort(key=lambda r: min(frac(r, {c}) for c in want),
+                      reverse=True)
+        else:
+            hits = [r for r in hits if frac(r, want) >= args.min]
+            hits.sort(key=lambda r: frac(r, want), reverse=True)
     if args.sharp:
         cut = np.percentile([float(r["sharp"]) for r in rows], 60)
         hits = [r for r in hits if float(r["sharp"]) >= cut]
@@ -259,11 +281,13 @@ def search(out: Path, args):
     if args.clip:
         hits = [r for r in hits if args.clip.lower() in r["clip"].lower()]
 
-    print(f"{'clip':44s} {'t':>6s} {'sharp':>6s} {'luma':>6s} "
-          f"{'skin':>5s}  colours")
+    # The filename is the answer, so it is never truncated - the whole point
+    # of the index is telling you which file to open.
+    print(f"{'t':>6s} {'sharp':>6s} {'luma':>6s} {'skin':>5s}  clip / colours")
     for r in hits[:args.n]:
-        print(f"{r['clip'][:44]:44s} {r['t']:>6s} {r['sharp']:>6s} "
-              f"{r['luma']:>6s} {r['skin']:>5s}  {r['colours']}")
+        print(f"{r['t']:>6s} {r['sharp']:>6s} {r['luma']:>6s} "
+              f"{r['skin']:>5s}  {r['clip']}")
+        print(f"{'':>26s}  {r['colours']}")
     print(f"\n{len(hits)} of {len(rows)} frames")
 
 
@@ -280,9 +304,13 @@ def main():
 
     s = sub.add_parser("search", help="ask the index a question")
     s.add_argument("out", type=Path)
-    s.add_argument("--colour", choices=sorted(HUES))
-    s.add_argument("--min", type=float, default=8.0,
-                   help="minimum %% of frame for --colour (default 8)")
+    s.add_argument("--colour", nargs="+", choices=sorted(HUES), metavar="HUE",
+                   help="one or more hues; their shares are summed, because a "
+                        "car on a hue boundary splits across two buckets")
+    s.add_argument("--all", action="store_true",
+                   help="require every named hue rather than any of them")
+    s.add_argument("--min", type=float, default=5.0,
+                   help="minimum combined %% of frame for --colour (default 5)")
     s.add_argument("--sharp", action="store_true", help="top 40%% by edge energy")
     s.add_argument("--bright", action="store_true")
     s.add_argument("--dark", action="store_true")
