@@ -228,3 +228,84 @@ COMPONENTS = {
     "scramble": scramble,
     "panel-rise": panel_rise,
 }
+
+# --------------------------------------------------------------------------
+# Read off the reference clips, 23 Sept. Measured, not copied - these are our
+# own implementations of two moves the shop's reference material uses and the
+# kit had no answer for. See 12-service-ads-footage/VISUAL-GRAMMAR.md.
+# --------------------------------------------------------------------------
+def swap_in_place(canvas, p, lines, y=0.42, size=0.055, color=B.WHITE,
+                  hold=0.88):
+    """One slot; the words inside it change. The slot never moves.
+
+    Measured on two reference clips: 63-71% of all frame motion sat in one
+    middle band with 0.0% at top and bottom, and the changing region's left and
+    right edges wandered by the same amount with no trend in width. That is not
+    a reveal and not a slide - it is content replacing itself inside a fixed
+    box.
+
+    It buys time a sequential reveal cannot. Four facts through one slot cost
+    one slot's worth of screen, which is why it survives on a short cut where
+    chips do not.
+    """
+    im = _blank(canvas)
+    fw, fh = im.size
+    if not lines:
+        return im
+    n = len(lines)
+    step = 1.0 / n
+    i = min(n - 1, int(p / step))
+    local = (p - i * step) / step          # 0..1 within this word's turn
+
+    # Each word snaps in and holds. The snap is the whole event, so it is
+    # short and eased hard; the hold is what makes it readable.
+    #
+    # Clamped on both sides. _ease_out is 1-(1-p)^3, which runs past 1 once p
+    # does, and an alpha over 1 overflows the channel - the first version of
+    # this could hand putalpha a value above 255. The snap is also kept short:
+    # at the 0.28 it started with, a quarter of every slot was spent invisible
+    # and a four-word run read as a flicker.
+    snap = max(1e-6, 1 - hold)
+    a = min(1.0, _ease_out(min(1.0, local / snap)))
+    scale = 0.94 + 0.06 * a
+
+    size_px = max(12, int(fh * size * scale))
+    body = R.text(str(lines[i]), size_px, color, tracking=0.03)
+    if a < 1.0:
+        body = body.copy()
+        body.putalpha(body.getchannel("A").point(lambda v: int(v * a)))
+    R.paste(im, body, (fw - body.width) // 2, int(fh * y) - body.height // 2)
+    return im
+
+
+def scale_pop(canvas, p, text, y=0.46, size=0.085, color=B.WHITE,
+              overshoot=0.06):
+    """One figure, punched in from slightly small, with a little overshoot.
+
+    The reference clip that does this holds both edges of the changing region
+    steady while its width grows (+0.39 correlation with time) - it is growing
+    in place, not being revealed from one side. Used for a single number,
+    never for a line of text: at 0.085 of frame height a sentence will not fit
+    and the move reads as a mistake.
+    """
+    im = _blank(canvas)
+    fw, fh = im.size
+    if p < 0.55:
+        q = _ease_out(p / 0.55)
+        scale = 0.80 + (0.20 + overshoot) * q
+        alpha = min(1.0, q * 1.6)
+    else:
+        q = (p - 0.55) / 0.45
+        scale = 1.0 + overshoot * (1 - _ease_in_out(min(1.0, q * 2.2)))
+        alpha = 1.0
+
+    size_px = max(14, int(fh * size * scale))
+    body = R.text(str(text), size_px, color, tracking=0.01)
+    if alpha < 1.0:
+        body = body.copy()
+        body.putalpha(body.getchannel("A").point(lambda v: int(v * alpha)))
+    R.paste(im, body, (fw - body.width) // 2, int(fh * y) - body.height // 2)
+    return im
+
+
+COMPONENTS.update({"swap-in-place": swap_in_place, "scale-pop": scale_pop})
