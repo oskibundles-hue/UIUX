@@ -390,15 +390,26 @@ def ember_burst(canvas, p, text=None, y=0.42, seed=7, sparks=150,
     im = Image.fromarray(
         np.dstack([rgb, alpha[..., None]]).astype(np.uint8), "RGBA")
 
-    # --- the wordmark, arriving as the sparks die ------------------------
+    # --- the monogram, arriving as the sparks die ------------------------
+    #
+    # The MARK, not the words. The first version drew only the brand name as
+    # text, so a cut opening on the ember showed a different logo from every
+    # other ad in the system - glow_burst composites fd-icon-mark-only and
+    # hangs the name under it, and an opener that does not is not the same
+    # brand on screen. Same mark, same proportion, same label placement.
+    q = _ease_out(min(1.0, max(0.0, (p - hold * 0.55)) / max(1e-6, 1 - hold * 0.55)))
+    if q > 0:
+        mark = R.logo("fd-icon-mark-only--white",
+                      width=int(W * 0.30 * (0.82 + 0.18 * q)))
+        mark.putalpha(mark.getchannel("A").point(lambda v: int(v * q)))
+        R.paste(im, mark, W // 2, int(H * y), anchor="cm")
+
     if text and p > hold:
-        q = _ease_out(min(1.0, (p - hold) / (1 - hold)))
-        body = R.text(str(text), int(H * 0.052), B.WHITE, tracking=0.10)
-        if q < 1.0:
-            body = body.copy()
-            body.putalpha(body.getchannel("A").point(lambda v: int(v * q)))
-        R.paste(im, body, (W - body.width) // 2,
-                int(H * y) - body.height // 2)
+        t2 = min(1.0, (p - hold) / max(1e-6, 1 - hold))
+        lab = R.text(str(text), int(H * 0.030), B.WHITE, tracking=0.16)
+        lab.putalpha(lab.getchannel("A").point(lambda v: int(v * t2)))
+        R.paste(im, lab, W // 2,
+                int(H * y + W * 0.20 + H * 0.012 * (1 - t2)), anchor="ct")
     return im
 
 
