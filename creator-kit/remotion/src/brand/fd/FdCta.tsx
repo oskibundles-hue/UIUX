@@ -9,15 +9,16 @@ const HOW = ts(T.ctaHow, 0.06);
 const HANDLE = ts(T.ctaHandle, 0.1);
 
 /**
- * Website CTA (mid-roll): kicker (brand name) in white 80% behind a red live lamp blinking at 2 Hz (red stays on the lamp,
- * the live signal: red kicker type measured ~2:1 on bright plates), the action "VISIT THE SITE" at 250 px, a rule with its
+ * CTA (mid-roll): kicker (brand name) in white 80% behind a red live lamp blinking at 2 Hz (red stays on the lamp,
+ * the live signal: red kicker type measured ~2:1 on bright plates), the action "BOOK YOUR BUILD" at 250 px, a rule with its
  * red first third, "DM US YOUR MODEL" 110 px, then the SITE in white 76 px and the handle 76 px grey; haze with the graph
  * grid (alpha: props `haze` from tools/fd_element_haze.py, else the panel default). Default slot = the lower-third slot,
  * bottom edge at y 2940 (or `y`, 0-1). Captions and the chapter bar yield for 8 f around it (FdMotion). Motion: haze 8 f,
  * kicker types 10 f, action clips in 12 f, rule 14 f, how, site and handle type in that order; out 8 f fade.
  *
- * 2026-09-23: this was a BOOKING CTA ("NOW BOOKING" / "BOOK YOUR BUILD", handle only, no site). Formula Dynamics does not
- * take bookings -- the ask is the website, so the site line is drawn here and the booking words are gone. See FD.copy.
+ * The site line (2026-09-24) is the lasting change: the first version showed the handle only, so the block never said
+ * where to go. It now shows the booking action AND the site and handle -- Omarie: "keep BOOK YOUR BUILD and also show the
+ * website + handle". Copy lives in FD.copy (tokens.ts).
  */
 export const FdCta: React.FC<{ c: BrandCta; copy: FdCopy }> = ({ c, copy }) => {
   const { frame, fps, s } = useClock();

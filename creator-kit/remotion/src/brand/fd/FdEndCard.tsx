@@ -11,7 +11,7 @@ const WEB = ts(T.endWeb, 0.12);
 /**
  * End card (new, replaces Outro; outro.endCardSrc and outro.cta are ignored): hard cut to a 100% opaque #08080A ground at
  * outro.at, masked 120/480 px graph grid (10 f), stacked FD logo 760 wide at y 640 (12 f), tagline 86 px .22em at y 1550
- * (types over 30 f). Judge fix: no dyno curve; the CTA block moves up into its place: the action ("VISIT THE SITE") 190 px at y 1850,
+ * (types over 30 f). Judge fix: no dyno curve; the CTA block moves up into its place: the action ("BOOK YOUR BUILD") 190 px at y 1850,
  * a 720 px rule with its red first third, "DM US YOUR MODEL" 92 px, then site and handle 84 px .12em in white (the card's
  * act-on lines; they were 68 px grey). Every centred line fits 1380 px, so it stays inside x 390..1770, left of Instagram's
  * action column. Everything ends above y 2960. The corner bug and chapter bar are already gone from outro.at.

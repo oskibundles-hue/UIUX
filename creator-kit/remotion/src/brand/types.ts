@@ -90,7 +90,7 @@ export type BrandCopyOverride = Partial<{
   locations: (string | [string, string])[];
   /** Extra end-card line under the locations; null hides it. */
   soon: string | null;
-  /** fd-telemetry: how-to line under the CTA ("DM US YOUR MODEL") and the CTA kicker (the brand name; FD takes no bookings). fd-telemetry joins a tagline pair with a space. */
+  /** fd-telemetry: how-to line under the CTA ("DM US YOUR MODEL") and the CTA kicker (the brand name). fd-telemetry joins a tagline pair with a space. */
   how: string;
   kicker: string;
 }>;

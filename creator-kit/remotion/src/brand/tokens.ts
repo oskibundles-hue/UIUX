@@ -433,13 +433,17 @@ export const FD = {
     site: "formuladynamicsperformance.com",
     handle: "@formuladynamicsperformance",
     /**
-     * Formula Dynamics does NOT take bookings (Omarie, 2026-09-23: "there is no booking for formula
-     * dynamics but they can go to the website"). The CTA sends people to the site, so the site line is
-     * drawn inside the CTA block as well as on the end card. Was "BOOK YOUR BUILD" / "NOW BOOKING"
-     * until 2026-09-23 -- do not reintroduce booking language on FD. Supercar Experience is the brand
-     * that books (SE.copy.cta "Book your supercar."), and the two never share copy.
+     * CTA = BOOK YOUR BUILD, always with WHERE: the site and the handle (Omarie, 2026-09-24: "keep BOOK YOUR
+     * BUILD and also show the website + handle, so the CTA and end card refer to both"). FdCta draws the
+     * site and the handle under the action; FdEndCard draws both under the rule. History, so it is not
+     * re-litigated: on 2026-09-23 he said FD has no booking and people go to the website, and early on
+     * 2026-09-24 this briefly became VISIT THE SITE ("remove everywhere"); his change of plan the same
+     * night brought BOOK YOUR BUILD back alongside the site. The kicker stayed the brand name rather than
+     * going back to NOW BOOKING -- he did not ask for that. The feed-post renderer reads the same copy from
+     * work/fd_daily_posts/brand_tokens.py (FD_CTA_ACTION / FD_SITE / FD_HANDLE); keep the two in step.
+     * Supercar Experience has its own copy (SE.copy.cta "Book your supercar.") and the two never share it.
      */
-    cta: "VISIT THE SITE",
+    cta: "BOOK YOUR BUILD",
     how: "DM US YOUR MODEL",
     kicker: "FORMULA DYNAMICS",
     tagline: "PRECISION. PERFORMANCE. PASSION.",
