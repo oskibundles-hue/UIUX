@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import type { MotionProps } from "../../Motion";
-import { exitKind } from "../motion";
+import { entryKind, exitKind } from "../motion";
 import { FD } from "../tokens";
 import { FdCallout, type FdCalloutSpec } from "./FdCallout";
 import { FdCaptions, captionPhrases } from "./FdCaptions";
@@ -54,7 +54,7 @@ export const FdMotion: React.FC<{ p: FdMotionProps; bug: React.ReactNode }> = ({
       <FdStage>
         {p.title ? <FdJobSheet t={p.title} /> : null}
         <FdCaptions phrases={phrases} until={outroAt ?? Infinity} yields={yields} haze={p.captionHaze} />
-        {(p.callouts ?? []).map((c, i) => <FdCallout key={i} c={c} exit={exitKind(c.exit, p.calloutExit)} />)}
+        {(p.callouts ?? []).map((c, i) => <FdCallout key={i} c={c} exit={exitKind(c.exit, p.calloutExit)} entry={entryKind(c.entry, p.calloutEntry)} />)}
         {lts.map((l, i) => <FdLowerThird key={i} l={l} bottom={fdLowerThirdBottom(l, phrases)} />)}
         {ctas.map((c, i) => <FdCta key={i} c={c} copy={copy} />)}
         {(p.follows ?? []).map((f, i) => <FdFollow key={i} f={f} />)}

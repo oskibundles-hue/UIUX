@@ -4,8 +4,8 @@ import type { Callout } from "../../Motion";
 import type { TextStyle } from "../measure";
 import type { BrandCalloutFields } from "../types";
 import { pathAt } from "../shared";
-import { exitKind, sinceEnd, spanE, type ExitKind } from "../motion";
-import { C, H4, L, M, Reticle, SHADOW, SPACE, ScaleRule, T, TM, TypeOn, W4, clampX, easeIn, elementHaze, fitSize, font, hazeAround, Haze, linear, ramp, ts, tw, up, useClock } from "./kit";
+import { entryKind, exitKind, pointAlong, sinceEnd, spanE, tipK, type EntryKind, type ExitKind } from "../motion";
+import { C, H4, L, M, Reticle, SHADOW, SPACE, ScaleRule, T, TM, TypeOn, W4, clampX, easeIn, easeOut, elementHaze, fitSize, font, hazeAround, Haze, linear, ramp, ts, tw, up, useClock } from "./kit";
 
 export type FdCalloutSpec = Callout & BrandCalloutFields;
 
@@ -42,7 +42,7 @@ const END_PAD = 60;   // end-aligned readouts keep their type this far from the 
  * draws back from the leader (12-22 f), label types (10 f), value counts up 16-40 f (ease-out exp, tabular digits) or
  * the text clips in left to right (10 f). Out: 8 f fade after the hold, the leader retracts over 6 f.
  */
-export const FdCallout: React.FC<{ c: FdCalloutSpec; exit?: ExitKind }> = ({ c, exit }) => {
+export const FdCallout: React.FC<{ c: FdCalloutSpec; exit?: ExitKind; entry?: EntryKind }> = ({ c, exit, entry }) => {
   const { frame, fps, s } = useClock();
   if (s < c.at || s > c.at + c.hold + M.unmount) return null;
   const atF = Math.round(c.at * fps);
@@ -167,6 +167,17 @@ export const FdCallout: React.FC<{ c: FdCalloutSpec; exit?: ExitKind }> = ({ c, 
   const d = pts.map((p, i) => `${i ? "L" : "M"}${p[0].toFixed(2)} ${p[1].toFixed(2)}`).join(" ");
   const elbowK = elbow ? ramp(f0, M.elbow.from, M.elbow.to) * retract : 0;
 
+  // ACQUIRE + DRAW ("lock"). The arms square up from A.armRotFrom degrees as they slide in; a live square tip
+  // rides the growing end of the leader (the dash reveals from pts[0], by the reticle, so the growing end is
+  // `total * lineK` along the path). Rotation is exactly 0 from A.rot.to and the tip is absent at rest and
+  // after the hold, so held and exit frames are byte-identical to "classic".
+  const locking = entryKind(c.entry, entry) === "lock";
+  const A = M.acquire;
+  const armRot = locking ? A.armRotFrom * (1 - spanE(f0, A.rot, easeOut)) : 0;
+  const tipO = locking && fe < 0 && total >= M.draw.minLen ? tipK(ramp(f0, M.leader.from, M.leader.to), M.draw.fadeIn, M.draw.fadeOut) : 0;
+  const tip = tipO > 0 ? pointAlong(pts, total * lineK) : null;
+  const tipS = pt ? CO.elbow : M.draw.tip;
+
   const collapse = 1 - targetOut;
   const armK = ramp(f0, M.arms.from, M.arms.to) * collapse;
   const ringK = ramp(f0, M.ring.from, M.ring.to) * collapse;
@@ -189,7 +200,8 @@ export const FdCallout: React.FC<{ c: FdCalloutSpec; exit?: ExitKind }> = ({ c, 
                 strokeDasharray={`${total} ${total + 40}`} strokeDashoffset={total * (1 - lineK)} />
         ) : null}
         {elbow && elbowK > 0 ? <rect x={elbow[0] - CO.elbow / 2} y={elbow[1] - CO.elbow / 2} width={CO.elbow} height={CO.elbow} fill="#fff" opacity={elbowK} /> : null}
-        <Reticle cx={dx} cy={dy} ringK={ringK} armK={armK} dotK={dotK} scale={rs} />
+        {tip ? <rect x={tip[0] - tipS / 2} y={tip[1] - tipS / 2} width={tipS} height={tipS} fill="#fff" opacity={tipO} /> : null}
+        <Reticle cx={dx} cy={dy} ringK={ringK} armK={armK} dotK={dotK} scale={rs} armRot={armRot} />
       </svg>
       <div style={{ position: "absolute", left: x, top, width: w, whiteSpace: "nowrap" }}>
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", gap: CO.headGap, height: CO.head, lineHeight: 1, textShadow: SHADOW, ...pad }}>

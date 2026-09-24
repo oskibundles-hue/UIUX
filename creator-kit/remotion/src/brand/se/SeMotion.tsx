@@ -1,6 +1,6 @@
 import React, { useMemo } from "react";
 import type { MotionProps } from "../../Motion";
-import { exitKind } from "../motion";
+import { entryKind, exitKind } from "../motion";
 import { SE } from "../tokens";
 import { SeBirthday, SeBirthdayScrim, birthdayEnd } from "./SeBirthday";
 import { SeCallout, type SeCalloutSpec } from "./SeCallout";
@@ -57,7 +57,7 @@ export const SeMotion: React.FC<{ p: SeMotionProps; bug: React.ReactNode }> = ({
         {p.title ? <SeTitle t={p.title} /> : null}
         {p.birthday ? <SeBirthday b={p.birthday} /> : null}
         <SeCaptions pages={pages} until={outroAt ?? Infinity} yields={yields} />
-        {(p.callouts ?? []).map((c, i) => <SeCallout key={i} c={c} exit={exitKind(c.exit, p.calloutExit)} />)}
+        {(p.callouts ?? []).map((c, i) => <SeCallout key={i} c={c} exit={exitKind(c.exit, p.calloutExit)} entry={entryKind(c.entry, p.calloutEntry)} />)}
         {lts.map((l, i) => <SeLowerThird key={i} l={l} bottom={lowerThirdBottom(l, pages)} copy={copy} />)}
         {ctas.map((c, i) => <SeCta key={i} c={c} copy={copy} />)}
         {(p.follows ?? []).map((f, i) => <SeFollow key={i} f={f} />)}

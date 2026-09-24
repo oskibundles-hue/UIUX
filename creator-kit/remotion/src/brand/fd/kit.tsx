@@ -166,9 +166,10 @@ export const elementHaze = (v: number | undefined): number =>
 /**
  * Reticle at (cx, cy) in an SVG: ring (r from `ringFrom` to `ring`, white 55%, 4 px), four 5 x 40 arms that
  * slide in from 1.5x their distance, red centre dot. k values 0-1. `scale` enlarges ring, arms, strokes and dot
- * (tracked callouts, which move over busy footage).
+ * (tracked callouts, which move over busy footage). `armRot` (degrees) turns the arms only -- the ring and dot
+ * are round -- for the Lock-On ACQUIRE square-up; 0 emits no transform at all, so the default is unchanged.
  */
-export const Reticle: React.FC<{ cx: number; cy: number; ringK: number; armK: number; dotK: number; scale?: number }> = ({ cx, cy, ringK, armK, dotK, scale = 1 }) => {
+export const Reticle: React.FC<{ cx: number; cy: number; ringK: number; armK: number; dotK: number; scale?: number; armRot?: number }> = ({ cx, cy, ringK, armK, dotK, scale = 1, armRot = 0 }) => {
   const R = L.callout;
   const r = (R.ringFrom + (R.ring - R.ringFrom) * ringK) * scale;
   const at = R.armAt * scale * (1.5 - 0.5 * armK);
@@ -178,7 +179,7 @@ export const Reticle: React.FC<{ cx: number; cy: number; ringK: number; armK: nu
   return (
     <g transform={`translate(${cx} ${cy})`}>
       <circle r={r} fill="none" stroke="#fff" strokeOpacity={0.55 * Math.min(1, ringK * 2)} strokeWidth={4 * Math.max(1, scale)} />
-      <g opacity={armK}>
+      <g opacity={armK} transform={armRot ? `rotate(${armRot})` : undefined}>
         <rect x={-hw} y={-at - arm} width={aw} height={arm} fill="#fff" />
         <rect x={-hw} y={at} width={aw} height={arm} fill="#fff" />
         <rect x={-at - arm} y={-hw} width={arm} height={aw} fill="#fff" />

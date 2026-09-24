@@ -4,8 +4,8 @@ import type { Callout } from "../../Motion";
 import type { BrandCalloutFields } from "../types";
 import { textWidth } from "../measure";
 import { pathAt } from "../shared";
-import { exitKind, sinceEnd, spanE, type ExitKind } from "../motion";
-import { C, H4, L, LABEL, LINING, M, SAFE, T, W4, bracket, clampX, easeIn, fitSize, fitTracking, font, panel, ramp, ts, useClock } from "./kit";
+import { entryKind, exitKind, pointAlong, sinceEnd, spanE, tipK, type EntryKind, type ExitKind } from "../motion";
+import { C, H4, L, LABEL, LINING, M, SAFE, T, W4, bracket, clampX, easeIn, easeOut, fitSize, fitTracking, font, panel, ramp, ts, useClock } from "./kit";
 
 export type SeCalloutSpec = Callout & BrandCalloutFields;
 
@@ -41,7 +41,7 @@ const rowWidth = (items: Item[]) => {
  * moves over busy footage, so (as in FdCallout) its target is scaled to ring r46 and its leader is 9 px over 26 px.
  * Timing as legacy: dot, leader 4-18 f, box from 10 f, count-up 14-40 f, out 0.35 s after hold.
  */
-export const SeCallout: React.FC<{ c: SeCalloutSpec; exit?: ExitKind }> = ({ c, exit }) => {
+export const SeCallout: React.FC<{ c: SeCalloutSpec; exit?: ExitKind; entry?: EntryKind }> = ({ c, exit, entry }) => {
   const { frame, fps, s } = useClock();
   if (s < c.at || s > c.at + c.hold + M.unmount) return null;
   const f0 = frame - Math.round(c.at * fps);
@@ -49,17 +49,27 @@ export const SeCallout: React.FC<{ c: SeCalloutSpec; exit?: ExitKind }> = ({ c, 
   const drawK = ramp(f0, M.leader.from, M.leader.to);
   const boxK = Math.max(0, spring({ frame: f0 - M.box.delay, fps, config: { damping: M.box.damping, stiffness: M.box.stiffness }, durationInFrames: M.box.frames }));
 
-  // RELEASE. "fade" = the shipped whole-layer opacity ramp. "retract" plays the entry backwards inside
-  // M.exitRetract.frames (10 f = 0.334 s), which stays under the 0.35 s end-before-cut rule.
+  // RELEASE. "fade" = the whole-layer opacity ramp. "retract" reverses each element's own entrance inside
+  // M.exitRetract.frames (10 f = 0.334 s), under the 0.35 s end-before-cut rule.
   const retracting = exitKind(c.exit, exit) === "retract";
   const fe = sinceEnd(f0, Math.round((c.at + c.hold) * fps) - Math.round(c.at * fps));
   const R = M.exitRetract;
   const out = retracting ? 1 : 1 - ramp(s, c.at + c.hold, c.at + c.hold + M.exitFade, easeIn);
-  const leaderOut = retracting ? spanE(fe, R.leader, easeIn) : 0;   // tip end retracts toward the box first
+  const leaderOut = retracting ? spanE(fe, R.leader, easeIn) : 0;   // lets go of the box, withdraws into the dot
   const targetOut = retracting ? spanE(fe, R.target, easeIn) : 0;   // ring, halo and core collapse
   const boxOut = retracting ? spanE(fe, R.box, easeIn) : 0;         // box slides back the way it came
   const line = Math.min(drawK, 1 - leaderOut);
   const dotS = dotK * (1 - targetOut);
+
+  // ACQUIRE ("lock"). The halo starts wide and closes onto the ring as the ring springs out; the core lands
+  // last on its own spring. Both hand back EXACTLY the classic value once their window is over (haloS === dotS
+  // from f8, coreS === dotS from core.settle), so held and exit frames are byte-identical to "classic".
+  const locking = entryKind(c.entry, entry) === "lock";
+  const A = M.acquire;
+  const conv = locking ? spanE(f0, A.halo, easeOut) : 1;
+  const haloS = (conv >= 1 ? dotK : conv * dotK + (1 - conv) * (A.haloFrom / CO.halo)) * (1 - targetOut);
+  const coreS = !locking || f0 >= A.core.settle ? dotS
+    : Math.max(0, spring({ frame: f0 - A.core.delay, fps, config: { damping: A.core.damping, stiffness: A.core.stiffness }, durationInFrames: A.core.frames })) * (1 - targetOut);
 
   const maxInner = SAFE.right - SAFE.left - 2 * CO.padX;
   const labelText = bracket(c.label);
@@ -96,6 +106,12 @@ export const SeCallout: React.FC<{ c: SeCalloutSpec; exit?: ExitKind }> = ({ c, 
   const total = Math.hypot(tx - ex, ty - ey) + Math.abs(ex - sx);
   const d = `M${tx} ${ty} L${ex} ${ey} L${sx} ${sy}`;   // drawn from the dot back to the box
   const dash = { strokeDasharray: `${total} ${total + 40}`, strokeDashoffset: total * (1 - line) };
+  // DRAW ("lock"): a live tip on the growing end of the leader. The dash reveals from the path's first point
+  // (the dot), so the growing end sits `total * line` along it. Absent at rest and on the way out.
+  const lw = pt ? CO.trackedLeader : CO.leader, lwu = pt ? CO.trackedLeaderUnder : CO.leaderUnder;
+  // entrance only, never after the hold, and only on a leader long enough to be seen travelling
+  const tipO = locking && fe < 0 && total >= M.draw.minLen ? tipK(drawK, M.draw.fadeIn, M.draw.fadeOut) : 0;
+  const tip = tipO > 0 ? pointAlong([[tx, ty], [ex, ey], [sx, sy]], total * line) : null;
 
   return (
     <div style={{ position: "absolute", left: 0, top: 0, width: W4, height: H4, opacity: out }}>
@@ -106,9 +122,15 @@ export const SeCallout: React.FC<{ c: SeCalloutSpec; exit?: ExitKind }> = ({ c, 
             <path d={d} fill="none" stroke="#fff" strokeWidth={pt ? CO.trackedLeader : CO.leader} strokeLinecap="round" strokeLinejoin="round" {...dash} />
           </>
         ) : null}
-        <circle cx={dx} cy={dy} r={CO.halo * rs * dotS * (1 + M.halo.amp * Math.sin(f0 / M.halo.period))} fill={C.accent} fillOpacity={0.2} />
+        {tip ? (
+          <>
+            <circle cx={tip[0]} cy={tip[1]} r={lw * M.draw.tip + (lwu - lw) / 2} fill={`rgba(0,0,0,${CO.leaderUnderAlpha})`} opacity={tipO} />
+            <circle cx={tip[0]} cy={tip[1]} r={lw * M.draw.tip} fill="#fff" opacity={tipO} />
+          </>
+        ) : null}
+        <circle cx={dx} cy={dy} r={CO.halo * rs * haloS * (1 + M.halo.amp * Math.sin(f0 / M.halo.period))} fill={C.accent} fillOpacity={0.2} />
         <circle cx={dx} cy={dy} r={CO.ring * rs * dotS} fill="rgba(15,16,20,.45)" stroke={C.accent} strokeWidth={8 * rs * Math.min(1, dotS)} />
-        <circle cx={dx} cy={dy} r={CO.core * rs * dotS} fill="#fff" />
+        <circle cx={dx} cy={dy} r={CO.core * rs * coreS} fill="#fff" />
       </svg>
       <div style={{ position: "absolute", left: bx, top, width: bw, height: bh, boxSizing: "border-box", padding: `${CO.padT}px ${CO.padX}px ${CO.padB}px`, whiteSpace: "nowrap",
                     ...panel(false, CO.radius), opacity: Math.min(1, boxK * 1.2) * (1 - boxOut),

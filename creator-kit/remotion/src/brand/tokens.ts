@@ -188,8 +188,27 @@ export const SE = {
     halo: { amp: 0.08, period: 5 },
     /** exit: "fade" = today's whole-layer opacity ramp, in seconds. */
     exitFade: 0.35,
-    /** exit: "retract" = the entry played backwards, in frames from the hold end. 10 f = 0.334 s. */
+    /**
+     * exit: "retract", frames from the hold end, 10 f = 0.334 s. Each element reverses its own entrance: the
+     * leader lets go of the box and withdraws into the dot (0-6), the ring, halo and core collapse (2-8),
+     * the box slides back its 36 px and goes (4-10). Note the leader withdraws INTO THE DOT, not toward the
+     * box -- the dash reveals from the dot end, so shrinking it gives up the box end first.
+     */
     exitRetract: { frames: 10, leader: { from: 0, to: 6 }, target: { from: 2, to: 8 }, box: { from: 4, to: 10 } },
+    /**
+     * entry: "lock" -- ACQUIRE. The halo starts wide (r110) and closes onto its r70 over 0-8 f while the ring
+     * springs out, so the target visibly locks instead of just growing. The white core no longer rides the
+     * ring's spring: it lands last on its own, softer, bouncier spring from f3 (overshoot, then r15). From
+     * `core.settle` on, both hand back exactly the classic values, so held frames do not change.
+     */
+    acquire: { haloFrom: 110, halo: { from: 0, to: 8 }, core: { delay: 3, damping: 8, stiffness: 400, frames: 6, settle: 12 } },
+    /**
+     * entry: "lock" -- DRAW. A live tip rides the growing end of the leader while it draws (4-18 f): a white
+     * disc `tip` x the leader width in radius, over the leader's own black under-stroke for contrast on
+     * bright sky. Fades in over the first 12% of the stroke and out over the last 20%, and is absent at rest.
+     * No tip on a leader shorter than `minLen` px: it would only park at the target and fade, not travel.
+     */
+    draw: { tip: 1, fadeIn: 0.12, fadeOut: 0.2, minLen: 160 },
   },
   /** Element geometry, px at 4K, from booking-luxury tokens.css + src/*.html (y values are canvas y). */
   layout: {
@@ -345,8 +364,27 @@ export const FD = {
     leader: { from: 4, to: 16 },
     elbow: { from: 9, to: 11 },
     count: { from: 16, to: 40 },
-    /** exit: "retract" = the entry played backwards, in frames from the hold end. 8 f = 0.267 s. */
+    /**
+     * exit: "retract", frames from the hold end, 8 f = 0.267 s. Each element reverses its own entrance: type
+     * clips out right to left, the rule draws back, the leader withdraws into the reticle, the reticle
+     * collapses, with a 2 f opacity tail on the panel so nothing can linger.
+     */
     exitRetract: { frames: 8, leader: { from: 0, to: 6 }, target: { from: 1, to: 6 }, rule: { from: 0, to: 5 }, text: { from: 0, to: 5 } },
+    /**
+     * entry: "lock" -- ACQUIRE. The four arms still slide in from 1.5x, and now also square up: they arrive
+     * rotated `armRotFrom` degrees and turn to true over 0-8 f, so the reticle reads as a sight settling onto
+     * the part. Ring and dot are round, so only the arms turn. At rest the rotation is exactly 0.
+     */
+    acquire: { armRotFrom: -12, rot: { from: 0, to: 8 } },
+    /**
+     * entry: "lock" -- DRAW. A live tip rides the growing end of the orthogonal leader while it draws (4-16 f):
+     * a white square `tip` px (tracked: the 16 px elbow size), echoing the elbow square. Contrast comes from
+     * the leader layer's existing drop shadow. Fades in over 12% and out over 20%, absent at rest.
+     * No tip on a leader shorter than `minLen` px. When the readout sits right on the target (p2L callout 4,
+     * "COMBINED OUTPUT") the leader is a ~38 px stub hidden at the top arm, and a tip there only parks on
+     * the arm and fades -- it reads as a glitch, not a pen stroke.
+     */
+    draw: { tip: 12, fadeIn: 0.12, fadeOut: 0.2, minLen: 160 },
   },
   /**
    * Element geometry, px at 4K, from telemetry.css / html (y values are canvas y). `haze` boxes bleed past the
