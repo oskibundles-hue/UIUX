@@ -156,10 +156,21 @@ def lower_third(canvas, title, subtitle=None, kicker=None):
     return im
 
 
+# Canvases that get a full set of full-frame overlays.
+#
+# Was ("9x16", "16x9") - the vertical master and the YouTube cut. The feed
+# canvases were only ever carrying logo bugs and end cards, which meant a 4x5
+# or 1x1 ad could not be RENDERED, only reframed from the 9x16 master with
+# blurred rails either side. The layout functions below have taken `canvas` and
+# read B.CANVASES[canvas] since they were written, so widening the loop is all
+# that was needed - no geometry is hard-coded to 1920 height.
+FULL_FRAME_CANVASES = ("9x16", "4x5", "1x1", "16x9")
+
+
 def build_lower_thirds():
     out = B.OVERLAYS / "lower-thirds"
     n = 0
-    for canvas in ("9x16", "16x9"):
+    for canvas in FULL_FRAME_CANVASES:
         for slug, label, _ in B.SERVICES:
             R.save(lower_third(canvas, label, B.SERVICE_SUBLINE[slug],
                                "FORMULA DYNAMICS"),
@@ -300,7 +311,7 @@ def cta_caption(canvas, lead, accent, style="bar"):
 def build_cta_captions():
     out = B.OVERLAYS / "cta-captions"
     n = 0
-    for canvas in ("9x16", "16x9"):
+    for canvas in FULL_FRAME_CANVASES:
         for slug, lead, accent, group in B.CTA_CAPTIONS:
             for style in ("bar", "panel"):
                 R.save(cta_caption(canvas, lead, accent, style),
@@ -379,7 +390,7 @@ def title_card(canvas, line1, line2, tone="dark"):
 def build_title_cards():
     out = B.OVERLAYS / "title-cards"
     n = 0
-    for canvas in ("9x16", "16x9"):
+    for canvas in FULL_FRAME_CANVASES:
         for slug, l1, l2 in TITLES:
             for tone in ("dark", "light"):
                 R.save(title_card(canvas, l1, l2, tone),

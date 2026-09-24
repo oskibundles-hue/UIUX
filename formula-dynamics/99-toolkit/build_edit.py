@@ -125,6 +125,35 @@ def canvas_for(w, h):
     return best
 
 
+def source_fit(sw, sh, cw, ch, aim=0.5):
+    """Filter that makes the source fill the canvas exactly, or None.
+
+    COVER, not fit: the source is scaled until it covers the canvas and the
+    excess is cropped away, so the picture goes edge to edge. The alternative
+    is fd_reframe.py, which scales the whole frame to fit INSIDE the canvas and
+    fills the rails with a blurred copy - that keeps the full field of view but
+    spends 30% of a 4x5 canvas on filler. Two different trades; this one is for
+    when the graphics are being laid out for the target canvas rather than
+    inherited from a finished 9x16 master.
+
+    `aim` is where the crop window sits on the axis being cut, 0.0 at the top
+    or left edge and 1.0 at the bottom or right. Centre is the default and is
+    usually wrong for footage shot 9x16 and posted 4x5 - the subject tends to
+    sit above centre - so it is worth measuring rather than leaving alone.
+    """
+    if (sw, sh) == (cw, ch):
+        return None
+    scale = max(cw / sw, ch / sh)
+    mw, mh = round(sw * scale), round(sh * scale)
+    mw += mw % 2
+    mh += mh % 2
+    aim = min(1.0, max(0.0, aim))
+    x = round((mw - cw) * aim)
+    y = round((mh - ch) * aim)
+    return (f"scale={mw}:{mh}:flags=lanczos,"
+            f"crop={cw}:{ch}:{max(0, x)}:{max(0, y)},setsar=1")
+
+
 # --------------------------------------------------------------------------
 # The edit
 # --------------------------------------------------------------------------
@@ -312,9 +341,17 @@ def seq_cue(name, tmp, canvas, fps, start, end, fn, kwargs, note):
                 seq=True)
 
 
-def filter_graph(cues, width, height):
-    """Compose the overlay chain. Each cue is one input, faded and gated."""
+def filter_graph(cues, width, height, fit=None):
+    """Compose the overlay chain. Each cue is one input, faded and gated.
+
+    `fit` reshapes the source to the canvas before anything is laid on it.
+    Every overlay is composited at x=0,y=0 against a frame assumed to be
+    canvas-sized, so this has to happen first or every element lands wrong.
+    """
     parts, last = [], "0:v"
+    if fit:
+        parts.append(f"[0:v]{fit}[base]")
+        last = "base"
     for i, c in enumerate(cues, start=1):
         tag = f"o{i}"
         s, e = c["start"], c["end"]
@@ -390,7 +427,7 @@ def filter_graph(cues, width, height):
 
 
 def render(source, out, cues, width, height, fps, duration, bitrate="20M",
-           bed_wav=None, sfx_gain=1.6):
+           bed_wav=None, sfx_gain=1.6, fit=None):
     cmd = [ffmpeg_bin(), "-y", "-i", str(source)]
     for c in cues:
         if c.get("seq"):
@@ -404,7 +441,7 @@ def render(source, out, cues, width, height, fps, duration, bitrate="20M",
         cmd += ["-loop", "1", "-framerate", str(fps), "-t", f"{duration:.3f}",
                 "-i", c["path"]]
 
-    graph, last = filter_graph(cues, width, height)
+    graph, last = filter_graph(cues, width, height, fit)
 
     if bed_wav:
         cmd += ["-i", str(bed_wav)]
@@ -542,6 +579,15 @@ def main():
                          "and the hook typed on, instead of the still title "
                          "card. Implies --sfx.")
     ap.add_argument("--bitrate", default="20M")
+    ap.add_argument("--canvas", choices=sorted(B.CANVASES),
+                    help="render for this canvas instead of the one the "
+                         "footage's own aspect ratio implies. The source is "
+                         "scaled to COVER the canvas and the excess cropped, "
+                         "so the picture is full-bleed - see --crop-aim")
+    ap.add_argument("--crop-aim", type=float, default=0.5,
+                    help="where the crop window sits on the axis being cut: "
+                         "0.0 top/left, 0.5 centre (default), 1.0 "
+                         "bottom/right. Only used with --canvas")
     ap.add_argument("--dry-run", action="store_true",
                     help="print the cue sheet without rendering")
     a = ap.parse_args()
@@ -551,7 +597,9 @@ def main():
         sys.exit(f"No such file: {src}")
 
     duration, w, h, fps = probe(src)
-    canvas = canvas_for(w, h)
+    canvas = a.canvas or canvas_for(w, h)
+    cw, ch = B.CANVASES[canvas]
+    fit = source_fit(w, h, cw, ch, a.crop_aim)
 
     cfg = dict(TEMPLATES[a.template])
     for slot in ("title", "service", "badge", "cta"):
@@ -787,7 +835,12 @@ def main():
         cues.sort(key=lambda c: (c["start"], c["layer"]))
 
     print(f"\n  {a.template.upper()}  ·  {TEMPLATES[a.template]['about']}")
-    print(f"  Source: {w}x{h} @ {fps}fps  ->  canvas {canvas}")
+    print(f"  Source: {w}x{h} @ {fps}fps  ->  canvas {canvas} ({cw}x{ch})")
+    if fit:
+        keep = min(1.0, (cw / ch) / (w / h)), min(1.0, (w / h) / (cw / ch))
+        print(f"  Full-bleed: source cropped to cover, aim {a.crop_aim:.2f}"
+              f"  (keeps {keep[0] * 100:.0f}% of the width, "
+              f"{keep[1] * 100:.0f}% of the height)")
     print(cue_sheet(cues, duration, src))
 
     if a.dry_run:
@@ -824,7 +877,8 @@ def main():
         print(note)
 
     print(f"  Rendering -> {out} ...")
-    render(src, out, cues, w, h, fps, duration, a.bitrate, bed_wav, a.sfx_gain)
+    render(src, out, cues, cw, ch, fps, duration, a.bitrate, bed_wav,
+           a.sfx_gain, fit)
     mb = out.stat().st_size / 1_048_576
     print(f"  Done. {out}  ({mb:.1f} MB)\n")
 
