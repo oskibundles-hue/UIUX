@@ -5,6 +5,8 @@
  * added HERE and Motion.tsx never needs another edit.
  */
 
+import type { ExitKind } from "./motion";
+
 /** A brand pack drawn by src/brand/BrandMotion.tsx. */
 export type BrandKey = "se-booking" | "fd-telemetry";
 /** Every entry of the token table. "legacy" = today's Motion4K look. */
@@ -42,6 +44,12 @@ export type BrandProps = {
   captionHaze?: BrandCaptionHaze[];
   /** se-booking only: birthday opener over the first shot (src/brand/se/SeBirthday.tsx). Absent = nothing changes. */
   birthday?: BrandBirthday;
+  /**
+   * Lock-On RELEASE, render-wide default for every callout: "fade" (shipped, the default) or "retract"
+   * (the entry played backwards -- SE 10 f, FD 8 f, both inside the 0.35 s end-before-cut rule).
+   * A callout's own `exit` overrides this. Absent = "fade" = the pixels approved on 2026-09-14.
+   */
+  calloutExit?: ExitKind;
 };
 
 /**
@@ -76,7 +84,7 @@ export type BrandCopyOverride = Partial<{
   locations: (string | [string, string])[];
   /** Extra end-card line under the locations; null hides it. */
   soon: string | null;
-  /** fd-telemetry: how-to line under the CTA ("DM US YOUR MODEL") and the CTA kicker ("NOW BOOKING"). fd-telemetry joins a tagline pair with a space. */
+  /** fd-telemetry: how-to line under the CTA ("DM US YOUR MODEL") and the CTA kicker (the brand name; FD takes no bookings). fd-telemetry joins a tagline pair with a space. */
   how: string;
   kicker: string;
 }>;
@@ -91,7 +99,7 @@ export type BrandCopyOverride = Partial<{
  * line under a text readout; `boxY` = readout top as 0-1 of height (default: above the dot, or below it near the top);
  * `haze` = readout haze alpha from work/brand_build/tools/fd_element_haze.py (default 0.55, max 0.8).
  */
-export type BrandCalloutFields = { sub?: string; boxY?: number; context?: string; haze?: number };
+export type BrandCalloutFields = { sub?: string; boxY?: number; context?: string; haze?: number; exit?: ExitKind };
 /**
  * Lower-third extras (se-booking). `variant` sets the defaults: "fleet" -> label "In the fleet", book "Reserve";
  * "city" -> label "Pick-up", book "Book". `meta` items render with orange dots between them; wrap bold parts

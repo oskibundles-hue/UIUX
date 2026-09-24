@@ -18,6 +18,8 @@ export const H4 = 3840;
 export const C = SE.color;
 export const T = SE.type;
 export const L = SE.layout;
+/** Lock-On motion tokens (SE dialect). See tokens.ts SE.motion. */
+export const M = SE.motion;
 export const SAFE = SE.space.safe;
 export const FONT = SE.font.text;
 export const LOGOS = SE.logos;

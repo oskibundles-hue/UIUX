@@ -19,6 +19,8 @@ export const H4 = 3840;
 export const C = FD.color;
 export const T = FD.type;
 export const L = FD.layout;
+/** Lock-On motion tokens (FD dialect). See tokens.ts FD.motion. */
+export const M = FD.motion;
 export const HZ = FD.haze;
 export const TM = FD.timing;
 export const SPACE = FD.space;

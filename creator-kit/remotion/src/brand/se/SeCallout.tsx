@@ -4,7 +4,8 @@ import type { Callout } from "../../Motion";
 import type { BrandCalloutFields } from "../types";
 import { textWidth } from "../measure";
 import { pathAt } from "../shared";
-import { C, H4, L, LABEL, LINING, SAFE, T, W4, bracket, clampX, easeIn, fitSize, fitTracking, font, panel, ramp, ts, useClock } from "./kit";
+import { exitKind, sinceEnd, spanE, type ExitKind } from "../motion";
+import { C, H4, L, LABEL, LINING, M, SAFE, T, W4, bracket, clampX, easeIn, fitSize, fitTracking, font, panel, ramp, ts, useClock } from "./kit";
 
 export type SeCalloutSpec = Callout & BrandCalloutFields;
 
@@ -40,21 +41,32 @@ const rowWidth = (items: Item[]) => {
  * moves over busy footage, so (as in FdCallout) its target is scaled to ring r46 and its leader is 9 px over 26 px.
  * Timing as legacy: dot, leader 4-18 f, box from 10 f, count-up 14-40 f, out 0.35 s after hold.
  */
-export const SeCallout: React.FC<{ c: SeCalloutSpec }> = ({ c }) => {
+export const SeCallout: React.FC<{ c: SeCalloutSpec; exit?: ExitKind }> = ({ c, exit }) => {
   const { frame, fps, s } = useClock();
-  if (s < c.at || s > c.at + c.hold + 0.4) return null;
+  if (s < c.at || s > c.at + c.hold + M.unmount) return null;
   const f0 = frame - Math.round(c.at * fps);
-  const dotK = Math.max(0, spring({ frame: f0, fps, config: { damping: 11, stiffness: 260 }, durationInFrames: 12 }));
-  const line = ramp(f0, 4, 18);
-  const boxK = Math.max(0, spring({ frame: f0 - 10, fps, config: { damping: 16, stiffness: 150 }, durationInFrames: 18 }));
-  const out = 1 - ramp(s, c.at + c.hold, c.at + c.hold + 0.35, easeIn);
+  const dotK = Math.max(0, spring({ frame: f0, fps, config: { damping: M.dot.damping, stiffness: M.dot.stiffness }, durationInFrames: M.dot.frames }));
+  const drawK = ramp(f0, M.leader.from, M.leader.to);
+  const boxK = Math.max(0, spring({ frame: f0 - M.box.delay, fps, config: { damping: M.box.damping, stiffness: M.box.stiffness }, durationInFrames: M.box.frames }));
+
+  // RELEASE. "fade" = the shipped whole-layer opacity ramp. "retract" plays the entry backwards inside
+  // M.exitRetract.frames (10 f = 0.334 s), which stays under the 0.35 s end-before-cut rule.
+  const retracting = exitKind(c.exit, exit) === "retract";
+  const fe = sinceEnd(f0, Math.round((c.at + c.hold) * fps) - Math.round(c.at * fps));
+  const R = M.exitRetract;
+  const out = retracting ? 1 : 1 - ramp(s, c.at + c.hold, c.at + c.hold + M.exitFade, easeIn);
+  const leaderOut = retracting ? spanE(fe, R.leader, easeIn) : 0;   // tip end retracts toward the box first
+  const targetOut = retracting ? spanE(fe, R.target, easeIn) : 0;   // ring, halo and core collapse
+  const boxOut = retracting ? spanE(fe, R.box, easeIn) : 0;         // box slides back the way it came
+  const line = Math.min(drawK, 1 - leaderOut);
+  const dotS = dotK * (1 - targetOut);
 
   const maxInner = SAFE.right - SAFE.left - 2 * CO.padX;
   const labelText = bracket(c.label);
   const labelSt = fitTracking(labelText, LABEL, maxInner, 0.14);
   const isText = c.text != null;
   const val = c.value ?? 0;
-  const count = f0 >= 40 ? val : interpolate(f0, [14, 40], [0, val], { ...clampX, easing: Easing.out(Easing.exp) });
+  const count = f0 >= M.count.to ? val : interpolate(f0, [M.count.from, M.count.to], [0, val], { ...clampX, easing: Easing.out(Easing.exp) });
   const fmt = (v: number) => (val >= 100 ? String(Math.round(v)) : v.toFixed(1));
   const suffix = (c.suffix ?? "").trim();
   const finalItems: Item[] | null = isText ? (UNITS_ONLY.test(c.text ?? "") ? unitItems(c.text ?? "") : null) : [{ num: fmt(val), unit: suffix }];
@@ -94,13 +106,13 @@ export const SeCallout: React.FC<{ c: SeCalloutSpec }> = ({ c }) => {
             <path d={d} fill="none" stroke="#fff" strokeWidth={pt ? CO.trackedLeader : CO.leader} strokeLinecap="round" strokeLinejoin="round" {...dash} />
           </>
         ) : null}
-        <circle cx={dx} cy={dy} r={CO.halo * rs * dotK * (1 + 0.08 * Math.sin(f0 / 5))} fill={C.accent} fillOpacity={0.2} />
-        <circle cx={dx} cy={dy} r={CO.ring * rs * dotK} fill="rgba(15,16,20,.45)" stroke={C.accent} strokeWidth={8 * rs * Math.min(1, dotK)} />
-        <circle cx={dx} cy={dy} r={CO.core * rs * dotK} fill="#fff" />
+        <circle cx={dx} cy={dy} r={CO.halo * rs * dotS * (1 + M.halo.amp * Math.sin(f0 / M.halo.period))} fill={C.accent} fillOpacity={0.2} />
+        <circle cx={dx} cy={dy} r={CO.ring * rs * dotS} fill="rgba(15,16,20,.45)" stroke={C.accent} strokeWidth={8 * rs * Math.min(1, dotS)} />
+        <circle cx={dx} cy={dy} r={CO.core * rs * dotS} fill="#fff" />
       </svg>
       <div style={{ position: "absolute", left: bx, top, width: bw, height: bh, boxSizing: "border-box", padding: `${CO.padT}px ${CO.padX}px ${CO.padB}px`, whiteSpace: "nowrap",
-                    ...panel(false, CO.radius), opacity: Math.min(1, boxK * 1.2),
-                    transform: `translateX(${(1 - Math.min(1, boxK)) * (onRight ? 36 : -36)}px) scale(${0.96 + 0.04 * boxK})`, transformOrigin: onRight ? "left center" : "right center" }}>
+                    ...panel(false, CO.radius), opacity: Math.min(1, boxK * 1.2) * (1 - boxOut),
+                    transform: `translateX(${((1 - Math.min(1, boxK)) + boxOut) * (onRight ? M.box.slide : -M.box.slide)}px) scale(${M.box.scaleFrom + (1 - M.box.scaleFrom) * boxK - (1 - M.box.scaleFrom) * boxOut})`, transformOrigin: onRight ? "left center" : "right center" }}>
         <div style={{ ...font(labelSt), lineHeight: 1, color: C.ink84 }}><span style={{ color: C.accent }}>[</span>{labelText.slice(1, -1)}<span style={{ color: C.accent }}>]</span></div>
         {liveItems ? (
           <div style={{ display: "flex", alignItems: "baseline", gap: CO.unitGap, marginTop: CO.labelGap, height: rowH, lineHeight: 0.9 }}>

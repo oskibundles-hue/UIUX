@@ -4,7 +4,8 @@ import type { Callout } from "../../Motion";
 import type { TextStyle } from "../measure";
 import type { BrandCalloutFields } from "../types";
 import { pathAt } from "../shared";
-import { C, H4, L, Reticle, SHADOW, SPACE, ScaleRule, T, TM, TypeOn, W4, clampX, easeIn, elementHaze, fitSize, font, hazeAround, Haze, linear, ramp, ts, tw, up, useClock } from "./kit";
+import { exitKind, sinceEnd, spanE, type ExitKind } from "../motion";
+import { C, H4, L, M, Reticle, SHADOW, SPACE, ScaleRule, T, TM, TypeOn, W4, clampX, easeIn, elementHaze, fitSize, font, hazeAround, Haze, linear, ramp, ts, tw, up, useClock } from "./kit";
 
 export type FdCalloutSpec = Callout & BrandCalloutFields;
 
@@ -41,15 +42,29 @@ const END_PAD = 60;   // end-aligned readouts keep their type this far from the 
  * draws back from the leader (12-22 f), label types (10 f), value counts up 16-40 f (ease-out exp, tabular digits) or
  * the text clips in left to right (10 f). Out: 8 f fade after the hold, the leader retracts over 6 f.
  */
-export const FdCallout: React.FC<{ c: FdCalloutSpec }> = ({ c }) => {
+export const FdCallout: React.FC<{ c: FdCalloutSpec; exit?: ExitKind }> = ({ c, exit }) => {
   const { frame, fps, s } = useClock();
-  if (s < c.at || s > c.at + c.hold + 0.4) return null;
+  if (s < c.at || s > c.at + c.hold + M.unmount) return null;
   const atF = Math.round(c.at * fps);
   const f0 = frame - atF;
   const endF = Math.round((c.at + c.hold) * fps) - atF;
-  const out = 1 - ramp(f0, endF, endF + TM.outFrames, easeIn);
+
+  // RELEASE. "fade" = the shipped 8 f whole-layer ramp with the leader already retracting under it.
+  // "retract" drops that ramp and reverses each element instead -- reticle collapses, rule draws back,
+  // type clips out -- keeping only a 2 f opacity tail on the panel so nothing can linger past
+  // M.exitRetract.frames (8 f = 0.267 s), well inside the 0.35 s end-before-cut rule.
+  const retracting = exitKind(c.exit, exit) === "retract";
+  const R = M.exitRetract;
+  const fe = sinceEnd(f0, endF);
+  const out = retracting
+    ? 1 - spanE(fe, { from: R.frames - 2, to: R.frames }, easeIn)
+    : 1 - ramp(f0, endF, endF + TM.outFrames, easeIn);
   if (out <= 0) return null;
-  const retract = 1 - ramp(f0, endF, endF + 6, easeIn);
+  // Identical in both modes: ramp(f0, endF, endF + 6) and spanE(fe, {0, 6}) are the same window.
+  const retract = 1 - spanE(fe, R.leader, easeIn);
+  const targetOut = retracting ? spanE(fe, R.target, easeIn) : 0;
+  const ruleOut = retracting ? spanE(fe, R.rule, easeIn) : 0;
+  const textOut = retracting ? spanE(fe, R.text, easeIn) : 0;
 
   const label = up(c.label);
   const context = up(c.context);
@@ -57,7 +72,7 @@ export const FdCallout: React.FC<{ c: FdCalloutSpec }> = ({ c }) => {
   const val = c.value ?? 0;
   const fmt = (v: number) => (val >= 100 ? String(Math.round(v)) : v.toFixed(1));
   const unit = up((c.suffix ?? "").trim());
-  const count = f0 >= 40 ? val : interpolate(f0, [16, 40], [0, val], { ...clampX, easing: Easing.out(Easing.exp) });
+  const count = f0 >= M.count.to ? val : interpolate(f0, [M.count.from, M.count.to], [0, val], { ...clampX, easing: Easing.out(Easing.exp) });
   const text = up(c.text);
   const sub = isText ? up(c.sub) : "";
   const railW = SPACE.rail - SPACE.side;
@@ -148,19 +163,20 @@ export const FdCallout: React.FC<{ c: FdCalloutSpec }> = ({ c }) => {
   }
   let total = 0;
   for (let i = 1; i < pts.length; i++) total += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
-  const lineK = ramp(f0, 4, 16) * retract;
+  const lineK = ramp(f0, M.leader.from, M.leader.to) * retract;
   const d = pts.map((p, i) => `${i ? "L" : "M"}${p[0].toFixed(2)} ${p[1].toFixed(2)}`).join(" ");
-  const elbowK = elbow ? ramp(f0, 9, 11) * retract : 0;
+  const elbowK = elbow ? ramp(f0, M.elbow.from, M.elbow.to) * retract : 0;
 
-  const armK = ramp(f0, 0, 8);
-  const ringK = ramp(f0, 0, 10);
-  const dotK = spring({ frame: f0 - 2, fps, config: { damping: 14, stiffness: 320 }, durationInFrames: 6 });
-  const hazeK = ramp(f0, 8, 16);
-  const ruleK = ramp(f0, 12, 22);
-  const labK = ramp(f0, 12, 22, linear);
-  const ctxK = ramp(f0, 16, 26, linear);
-  const txtK = ramp(f0, 18, 28);
-  const subK = ramp(f0, 24, 24 + Math.max(1, [...sub].length), linear);
+  const collapse = 1 - targetOut;
+  const armK = ramp(f0, M.arms.from, M.arms.to) * collapse;
+  const ringK = ramp(f0, M.ring.from, M.ring.to) * collapse;
+  const dotK = spring({ frame: f0 - M.dot.delay, fps, config: { damping: M.dot.damping, stiffness: M.dot.stiffness }, durationInFrames: M.dot.frames }) * collapse;
+  const hazeK = ramp(f0, M.haze.from, M.haze.to) * (1 - ruleOut);
+  const ruleK = Math.min(ramp(f0, M.rule.from, M.rule.to), 1 - ruleOut);
+  const labK = ramp(f0, M.label.from, M.label.to, linear) * (1 - textOut);
+  const ctxK = ramp(f0, M.context.from, M.context.to, linear) * (1 - textOut);
+  const txtK = Math.min(ramp(f0, M.text.from, M.text.to), 1 - textOut);
+  const subK = ramp(f0, M.subFrom, M.subFrom + Math.max(1, [...sub].length), linear) * (1 - textOut);
   const hz = hazeAround(x, top, w, h, CO.haze);
   const pad: React.CSSProperties = { paddingLeft: padL, paddingRight: padR, boxSizing: "border-box" };
 
@@ -188,7 +204,7 @@ export const FdCallout: React.FC<{ c: FdCalloutSpec }> = ({ c }) => {
             {sub ? <div style={{ ...font(subSt), lineHeight: 1, marginTop: CO.subGap, color: C.sub, textShadow: SHADOW, ...pad }}><TypeOn text={sub} k={subK} /></div> : null}
           </>
         ) : (
-          <div style={{ display: "flex", alignItems: "baseline", ...font(VAL), lineHeight: 0.78, marginTop: CO.valueGap, textShadow: SHADOW, opacity: ramp(f0, 14, 18), ...pad }}>
+          <div style={{ display: "flex", alignItems: "baseline", ...font(VAL), lineHeight: 0.78, marginTop: CO.valueGap, textShadow: SHADOW, opacity: ramp(f0, 14, 18) * (1 - textOut), ...pad }}>
             <span style={{ display: "inline-block", minWidth: numW }}>{fmt(count)}</span>
             {unit ? <span style={{ ...font(UNIT), lineHeight: 1, marginLeft: CO.unitGap, color: "rgba(255,255,255,.76)" }}>{unit}</span> : null}
           </div>

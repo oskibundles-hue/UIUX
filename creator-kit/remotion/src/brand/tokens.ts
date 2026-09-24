@@ -168,6 +168,29 @@ export const SE = {
     stamp: 120,
   },
   timing: { chapterShow: "always" },
+  /**
+   * Lock-On motion (SE dialect: "spring & settle"). Frames at 29.97 fps unless a field names seconds.
+   * These are today's shipped numbers, lifted out of SeCallout.tsx so the next element inherits the feel
+   * instead of inventing a fourth spring. Data only -- no call is made here.
+   *
+   * `unmount` is the seconds AFTER the hold at which the component stops rendering. It must stay <= the
+   * story rule's end-before-cut gap (story/sync_props.py CALLOUT_GAP = 0.35), or a callout can still be
+   * painting when the next cut lands. It was 0.4 until 2026-09-23, which was safe only because the fade
+   * had already reached 0 by 0.35; any exit that actually draws in that window would have crossed the cut.
+   * Every exit below therefore finishes within `unmount`.
+   */
+  motion: {
+    unmount: 0.35,
+    dot: { damping: 11, stiffness: 260, frames: 12 },
+    leader: { from: 4, to: 18 },
+    box: { delay: 10, damping: 16, stiffness: 150, frames: 18, slide: 36, scaleFrom: 0.96 },
+    count: { from: 14, to: 40 },
+    halo: { amp: 0.08, period: 5 },
+    /** exit: "fade" = today's whole-layer opacity ramp, in seconds. */
+    exitFade: 0.35,
+    /** exit: "retract" = the entry played backwards, in frames from the hold end. 10 f = 0.334 s. */
+    exitRetract: { frames: 10, leader: { from: 0, to: 6 }, target: { from: 2, to: 8 }, box: { from: 4, to: 10 } },
+  },
   /** Element geometry, px at 4K, from booking-luxury tokens.css + src/*.html (y values are canvas y). */
   layout: {
     chapter: { left: 145, top: 560, width: 1000, height: 150, padX: 44, rowGap: 28, itemGap: 26, segGap: 12, segHeight: 10 },
@@ -304,6 +327,28 @@ export const FD = {
   /** Seconds unless named frames. Chapter bar window per chapter change (judge: ~3.5 s, not always on). */
   timing: { chapterShow: 3.5, captionTail: 0.35, captionOutFrames: 6, outFrames: 8, scanHalfFrames: 3 },
   /**
+   * Lock-On motion (FD dialect: "draw & type"). Frames at 29.97 fps unless a field names seconds.
+   * Today's shipped numbers, lifted out of FdCallout.tsx. Data only -- no call is made here.
+   * See SE.motion for why `unmount` is 0.35 and not 0.4.
+   */
+  motion: {
+    unmount: 0.35,
+    arms: { from: 0, to: 8 },
+    ring: { from: 0, to: 10 },
+    dot: { delay: 2, damping: 14, stiffness: 320, frames: 6 },
+    haze: { from: 8, to: 16 },
+    rule: { from: 12, to: 22 },
+    label: { from: 12, to: 22 },
+    context: { from: 16, to: 26 },
+    text: { from: 18, to: 28 },
+    subFrom: 24,
+    leader: { from: 4, to: 16 },
+    elbow: { from: 9, to: 11 },
+    count: { from: 16, to: 40 },
+    /** exit: "retract" = the entry played backwards, in frames from the hold end. 8 f = 0.267 s. */
+    exitRetract: { frames: 8, leader: { from: 0, to: 6 }, target: { from: 1, to: 6 }, rule: { from: 0, to: 5 }, text: { from: 0, to: 5 } },
+  },
+  /**
    * Element geometry, px at 4K, from telemetry.css / html (y values are canvas y). `haze` boxes bleed past the
    * content by l/r/t/b and feather by f (or fl/fr/ft/fb).
    */
@@ -349,9 +394,16 @@ export const FD = {
   copy: {
     site: "formuladynamicsperformance.com",
     handle: "@formuladynamicsperformance",
-    cta: "BOOK YOUR BUILD",
+    /**
+     * Formula Dynamics does NOT take bookings (Omarie, 2026-09-23: "there is no booking for formula
+     * dynamics but they can go to the website"). The CTA sends people to the site, so the site line is
+     * drawn inside the CTA block as well as on the end card. Was "BOOK YOUR BUILD" / "NOW BOOKING"
+     * until 2026-09-23 -- do not reintroduce booking language on FD. Supercar Experience is the brand
+     * that books (SE.copy.cta "Book your supercar."), and the two never share copy.
+     */
+    cta: "VISIT THE SITE",
     how: "DM US YOUR MODEL",
-    kicker: "NOW BOOKING",
+    kicker: "FORMULA DYNAMICS",
     tagline: "PRECISION. PERFORMANCE. PASSION.",
   },
 } as const satisfies BaseTokens & Record<string, unknown>;
