@@ -12,7 +12,10 @@
  */
 
 export type Phrase = { text: string; start: number; end: number };
-export type Word = { text: string; start: number; end: number };
+export type Word = { text: string; start: number; end: number;
+  /** Optional speaker id. Omitted / empty = the vlogger himself (the default look).
+   *  Any other value marks a different speaker; SeCaptions gives those words their own look. */
+  speaker?: string };
 
 export const toWords = (phrases: Phrase[]): Word[] => {
   const out: Word[] = [];
