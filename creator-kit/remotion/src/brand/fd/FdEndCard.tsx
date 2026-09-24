@@ -34,15 +34,10 @@ export const FdEndCard: React.FC<{ at: number; copy: FdCopy }> = ({ at, copy }) 
     const v = ramp(f0, a, b);
     return { opacity: v, transform: `translateY(${(1 - v) * 24}px)` };
   };
-  const grid = "rgba(255,255,255,.085)", fine = "rgba(255,255,255,.035)";
-  const mask = "radial-gradient(ellipse 80% 60% at 50% 46%, #000 30%, transparent 100%)";
 
   return (
     <div style={{ position: "absolute", left: 0, top: 0, width: W4, height: H4, background: C.ink }}>
-      <div style={{ position: "absolute", left: 0, top: 0, width: W4, height: H4, opacity: ramp(f0, 0, 10),
-                    backgroundImage: `linear-gradient(${grid} 2px, transparent 2px), linear-gradient(90deg, ${grid} 2px, transparent 2px), linear-gradient(${fine} 2px, transparent 2px), linear-gradient(90deg, ${fine} 2px, transparent 2px)`,
-                    backgroundSize: "480px 480px, 480px 480px, 120px 120px, 120px 120px", backgroundPosition: "120px 0, 120px 0, 120px 0, 120px 0",
-                    WebkitMaskImage: mask, maskImage: mask }} />
+      {/* no grid layer: Omarie 2026-09-24 "remove grid on vlogs too from now on" (matches the post end card v4) */}
       <Img src={staticFile(LOGOS.stacked)} style={{ position: "absolute", left: (W4 - EC.logoW) / 2, top: EC.logoTop, width: EC.logoW, height: logoH, opacity: ramp(f0, 2, 14) }} />
       <div style={{ ...centered(tagSt), top: EC.tagTop, ...font(tagSt), lineHeight: 1 }}><TypeOn text={tag} k={ramp(f0, 10, 40, linear)} /></div>
       <div style={{ ...centered(ctaSt), top: EC.ctaTop, ...font(ctaSt), lineHeight: 0.82, ...up24(28, 38) }}>{cta}</div>
