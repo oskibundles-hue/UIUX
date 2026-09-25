@@ -1,5 +1,5 @@
 """
-Formula Dynamics Performance - HUD component set.
+Supercar Experience - HUD component set.
 
 A technical-annotation layer: elbow callouts that point at parts of the car,
 a persistent title block, and a ticker strip. The layout language follows the

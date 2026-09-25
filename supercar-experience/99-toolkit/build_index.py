@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Formula Dynamics Performance - asset index.
+Supercar Experience - asset index.
 
 Walks the kit and writes ASSET-INDEX.md so the listing can never drift from
 what is actually on disk.

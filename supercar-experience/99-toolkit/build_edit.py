@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Formula Dynamics Performance - burn the overlay set into a video.
+Supercar Experience - burn the overlay set into a video.
 
 Takes your footage and renders a finished, on-brand cut: title card in,
 logo bug for the body of the video, service name plate, feature badge, one

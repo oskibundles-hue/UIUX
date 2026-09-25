@@ -1,5 +1,5 @@
 """
-Formula Dynamics Performance - shared rendering helpers.
+Supercar Experience - shared rendering helpers.
 
 Small, dependency-light utilities used by the overlay builders: logo loading
 from the traced vectors, Bebas Neue text rendering with letter-spacing, and

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Formula Dynamics Performance - rebuild the whole asset kit.
+Supercar Experience - rebuild the whole asset kit.
 
 Run this after changing anything in fd_brand.py (colours, services, partners,
 contact details) and every generated file is regenerated consistently.

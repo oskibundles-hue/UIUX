@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-Formula Dynamics Performance - overlay and template generation.
+Supercar Experience - overlay and template generation.
 
 Builds the drag-and-drop layer for video editing: colour swatches, accent
 bars, pre-positioned logo bugs, lower thirds, service badges, title cards,
