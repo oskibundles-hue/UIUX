@@ -22,9 +22,9 @@ Then check `skill-observations/log.md` for OPEN observations on these files and 
 ## Rules that are easy to break
 
 - **Format is not settled.** Observation 1 in the log: his two reels with reach are 14–20 s car-only
-  shots with a question hook, while talking-head Fast Cuts sit at 50–150 plays. Do not re-render
-  MR1–MR8 until he decides the format. If asked to build "another one like MR8", say so first.
-- **Red is `#FE0F13`.** MR1–MR8 carry the old `#DE1A22`. Never mix the two in one delivered set.
+  shots with a question hook, while talking-head Fast Cuts sit at 50–150 plays. If asked to build
+  "another one like MR8", say so first.
+- **Red is `#FE0F13`.** MR1–MR8 are old work (2026-09-26) — not re-rendered, not a reference to match.
 - **Only his voice is captioned**, matched through `creator-kit/voice/omarie_profile.json`. Do not loosen
   the voice threshold to raise caption coverage — it captions other people as him.
 - **Never "improve" his words.** Captions are what he said. SlopMonster is for copy you write (hooks,
