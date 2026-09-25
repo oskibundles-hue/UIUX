@@ -1,0 +1,105 @@
+
+# watch: video report
+
+- **Source:** https://www.youtube.com/watch?v=-DawhgUKiOg (URL sent to Google)
+- **Engine:** gemini-3-flash-preview (static clip 2:00:00–2:30:00)
+- **Focus range:** 2:00:00 → 2:30:00
+- **Gemini tokens:** 167247
+
+## Answer (from Gemini)
+
+_These are Gemini's observations of the video, not frames you viewed yourself. Relay them as such; rerun with `--engine local` to inspect frames directly._
+
+This report details the segment of Eliot Prince’s Claude Skills course from **120:00 to 150:00**, covering brand voice refinement, strategic skill selection, and the build of the "Brandprint" and various marketing-focused skills.
+
+---
+
+### 1. Frameworks, Rules, Definitions, and Checklists
+
+*   **The One Rule That Outranks Everything (120:00):** "Change how it is written, never what it says. A voice pass is not a fact-check, a rewrite of the argument, or an addition of missing info."
+*   **Rewriting Checklist (120:36):**
+    *   **Openings:** Resate the reader's question back at them, then pivot on 'Well'. Do not open with a statistic, a definition, or a scene.
+    *   **Inside Sections:** Segment readers with 'If you're...' conditionals. Bridge between ideas with spoken connections ("So let's dig in...", "Adding to this,"). No rhetorical questions or formal connectives.
+    *   **Venues, Activities, and Places:** Give the reader a route in imperatives, not a description from outside.
+    *   **Logistics:** Leave them plain.
+    *   **Closing:** A summary heading that reuses the title, an answer restated plainly, and one short lifted line to finish.
+    *   **Register:** Shifts within a piece, not between pieces. Blunter about money, lyrical about mountains.
+*   **Hard Rules for Brand Voice (120:42):**
+    *   No em dashes (en dashes only, and only inside a parenthetical aside).
+    *   No semicolons.
+    *   No bullet points and no tables.
+    *   No bold for emphasis in prose.
+    *   No paragraph longer than about five lines.
+    *   No formal connectives (however, moreover, furthermore, therefore, thus, in conclusion, ultimately).
+    *   No 'white' or 'amongst' (he writes while).
+    *   No hedging (he asserts, then concedes flat).
+    *   No sneering at the money, and no swearing.
+    *   No sentence over about 25 words.
+*   **Start With Pain Framework (127:14):** "Not with what AI can do. Start with what you hate."
+*   **Skill Audit Questions (127:18):**
+    1.  What I avoid?
+    2.  What I redo?
+    3.  What I check?
+    4.  What I paste?
+    5.  The Cost?
+    6.  The Honesty Question?
+*   **Brandprint Definition (130:00):** "A brand specification precise enough that another AI could apply my brand to any file type without ever seeing these assets."
+*   **The Play Call (Viral Content) (142:33):** Topic → Shape → Angle.
+*   **Short-Form Video Clipping Rules (145:36):**
+    1.  Never cut mid-word.
+    2.  Chronological only; never reorder.
+    3.  Never touch the source.
+
+---
+
+### 2. Tools, Connectors, Plugins, and Skills Named
+
+*   **brand-voice Skill (120:00):** Improves draft text based on a specific brand persona without changing facts.
+*   **Claude Desktop App (131:18):** Used for higher power and "Cowork" autonomous settings.
+*   **Apify (143:01):** A connector used to scrape the web for more detailed data during trend analysis.
+*   **Director of Psychology Skill (143:31):** Evaluates content against 15 psychological principles (e.g., Zeigarnik effect, curiosity loops) to increase retention.
+*   **Trend Jack Skill (142:18):** Scans YouTube, TikTok, and Instagram to find outliers and pair niche topics with popular culture.
+*   **Clipper Army Skill (145:04):** Automatically identifies "hot moments" in long-form video and clips them into 9:16 short-form content.
+*   **Lead Magnet Skill (147:28):** Generates 3-5 high-converting lead magnet concepts (calculators, diagnostics) based on business context.
+*   **Email Sequences Skill (149:48):** Automates the drafting of subscriber-to-customer welcome sequences.
+
+---
+
+### 3. Step-by-Step Builds and Demonstrations
+
+#### Build 1: Finalizing Brand Voice (120:00 - 126:44)
+*   **122:23:** Running an **Eval Review** (Benchmark) to compare outputs "With Skill" vs "Without Skill."
+*   **123:23:** Results show "With Skill" passed checks for no em dashes, no semicolons, and sentence length, while "Without Skill" failed.
+*   **124:45:** Final test run on a blog post "5 Reasons to Ski in Courchevel."
+
+#### Build 2: The "Brandprint" Skill (129:31 - 138:10)
+*   **Step 1 (131:36):** Collate assets (logos, fonts, guidelines) into a single folder.
+*   **Step 2: Brand Audit (131:35).** Use Claude in **Cowork mode** with the following prompt:
+    *   *"You're a brand systems analyst. I want you to audit my brand assets and produce a brand specification precise enough that another AI could apply my brand and to any file type without ever seeing these assets."*
+*   **Step 3 (134:27):** Answer 15+ clarification questions generated by Claude to resolve inferred details (e.g., specific HEX codes, clear space rules).
+*   **Step 4: Build the Skill (134:40).** Use the prompt shown at **134:42**:
+    *   **Structure:** `SKILL.md`, `assets/` (logos, fonts), `references/` (docs.md, pptx.md, xlsx.md, etc.).
+    *   **SKILL.md Frontmatter (135:18):** Trigger words: "brand this," "make it on-brand," "use our branding."
+    *   **SKILL.md Body Rules:** The brand feel in two sentences; Color pairing rules; Typography table; Logo variant table; Application guidelines; Closing checklist.
+*   **136:30:** Demo of the finished skill generating a branded invoice for the "King of England" using stored business context.
+
+---
+
+### 4. UI Elements Shown
+
+*   **Claude Desktop App (131:24):** Features the "Chat" and "Cowork" tabs.
+*   **Notion (127:03):** Used for the "Complete Claude Skills Course Guide" and "AI Recipe Vault."
+*   **Mac Finder (131:53):** Showing the folder structure for brand assets.
+*   **YouTube Creator Studio (138:21):** Displaying analytics for viral videos (348k views).
+*   **LinkedIn (138:26):** Showing engagement metrics (impressions jumped from 536 to 7,287).
+*   **Kit (formerly ConvertKit) (147:01):** Email subscriber dashboard showing 29,611 subscribers.
+
+---
+
+### 5. Actionable Takeaways for Marketing Agencies
+
+1.  **Stop Prompting, Start Building (126:45):** If you have pasted a prompt twice, it should be a Skill. Move from Level 1 (wrapping a prompt) to Level 3 (multi-file Skill).
+2.  **Autonomous Auditing (131:26):** Use Claude’s **Cowork mode** to handle the tedious work of cataloging brand colors and fonts from raw files.
+3.  **The "Director of Psychology" Pass (138:51):** Agencies should have a specific skill that does nothing but check if content uses triggers like the "Zeigarnik effect" to fix "dead" posts.
+4.  **Trend Pairing (142:10):** Don't just report news. Use the **Play Call framework** to find an "outlier" (a video performing 10x better than a channel's average) and apply its "shape" to your niche.
+5.  **Context is the Star (147:51):** Lead magnet and email skills only work if they are run on top of a **Deep Context folder** containing the ICP (Ideal Customer Profile) and past successes.

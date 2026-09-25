@@ -169,6 +169,41 @@ Full engineering record, fault log and cue timelines: https://claude.ai/code/art
 - Claude's memory store is full until 1 October. Until then the standing brief is this file plus Dropbox, `/Anti Stock Media/00 PROJECT MEMORY (backup until Oct 1).md`.
 - At the start of any task-oriented session — any interaction where you will use tools and produce deliverables — invoke the `task-observer` skill (`.claude/skills/task-observer/`) before beginning work, so corrections and repeated patterns get logged to `skill-observations/log.md`. When loading any skill, check that log for OPEN observations tagged to it and apply them even if the skill file hasn't been updated yet.
 
+## How the work is split: lead, specialists, gates (added 2026-09-25)
+
+The main session is the **lead**. It talks to Omarie, plans, delivers and pushes. Specialists in
+`.claude/agents/` do one job each with only the tools that job needs, and hand back to the lead —
+never straight to him.
+
+| agent | job | model |
+|---|---|---|
+| `researcher` | watch videos, research tools and trends; sourced reports | sonnet |
+| `anti-stock-editor` | personal-channel reels via `creator-kit/` | sonnet |
+| `fd-ads` | Formula Dynamics builds, in a worktree of the FD branch | opus, high effort |
+| `se-ads` | Supercar Experience builds, in a worktree of the SE branch | opus, high effort |
+| `reviewer` | read-only check before delivery: figures, brand, layout, frames, copy, loudness | opus |
+
+The usual run is **build → reviewer → lead delivers**. That is a chain, not a job for a manager: only add
+an orchestrating step for requests that genuinely need routing across workstreams.
+
+**The regret list is enforced, not just written down.** `.claude/hooks/regret_gate.py` runs before
+Bash and connector calls (wired in `.claude/settings.json`). It **asks** before any paid Higgsfield call
+(quote the cost first), anything that publishes or changes a live account, Dropbox move or delete,
+Windsor.ai write actions, memory-store writes, force pushes, `git reset --hard`, `git clean -f` and
+recursive deletes outside `/tmp`. It **refuses** any push to `main`. It loads only in sessions opened in
+this repo on this branch; the FD and SE branches do not have it yet.
+
+**Skills added:** `watch` (YouTube via Gemini — read its `SOURCE.md` for the method, limits and
+fallbacks), `slopmonster` (AI-tell scorer for copy Claude writes, never for Omarie's own words),
+`wrap-up` (end of job: log corrections, propose CLAUDE.md edits, token report).
+
+**Building a skill or agent** (Eliot Prince's rules, from his course — `docs/research/2026-09-25-video-rewatch/`):
+one skill, one job · main file under ~500 lines, detail in reference files · scripts for anything with
+one right answer · build from work already done well · show it 3–5 examples of good · descriptions must
+not overlap, so name what the skill is *not* for — especially across the three workstreams. Test it on
+the same brief with and without the skill; if it doesn't clearly win, it's decoration. Description limit
+1,024 characters; no colons or quotes in it; "claude" can't be in a skill name.
+
 ## Memory, and why it lives here
 
 The Vertiso Memory store is at its write limit (20/20) and refuses every write until **1 October 2026**.
