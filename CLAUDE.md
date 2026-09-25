@@ -212,3 +212,14 @@ a set read off disk. A download page with one wrong link is worse than none.
 
 Files with no public URL get a row too, marked as delivered in chat rather than
 a dead button, and carry the folder path to save them into.
+
+## Agents and approval gates (copied from the Anti Stock branch, 2026-09-26)
+
+Same set as `claude/instagram-growth-video-editing-rswexx`, where the full notes live in its CLAUDE.md.
+`.claude/hooks/regret_gate.py` (wired in `.claude/settings.json`) asks before paid Higgsfield calls,
+anything that publishes or changes a live account, Dropbox move or delete, Windsor.ai write actions,
+memory writes, force pushes and destructive git/rm commands, and refuses any push to `main`.
+Agents in `.claude/agents/`: `researcher`, `anti-stock-editor`, `fd-ads`, `se-ads`, `reviewer` — build,
+then reviewer, then the lead delivers. Skills: `watch`, `slopmonster` (copy Claude writes only, never
+Omarie's words), `wrap-up`. Change these on the Anti Stock branch first and copy across, so the three
+branches don't drift.
