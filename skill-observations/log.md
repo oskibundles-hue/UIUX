@@ -29,7 +29,7 @@ DECLINED = user decided not to pursue
 
 ### Observation 2: "Report Higgsfield balance before spending" has no mechanism
 
-**Status:** ACTIONED 2026-09-25 — `.claude/hooks/regret_gate.py` now asks before every paid Higgsfield call and tells Claude to quote the per-render cost and confirm the beat against a contact sheet. The CLAUDE.md wording was not changed.
+**Status:** ACTIONED 2026-09-25 — `.claude/hooks/regret_gate.py` now asks before every paid Higgsfield call and tells Claude to quote the per-render cost and confirm the beat against a contact sheet. The CLAUDE.md rule itself was rewritten on 17 Sept (a38270b); the gate is the mechanism behind it.
 **Date:** 2026-09-16
 **Session context:** Earth Zoom intros and LED-blink renders on Higgsfield across several days.
 **Skill:** CLAUDE.md standing rules (Higgsfield spend)

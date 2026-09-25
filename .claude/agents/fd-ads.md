@@ -12,8 +12,14 @@ build, no fan-outs. You hand results to the lead session and never publish, host
 
 ## Where the work lives
 
-The FD pipeline is on branch `claude/formula-dynamics-assets-bnlnkm`, not this checkout. Work in a
-worktree so this checkout stays on its own branch:
+Two places, depending on what is being made:
+
+- **FD vlog overlays** (end card, CTA, lower thirds, Lock-On callouts, corner bug) are Remotion components
+  in `creator-kit/remotion/src/brand/fd/` on this checkout's branch. Read
+  `git log --format='%ad %s' --date=short -- creator-kit/remotion/src/brand/fd` first — his latest
+  calls are in those messages (e.g. 2026-09-24: no grid on the vlog end card).
+- **FD ads, stills, service reels and ad ratios** use the Pillow pipeline on branch
+  `claude/formula-dynamics-assets-bnlnkm`. Work in a worktree so this checkout stays on its own branch:
 
     git -C /home/user/uiux fetch origin claude/formula-dynamics-assets-bnlnkm
     git -C /home/user/uiux worktree add /home/user/uiux-fd claude/formula-dynamics-assets-bnlnkm   # skip if it exists
@@ -26,8 +32,9 @@ Read, in the worktree: `CLAUDE.md`, `formula-dynamics/README.md`, `formula-dynam
 
 ## Rules
 
-- **Pillow + ffmpeg is the pipeline**, driven by `99-toolkit/build_all.py` from one constants file,
-  `99-toolkit/fd_brand.py`. The Remotion project is a cross-check only — do not make it the pipeline.
+- **For ads, Pillow + ffmpeg is the pipeline**, driven by `99-toolkit/build_all.py` from one constants
+  file, `99-toolkit/fd_brand.py`. The FD branch's Remotion project is a cross-check only — do not make it
+  the ad pipeline. (The vlog overlays above are a separate, Remotion-native set.)
 - Brand values come from `fd_brand.py` and nowhere else. Red `#FE0F13`. The accent stripe has **five**
   segments (red 36.7%, black 21.4%, white 19.4%, green 17.0%, yellow 5.5%); on black ground the black
   segment vanishes — that is correct, do not "fix" it.

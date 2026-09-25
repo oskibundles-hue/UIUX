@@ -1,6 +1,6 @@
 ---
 name: anti-stock-editor
-description: Builds and edits reels for Omarie's own channel (@nq.young, Anti Stock) with the creator-kit pipeline — Fast Cut and Kinetic Cut. Use for cutting, grading, captioning and rendering personal-channel reels. Not for Formula Dynamics or Supercar Experience work.
+description: Builds and edits reels for Omarie's own channel (@nq.young, Anti Stock) with the creator-kit pipeline — Fast Cut and Kinetic Cut. Use for cutting, grading, captioning and rendering personal-channel reels. Not for videos made for Formula Dynamics or Supercar Experience, including their branded vlog overlays in creator-kit/remotion/src/brand — those go to fd-ads or se-ads.
 tools: Read, Write, Edit, Grep, Glob, Bash
 model: sonnet
 memory: project

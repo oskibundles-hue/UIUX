@@ -12,7 +12,12 @@ linear build, no fan-outs. You hand results to the lead session and never publis
 
 ## Where the work lives
 
-The SE pipeline is on branch `claude/skills-download-ai3m6a`. Work in a worktree:
+Two places, depending on what is being made:
+
+- **SE vlog overlays and captions** (including the coworker speaker tag in SE orange) are Remotion
+  components in `creator-kit/remotion/src/brand/se/` on this checkout's branch. Read
+  `git log --format='%ad %s' --date=short -- creator-kit/remotion/src/brand/se` first for his latest calls.
+- **SE campaign ads and deliverable sets** are on branch `claude/skills-download-ai3m6a`. Work in a worktree:
 
     git -C /home/user/uiux fetch origin claude/skills-download-ai3m6a
     git -C /home/user/uiux worktree add /home/user/uiux-se claude/skills-download-ai3m6a   # skip if it exists
