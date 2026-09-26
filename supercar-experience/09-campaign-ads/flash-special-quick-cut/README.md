@@ -28,3 +28,20 @@ was synthesised for this cut. Swap in IG music if wanted.
 
 `story.html` is the motion layer: `window.renderAt(t)` sets every element for time t, and `render.js` screenshots it frame by
 frame with a transparent background. Change the end time by editing the `11AM–1PM` / `1PM` strings in `story.html`.
+
+## GT3 RS and Black Series variants (`story2.html`)
+
+The same motion layer with the offer card swapped for a price card. Pick the car with the URL hash:
+`story2.html#gt3rs` or `story2.html#bs` (config block at the top of the file).
+
+| Car | Offer on screen | Footage |
+|---|---|---|
+| Porsche 911 GT3 RS (2025 · EXOTIC) | TODAY ONLY · ENDS 1PM · 5 HOURS · $1,200 · OUT THE DOOR | `SCE_Porsche-911-GT3RS_white-red-livery_no-branding.mov` |
+| Mercedes-AMG GT Black Series (2021 · EXOTIC) | TODAY ONLY · ENDS 1PM · 5 HOURS · $800 · OUT THE DOOR | `SCE_Mercedes-AMG-GT-Black-Series_no-branding.mov` |
+
+Prices, hours and "out the door" are Omarie's figures from 26 Sept 2026. Years and class come from brand tokens.
+The hook reads TODAY ONLY / FLASH SPECIAL rather than 2-HOUR, so it does not clash with the 5-hour rental.
+
+    python3 plate.py <ffmpeg> gt3rs <source clip>      # or: bs
+    PAGE="story2.html#gt3rs" node render.js seq .work/seq_gt3rs 24
+    # then the same overlay/encode step as build.sh, with plate_gt3rs.mp4 and .work/seq_gt3rs

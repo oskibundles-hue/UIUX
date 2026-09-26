@@ -3,7 +3,7 @@ const { chromium } = require('/opt/node22/lib/node_modules/playwright');
   const [,, mode, outDir, fpsOrTimes] = process.argv;
   const b = await chromium.launch();
   const pg = await b.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
-  await pg.goto('file://' + __dirname + '/story.html');
+  await pg.goto('file://' + __dirname + '/' + (process.env.PAGE||'story.html'));
   await pg.evaluate(() => document.fonts.ready);
   await pg.waitForTimeout(300);
   const times = mode === 'seq' ? Array.from({ length: Math.round(15 * +fpsOrTimes) }, (_, i) => i / +fpsOrTimes) : fpsOrTimes.split(',').map(Number);
