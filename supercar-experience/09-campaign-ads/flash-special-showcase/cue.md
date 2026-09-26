@@ -36,8 +36,8 @@ listed under **Deviations** at the end with the reason for it.
 | 1 | 0.000-0.643 | f34-44 tunnel side pass | 0.71x blend, frame 0 = f34 | push 1.00->1.03 over beats 1-5 (outCubic to 3.25); shake 6 px + RGB split on frames 1-8; no flash | impact_open 0.000 |
 | 2 | 0.643-1.714 | f9-22 rear wing, badge | 0.545x blend | amber leak burst at 0.643, 0.25, right | blips |
 | 3 | 1.714-2.143 | f46-59 DRIVE MODE knob | 1.26x | whip right, k=3 | whoosh 1.714 |
-| 4 | 2.143-3.000 | f62-72 dial Normal -> Sport (skips f60-61 gauges) | ~0.5x blend | push-in 1.00->1.04 | rev |
-| 5 | 3.000-3.429 | f73-78 pedal | ~0.56x | 2-frame zoom punch 1.03 at 3.214 | engine_rev_peak |
+| 4 | 2.143-3.000 | f62-72 dial Normal -> Sport (skips f60-61 gauges) | ~0.5x frame-hold (no blend) | push-in 1.00->1.04 | rev |
+| 5 | 3.000-3.429 | f73-78 pedal | ~0.56x optical flow f73-78 x4 | 2-frame zoom punch 1.03 at 3.214 | engine_rev_peak |
 | 6 | 3.429-3.857 | f156-166 hood stripes | 0.97x | whip up, k=3; leak 0.2 | groove 3.429 |
 | 7 | 3.857-4.286 | f168-177 GT3RS door script | 0.9x | hard cut | |
 | 8 | 4.286-4.714 | f0-7 wing strut | 0.78x | hard cut | clap |
@@ -88,4 +88,8 @@ listed under **Deviations** at the end with the reason for it.
 4. **Second plate blur** on f9-22 (see above). The cue said that corner was unreadable; at 100 % it was
    partly readable.
 5. **Top scrim** stays on under the end card's top block, for legibility over the warehouse ceiling.
-6. **Warehouse** frames also get the per-clip NightGrade, so the look matches the tunnel shots.
+6. **Beat 4 (dial)** is frame-held instead of blended. The dial UI switches Normal from red to white
+   between f63 and f64, so a blend or optical flow gave a doubled red/white word. **Beat 5 (pedal)**
+   uses optical flow instead of a blend. Both were needed to pass QA gate 4 (no doubled edges).
+7. **The black gap** gets no light leak, so it stays pure #000.
+8. **Warehouse** frames also get the per-clip NightGrade, so the look matches the tunnel shots.

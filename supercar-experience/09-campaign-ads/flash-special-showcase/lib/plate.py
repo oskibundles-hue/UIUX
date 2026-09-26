@@ -46,6 +46,8 @@ class Src:
 
     def at(self, p, B):
         p = min(max(p, B['fa']), B['fb'])
+        if B.get('hold'):                       # step retime: nearest source frame, never a blend
+            return self.f(int(math.floor(p + 0.5)))
         d = self.dense.get(B['id'])
         if d is not None:
             arr, fa, k = d
@@ -196,7 +198,9 @@ class Plate:
         return f
 
     def post(self, i, f):
-        """impact (beat 14) and light leaks, after whips."""
+        """impact (beat 14) and light leaks, after whips. The black gap stays pure #000."""
+        if edl.beat(self.tl[i]['beat']).get('black'):
+            return f
         k = i - edl.DROP_FRAME
         if 0 <= k < 16:
             f = fx.impact(f, k, strength=1.0, seed=edl.IMPACT_SEED)

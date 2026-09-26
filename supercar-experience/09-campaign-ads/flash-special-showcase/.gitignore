@@ -1,2 +1,3 @@
 .work/
 exports/*.mp4
+__pycache__/
