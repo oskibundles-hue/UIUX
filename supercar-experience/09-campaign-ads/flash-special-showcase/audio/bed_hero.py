@@ -9,6 +9,12 @@ USAGE
   python3 bed.py --cue drop=4.5 --cue impact_2=6.5  # override cue positions (in BARS from 0)
   python3 bed.py --whoosh 1,2,3,3.5,6,7.5           # whoosh peak positions (BARS) = your shot cuts
   python3 bed.py --no-engine                        # drop the synthesized engine layers
+  python3 bed.py --tapestop-len 0.25 --swell-len 0.25  # shorter tape stop + swell (bars): end card earlier
+
+  THIS PIECE (fix r1) is rendered with:
+    python3 audio/bed_hero.py --whoosh 1,2,3.25,6.25,7.5 --tapestop-len 0.25 --swell-len 0.25 --out audio/bed_hero
+  -> tape stop 13.714-14.143, swell 14.143-14.571, end card (impact_3) 14.571 s.
+  synth.py is vendored next to this file (copied from scratchpad/showcase/rnd-sound/synth.py).
   python3 bed.py --ffmpeg /path/to/ffmpeg
 
 ARRANGEMENT (reference: 10.5 bars = 18.0 s at 140 BPM, 4/4, key F minor)
@@ -37,8 +43,7 @@ MASTERING
   at -2.2 dBTP) so ffmpeg loudnorm can run in LINEAR mode (no dynamic pumping); then a second
   loudnorm print pass verifies the file. Readings go in the JSON.
 """
-import argparse, sys
-sys.path.insert(0, '/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/showcase/rnd-sound')
+import argparse
 import json
 import os
 import re
@@ -69,7 +74,7 @@ PROG = [  # (808 midi, pad voicing) per bar, cycles
 
 
 # ----------------------------------------------------------------- arrangement
-def plan(duration, bpm, overrides):
+def plan(duration, bpm, overrides, ts_len=0.5, sw_len=0.5):
     beat = 60.0 / bpm
     bar = 4 * beat
     total = duration / bar
@@ -84,8 +89,8 @@ def plan(duration, bpm, overrides):
     cues['v8_burble'] = cues['impact_2'] - 0.5
     cues.update({k2: float(v) for k2, v in overrides.items()})
     cues['drop_gap'] = cues['drop'] - 0.125
-    cues['swell_start'] = cues['tapestop'] + 0.5
-    cues['endcard'] = cues['tapestop'] + 1.0
+    cues['swell_start'] = cues['tapestop'] + ts_len
+    cues['endcard'] = cues['tapestop'] + ts_len + sw_len
     order = ['impact_open', 'groove', 'riser_start', 'drop', 'v8_burble', 'impact_2', 'tapestop', 'endcard']
     for a, b in zip(order, order[1:]):
         if cues[b] <= cues[a]:
@@ -94,9 +99,9 @@ def plan(duration, bpm, overrides):
     return beat, bar, total, cues
 
 
-def build(duration=18.0, bpm=140, seed=11, overrides=None, whoosh_bars=None, engine=True):
+def build(duration=18.0, bpm=140, seed=11, overrides=None, whoosh_bars=None, engine=True, ts_len=0.5, sw_len=0.5):
     rng = np.random.default_rng(seed)
-    beat, bar, total, cues = plan(duration, bpm, overrides or {})
+    beat, bar, total, cues = plan(duration, bpm, overrides or {}, ts_len, sw_len)
     step = beat / 4
     T = lambda b: b * bar                                          # bars -> seconds
     N = n_of(duration)
@@ -386,6 +391,8 @@ def main():
     ap.add_argument('--cue', action='append', default=[], help='name=bar, e.g. drop=5')
     ap.add_argument('--whoosh', default=None, help='comma list of bar positions for whoosh peaks')
     ap.add_argument('--no-engine', action='store_true')
+    ap.add_argument('--tapestop-len', type=float, default=0.5, help='tape stop length in bars')
+    ap.add_argument('--swell-len', type=float, default=0.5, help='reverse swell length in bars')
     ap.add_argument('--out', default=os.path.join(os.path.dirname(os.path.abspath(__file__)), 'out', 'bed'))
     ap.add_argument('--ffmpeg', default=DEFAULT_FFMPEG)
     a = ap.parse_args()
@@ -393,7 +400,7 @@ def main():
     ov = dict((k, float(v)) for k, v in (c.split('=') for c in a.cue))
     wb = [float(v) for v in a.whoosh.split(',')] if a.whoosh else None
     t0 = time.time()
-    mix, meta, _stems = build(a.duration, a.bpm, a.seed, ov, wb, not a.no_engine)
+    mix, meta, _stems = build(a.duration, a.bpm, a.seed, ov, wb, not a.no_engine, a.tapestop_len, a.swell_len)
     t_synth = time.time() - t0
     pre, pre_path, m1 = master(mix, a.ffmpeg, os.path.dirname(a.out) or '.')
     pass2, verify = finalize(a.ffmpeg, pre_path, a.out + '.wav', m1)
@@ -406,7 +413,8 @@ def main():
         'file': os.path.basename(a.out) + '.wav', 'sample_rate': SR, 'duration': a.duration,
         'bpm': a.bpm, 'beat_sec': 60 / a.bpm, 'bar_sec': 240 / a.bpm, 'time_signature': '4/4', 'key': 'F minor',
         'regenerate': {'cmd': 'python3 bed.py', 'duration': a.duration, 'bpm': a.bpm, 'seed': a.seed,
-                       'cue_overrides_bars': ov, 'whoosh_bars': wb, 'engine': not a.no_engine},
+                       'cue_overrides_bars': ov, 'whoosh_bars': wb, 'engine': not a.no_engine,
+                       'tapestop_len': a.tapestop_len, 'swell_len': a.swell_len},
         'master': {'pre_measure': m1, 'loudnorm_pass': {k: pass2[k] for k in ('output_i', 'output_tp', 'normalization_type')},
                    'verify': {k: verify[k] for k in ('input_i', 'input_tp', 'input_lra')}},
         'rms_dbfs_per_second': rms_per_second(final),

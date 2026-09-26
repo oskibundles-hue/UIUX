@@ -46,8 +46,8 @@ SCRATCH = '/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/sc
 H, W = 1920, 1080
 NAME = 'SCE_Flash-Special-Showcase_GT3RS-Locked-On_18s-9x16.mp4'
 AUDIO = os.path.join(ROOT, 'audio', 'bed_hero.wav')
-QA_TIMES = [0, 0.70, 2.30, 3.30, 4.00, 5.90, 6.90, 7.90, 8.40, 8.62, 9.43, 10.50, 11.20, 12.70, 13.30,
-            14.90, 15.43, 16.40, 17.99]
+QA_TIMES = [0, 0.47, 0.70, 2.30, 3.30, 4.00, 5.90, 6.38, 6.50, 6.90, 7.90, 8.40, 8.62, 8.84, 9.43, 9.90,
+            10.50, 11.00, 11.20, 12.70, 13.30, 14.00, 14.15, 14.25, 14.40, 14.60, 15.30, 16.40, 17.99]
 
 
 def log(*a):
@@ -90,6 +90,20 @@ def st_source(A):
     open(ok, 'w').write('decoded %d frames; plate blurred f226-246 and f9-22\n' % n)
 
 
+def st_source_plate3(A):
+    """fix r1: beat 15 now uses the rear tracking shot f206-224, where the Montana plate is readable.
+    Tracked with lib/track.py (box 262,943,118,59 on f206 -> lib/data/plate3_track.json) and blurred in
+    place like the other two. Separate marker so an existing decoded cache is upgraded, not re-decoded."""
+    ok = os.path.join(WORK, 'src_gt.plate3.ok')
+    if os.path.exists(ok):
+        return
+    import plate
+    log('source: blurring the licence plate on f206-224 (rear tracking, beat 15)')
+    plate.plate_blur(os.path.join(WORK, 'src_gt.npy'), os.path.join(LIB, 'data', 'plate3_track.json'),
+                     'plate3', 206, 224)
+    open(ok, 'w').write('plate blurred f206-224\n')
+
+
 def st_dense(A):
     import plate
     for B in edl.BEATS:
@@ -112,7 +126,7 @@ def st_timeline(A):
         shake[edl.DROP_FRAME + k] = [round(dx, 2), round(dy, 2)]
     js = dict(fps=edl.FPS, nf=edl.NF, p=[None if r['p'] is None else round(r['p'], 4) for r in tl],
               beat=[r['beat'] for r in tl], shake=shake,
-              beats={B['id']: [B['i0'], B['i1']] for B in edl.BEATS})
+              beats={B['id']: [B['i0'], B['i1']] for B in edl.BEATS}, tEnd=edl.snap(edl.T_END))
     open(os.path.join(WORK, 'timeline.js'), 'w').write('window.TL=' + json.dumps(js) + ';\n')
     C = json.load(open(os.path.join(ROOT, 'config.json')))
     open(os.path.join(WORK, 'config.js'), 'w').write('window.CONFIG=' + json.dumps(C) + ';\n')
@@ -288,6 +302,9 @@ def st_qa(A, mp4):
     os.makedirs(qd, exist_ok=True)
     # decode the delivered mp4 (not the intermediates) for the stills
     fs = sorted({edl.fr(t) if t < 17.99 else edl.NF - 1 for t in QA_TIMES})
+    for old in os.listdir(qd):                                  # stale stills from earlier renders
+        if old.startswith('final_f'):
+            os.remove(os.path.join(qd, old))
     raw = subprocess.run([A.ffmpeg, '-v', 'error', '-i', mp4, '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'],
                          capture_output=True, check=True).stdout
     allf = np.frombuffer(raw, np.uint8).reshape(-1, H, W, 3)
@@ -297,7 +314,10 @@ def st_qa(A, mp4):
         Image.fromarray(allf[i]).save(os.path.join(qd, f'final_f{i:03d}_{i / edl.FPS:06.3f}s.jpg'), quality=92)
         imgs.append((i, allf[i]))
     contact_sheet(imgs, os.path.join(EXP, 'contact-sheet.jpg'), cols=7, tw=240)
+    # poster = frame 0 (complete hook: FLASH SPECIAL / TODAY ONLY / ENDS {endTime} + SCE lockup);
+    # poster-endcard.jpg = the held last frame (logo, car name, price, offer, contact) as an alternate cover
     Image.fromarray(allf[0]).save(os.path.join(EXP, 'poster.jpg'), quality=94)
+    Image.fromarray(allf[-1]).save(os.path.join(EXP, 'poster-endcard.jpg'), quality=94)
     every = [(i, allf[i]) for i in range(0, len(allf), 6)]
     contact_sheet(every, os.path.join(qd, 'every6_contact.jpg'), cols=12, tw=150)
     # loudness + probe
@@ -331,6 +351,7 @@ def main():
     stages = A.stage.split(',')
     if 'source' in stages:
         st_source(A)
+        st_source_plate3(A)
     if 'dense' in stages:
         st_dense(A)
     if 'timeline' in stages:

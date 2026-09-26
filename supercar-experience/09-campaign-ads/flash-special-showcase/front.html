@@ -33,20 +33,26 @@ html,body{margin:0;padding:0;background:transparent;width:1080px;height:1920px;o
 <script src="lib/lock.js"></script>
 <script>
 // capture plan: 28 samples over a 270-degree shutter on the whips and the reels
+// fix r1: + the crest bracket fly-in (6.39-6.75) so it smears instead of stepping; the end-card
+// window moved with the end card (T_END 15.429 -> 14.571)
 window.KT_PLAN = { k: 10, shutter: 180, spans: [
-  { a: 3.24, b: 3.43, k: 28, shutter: 270 }, { a: 8.23, b: 8.36, k: 28, shutter: 270 },
-  { a: 8.60, b: 9.50, k: 28, shutter: 270 }, { a: 15.18, b: 15.44, k: 28, shutter: 270 } ] };
+  { a: 3.24, b: 3.43, k: 28, shutter: 270 }, { a: 6.39, b: 6.75, k: 28, shutter: 270 },
+  { a: 8.23, b: 8.36, k: 28, shutter: 270 }, { a: 8.60, b: 9.50, k: 28, shutter: 270 },
+  { a: 14.32, b: 14.58, k: 28, shutter: 270 } ] };
 </script>
 </head><body>
 <div id="stage" class="a" style="width:1080px;height:1920px">
 
   <!-- A. HOOK PANEL -->
   <div id="hook" class="a">
-    <div id="hookPanel" class="a" style="left:54px;top:280px;width:1026px;height:410px;background:rgba(0,0,0,.86)"></div>
+    <!-- fix r1: 846 wide like the stripe cap and the offer panel (was 1026, bleeding off the right edge) -->
+    <div id="hookPanel" class="a" style="left:54px;top:280px;width:846px;height:410px;background:rgba(0,0,0,.86)"></div>
     <div id="hookStripe" class="a stripe" style="left:54px;top:280px;width:846px"></div>
     <div id="hFlashW" class="a"><div id="hFlash" class="mic gold" style="font-size:36px"></div></div>
     <div id="hTodayW" class="a"><div id="hToday" class="beb white" style="font-size:210px"></div></div>
-    <div id="hEndsW" class="a"><div class="mask"><div id="hEnds" class="beb gold" style="font-size:96px"></div></div></div>
+    <div id="hEndsW" class="a"><div id="hEndsM" class="mask"><div id="hEnds" class="beb gold" style="font-size:96px"></div></div></div>
+    <!-- fix r1: brand on the hook (frame 0 / poster) -- white primary lockup, 240 px, on the ENDS row -->
+    <div id="hLogoW" class="a"><img id="hLogo" src="../../02-logos/png/sce-primary-horizontal--white.png" style="width:240px;display:block"></div>
   </div>
 
   <!-- B + C. TRACKED BRACKETS (door flash, crest callout) -->
@@ -91,17 +97,19 @@ window.KT_PLAN = { k: 10, shutter: 180, spans: [
   <div id="end" class="a">
     <div id="eLogoW" class="a" style="left:62px;top:282px"><img id="eLogo" src="../../02-logos/png/sce-primary-horizontal--white.png" style="width:360px;display:block">
       <div id="eEdge" class="a edge" style="height:64px;top:-6px;opacity:0"></div></div>
+    <div id="eModelW" class="a"><div id="eModel" class="mic white" style="font-size:30px"></div></div>
     <div id="eOfferW" class="a"><div class="mask"><div id="eOffer" class="beb white" style="font-size:100px"></div></div></div>
-    <div id="eStripe" class="a stripe" style="left:62px;top:446px;width:520px"></div>
+    <div id="eStripe" class="a stripe" style="left:62px;top:522px;width:520px"></div>
     <div id="eWhenW" class="a"><div id="eWhen" class="beb gold" style="font-size:72px"></div>
       <div id="eEdge2" class="a edge" style="height:62px;opacity:0"></div></div>
-    <div id="eCtaW" class="a"><div class="mask"><div id="eCta" class="beb white" style="font-size:84px"></div></div></div>
-    <div id="eContactW" class="a"><div id="eContact" class="mic white" style="font-size:28px"></div></div>
-    <div id="eReqW" class="a"><div id="eReq" class="mic white" style="font-size:24px;opacity:.85"></div></div>
+    <div id="eCtaW" class="a"><div class="mask"><div id="eCta" class="beb white" style="font-size:80px"></div></div></div>
+    <div id="eContactW" class="a"><div id="eContact" class="beb white" style="font-size:60px"></div></div>
+    <div id="eReqW" class="a"><div id="eReq" class="mic white" style="font-size:28px"></div></div>
   </div>
 </div>
 
 <script>
+const TE = TL.tEnd;                           // end-card hit (edl.T_END, 14.571 s since fix r1)
 const C = window.CONFIG, FPS = TL.fps, E = KT.ease, P = KT.p, cl = KT.cl, lerp = KT.lerp;
 const $ = id => document.getElementById(id);
 const fT = i => i / FPS;                      // frame index -> time
@@ -175,6 +183,11 @@ const shrink = (r, k) => ({ x: r.x + r.w / 2 * k, y: r.y + r.h / 2 * k, w: r.w *
   place($('hEndsW'), 'Bebas', 96, endsTxt, 90, 596);
   G.flash = setLine('hFlash', 'FLASH SPECIAL'); G.today = setLine('hToday', 'TODAY ONLY');
   G.ends = setLine('hEnds', endsTxt);
+  { // logo: right edge at x 866, centred on the ENDS cap height
+    const m = ink('Bebas', 96, endsTxt), lh = 240 * 215 / 1527;
+    $('hLogoW').style.left = (866 - 240) + 'px'; $('hLogoW').style.top = (596 + m.aA / 2 - lh / 2) + 'px';
+  }
+  $('hEndsM').style.transformOrigin = '0% 60%';
   KT.stripe($('hookStripe'));
   // C (coordinates relative to the label panel at 54,470)
   place($('cBrandW'), 'Michroma', 34, C.brand, 26, 22);
@@ -204,18 +217,25 @@ const shrink = (r, k) => ({ x: r.x + r.w / 2 * k, y: r.y + r.h / 2 * k, w: r.w *
   G.age = setLine('rAge', '21+ · INSURANCE', true);
   KT.stripe($('rStripe'));
   // G
+  // fix r1: the stack starts one logo-height (50 px) under the lockup (brand-tokens clear space);
+  // the car is named on the end card; contact is Bebas 60 and requirements Michroma 28 at full opacity
+  const eModel = C.brand + ' ' + C.model;
   const eOffer = C.hours + ' HOURS · OUT THE DOOR', eWhen = 'TODAY ONLY · ENDS ' + C.endTime;
   const eContact = C.phone + ' · ' + C.url, eReq = '21+ · VALID LICENSE · INSURANCE';
-  place($('eOfferW'), 'Bebas', 100, eOffer, 62, 356);
-  place($('eWhenW'), 'Bebas', 72, eWhen, 62, 466);
-  place($('eCtaW'), 'Bebas', 84, 'CALL OR DM TO BOOK', 62, 1340);
-  place($('eContactW'), 'Michroma', 28, eContact, 62, 1428);
-  place($('eReqW'), 'Michroma', 24, eReq, 62, 1478);
+  place($('eModelW'), 'Michroma', 30, eModel, 62, 384);
+  place($('eOfferW'), 'Bebas', 100, eOffer, 62, 430);
+  place($('eWhenW'), 'Bebas', 72, eWhen, 62, 544);
+  place($('eCtaW'), 'Bebas', 80, 'CALL OR DM TO BOOK', 62, 1318);
+  place($('eContactW'), 'Bebas', 60, eContact, 62, 1396);
+  place($('eReqW'), 'Michroma', 28, eReq, 62, 1462);
+  G.eModel = setLine('eModel', eModel);
+  G.eModel.forEach((g, i) => { if (i < C.brand.length) g.style.color = '#FBD101'; });
   G.eOffer = setLine('eOffer', eOffer, true); $('eWhen').textContent = eWhen;
   G.eCta = setLine('eCta', 'CALL OR DM TO BOOK'); G.eContact = setLine('eContact', eContact, true);
   G.eReq = setLine('eReq', eReq, true);
   KT.stripe($('eStripe'));
   await new Promise(r => $('eLogo').complete ? r() : ($('eLogo').onload = r));
+  await new Promise(r => $('hLogo').complete ? r() : ($('hLogo').onload = r));
   window.renderAt(0);
   window.__ktReady = true;
 })();
@@ -240,19 +260,25 @@ window.renderAt = function (t) {
   const hookOn = t < 3.46;
   show('hook', hookOn);
   if (hookOn) {
-    KT.rise(G.ends, t, { start: 0.429, stagger: 0.025, dur: 0.22, dy: 1.1, ease: E.outExpo });
+    // fix r1: ENDS {endTime} is set on frame 0 (complete hook + poster); at 0.429 it gets a re-hit:
+    // a 4-frame 1.06 pulse and a gold glint through the letters
+    const pe = pulse(t, 0.429);
+    $('hEndsM').style.transform = pe > 0 ? `scale(${(1 + 0.06 * pe).toFixed(5)})` : 'none';
+    const ge = KT.glint(G.ends, t, { start: 0.43, dur: 0.36, base: '#FBD101', warm: '#FFE866', hot: '#FFFFFF',
+                                     width: 0.22 * G.ends.W, angle: 108 });
+    glintShadow($('hEndsW'), ge);
     const gs = KT.glint(G.today, t, { start: 0.857, dur: 0.45, base: '#FFFFFF', warm: '#FFF6D0', hot: '#FFFFFF',
                                       width: 0.18 * G.today.W, angle: 108 });
     glintShadow($('hTodayW'), gs);
     const wh = (id, st) => KT.whip($(id), t, { start: st, dur: 0.16, dx: 0, dy: -300, ease: E.inCubic });
     wh('hEndsW', 3.25); wh('hTodayW', 3.27); wh('hFlashW', 3.29);
-    wh('hookPanel', 3.29); wh('hookStripe', 3.29);
+    wh('hLogoW', 3.25); wh('hookPanel', 3.29); wh('hookStripe', 3.29);
   }
 
   // ================= B/C. BRACKETS =================
   const iDoor0 = beatOf(7)[0], iDoor1 = beatOf(7)[1];
   const tD0 = fT(iDoor0) - 0.5 / FPS, tD1 = fT(iDoor1) - 0.5 / FPS;   // frame-edge times of the door shot
-  const tC0 = 6.300, tLock = fT(beatOf(12)[0]) - 0.5 / FPS, tCx = 8.235;
+  const tC0 = fT(beatOf(12)[0]) - 0.5 / FPS, tLock = fT(beatOf(12)[0]) - 0.5 / FPS, tCx = 8.235;
   let rect = null, op = 0, leader = null;
   if (t >= tD0 && t < tD1) {
     const p = srcPos(t, 7), box = TrackLock.at(TRACKS.door, p / FPS), tgt = bracketRect(box);
@@ -319,7 +345,7 @@ window.renderAt = function (t) {
   }
 
   // ================= F. REQUIREMENTS 12.857-15.43 =================
-  const reqOn = t >= 12.80 && t < 15.44;
+  const reqOn = t >= 12.80 && t < TE + 0.01;
   show('req', reqOn);
   $('topScrim').style.display = t >= 12.78 ? 'block' : 'none';
   $('topScrim').style.opacity = E.outCubic(P(t, 12.78, 13.0));
@@ -327,29 +353,31 @@ window.renderAt = function (t) {
     const rs = (g, st) => KT.rise(g, t, { start: st, stagger: 0.006, dur: 0.25, dy: 1.1, ease: E.outExpo });
     rs(G.need, 12.857); rs(G.lic, 12.930); rs(G.age, 13.000);
     KT.drawStripe($('rStripe'), t, { start: 12.90, dur: 0.30 });
-    KT.whip($('req'), t, { start: 15.33, dur: 0.10, dx: 0, dy: -260, ease: E.inCubic });
+    KT.whip($('req'), t, { start: TE - 0.10, dur: 0.10, dx: 0, dy: -260, ease: E.inCubic });
   }
 
-  // ================= G. END CARD 15.50-18.0 =================
-  const endOn = t >= 15.45;
+  // ================= G. END CARD TE-18.0 (TE = 14.571; every time below is TE + offset) =================
+  const endOn = t >= TE + 0.02;
   show('end', endOn);
   if (endOn) {
-    KT.wipe($('eLogo'), t, { start: 15.643, dur: 0.257, dir: 'right', edge: $('eEdge'), ease: E.inOutCubic, pad: 2 });
-    KT.rise(G.eOffer, t, { start: 15.50, stagger: 0.012, dur: 0.35, dy: 1.1, ease: E.outExpo });
-    KT.drawStripe($('eStripe'), t, { start: 15.55, dur: 0.25 });
-    KT.wipe($('eWhen'), t, { start: 15.60, dur: 0.25, dir: 'right', edge: $('eEdge2'), ease: E.inOutCubic, pad: 4 });
-    KT.rise(G.eCta, t, { start: 15.75, stagger: 0.012, dur: 0.35, dy: 1.1, ease: E.outExpo });
-    const qc = E.outCubic(P(t, 15.86, 16.10));
+    KT.wipe($('eLogo'), t, { start: TE + 0.214, dur: 0.257, dir: 'right', edge: $('eEdge'), ease: E.inOutCubic, pad: 2 });
+    trackLeft(G.eModel, t, TE + 0.14, 0.30, 0.6, 0.08, 30);
+    KT.rise(G.eOffer, t, { start: TE + 0.071, stagger: 0.012, dur: 0.35, dy: 1.1, ease: E.outExpo });
+    KT.drawStripe($('eStripe'), t, { start: TE + 0.121, dur: 0.25 });
+    KT.wipe($('eWhen'), t, { start: TE + 0.171, dur: 0.25, dir: 'right', edge: $('eEdge2'), ease: E.inOutCubic, pad: 4 });
+    KT.rise(G.eCta, t, { start: TE + 0.321, stagger: 0.012, dur: 0.35, dy: 1.1, ease: E.outExpo });
+    const qc = E.outCubic(P(t, TE + 0.43, TE + 0.67));
     $('eContactW').style.opacity = qc; $('eContactW').style.transform = `translateY(${(12 * (1 - qc)).toFixed(3)}px)`;
-    $('eReqW').style.opacity = E.outCubic(P(t, 16.00, 16.20));
+    const qr = E.outCubic(P(t, TE + 0.57, TE + 0.77));
+    $('eReqW').style.opacity = qr; $('eReqW').style.transform = `translateY(${(10 * (1 - qr)).toFixed(3)}px)`;
   }
 };
 
 // QA helper: ink rects of every visible text line at time t (build.py checks x <= 907, 269 <= y <= 1536)
 window.inkAudit = function (t) {
   window.renderAt(t);
-  const ids = ['hFlash', 'hToday', 'hEnds', 'cBrand', 'cModel', 'cYear', 'oHours', 'oPrice', 'oDoor', 'rNeed', 'rLic', 'rAge',
-               'eLogo', 'eOffer', 'eWhen', 'eCta', 'eContact', 'eReq'];
+  const ids = ['hFlash', 'hToday', 'hEnds', 'hLogo', 'cBrand', 'cModel', 'cYear', 'oHours', 'oPrice', 'oDoor', 'rNeed', 'rLic', 'rAge',
+               'eLogo', 'eModel', 'eOffer', 'eWhen', 'eCta', 'eContact', 'eReq'];
   const out = [];
   for (const id of ids) {
     const el = $(id); let vis = true, n = el;

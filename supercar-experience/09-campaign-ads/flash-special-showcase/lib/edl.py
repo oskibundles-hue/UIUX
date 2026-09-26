@@ -75,14 +75,21 @@ BEATS = [
     dict(id=13, a=8.380, b=8.571, black=True, what='BLACK (drop gap)'),
     dict(id=14, a=8.571, b=10.714, fa=121, fb=154, keys=[(0, 1.6), (0.28, 0.45), (1.0, 0.55)],
          dense=(129, 154, 4), what='tunnel front 3/4, headlights (ramp + optical-flow slow-mo)',
-         streak_split=(820, ST(0.8), ST(1.2))),
-    dict(id=15, a=10.714, b=11.571, fa=256, fb=276, speed=1.0, what='tunnel light pass, ceiling lamps',
-         streak=ST(1.0)),
+         # fix r1: stricter point-source test (the white body no longer streaks into a smear that
+         # boxed in the front wheel) + lower gain below y 820; warm-hue protect keeps the copper wheel
+         streak_split=(820, ST(0.8, thresh=0.93, point=0.25, point_radius=60),
+                       ST(0.8, thresh=0.93, point=0.25, point_radius=60)),
+         warm_protect=0.75),
+    # fix r1: was f256-276 ceiling-lamp flares (a 12 Hz full-frame strobe). Now the unused rear
+    # tracking shot f206-224 (plate tracked + blurred, lib/data/plate3_track.json), lowered 210 px
+    # so the car sits under the price panel, not behind it.
+    dict(id=15, a=10.714, b=11.571, fa=206, fb=224, speed=0.9, what='rear tracking in tunnel (plate blurred)',
+         streak=ST(0.7), drop=210),
     dict(id=16, a=11.571, b=12.000, fa=279, fb=287, speed=0.78, what='chrome PORSCHE rear script',
          streak=ST(0.7)),
     dict(id=17, a=12.000, b=13.714, ware=True, what='warehouse, 0.45x'),
-    dict(id=18, a=13.714, b=15.429, ware=True, what='warehouse, tape stop to freeze'),
-    dict(id=19, a=15.429, b=18.020, ware=True, what='warehouse, resumes 0.37x (end card)'),
+    dict(id=18, a=13.714, b=14.250, ware=True, what='warehouse, tape stop to a short freeze (~7 frames)'),
+    dict(id=19, a=14.250, b=18.020, ware=True, what='warehouse, resumes; end card hit at 14.571'),
 ]
 for B in BEATS:
     B['i0'], B['i1'] = fr(B['a']), min(fr(B['b']), NF)   # frames [i0, i1)
@@ -107,8 +114,14 @@ PUNCH_T = 3.214                        # 2-frame zoom punch 1.03
 # warehouse (beats 17-19)
 WARE_F0 = 290                          # ware frames = source frames 290..334 (track.json index 0 = f290)
 WARE_START = 291
-T_STOP0, T_STOP1 = 13.714, 14.30       # tape stop decel
-T_SWELL, T_END = 14.571, 15.429
+# fix r1: the freeze was 25 frames (14.17-15.18) and the end card only landed at 15.429. Tape stop
+# and swell are now a quarter bar each (bed_hero.py --tapestop-len 0.25 --swell-len 0.25), so the
+# end card lands at bar 8.5 = 14.571 s, 0.857 s earlier, and the phone number reads for ~2.8 s.
+T_STOP0, T_STOP1 = 13.714, 14.143      # tape stop decel (speed 0.45*(1-u)^3)
+T_RESUME = 14.250                      # plate resumes (beat 19): frozen ~13.97-14.25
+T_SWELL, T_END = 14.143, 14.571        # grade recovers over the swell; end card hit (impact_3)
+SWEEP = (13.93, 14.47)                 # light sweep across the car body, inside the freeze
+HAIRLINE = (14.00, 14.40)              # gold floor hairline draws during the freeze
 WARE_LAST = 333.5                      # 13.91 s
 
 
@@ -163,7 +176,7 @@ def build():
             p += s / 8
     p_freeze = p
     n19 = NF - i19
-    ramp = [min(1.0, (j + 1) / 4) for j in range(n19)]           # 3-frame ease-in, then constant
+    ramp = [min(1.0, (j + 1) / 7) for j in range(n19)]           # 6-frame ease-in, then constant
     ramp = [smootherstep(r) if r < 1 else 1.0 for r in ramp]
     v = (WARE_LAST - p_freeze) / sum(ramp[:-1])
     for j in range(n19):

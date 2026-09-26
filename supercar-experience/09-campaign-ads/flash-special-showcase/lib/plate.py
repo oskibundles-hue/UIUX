@@ -167,8 +167,15 @@ class Plate:
             return np.zeros((H, W, 3), np.float32)
         if B.get('ware'):
             return self.ware.render(i, r)
-        f = self.src.sample(r['p'], r['span'], B)
-        f = self.grade(B)(f)
+        f0 = self.src.sample(r['p'], r['span'], B)
+        f = self.grade(B)(f0)
+        if B.get('warm_protect'):
+            # fix r1: hue-qualified lift -- where the SOURCE is orange/red (copper wheel, amber
+            # lamps) pull the graded pixel back toward max(source, graded), so the NightGrade's
+            # shadow crush cannot turn the wheel into a black hole
+            w = np.clip((f0[..., 0:1] - np.maximum(f0[..., 1:2], f0[..., 2:3])) * 5, 0, 1) \
+                * np.clip(f0[..., 0:1] * 4, 0, 1)
+            f = f + (np.maximum(f0, f) - f) * w * B['warm_protect']
         if 'streak' in B:
             f = fx.streaks(f, **B['streak'])
         if 'streak_split' in B:
@@ -178,6 +185,13 @@ class Plate:
             yy = np.arange(H, dtype=np.float32)[:, None, None]
             wb = np.clip((yy - (y - 40)) / 80, 0, 1)
             f = f + st_t * top['gain'] * (1 - wb) + st_b * bot['gain'] * wb
+        if B.get('drop'):
+            # fix r1 (beat 15): lower the picture so the car sits below the offer panel; the rows
+            # uncovered at the top fade to black (they sit above / behind the panel)
+            d = float(B['drop'])
+            f = fx.transform(f, 0.0, -d, 1.0)             # (fx.transform: +dy moves content UP)
+            yy = np.arange(H, dtype=np.float32)[:, None, None]
+            f = f * np.clip((yy - d) / 160.0, 0, 1)
         t = r['t']
         # beats 1-5: one continuous push 1.00 -> 1.03 (outCubic, 0 -> 3.25 s)
         if r['beat'] <= 5:

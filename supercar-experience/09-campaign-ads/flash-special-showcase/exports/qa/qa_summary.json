@@ -1,13 +1,13 @@
 {
  "loudness": {
-  "I": "-14.08",
-  "TP": "-1.71",
-  "LRA": "3.20"
+  "I": "-14.09",
+  "TP": "-1.77",
+  "LRA": "4.80"
  },
  "probe": [
-  "Duration: 00:00:18.02, start: 0.000000, bitrate: 30209 kb/s",
-  "Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920, 29999 kb/s, 23.98 fps, 23.98 tbr, 24k tbn (default)",
-  "Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 203 kb/s (default)"
+  "Duration: 00:00:18.02, start: 0.000000, bitrate: 30391 kb/s",
+  "Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920, 30182 kb/s, 23.98 fps, 23.98 tbr, 24k tbn (default)",
+  "Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 202 kb/s (default)"
  ],
  "frames": 432
 }

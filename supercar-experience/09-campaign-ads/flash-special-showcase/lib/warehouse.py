@@ -12,7 +12,7 @@ The front HTML layer (requirements, end-card copy) is NOT drawn here.
 
 Layer stack per frame (back -> front), each with its own 2.5D push about the tyre contact point:
     BACKGROUND  plate, car diffused out, graded to 55 % above the car          s_bg
-    TYPE        Bebas giant "GT3" / "$1,200" rising out of the floor line      s_type
+    TYPE        Bebas giant "GT3 RS" / "$1,200" rising out of the floor line   s_type
                 (per-glyph, 6-sample motion blur, lit from above), floor hairline
     CAR         plate x car matte (+ floor under the tyres)                    s_car
                 + light wrap of the type onto the car's edge
@@ -37,13 +37,19 @@ GOLD = np.array([251, 209, 1], np.float32) / 255
 WHITE = np.ones(3, np.float32)
 ANCHOR = (560.0, 1255.0)           # tyre contact (REF coords, frame f312)
 FLOOR_Y = 1088                     # letters rise out of this line
-# Giant words are sized so that at FULL 2.5D push (type layer x1.040 about x=560) the ink stays
-# inside x 54..907: GT3 720 px at ink-left 64 (831 wide), $1,200 372 px at ink-left 76 (815 wide).
-# (The cue's 730 / 384 px at x 58 would reach x ~912 at full push.)
-HERO_PX, HERO_L = 720, 64
-PRICE_PX, PRICE_L = 372, 76
-PUSH1 = (1.012, 1.019, 1.024)      # bg / type / car at the end of beat 17
-PUSH2 = (1.025, 1.040, 1.050)      # ... at 18.0 s
+# Giant words are AUTO-FITTED (fix r1): the largest size <= the cap whose ink, at the type layer's
+# push at the time the word is on screen, stays inside x 58..900 (safe zone 54..907, a few px spare
+# for the ware track's dx). The word space is tightened to 55 % (Bebas' space is very wide).
+#   giant ("GT3 RS"): on screen 12.05-14.15, type push <= 1.012 there  -> ~410 px from x 64
+#   price ("$1,200"): on screen to the end, type push reaches 1.055     -> ~362 px from x 84
+HERO_MAX, HERO_L, HERO_W = 720, 64, 826
+PRICE_MAX, PRICE_L, PRICE_W = 372, 84, 790
+SPACE = 0.55
+# 2.5D push (fix r1): one continuous drift from 12.0 s to the end (it no longer pauses through the
+# freeze, so the matte keeps selling depth), plus an outCubic kick after the end-card hit.
+#   s(t) = 1 + A * u + B * outCubic((t - T_END) / 1.2),  u = (t - 12) / (18.018 - 12)
+PUSH_A = (0.018, 0.037, 0.050)     # bg / type / car
+PUSH_B = (0.010, 0.018, 0.020)
 
 
 def cl(x):
@@ -73,6 +79,21 @@ def out_back(x, s=1.2):
     return 1 + (s + 1) * x ** 3 + s * x ** 2
 
 
+def fit_size(text, max_px, max_w):
+    for size in range(max_px, 100, -2):
+        g, _, lb = glyph_row(text, size)
+        if row_ink_width(g, text, size) <= max_w:
+            return size
+    return 100
+
+
+def row_ink_width(glyphs, text, size):
+    f = ImageFont.truetype(BEBAS, size)
+    last_spr, last_x = glyphs[-1]
+    x_end = last_x + (f.getbbox(text[-1])[2] + int(size * 0.1))
+    return x_end - f.getbbox(text[0])[0]
+
+
 def glyph_row(text, size):
     """Per-glyph alpha sprites on one baseline, advance-width spacing (no kerning pairs -- the
     HTML slot price places glyphs the same way, so the two $1,200s match), Bebas letter-spacing 0.
@@ -81,7 +102,7 @@ def glyph_row(text, size):
     asc = f.getmetrics()[0]
     out, x = [], 0.0
     for ch in text:
-        adv = f.getlength(ch)
+        adv = f.getlength(ch) * (SPACE if ch == ' ' else 1.0)
         pad = int(size * 0.1)
         im = Image.new('L', (int(adv + 2 * pad), int(size * 1.25)), 0)
         ImageDraw.Draw(im).text((pad, 0), ch, font=f, fill=255)
@@ -117,40 +138,42 @@ class Warehouse:
         contact = 1300 - (xx - 150) * (1300 - 1212) / (960 - 150)
         floor = np.clip((yy - contact + 10) / 70, 0, 1)
         self.fg = np.maximum(alpha, floor)
+        self.alpha = alpha                                      # car only (light sweep mask)
         self.hole = ml.dilate((alpha > 0.02).astype(np.float32), 9)
         self.look = fx.NightGrade.fit(np.asarray(self.m[edl.WARE_START:335]))
         ref = self.look(self.m[self.ref].astype(np.float32) / 255)
         self.fill = ml.inpaint_diffuse(ref, self.hole)
         self.bg_grade = (0.55 + 0.45 * np.clip((yy - 980) / 200, 0, 1))[..., None]
-        self.hero = glyph_row(C['giant'], HERO_PX)
-        self.price = glyph_row(C['price'], PRICE_PX)
+        self.hero_px = fit_size(C['giant'], HERO_MAX, HERO_W)
+        self.price_px = fit_size(C['price'], PRICE_MAX, PRICE_W)
+        self.hero = glyph_row(C['giant'], self.hero_px)
+        self.price = glyph_row(C['price'], self.price_px)
         self._last = None
 
     # ---------------------------------------------------------------- timeline
     @staticmethod
     def push(t):
         """(s_bg, s_type, s_car) at output time t."""
-        a = in_out_cubic((t - 12.0) / (edl.T_STOP0 - 12.0))
-        s = [1 + (p - 1) * a for p in PUSH1]
-        if t > edl.T_END:
-            b = out_cubic((t - edl.T_END) / (18.0 - edl.T_END))
-            s = [p1 + (p2 - p1) * b for p1, p2 in zip(PUSH1, PUSH2)]
-        return s
+        u = cl((t - 12.0) / (edl.DUR - 12.0))
+        k = out_cubic((t - edl.T_END) / 1.2)
+        return [1 + a * u + b * k for a, b in zip(PUSH_A, PUSH_B)]
 
     def hero_offsets(self, t):
         n = len(self.C['giant'])
-        rise0 = [12.05 + 0.08 * k for k in range(n)]
+        step = 0.08 if n <= 3 else 0.05                         # "GT3 RS": 6 glyphs, same total stagger
+        rise0 = [12.05 + step * k for k in range(n)]
         offs = []
         for k in range(n):
             rise = 1 - out_expo((t - rise0[k]) / 0.55)
             ks = n - 1 - k                                      # sink order: 3, T, G
-            sink = in_cubic((t - edl.T_STOP0 - 0.05 * ks) / (14.15 - edl.T_STOP0 - 0.05 * (n - 1)))
+            sink = in_cubic((t - edl.T_STOP0 - 0.03 * ks) / (14.15 - edl.T_STOP0 - 0.03 * (n - 1)))
             offs.append(640 * rise + 720 * sink)
         return offs
 
     @staticmethod
     def price_offset(t):
-        return 470 * (1 - out_back((t - 15.189) / (edl.T_END - 15.189), 1.2)) if t < edl.T_END else 0.0
+        t0 = edl.T_END - 0.24
+        return 470 * (1 - out_back((t - t0) / (edl.T_END - t0), 1.2)) if t < edl.T_END else 0.0
 
     # ---------------------------------------------------------------- type layer
     def _word(self, rgb, a, row, baseline, offs, color, ink_l):
@@ -169,14 +192,17 @@ class Warehouse:
             return self.hero_offsets(tt), self.price_offset(tt)
         s0, s1 = state(t - sh / 2), state(t + sh / 2)
         moving = s0 != s1
-        ts = [t + sh * (j / 5 - 0.5) for j in range(6)] if moving else [t]
+        # samples scale with the fastest glyph's travel so fast sinks smear instead of stepping
+        travel = max([abs(a - b) for a, b in zip(s0[0], s1[0])] + [abs(s0[1] - s1[1])])
+        ns = int(min(28, max(6, math.ceil(travel / 3))))
+        ts = [t + sh * (j / (ns - 1) - 0.5) for j in range(ns)] if moving else [t]
         y0, y1 = 360, 1120
         for tt in ts:
             rgb = np.zeros((y1 - y0, W, 3), np.float32)
             a = np.zeros((y1 - y0, W), np.float32)
             ho, po = state(tt)
             self._word(rgb, a, self.hero, FLOOR_Y - y0, ho, WHITE, HERO_L)
-            if tt >= 15.189:
+            if tt >= edl.T_END - 0.24:
                 self._word(rgb, a, self.price, 968 - y0, [po] * len(self.C['price']), GOLD, PRICE_L)
             acc_rgb[y0:y1] += rgb
             acc_a[y0:y1] += a
@@ -187,8 +213,11 @@ class Warehouse:
         clip = np.clip((FLOOR_Y + 2 - yy) / 4, 0, 1)
         r = r * clip[..., None]
         a = a * clip
-        # glint on the price 16.29-16.75 (band tilted 18 deg, warm -> hot, painted into the letters)
-        q = (t - 16.29) / (16.75 - 16.29)
+        # glint on the price (band tilted 18 deg, warm -> hot, painted into the letters), 0.86 s after
+        # the end-card hit, and a second, slower one near the end so the last 2 s keep moving
+        q = (t - (edl.T_END + 0.86)) / 0.46
+        if not 0 < q < 1:
+            q = (t - (edl.T_END + 2.55)) / 0.60
         if 0 < q < 1:
             e = in_out_cubic(q)
             xx = np.arange(W, dtype=np.float32)[None, :]
@@ -204,8 +233,8 @@ class Warehouse:
         gold_w = (r[..., 2:3] < 0.5 * r[..., 0:1]).astype(np.float32)
         light = 1.0 - fall[..., None] * (0.28 * (1 - gold_w) + 0.06 * gold_w)
         r = r * light
-        # floor hairline 14.80-15.30, drawn L -> R, 2 px, behind the car
-        hq = out_cubic((t - 14.80) / 0.50)
+        # floor hairline, drawn L -> R during the freeze (fix r1: was 14.80-15.30), 2 px, behind the car
+        hq = out_cubic((t - edl.HAIRLINE[0]) / (edl.HAIRLINE[1] - edl.HAIRLINE[0]))
         if hq > 0:
             xe = HERO_L + (895 - HERO_L) * hq
             ry = FLOOR_Y - y0
@@ -265,17 +294,35 @@ class Warehouse:
             out = fx.transform(out, scale=1.0 + 0.04 * (1 - out_cubic(k2 / 9)))
         if k2 == 0:
             out = out * 1.25
-        if i == edl.fr(15.429):
+        if i == edl.fr(edl.T_END):
             out = out * 1.20
-        # tape stop: -15 % luma, -20 % saturation (easeIn), recovers inOutCubic 14.571-15.429
+        # tape stop: -15 % luma, -20 % saturation (easeIn), recovers inOutCubic over T_SWELL-T_END (14.143-14.571)
         g = in_cubic((t - edl.T_STOP0) / (edl.T_STOP1 - edl.T_STOP0))
         if t > edl.T_SWELL:
             g *= 1 - in_out_cubic((t - edl.T_SWELL) / (edl.T_END - edl.T_SWELL))
         if g > 1e-4:
             l = fx.luma(out)[..., None]
             out = (l + (out - l) * (1 - 0.20 * g)) * (1 - 0.15 * g)
+        # fix r1: light sweep across the car body inside the freeze -- a soft warm-white band tilted
+        # 24 deg travels L -> R over the car matte, strongest on the white paint (luma-weighted)
+        q = (t - edl.SWEEP[0]) / (edl.SWEEP[1] - edl.SWEEP[0])
+        if 0 < q < 1:
+            e = 0.5 * (q + in_out_cubic(q))
+            ys, ye = 820, 1320
+            yy = np.arange(ys, ye, dtype=np.float32)[:, None]
+            xx = np.arange(W, dtype=np.float32)[None, :]
+            pos = -250 + 1500 * e
+            d = xx + (yy - 1050) * math.tan(math.radians(24)) - pos
+            band = np.exp(-(d / 45) ** 2) + 0.30 * np.exp(-(d / 150) ** 2)
+            env = math.sin(math.pi * q) ** 0.7
+            body = ml.scale_about(ml.shift(self.alpha, dy, dx), sc, cx, cy)[ys:ye]
+            body = np.clip(body * (1 - np.clip((yy - 1170) / 60, 0, 1)), 0, 1)
+            # uniform lift: on the white paint it clips to a hot sheen, on the black stripes / glass
+            # it reads as a reflection travelling across the body
+            add = (band * body * env * 0.45)[..., None] * np.array([1.0, 0.97, 0.9], np.float32)
+            out[ys:ye] = out[ys:ye] + add
         # beat 19: warm leak drift + bottom scrim (0 -> 55 % black, y 1250-1920)
-        if t > edl.T_END - 0.05:
+        if t > edl.T_END - 0.05:  # (T_END = 14.571 since fix r1)
             lk = 0.15 * out_cubic((t - edl.T_END) / 0.8)
             out = fx.light_leak(out, t, strength=lk, seed=11, side='right')
             sc_ = out_cubic((t - (edl.T_END - 0.05)) / 0.35)
