@@ -190,9 +190,12 @@
       for (const w of words) { w.x0 += originX; w.x1 += originX; w.cx = (w.x0 + w.x1) / 2; }
       this.meas = { originX, baseline, words: words.map((w) => [w.x0, w.x1]) };
 
-      // Landing targets: ink centres of the words; the full stop hangs 60 px right of the ink (+16 px gap)
-      const xT = Math.round(words[0].cx), xI = Math.round(words[1].cx), xE = Math.round(words[2].cx);
-      const xS = Math.round(words[2].x1 + 60);
+      // Landing targets: ink centres of the words; the full stop hangs 60 px right of the ink (+16 px
+      // gap). The storyboard's reference numbers win when the live measurement agrees within 2 px
+      // (they differ only by the AA threshold); a font that shapes differently falls back to the measure.
+      const pick = (measured, ref) => (Math.abs(measured - ref) <= 2 ? ref : Math.round(measured));
+      const xT = pick(words[0].cx, 470), xI = pick(words[1].cx, 823), xE = pick(words[2].cx, 1308);
+      const xS = pick(words[2].x1 + 60, 1759);
       this.xS = xS;
       this.words = words;
 
