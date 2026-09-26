@@ -93,6 +93,17 @@ Aventador, which cuts roughly every second.
 **Type carries a scrim wherever the shot changes underneath it.** Same fix
 `AUTO-EDIT.md` prescribes for the GT3 RS.
 
+**Keep the music if the source video has any.** Omarie, 2026-09-26: "Keep music as well if
+the videos ever have any." Play the clip's own audio continuously from one start point, not
+chopped at every picture cut, and lay the designed accents (impacts, whooshes, ticks) under
+it at about 45%. A synthesised pad or drone would clash with the music, so drop it. Use a
+fully synthesised bed only when the source is silent. `flash-special-story/build_story.py`
+implements this (`--music-start`, `--no-music`).
+
+**Match the phone number to the ad's city.** `brand-tokens.json` `brand.phone` is the
+Scottsdale line. Use `brand.phones.text` (the site-wide text line) unless the ad is for one
+city, and then use that city's line.
+
 ---
 
 ## Copy and claims
@@ -138,6 +149,7 @@ Keeping them separate is deliberate: a test on one axis stays interpretable.
 | 2026-09-08 | McLaren 765LT, Aventador S base | "I love the very first video" — approved the `hud` treatment itself, independent of counters vs build sheet |
 | 2026-09-08 | Aventador S, layout variations | "the third was very fitting" — `centred` approved, on par with `hud`, chosen per job |
 | 2026-09-26 | SE flash-special quick cuts: Huracán STO, GT3 RS, AMG GT Black Series | "That was amazing", then "I approve those ads for when we need quick story ads for promotions" — `quick-promo` approved as the go-to for promo stories |
+| 2026-09-26 | Polished STO flash special (HUD lock-on) | "These animated graphics are way better... keep these up. I wanna implement these in my vlogs too" — the animated HUD level is the bar; vlog versions to follow. Also: "Keep music as well if the videos ever have any" |
 
 Add a row when the shop reacts to something. This file is the reason a future ad
 does not have to re-litigate a settled look.

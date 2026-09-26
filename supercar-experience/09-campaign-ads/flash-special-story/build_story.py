@@ -9,7 +9,10 @@ One command builds everything (see cue.md):
               tone-lock B2 (crest strobe) and B8 (white-balance steps) in 16-bit, knock back the third-party
               marks in B8, the B6 push (1.00 -> 1.03), then 59 black end-card frames      -> .work/plate/
   2. overlay  node render_overlay.js: story.html renderAt(i/24), transparent PNGs       -> .work/overlay/
-  3. audio    original sound bed synthesised with numpy (seeded), two-pass loudnorm -14 LUFS -> .work/bed.wav
+  3. audio    house rule: KEEP THE SOURCE MUSIC. If the source clip has an audio track that isn't silent, it plays
+              continuously from --music-start (not chopped at the picture cuts), and the synthesised accents
+              (impacts, whooshes, ticks, riser; no pad) sit under it. With no usable track, the full synthesised
+              bed plays instead. Two-pass loudnorm -14 LUFS -> .work/bed.wav
   4. encode   ffmpeg overlay in RGB, BT.709 limited-range yuv420p, H.264 High CRF 17, AAC 192k 48 kHz
   5. QA       stills at every text beat, poster, contact sheet, stream check            -> exports/
 
@@ -287,7 +290,7 @@ def _spectral(x, lo=None, hi=None, pink=False):
     return y / (np.max(np.abs(y)) + 1e-12)
 
 
-def synth_bed(path_raw):
+def synth_bed(path_raw, with_pad=True):
     """Original bed, seeded. Built for phone speakers: every element carries energy above 200 Hz (harmonic pad,
     saturated impact bodies with a transient and a metallic ring, 0.7-6 kHz whooshes); the sub is a layer, not the
     mix. Checked through a 200 Hz high-pass (cue.md section 5)."""
@@ -317,7 +320,7 @@ def synth_bed(path_raw):
         return np.arange(int(dur * SR)) / SR
 
     # 1. pad: A-minor stack with harmonics, slow tremolo, detuned L/R; air noise on top. 0.3 s in, fades 14.7-15.5
-    env = np.clip(t / 0.3, 0, 1) * np.clip((DUR - t) / 0.8, 0, 1)
+    env = np.clip(t / 0.3, 0, 1) * np.clip((DUR - t) / 0.8, 0, 1) * (1.0 if with_pad else 0.0)
     trem = 0.8 + 0.2 * np.sin(2 * np.pi * 0.25 * t)
     parts = [(55, .010), (110, .012), (164.8, .010), (220, .026), (261.6, .016), (329.6, .022), (440, .018),
              (523.3, .008), (659.3, .010), (880, .005)]
@@ -393,10 +396,35 @@ def synth_bed(path_raw):
         w.writeframes(pcm.tobytes())
 
 
-def build_audio(ff):
+def source_music(ff, src, start):
+    """The source clip's own audio from `start`, DUR long, as 48 kHz stereo WAV, or None if there's no track
+    or it's silent (mean volume below -50 dB). Fades 0.05 s in and 0.8 s out."""
+    out = WORK / "music.wav"
+    p = subprocess.run([str(ff), "-hide_banner", "-y", "-loglevel", "error", "-ss", f"{start}", "-t", f"{DUR}", "-i", str(src),
+                        "-vn", "-ac", "2", "-ar", "48000",
+                        "-af", f"afade=t=in:d=0.05,afade=t=out:st={DUR - 0.8:.3f}:d=0.8,apad,atrim=end_sample={int(round(DUR * SR))}",
+                        "-c:a", "pcm_s16le", str(out)], capture_output=True, text=True)
+    if p.returncode != 0 or not out.exists():
+        return None
+    v = subprocess.run([str(ff), "-hide_banner", "-i", str(out), "-af", "volumedetect", "-f", "null", "-"], capture_output=True, text=True).stderr
+    m = re.search(r"mean_volume: (-?[\d.]+) dB", v)
+    if not m or float(m.group(1)) < -50:
+        return None
+    print(f"audio: keeping the source music ({src}, from {start}s, mean {m.group(1)} dB)")
+    return out
+
+
+def build_audio(ff, src=None, music_start=0.0, keep_music=True):
     raw, bed = WORK / "bed_raw.wav", WORK / "bed.wav"
     WORK.mkdir(exist_ok=True)
-    synth_bed(raw)
+    music = source_music(ff, src, music_start) if (keep_music and src) else None
+    if music:
+        acc = WORK / "accents.wav"
+        synth_bed(acc, with_pad=False)
+        run([ff, "-y", "-loglevel", "error", "-i", music, "-i", acc, "-filter_complex",
+             "[0:a][1:a]amix=inputs=2:weights='1 0.45':normalize=0[m]", "-map", "[m]", "-c:a", "pcm_s16le", raw])
+    else:
+        synth_bed(raw)
     # two-pass linear loudnorm: I -14, TP -2.0 (headroom for AAC overshoot), LRA 7
     p = subprocess.run([str(ff), "-hide_banner", "-i", str(raw), "-af",
                         "loudnorm=I=-14:TP=-2.0:LRA=7:print_format=json", "-f", "null", "-"],
@@ -529,6 +557,8 @@ def main():
     ap.add_argument("--skip-plate", action="store_true")
     ap.add_argument("--skip-overlay", action="store_true")
     ap.add_argument("--skip-audio", action="store_true")
+    ap.add_argument("--music-start", type=float, default=0.0, help="where the kept source music starts in the clip (s)")
+    ap.add_argument("--no-music", action="store_true", help="ignore the source audio, use the full synthesised bed")
     a = ap.parse_args()
     WORK.mkdir(exist_ok=True)
     if not a.skip_plate:
@@ -536,7 +566,7 @@ def main():
     if not a.skip_overlay:
         print("2/5 overlay"); build_overlay()
     if not a.skip_audio:
-        print("3/5 audio"); build_audio(a.ffmpeg)
+        print("3/5 audio"); build_audio(a.ffmpeg, a.src, a.music_start, not a.no_music)
     print("4/5 encode"); out = encode(a.ffmpeg)
     print("5/5 QA"); stills(a.ffmpeg, out)
     verify_sync(a.ffmpeg, out)
