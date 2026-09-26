@@ -28,7 +28,7 @@
   const T_STUT = 12.0703125; //    7.2.4  row stutter
   const T_REV = 12.1875; //        7.3.1  THE REVEAL, the period lands
   const T_FLAT = 12.65625; //      7.4.1  flatten (drums out)
-  const T_HOP_A = 766 / 60; //     the period re-seats onto the plain baseline: anticipation …
+  const T_HOP_A = 765.5 / 60; //   the period re-seats onto the plain baseline: anticipation …
   const T_HOP_UP = 768 / 60; //    … take-off (as the E cell snaps shut) …
   const T_HOP_DN = 773 / 60; //    … and landing on baseline 640
   const T_SQ = 12.890625; //       7.4.3  squeeze
@@ -835,23 +835,42 @@
     } else {
       d = PERIOD.d;
       x = PERIOD.x;
-      y = PERIOD.y;
-      const tl = t - T_REV;
-      if (t < T_SQ) {
-        // landing: 2-frame squash 1.4 × 0.71 on the cell baseline, then a TIGHT settle
+      anchor = 'bottom';
+      let bottom = PERIOD.y + PERIOD.d / 2; // 710, the cell baseline
+      if (t < T_HOP_A) {
+        // landing as the row's period: 2-frame squash 1.4 × 0.71 on the cell baseline, then a TIGHT settle
+        const tl = t - T_REV;
         if (tl < 2 / 60) { sx = 1.4; sy = 0.71; } else { sx = 1.4 - 0.4 * R.spring(tl - 2 / 60, TIGHT); sy = 1 / sx; }
-        anchor = 'bottom';
-        y = PERIOD.y + d / 2;
+      } else if (t < T_HOP_UP) {
+        // the cells are gone: anticipation before re-seating on the plain letters' baseline
+        sx = lerp(1, 1.2, EZ.swift(R.seg(t, T_HOP_A, T_HOP_UP)));
+        sy = 1 / sx;
+      } else if (t < T_HOP_DN) {
+        // the hop: 710 → 640 (bottom) on a short arc, stretched along its (vertical) velocity
+        anchor = 'center';
+        const D = T_HOP_DN - T_HOP_UP, u = (t - T_HOP_UP) / D, rise = PLAIN_TOP_SEAT.y - PERIOD.y, h = 40;
+        y = PERIOD.y + rise * u - 4 * h * u * (1 - u);
+        const vy = (rise - 4 * h * (1 - 2 * u)) / D;
+        const st = 1 + 0.22 * R.smoothstep(300, 2600, Math.abs(vy));
+        rot = vy < 0 ? -Math.PI / 2 : Math.PI / 2;
+        sx = st;
+        sy = 1 / st;
       } else {
-        // squeeze (snap) and the rest pose
+        // seated on the plain baseline (bottom 640); the squeeze carries it with the word to (1542, 638) Ø64
         const q = EZ.snap(R.seg(t, T_SQ, T_REST));
         x = lerp(PERIOD.x, FINAL.x, q);
-        y = lerp(PERIOD.y, FINAL.y, q);
+        bottom = lerp(PLAIN_BASE, CANON_BASE, q);
         d = lerp(PERIOD.d, FINAL.d, q);
+        const tl = t - T_HOP_DN;
+        let s = tl < 1 / 60 ? 1.22 : 1.22 - 0.22 * R.spring(tl - 1 / 60, TIGHT);
+        s = 1 + (s - 1) * (1 - R.smoothstep(T_SQ, T_TREM, t)); // fully settled before the tremble and the rest pose
+        sx = s;
+        sy = 1 / s;
         const tr = tremble(t, 1);
         x += tr[0];
-        y += tr[1];
+        bottom += tr[1];
       }
+      if (anchor === 'bottom') y = bottom;
     }
     if (d !== S.dotD) {
       el.style.width = d + 'px';

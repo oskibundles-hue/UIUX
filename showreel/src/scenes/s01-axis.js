@@ -42,7 +42,8 @@
   const ANT = 3 / 60; //                              anticipation length
   const FLIP = R.E16; //                              squeeze-flip length (NARROW, WIDE)
   const SPLIT = 0.3; //                               share of a flip spent folding the old letter
-  const SPLIT_W = 0.25; //                            same for the in-place WIDE flips
+  const SPLIT_W = 0.2; //                             WIDE folds faster: a quick gather, then the burst
+  const AX62 = { wg: 900, wd: 62 };
 
   // ------------------------------------------------------------------------------------------ geometry
   const BASE = 700;
@@ -381,8 +382,7 @@
         if (t < T_NARROW) return st;
         const m = this.gm('R', ax), kr = this.kern(c.kern[0], ax);
         if (t < T_WIDE) return this.flip(st, null, m, 0, kr, (t - T_NARROW - c.rank / 60) / FLIP);
-        const ax62 = { wg: 900, wd: 62 };
-        return this.flipInPlace(st, this.gm('R', ax62), null, this.kern(c.kern[0], ax62), 0, (t - T_WIDE - c.rank / 60) / FLIP, ax62, ax, 0, 0);
+        return this.flip(st, this.gm('R', AX62), null, this.kern(c.kern[0], AX62), 0, (t - T_WIDE - c.rank / 60) / FLIP, 0, 0, AX62);
       }
 
       if (t < T_NARROW) {
@@ -405,15 +405,15 @@
       if (t < T_WIDE) {
         // HEAVY → NARROW: squeeze-flips staggered from the centre out; the A folds away and the two R's unfold
         const q = (t - T_NARROW - c.rank / 60) / FLIP;
-        if (ci === 2) return this.flip(st, this.gm('A', ax), null, this.kern('AV', ax), 0, q, true, 1);
-        return this.flip(st, this.gm(c.seq[1], ax), this.gm(c.seq[2], ax), this.kern(c.kern[1], ax), this.kern(c.kern[2], ax), q, false, 1, 2);
+        if (ci === 2) return this.flip(st, this.gm('A', ax), null, this.kern('AV', ax), 0, q, 1);
+        return this.flip(st, this.gm(c.seq[1], ax), this.gm(c.seq[2], ax), this.kern(c.kern[1], ax), this.kern(c.kern[2], ax), q, 1, 2);
       }
 
       // WIDE: NARROW → WIDE flips, then the drop through the baseline (right → left from E).
       if (ci === 2) return st;
       const q = (t - T_WIDE - c.rank / 60) / FLIP;
-      const ax62 = { wg: 900, wd: 62 }; // outgoing NARROW letters keep their width; incoming ones ride the tween
-      this.flipInPlace(st, this.gm(c.seq[2], ax62), this.gm(c.seq[3], ax), this.kern(c.kern[2], ax62), this.kern(c.kern[3], ax), q, ax62, ax, 2, 3);
+      // outgoing NARROW letters keep their width while they fold; incoming WIDE letters ride the tween
+      this.flip(st, this.gm(c.seq[2], AX62), this.gm(c.seq[3], ax), this.kern(c.kern[2], AX62), this.kern(c.kern[3], ax), q, 2, 3, AX62, null, SPLIT_W);
       if (t >= T_EXIT) {
         const order = [3, 2, null, 1, 0][ci]; // E first, then D, I, W
         const qd = clamp((t - (T_EXIT + order / 120)) / 0.07);
@@ -428,17 +428,17 @@
      * unfolds (swift). a = null → unfold only; b = null → fold only (the slot then closes for good).
      * The allocation follows the glyph, so in the centred row every letter folds about its own centre.
      */
-    flip(st, a, b, kA, kB, q, foldOnly, ia = 0, ib = 0) {
+    flip(st, a, b, kA, kB, q, ia = 0, ib = 0, axA = null, axB = null, split = SPLIT) {
       const pad = this.pad;
-      let m, f, k, kn;
-      if (q < SPLIT) {
+      let m, f, k, kn, gax;
+      if (q < split) {
         if (!a) return st;
-        f = 1 - clamp(q / SPLIT);
-        m = a; k = ia; kn = kA;
+        f = 1 - clamp(q / split);
+        m = a; k = ia; kn = kA; gax = axA;
       } else {
         if (!b) return st;
-        f = E.swift(clamp((q - SPLIT) / (1 - SPLIT)));
-        m = b; k = ib; kn = kB;
+        f = E.swift(clamp((q - split) / (1 - split)));
+        m = b; k = ib; kn = kB; gax = axB;
       }
       if (f <= 0) return st;
       st.w = m.adv * f;
@@ -448,37 +448,7 @@
       st.inkR = m.inkR * f;
       st.mL = Math.min(0, st.inkL) - pad;
       st.mR = Math.max(st.w, st.inkR) + pad;
-      st.gl.push({ k, x: 0, y: 0, sx: f });
-      return st;
-    },
-
-    /**
-     * In-place flip (WIDE): the slot's allocation eases monotonically from glyph a to glyph b (so the row only
-     * ever expands) while the letter inside folds shut and the new one unfolds, centred in the slot.
-     */
-    flipInPlace(st, a, b, kA, kB, q, axA, axB, ia, ib) {
-      const pad = this.pad;
-      const P = E.swift(clamp(q));
-      st.w = lerp(a ? a.adv : 0, b ? b.adv : 0, P);
-      st.kern = lerp(kA, kB, P);
-      st.trk = lerp(a ? 1 : 0, b ? 1 : 0, P);
-      st.inkL = lerp(a ? a.inkL : 0, b ? b.inkL : 0, P);
-      st.inkR = lerp(a ? a.inkR : 0, b ? b.inkR : 0, P);
-      let m, f, k, gax;
-      if (q < SPLIT_W) {
-        if (!a) return st;
-        f = 1 - clamp(q / SPLIT_W);
-        m = a; k = ia; gax = axA;
-      } else {
-        if (!b) return st;
-        f = E.swift(clamp((q - SPLIT_W) / (1 - SPLIT_W)));
-        m = b; k = ib; gax = axB;
-      }
-      if (f <= 0 || st.w <= 0) return st;
-      const x = (st.w - m.adv * f) / 2;
-      st.mL = Math.min(0, x + m.inkL * f) - pad;
-      st.mR = Math.max(st.w, x + m.inkR * f) + pad;
-      st.gl.push({ k, x, y: 0, sx: f, ax: gax });
+      st.gl.push({ k, x: 0, y: 0, sx: f, ax: gax });
       return st;
     },
 
