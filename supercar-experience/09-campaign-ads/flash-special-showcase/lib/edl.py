@@ -83,8 +83,20 @@ BEATS = [
     # fix r1: was f256-276 ceiling-lamp flares (a 12 Hz full-frame strobe). Now the unused rear
     # tracking shot f206-224 (plate tracked + blurred, lib/data/plate3_track.json), lowered 210 px
     # so the car sits under the price panel, not behind it.
-    dict(id=15, a=10.714, b=11.571, fa=206, fb=224, speed=0.9, what='rear tracking in tunnel (plate blurred)',
-         streak=ST(0.7), drop=210),
+    # fix r2 (blown wheels): in f206-224 the spinning wheels are pale, spoke-less discs IN THE SOURCE
+    # (wheel-box p95 = 228/230/231 before any FX), and the streaks/bloom pushed them to glowing white.
+    # No gain setting can make them read red, so beat 15 is now the tunnel side pass f24-36: the
+    # GT3 RS is revealed from behind a passing dark car and its red wheels read. No plate is visible.
+    # f34-36 overlap beat 1's first frames (f34-44); the reveal f24-33 is new material.
+    # fix r2 review: f24-26 are the passing sedan alone, and the 0.63x blend doubled its wheel and
+    # headlight over the white car. Beat 15 now starts at f27 (the GT3 RS front is already in frame;
+    # f27-29 sit inside the whip smear), plays the sedan's exit f27-32 at 1.0x on whole source frames
+    # (no blend, so no double image), then eases to 0.45x once the GT3 RS is alone (f32-39.3).
+    dict(id=15, a=10.714, b=11.571, fa=27, fb=40, keys=[(0, 1.0), (0.27, 1.0), (0.45, 0.45), (1.0, 0.45)],
+         what='tunnel side pass: the dark sedan exits at 1.0x, then the GT3 RS alone at 0.45x, red wheels',
+         # strict point-source streaks (as beat 14) so the white body does not smear into a dark box
+         # round the front wheel; full warm-hue protect so the grade cannot crush the red wheels
+         streak=ST(0.5, thresh=0.93, point=0.25, point_radius=60), warm_protect=1.0, drop=120),
     dict(id=16, a=11.571, b=12.000, fa=279, fb=287, speed=0.78, what='chrome PORSCHE rear script',
          streak=ST(0.7)),
     dict(id=17, a=12.000, b=13.714, ware=True, what='warehouse, 0.45x'),
@@ -150,7 +162,7 @@ def build():
                 for k in range(8):
                     uu = (j + (k + 0.5) / 8) / max(n - 1, 1)
                     p += speed_at(uu, B['keys']) / 8
-            assert ps[-1][0] <= 6.40 * FPS, ('beat 14 overruns 6.40 s', ps[-1][0] / FPS)
+            assert ps[-1][0] <= 6.40 * FPS, ('beat overruns 6.40 s', ps[-1][0] / FPS)
             assert ps[-1][0] <= B['fb'], ps[-1][0]
         else:
             v = _fit(B['fa'], B['fb'], n, B['speed'])

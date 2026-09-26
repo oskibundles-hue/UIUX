@@ -43,7 +43,12 @@ FLOOR_Y = 1088                     # letters rise out of this line
 #   giant ("GT3 RS"): on screen 12.05-14.15, type push <= 1.012 there  -> ~410 px from x 64
 #   price ("$1,200"): on screen to the end, type push reaches 1.055     -> ~362 px from x 84
 HERO_MAX, HERO_L, HERO_W = 720, 64, 826
-PRICE_MAX, PRICE_L, PRICE_W = 372, 84, 790
+# fix r2: the car's roof and wing hid the bottom ~44 px of the "00" at full push. The price now caps at
+# 332 px (was 372, which landed on 360) and sits 57 px higher (baseline PRICE_BASE 911, was 968), so
+# every digit clears the car's top edge at every frame of the end card and keeps ~20 px under the
+# TODAY ONLY / ENDS line of the front layer (min clearance to the car ~14 px).
+PRICE_MAX, PRICE_L, PRICE_W = 332, 84, 790
+PRICE_BASE = 911
 SPACE = 0.55
 # 2.5D push (fix r1): one continuous drift from 12.0 s to the end (it no longer pauses through the
 # freeze, so the matte keeps selling depth), plus an outCubic kick after the end-card hit.
@@ -77,6 +82,30 @@ def in_out_cubic(x):
 def out_back(x, s=1.2):
     x = cl(x) - 1
     return 1 + (s + 1) * x ** 3 + s * x ** 2
+
+
+def inpaint_pullpush(img, hole):
+    """fix r2 (matte seam): clean plate by pull-push. Known pixels are averaged down a 2x pyramid
+    until every cell has support, then pushed back up, so each hole pixel takes the colour of the
+    NEAREST known background (smooth, never black). The r1 fill (matte_lib.inpaint_diffuse) left
+    zeros deep in the hole and pulled dark wall pixels into the ring around the car, which showed
+    as a dark crescent (a copy of the rear-quarter silhouette) once the 2.5D push separated the
+    car layer from the background layer."""
+    known = (hole < 0.5).astype(np.float32)
+    levels = [(img * known[..., None], known)]
+    while min(levels[-1][1].shape) > 4 and levels[-1][1].min() <= 0:
+        c, w = levels[-1]
+        h2, w2 = (c.shape[0] // 2) * 2, (c.shape[1] // 2) * 2
+        c2 = c[:h2, :w2].reshape(h2 // 2, 2, w2 // 2, 2, 3).sum((1, 3))
+        k2 = w[:h2, :w2].reshape(h2 // 2, 2, w2 // 2, 2).sum((1, 3))
+        levels.append((c2 / np.maximum(k2, 1e-6)[..., None] * (k2 > 0)[..., None], (k2 > 0).astype(np.float32)))
+    est = levels[-1][0]
+    for c, w in reversed(levels[:-1]):
+        up = np.repeat(np.repeat(est, 2, 0), 2, 1)
+        up = np.pad(up, ((0, c.shape[0] - up.shape[0]), (0, c.shape[1] - up.shape[1]), (0, 0)), mode='edge')
+        up = ml.gauss_blur(up, 1.0)
+        est = np.where(w[..., None] > 0, c, up)
+    return img * known[..., None] + est * (1 - known)[..., None]
 
 
 def fit_size(text, max_px, max_w):
@@ -139,10 +168,17 @@ class Warehouse:
         floor = np.clip((yy - contact + 10) / 70, 0, 1)
         self.fg = np.maximum(alpha, floor)
         self.alpha = alpha                                      # car only (light sweep mask)
-        self.hole = ml.dilate((alpha > 0.02).astype(np.float32), 9)
+        # fix r2 (matte seam): the clean plate is only swapped in on the car itself (alpha > 0.02 + 2 px).
+        # r1 swapped it into a ring 9 px OUTSIDE the matte too, so the real floor/wall next to the car
+        # was replaced by a darker diffused guess, which read as a dark crescent along the rear quarter.
+        # Now the ring keeps the real plate; the car layer always grows faster than the background
+        # (push 1.070 vs 1.028 about the tyre contact), so it covers its own edge in the plate.
+        # The fill itself is still built from a 9 px dilated hole, so no car pixel feeds it.
+        self.hole_fill = ml.dilate((alpha > 0.02).astype(np.float32), 9)
+        self.hole = ml.gauss_blur(ml.dilate((alpha > 0.02).astype(np.float32), 2), 0.8)
         self.look = fx.NightGrade.fit(np.asarray(self.m[edl.WARE_START:335]))
         ref = self.look(self.m[self.ref].astype(np.float32) / 255)
-        self.fill = ml.inpaint_diffuse(ref, self.hole)
+        self.fill = inpaint_pullpush(ref, self.hole_fill)
         self.bg_grade = (0.55 + 0.45 * np.clip((yy - 980) / 200, 0, 1))[..., None]
         self.hero_px = fit_size(C['giant'], HERO_MAX, HERO_W)
         self.price_px = fit_size(C['price'], PRICE_MAX, PRICE_W)
@@ -203,7 +239,7 @@ class Warehouse:
             ho, po = state(tt)
             self._word(rgb, a, self.hero, FLOOR_Y - y0, ho, WHITE, HERO_L)
             if tt >= edl.T_END - 0.24:
-                self._word(rgb, a, self.price, 968 - y0, [po] * len(self.C['price']), GOLD, PRICE_L)
+                self._word(rgb, a, self.price, PRICE_BASE - y0, [po] * len(self.C['price']), GOLD, PRICE_L)
             acc_rgb[y0:y1] += rgb
             acc_a[y0:y1] += a
         acc_rgb /= len(ts)

@@ -7,7 +7,8 @@ build.py -- ONE command for the SE flash-special showcase ("LOCKED ON", Porsche 
     python3 build.py --frames 0,206,370   # just these frames -> .work/stills/
     options: --ffmpeg PATH  --footage DIR  --workers 2  --stage source,dense,plate,front,finish,qa
 
-Stages (each is cached in .work/ and skipped when its output exists; delete the file to redo):
+Stages (each is cached in .work/; the plate and front caches are keyed to a signature of their code and
+           inputs (fix r2 review), so an edit re-renders exactly the frames it touches):
   source   decode GT3RS_livery.mov IN FRAME ORDER (never -ss) -> .work/src_gt.npy, then blur the
            licence plate in place on source frames 226-246 (tracked box, lib/data/plate_track.json)
   dense    optical-flow in-betweens (ffmpeg minterpolate, fed by frame number) for beat 14's slow-mo
@@ -15,6 +16,7 @@ Stages (each is cached in .work/ and skipped when its output exists; delete the 
            lib/data/tracks.json -> .work/tracks.js  (the front page loads all three)
   plate    lib/plate.py + lib/warehouse.py -> .work/plate.npy  (uint8, 432 x 1920 x 1080 x 3)
   front    front.html captured by lib/kcapture.js with sub-frame motion blur -> .work/front/NNNNN.png
+  audio    audio/bed_music.py -> audio/bed_music.wav (clip music + accents, -14 LUFS, rebuilt if stale)
   finish   plate + front (alpha over) -> vignette 0.42 -> grain 0.035 (last) -> x264 + the bed (as-is)
   qa       QA stills, contact sheet, loudness print, ffprobe summary
 
@@ -45,9 +47,11 @@ EXP = os.path.join(ROOT, 'exports')
 SCRATCH = '/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad'
 H, W = 1920, 1080
 NAME = 'SCE_Flash-Special-Showcase_GT3RS-Locked-On_18s-9x16.mp4'
-AUDIO = os.path.join(ROOT, 'audio', 'bed_hero.wav')
+# fix r2: the bed is the clip's own music (GT3RS_livery.mov), extended by one phrase, with the designed
+# accents under it -- audio/bed_music.py (bed_hero.py is the r1 synthetic bed, no longer used)
+AUDIO = os.path.join(ROOT, 'audio', 'bed_music.wav')
 QA_TIMES = [0, 0.47, 0.70, 2.30, 3.30, 4.00, 5.90, 6.38, 6.50, 6.90, 7.90, 8.40, 8.62, 8.84, 9.43, 9.90,
-            10.50, 11.00, 11.20, 12.70, 13.30, 14.00, 14.15, 14.25, 14.40, 14.60, 15.30, 16.40, 17.99]
+            10.50, 10.80, 10.93, 11.00, 11.20, 11.26, 11.45, 12.70, 13.30, 14.00, 14.15, 14.25, 14.40, 14.60, 15.30, 16.40, 17.99]
 
 
 def log(*a):
@@ -157,33 +161,82 @@ def _do_unit(u):
     return list(res), time.time() - t0
 
 
+def _hash(*parts):
+    import hashlib
+    h = hashlib.sha1()
+    for x in parts:
+        if isinstance(x, str) and os.path.isfile(x):
+            h.update(open(x, 'rb').read())
+        else:
+            h.update(json.dumps(x, sort_keys=True, default=str).encode())
+        h.update(b'|')
+    return h.hexdigest()[:16]
+
+
+def plate_sigs(tl):
+    """fix r2 review: a per-frame signature for the plate cache. r2's plate.done.json was a bare list of
+    frame numbers, so an edl/plate edit after a frame was rendered never re-rendered it (beat 15 shipped
+    from an older lib/edl.py). The signature covers the plate code, the fx library, the source cache
+    markers, the edl constants the plate reads, the frame's timeline row and beat dict, and for warehouse
+    frames the warehouse code, matte data and config.json. A whip window renders as one unit, so each of
+    its frames gets the signature of the whole window."""
+    code = _hash(os.path.join(LIB, 'plate.py'), os.path.join(LIB, 'fx.py'), os.path.join(WORK, 'src_gt.ok'),
+                 os.path.join(WORK, 'src_gt.plate3.ok'))
+    ware = _hash(os.path.join(LIB, 'warehouse.py'), os.path.join(LIB, 'matte_lib.py'),
+                 os.path.join(ROOT, 'config.json'), os.path.join(LIB, 'data', 'ware_track.json'),
+                 os.path.join(LIB, 'data', 'matte_ref.png'),
+                 [getattr(edl, k) for k in ('WARE_F0', 'WARE_START', 'T_STOP0', 'T_STOP1', 'T_RESUME', 'T_SWELL',
+                                            'T_END', 'SWEEP', 'HAIRLINE', 'WARE_LAST')])
+    consts = [edl.WHIPS, edl.WHIP_K, edl.LEAKS, edl.PUSH_A, edl.DROP_FRAME, edl.IMPACT_SEED, edl.PUNCH_T]
+    sig = {}
+    for r in tl:
+        B = edl.beat(r['beat'])
+        sig[r['i']] = _hash(code, consts, r, B, ware if B.get('ware') else '')
+    for b in {edl.fr(t) for t, _ in edl.WHIPS}:
+        win = list(range(b - edl.WHIP_K, b + edl.WHIP_K))
+        u = _hash([sig[i] for i in win])
+        for i in win:
+            sig[i] = u
+    return sig
+
+
 def st_plate(A, frames):
     npy = os.path.join(WORK, 'plate.npy')
     if not os.path.exists(npy):
         np.lib.format.open_memmap(npy, mode='w+', dtype=np.uint8, shape=(edl.NF, H, W, 3)).flush()
     done_p = os.path.join(WORK, 'plate.done.json')
-    done = set(json.load(open(done_p))) if os.path.exists(done_p) else set()
+    tl = json.load(open(os.path.join(WORK, 'timeline.json')))['tl']
+    want = plate_sigs(tl)
+    old = json.load(open(done_p)) if os.path.exists(done_p) else {}
+    if isinstance(old, list):                  # r2 format: bare frame list, no signature -> all stale
+        old = {}
+    done = {int(k): v for k, v in old.get('sig', {}).items()}
     if A.force_plate:
-        done -= set(frames)
-    todo = [i for i in frames if i not in done]
+        for i in frames:
+            done.pop(i, None)
+    todo = [i for i in frames if done.get(i) != want[i]]
     if not todo:
         return
+
+    def save():
+        json.dump(dict(version=3, sig={str(k): v for k, v in sorted(done.items())}), open(done_p, 'w'))
     import plate
-    tl = json.load(open(os.path.join(WORK, 'timeline.json')))['tl']
     units = plate.Plate.__new__(plate.Plate)
     units.whip_at = {edl.fr(t): d for t, d in edl.WHIPS}
     us = plate.Plate.units(units, todo)
     # heavy warehouse frames first so the pool drains evenly
     us.sort(key=lambda u: -(u[1] >= 288) * 3 - len(u[2]))
-    log(f'plate: {len(todo)} frames in {len(us)} units, {A.workers} workers')
+    stale = len([i for i in todo if i in done])
+    log(f'plate: {len(todo)} frames ({stale} stale by signature) in {len(us)} units, {A.workers} workers')
     t0 = time.time()
     with get_context('fork').Pool(A.workers, initializer=_init_worker) as pool:
         for n, (fs, dt) in enumerate(pool.imap_unordered(_do_unit, us)):
-            done |= set(fs)
+            for i in fs:
+                done[i] = want[i]
             if n % 20 == 0:
                 log(f'  plate unit {n + 1}/{len(us)} frames {fs[0]}.. {dt:.1f}s')
-                json.dump(sorted(done), open(done_p, 'w'))
-    json.dump(sorted(done), open(done_p, 'w'))
+                save()
+    save()
     log(f'plate: done in {time.time() - t0:.0f}s')
 
 
@@ -200,6 +253,16 @@ def st_front(A, frames=None, outdir=None):
         cmd += ['frames', repr(edl.FPS), ','.join(map(str, todo)), '--workers', '2']
     log('front:', ' '.join(cmd[3:]))
     subprocess.run(cmd, check=True)
+
+
+def st_audio(A):
+    src = os.path.join(ROOT, 'audio', 'bed_music.py')
+    deps = [src, os.path.join(ROOT, 'audio', 'synth.py')]
+    if os.path.exists(AUDIO) and all(os.path.getmtime(AUDIO) >= os.path.getmtime(d) for d in deps):
+        return
+    log('audio: building the bed (clip music + accents)')
+    subprocess.run([sys.executable, src, '--footage', A.footage, '--ffmpeg', A.ffmpeg], check=True,
+                   stdout=subprocess.DEVNULL)
 
 
 def finish_frame(i, plate_mm=None):
@@ -297,6 +360,33 @@ def whip_window(i):
     return [i]
 
 
+def mp4_track_durations(path):
+    """Presentation duration of each track (edit list segment / movie timescale), as players and
+    ffprobe see it. The raw AAC decode is ~9 ms longer (encoder padding in the last frame, silent)."""
+    import struct
+    b = open(path, 'rb').read()
+    out, mts = [], [1000]
+
+    def walk(off, end):
+        while off < end:
+            sz, typ = struct.unpack('>I4s', b[off:off + 8])
+            h = 8
+            if sz == 1:
+                sz, h = struct.unpack('>Q', b[off + 8:off + 16])[0], 16
+            typ = typ.decode('latin1')
+            if typ in ('moov', 'trak', 'edts'):
+                walk(off + h, off + sz)
+            elif typ == 'mvhd':
+                mts[0] = struct.unpack('>I', b[off + 20:off + 24])[0]
+            elif typ == 'elst':
+                v = b[off + 8]
+                sd = struct.unpack('>I' if v == 0 else '>Q', b[off + 16:off + (20 if v == 0 else 24)])[0]
+                out.append(round(sd / mts[0], 4))
+            off += sz
+    walk(0, len(b))
+    return out
+
+
 def st_qa(A, mp4):
     qd = os.path.join(EXP, 'qa')
     os.makedirs(qd, exist_ok=True)
@@ -325,7 +415,20 @@ def st_qa(A, mp4):
                          '-f', 'null', '-'], capture_output=True, text=True).stderr
     j = json.loads(ln[ln.rindex('{'):ln.rindex('}') + 1])
     probe = subprocess.run([A.ffmpeg, '-hide_banner', '-i', mp4], capture_output=True, text=True).stderr
-    summ = dict(loudness=dict(I=j['input_i'], TP=j['input_tp'], LRA=j['input_lra']),
+    # fix r2: end-of-file silence, mono fold-down and A/V durations, all from the delivered mp4
+    au = subprocess.run([A.ffmpeg, '-v', 'error', '-i', mp4, '-map', '0:a:0', '-f', 'f32le', '-ac', '2', '-'],
+                        capture_output=True, check=True).stdout
+    au = np.frombuffer(au, '<f4').reshape(-1, 2).astype(np.float64)
+    up = np.fft.irfft(np.fft.rfft(au.sum(1), axis=0), len(au) * 4) * 4
+    dbf = lambda v: round(float(20 * np.log10(max(v, 1e-12))), 2)
+    tracks = mp4_track_durations(mp4)
+    audio_chk = dict(track_durations_sec_video_audio=tracks,
+                     decoded_audio_sec=round(len(au) / 48000, 4), video_sec=round(len(allf) * 1001 / 24000, 4),
+                     last50ms_peak_dbfs=dbf(np.abs(au[-2400:]).max()),
+                     last50ms_max_abs=float(np.abs(au[-2400:]).max()),
+                     mono_half_sum_peak_dbfs=dbf(np.abs(au.sum(1) / 2).max()),
+                     mono_minus3dB_true_peak_dbfs=dbf(np.abs(up).max() * 0.7071))
+    summ = dict(loudness=dict(I=j['input_i'], TP=j['input_tp'], LRA=j['input_lra']), audio=audio_chk,
                 probe=[l.strip() for l in probe.splitlines() if 'Stream' in l or 'Duration' in l],
                 frames=len(allf))
     json.dump(summ, open(os.path.join(qd, 'qa_summary.json'), 'w'), indent=1)
@@ -372,10 +475,19 @@ def main():
     if 'plate' in stages:
         st_plate(A, list(range(edl.NF)))
     if 'front' in stages:
-        if A.force_front or not os.path.exists(os.path.join(WORK, 'front', f'{edl.NF - 1:05d}.png')):
+        # fix r2 review: the front cache is keyed to its inputs too (it used to re-render only when the
+        # last PNG was missing)
+        fsig = _hash(os.path.join(ROOT, 'front.html'), *[os.path.join(LIB, f) for f in
+                     ('kcapture.js', 'kinetic.js', 'lock.js')], os.path.join(WORK, 'timeline.js'),
+                     os.path.join(WORK, 'config.js'), os.path.join(WORK, 'tracks.js'))
+        fsig_p = os.path.join(WORK, 'front.sig')
+        have = open(fsig_p).read().strip() if os.path.exists(fsig_p) else ''
+        if A.force_front or have != fsig or not os.path.exists(os.path.join(WORK, 'front', f'{edl.NF - 1:05d}.png')):
             st_front(A)
+            open(fsig_p, 'w').write(fsig + '\n')
     mp4 = os.path.join(EXP, NAME)
     if 'finish' in stages:
+        st_audio(A)
         mp4 = st_finish(A)
     if 'qa' in stages:
         st_qa(A, mp4)
