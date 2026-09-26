@@ -7,12 +7,14 @@
 //                          curl-noise advection (R.noise3 potential sampled on a coarse grid) and two counter-
 //                          rotating vortices that roll the cloud up into two horns; a +600 px/s radial impulse on
 //                          beat 2; a Paper shockwave.
-//                          A uniform updraft cancels the pair's downward jet so the cloud stays centred; on the
-//                          reverse zip (8.3203) the vortices spin up and draw the cloud toward the word (wind-up).
+//                          A uniform updraft balances the pair's downward jet so the cloud stays centred: strong
+//                          while the bloom still sits inside the jet, easing off as the cloud spreads past the
+//                          cores (where the pair's own flow turns upward); on the reverse zip (8.3203) the vortices
+//                          spin up, the updraft with them, and draw the cloud toward the word (wind-up).
 //   RANGE  8.4375–9.1406   the particles nearest the word are paired with a 5 px dot-matrix of "RANGE" (each half
 //                          of the frame feeds its half of the word, by angle rank around that side's vortex) and
 //                          spring onto it from their cached state (SOFT's damping ratio, swirling in the sense of
-//                          their vortex), then settle over 4 frames into 3×3 Paper squares. The spares keep
+//                          their vortex), then settle over 4 frames into 4×4 Paper squares. The spares keep
 //                          orbiting behind as a 0.3 Signal/Volt haze.
 //   WHIP   9.1406–9.375    the whole layer rides the shared whip P(t) (x = −P) with a horizontal smear.
 (function () {
@@ -39,14 +41,18 @@
 
   // ------------------------------------------------------------------ particle system (tuned on renders)
   const C = {
-    // launch: truncated exponential 700–2800 px/s, plus 20% slow embers (0–700) so the core is hot, not hollow
-    V_MIN: 700, V_MAX: 2800, V_MEAN: 480, SLOW_FRAC: 0.2, SLOW_MIN: 0,
+    // launch: truncated exponential 700–2800 px/s, plus 12% slow embers (0–700) so the core is hot, not hollow
+    V_MIN: 700, V_MAX: 2800, V_MEAN: 800, SLOW_FRAC: 0.12, SLOW_MIN: 0,
     SWIRL: 0.12, DRAG: 2.2, KICK_V: 600,
     CURL_V: 220, CURL_SCALE: 0.0022, CURL_TIME: 0.35,
     // vortex pair: speed V·exp(−d/FALL) with a calm 56 px core and a gentle inflow (SINK × tangential)
     VORTEX_V: 1000, VORTEX_FALL: 400, VORTEX_CORE: 56, VORTEX_SINK: 0.4,
     FIELD_RAMP: 0.22, // s: the fields fade in so the first frames read as a clean radial detonation
-    LIFT: 420, // px/s: uniform updraft that cancels the vortex pair's downward jet (keeps the cloud centred)
+    // uniform updraft (px/s) against the pair's downward jet (≈900 px/s between the cores), scaled by the field
+    // and the wind-up spin like the pair itself: LIFT_BLOOM while the bloom sits inside the jet, easing to LIFT
+    // over LIFT_EASE (s after the drop) as the cloud spreads past the cores. Tuned on renders so the lit centroid
+    // holds y 540 ± 17 px and the top half carries 44–56% of the lit pixels on every drop frame (f458–f506).
+    LIFT_BLOOM: 750, LIFT: 400, LIFT_EASE: [0.2, 0.65],
     // brightness: per colour × width (thin = dim = depth), times a speed level (energy reads where motion is)
     A_SIGNAL: [0.72, 0.86, 1], A_PAPER: [0.3, 0.4, 0.55], A_VOLT: [0.4, 0.55, 0.7], A_ACID: [1, 1, 1],
     // wind-up on the reverse zip (8.3203 → 8.4375): the vortices spin up and the cloud is drawn toward the
@@ -286,9 +292,9 @@
         // after the snap the inflow stops and the haze settles into a slow orbit behind the letters
         const post = R.smoothstep(SNAP_L, SNAP_L + 0.25, st);
         const sink = R.lerp(C.VORTEX_SINK, 0, post);
-        const lift = C.LIFT * (1 - post);
         const wind = R.ease.inQuad(R.clamp((st - (SNAP_L - R.E16)) / R.E16)) * (1 - R.smoothstep(SNAP_L, SNAP_L + 0.06, st));
         const spin = 1 + C.WIND_SPIN * wind, pull = C.WIND_PULL * wind;
+        const lift = R.lerp(C.LIFT_BLOOM, C.LIFT, R.smoothstep(C.LIFT_EASE[0], C.LIFT_EASE[1], st)) * spin * (1 - post);
         const dragF = post > 0 ? Math.exp(-R.lerp(C.DRAG, C.HAZE_DRAG, post) * dt) : DRAG_F;
         const { x, y, vx, vy, fx, fy, sStep } = S;
         const v0x = VORTICES[0][0], v0y = VORTICES[0][1], v0s = VORTICES[0][2];
@@ -423,10 +429,12 @@
           const ti = tgt[i], tx = TX[ti], ty = TY[ti];
           const k = cur - ss;
           if (k >= LAND_AT + C.LAND_STEPS) {
-            // locked: a crisp 3×3 Paper square on the whole-pixel lattice, with a sparse ±1 px live jitter
+            // locked: a crisp 4×4 Paper square on the whole-pixel lattice (64% fill, a 1 px gutter), with a sparse
+            // ±1 px live jitter. Every gutter a jittered square leaves lies inside its own knocked-out 5×5 cell, so
+            // no haze shows through the word.
             const nx = R.noise2(JX[ti], jt), ny = R.noise2(JY[ti], jt);
             const jx = nx > C.JITTER_T ? 1 : nx < -C.JITTER_T ? -1 : 0, jy = ny > C.JITTER_T ? 1 : ny < -C.JITTER_T ? -1 : 0;
-            squares.rect(tx - 1 + jx, ty - 1 + jy, 3 + smear, 3);
+            squares.rect(tx - 2 + jx, ty - 2 + jy, 4 + smear, 4);
             knock.rect(tx - 2, ty - 2, 5 + smear, 5);
             nSquares++;
             continue;
@@ -534,8 +542,8 @@
   // ------------------------------------------------------------------ RANGE target lattice
   // Archivo 900 at canvas width "expanded", size solved so the ink spans x 200→1720 (1520 px) with the flat cap
   // (0.6875 em) centred on y 540. Cells are 5×5 px anchored at x 200 / the cap top; a cell becomes a target when
-  // the glyph covers ≥ 50% of it. Target = the cell's centre pixel, so a 3×3 square sits inside it with a 1 px
-  // margin on every side: a true dot-matrix on the whole-pixel lattice. (A local sampler rather than
+  // the glyph covers ≥ 50% of it. Target = the cell's centre pixel; its 4×4 square fills the cell's top-left
+  // 4×4 pixels, leaving a 1 px gutter: a true dot-matrix on the whole-pixel lattice. (A local sampler rather than
   // R.textPoints: its lattice is anchored at the frame origin and its y at the em-box middle.)
   function sampleRange() {
     const c = document.createElement('canvas');
