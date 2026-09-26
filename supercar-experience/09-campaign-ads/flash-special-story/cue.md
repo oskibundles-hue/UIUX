@@ -16,10 +16,20 @@ reason. Everything else in `story.html` / `build_story.py` follows the text belo
 | D7 | Visibility windows | Evaluated on the 24 fps frame grid (`round(t·24)`) | Cue times are 3-decimal frame boundaries (9.417 = frame 226 = 9.41667). Comparing raw decimals left frame 226 with the rows still on; now it is clean as the cue intends. |
 | D8 | Mix → `loudnorm=I=-14:TP=-1.0:LRA=7` | Mix gets a gentle tanh saturation (drive 2.2), then two-pass linear loudnorm with TP −1.5. Final file: −14.2 LUFS integrated, −1.4 dBTP | The raw sub thumps set the peak, so linear loudnorm stopped at −14.5 and the AAC encode overshot to −0.7 dBTP. Saturating the thumps lowers the crest factor (and adds harmonics so the hits read on phone speakers); the TP −1.5 target leaves room for AAC overshoot. |
 | D9 | Build rules say prefer the clip's own audio | Original synthesised bed only (cue section 5) | Provenance of the reel audio is unknown and the edit reorders the shots. The cue's alternate master applies only if Omarie confirms the reel audio is licensed. |
+| D10 | B2 0.7x frame-repeat (D1) over src 56–76 | B2 = the whole crest take at **1.0x** (src 55–77, 23 frames, 1.833–2.792), **tone-locked** in 16-bit: each frame's luma is quantile-matched to the take's mean luma distribution and applied as an RGB gain, then a luma-neutral per-channel balance | Round-1 review: the 4-3-3 repeat cadence juddered and the source's baked-in light strobe (luma 50↔160 every 2–3 frames) gave ~3 flashes/s. The crest take is only 23 frames long, so 1.0x is the whole take. Final B2 luma 66.9–71.8, largest frame step 2.0 (was 30–107). Per-channel matching was tried first and lifted the shield black to navy, hence luma-only. |
+| D11 | B8 src 498–561 as graded | B8 = src 498–567 (70 frames, 10.125–13.042), **per-channel quantile-matched** in 16-bit to the blue-white state (src 510–530) | The reel's grade steps white balance inside the locked-off take (src 507 and 547: facade, car and asphalt all shift, so it is a whole-frame grade change). Facade band now holds (88,97,107)→(91,99,110), max frame step 2.5 (was 8.5 in the source). |
+| D12 | §6: darken y 12–30% only if the client objects | Applied now in B8: full-width graduated defocus + ×0.45 darken above y 23% (eases out by 27.5%, clear of the LAS VEGAS lettering); the small IBIE door sign and the doorway poster face softened in place | Round-1 review: IBIE / ABA / BEMA marks and a readable face sat behind the CTA. Positions measured on plate frames 243/312 by template match (background drift +1.1% x, −0.6% y: the camera dollies toward the car). A boxed blur was tried first and read as a censor patch. |
+| D13 | Timeline B4 → B5 → B6 (reqs) → B7 (breath) → B8 | B4 → B5+B7 (reqs) → **B6 clean hero** → B8; B4 = src 279–311 ends exactly on the fill arrival | Round-1 review: the hero head-on shot sat under the requirements (clean 0.58 s) and the 1PM payoff landed on a near-black frame. Now the requirements live on the side profile + wide roll-by (one continuous source range 323–381, in-source cut on 7.250), HUD is out at 8.292 and B6 runs clean 1.83 s with its push; the 1PM gold beat lands on the first frames of the bright B5 side profile. Ask starts 10.167, 1.875 s after HUD out (≥ 1.6). |
+| D14 | B8 soft brackets eased to a fixed end box | Right edge follows the measured nose (+2%): 83.5% @10.125 → 94.6% @12.875 (table `NOSE` in story.html); brackets release 12.208–12.375 while the text holds | New source range; keeps the box inside x 95.5%. |
+| D15 | Mid scrim 0.80 throughout the HUD | 0.62 over B4, 0.80 from the B5 cut | The B4 plate mid band is 68–122 luma; at 0.80 it read as black. The readout (Bebas 96 + gold bar) holds at 0.62. |
+| D16 | Copy | 'ENDS TODAY · 1PM PT' (hook), 'RENTAL FLASH WINDOW · TODAY', ticker '2-HOUR RENTAL FLASH SPECIAL ◆ 11AM – 1PM PT TODAY', ask 'BOOK BEFORE 1PM PT' (Bebas 120) / 'CALL FOR THE FLASH RATE' / '(888) 678-6079', end card 'RENTAL FLASH SPECIAL' / 'ENDS TODAY · 1PM PT' | Round-1 review: nothing said rental, and 1PM had no time zone (SE also lists the STO in Boise, on Mountain time). PT is the brief's zone and the car's listing is Las Vegas. All lines 5/5 CLEAN on SlopMonster. '21+' left exactly as the client wrote it (see §6). |
+| D17 | End card: lines staggered 0.125 s from 14.042, handle 24 px at 75% | End card 13.042–15.500 (2.46 s); contacts in together (0.042 s stagger) from 13.375; handle Michroma 26, 100% white | Round-1 review: handle held 1.00 s, phone 1.17 s. Now every contact line is complete by 13.625 and held ≥ 1.88 s (measured on the MP4). |
+| D18 | (build bug) | Overlay PNGs normalised to RGBA; `verify_sync` compares 13 MP4 frames to plate+overlay | Chromium writes a fully opaque page (the end card) as RGB PNG; the format change re-initialised ffmpeg's filter graph and slipped the end card 7 frames late (in round 0 too). |
+| D19 | Sound bed: sub drone + sub hits | Re-voiced for phone speakers: A-minor pad 220–880 Hz with harmonics, impacts = sub + saturated 240→70 Hz body + 1.5–8 kHz crack + metallic ring, 0.7–6 kHz whooshes, harmonic fill sweep, bell ping | Round-1 review: bed was 100% below 150 Hz. Now 86% of the pad is in 150–500 Hz; through a 200 Hz high-pass (phone sim) momentary loudness never drops below −24 LUFS (median −16.7); round 0 was below −30 for 47% of the runtime. Loudnorm TP −2.0 → −14.2 LUFS, −1.4 dBTP after AAC. |
 
 ---
 
-1080x1920, **24 fps**, **372 frames = 15.500 s**, H.264 yuv420p. Treatment: house `hud` (approved), in motion.
+1080x1920, **24 fps**, **372 frames = 15.500 s**, H.264 yuv420p. Treatment: house `hud` (approved), in motion. Round-1 fixes: D10–D19.
 
 ## Colours and fonts
 
@@ -48,20 +58,19 @@ reason. Everything else in `story.html` / `build_story.py` follows the text belo
 | # | t0 | t1 | out frames | src frames | speed | shot |
 |---|---|---|---|---|---|---|
 | B1 HOOK | 0.000 | 1.833 | 0–43 | 393–436 | 1.0 | STO front-on, driving at camera at night, headlights on |
-| B2 BRAND LOCK | 1.833 | 3.083 | 44–73 | 56–76 | 0.7 (frame repeat, D1) | LAMBORGHINI crest close-up on lime body |
-| B3 MODEL LOCK | 3.083 | 4.750 | 74–113 | 148–179 | 0.8 (blend) | 'STO' lettering on the carbon deck |
-| B4 FLASH WINDOW | 4.750 | 6.542 | 114–156 | 279–321 | 1.0 | 3/4 front rolling past the city → low-front headlights |
-| B5 REQUIREMENTS A | 6.542 | 7.833 | 157–187 | 324–354 | 1.0 | side profile tracking, yellow caliper |
-| B6 REQUIREMENTS B + HUD OUT | 7.833 | 9.958 | 188–238 | 182–232 | 1.0 | front-on under the white canopy; push 1.00→1.03 |
-| B7 CLEAN BREATH | 9.958 | 11.000 | 239–263 | 358–382 | 1.0 | wide: car rolls past a lit canopy |
-| B8 THE ASK | 11.000 | 13.667 | 264–327 | 498–561 | 1.0 | parked at the Las Vegas Convention Center, in-camera push |
-| B9 END CARD | 13.667 | 15.500 | 328–371 | none | none | solid #000 |
+| B2 BRAND LOCK | 1.833 | 2.792 | 44–66 | 55–77 | 1.0, tone-locked (D10) | LAMBORGHINI crest close-up on lime body |
+| B3 MODEL LOCK | 2.792 | 4.458 | 67–106 | 148–179 | 0.8 (blend) | 'STO' lettering on the carbon deck |
+| B4 FLASH WINDOW | 4.458 | 5.833 | 107–139 | 279–311 | 1.0 | front-on rolling past the city, headlights (fill lands on the cut) |
+| B5+B7 REQUIREMENTS | 5.833 | 8.292 | 140–198 | 323–381 | 1.0 | side profile, yellow caliper → (in-source cut at 7.250) wide roll-by past a lit canopy |
+| B6 CLEAN HERO | 8.292 | 10.125 | 199–242 | 189–232 | 1.0 | front-on under the white canopy; push 1.00→1.03; no type |
+| B8 THE ASK | 10.125 | 13.042 | 243–312 | 498–567 | 1.0, colour-locked + facade cleanup (D11, D12) | parked at the Las Vegas Convention Center, in-camera dolly |
+| B9 END CARD | 13.042 | 15.500 | 313–371 | none | none | solid #000 |
 
 Grade: `eq=contrast=1.04:saturation=0.96:gamma=1.0,vignette=angle=PI/5` only (the source is already a finished reel grade). No LUT, no hue or saturation push that could clip the lime paint.
 
 Encode: `libx264 -preset slow -crf 17 -profile:v high`, BT.709 limited range yuv420p, AAC 192k 48 kHz stereo, `+faststart`.
 
-Verify stills: t = 0.000, 1.000, 2.500, 3.900, 5.900, 7.500, 8.800, 10.400, 12.200, 14.900 (Á renders; 'VALID DRIVER'S LICENSE' right edge ≤ x 84%; nothing in the top 14% or bottom 20% except the ticker bar edge and the transit scan lines).
+Verify stills: t = 0.000, 1.000, 2.500, 3.600, 5.500, 5.958, 7.100, 8.000, 9.400, 11.000, 12.500, 14.600 (Á renders; every line ≤ x 80%; nothing in the top 14% or bottom 20% except the transit scan lines). `verify_sync` checks MP4 frames 0, 43, 44, 106, 140, 198, 199, 242, 243, 312, 313, 330, 371 against plate+overlay.
 
 **Measured band luma** (0–255, x 5–84%, mean (min–max) p98), the reasons for every placement:
 
@@ -76,13 +85,24 @@ Verify stills: t = 0.000, 1.000, 2.500, 3.900, 5.900, 7.500, 8.800, 10.400, 12.2
 
 **House rules check:**
 - Hook clears at 1.833, before any HUD furniture (4.75).
-- The HUD is fully clear at 9.417 (frame 226) and the ask starts at 11.042 (1.625 s ≥ 1.6).
-- The CTA is gone at 13.417 (frame 322) and the end card hard-cuts at 13.667 (0.25 s clean footage).
-- Scrim or plate wherever the shot changes under type (B4→B5→B6).
+- The HUD is fully clear at 8.292 (frame 199) and the ask starts at 10.167 (1.875 s ≥ 1.6).
+- The CTA is gone at 12.750 (frame 306) and the end card hard-cuts at 13.042 (0.29 s clean footage).
+- Scrim or plate wherever the shot changes under type (B4→B5, B5→B7).
 - No corner logo bug (top band swings 20→148): the SE mark lives inside the title block.
 - The stripe is horizontal everywhere.
 
 ## 2. Beat-by-beat graphics
+
+**Round 1 timing (supersedes the times below where they differ).** B1 unchanged. B2 runs 1.833–2.792: brackets contract
+1.875–2.208, tick 2.208–2.333, release 2.708–2.792; tag plate 1.875–2.167, stripe 1.958–2.250, BRAND 1.917–2.125,
+LAMBORGHINI rise 1.875–2.208. B3, the HUD entry, the B4 readout and the requirements build keep the motion below
+shifted 7 frames earlier (story.html `u = t + 7/24`): B4 fill 4.917–5.833 and the 1PM gold/pulse at 5.833 (the B5 cut);
+readout exit 6.125–6.250; REQUIREMENTS 6.292, rows 6.417 / 6.583 / 6.750. HUD OUT in real time: title/ticker/scrim fade
+8.083–8.292, rows clip 8.125–8.292. B6 8.292–10.125 carries no type; scan line 9.917–10.125. The ask keeps its entry
+motion shifted 21 frames (`v = t + 21/24`): headline rise 10.167–10.583, 'CALL FOR THE FLASH RATE' 10.375–10.708,
+phone 10.458–10.792, stripe 10.542–10.917; brackets fly in 10.333–10.708, follow the nose, release 12.208–12.375;
+text exit 12.583–12.750. End card from 13.042: logo 13.042–13.458, stripe 13.208–13.583, 'RENTAL FLASH SPECIAL'
+13.250–13.500, 'ENDS TODAY · 1PM PT' rise 13.292–13.625, contacts 13.375 / 13.417 / 13.458 (+0.25 s each). Copy per D16.
 
 ### B1 HOOK 0.000–1.833
 - Hook scrim `linear-gradient(to bottom, rgba(0,0,0,0) 12%, rgba(0,0,0,.45) 18%, rgba(0,0,0,.45) 32%, rgba(0,0,0,0) 38%)`, opacity 1 from frame 0, fades 1.667–1.833 (linear).
@@ -144,12 +164,14 @@ Verify stills: t = 0.000, 1.000, 2.500, 3.900, 5.900, 7.500, 8.800, 10.400, 12.2
 - Holds to the last frame. No fade-out.
 
 ## 3. Safe zones (stories)
-- Type spans x 7.5% to ≤ 80% (title plate edge 84%) and y 15.0%–71.8% on footage.
+- Type spans x 7.5% to ≤ 80% (title plate edge 84%) and y 15.0%–73.0% on footage (measured overlay ink y 14.4–79.9% incl. brackets and ticker bar; no out-of-band frames).
 - Title plate bottom 74.0%, ticker bar 76.2–78.8%, clear of the reply bar (> 80%).
 - Top 14% is empty apart from the transit scan lines (under 0.2 s).
 
 ## 4. Claims ledger
-- '2-HOUR FLASH SPECIAL', 'ENDS 1PM TODAY', '11AM – 1PM TODAY', 'BOOK BEFORE 1PM', 'FLASH SPECIAL ENDS 1PM': the client's brief (2-hour flash special until 1 o'clock, today 2026-09-26).
+- '2-HOUR FLASH SPECIAL', 'ENDS TODAY · 1PM PT', '11AM – 1PM PT TODAY', 'BOOK BEFORE 1PM PT', 'ENDS TODAY · 1PM PT': the client's brief (2-hour flash special until 1 o'clock, today 2026-09-26); PT = the brief's time zone.
+- 'RENTAL' / 'RENTAL FLASH SPECIAL' / 'RENTAL FLASH WINDOW': the client's brief ('on our rental car').
+- 'CALL FOR THE FLASH RATE': a CTA, names no figure.
 - No %, no $, no prices, no specs, no countdown digits. The timeline bar fills once as a graphic.
 - LAMBORGHINI / HURACÁN STO: tokens label (accent restored) and the badges visible in the footage.
 - 2023 and LAS VEGAS: tokens ('2023 - Exotic - Las Vegas'); the site lists '2023 Lamborghini STO'.
@@ -157,21 +179,25 @@ Verify stills: t = 0.000, 1.000, 2.500, 3.900, 5.900, 7.500, 8.800, 10.400, 12.2
 - supercarexp.vip, (888) 678-6079, @supercar_experience_: tokens.
 
 ## 5. Audio
-Source AAC not used (unknown provenance). Original bed synthesised in numpy (seed 20260926), 48 kHz stereo:
-drone 55/110 Hz; sub thumps at 0.000 and 13.667 (the end one longer with a lowpassed pink tail); pink-noise
-whooshes (bandpass 0.9–3.6 kHz, 0.3 s, −12 dBFS) centred on 1.833, 3.083, 4.750, 6.542, 7.833, 9.958, 11.000;
-double lock ticks at 2.250, 3.500, 11.583; fill sweep 300→900 Hz over 5.208–6.125; arrival ping at 6.125; row
-ticks at 6.958, 7.125, 7.292; high-passed noise riser 9.55–11.00; CTA pop at 11.042. Two-pass loudnorm
-(I −14, TP −1.0, LRA 7). The ad reads fully muted.
+Source AAC not used (unknown provenance). Original bed synthesised in numpy (seed 20260926), 48 kHz stereo, voiced for
+phone speakers (D19): A-minor pad (55–880 Hz, weight on 220–660, slow tremolo, detuned L/R) + 3–9 kHz air, fading
+14.7–15.5; impacts at 0.000 and 13.042 (sub + saturated 240→70 Hz body + 1.5–8 kHz crack + 523/1244/2093/3322 Hz ring
++ 200–1200 Hz boom); whooshes into each cut (1.833, 2.792, 4.458, 5.833, 7.250, 8.292, 10.125; pink noise 0.7–6 kHz
++ shimmer, panned); double lock ticks at 2.208, 3.208, 10.708; row ticks at 6.667, 6.833, 7.000; harmonic fill sweep
+220→880 Hz over 4.917–5.833 and a bell at 5.833; riser 8.90–10.125 (band noise + rising tone); CTA pop at 10.167.
+tanh saturation (drive 1.6), two-pass linear loudnorm (I −14, TP −2.0, LRA 7). Final: −14.2 LUFS, −1.4 dBTP.
+Phone check: through a 200 Hz high-pass the momentary loudness stays between −19.8 (p10) and −14.4 (p90) LUFS.
+The ad reads fully muted.
 
 Optional alternate master, only if Omarie confirms the reel audio is licensed for ads: the source audio
 continuous from 0.0 to 15.5 with the SFX at −6 dB relative and a 0.5 s fade-out from 15.0, same loudnorm.
 
 ## 6. Risks and checks
-1. Timing: the copy says TODAY / ENDS 1PM with no date. Post by about 11:00 AM PT; expire or delete at 1 PM. Never repost on another day.
-2. The IBIE trade-show banner on the LVCC facade (y 14–25%) is background only. If the client objects, darken y 12–30% with a 50% gradient in B8.
-3. B2 0.7x: blend ghosted, frame-repeat fallback used (D1).
-4. Á glyph verified in the render at 3.9 s.
+1. Timing: the copy says TODAY / ENDS 1PM PT with no date. Post by about 11:00 AM PT; expire or delete at 1 PM PT. Never repost on another day.
+2. Third-party marks on the LVCC facade (IBIE banner, sponsor logos, door sign, poster face) are knocked back in B8 (D12). The generic 'WELCOME / REGISTRATION & EXHIBITS' venue signage stays.
+3. B2 is the whole crest take at 1.0x, tone-locked (D10). The bull's specular glint still varies frame to frame, which reads as light play, not flicker.
+4. Á glyph verified in the render at 3.6 s and in the title block.
 5. Michroma licence: tokens mark it `bundled:false`; used under SE's existing licence.
-6. Location: 'LAS VEGAS' comes from the car's listing. Confirm the flash special applies to the Las Vegas STO.
-7. The flash rate is unnamed (no figure given). Staff must know the rate when people call or DM.
+6. **Confirm with Omarie: location.** 'LAS VEGAS' comes from the car's listing, and 'PT' from the brief's time zone. SE also lists the 2023 STO in Scottsdale and Boise (Boise is on Mountain time). If the special covers every location, drop 'LAS VEGAS' from the title block and restate the time per market.
+7. **Confirm with Omarie: 21+.** The site says 'Renter Must Be 25+ (Ages 21–24 With $299 Underage Fee)'. '21+' is the client's own wording and stays as written. If he wants it, a small line such as '21–24 UNDERAGE FEE APPLIES' (quoted from the site) fits under row 02. Either way, staff must mention the fee on calls.
+8. The flash rate is unnamed (no figure given). Staff must know the rate when people call or DM ('CALL FOR THE FLASH RATE').

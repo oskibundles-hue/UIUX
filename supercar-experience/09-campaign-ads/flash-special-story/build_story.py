@@ -5,15 +5,16 @@ One command builds everything (see cue.md):
 
     python3 build_story.py [--src STO.mp4] [--ffmpeg /path/to/ffmpeg]
 
-  1. plate    cut + grade the 8 source ranges from the cue (speed ramps via setpts, 10-bit -> 8-bit,
-              24 fps), the B6 push (1.00 -> 1.03), then 44 black end-card frames      -> .work/plate/
+  1. plate    cut + grade the 7 source ranges from the cue (speed ramp via setpts, 10-bit -> 8-bit, 24 fps),
+              tone-lock B2 (crest strobe) and B8 (white-balance steps) in 16-bit, knock back the third-party
+              marks in B8, the B6 push (1.00 -> 1.03), then 59 black end-card frames      -> .work/plate/
   2. overlay  node render_overlay.js: story.html renderAt(i/24), transparent PNGs       -> .work/overlay/
   3. audio    original sound bed synthesised with numpy (seeded), two-pass loudnorm -14 LUFS -> .work/bed.wav
   4. encode   ffmpeg overlay in RGB, BT.709 limited-range yuv420p, H.264 High CRF 17, AAC 192k 48 kHz
   5. QA       stills at every text beat, poster, contact sheet, stream check            -> exports/
 
 Flags: --skip-plate / --skip-overlay / --skip-audio reuse what is already in .work/.
-Needs: ffmpeg with overlay/eq/vignette/minterpolate/loudnorm/libx264; Python 3 + Pillow + numpy;
+Needs: ffmpeg with overlay/eq/vignette/minterpolate/loudnorm/libx264/ebur128; Python 3 + Pillow + numpy;
 Node 22 + Playwright (Chromium).
 """
 import argparse, json, os, re, shutil, subprocess, sys, wave
@@ -99,6 +100,38 @@ def _match(fr, qsrc, qref):
     return np.clip(out, 0, 65535)
 
 
+LUMA = np.array([0.2126, 0.7152, 0.0722], np.float32)
+
+
+def _yquantiles(fr):
+    y = fr[::4, ::4].reshape(-1, 3).astype(np.float32) @ LUMA
+    return np.quantile(y, Q)
+
+
+def _match_luma(fr, qsrc, qref):
+    """Luma-only quantile match, applied as a gain on RGB so hue and the crest's blacks are preserved."""
+    x = fr.astype(np.float32)
+    y = x @ LUMA
+    xp = qsrc + np.arange(len(Q)) * 1e-3
+    y2 = np.interp(y, xp, qref)
+    hi = y > xp[-1]
+    y2[hi] = qref[-1] + (y[hi] - xp[-1]) * (65535 - qref[-1]) / max(65535 - xp[-1], 1.0)
+    g = np.clip(y2 / np.maximum(y, 64.0), 0.25, 4.0)
+    return np.clip(x * g[..., None], 0, 65535)
+
+
+def _balance(frames):
+    """Per-channel mean gains toward the take's average colour, luma-neutral (evens out warm/cool frames)."""
+    means = np.array([f[::4, ::4].reshape(-1, 3).mean(0) for f in frames])
+    ref = means.mean(0)
+    out = []
+    for f, m in zip(frames, means):
+        g = ref / np.maximum(m, 1.0)
+        g *= (m @ LUMA) / max((m * g) @ LUMA, 1.0)
+        out.append(np.clip(f * g.astype(np.float32), 0, 65535))
+    return out
+
+
 def _grade_into(ff, frames16, d, first, tmp):
     """Write 16-bit frames, run the house grade on them exactly like the main pass, land them as plate frames."""
     shutil.rmtree(tmp, ignore_errors=True); tmp.mkdir(parents=True)
@@ -113,14 +146,15 @@ def _grade_into(ff, frames16, d, first, tmp):
 
 
 def tone_lock(ff, src, d):
-    """B2: the crest take carries a light strobe (luma 50 <-> 160 every 2-3 frames). Each frame is quantile-matched
-    to the take's own mean distribution (per-channel barycentre), so the strobe is gone and the look is its average.
+    """B2: the crest take carries a light strobe (luma 50 <-> 160 every 2-3 frames). Each frame's luma is
+    quantile-matched to the take's own mean luma distribution and applied as an RGB gain (hue kept), so the strobe
+    is gone and the look is the take's average.
     B8: the reel's grade steps white balance inside the locked-off LVCC take (src 507, 547). Each frame is matched to
     the blue-white state (src 510-530), so the facade holds one colour for the whole ask."""
     x = _extract16(ff, src, 55, 78, d)
-    qs = [_quantiles(f) for f in x]
+    qs = [_yquantiles(f) for f in x]
     qref = np.mean(qs, 0)
-    _grade_into(ff, [_match(f, q, qref) for f, q in zip(x, qs)], d, B2_FIRST, WORK / "tl")
+    _grade_into(ff, _balance([_match_luma(f, q, qref) for f, q in zip(x, qs)]), d, B2_FIRST, WORK / "tl")
     ref = _extract16(ff, src, B8_REF.start, B8_REF.stop, d)
     qref = np.mean([_quantiles(f) for f in ref], 0)
     del ref
@@ -130,24 +164,44 @@ def tone_lock(ff, src, d):
     print("tone lock: B2 (strobe) and B8 (white balance) matched")
 
 
-def b8_cleanup(d):
-    """Third-party marks on the LVCC facade (IBIE banner and sponsor logos, y ~11-25%) are darkened and softened;
-    a poster face in the right-hand doorway is softened. Masks are soft and static (the in-camera push is slow)."""
+def _soft_rect(x0, x1, y0, y1, fx, fy):
+    """Soft-edged rectangle mask on the frame grid (fractions), smoothstep feather fx / fy."""
+    xx = np.arange(W, dtype=np.float32) / W
+    yy = np.arange(H, dtype=np.float32) / H
+    def ss(v):
+        v = np.clip(v, 0, 1)
+        return v * v * (3 - 2 * v)
+    mx = ss((xx - (x0 - fx)) / fx) * ss(((x1 + fx) - xx) / fx)
+    my = ss((yy - (y0 - fy)) / fy) * ss(((y1 + fy) - yy) / fy)
+    return my[:, None] * mx[None, :]
+
+
+def b8_cleanup(d, frames=None):
+    """Third-party marks on the LVCC facade are knocked back (cue.md D12). The IBIE banner and its sponsor logos
+    (x 43-76%, y 11-25%) sit under a full-width graduated defocus + darken (x0.45 above y 23%, easing out by 27.5%,
+    clear of the LAS VEGAS lettering), so it reads as depth of field rather than a patch. The small IBIE door sign
+    (x 73-80%, y 37.5-39.5%) and the doorway poster face (centre x 76.1%, y 42.4%) are softened in place. Positions are
+    measured on plate frames 243 and 312 by template match (background drift +1.1% x, -0.6% y: the camera dollies
+    toward the car, so the facade barely moves)."""
+    grad = _soft_rect(-1, 2, -1, 0.23, 0.01, 0.045)                  # 1 above y 23%, smoothstep to 0 by 27.5%
+    dark = 1 - 0.55 * grad
     yy = np.arange(H, dtype=np.float32)[:, None] / H
     xx = np.arange(W, dtype=np.float32)[None, :] / W
-    band = np.clip((0.34 - yy) / 0.08, 0, 1) * np.ones_like(xx)                  # 1 above y 26%, 0 below y 34%
-    band = band * band * (3 - 2 * band)                                          # smoothstep
-    dark = 1 - 0.58 * band                                                       # 58% darker at the top
-    for f in range(B8_FIRST, B8_LAST + 1):
+    for f in (frames or range(B8_FIRST, B8_LAST + 1)):
         p = d / f"{f:04d}.png"
         im = Image.open(p).convert("RGB")
         a = np.asarray(im, np.float32)
-        b = np.asarray(im.filter(ImageFilter.GaussianBlur(9)), np.float32)
+        b_hi = np.asarray(im.filter(ImageFilter.GaussianBlur(16)), np.float32)
+        b_lo = np.asarray(im.filter(ImageFilter.GaussianBlur(6)), np.float32)
         k = (f - B8_FIRST) / (B8_LAST - B8_FIRST)
-        cx, cy = 0.745 + 0.02 * k, 0.425 + 0.004 * k                            # doorway poster (see cue.md D12)
-        face = np.exp(-(((xx - cx) / 0.05) ** 2 + ((yy - cy) / 0.028) ** 2)) * 1.0
-        mix = np.clip(np.maximum(band, face), 0, 1)[..., None]
-        out = (a * (1 - mix) + b * mix) * (dark * (1 - 0.35 * face))[..., None]
+        dx, dy = 0.011 * k, -0.006 * k
+        face = np.exp(-((((xx - 0.761 - dx) / 0.028) ** 2 + ((yy - 0.424 - dy) / 0.022) ** 2) ** 2))
+        sign = _soft_rect(0.728 + dx, 0.80 + dx, 0.374 + dy, 0.396 + dy, 0.008, 0.004)
+        m_lo = np.maximum(face, sign)[..., None]
+        out = a * (1 - m_lo) + b_lo * m_lo
+        g = grad[..., None]
+        out = out * (1 - g) + b_hi * g
+        out *= (dark * (1 - 0.25 * face))[..., None]
         Image.fromarray(np.clip(out + 0.5, 0, 255).astype(np.uint8)).save(p, compress_level=1)
 
 
@@ -199,12 +253,23 @@ def build_overlay():
     got = len(list(d.glob("*.png")))
     if got != TOTAL:
         sys.exit(f"overlay: expected {TOTAL} frames, got {got}")
+    # Chromium writes a fully opaque page (the end card) as an RGB PNG. A pixel-format change mid-sequence makes
+    # ffmpeg re-initialise the filter graph and slips the overlay against the plate by several frames, so every
+    # frame is normalised to RGBA here.
+    fixed = 0
+    for f in sorted(d.glob("*.png")):
+        im = Image.open(f)
+        if im.mode != "RGBA":
+            im.convert("RGBA").save(f, compress_level=1)
+            fixed += 1
+    print(f"overlay: {fixed} opaque frames normalised to RGBA")
 
 
 # ---------------------------------------------------------------- 3. audio (cue.md section 5)
 SR = 48000
 DUR = TOTAL / FPS
-CUTS = [1.833, 3.083, 4.750, 6.542, 7.833, 9.958, 11.000]
+CUTS = [1.833, 2.792, 4.458, 5.833, 7.250, 8.292, 10.125]
+T_END = 13.042                     # end card hard cut
 
 
 def _spectral(x, lo=None, hi=None, pink=False):
@@ -223,84 +288,105 @@ def _spectral(x, lo=None, hi=None, pink=False):
 
 
 def synth_bed(path_raw):
+    """Original bed, seeded. Built for phone speakers: every element carries energy above 200 Hz (harmonic pad,
+    saturated impact bodies with a transient and a metallic ring, 0.7-6 kHz whooshes); the sub is a layer, not the
+    mix. Checked through a 200 Hz high-pass (cue.md section 5)."""
     rng = np.random.default_rng(20260926)
     n = int(round(DUR * SR))
     t = np.arange(n) / SR
     L = np.zeros(n)
     R = np.zeros(n)
 
-    def add(sig, t0, gain_l=1.0, gain_r=1.0):
+    def add(sig, t0, gl=1.0, gr=1.0):
         i0 = int(round(t0 * SR))
         i1 = min(n, i0 + len(sig))
         if i0 >= n or i1 <= 0:
             return
         s = sig[max(0, -i0): i1 - i0]
-        L[max(0, i0):i1] += s * gain_l
-        R[max(0, i0):i1] += s * gain_r
+        L[max(0, i0):i1] += s * gl
+        R[max(0, i0):i1] += s * gr
 
-    def env_ramp(sig, a=0.002, r=0.004):
+    def ramp(sig, a=0.002, r=0.004):
         k = np.ones(len(sig))
         na, nr = int(a * SR), int(r * SR)
         if na: k[:na] = np.linspace(0, 1, na)
         if nr: k[-nr:] *= np.linspace(1, 0, nr)
         return sig * k
 
-    # drone 0-15.5, 0.3 s in, 0.5 s out
-    drone = 0.045 * np.sin(2 * np.pi * 55 * t) + 0.025 * np.sin(2 * np.pi * 110 * t)
-    drone *= np.clip(t / 0.3, 0, 1) * np.clip((DUR - t) / 0.5, 0, 1)
-    add(drone, 0)
+    def tt(dur):
+        return np.arange(int(dur * SR)) / SR
 
-    # sub thumps: hook (0.000) and end card (13.667, longer + pink tail lowpassed 400 Hz)
-    tt = np.arange(int(0.6 * SR)) / SR
-    add(env_ramp(0.9 * np.sin(2 * np.pi * 45 * tt) * np.exp(-9 * tt), a=0.0005), 0.0)
-    tt = np.arange(int(1.6 * SR)) / SR
-    end = 0.9 * np.sin(2 * np.pi * 45 * tt) * np.exp(-3 * tt)
-    tail_l = _spectral(rng.standard_normal(len(tt)), hi=400, pink=True) * 0.22 * np.exp(-tt / 1.5 * 4.6)
-    tail_r = _spectral(rng.standard_normal(len(tt)), hi=400, pink=True) * 0.22 * np.exp(-tt / 1.5 * 4.6)
-    add(env_ramp(end + tail_l, a=0.0005, r=0.05), 13.667, 1, 0)
-    add(env_ramp(end + tail_r, a=0.0005, r=0.05), 13.667, 0, 1)
+    # 1. pad: A-minor stack with harmonics, slow tremolo, detuned L/R; air noise on top. 0.3 s in, fades 14.7-15.5
+    env = np.clip(t / 0.3, 0, 1) * np.clip((DUR - t) / 0.8, 0, 1)
+    trem = 0.8 + 0.2 * np.sin(2 * np.pi * 0.25 * t)
+    parts = [(55, .010), (110, .012), (164.8, .010), (220, .026), (261.6, .016), (329.6, .022), (440, .018),
+             (523.3, .008), (659.3, .010), (880, .005)]
+    for det, gl, gr in ((1.0, 1, 0), (1.0035, 0, 1)):
+        x = sum(a * np.sin(2 * np.pi * f * det * t + f) for f, a in parts)
+        add(np.tanh(3 * x) / 3 * env * trem * 1.7, 0, gl, gr)
+    air = _spectral(rng.standard_normal(n), lo=3000, hi=9000) * 0.010 * env
+    add(air, 0, 1, 0.7)
 
-    # whooshes on each cut: pink noise, bandpass 1.8 kHz (2 octaves: 0.9-3.6 kHz), 0.3 s, peak -12 dBFS
-    wn = int(0.3 * SR)
-    wenv = np.minimum(np.linspace(0, 2, wn), np.linspace(2, 0, wn))    # linear in 0.15 / out 0.15
-    peak = 10 ** (-12 / 20)
-    for c in CUTS:
-        for ch in (0, 1):
-            wsh = _spectral(rng.standard_normal(wn * 4), lo=900, hi=3600, pink=True)[:wn] * wenv * peak
-            add(wsh, c - 0.15, 1 - ch, ch)
+    # 2. impacts: sub + pitch-drop body (saturated -> harmonics) + noise transient + metallic ring
+    def impact(length, decay, ring=0.05):
+        x = tt(length)
+        sub = 0.32 * np.sin(2 * np.pi * 45 * x) * np.exp(-decay * x)
+        f = 70 + 170 * np.exp(-x / 0.07)                             # 240 -> 70 Hz pitch drop, saturated
+        body = np.tanh(3.2 * 0.5 * np.sin(2 * np.pi * np.cumsum(f) / SR) * np.exp(-decay * 1.6 * x)) * 0.32
+        crack = _spectral(rng.standard_normal(len(x)), lo=1500, hi=8000) * 0.30 * np.exp(-x / 0.035)
+        metal = sum(np.sin(2 * np.pi * fr * x + ph) for fr, ph in ((523.3, 0), (1244, 1), (2093, 2), (3322, 3))) * ring
+        metal *= np.exp(-x / (length * 0.35))
+        boom = _spectral(rng.standard_normal(len(x)), lo=200, hi=1200) * 0.20 * np.exp(-x / 0.18)
+        return ramp(sub + body + crack + metal + boom, a=0.0005, r=0.05)
+    add(impact(0.9, 7), 0.0)
+    add(impact(2.0, 2.6, ring=0.06), T_END)
 
-    def blip(amp=0.4, f=2200, k=120, dur=0.025):
-        x = np.arange(int(dur * SR)) / SR
-        return env_ramp(amp * np.sin(2 * np.pi * f * x) * np.exp(-k * x), a=0.0003, r=0.002)
+    # 3. whooshes into each cut: pink noise, band 0.7-6 kHz, centre swept up into the cut then down; panned L->R
+    wn = int(0.42 * SR)
+    for i, c in enumerate(CUTS):
+        x = _spectral(rng.standard_normal(wn * 3), lo=700, hi=6000, pink=True)[:wn]
+        shimmer = _spectral(rng.standard_normal(wn * 3), lo=4000, hi=10000)[:wn] * 0.35
+        e = np.concatenate([np.linspace(0, 1, int(wn * 0.7)) ** 2, np.linspace(1, 0, wn - int(wn * 0.7)) ** 1.5])
+        w = (x + shimmer * np.linspace(0, 1, wn)) * e * 0.32
+        pan = np.linspace(0.2, 0.8, wn) if i % 2 == 0 else np.linspace(0.8, 0.2, wn)
+        add(w * (1 - pan) * 1.4, c - 0.29, 1, 0)
+        add(w * pan * 1.4, c - 0.29, 0, 1)
 
-    for c in (2.250, 3.500, 11.583):              # double lock ticks
-        add(blip(), c)
-        add(blip(), c + 0.060)
-    for c in (6.958, 7.125, 7.292):               # row ticks
-        add(blip(), c)
+    # 4. ticks (lock-ons, requirement rows): 2.2 kHz blip with an octave, short
+    def blip(amp=0.30, f=2200, k=110, dur=0.03):
+        x = tt(dur)
+        return ramp(amp * (np.sin(2 * np.pi * f * x) + 0.4 * np.sin(2 * np.pi * 2 * f * x)) * np.exp(-k * x), 0.0003, 0.002)
+    for c in (2.208, 3.208, 10.708):              # double lock ticks: B2, B3, B8 brackets
+        add(blip(), c); add(blip(amp=0.22), c + 0.060)
+    for c in (6.667, 6.833, 7.000):               # requirement rows land
+        add(blip(amp=0.26, f=1760), c)
 
-    # fill sweep 5.208-6.125, 300 -> 900 Hz
-    x = np.arange(int((6.125 - 5.208) * SR)) / SR
-    add(env_ramp(0.12 * np.sin(2 * np.pi * (300 * x + 327 * x * x)), a=0.01, r=0.01), 5.208)
-    # arrival ping 6.125
-    x = np.arange(int(0.25 * SR)) / SR
-    add(env_ramp(0.35 * np.sin(2 * np.pi * 1800 * x) * np.exp(-30 * x), a=0.0005), 6.125)
+    # 5. fill sweep 4.917-5.833: harmonic tone 220 -> 880 Hz (the bar filling), then the arrival bell at 5.833
+    x = tt(5.833 - 4.917)
+    ph = 2 * np.pi * np.cumsum(220 * 4 ** (x / x[-1])) / SR
+    sweep = sum(np.sin(k * ph) / k for k in range(1, 6)) * 0.07 * (0.4 + 0.6 * x / x[-1])
+    add(ramp(sweep, 0.02, 0.01), 4.917, 0.8, 1)
+    x = tt(0.9)
+    bell = (np.sin(2 * np.pi * 1760 * x) + 0.5 * np.sin(2 * np.pi * 2637 * x) + 0.25 * np.sin(2 * np.pi * 3520 * x))
+    add(ramp(0.20 * bell * np.exp(-x / 0.22), 0.0005), 5.833)
 
-    # riser 9.55-11.00: white noise HP 800 Hz, exponential fade-in over 1.4 s, stop at 11.00
-    rn = int((11.0 - 9.55) * SR)
-    x = np.arange(rn) / SR
-    renv = (np.exp(np.clip(x / 1.4, 0, 1) * 4) - 1) / (np.e ** 4 - 1)
+    # 6. riser into the ask 8.90-10.125: rising band noise + rising tone, exponential swell, hard stop on the cut
+    x = tt(10.125 - 8.90)
+    sw = (np.exp(np.clip(x / x[-1], 0, 1) * 4) - 1) / (np.e ** 4 - 1)
+    tone = np.sin(2 * np.pi * np.cumsum(220 * 3 ** (x / x[-1])) / SR) * 0.05
     for ch in (0, 1):
-        rs = _spectral(rng.standard_normal(rn), lo=800) * 0.28 * renv
-        add(env_ramp(rs, a=0.0, r=0.006), 9.55, 1 - ch, ch)
+        nz = _spectral(rng.standard_normal(len(x)), lo=900, hi=7000) * 0.20
+        add(ramp((nz + tone) * sw, 0.0, 0.006), 8.90, 1 - ch, ch)
 
-    # pop on the CTA 11.042
-    x = np.arange(int(0.45 * SR)) / SR
-    add(env_ramp(0.8 * np.sin(2 * np.pi * 60 * x) * np.exp(-14 * x), a=0.0005), 11.042)
+    # 7. CTA pop 10.167: small sub + click + 1.2 kHz blip
+    x = tt(0.4)
+    pop = 0.30 * np.sin(2 * np.pi * 62 * x) * np.exp(-12 * x) + np.tanh(2 * 0.25 * np.sin(2 * np.pi * 124 * x)) * np.exp(-18 * x)
+    add(ramp(pop, 0.0005), 10.167)
+    add(blip(amp=0.22, f=1200, k=60, dur=0.08), 10.167)
 
     st = np.stack([L, R], 1)
     st /= max(1e-9, np.max(np.abs(st)))
-    st = np.tanh(2.2 * st) / np.tanh(2.2) * 0.89     # gentle saturation on the thumps: lower crest, audible on phones
+    st = np.tanh(1.6 * st) / np.tanh(1.6) * 0.89     # gentle saturation: lower crest factor, a little more harmonic
     pcm = (st * 32767).astype("<i2")
     with wave.open(str(path_raw), "wb") as w:
         w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR)
@@ -311,12 +397,12 @@ def build_audio(ff):
     raw, bed = WORK / "bed_raw.wav", WORK / "bed.wav"
     WORK.mkdir(exist_ok=True)
     synth_bed(raw)
-    # two-pass loudnorm: I -14, TP -1.0, LRA 7
+    # two-pass linear loudnorm: I -14, TP -2.0 (headroom for AAC overshoot), LRA 7
     p = subprocess.run([str(ff), "-hide_banner", "-i", str(raw), "-af",
-                        "loudnorm=I=-14:TP=-1.5:LRA=7:print_format=json", "-f", "null", "-"],
+                        "loudnorm=I=-14:TP=-2.0:LRA=7:print_format=json", "-f", "null", "-"],
                        capture_output=True, text=True, check=True)
     m = json.loads(p.stderr[p.stderr.rindex("{"): p.stderr.rindex("}") + 1])
-    af = (f"loudnorm=I=-14:TP=-1.5:LRA=7:measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
+    af = (f"loudnorm=I=-14:TP=-2.0:LRA=7:measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
           f"measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true,"
           f"aresample=48000,apad,atrim=end_sample={int(round(DUR * SR))}")
     run([ff, "-y", "-loglevel", "error", "-i", raw, "-af", af, "-ac", "2", "-ar", "48000", "-c:a", "pcm_s16le", bed])
@@ -375,26 +461,47 @@ def stills(ff, mp4):
     # poster (the hook, fully built)
     run([ff, "-y", "-loglevel", "error", "-i", mp4, "-vf", f"select='eq(n\\,{round(POSTER_T * FPS)})'",
          "-fps_mode", "passthrough", "-frames:v", 1, "-q:v", 2, EXPORTS / "poster.jpg"])
-    # contact sheet 5 x 2 with timestamps
-    tw, th = 324, 576
-    sheet = Image.new("RGB", (tw * 5 + 6 * 12, th * 2 + 3 * 12 + 2 * 34), (12, 12, 12))
+    # contact sheet (6 per row) with timestamps
+    tw, th, cols = 324, 576, 6
+    rows = (len(QA_TIMES) + cols - 1) // cols
+    sheet = Image.new("RGB", (tw * cols + (cols + 1) * 12, th * rows + (rows + 1) * 12 + rows * 34), (12, 12, 12))
     try:
         font = ImageFont.truetype(str(HERE.parent.parent / "07-fonts/Michroma-Regular.ttf"), 18)
     except OSError:
         font = ImageFont.load_default()
     d = ImageDraw.Draw(sheet)
     for i, (t, p) in enumerate(zip(QA_TIMES, paths)):
-        cx, cy = 12 + (i % 5) * (tw + 12), 12 + (i // 5) * (th + 34 + 12)
+        cx, cy = 12 + (i % cols) * (tw + 12), 12 + (i // cols) * (th + 34 + 12)
         sheet.paste(Image.open(p).resize((tw, th), Image.LANCZOS), (cx, cy + 34))
         d.text((cx, cy + 6), f"{t:0.3f} s  f{round(t * FPS)}", fill=(251, 209, 1), font=font)
     sheet.save(EXPORTS / "contact-sheet.jpg", quality=90)
     return paths
 
 
+def verify_sync(ff, mp4):
+    """Every sampled MP4 frame must match plate+overlay of the same index (catches any frame slip)."""
+    idx = [0, 43, 44, 106, 140, 198, 199, 242, 243, 312, 313, 330, 371]
+    sel = "+".join(f"eq(n\\,{i})" for i in idx)
+    p = subprocess.run([str(ff), "-loglevel", "error", "-i", str(mp4), "-vf", f"select='{sel}',scale=270:480,format=rgb24",
+                        "-fps_mode", "passthrough", "-f", "rawvideo", "-"], capture_output=True, check=True)
+    got = np.frombuffer(p.stdout, np.uint8).reshape(-1, 480, 270, 3).astype(np.float32)
+    bad = []
+    for k, i in enumerate(idx):
+        c = Image.alpha_composite(Image.open(WORK / f"plate/{i:04d}.png").convert("RGBA"),
+                                  Image.open(WORK / f"overlay/{i:05d}.png").convert("RGBA"))
+        ref = np.asarray(c.convert("RGB").resize((270, 480), Image.BILINEAR), np.float32)
+        err = float(np.abs(got[k] - ref).mean())
+        if err > 8:
+            bad.append((i, round(err, 1)))
+    print(f"sync: {len(idx)} sampled frames vs plate+overlay, mismatches: {bad or 'none'}")
+    if bad:
+        sys.exit("sync check failed")
+
+
 def safe_zone_report():
     """Overlay ink (alpha > 8) on footage frames must sit inside y 14%-80% (stories profile bar / reply bar).
     Transit scan-line frames are exempt (they sweep through in < 0.2 s)."""
-    exempt = set(range(43, 46)) | set(range(259, 265))
+    exempt = set(range(43, 46)) | set(range(238, 244))              # transit scan lines 1.792-1.875, 9.917-10.125
     worst = [100.0, 0.0, 100.0, 0.0]
     bad = []
     for f in range(PLATE_FRAMES):
@@ -432,6 +539,7 @@ def main():
         print("3/5 audio"); build_audio(a.ffmpeg)
     print("4/5 encode"); out = encode(a.ffmpeg)
     print("5/5 QA"); stills(a.ffmpeg, out)
+    verify_sync(a.ffmpeg, out)
     safe_zone_report()
     info = probe(a.ffmpeg, out)
     (WORK / "probe.json").write_text(json.dumps(info, indent=2))

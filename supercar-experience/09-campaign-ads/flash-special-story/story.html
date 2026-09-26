@@ -216,7 +216,7 @@ function build() {
     '-webkit-mask-image:linear-gradient(to right,transparent 3%,#000 7%,#000 93%,transparent 97%);' +
     'mask-image:linear-gradient(to right,transparent 3%,#000 7%,#000 93%,transparent 97%)');
   const tm = met('M', 22);
-  const tickerHTML = 'SUPERCAR EXPERIENCE<i class="dm"></i>2-HOUR FLASH SPECIAL<i class="dm"></i>11AM – 1PM TODAY<i class="dm"></i>SUPERCAREXP.VIP<i class="dm"></i>';
+  const tickerHTML = 'SUPERCAR EXPERIENCE<i class="dm"></i>2-HOUR RENTAL FLASH SPECIAL<i class="dm"></i>11AM – 1PM PT TODAY<i class="dm"></i>SUPERCAREXP.VIP<i class="dm"></i>';
   R.tickerRun = el('div', 'a w', tmask, `white-space:nowrap;font-family:${FONT.M};font-size:22px;letter-spacing:.14em;` +
     `line-height:${Math.ceil(tm.asc + tm.desc)}px;top:${(Y(.775) - 1440 - tm.cap / 2 - (tm.asc - tm.cap)).toFixed(2)}px`);
   const one = el('span', '', R.tickerRun); one.innerHTML = tickerHTML;
@@ -232,7 +232,7 @@ function build() {
   // B1 hook
   R.h1 = line(ty, { f: 'B', fs: 210, x: x0, cap: Y(.150), html: '2-HOUR', cls: 'g' });
   R.h2 = line(ty, { f: 'B', fs: 150, x: x0, cap: Y(.242), html: 'FLASH SPECIAL', cls: 'w' });
-  R.h3 = line(ty, { f: 'M', fs: 34, x: x0, cap: Y(.316), ls: .18, html: 'ENDS <span class="g">1PM</span> TODAY', cls: 'w' });
+  R.h3 = line(ty, { f: 'M', fs: 34, x: x0, cap: Y(.316), ls: .18, html: 'ENDS TODAY · <span class="g">1PM PT</span>', cls: 'w' });
   R.hS = stripe(ty, x0, 651, 180, 8);
   // B2 tag
   R.tBrand = line(ty, { f: 'M', fs: 22, x: x0, cap: Y(.212), ls: .22, html: 'BRAND', cls: 'g' });
@@ -242,7 +242,7 @@ function build() {
   R.mName = line(ty, { f: 'B', fs: 120, x: x0, cap: Y(.372), html: 'HURACÁN STO', cls: 'w', shadow: SH_B3 });
   // B4 readout
   R.ro = el('div', 'lyr', ty);
-  R.roHead = line(R.ro, { f: 'M', fs: 24, x: x0, cap: Y(.410), ls: .2, html: 'FLASH WINDOW · TODAY', cls: 'g' });
+  R.roHead = line(R.ro, { f: 'M', fs: 24, x: x0, cap: Y(.410), ls: .2, html: 'RENTAL FLASH WINDOW · TODAY', cls: 'g' });
   R.roStripe = stripe(R.ro, x0, Y(.432), 300, 8);
   const ty0 = Y(.490), tx1 = X(.80);
   R.track = el('div', 'a', R.ro, `left:${x0}px;top:${(ty0 - 3).toFixed(1)}px;width:${tx1 - x0}px;height:6px;transform-origin:0 50%`);
@@ -271,9 +271,10 @@ function build() {
     return { lab, idx, scan, pip };
   });
   // B8 ask
-  R.ask1 = line(ty, { f: 'B', fs: 140, x: x0, cap: Y(.610), html: 'BOOK BEFORE <span class="g">1PM</span>', cls: 'w', shadow: SH_B8 });
-  R.ask2 = line(ty, { f: 'M', fs: 36, x: x0, cap: Y(.684), ls: .04, html: 'CALL <span class="g">(888) 678-6079</span>', cls: 'w', shadow: SH_B8 });
-  R.askS = stripe(ty, x0, Y(.714), 320, 8);
+  R.ask1 = line(ty, { f: 'B', fs: 120, x: x0, cap: Y(.610), html: 'BOOK BEFORE <span class="g">1PM PT</span>', cls: 'w', shadow: SH_B8 });
+  R.ask2 = line(ty, { f: 'M', fs: 26, x: x0, cap: Y(.673), ls: .14, html: 'CALL FOR THE FLASH RATE', cls: 'w', shadow: SH_B8 });
+  R.ask3 = line(ty, { f: 'M', fs: 40, x: x0, cap: Y(.696), ls: .04, html: '(888) 678-6079', cls: 'g', shadow: SH_B8 });
+  R.askS = stripe(ty, x0, Y(.726), 320, 8);
   /* 9. scan lines and pulses */
   const fx = layer();
   R.scan1 = scanLine(fx, 3, .7);
@@ -283,19 +284,39 @@ function build() {
   R.logo = el('img', 'a', R.end, `left:${540 - 280}px;top:547px;width:560px;height:333px;transform-origin:50% 50%`);
   R.logo.src = '../../02-logos/png/sce-stacked--white.png';
   R.endS = stripe(R.end, 540 - 180, Y(.486), 360, 8);
-  R.endH = line(R.end, { f: 'B', fs: 92, x: 540, cap: Y(.510), html: 'FLASH SPECIAL ENDS 1PM', cls: 'g', align: 'center' });
+  R.endK = line(R.end, { f: 'M', fs: 26, x: 540, cap: Y(.505), ls: .2, html: 'RENTAL FLASH SPECIAL', cls: 'w', align: 'center' });
+  R.endH = line(R.end, { f: 'B', fs: 92, x: 540, cap: Y(.525), html: 'ENDS TODAY · 1PM PT', cls: 'g', align: 'center' });
   R.endC = [
-    line(R.end, { f: 'M', fs: 32, x: 540, cap: Y(.576), ls: .16, html: 'SUPERCAREXP.VIP', cls: 'w', align: 'center' }),
-    line(R.end, { f: 'M', fs: 32, x: 540, cap: Y(.610), ls: .08, html: '(888) 678-6079', cls: 'w', align: 'center' }),
-    line(R.end, { f: 'M', fs: 24, x: 540, cap: Y(.644), ls: .12, html: '@SUPERCAR_EXPERIENCE_', cls: 'w', align: 'center' }),
+    line(R.end, { f: 'M', fs: 32, x: 540, cap: Y(.589), ls: .16, html: 'SUPERCAREXP.VIP', cls: 'w', align: 'center' }),
+    line(R.end, { f: 'M', fs: 32, x: 540, cap: Y(.622), ls: .08, html: '(888) 678-6079', cls: 'w', align: 'center' }),
+    line(R.end, { f: 'M', fs: 26, x: 540, cap: Y(.655), ls: .12, html: '@SUPERCAR_EXPERIENCE_', cls: 'w', align: 'center' }),
   ];
-  R.endC[2].inner.style.opacity = .75;
 }
 
 /* ---------- render: every element is a pure function of t ---------- */
+/* Cut points (24 fps frame boundaries, cue.md section 1):
+   B1 0.000 | B2 1.833 | B3 2.792 | B4 4.458 | B5 5.833 | B7 7.250 | B6 8.292 | B8 10.125 | B9 13.042 | end 15.500
+   B3, B4 and the requirements build keep the approved round-0 motion, shifted 7 frames earlier (u = t + S7);
+   the ask keeps its entry motion shifted 21 frames (v = t + S21). Exits are re-anchored in real time. */
+const S7 = 7 / 24, S21 = 21 / 24;
+const T_B2 = 1.833, T_B3 = 2.792, T_B8 = 10.125, T_B9 = 13.042;
+const HUD_OUT = 8.083, HUD_END = 8.292;                         // everything HUD is gone at the B6 cut (frame 199)
+const ASK_OUT = 12.583, ASK_END = 12.750;                       // 0.29 s of clean footage before the end card
+/* B8 car nose (x fraction) on the plate, measured per frame (cue.md D14); brackets sit 2% outside it */
+const NOSE = [[10.125, .835], [10.625, .860], [11.250, .895], [11.875, .912], [12.500, .937], [12.875, .946]];
+function noseAt(t) {
+  if (t <= NOSE[0][0]) return NOSE[0][1];
+  for (let i = 1; i < NOSE.length; i++) if (t <= NOSE[i][0]) {
+    const [t0, x0] = NOSE[i - 1], [t1, x1] = NOSE[i];
+    return lerp(x0, x1, (t - t0) / (t1 - t0));
+  }
+  return NOSE[NOSE.length - 1][1];
+}
+
 function renderAt(t) {
   if (!R) return;
   const x0 = X(.075);
+  const u = t + S7, v = t + S21;
 
   /* ===== B1 HOOK 0.000-1.833 ===== */
   if (on(t, 0, 1.833)) {
@@ -310,102 +331,102 @@ function renderAt(t) {
     st(R.hS, { o: exO, ty: exT, clip: t < 1.667 ? stripeReveal(R.hS, ps, 'lr') : stripeReveal(R.hS, 1 - pr, 'lr') });
   } else { hide(R.hookScrim); [R.h1, R.h2, R.h3].forEach(l => L(l, { o: 0 })); hide(R.hS); }
 
-  /* ===== B2 BRAND LOCK 1.833-3.083 ===== */
-  if (on(t, 1.833, 3.083)) {
-    // brackets: frame 44 start box (5-95 / 15-80), contract to lock (6-94 / 32-77), tick 8px inward, release at exit
-    const pc = ease(t, 1.875, 2.250, E.oExpo);
+  /* ===== B2 BRAND LOCK 1.833-2.792 (the whole crest take at 1.0x, 23 frames) ===== */
+  if (on(t, T_B2, T_B3)) {
+    const pc = ease(t, 1.875, 2.208, E.oExpo);
     let l = lerp(X(.05), X(.06), pc), r = lerp(X(.95), X(.94), pc), tp = lerp(Y(.15), Y(.32), pc), b = lerp(Y(.80), Y(.77), pc);
-    const tick = on(t, 2.250, 2.375) ? 8 * Math.sin(Math.PI * P(t, 2.250, 2.375)) : 0;
-    const rel = ease(t, 3.000, 3.083, E.oCub);
+    const tick = on(t, 2.208, 2.333) ? 8 * Math.sin(Math.PI * P(t, 2.208, 2.333)) : 0;
+    const rel = ease(t, 2.708, 2.792, E.oCub);
     const d = tick - 20 * rel;
     l += d; r -= d; tp += d; b -= d;
-    R.brA.set(l, tp, r, b, P(t, 1.833, 1.917) * (1 - rel));
-    const pp = ease(t, 1.875, 2.208, E.oCub);
+    R.brA.set(l, tp, r, b, P(t, T_B2, 1.917) * (1 - rel));
+    const pp = ease(t, 1.875, 2.167, E.oCub);
     st(R.tagPlate, { tx: -24 * (1 - pp), o: pp });
-    st(R.tagStripe, { clip: stripeReveal(R.tagStripe, ease(t, 2.000, 2.333, E.oCub), 'lr') });
-    L(R.tBrand, { o: P(t, 1.958, 2.208) });
-    L(R.tLambo, { rise: ease(t, 1.917, 2.250, E.oExpo), o: t < 1.917 ? 0 : 1 });
+    st(R.tagStripe, { clip: stripeReveal(R.tagStripe, ease(t, 1.958, 2.250, E.oCub), 'lr') });
+    L(R.tBrand, { o: P(t, 1.917, 2.125) });
+    L(R.tLambo, { rise: ease(t, 1.875, 2.208, E.oExpo), o: t < 1.875 ? 0 : 1 });
   } else { R.brA.set(0, 0, 0, 0, 0); hide(R.tagPlate); L(R.tBrand, { o: 0 }); L(R.tLambo, { o: 0 }); }
 
-  /* ===== B3 MODEL LOCK 3.083-4.750 ===== */
-  if (on(t, 3.083, 4.750)) {
-    const pin = P(t, 3.083, 3.125), pc = ease(t, 3.125, 3.500, E.oExpo);
-    // the STO lettering drifts/grows in the take (measured x 23.2-76.1% @3.5 s -> 19.8-78.8% @4.583 s),
+  /* ===== B3 MODEL LOCK 2.792-4.458 (round-0 motion at u = t + 7 frames) ===== */
+  if (on(u, 3.083, 4.750)) {
+    const pin = P(u, 3.083, 3.125), pc = ease(u, 3.125, 3.500, E.oExpo);
+    // the STO lettering drifts/grows in the take (measured x 23.2-76.1% -> 19.8-78.8% over the shot),
     // so the lock box tracks it, keeping ~3% clear of the letters
-    const bl = .20 - .0307 * (t - 3.5), bri = .80 + .0227 * (t - 3.5);
+    const bl = .20 - .0307 * (u - 3.5), bri = .80 + .0227 * (u - 3.5);
     let l = lerp(X(.035), X(bl), pc), r = lerp(X(.965), X(bri), pc), tp = lerp(Y(.15), Y(.455), pc), b = lerp(Y(.80), Y(.535), pc);
-    const tick = on(t, 3.500, 3.625) ? 8 * Math.sin(Math.PI * P(t, 3.500, 3.625)) : 0;
-    const rel = ease(t, 4.583, 4.667, E.oCub);
+    const tick = on(u, 3.500, 3.625) ? 8 * Math.sin(Math.PI * P(u, 3.500, 3.625)) : 0;
+    const rel = ease(u, 4.583, 4.667, E.oCub);
     const d = tick - 20 * rel;
     l += d; r -= d; tp += d; b -= d;
-    R.brB.set(l, tp, r, b, Math.max(pin, t >= 3.125 ? 1 : 0) * (1 - rel));
-    const up = ease(t, 4.583, 4.708, E.iCub);
-    L(R.mModel, { o: t < 3.250 || up >= 1 ? 0 : 1, clipR: ease(t, 3.250, 3.583, E.oCub), up });
-    L(R.mName, { o: t < 3.167 || up >= 1 ? 0 : 1, rise: ease(t, 3.167, 3.542, E.oExpo), up });
+    R.brB.set(l, tp, r, b, Math.max(pin, u >= 3.125 ? 1 : 0) * (1 - rel));
+    const up = ease(u, 4.583, 4.708, E.iCub);
+    L(R.mModel, { o: u < 3.250 || up >= 1 ? 0 : 1, clipR: ease(u, 3.250, 3.583, E.oCub), up });
+    L(R.mName, { o: u < 3.167 || up >= 1 ? 0 : 1, rise: ease(u, 3.167, 3.542, E.oExpo), up });
   } else { R.brB.set(0, 0, 0, 0, 0); L(R.mModel, { o: 0 }); L(R.mName, { o: 0 }); }
 
-  /* ===== HUD furniture 4.667-9.417: mid scrim, title block, ticker ===== */
-  const hudOut = ease(t, 9.208, 9.417, E.iCub);
-  if (on(t, 4.667, 9.417)) {
-    st(R.midScrim, { o: P(t, 4.667, 4.875) * (1 - hudOut) });
+  /* ===== HUD furniture 4.375-8.292: mid scrim, title block, ticker ===== */
+  const hudOut = ease(t, HUD_OUT, HUD_END, E.iCub);
+  if (on(u, 4.667, 99) && on(t, 0, HUD_END)) {
+    // 0.80 gradient; lighter (x0.775 = 0.62) over B4 so the car reads under the readout, full from the B5 cut
+    st(R.midScrim, { o: P(u, 4.667, 4.875) * (1 - hudOut) * (on(t, 0, 5.833) ? .775 : 1) });
   } else hide(R.midScrim);
-  if (on(t, 4.792, 9.417)) {
-    const pe = ease(t, 4.792, 5.250, E.oCub);
+  if (on(u, 4.792, 99) && on(t, 0, HUD_END)) {
+    const pe = ease(u, 4.792, 5.250, E.oCub);
     st(R.title, { ty: 30 * (1 - pe), o: pe * (1 - hudOut) });
-    const pb = ease(t, 5.000, 5.250, E.oCub);
+    const pb = ease(u, 5.000, 5.250, E.oCub);
     R.titleBr.set(54, 1238, 907, 1421, pb > 0 ? 1 : 0, pb);
-    const pw = ease(t, 4.792, 5.125, E.oCub);
+    const pw = ease(u, 4.792, 5.125, E.oCub);
     st(R.ticker, { o: 1 - hudOut, clip: pw >= 1 ? 'none' : `inset(0 ${(100 * (1 - pw)).toFixed(3)}% 0 0)` });
-    const loop = R.tickerLoop, trav = 60 * (t - 4.792);
+    const loop = R.tickerLoop, trav = 60 * (u - 4.792);
     const x = 54 - (((trav % loop) + loop) % loop);
     R.tickerRun.style.transform = `translateX(${x.toFixed(2)}px)`;
   } else { hide(R.title); hide(R.ticker); }
 
-  /* ===== B4 FLASH WINDOW readout 4.792-6.542 ===== */
-  if (on(t, 4.792, 6.542)) {
-    const ex = ease(t, 6.417, 6.542, E.iCub);
+  /* ===== B4 RENTAL FLASH WINDOW readout 4.500-6.250; the fill lands on the B5 cut (5.833) ===== */
+  if (on(u, 4.792, 6.542)) {
+    const ex = ease(u, 6.417, 6.542, E.iCub);
     st(R.ro, { tx: -40 * ex, o: 1 - ex });
-    const ph = ease(t, 4.792, 5.125, E.oCub);
+    const ph = ease(u, 4.792, 5.125, E.oCub);
     L(R.roHead, { o: ph, ty: 16 * (1 - ph) });
-    st(R.roStripe, { clip: stripeReveal(R.roStripe, ease(t, 4.875, 5.375, E.oCub), 'lr'), o: t < 4.875 ? 0 : 1 });
-    const ptk = ease(t, 4.917, 5.208, E.oCub);
+    st(R.roStripe, { clip: stripeReveal(R.roStripe, ease(u, 4.875, 5.375, E.oCub), 'lr'), o: u < 4.875 ? 0 : 1 });
+    const ptk = ease(u, 4.917, 5.208, E.oCub);
     st(R.track, { sx: ptk, o: ptk > 0 ? 1 : 0 });
-    const pf = ease(t, 5.208, 6.125, E.ioCub);
+    const pf = ease(u, 5.208, 6.125, E.ioCub);
     st(R.fill, { sx: pf, o: pf > 0 ? 1 : 0 });
     const trackW = X(.80) - x0;
-    const dotO = t < 5.208 ? 0 : 1 - P(t, 6.125, 6.208);
-    st(R.dot, { tx: pf * trackW, o: dotO, s: 1 - .4 * P(t, 6.125, 6.208) });
-    if (on(t, 6.125, 6.475)) {
-      const pp = ease(t, 6.125, 6.475, E.oCub);
+    const dotO = u < 5.208 ? 0 : 1 - P(u, 6.125, 6.208);
+    st(R.dot, { tx: pf * trackW, o: dotO, s: 1 - .4 * P(u, 6.125, 6.208) });
+    if (on(u, 6.125, 6.475)) {
+      const pp = ease(u, 6.125, 6.475, E.oCub);
       st(R.pulse, { s: lerp(1, 64 / 24, pp), o: .8 * (1 - pp) });
     } else hide(R.pulse);
-    const p11 = P(t, 5.000, 5.250);
+    const p11 = P(u, 5.000, 5.250);
     L(R.l11, { o: p11 > 0 ? Math.min(1, p11 * 1.6) : 0, s: lerp(.9, 1, E.oBack(p11)) });
-    const p1 = P(t, 5.083, 5.333);
-    const bump = on(t, 6.125, 6.375) ? Math.sin(Math.PI * P(t, 6.125, 6.375)) * .08 : 0;
+    const p1 = P(u, 5.083, 5.333);
+    const bump = on(u, 6.125, 6.375) ? Math.sin(Math.PI * P(u, 6.125, 6.375)) * .08 : 0;
     const originR = `${R.l1.padX + R.l1.vis}px ${R.l1.padT + R.l1.capH / 2}px`;
     L(R.l1, { o: p1 > 0 ? Math.min(1, p1 * 1.6) : 0, s: lerp(.9, 1, E.oBack(p1)) + bump, origin: originR,
-              color: rgb(WHITE, GOLD, P(t, 6.125, 6.208)) });
+              color: rgb(WHITE, GOLD, P(u, 6.125, 6.208)) });
   } else hide(R.ro);
 
-  /* ===== B5 + B6 REQUIREMENTS 6.583-9.417 ===== */
-  if (on(t, 6.583, 9.417)) {
+  /* ===== B5 + B7 REQUIREMENTS 6.292-8.292 (build at u, HUD OUT in real time) ===== */
+  if (on(u, 6.583, 99) && on(t, 0, HUD_END)) {
     R.rq.style.display = '';
-    const ph = ease(t, 6.583, 6.875, E.oCub), hx = 1 - ease(t, 9.250, 9.375, E.iCub);
+    const ph = ease(u, 6.583, 6.875, E.oCub), hx = 1 - ease(t, HUD_OUT + .042, HUD_OUT + .167, E.iCub);
     L(R.rqHead, { o: ph * hx, ty: 16 * (1 - ph) });
-    st(R.rqStripe, { clip: stripeReveal(R.rqStripe, ease(t, 6.625, 7.083, E.oCub), 'lr'), o: (t < 6.625 ? 0 : 1) * hx });
+    st(R.rqStripe, { clip: stripeReveal(R.rqStripe, ease(u, 6.625, 7.083, E.oCub), 'lr'), o: (u < 6.625 ? 0 : 1) * hx });
     const x1 = X(.80);
+    const out = ease(t, HUD_OUT + .042, HUD_END, E.iCub);
     R.rows.forEach((rw, i) => {
       const s = 6.708 + .167 * i;
-      const out = ease(t, 9.250, 9.417, E.iCub);
-      if (!on(t, 9.250, 99)) {
+      if (!on(t, HUD_OUT + .042, 99)) {
         // reveal
-        const ps = ease(t, s, s + .25, E.ioQuad), scanX = lerp(x0, x1, ps);
-        L(rw.lab, { o: t < s ? 0 : 1, clipR: clamp((scanX - rw.lab.left) / rw.lab.vis, 0, 1) });
-        L(rw.idx, { o: P(t, s, s + .1) });
-        const so = t < s ? 0 : 1 - P(t, s + .25, s + .33);
+        const ps = ease(u, s, s + .25, E.ioQuad), scanX = lerp(x0, x1, ps);
+        L(rw.lab, { o: u < s ? 0 : 1, clipR: clamp((scanX - rw.lab.left) / rw.lab.vis, 0, 1) });
+        L(rw.idx, { o: P(u, s, s + .1) });
+        const so = u < s ? 0 : 1 - P(u, s + .25, s + .33);
         st(rw.scan, { sx: Math.max(ps, .001), o: so });
-        const pp = P(t, s + .25, s + .45);
+        const pp = P(u, s + .25, s + .45);
         st(rw.pip, { s: pp > 0 ? Math.max(0, E.oBack(pp)) : 0, o: pp > 0 ? 1 : 0 });
       } else {
         // HUD OUT: clip left->right with a leading gold scan
@@ -420,37 +441,41 @@ function renderAt(t) {
 
   /* ===== transit scan lines ===== */
   scanSet(R.scan1, t, 1.792, 1.875);
-  scanSet(R.scan2, t, 10.792, 11.000);
+  scanSet(R.scan2, t, 9.917, T_B8);
 
-  /* ===== B8 THE ASK 11.000-13.417 ===== */
-  if (on(t, 11.042, 13.417)) {
-    const ex = ease(t, 13.250, 13.417, E.iCub), exO = 1 - ex, exT = 12 * ex;
-    L(R.ask1, { rise: ease(t, 11.042, 11.458, E.oExpo), o: exO, ty: exT });
-    const p2 = ease(t, 11.250, 11.583, E.oCub);
+  /* ===== B8 THE ASK 10.125-13.042: entry at v = t + 21 frames, exit 12.583-12.750 ===== */
+  if (on(v, 11.042, 99) && on(t, 0, ASK_END)) {
+    const ex = ease(t, ASK_OUT, ASK_END, E.iCub), exO = 1 - ex, exT = 12 * ex;
+    L(R.ask1, { rise: ease(v, 11.042, 11.458, E.oExpo), o: exO, ty: exT });
+    const p2 = ease(v, 11.250, 11.583, E.oCub);
     L(R.ask2, { o: p2 * exO, ty: 16 * (1 - p2) + exT });
-    st(R.askS, { clip: stripeReveal(R.askS, ease(t, 11.417, 11.792, E.oCub), 'lr'), o: (t < 11.417 ? 0 : 1) * exO });
-  } else { L(R.ask1, { o: 0 }); L(R.ask2, { o: 0 }); hide(R.askS); }
-  if (on(t, 11.208, 13.417)) {
-    // box follows the in-camera push. Measured on the plate (car nose x 81.5% @11.00, 88% @11.58, 93.5% @13.29):
-    // the move decelerates, so the box eases on 1-exp(-(t-11)/0.8), normalised to reach the cue's end box at 13.417.
-    const k = (1 - Math.exp(-Math.max(0, t - 11.0) / 0.8)) / (1 - Math.exp(-2.417 / 0.8));
-    const tl = lerp(X(.06), X(.05), k), tr = lerp(X(.83), X(.95), k), tt = lerp(Y(.41), Y(.40), k), tb = lerp(Y(.58), Y(.585), k);
-    const pl = ease(t, 11.208, 11.583, E.oExpo);
-    const ex = ease(t, 13.250, 13.417, E.iCub);
-    R.brC.set(lerp(X(.035), tl, pl), lerp(Y(.15), tt, pl), lerp(X(.965), tr, pl), lerp(Y(.80), tb, pl),
-              Math.min(1, P(t, 11.208, 11.292)) * (1 - ex));
+    const p3 = ease(v, 11.333, 11.667, E.oCub);
+    L(R.ask3, { o: p3 * exO, ty: 16 * (1 - p3) + exT });
+    st(R.askS, { clip: stripeReveal(R.askS, ease(v, 11.417, 11.792, E.oCub), 'lr'), o: (v < 11.417 ? 0 : 1) * exO });
+  } else { L(R.ask1, { o: 0 }); L(R.ask2, { o: 0 }); L(R.ask3, { o: 0 }); hide(R.askS); }
+  /* soft lock brackets: fly in, track the car (right edge = measured nose + 2%), release before the text exits */
+  const BR_OUT = 12.208, BR_END = 12.375;
+  if (on(v, 11.208, 99) && on(t, 0, BR_END)) {
+    const tl = X(.05), tr = X(Math.min(.955, noseAt(t) + .02)), tt = Y(.395), tb = Y(.595);
+    const pl = ease(v, 11.208, 11.583, E.oExpo);
+    const rel = ease(t, BR_OUT, BR_END, E.oCub), d = -20 * rel;
+    R.brC.set(lerp(X(.035), tl, pl) + d, lerp(Y(.15), tt, pl) + d, lerp(X(.965), tr, pl) - d, lerp(Y(.80), tb, pl) - d,
+              Math.min(1, P(v, 11.208, 11.292)) * (1 - rel));
   } else R.brC.set(0, 0, 0, 0, 0);
 
-  /* ===== B9 END CARD 13.667-15.500 ===== */
-  if (on(t, 13.667, 99)) {
+  /* ===== B9 END CARD 13.042-15.500 ===== */
+  if (on(t, T_B9, 99)) {
     R.end.style.display = '';
-    const pl = ease(t, 13.667, 14.083, E.oCub);
+    const pl = ease(t, T_B9, T_B9 + .417, E.oCub);
     st(R.logo, { o: pl, s: lerp(.96, 1, pl) });
-    const ps = ease(t, 13.833, 14.208, E.ioCub);
+    const ps = ease(t, T_B9 + .167, T_B9 + .542, E.ioCub);
     st(R.endS, { clip: stripeReveal(R.endS, ps, 'center'), o: ps > 0 ? 1 : 0 });
-    L(R.endH, { rise: ease(t, 13.917, 14.250, E.oExpo), o: t < 13.917 ? 0 : 1 });
+    const pk = ease(t, T_B9 + .208, T_B9 + .458, E.oCub);
+    L(R.endK, { o: pk, ty: 12 * (1 - pk) });
+    L(R.endH, { rise: ease(t, T_B9 + .250, T_B9 + .583, E.oExpo), o: t < T_B9 + .250 ? 0 : 1 });
     R.endC.forEach((ln, i) => {
-      const p = ease(t, 14.042 + .125 * i, 14.042 + .125 * i + .292, E.oCub);
+      const a0 = T_B9 + .333 + .042 * i;
+      const p = ease(t, a0, a0 + .250, E.oCub);
       L(ln, { o: p, ty: 14 * (1 - p) });
     });
   } else hide(R.end);
