@@ -13,6 +13,10 @@
 // glyph pixels differently depending on which frame was rendered before, which broke determinism.
 // On a Signal ground (s02's dive disc → s03's corridor, frames 222–307) the Signal marks (lit square,
 // typing cursor) take the HUD colour so the metronome never vanishes.
+// Split grounds: where a hard ground edge crosses the HUD (s03's Paper wall opening out, f305–307; the
+// s05 → s06 whip seam, f549–562) the HUD takes its colour per side of the edge. A text block crossed by an
+// edge is cut by two whole-pixel overflow:hidden masks (the original and a clone in the other colour);
+// crop marks and meter squares take the colour of the ground under their horizontal centre.
 (() => {
   const PAPER = R.pal.paper, INK = R.pal.ink, SIGNAL = R.pal.signal;
   const FPS = R.FPS;
@@ -20,8 +24,12 @@
   const frameOf = (t) => Math.floor(t * FPS + 1e-6);
 
   // HUD colour schedule (storyboard "Handoff protocol"): exact frames, no fades.
+  //   3.7 (f222)      Ink:   s02's dive disc covers every corner (Signal ground), through s03's Signal field
+  //   4.6875 (f282)   Paper: ROLL 2 + RUSH, the corridor walls darken toward Ink
+  //   307/60 (f307)   Ink:   s03's Paper wall fills the frame bar two thin side strips (WALL_BAND splits them);
+  //                          written as 307/60 because fr(5.1166667) = 308
   const COLOR_SCHEDULE = [
-    [0, PAPER], [3.75, INK], [7.03125, PAPER], [9.375, INK], [9.84375, PAPER],
+    [0, PAPER], [3.7, INK], [4.6875, PAPER], [307 / 60, INK], [7.03125, PAPER], [9.375, INK], [9.84375, PAPER],
     [10.78125, INK], [11.25, PAPER], [11.484375, INK], [11.71875, PAPER],
   ].map(([t, c]) => [fr(t), c]);
   const hudColorAt = (f) => {
@@ -35,6 +43,53 @@
   // at 308. A Signal mark would vanish there, so the lit square and the typing cursor take the HUD colour.
   const SIGNAL_GROUND = [222, 308];
   const onSignal = (f) => f >= SIGNAL_GROUND[0] && f < SIGNAL_GROUND[1];
+  // s03's Paper far wall opens out as a full-height band across the dark rush corridor and reaches the
+  // corners on 308. Its edges at the HUD rows [left, right] (top row y 62–78, bottom row y 1002–1018), measured
+  // on s03's render (L = 120 crossing, mean over the row band). Ink inside the band, Paper outside.
+  // (f304: 351 → 1571, clear of every HUD part.)
+  const WALL_BAND = {
+    305: { top: [281, 1636], bot: [286, 1641] },
+    306: { top: [198, 1714], bot: [207, 1724] },
+    307: { top: [98, 1812], bot: [109, 1823] },
+  };
+  // The crop-mark corners are 1058 px from centre, beyond the disc on frame 222 (R ≈ 1033): they sit on
+  // Ink for that one frame and take the Ink switch on 223 (R ≈ 1396), when the disc covers the whole frame.
+  const CORNERS_ON_DISC_F = 223;
+
+  // s05 → s06 whip overlap (storyboard "Shared whip function"): s06's opaque panel sits at x = 1920 − P(t).
+  // On these frames HUD parts right of the seam take the colour the schedule switches to at the landing.
+  const WHIP_T0 = 9.140625, WHIP_DUR = 0.234375;
+  const WHIP_F = [fr(WHIP_T0), fr(WHIP_T0 + WHIP_DUR)]; // 549 → 562 inclusive (563 is the landing)
+  // s06 smears its leading edge with a Paper ramp just left of the panel, as long as the edge's travel over
+  // half a frame (0.5·|P'|/60, drawn when ≥ 2 px). The split sits at the ramp's midpoint: Paper type over
+  // the darker half, Ink over the lighter half, so no glyph is ever Paper-on-near-Paper inside the ramp.
+  const whipSeam = (t) => {
+    const u = (t - WHIP_T0) / WHIP_DUR;
+    const x = 1920 - 1920 * R.ease.inOutCubic(R.clamp(u));
+    const dP = u <= 0 || u >= 1 ? 0 : (1920 / WHIP_DUR) * (u < 0.5 ? 12 * u * u : 3 * (2 - 2 * u) * (2 - 2 * u));
+    const blur = (0.5 * dP) / FPS;
+    return Math.round(blur >= 2 && x < 1920 ? x - blur / 2 : x);
+  };
+
+  // Ground split on frame f: null (the whole HUD takes the schedule colour) or, per HUD row, the x where the
+  // colour changes (`edges`, ascending) and the colours between them (`cols`, one more than edges).
+  const groundSplit = (f, t) => {
+    if (f >= WHIP_F[0] && f < WHIP_F[1]) {
+      const row = { edges: [whipSeam(t)], cols: [hudColorAt(f), hudColorAt(WHIP_F[1])] };
+      return { top: row, bot: row };
+    }
+    const band = WALL_BAND[f];
+    if (band) {
+      const row = (e) => ({ edges: e, cols: [PAPER, INK, PAPER] });
+      return { top: row(band.top), bot: row(band.bot) };
+    }
+    return null;
+  };
+  const rowColAt = (row, x) => {
+    let i = 0;
+    while (i < row.edges.length && x >= row.edges[i]) i++;
+    return row.cols[i];
+  };
 
   const CHAPTERS = [
     [0, '01', 'WEIGHT'], [1.875, '02', 'TIMING'], [3.75, '03', 'SPACE'],
@@ -161,7 +216,21 @@
         w.el.style.top = PAD + 'px';
         return Object.assign(w, { mask, box });
       });
+      // Timecode mask: the timecode moves into it only on frames where a ground edge cuts it, and lives on the
+      // root (its original place) otherwise. (Parked in an overflow:hidden div for the whole reel, it
+      // rasterised 1–2 levels differently under the camera shake/zoom of the later hits.)
+      const tcLeft = Math.round(X_RIGHT - boxW(this.tcLen)), tcTop = topFor(BASE_BOT);
+      const tcBox = { x0: tcLeft - PAD, x1: Math.ceil(tcLeft + boxW(this.tcLen)) + PAD };
+      const tcMask = R.el('div', { style: { left: tcBox.x0 + 'px', top: tcTop - PAD + 'px', width: tcBox.x1 - tcBox.x0 + 'px', height: FS + 2 * PAD + 'px', overflow: 'hidden', display: 'none' } }, root);
+      this.tcMask = tcMask;
+      this.tcHome = { left: this.tc.style.left, top: this.tc.style.top, inLeft: tcLeft - tcBox.x0 + 'px', inTop: PAD + 'px' };
+      // Split ground: every text block gets a second mask that holds a clone in the other colour.
+      this.splitTargets = [...this.wipeTargets, { el: this.tc, left: tcLeft, base: BASE_BOT, mask: tcMask, box: tcBox }].map((w) => {
+        const dup = R.el('div', { style: { top: topFor(w.base) - PAD + 'px', height: FS + 2 * PAD + 'px', overflow: 'hidden', display: 'none' } }, root);
+        return Object.assign(w, { dup });
+      });
       for (const e of [this.cursor, ...this.edges]) root.appendChild(e); // keep cursor + hairlines above the text
+      this.tcHome.next = this.tc.nextSibling; // the timecode's slot in the root's stacking order
       // No cues or sfx of its own (storyboard: "No sound of its own").
     },
 
@@ -173,9 +242,28 @@
       w.el.style.left = w.left - x0 + 'px';
     },
 
+    // Timecode in its split mask (a ground edge cuts it) or back in its own slot on the root.
+    setTcMasked(inMask) {
+      const h = this.tcHome;
+      if (inMask) {
+        if (this.tc.parentNode !== this.tcMask) this.tcMask.appendChild(this.tc);
+        this.tc.style.left = h.inLeft;
+        this.tc.style.top = h.inTop;
+        this.tcMask.style.display = 'block';
+      } else {
+        if (this.tc.parentNode === this.tcMask) this.tcMask.parentNode.insertBefore(this.tc, h.next);
+        this.tc.style.left = h.left;
+        this.tc.style.top = h.top;
+        this.tcMask.style.display = 'none';
+      }
+    },
+
     update(lt, p, t) {
       const f = frameOf(t);
       const col = hudColorAt(f);
+      // Split ground: a mark takes the colour of the ground under its horizontal centre.
+      const split = groundSplit(f, t);
+      const colAt = (bottom, cx) => (split ? rowColAt(bottom ? split.bot : split.top, cx) : col);
       const swift = R.ease.swift, whip = R.ease.whip;
 
       // ---- crop marks: draw from each vertex outward along the frame edges
@@ -184,7 +272,8 @@
         const [x, y, dx, dy] = CROP_V[i];
         const pth = this.crops[i];
         pth.setAttribute('d', `M${(x + dx * arm).toFixed(3)} ${y}H${x}V${(y + dy * arm).toFixed(3)}`);
-        pth.setAttribute('stroke', col);
+        const cropCol = f >= SIGNAL_GROUND[0] && f < CORNERS_ON_DISC_F ? hudColorAt(SIGNAL_GROUND[0] - 1) : colAt(y > 540, x + (dx * ARM) / 2);
+        pth.setAttribute('stroke', cropCol);
       }
 
       // ---- text colour
@@ -251,6 +340,30 @@
       }
       if (f >= WIPE_F0) this.cursor.style.display = 'none';
 
+      // ---- split ground: original left of the edge, a clone in the other colour right of it (whole-pixel masks)
+      for (const w of this.splitTargets) {
+        const { x0, x1 } = w.box;
+        const row = split && (w.base === BASE_BOT ? split.bot : split.top);
+        const cut = row ? row.edges.find((e) => e > x0 && e < x1) : undefined;
+        if (row) w.el.style.color = rowColAt(row, cut === undefined ? (x0 + x1) / 2 : cut - 1);
+        if (w.el === this.tc) this.setTcMasked(cut !== undefined);
+        // (split frames are all before WIPE_F0, so a wipe mask is at its full box whenever it is narrowed here)
+        if (cut === undefined) {
+          if (row) w.mask.style.width = x1 - x0 + 'px';
+          w.dup.style.display = 'none';
+          w.dup.replaceChildren();
+          continue;
+        }
+        w.mask.style.width = cut - x0 + 'px';
+        const clone = w.el.cloneNode(true);
+        clone.style.left = w.left - cut + 'px';
+        clone.style.color = rowColAt(row, cut);
+        w.dup.replaceChildren(clone);
+        w.dup.style.left = cut + 'px';
+        w.dup.style.width = x1 - cut + 'px';
+        w.dup.style.display = 'block';
+      }
+
       // ---- beat meter
       const beatIdx = Math.floor(t / R.BEAT + 1e-9);
       const lit = beatIdx % 4;
@@ -259,7 +372,8 @@
       for (let i = 0; i < 4; i++) {
         const m = this.meter[i];
         const on = full || i === lit;
-        m.outline.setAttribute('stroke', col);
+        const mcol = colAt(true, m.x + SQ / 2);
+        m.outline.setAttribute('stroke', mcol);
         m.outline.style.display = on ? 'none' : 'inline';
         m.fill.style.display = on ? 'inline' : 'none';
         if (!on) continue;
@@ -272,7 +386,7 @@
         m.fill.setAttribute('height', SQ + 2 * pop);
         // Bar downbeat: the first square flashes the HUD colour for 2 frames before turning Signal.
         const downbeat = !full && i === 0 && since < 2;
-        m.fill.setAttribute('fill', downbeat || onSignal(f) ? col : SIGNAL);
+        m.fill.setAttribute('fill', downbeat || onSignal(f) ? mcol : SIGNAL);
       }
     },
   });
