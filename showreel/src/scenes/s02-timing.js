@@ -188,7 +188,7 @@
       const originX = Math.round(200 - words[0].x0); // sentence ink starts at x = 200
       for (const l of letters) { l.x = originX + l.pen; l.ink = [l.ink[0] + originX, l.ink[1] + originX, l.ink[2] + GROUND, l.ink[3] + GROUND]; l.cx = (l.ink[0] + l.ink[1]) / 2; }
       for (const w of words) { w.x0 += originX; w.x1 += originX; w.cx = (w.x0 + w.x1) / 2; }
-      this.meas = { originX, baseline, words: words.map((w) => [w.x0, w.x1]) };
+      this.meas = { originX, baseline, words: words.map((w) => [w.x0, w.x1]) }; // QA aid (live ink boxes)
 
       // Landing targets: ink centres of the words; the full stop hangs 60 px right of the ink (+16 px
       // gap). The storyboard's reference numbers win when the live measurement agrees within 2 px
@@ -197,7 +197,6 @@
       const xT = pick(words[0].cx, 470), xI = pick(words[1].cx, 823), xE = pick(words[2].cx, 1308);
       const xS = pick(words[2].x1 + 60, 1759);
       this.xS = xS;
-      this.words = words;
 
       // ---- Hops (flight windows start after each 2-frame ground contact) --------------------
       this.hops = [
@@ -228,7 +227,10 @@
 
       const world = R.el('div', { style: { top: WORLD_TOP + 'px', width: R.W + 'px', height: WORLD_H + 'px', transformOrigin: '0 0' } }, root);
       this.world = world;
-      this.ground = R.el('div', { style: { top: GROUND - WORLD_TOP + 'px', height: '1.5px', width: '0px', background: rgba(FOG_RGB, 0.4) } }, world);
+      // Fog 1.5 px @ 40 % whose top edge sits on the baseline: rendered as its exact coverage
+      // (row 780 at 40 %, row 781 at 20 %) because DOM boxes snap to whole pixels
+      this.ground = R.el('div', { style: { top: GROUND - WORLD_TOP + 'px', height: '2px', width: '0px',
+        background: `linear-gradient(${rgba(FOG_RGB, 0.4)} 0 1px, ${rgba(FOG_RGB, 0.2)} 1px 2px)` } }, world);
       this.letterEls = letters.map((l) => {
         const el = R.el('span', {
           text: l.ch,
@@ -257,7 +259,8 @@
 
       // ---- Notation labels -------------------------------------------------------------------
       // Positions follow the storyboard's intent (each label at its event) but are nudged so no
-      // label is ever crossed by a dashed arc or by the dot itself (checked frame by frame).
+      // label is ever crossed by a dashed arc or by the dot itself (checked frame by frame). The two
+      // labels at the full stop hang from the grid's right margin (x = 1824).
       const self = this;
       const hop0 = this.hops[0], hop1 = this.hops[1];
       const apex0 = hop0.at(0.5 - (hop0.y1 - hop0.y0) / (8 * hop0.h)); // true apex: τ = ½ − (y1−y0)/8h
@@ -266,16 +269,16 @@
       const ax = Math.round(apex0[0]), sx1 = Math.round(apex1[0] * 2) / 2;
       this.labels = [
         // stem tracks the top of the crouching dot, retracts when it leaves
-        Object.assign({ text: 'ANTICIPATION', x: 1703, y: 560, align: 'left', tIn: T_IN, rate: 2,
+        Object.assign({ text: 'ANTICIPATION', x: 1824, y: 560, align: 'right', tIn: T_IN, rate: 2,
           stem: (t) => { const ps = self.pose(Math.min(t, T_LEAP - 1e-4)); return [ps.cx - DOT_R * ps.c, 567, ps.cy - DOT_R * ps.d - 5]; },
           stemOff: T_LEAP }, fadeAll),
         Object.assign({ text: 'ARCS', x: ax, y: 196, align: 'center', tIn: T_LEAP + 0.56 * hop0.T, rate: 1,
           stem: () => [ax, 203, apex0[1] - 7] }, fadeAll),
-        Object.assign({ text: 'SQUASH & STRETCH', x: xT, y: 500, align: 'center', tIn: T_L[0], rate: 2,
-          stem: () => [xT, 507, 662] }, fadeAll),
+        // an eyebrow over the word that takes the hit, flush with the sentence's left ink edge
+        Object.assign({ text: 'SQUASH & STRETCH', x: 200, y: 600, align: 'left', tIn: T_L[0], rate: 2 }, fadeAll),
         Object.assign({ text: 'SLOW IN / SLOW OUT', x: sx1, y: 392, align: 'center', tIn: T_L[1], rate: 2,
           stem: () => [sx1, 399, apex1[1] - 14] }, fadeAll),
-        { text: 'FOLLOW-THROUGH', x: xS, y: 640, align: 'center', tIn: T_L[3] + FR, rate: 2, tOut: 3.1640625, fade: 0.1171875 },
+        { text: 'FOLLOW-THROUGH', x: 1824, y: 640, align: 'right', tIn: T_L[3] + FR, rate: 2, tOut: 3.1640625, fade: 0.1171875 },
       ];
       for (const L of this.labels) {
         const w = L.text.length * MONO_ADV + (L.text.length - 1) * MONO_TRACK;
@@ -301,7 +304,7 @@
         if (t < h.t1) return this.flightPose(h, (t - h.t0) / h.T);
         const c = C[k];
         if (t < c.t0 + CONTACT) {
-          const q = (t - c.t0) / CONTACT, e = 1 - q * q;
+          const q = (t - c.t0) / CONTACT, e = 1 - q * q * q; // ~full squash, then ~70 %, then lift-off
           return poseSquash(c.x, GROUND, 1 + (c.sx - 1) * e, 1 - (1 - c.sy) * e, c.lean * e);
         }
       }
@@ -311,7 +314,9 @@
       if (t < T_DIVE) {
         // settle wobble (WOBBLE), tapered to exact rest before the notice beat
         const w = (1 - R.spring(t - T_L[4], WOBBLE)) * (1 - R.smoothstep(T_L[4] + 0.12, T_NOTICE - FR, t));
-        const k = lerp(1, 0.85, E.inOutSine(seg(t, T_NOTICE, T_NOTICE + R.E16)));
+        // notice: 1 → 0.85 over a 16th (inOutSine), a hair past it and back, so the "held"
+        // anticipation is a moving hold that settles exactly on 0.85 (R 37.4) before the dive
+        const k = R.kf(t, [[T_NOTICE, 1], [T_NOTICE + R.E16, 0.825, 'inOutSine'], [T_NOTICE + R.E16 + 0.1, 0.85, 'inOutSine']]);
         const ps = poseSquash(xS, GROUND, 1 + 0.06 * w, 1 - 0.05 * w, 0);
         if (k === 1) return ps;
         return poseRound(xS, REST_Y, k); // notice: uniform scale about the centre
@@ -375,9 +380,16 @@
       }
     },
 
+    /**
+     * Dive centre: the storyboard's inOutCubic(min(1, u/0.1875)) progress from the full stop to frame
+     * centre, carried along a gentle upward arc (quadratic Bézier, ≤ 62 px off the chord) instead of
+     * a straight line — the dot's last move is one more hop, this time at the lens ("arcs, not lines").
+     */
     diveCentre(t) {
       const u = t - T_DIVE, e = E.inOutCubic(Math.min(1, Math.max(0, u / 0.1875)));
-      return [lerp(this.xS, 960, e), lerp(REST_Y, 540, e)];
+      const p0x = this.xS, p0y = REST_Y, p1x = this.xS - 199, p1y = REST_Y - 176, p2x = 960, p2y = 540;
+      const a = (1 - e) * (1 - e), b = 2 * e * (1 - e), c = e * e;
+      return [a * p0x + b * p1x + c * p2x, a * p0y + b * p1y + c * p2y];
     },
 
     // -------------------------------------------------------------------------------------------
@@ -388,6 +400,19 @@
       if (t >= T_NOTICE + 0.2) return;
 
       const outA = 1 - seg(t, T_L[3], T_L[4]); // notation fades as the full stop lands
+
+      // ---- springboard: the last stub of WIDE's Volt construction baseline (y = 700) surfaces
+      // under the crouch so the squash visibly presses on something, then retracts into the
+      // contact point once the dot has left (the same gesture as s01's line retract) ----
+      if (t < T_LEAP + 0.1) {
+        const grow = E.swift(seg(t, T_IN, T_LEAP));
+        const gone = E.inCubic(seg(t, T_LEAP + 2 * FR, T_LEAP + 0.1));
+        const hw = 92 * grow * (1 - gone);
+        if (hw > 0.5) {
+          ctx.fillStyle = PAL.volt;
+          ctx.fillRect(START[0] - hw, START_FLOOR, 2 * hw, 1);
+        }
+      }
 
       // ---- dashed motion paths (drawn PATH_LEAD ahead of the dot; trimmed away into the dot) ----
       const ret = this.trailLen * E.inQuad(seg(t, T_L[3], 3.1));
@@ -487,14 +512,20 @@
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, R.W, R.H);
 
-      // impact ring on "Timing"
+      // impact ring on "Timing": a shock dome on the floor — clipped at the ground line so it never
+      // sinks through the floor (or through the word's descender zone)
       const ir = seg(t, T_L[0], T_L[0] + 0.2);
       if (ir > 0 && ir < 1) {
+        ctx.save();
+        ctx.beginPath();
+        ctx.rect(0, 0, R.W, GROUND);
+        ctx.clip();
         ctx.strokeStyle = rgba(PAPER_RGB, (1 - ir) * (1 - ir) * 0.9);
         ctx.lineWidth = 1.5;
         ctx.beginPath();
         ctx.arc(this.contacts[0].x, REST_Y, 44 + 96 * E.swift(ir), 0, TAU);
         ctx.stroke();
+        ctx.restore();
       }
       // the camera-notice pulse
       const pr = seg(t, T_NOTICE, T_NOTICE + 0.2);
@@ -518,6 +549,20 @@
       const u = t - T_DIVE;
       const Rr = 37.4 * Math.exp(18 * u);
       const c = this.diveCentre(t);
+      // shutter: NS sub-frame samples over the previous half frame (180°), drawn oldest first with
+      // alpha 1/(NS+2-i) so the overlaps average to a linear coverage ramp — a soft trailing smear
+      // behind a crisp leading edge (every sample is a pure circle, so the portal still reads round)
+      const NS = 10;
+      for (let i = 1; i <= NS; i++) {
+        const ts = t - ((NS + 1 - i) / (NS + 1)) * (FR / 2);
+        if (ts <= T_DIVE) continue;
+        const cs = this.diveCentre(ts), rs = 37.4 * Math.exp(18 * (ts - T_DIVE));
+        ctx.globalAlpha = 1 / (NS + 2 - i);
+        ctx.beginPath();
+        ctx.arc(cs[0], cs[1], rs, 0, TAU);
+        ctx.fill();
+      }
+      ctx.globalAlpha = 1;
       ctx.beginPath();
       ctx.arc(c[0], c[1], Rr, 0, TAU);
       ctx.fill();
