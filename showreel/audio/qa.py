@@ -302,19 +302,66 @@ def first_sound(x, thr=1e-4):
     return a[0] / SR if a.size else float('nan')
 
 
-def onsets_in(x, t0, t1, gap=0.012, thr_db=-60.0):
-    """Onsets of a sparse one-shot stem (a part): starts of sound after >= gap of near-silence, or strong
-    rises inside sound, in [t0, t1)."""
-    a = np.abs(cut(x, t0, t1)).max(axis=0)
-    hop = int(0.001 * SR)
-    nb = a.size // hop
-    e = 20 * np.log10(a[:nb * hop].reshape(nb, hop).max(axis=1) + 1e-12)
+def onsets_in(x, t0, t1, fwd=0.0015, bwd=0.010, min_rise=4.0, min_gap=0.025, floor_db=-70.0):
+    """Onsets in [t0, t1): peaks (>= min_gap apart) of the forward / backward window energy ratio that rise
+    by min_rise dB over a level above floor_db. 0.25 ms resolution; works on noisy decays (snare rolls)."""
+    p = np.mean(np.square(x), axis=0)
+    c = np.concatenate([[0.0], np.cumsum(p)])
+    wf, wb, hop = int(fwd * SR), int(bwd * SR), max(1, int(0.00025 * SR))
+    i = np.arange(max(0, int(round(t0 * SR))), min(p.size - wf, int(round(t1 * SR))), hop)
+    if i.size == 0:
+        return []
+    ef = (c[i + wf] - c[i]) / wf
+    eb = (c[i] - c[np.maximum(i - wb, 0)]) / wb
+    r = 10 * np.log10((ef + 1e-14) / (eb + 1e-14))
+    ok = (r > min_rise) & (10 * np.log10(ef + 1e-24) > floor_db)
     out = []
-    for k in range(1, nb):
-        prev = e[max(0, k - int(gap * 1000)):k]
-        if e[k] > thr_db and e[k] - (prev.max() if prev.size else -240) > 6.0 and (not out or k - out[-1] > 20):
-            out.append(k)
-    return [t0 + k / 1000.0 for k in out]
+    for k in np.flatnonzero(ok):
+        t = i[k] / SR
+        if out and t - out[-1][0] < min_gap:
+            if r[k] > out[-1][1]:
+                out[-1] = (t, r[k])
+            continue
+        out.append((t, r[k]))
+    return [t for t, _ in out]
+
+
+def event_buf(ev, side, song=None):
+    """One sound event from render.json rendered alone, exactly as the mixer places it (same renderer, seed,
+    SFX_MIX gain and stems pregain). -> (stereo buffer, start time)."""
+    kw = {k: v for k, v in ev.items() if k not in ('type', 'gain_db', 'source', 'passes', 'anchor')}
+    if ev['type'] == 'reverse':
+        song = song or synth.Song(synth.SONG)
+        kw['chord_notes'] = synth.voicing(song.chord_at(ev['t'] + ev['dur'] + 1e-6), 64.0)
+    buf, off = synth.RENDERERS[ev['type']](**kw)
+    buf = synth.stereo(buf) if buf.ndim == 1 else buf
+    return buf * synth.undb(ev['gain_db']) * side['pregain'], ev['t'] + off
+
+
+def find_event(side, typ, t, source=None, tol=0.002):
+    for ev in side['events']:
+        if ev['type'] == typ and abs(ev['t'] - t) < tol and (source is None or ev['source'].startswith(source)):
+            return ev
+    return None
+
+
+def peak_time(buf, t0, win=0.004):
+    e = np.convolve(np.abs(buf).max(axis=0), np.ones(int(win * SR)) / int(win * SR), mode='same')
+    return t0 + int(np.argmax(e)) / SR
+
+
+NOTE_NAMES = ('C', 'Db', 'D', 'Eb', 'E', 'F', 'Gb', 'G', 'Ab', 'A', 'Bb', 'B')
+
+
+def chroma(x, t0, t1, fmin=90.0, fmax=2000.0):
+    """Pitch-class energy profile of [t0, t1) -> the strongest pitch classes, strongest first."""
+    m = cut(x, t0, t1).mean(axis=0)
+    S = np.abs(np.fft.rfft(m * np.hanning(m.size), 1 << 17)) ** 2
+    f = np.fft.rfftfreq(1 << 17, 1.0 / SR)
+    sel = (f >= fmin) & (f <= fmax)
+    pc = np.round(12 * np.log2(f[sel] / 440.0) + 69).astype(int) % 12
+    prof = np.bincount(pc, weights=S[sel], minlength=12)
+    return [NOTE_NAMES[k] for k in np.argsort(prof)[::-1] if prof[k] > 0.08 * prof.max()]
 
 
 def logspec(m, t, win=0.02, fmin=150.0, fmax=5000.0, bpo=96):

@@ -68,36 +68,59 @@
 
   // ---- The dot's path (pure) --------------------------------------------------------------------------------
   const HOP_A = [960, 540], HOP_C = [1022, 262], HOP_B = [TRACK_X0, TRACK_Y];
-  const RET_A = [TRACK_X1, TRACK_Y], RET_C = [1300, 262], RET_B = [960, 540];
+  // Return flight: the house `anticipate` curve on a quadratic arc. Its negative lobe extrapolates the arc
+  // backwards (down-right: a crouch), then the dot flings up-left over the apex and decelerates into the exact
+  // rest pose. Peak ≈170 px/frame instead of the snap curve's 268 px single-frame jump, so the arc reads.
+  const RET_A = [TRACK_X1, TRACK_Y], RET_C = [1300, 250], RET_B = [960, 540];
+  const retK = (t) => E.anticipate(seg(t, T.retract, T.home));
+  const RET_WIND = (() => { let m = 0; for (let i = 0; i <= 200; i++) m = Math.min(m, E.anticipate(i / 200)); return -m; })();
+  // Settle after PLAY: the curve ends with dv/dx = −0.625, so the dot arrives at 1680 moving ≈14 px/frame.
+  // Follow-through instead of a dead stop: the mass carries on left (volume-preserving stretch, right edge
+  // anchored) and wobbles out, fully settled well before RETRACT. The centre ends exactly on 1680.
+  const SETTLE_DUR = 0.2;
+  const settleAmt = (t) => {
+    const d = t - T.playEnd;
+    if (d < 0 || d >= SETTLE_DUR) return 0;
+    return 0.17 * Math.exp(-d / 0.045) * Math.cos((2 * Math.PI * d) / 0.13) * (1 - R.smoothstep(0.15, SETTLE_DUR, d));
+  };
   function dotPos(t) {
     if (t < T.hopLaunch) return HOP_A;
     if (t < T.hopLand) return qb(HOP_A, HOP_C, HOP_B, (t - T.hopLaunch) / (T.hopLand - T.hopLaunch)); // ballistic
     if (t < T.play) return HOP_B;
     if (t < T.retract) return [TRACK_X0 + 640 * vAt(t), TRACK_Y];
-    if (t < T.home) return qb(RET_A, RET_C, RET_B, E.snap(seg(t, T.retract, T.home)));
+    if (t < T.home) return qb(RET_A, RET_C, RET_B, retK(t));
     return RET_B;
   }
   // Shutter (in seconds) of the fake motion blur per phase.
   function shutter(t) {
     if (t >= T.hopLaunch && t < T.hopLand) return 0.55 * F;
-    if (t >= T.play && t < T.retract) return 0.4 * F;
-    if (t >= T.retract) return 0.7 * F;
+    if (t >= T.play && t < T.playEnd) return 0.4 * F;
+    if (t >= T.retract && t < T.home && retK(t) > 0) return 0.5 * F; // no smear during the wind-up (it squashes)
     return 0;
   }
-  // Squash / stretch that is not velocity-driven: crouch, landing squash, spring back.
+  // Squash / stretch that is not velocity-driven: crouch, landing squash, spring back, settle, wind-up.
   function dotSquash(t) {
     if (t > FR0 && t < T.hopLaunch) {
       const a = E.outQuad(seg(t, FR0, T.hopLaunch));
       const sy = 1 - 0.16 * a;
-      return { sx: 1 / sy, sy, dy: DOT_R * (1 - sy) }; // anchored at the bottom: a crouch
+      return { sx: 1 / sy, sy, dx: 0, dy: DOT_R * (1 - sy) }; // anchored at the bottom: a crouch
     }
-    if (t >= T.hopLand && t < T.squashEnd) return { sx: 1.25, sy: 0.8, dy: 0 };
+    if (t >= T.hopLand && t < T.squashEnd) return { sx: 1.25, sy: 0.8, dx: 0, dy: 0 };
     if (t >= T.squashEnd && t < T.squashEnd + 0.6) {
       const k = R.spring(t - T.squashEnd, TIGHT);
       const sx = 1.25 - 0.25 * k;
-      return { sx, sy: 1 / sx, dy: 0 };
+      return { sx, sy: 1 / sx, dx: 0, dy: 0 };
     }
-    return { sx: 1, sy: 1, dy: 0 };
+    const st = settleAmt(t);
+    if (st !== 0) {
+      const sx = 1 + st;
+      return { sx, sy: 1 / sx, dx: -DOT_R * st, dy: 0 }; // right edge stays put, the body carries on left
+    }
+    if (t >= T.retract && t < T.home) {
+      const w = clamp(-retK(t) / RET_WIND); // 0..1 through the wind-up
+      if (w > 0) { const sy = 1 - 0.18 * w; return { sx: 1 / sy, sy, dx: 0, dy: DOT_R * (1 - sy) }; } // crouch before the fling
+    }
+    return { sx: 1, sy: 1, dx: 0, dy: 0 };
   }
 
   // ---- Cursor (pure) ----------------------------------------------------------------------------------------
@@ -260,6 +283,7 @@
         const tk = T.play + 3 * k * F;
         this.ghosts.push({ t: tk, x: TRACK_X0 + 640 * vAt(tk) });
       }
+      this.beadRank = this.ghosts.map((g, k) => this.ghosts.filter((h, i) => Math.abs(h.x - TRACK_X1) < Math.abs(g.x - TRACK_X1) || (Math.abs(h.x - TRACK_X1) === Math.abs(g.x - TRACK_X1) && i < k)).length);
       this.tickPass = [];
       for (let k = 1; k <= 8; k++) {
         let lo = 0, hi = 0.8; // first crossing happens before the peak (x ≈ 0.73)
@@ -479,9 +503,11 @@
           if (t < G[k].t) continue;
           let x = G[k].x, y = TRACK_Y, r = DOT_R, a = 1;
           if (t >= T.retract) {
-            const j = n - 1 - k; // along the string: newest bead first
-            const st = T.retract + j * 0.01;
-            const q = E.inCubic(seg(t, st, st + 0.1));
+            // Beads on a string: all reel toward the dot, nearest first (0.5-frame steps), 4 frames each, inCubic.
+            // The near ones merge during the wind-up; the far-left ones meet the dot as it flies home past them.
+            const j = this.beadRank[k];
+            const st = T.retract + j * 0.5 * F;
+            const q = E.inCubic(seg(t, st, st + 4 * F));
             const d = dotPos(t);
             x = lerp(x, d[0], q); y = lerp(y, d[1], q);
             r = DOT_R * (1 - 0.3 * q);
@@ -588,7 +614,7 @@
       const sL = R.spring(t - 5.2, POP) * endOut;
       ctx.fillStyle = INK;
       if (sL > 0.01) ctx.fillRect(TRACK_X0 - 1, TRACK_Y - 6 * sL, 2, 12 * sL);
-      const sR = R.spring(t - this.tickAppear[8], POP) * popEnv(t, this.tickPass[7], 1.6) * endOut;
+      const sR = R.spring(t - this.tickAppear[8], POP) * popEnv(t, this.tickPass[7], 1.6) * popEnv(t, T.playEnd, 1.5) * endOut; // pops again as the dot settles on it
       const xR = t < T.retract ? TRACK_X1 : head;
       if (sR > 0.01 && (t >= T.retract || head >= TRACK_X1 - 0.5)) ctx.fillRect(xR - 1, TRACK_Y - 6 * sR, 2, 12 * sR);
       // "0" / "1" under the ends
@@ -685,7 +711,7 @@
       } else {
         const s = dotSquash(t);
         ctx.beginPath();
-        ctx.ellipse(p[0], p[1] + s.dy, DOT_R * s.sx, DOT_R * s.sy, 0, 0, R.TAU);
+        ctx.ellipse(p[0] + s.dx, p[1] + s.dy, DOT_R * s.sx, DOT_R * s.sy, 0, 0, R.TAU);
         ctx.fill();
       }
 

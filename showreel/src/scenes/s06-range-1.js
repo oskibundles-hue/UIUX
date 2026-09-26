@@ -126,6 +126,9 @@
     setup(root) {
       root.style.pointerEvents = 'none';
       this.panel = R.el('div', { style: { width: W + 'px', height: H + 'px', overflow: 'hidden', background: PAPER } }, root);
+      // Motion-blurred leading edge of the whip: a Paper ramp just LEFT of the (fully opaque) panel,
+      // as long as the edge's travel over ~⅓ frame, so the seam smears like the rest of the camera move.
+      this.edge = R.el('div', { style: { width: '1px', height: H + 'px', transformOrigin: '0 0', background: `linear-gradient(to right, ${R.rgba(PAPER, 0)}, ${R.rgba(PAPER, 1)})`, display: 'none' } }, root);
       const cv = R.canvas(this.panel);
       this.ctx = cv.ctx;
 
@@ -795,6 +798,11 @@
       this.panel.style.background = GROUND[v];
       const speed = Math.abs(dP(t)) / DP_MAX; // 0..1
       const smear = 1 + 2.5 * speed; // halftone smear: peak 3.5 mid-whip, 1.0 on landing
+      const blurLen = (0.35 * Math.abs(dP(t))) / FPS; // ≤ 143 px at peak speed
+      if (blurLen > 1 && px < W) {
+        this.edge.style.display = 'block';
+        this.edge.style.transform = `translate3d(${(px - blurLen).toFixed(3)}px,0,0) scaleX(${blurLen.toFixed(3)})`;
+      } else this.edge.style.display = 'none';
 
       ctx.clearRect(0, 0, W, H);
       let dx = 0, dy = 0, sx = 1, sy = 1, dotVisible = true;
