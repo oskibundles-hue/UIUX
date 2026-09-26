@@ -1,0 +1,497 @@
+<!doctype html>
+<!--
+  story.html -- the Locked-On motion layer for the 2026-09-15 rally vlog (Omarie Young, @nq.young).
+  Transparent 1080x1920. window.renderAt(t) is a pure function of t (seconds on the 30000/1001 fps
+  timeline of the approved T7 cut): no CSS animation, no transitions, no rAF, no clock, no randomness.
+  lib/kcapture.js renders it with sub-frame motion blur; build.py composites it over the vlog with ffmpeg.
+
+  Loads (written by build.py, so run `python3 build.py --stage prep` once before opening by hand):
+    .work/config.js   window.CONFIG  <- config.json (every on-screen line + the measured frame anchors)
+    .work/tracks.js   window.TRACKS  <- lib/data/tracks.json (lib/track.py: urus f3215-3406, soe f3119-3214)
+  Library: lib/kinetic.js (window.KT). Fonts ../../07-fonts/, logos ../../02-logos/png/.
+  Every element and its in/out times: cue.md. window.WINDOWS lists the on-screen spans (render list).
+-->
+<html><head><meta charset="utf-8"><title>Rally Vlog Locked-On Layer</title>
+<style>
+@font-face{font-family:Bebas;src:url('../../07-fonts/BebasNeue-Regular.ttf')}
+@font-face{font-family:Michroma;src:url('../../07-fonts/Michroma-Regular.ttf')}
+:root{--gold:#FBD101;--white:#FFFFFF;--black:#000000}
+html,body{margin:0;padding:0;background:transparent;width:1080px;height:1920px;overflow:hidden}
+*{box-sizing:border-box}
+.a{position:absolute;left:0;top:0}
+.beb{font-family:Bebas;letter-spacing:0;line-height:1;white-space:pre}
+.mic{font-family:Michroma;letter-spacing:.08em;line-height:1;white-space:pre}
+.gold{color:var(--gold)}.white{color:var(--white)}
+.stripe{background:linear-gradient(90deg,#FBD101 0 78%,#fff 78% 100%);transform-origin:left center}
+.mask{overflow:hidden;padding:6px 24px 6px 0;margin:-6px 0 0 0}
+.edge{width:4px;margin-left:-2px;background:#fff;box-shadow:0 0 26px 9px rgba(255,255,255,.42),0 0 7px 2px rgba(255,255,255,.8);border-radius:2px}
+.hide{display:none}
+</style>
+<script src=".work/config.js"></script>
+<script src=".work/tracks.js"></script>
+<script src="lib/kinetic.js"></script>
+</head><body>
+<div id="stage" class="a" style="width:1080px;height:1920px"></div>
+<script>
+const C = window.CONFIG, CP = C.copy, AN = C.anchors, E = KT.ease, P = KT.p, cl = KT.cl, lerp = KT.lerp;
+const FPS = 30000 / 1001, fT = n => n / FPS, SUB = 0.25 / FPS;        // SUB = half of a 180-degree shutter
+const $ = id => document.getElementById(id);
+const stage = $('stage');
+const G = {};
+const px = v => v.toFixed(2) + 'px';
+
+// ======================================================================== timing (all derived from anchors)
+const T = {};
+T.hookExit = fT(AN.titleLast + 1);                   // first frame without the old title (f78, 2.603 s)
+// chapter starts / exit starts. 01 and 02: in on the cut, fully built before the pill's first frame,
+// exit only after the pill's last visible frame. 03-05: in on the cut, held ~1.6-1.8 s.
+T.ch = [
+  { ts: fT(AN.pill1.cut), tx: fT(AN.pill1.last + 1) },
+  { ts: fT(AN.pill2.cut), tx: fT(AN.pill2.last + 1) },
+  { ts: fT(AN.briefingCut), tx: fT(AN.briefingCut) + 2.08 },
+  { ts: fT(AN.driveCut), tx: fT(AN.driveCut) + 1.90 },
+  { ts: fT(AN.levelNineCut), tx: fT(AN.levelNineCut) + 2.07 },
+];
+T.CH_IN = 0.22; T.CH_OUT = 0.30;
+T.routeIn = T.ch[2].tx + T.CH_OUT - 0.02;           // the route card takes over as CH 03 leaves
+T.routeOut = 88.40;
+T.ticks = AN.routeTicks.map(r => fT(r.frame));
+T.soe = { a: 105.00, x: fT(AN.stripCut) - 0.24 };     // acquire, exit start (exit done before the cut f3215)
+T.urus = { a: fT(AN.stripCut + 3), x: fT(AN.levelNineCut) - 0.38 };
+T.end = fT(AN.endCardFirst);                          // f3810, the frame after his closing caption
+T.END_WIPE = 0.118;                                   // opaque from 127.245 s: f3814 on, before the old card's darkening (~f3815) and logo (f3817)
+T.total = (C.source.frames + C.source.extendFrames) / FPS;
+
+// on-screen windows (render list for kcapture; a frame is rendered if its shutter touches one)
+window.WINDOWS = [[0, T.hookExit + 0.40]]
+  .concat(T.ch.map(c => [c.ts - 0.01, c.tx + T.CH_OUT + 0.01]))
+  .concat([[T.routeIn - 0.01, T.routeOut + 0.40], [T.soe.a - 0.01, T.soe.x + 0.26], [T.urus.a - 0.01, T.urus.x + 0.26],
+           [T.end - 0.01, T.total + 0.01]]);
+window.TIMES = T;
+
+// motion-blur plan: 1 sample on held frames, K samples on the fast moves (270-degree shutter on the whips)
+const spans = [{ a: T.hookExit - 0.02, b: T.hookExit + 0.42, k: 14, shutter: 220 }];
+T.ch.forEach(c => { spans.push({ a: c.ts - 0.02, b: c.ts + 0.50, k: 12, shutter: 200 }, { a: c.tx - 0.02, b: c.tx + T.CH_OUT + 0.02, k: 12, shutter: 220 }); });
+spans.push({ a: T.routeIn - 0.02, b: T.routeIn + 0.80, k: 8 }, { a: T.routeOut - 0.02, b: T.routeOut + 0.42, k: 10 });
+T.ticks.forEach(tk => spans.push({ a: tk - 0.06, b: tk + 0.30, k: 8 }));
+for (const L of [T.soe, T.urus]) spans.push({ a: L.a - 0.02, b: L.a + 0.95, k: 12, shutter: 220 }, { a: L.x - 0.02, b: L.x + 0.28, k: 12, shutter: 220 });
+spans.push({ a: T.end - 0.02, b: T.end + T.END_WIPE + 0.04, k: 32, shutter: 270 }, { a: T.end + 0.04, b: T.end + 0.70, k: 10 });
+window.KT_PLAN = { k: 1, shutter: 180, spans };
+
+// ======================================================================== text placement helpers
+const cv = document.createElement('canvas').getContext('2d');
+function ink(fam, size, text) {
+  cv.font = `${size}px ${fam}`; cv.letterSpacing = fam === 'Michroma' ? (0.08 * size) + 'px' : '0px';
+  const m = cv.measureText(text);
+  return { aA: m.actualBoundingBoxAscent, aD: m.actualBoundingBoxDescent, fA: m.fontBoundingBoxAscent,
+           fD: m.fontBoundingBoxDescent, left: m.actualBoundingBoxLeft, w: m.actualBoundingBoxLeft + m.actualBoundingBoxRight,
+           adv: m.width - (fam === 'Michroma' ? 0.08 * size : 0) };
+}
+// place wrapper `w` so the ink of its (line-height:1) text starts at (x, y) in the wrapper's parent
+function place(w, fam, size, text, x, y) {
+  const m = ink(fam, size, text), hl = (size - (m.fA + m.fD)) / 2;
+  w.style.left = px(x + m.left); w.style.top = px(y - (hl + m.fA - m.aA));
+  return m;
+}
+function el(tag, cls, parent, css, text) {
+  const e = document.createElement(tag); if (cls) e.className = cls; if (css) e.style.cssText = css;
+  if (text != null) e.textContent = text; (parent || stage).appendChild(e); return e;
+}
+// a text line: wrapper (positioned) > optional mask > text div; returns {w, m, t, g(glyphs)}
+function line(parent, fam, size, text, x, y, cls, opts = {}) {
+  const w = el('div', 'a', parent);
+  let host = w;
+  if (opts.mask) host = el('div', 'mask', w);
+  const t = el('div', (fam === 'Bebas' ? 'beb ' : 'mic ') + (cls || ''), host, `font-size:${size}px`);
+  t.textContent = text;
+  const m = place(w, fam, size, text, x, y);
+  let g = null;
+  if (opts.split !== false) {
+    g = KT.measure(KT.split(t, { perspective: 0 }));
+    if (opts.goldDots) g.forEach(s => { if (s.dataset.ch === '·') s.style.color = '#FBD101'; });
+  }
+  return { w, t, m, g, x, y, size, fam, text };
+}
+const centreX = (fam, size, text, cx) => cx - ink(fam, size, text).w / 2;
+const show = (e, on) => { e.style.display = on ? 'block' : 'none'; };
+
+// ======================================================================== A. HOOK (frame 0 -> 2.603 s)
+const HK = { x: 54, y: 362, w: 856, h: 390 };
+function buildHook() {
+  const root = el('div', 'a', stage); root.id = 'hook';
+  const clip = el('div', 'a', root, `left:${HK.x}px;top:${HK.y}px;width:${HK.w}px;height:${HK.h}px;overflow:hidden`);
+  el('div', 'a', clip, `width:${HK.w}px;height:${HK.h}px;background:#000`);
+  const inner = el('div', 'a', clip, `width:${HK.w}px;height:${HK.h}px`);
+  const stripe = el('div', 'a stripe', root, `left:${HK.x}px;top:${HK.y}px;width:${HK.w}px;height:8px`);
+  const redge = el('div', 'a', root, `left:${HK.x}px;top:0;width:${HK.w}px;height:3px;background:#FBD101;box-shadow:0 0 14px 3px rgba(251,209,1,.55);opacity:0`);
+  const sweep = el('div', 'a', root, `left:${HK.x}px;top:${HK.y}px;width:${HK.w}px;height:8px;overflow:hidden`);
+  const sweepBar = el('div', 'a', sweep, 'width:120px;height:8px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.95),rgba(255,255,255,0))');
+  const X = 36;                                           // inner padding (panel-relative coordinates)
+  G.hkEyebrow = line(inner, 'Michroma', 22, CP.hook.eyebrow, X, 36, 'gold', { goldDots: true });
+  G.hkEyebrow.g.forEach(s => { if (s.dataset.ch === '·') s.style.color = '#FFFFFF'; });
+  G.hkL1 = line(inner, 'Bebas', 190, CP.hook.line1, X, 74, 'white', { mask: true });
+  G.hkL2 = line(inner, 'Bebas', 84, CP.hook.line2, X, 232, 'gold', { mask: true });
+  const lw = 250, lh = lw * 215 / 1527;
+  const logoW = el('div', 'a', inner, `left:${X}px;top:318px;width:${lw}px;height:${lh.toFixed(2)}px`);
+  const img = el('img', '', logoW, `width:${lw}px;display:block`); img.src = '../../02-logos/png/sce-primary-horizontal--white.png';
+  G.hook = { root, clip, inner, stripe, sweep, sweepBar, logoW, img, redge };
+}
+function renderHook(t) {
+  const H = G.hook, on = t < T.hookExit + 0.40;
+  show(H.root, on); if (!on) return;
+  // life on the hold: a gold glint through THE RALLY, then a white glint through the gold line, a stripe light sweep
+  const g1 = KT.glint(G.hkL1.g, t, { start: 0.30, dur: 0.50, base: '#FFFFFF', warm: '#FFF2B0', hot: '#FBD101', width: 0.20 * G.hkL1.g.W, angle: 106 });
+  G.hkL1.w.style.filter = g1 > 0 ? `drop-shadow(0 0 ${(10 * g1).toFixed(2)}px rgba(251,209,1,${(.35 * g1).toFixed(3)}))` : 'none';
+  const g2 = KT.glint(G.hkL2.g, t, { start: 0.95, dur: 0.50, base: '#FBD101', warm: '#FFE866', hot: '#FFFFFF', width: 0.18 * G.hkL2.g.W, angle: 106 });
+  G.hkL2.w.style.filter = g2 > 0 ? `drop-shadow(0 0 ${(8 * g2).toFixed(2)}px rgba(255,255,255,${(.30 * g2).toFixed(3)}))` : 'none';
+  const qs = P(t, 1.55, 2.05), sw = qs > 0 && qs < 1;
+  H.sweepBar.style.display = sw ? 'block' : 'none';
+  H.sweepBar.style.transform = `translateX(${(-120 + (HK.w + 240) * E.inOutCubic(qs)).toFixed(2)}px)`;
+  // masked exit (starts on the first frame without the old title): the lines and the lockup lift out of the
+  // panel's mask, the panel retracts up into its stripe, then the stripe wipes out to the right
+  const x0 = T.hookExit;
+  const qp = E.inOutCubic(P(t, x0, x0 + 0.28));
+  H.inner.style.transform = qp > 0 ? `translateY(${(-70 * qp).toFixed(2)}px)` : 'none';
+  H.clip.style.clipPath = qp > 0 ? `inset(0 0 ${(100 * qp).toFixed(3)}% 0)` : 'none';
+  H.redge.style.opacity = qp > 0 && qp < 1 ? Math.min(1, Math.sin(Math.PI * qp) * 2).toFixed(4) : 0;
+  H.redge.style.transform = `translateY(${(HK.y + HK.h * (1 - qp) - 2).toFixed(2)}px)`;
+  const qst = E.inExpo(P(t, x0 + 0.20, x0 + 0.38));
+  H.stripe.style.transformOrigin = 'right center';
+  H.stripe.style.transform = qst > 0 ? `scaleX(${(1 - qst).toFixed(5)})` : 'none';
+  H.stripe.style.opacity = qst >= 1 ? 0 : 1;
+}
+
+// ======================================================================== B. CHAPTER CARDS
+const CH_Y = 388, CH_H = 150;
+const CH_W = [560, 720, 0, 0, 0];                       // 01 / 02 are sized to cover the burned-in pills
+function buildChapters() {
+  G.ch = CP.chapters.map((c, i) => {
+    const title = c.title, tag = c.tag;
+    const tw = ink('Bebas', 88, title).w, gw = ink('Michroma', 24, tag).w;
+    const w = Math.max(CH_W[i], Math.ceil(Math.max(tw, gw) + 110));
+    const x = Math.round(540 - w / 2);
+    const root = el('div', 'a', stage);
+    const clip = el('div', 'a', root, `left:${x}px;top:${CH_Y}px;width:${w}px;height:${CH_H}px;overflow:hidden`);
+    el('div', 'a', clip, `width:${w}px;height:${CH_H}px;background:#000`);
+    const inner = el('div', 'a', clip, `width:${w}px;height:${CH_H}px`);
+    const tagL = line(inner, 'Michroma', 24, tag, (w - gw) / 2, 25, 'gold');
+    const titL = line(inner, 'Bebas', 88, title, (w - tw) / 2, 62, 'white', { mask: true });
+    const stripe = el('div', 'a stripe', root, `left:${x}px;top:${CH_Y}px;width:${w}px;height:8px`);
+    const edge = el('div', 'a edge', root, `left:${x}px;top:${CH_Y - 6}px;height:20px;opacity:0;box-shadow:0 0 16px 5px rgba(255,255,255,.42),0 0 6px 2px rgba(255,255,255,.8)`);
+    const redge = el('div', 'a', root, `left:${x}px;top:0;width:${w}px;height:3px;background:#FBD101;box-shadow:0 0 12px 3px rgba(251,209,1,.5);opacity:0`);
+    return { root, clip, inner, stripe, edge, redge, tagL, titL, x, w };
+  });
+}
+function renderChapter(i, t) {
+  const c = G.ch[i], { ts, tx } = T.ch[i];
+  const on = t >= ts && t < tx + T.CH_OUT;
+  show(c.root, on); if (!on) return;
+  // IN: gold stripe draws L->R with a light edge, the panel unrolls down from it (masked reveal),
+  // the tag's tracking collapses, the title rises glyph by glyph inside its mask
+  const qs = E.outExpo(P(t, ts, ts + T.CH_IN));
+  // OUT: title and tag lift out through the mask, panel retracts into the stripe, stripe wipes off to the right
+  const qo = E.inExpo(P(t, tx + 0.16, tx + T.CH_OUT));
+  if (qo > 0) { c.stripe.style.transformOrigin = 'right center'; c.stripe.style.transform = `scaleX(${(1 - qo).toFixed(5)})`; }
+  else { c.stripe.style.transformOrigin = 'left center'; c.stripe.style.transform = qs < 1 ? `scaleX(${qs.toFixed(5)})` : 'none'; }
+  c.stripe.style.opacity = qo >= 1 ? 0 : 1;
+  const ev = qs > 0 && qs < 1 ? Math.sin(Math.PI * qs) : 0;
+  c.edge.style.opacity = ev.toFixed(4); c.edge.style.transform = `translateX(${(c.w * qs).toFixed(2)}px)`;
+  const qr = E.outExpo(P(t, ts + 0.015, ts + T.CH_IN));
+  const qc = E.inOutCubic(P(t, tx, tx + 0.24));
+  const bottom = qc > 0 ? 100 * qc : 100 * (1 - qr);
+  c.clip.style.clipPath = bottom > 0.001 ? `inset(0 0 ${bottom.toFixed(3)}% 0)` : 'none';
+  c.inner.style.transform = qc > 0 ? `translateY(${(-40 * qc).toFixed(2)}px)` : 'none';
+  c.redge.style.opacity = qc > 0 && qc < 1 ? Math.min(1, Math.sin(Math.PI * qc) * 2).toFixed(4) : 0;
+  c.redge.style.transform = `translateY(${(CH_Y + CH_H * (1 - qc) - 2).toFixed(2)}px)`;
+  KT.track(c.tagL.g, t, { start: ts + 0.07, dur: 0.34, spread: 1.9 });
+  KT.rise(c.titL.g, t, { start: ts + 0.08, stagger: 0.014, dur: 0.36, dy: 1.05, ease: E.outExpo });
+  const gl = KT.glint(c.titL.g, t, { start: ts + 0.72, dur: 0.46, base: '#FFFFFF', warm: '#FFF2B0', hot: '#FBD101', width: 0.22 * c.titL.g.W, angle: 106 });
+  c.titL.w.style.filter = gl > 0 ? `drop-shadow(0 0 ${(9 * gl).toFixed(2)}px rgba(251,209,1,${(.32 * gl).toFixed(3)}))` : 'none';
+}
+
+// ======================================================================== C. ROUTE HUD (briefing)
+const RT = { x: 54, y: 222, h: 298, pitch: 46, row0: 66, lab: 44, box: 30 };
+function buildRoute() {
+  const wps = CP.route.waypoints;
+  const maxW = Math.max(...wps.map(s => ink('Bebas', RT.lab, s).w));
+  const w = Math.ceil(28 + RT.box + 18 + maxW + 40);
+  RT.w = Math.max(w, 420);
+  const root = el('div', 'a', stage);
+  const clip = el('div', 'a', root, `left:${RT.x}px;top:${RT.y}px;width:${RT.w}px;height:${RT.h}px;overflow:hidden`);
+  el('div', 'a', clip, `width:${RT.w}px;height:${RT.h}px;background:rgba(0,0,0,.90)`);
+  const inner = el('div', 'a', clip, `width:${RT.w}px;height:${RT.h}px`);
+  const stripe = el('div', 'a stripe', root, `left:${RT.x}px;top:${RT.y}px;width:${RT.w}px;height:6px`);
+  const edge = el('div', 'a edge', root, `left:${RT.x}px;top:${RT.y - 8}px;height:22px;opacity:0`);
+  const redge = el('div', 'a', root, `left:${RT.x}px;top:0;width:${RT.w}px;height:3px;background:#FBD101;box-shadow:0 0 12px 3px rgba(251,209,1,.5);opacity:0`);
+  const head = line(inner, 'Michroma', 22, CP.route.title, 28, 28, 'gold');
+  // counter "0 / 5": the digit is a two-row column (old over new) inside a mask
+  const cnt = el('div', 'a', inner);
+  const cntTxt = ' / ' + wps.length, cm = ink('Michroma', 22, '0' + cntTxt);
+  place(cnt, 'Michroma', 22, '0' + cntTxt, RT.w - 28 - cm.w, 28);
+  const dm = el('div', '', cnt, 'display:inline-block;overflow:hidden;height:22px;vertical-align:top');
+  const dcol = el('div', '', dm, 'display:flex;flex-direction:column');
+  const digs = [];
+  for (let k = 0; k <= wps.length; k++) digs.push(el('div', 'mic white', dcol, 'font-size:22px;height:22px', String(k)));
+  el('span', 'mic white', cnt, 'font-size:22px;opacity:.55', cntTxt);
+  // the route line: a thin gold rail through the tick boxes, drawn down to the last ticked waypoint
+  const bx = 28, rows = [];
+  const rail = el('div', 'a', inner, `left:${bx + RT.box / 2 - 1}px;top:${RT.row0 + RT.box / 2}px;width:2px;height:${RT.pitch * (wps.length - 1)}px;background:rgba(255,255,255,.18)`);
+  const railG = el('div', 'a', inner, `left:${bx + RT.box / 2 - 1}px;top:${RT.row0 + RT.box / 2}px;width:2px;height:${RT.pitch * (wps.length - 1)}px;background:#FBD101;transform-origin:50% 0;transform:scaleY(0)`);
+  wps.forEach((s, k) => {
+    const y = RT.row0 + k * RT.pitch;
+    const row = el('div', 'a', inner, `left:0;top:0;width:${RT.w}px;height:${RT.h}px`);
+    const box = el('div', 'a', row, `left:${bx}px;top:${y}px;width:${RT.box}px;height:${RT.box}px;background:#000;border:2px solid rgba(255,255,255,.55)`);
+    const fill = el('div', 'a', row, `left:${bx}px;top:${y}px;width:${RT.box}px;height:${RT.box}px;background:#FBD101;transform-origin:50% 50%`);
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('width', RT.box); svg.setAttribute('height', RT.box); svg.setAttribute('viewBox', '0 0 28 28');
+    svg.style.cssText = `position:absolute;left:${bx}px;top:${y}px;overflow:visible`;
+    const pth = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+    pth.setAttribute('d', 'M6.5,14.5 L11.8,19.6 L21.8,8.6'); pth.setAttribute('fill', 'none'); pth.setAttribute('stroke', '#000');
+    pth.setAttribute('stroke-width', '3.6'); pth.setAttribute('stroke-linecap', 'square'); pth.setAttribute('stroke-linejoin', 'miter');
+    svg.appendChild(pth); row.appendChild(svg);
+    const plen = 7.4 + 14.9;
+    // label: dim copy underneath, bright copy wiped on top when the waypoint is spoken (cap centred on the box)
+    const capH = ink('Bebas', RT.lab, 'H').aA;
+    const ly = y + RT.box / 2 - capH / 2;
+    const dim = line(row, 'Bebas', RT.lab, s, bx + RT.box + 18, ly, 'white', { split: false });
+    dim.t.style.opacity = 0.42;
+    const brW = el('div', 'a', row, `left:0;top:0;width:${RT.w}px;height:${RT.h}px`);
+    const br = line(brW, 'Bebas', RT.lab, s, bx + RT.box + 18, ly, 'white');
+    rows.push({ row, box, fill, svg, pth, plen, dim, brW, br, y });
+  });
+  G.route = { root, clip, inner, stripe, edge, redge, head, digs, dcol, rows, rail, railG, cnt };
+  T.routeBoxes = rows.map(r => [RT.x + bx, RT.y + r.y, RT.x + bx + RT.box, RT.y + r.y + RT.box]);   // for the QA tick check
+}
+function renderRoute(t) {
+  const R = G.route, t0 = T.routeIn, tx = T.routeOut;
+  const on = t >= t0 && t < tx + 0.40;
+  show(R.root, on); if (!on) return;
+  const qs = E.outExpo(P(t, t0, t0 + 0.26)), qo = E.inExpo(P(t, tx + 0.20, tx + 0.38));
+  if (qo > 0) { R.stripe.style.transformOrigin = 'right center'; R.stripe.style.transform = `scaleX(${(1 - qo).toFixed(5)})`; }
+  else { R.stripe.style.transformOrigin = 'left center'; R.stripe.style.transform = qs < 1 ? `scaleX(${qs.toFixed(5)})` : 'none'; }
+  R.stripe.style.opacity = qo >= 1 ? 0 : 1;
+  const ev = qs > 0 && qs < 1 ? Math.sin(Math.PI * qs) : 0;
+  R.edge.style.opacity = ev.toFixed(4); R.edge.style.transform = `translateX(${(RT.w * qs).toFixed(2)}px)`;
+  const qr = E.outExpo(P(t, t0 + 0.03, t0 + 0.34)), qc = E.inOutCubic(P(t, tx, tx + 0.26));
+  const bottom = qc > 0 ? 100 * qc : 100 * (1 - qr);
+  R.clip.style.clipPath = bottom > 0.001 ? `inset(0 0 ${bottom.toFixed(3)}% 0)` : 'none';
+  R.inner.style.transform = qc > 0 ? `translateY(${(-60 * qc).toFixed(2)}px)` : 'none';
+  R.redge.style.opacity = qc > 0 && qc < 1 ? Math.min(1, Math.sin(Math.PI * qc) * 2).toFixed(4) : 0;
+  R.redge.style.transform = `translateY(${(RT.y + RT.h * (1 - qc) - 2).toFixed(2)}px)`;
+  KT.track(R.head.g, t, { start: t0 + 0.10, dur: 0.34, spread: 1.8 });
+  const qh = E.outCubic(P(t, t0 + 0.16, t0 + 0.44));
+  R.cnt.style.opacity = qh.toFixed(4); R.rail.style.opacity = qh.toFixed(4);
+  // rows arrive dim, staggered; each one lights up on its spoken word
+  R.rows.forEach((r, k) => {
+    const qa = E.outExpo(P(t, t0 + 0.14 + 0.06 * k, t0 + 0.50 + 0.06 * k));
+    r.row.style.opacity = qa.toFixed(4);
+    r.row.style.transform = qa < 1 ? `translateX(${(-26 * (1 - qa)).toFixed(2)}px)` : 'none';
+    // tk = the start of the word frame's exposure (half a frame before its timestamp), so the word frame itself
+    // shows the tick slamming in and the frame before shows nothing
+    const tk = T.ticks[k] - 0.5 / FPS;
+    // the tick lands ON the word frame: nothing before tk, then the gold fill slams in (1.45x -> 1, back-out)
+    // with a flash, and the check draws
+    const qf = P(t, tk, tk + 0.10), ef = E.outBack(qf, 1.6);
+    const hit = t >= tk ? Math.exp(-(t - tk) * 12) : 0;
+    r.fill.style.opacity = t < tk ? 0 : 1;
+    r.fill.style.transform = `scale(${(1.45 - 0.45 * ef).toFixed(5)})`;
+    r.fill.style.boxShadow = hit > 0.02 ? `0 0 ${(22 * hit).toFixed(2)}px ${(6 * hit).toFixed(2)}px rgba(251,209,1,${(0.65 * hit).toFixed(3)})` : 'none';
+    const qk = E.outCubic(P(t, tk + 0.03, tk + 0.17));
+    r.pth.setAttribute('stroke-dasharray', `${(r.plen * qk).toFixed(2)} 40`);
+    r.svg.style.opacity = qk > 0 ? 1 : 0;
+    r.svg.style.setProperty('--k', qk.toFixed(4));
+    r.box.style.borderColor = t >= tk ? '#FBD101' : 'rgba(255,255,255,.55)';
+    // bright label wipes in L->R from the hit, then a gold glint runs through it
+    const qw = E.outCubic(P(t, tk, tk + 0.22));
+    r.brW.style.clipPath = qw >= 1 ? 'none' : `inset(0 ${(100 - 100 * qw).toFixed(3)}% 0 0)`;
+    r.brW.style.opacity = qw > 0 ? 1 : 0;
+    const gl = KT.glint(r.br.g, t, { start: tk + 0.12, dur: 0.42, base: '#FFFFFF', warm: '#FFF2B0', hot: '#FBD101', width: 0.28 * r.br.g.W, angle: 106 });
+    r.br.w.style.filter = gl > 0 ? `drop-shadow(0 0 ${(7 * gl).toFixed(2)}px rgba(251,209,1,${(.35 * gl).toFixed(3)}))` : 'none';
+  });
+  // counter flips to the number of waypoints called, rolling one row per tick
+  let pos = 0;
+  T.ticks.forEach(tw => { const tk = tw - 0.5 / FPS; pos += E.outExpo(P(t, tk, tk + 0.09)); });
+  R.dcol.style.transform = `translateY(${(-22 * pos).toFixed(3)}px)`;
+  // the rail draws down to the last called waypoint
+  let rail = 0;
+  T.ticks.forEach((tw, k) => { const tk = tw - 0.5 / FPS; if (k > 0) rail += E.outCubic(P(t, tk, tk + 0.20)) / (T.ticks.length - 1); });
+  R.railG.style.transform = `scaleY(${rail.toFixed(5)})`;
+}
+
+// ======================================================================== D. TRACKED LOCK-ONS
+function trackAt(tr, t) {                               // linear interpolation between tracked frames
+  const fp = t * FPS - tr.f0, n = tr.frames.length;
+  const i = Math.max(0, Math.min(n - 1, Math.floor(fp))), j = Math.min(i + 1, n - 1), k = cl(fp - i, 0, 1);
+  const a = tr.frames[i], b = tr.frames[j];
+  return { x: lerp(a.x, b.x, k), y: lerp(a.y, b.y, k), w: lerp(a.w, b.w, k), h: lerp(a.h, b.h, k), conf: Math.min(a.conf, b.conf) };
+}
+const NS = 'http://www.w3.org/2000/svg';
+function svgEl(tag, attrs, parent) { const e = document.createElementNS(NS, tag); for (const k in attrs) e.setAttribute(k, attrs[k]); parent.appendChild(e); return e; }
+function buildLock(key, opt) {
+  const copy = CP.locks[key];
+  const root = el('div', 'a', stage, 'width:1080px;height:1920px');
+  const svg = svgEl('svg', { width: 1080, height: 1920, viewBox: '0 0 1080 1920' }, root);
+  svg.style.cssText = 'position:absolute;left:0;top:0;overflow:visible';
+  const U = svgEl('g', { fill: 'none', stroke: 'rgba(0,0,0,.45)', 'stroke-width': 11, 'stroke-linecap': 'square' }, svg);
+  const O = svgEl('g', { fill: 'none', stroke: '#FBD101', 'stroke-width': 5, 'stroke-linecap': 'square' }, svg);
+  const p = { bu: svgEl('path', {}, U), bo: svgEl('path', {}, O), tu: svgEl('path', {}, U), to: svgEl('path', {}, O),
+              lu: svgEl('path', { 'stroke-width': 8 }, U), lo: svgEl('path', { 'stroke-width': 3 }, O) };
+  const dotU = svgEl('circle', { r: 10, fill: 'rgba(0,0,0,.45)', stroke: 'none' }, U), dot = svgEl('circle', { r: 6.5, fill: '#FBD101', stroke: 'none' }, O);
+  const kw = ink('Michroma', 22, copy.kicker).w, nw = ink('Bebas', 64, copy.name).w;
+  const lw = Math.ceil(Math.max(kw, nw) + 64), lh = 136;
+  const lab = el('div', 'a', root, `width:${lw}px;height:${lh}px`);
+  const bg = el('div', 'a', lab, `width:${lw}px;height:${lh}px;background:rgba(0,0,0,.88)`);
+  const stripe = el('div', 'a stripe', lab, `width:${lw}px;height:6px`);
+  const kick = line(lab, 'Michroma', 22, copy.kicker, 32, 30, 'gold', { mask: true });
+  const name = line(lab, 'Bebas', 64, copy.name, 32, 66, 'white', { mask: true });
+  return Object.assign({ root, svg, p, dot, dotU, lab, bg, stripe, kick, name, lw, lh }, opt);
+}
+function bracketPaths(r) {
+  const L = Math.min(40, 0.24 * Math.min(r.w, r.h)), Tk = Math.min(14, 0.08 * Math.min(r.w, r.h));
+  const x0 = r.x, y0 = r.y, x1 = r.x + r.w, y1 = r.y + r.h, mx = (x0 + x1) / 2, my = (y0 + y1) / 2, f = v => v.toFixed(2);
+  const br = `M${f(x0)},${f(y0 + L)}V${f(y0)}H${f(x0 + L)}M${f(x1 - L)},${f(y0)}H${f(x1)}V${f(y0 + L)}` +
+             `M${f(x1)},${f(y1 - L)}V${f(y1)}H${f(x1 - L)}M${f(x0 + L)},${f(y1)}H${f(x0)}V${f(y1 - L)}`;
+  const tk = `M${f(mx)},${f(y0)}v${Tk}M${f(mx)},${f(y1)}v${-Tk}M${f(x0)},${f(my)}h${Tk}M${f(x1)},${f(my)}h${-Tk}`;
+  return { br, tk };
+}
+function renderLock(L, t, tr, win) {
+  const { a: ta, x: tx } = win;
+  const on = t >= ta && t < tx + 0.26;
+  show(L.root, on); if (!on) return;
+  const b = trackAt(tr, t);
+  const pad = 0.10 * Math.min(b.w, b.h) + 12;
+  const tgt = { x: b.x - pad, y: b.y - pad, w: b.w + 2 * pad, h: b.h + 2 * pad };
+  // acquire: brackets fly in from 1.7x over 7 frames (expo), ticks appear as they settle
+  const qa = E.outExpo(cl((t - ta) * FPS / 7));
+  const src = { x: tgt.x - tgt.w * 0.35, y: tgt.y - tgt.h * 0.35, w: tgt.w * 1.7, h: tgt.h * 1.7 };
+  let r = { x: lerp(src.x, tgt.x, qa), y: lerp(src.y, tgt.y, qa), w: lerp(src.w, tgt.w, qa), h: lerp(src.h, tgt.h, qa) };
+  // lock pulse on the second tick (lock confirmed), exit collapse to the centre
+  const tl = ta + L.lockDelay, pl = t >= tl ? Math.exp(-(t - tl) * 16) * Math.min(1, (t - tl) * FPS / 1.5) : 0;
+  const s = 1 + 0.06 * pl;
+  const qx = E.inCubic(P(t, tx + 0.06, tx + 0.24));
+  r = { x: r.x + r.w / 2 * (1 - s) + r.w / 2 * 0.55 * qx, y: r.y + r.h / 2 * (1 - s) + r.h / 2 * 0.55 * qx,
+        w: r.w * s * (1 - 0.55 * qx), h: r.h * s * (1 - 0.55 * qx) };
+  const op = cl(qa * 3) * (1 - E.inCubic(P(t, tx + 0.10, tx + 0.24)));
+  const P0 = bracketPaths(r);
+  L.p.bu.setAttribute('d', P0.br); L.p.bo.setAttribute('d', P0.br); L.p.tu.setAttribute('d', P0.tk); L.p.to.setAttribute('d', P0.tk);
+  [L.p.tu, L.p.to].forEach(e => e.setAttribute('opacity', cl(qa * 1.4 - 0.4).toFixed(3)));
+  L.svg.style.opacity = op.toFixed(4);
+  L.p.bo.setAttribute('stroke', pl > 0.05 ? `rgb(${Math.round(251 + 4 * pl)},${Math.round(209 + 46 * pl)},${Math.round(1 + 254 * pl * 0.7)})` : '#FBD101');
+  // label anchored to the bracket corner (moves with the lock), leader drawn from the corner up into it
+  const cx = tgt.x, cy = tgt.y;                           // top-left corner of the settled brackets
+  const lx = cx + L.dx, ly = cy - L.gap - L.lh;
+  L.lab.style.transform = `translate(${lx.toFixed(2)}px,${ly.toFixed(2)}px)`;
+  const qL = E.inOutCubic(P(t, ta + L.leadIn, ta + L.leadIn + 0.26)), qLo = E.inCubic(P(t, tx, tx + 0.16));
+  const Ay = ly + L.lh;
+  const len = cy - Ay, drawn = len * qL * (1 - qLo);
+  const d = `M${cx.toFixed(2)},${cy.toFixed(2)}V${Ay.toFixed(2)}`;
+  [L.p.lu, L.p.lo].forEach(e => { e.setAttribute('d', d); e.setAttribute('stroke-dasharray', `${drawn.toFixed(2)} ${(len + 20).toFixed(2)}`); });
+  [L.dot, L.dotU].forEach(c => { c.setAttribute('cx', cx.toFixed(2)); c.setAttribute('cy', cy.toFixed(2)); c.setAttribute('opacity', qL > 0 && qLo < 1 ? 1 : 0); });
+  L.svg.style.setProperty('--d', `"${P0.br}|${drawn.toFixed(1)}|${op.toFixed(3)}"`);   // lets KT.signature see the SVG move
+  // label: panel wipes L->R, stripe draws, lines rise through their masks; exit: panel wipes back R->L
+  const qp = E.outExpo(P(t, ta + L.labIn, ta + L.labIn + 0.30)), qpo = E.inCubic(P(t, tx + 0.02, tx + 0.20));
+  const right = qpo > 0 ? 100 * qpo : 100 * (1 - qp);
+  L.lab.style.clipPath = right > 0.001 ? `inset(0 ${right.toFixed(3)}% 0 0)` : 'none';
+  L.lab.style.display = qp > 0 && qpo < 1 ? 'block' : 'none';
+  KT.drawStripe(L.stripe, t, { start: ta + L.labIn + 0.04, dur: 0.26 });
+  const rise = (ln, st) => { const q = E.outExpo(P(t, st, st + 0.32)); ln.t.parentNode.style.transform = 'none'; ln.t.style.transform = `translateY(${(105 * (1 - q)).toFixed(3)}%)`; };
+  rise(L.kick, ta + L.labIn + 0.08); rise(L.name, ta + L.labIn + 0.12);
+  const gl = KT.glint(L.name.g, t, { start: ta + L.labIn + 0.70, dur: 0.46, base: '#FFFFFF', warm: '#FFF2B0', hot: '#FBD101', width: 0.22 * L.name.g.W, angle: 106 });
+  L.name.w.style.filter = gl > 0 ? `drop-shadow(0 0 ${(8 * gl).toFixed(2)}px rgba(251,209,1,${(.32 * gl).toFixed(3)}))` : 'none';
+}
+
+// ======================================================================== E. END CARD
+function buildEnd() {
+  const e = CP.end;
+  const root = el('div', 'a', stage, 'width:1080px;height:1920px');
+  const panel = el('div', 'a', root, 'width:1080px;height:1920px;background:#000');
+  const wipeStripe = el('div', 'a', root, 'width:1080px;height:160px;background:linear-gradient(180deg,rgba(251,209,1,.34) 0,rgba(251,209,1,.10) 30%,rgba(251,209,1,0) 100%);opacity:0');
+  const body = el('div', 'a', root, 'width:1080px;height:1920px;transform-origin:540px 900px');
+  const lw = 400, lh = lw * 683 / 1148;
+  const logoW = el('div', 'a', body, `left:${540 - lw / 2}px;top:352px;width:${lw}px;height:${lh.toFixed(2)}px`);
+  const logo = el('img', '', logoW, `width:${lw}px;display:block`); logo.src = '../../02-logos/png/sce-stacked--white.png';
+  const logoEdge = el('div', 'a edge', logoW, `height:${lh + 12}px;top:-6px;opacity:0`);
+  const stripe = el('div', 'a stripe', body, 'left:360px;top:654px;width:360px;height:8px');
+  const L = {};
+  L.tag = line(body, 'Bebas', 104, e.tagline, centreX('Bebas', 104, e.tagline, 540), 700, 'white', { mask: true });
+  L.cta = line(body, 'Michroma', 30, e.cta, centreX('Michroma', 30, e.cta, 540), 848, 'gold');
+  L.phone = line(body, 'Bebas', 124, e.phone, centreX('Bebas', 124, e.phone, 540), 904, 'white', { mask: true });
+  L.url = line(body, 'Bebas', 72, e.url, centreX('Bebas', 72, e.url, 540), 1044, 'white');
+  L.handle = line(body, 'Bebas', 72, e.handle, centreX('Bebas', 72, e.handle, 540), 1122, 'white');
+  L.loc = line(body, 'Michroma', 26, e.locations, centreX('Michroma', 26, e.locations, 540), 1232, 'white', { goldDots: true });
+  const rule = el('div', 'a', body, 'left:470px;top:1318px;width:140px;height:2px;background:rgba(255,255,255,.35);transform-origin:50% 50%');
+  L.credit = line(body, 'Michroma', 20, e.credit, centreX('Michroma', 20, e.credit, 540), 1356, 'white');
+  L.credit.t.style.opacity = 0.78;
+  G.end = { root, panel, wipeStripe, body, logoW, logo, logoEdge, stripe, L, rule };
+}
+function renderEnd(t) {
+  const N = G.end, t0 = T.end;
+  const on = t >= t0;
+  show(N.root, on); if (!on) return;
+  // IN: the black card wipes up from the bottom with a feathered edge (opaque from t0 + 0.118 s, f3814), then a
+  // gold light blooms down from the top edge as it lands
+  const qw = E.inOutCubic(P(t, t0, t0 + T.END_WIPE));
+  // feathered leading edge (90 px) so the sub-frame samples of this very fast wipe blend instead of banding
+  const FE = 90, yb = (1920 + FE) * qw;                   // opaque below 1920 - yb + FE ... fully opaque at qw = 1
+  if (qw >= 1) { N.panel.style.webkitMaskImage = 'none'; N.panel.style.maskImage = 'none'; }
+  else { const m = `linear-gradient(0deg,#000 0px,#000 ${Math.max(0, yb - FE).toFixed(2)}px,rgba(0,0,0,0) ${yb.toFixed(2)}px)`;
+         N.panel.style.webkitMaskImage = m; N.panel.style.maskImage = m; }
+  N.panel.style.display = qw > 0 ? 'block' : 'none';
+  // the gold light edge only glows up once the panel has landed (a moving glow this fast would band)
+  const sf = Math.sin(Math.PI * P(t, t0 + T.END_WIPE - 0.02, t0 + T.END_WIPE + 0.30));
+  N.wipeStripe.style.opacity = sf.toFixed(4);
+  const s0 = t0 + 0.06;
+  KT.wipe(N.logo, t, { start: s0, dur: 0.24, dir: 'right', edge: N.logoEdge, ease: E.inOutCubic, pad: 2 });
+  KT.drawStripe(N.stripe, t, { start: s0 + 0.06, dur: 0.22 });
+  KT.rise(N.L.tag.g, t, { start: s0 + 0.08, stagger: 0.006, dur: 0.28, dy: 1.05, ease: E.outExpo });
+  KT.track(N.L.cta.g, t, { start: s0 + 0.14, dur: 0.26, spread: 1.7, stagger: 0.004 });
+  KT.rise(N.L.phone.g, t, { start: s0 + 0.16, stagger: 0.006, dur: 0.28, dy: 1.05, ease: E.outExpo });
+  const fu = (ln, st) => { const q = E.outCubic(P(t, st, st + 0.22)); ln.w.style.opacity = q.toFixed(4); ln.w.style.transform = `translateY(${(14 * (1 - q)).toFixed(3)}px)`; };
+  fu(N.L.url, s0 + 0.22); fu(N.L.handle, s0 + 0.26);
+  KT.track(N.L.loc.g, t, { start: s0 + 0.24, dur: 0.24, spread: 1.6, stagger: 0.004 });
+  const qr = E.outExpo(P(t, s0 + 0.30, s0 + 0.52)); N.rule.style.transform = `scaleX(${qr.toFixed(5)})`;
+  fu(N.L.credit, s0 + 0.32);
+  // hold: a slow push, a gold glint through the phone number and one through the tagline
+  const push = 1 + 0.018 * E.inOutCubic(P(t, t0 + 0.55, T.total));
+  N.body.style.transform = `scale(${push.toFixed(5)})`;
+  const g1 = KT.glint(N.L.phone.g, t, { start: t0 + 1.10, dur: 0.55, base: '#FFFFFF', warm: '#FFF2B0', hot: '#FBD101', width: 0.20 * N.L.phone.g.W, angle: 106 });
+  N.L.phone.w.style.filter = g1 > 0 ? `drop-shadow(0 0 ${(12 * g1).toFixed(2)}px rgba(251,209,1,${(.35 * g1).toFixed(3)}))` : 'none';
+  const g2 = KT.glint(N.L.tag.g, t, { start: t0 + 2.05, dur: 0.60, base: '#FFFFFF', warm: '#FFF2B0', hot: '#FBD101', width: 0.18 * N.L.tag.g.W, angle: 106 });
+  N.L.tag.w.style.filter = g2 > 0 ? `drop-shadow(0 0 ${(10 * g2).toFixed(2)}px rgba(251,209,1,${(.30 * g2).toFixed(3)}))` : 'none';
+}
+
+// ======================================================================== build + renderAt
+(async () => {
+  await document.fonts.load('100px Bebas'); await document.fonts.load('40px Michroma'); await KT.ready();
+  buildHook(); buildChapters(); buildRoute(); buildEnd();
+  G.soe = buildLock('soe', { dx: -300, gap: 86, lockDelay: 0.23, leadIn: 0.20, labIn: 0.28 });
+  G.urus = buildLock('urus', { dx: -140, gap: 96, lockDelay: 0.23, leadIn: 0.20, labIn: 0.28 });
+  const imgs = [...document.images];
+  await Promise.all(imgs.map(i => i.complete ? 0 : new Promise(r => { i.onload = r; i.onerror = r; })));
+  window.renderAt(0);
+  window.__ktReady = true;
+})();
+
+window.renderAt = function (t) {
+  renderHook(t);
+  for (let i = 0; i < G.ch.length; i++) renderChapter(i, t);
+  renderRoute(t);
+  renderLock(G.soe, t, TRACKS.soe, T.soe);
+  renderLock(G.urus, t, TRACKS.urus, T.urus);
+  renderEnd(t);
+};
+
+// QA helper: ink rects of the visible text lines (build.py --audit)
+window.inkAudit = function (t) {
+  window.renderAt(t);
+  const out = [];
+  document.querySelectorAll('.beb,.mic').forEach(n => {
+    let vis = true, m = n;
+    while (m && m !== document.body) { const cs = getComputedStyle(m); if (cs.display === 'none' || +cs.opacity === 0) { vis = false; break; } m = m.parentElement; }
+    if (!vis) return;
+    const r = n.getBoundingClientRect(); out.push({ text: n.textContent, x0: r.left, x1: r.right, y0: r.top, y1: r.bottom });
+  });
+  return out;
+};
+</script>
+</body></html>

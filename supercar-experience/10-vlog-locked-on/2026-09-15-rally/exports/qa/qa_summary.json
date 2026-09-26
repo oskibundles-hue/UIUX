@@ -1,0 +1,172 @@
+{
+ "file": "01 2026-09-15 the rally, dinner and the drive back (reel cut) SE LOCKED-ON - INSTAGRAM 1080x1920.mp4",
+ "bytes": 183497201,
+ "MB": 183.5,
+ "track_durations_s": [
+  130.598,
+  130.597
+ ],
+ "frames": 3914,
+ "picture_s": 130.5971,
+ "audio_decoded_s": 130.6027,
+ "loudnorm": {
+  "I": -14.0,
+  "TP": -2.29,
+  "LRA": 8.3
+ },
+ "trailing_silence_ms": 118.7,
+ "last_50ms_peak": 0.0,
+ "stream_lines": [
+  "Duration: 00:02:10.60, start: 0.000000, bitrate: 11240 kb/s",
+  "Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920, 10986 kb/s, 29.97 fps, 29.97 tbr, 30k tbn (default)",
+  "Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 245 kb/s (default)"
+ ],
+ "coverage": {
+  "hook_covers_old_title_f0_to_f77": {
+   "frames": [
+    0,
+    77
+   ],
+   "box": [
+    68,
+    400,
+    894,
+    633
+   ],
+   "min_alpha": 255,
+   "ok": true
+  },
+  "ch01_covers_pill1": {
+   "frames": [
+    141,
+    205
+   ],
+   "box": [
+    298,
+    402,
+    780,
+    518
+   ],
+   "min_alpha": 255,
+   "ok": true
+  },
+  "ch02_covers_pill2": {
+   "frames": [
+    475,
+    538
+   ],
+   "box": [
+    212,
+    402,
+    868,
+    518
+   ],
+   "min_alpha": 255,
+   "ok": true
+  },
+  "se_bug_clear": {
+   "frames": [
+    0,
+    3809
+   ],
+   "box": [
+    665,
+    282,
+    1005,
+    352
+   ],
+   "max_alpha": 0,
+   "frames_touching": [],
+   "n_touching": 0,
+   "ok": true
+  },
+  "follow_card_clear": {
+   "frames": [
+    1003,
+    1152
+   ],
+   "box": [
+    0,
+    300,
+    1080,
+    700
+   ],
+   "max_alpha": 0,
+   "frames_touching": [],
+   "n_touching": 0,
+   "ok": true
+  },
+  "captions_clear": {
+   "frames": [
+    67,
+    3809
+   ],
+   "box": [
+    40,
+    1270,
+    1040,
+    1460
+   ],
+   "max_alpha": 0,
+   "frames_touching": [],
+   "n_touching": 0,
+   "ok": true
+  },
+  "end_card_full_frame": {
+   "frames": [
+    3814,
+    3913
+   ],
+   "box": [
+    0,
+    0,
+    1079,
+    1919
+   ],
+   "min_alpha": 255,
+   "ok": true
+  },
+  "end_card_first_opaque_frame": 3814,
+  "end_card_readable_s": 2.903,
+  "route_ticks_on_word_frame": {
+   "ticks": [
+    {
+     "word": "north.",
+     "frame": 2114,
+     "gold_before": 0.0,
+     "gold_on_word": 1.0,
+     "ok": true
+    },
+    {
+     "word": "Flamingo.",
+     "frame": 2161,
+     "gold_before": 0.0,
+     "gold_on_word": 1.0,
+     "ok": true
+    },
+    {
+     "word": "Boulevard",
+     "frame": 2374,
+     "gold_before": 0.0,
+     "gold_on_word": 1.0,
+     "ok": true
+    },
+    {
+     "word": "Venetian.",
+     "frame": 2405,
+     "gold_before": 0.0,
+     "gold_on_word": 1.0,
+     "ok": true
+    },
+    {
+     "word": "floor",
+     "frame": 2548,
+     "gold_before": 0.0,
+     "gold_on_word": 1.0,
+     "ok": true
+    }
+   ],
+   "ok": true
+  }
+ }
+}
