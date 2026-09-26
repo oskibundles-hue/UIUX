@@ -1,0 +1,157 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Bebas;src:url('../../07-fonts/BebasNeue-Regular.ttf')}
+@font-face{font-family:Michroma;src:url('../../07-fonts/Michroma-Regular.ttf')}
+html,body{margin:0;padding:0;background:transparent;width:1080px;height:1920px;overflow:hidden}
+*{box-sizing:border-box}
+.a{position:absolute;will-change:transform,opacity}
+.bebas{font-family:Bebas;line-height:.86;letter-spacing:1px}
+.mic{font-family:Michroma;letter-spacing:6px}
+.gold{color:#FBD101}.white{color:#fff}
+.shadow{text-shadow:0 6px 30px rgba(0,0,0,.65),0 2px 6px rgba(0,0,0,.6)}
+.clip{overflow:hidden}
+.stripe{height:10px;background:linear-gradient(90deg,#FBD101 0 78%,#fff 78% 100%)}
+.panel{background:rgba(0,0,0,.72);backdrop-filter:blur(6px)}
+.streak{height:4px;background:linear-gradient(90deg,rgba(251,209,1,0),#FBD101 40%,#fff 60%,rgba(255,255,255,0))}
+.corner{width:90px;height:90px;border-color:#FBD101;border-style:solid;border-width:0}
+</style></head>
+<body>
+<!-- scrims -->
+<div id="scrimBottom" class="a" style="left:0;top:960px;width:1080px;height:960px;background:linear-gradient(180deg,rgba(0,0,0,0),rgba(0,0,0,.78) 70%,rgba(0,0,0,.85))"></div>
+<div id="scrimTop" class="a" style="left:0;top:0;width:1080px;height:1100px;background:linear-gradient(180deg,rgba(0,0,0,.82),rgba(0,0,0,.55) 55%,rgba(0,0,0,0))"></div>
+
+<!-- streaks -->
+<div id="streaks"></div>
+
+<!-- HOOK -->
+<div id="hookTag" class="a mic white shadow" style="left:60px;top:1150px;font-size:26px">SUPERCAR EXPERIENCE</div>
+<div id="hook1" class="a bebas gold shadow" style="left:54px;top:1195px;font-size:150px">2-HOUR</div>
+<div id="hook2" class="a bebas white shadow" style="left:54px;top:1320px;font-size:172px;white-space:nowrap">FLASH SPECIAL</div>
+<div id="hookStripe" class="a stripe" style="left:60px;top:1478px;width:760px;transform-origin:left"></div>
+
+<!-- VEHICLE LABEL (crest + STO) -->
+<div id="labelPanel" class="a panel" style="left:0;top:300px;width:880px;height:330px;transform-origin:left"></div>
+<div id="labelStripe" class="a stripe" style="left:0;top:300px;width:880px;transform-origin:left"></div>
+<div id="labelYear" class="a mic gold" style="left:60px;top:345px;font-size:26px">2023 · EXOTIC</div>
+<div id="labelBrand" class="a bebas white" style="left:56px;top:392px;font-size:120px">LAMBORGHINI</div>
+<div id="labelModelWrap" class="a clip" style="left:56px;top:500px;width:820px;height:120px"><div id="labelModel" class="bebas gold" style="font-size:132px;white-space:nowrap">HURACAN STO</div></div>
+<!-- focus brackets -->
+<div id="br" class="a" style="left:0;top:0;width:10px;height:10px">
+  <div class="a corner" id="c1" style="border-top-width:8px;border-left-width:8px"></div>
+  <div class="a corner" id="c2" style="border-top-width:8px;border-right-width:8px"></div>
+  <div class="a corner" id="c3" style="border-bottom-width:8px;border-left-width:8px"></div>
+  <div class="a corner" id="c4" style="border-bottom-width:8px;border-right-width:8px"></div>
+</div>
+
+<!-- WINDOW -->
+<div id="winPanel" class="a panel" style="left:54px;top:300px;width:850px;height:520px;transform-origin:top"></div>
+<div id="winTag" class="a mic gold" style="left:100px;top:345px;font-size:28px">TODAY ONLY</div>
+<div id="winTime" class="a bebas white" style="left:94px;top:395px;font-size:210px;white-space:nowrap">11AM–1PM</div>
+<div id="barBg" class="a" style="left:100px;top:640px;width:760px;height:14px;background:rgba(255,255,255,.18)"></div>
+<div id="barFill" class="a" style="left:100px;top:640px;width:760px;height:14px;background:#FBD101;transform-origin:left"></div>
+<div id="bar11" class="a mic white" style="left:100px;top:672px;font-size:22px">11AM</div>
+<div id="bar1" class="a mic white" style="left:772px;top:672px;font-size:22px">1PM</div>
+<div id="winEnds" class="a bebas gold" style="left:100px;top:720px;font-size:72px">ENDS AT 1PM</div>
+
+<!-- REQUIREMENTS -->
+<div id="reqPanel" class="a panel" style="left:54px;top:300px;width:850px;height:600px;transform-origin:top"></div>
+<div id="reqStripe" class="a stripe" style="left:54px;top:300px;width:850px;transform-origin:left"></div>
+<div id="reqHead" class="a mic gold" style="left:100px;top:350px;font-size:28px">TO DRIVE IT, YOU NEED</div>
+<div id="req1" class="a" style="left:100px;top:420px;display:flex;align-items:center;gap:30px"><div class="chk"></div><div class="bebas white" style="font-size:112px;white-space:nowrap">VALID DRIVER'S LICENSE</div></div>
+<div id="req2" class="a" style="left:100px;top:570px;display:flex;align-items:center;gap:30px"><div class="chk"></div><div class="bebas white" style="font-size:112px">AGE 21+</div></div>
+<div id="req3" class="a" style="left:100px;top:720px;display:flex;align-items:center;gap:30px"><div class="chk"></div><div class="bebas white" style="font-size:112px">INSURANCE</div></div>
+
+<!-- END CARD -->
+<img id="endLogo" class="a" src="../../02-logos/png/sce-stacked--white.png" style="left:340px;top:280px;width:400px">
+<div id="endPanel" class="a panel" style="left:54px;top:700px;width:850px;height:430px;transform-origin:top"></div>
+<div id="endStripe" class="a stripe" style="left:54px;top:700px;width:850px;transform-origin:left"></div>
+<div id="endEnds" class="a bebas gold" style="left:100px;top:745px;font-size:92px">FLASH SPECIAL ENDS 1PM</div>
+<div id="endCta" class="a bebas white" style="left:100px;top:840px;font-size:120px">CALL OR DM TO BOOK</div>
+<div id="endPhone" class="a bebas gold" style="left:100px;top:955px;font-size:96px">(888) 678-6079</div>
+<div id="endWeb" class="a mic white" style="left:100px;top:1060px;font-size:24px;letter-spacing:4px">SUPERCAREXP.VIP · @SUPERCAR_EXPERIENCE_</div>
+
+<script>
+// check marks
+document.querySelectorAll('.chk').forEach(e=>{e.style.cssText='width:64px;height:64px;border:6px solid #FBD101;position:relative;flex:none';
+  const k=document.createElement('div');k.style.cssText='position:absolute;left:14px;top:4px;width:18px;height:36px;border-right:8px solid #FBD101;border-bottom:8px solid #FBD101;transform:rotate(45deg)';e.appendChild(k)});
+// streak lines (seeded)
+let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647};
+const ST=[];const cuts=[1.5,2.9,4.4,7.4,10.4];
+cuts.forEach((c,ci)=>{for(let i=0;i<7;i++){const d=document.createElement('div');d.className='a streak';
+  const y=200+rnd()*1400, w=300+rnd()*600, h=2+Math.round(rnd()*5), dl=rnd()*0.12;
+  d.style.cssText+=`top:${y}px;width:${w}px;height:${h}px`;document.getElementById('streaks').appendChild(d);ST.push({d,c,dl,w})}});
+
+const $=id=>document.getElementById(id);
+const cl=(x,a=0,b=1)=>Math.min(b,Math.max(a,x));
+const oE=x=>x>=1?1:1-Math.pow(2,-10*x);            // easeOutExpo
+const iE=x=>x<=0?0:Math.pow(2,10*x-10);            // easeInExpo
+const oC=x=>1-Math.pow(1-x,3);
+const p=(t,a,b)=>cl((t-a)/(b-a));
+// in/out envelope: rise over [a,a+ri], fall over [b-fo,b]
+const env=(t,a,b,ri=.25,fo=.2)=>Math.min(oE(p(t,a,a+ri)),1-iE(p(t,b-fo,b)));
+function set(id,o,tx=0,ty=0,s=1,blur=0,extra=''){const e=$(id);e.style.opacity=o;e.style.transform=`translate(${tx}px,${ty}px) scale(${s}) ${extra}`;e.style.filter=blur>0.05?`blur(${blur}px)`:'none'}
+
+window.renderAt=function(t){
+  // scrims
+  $('scrimBottom').style.opacity = env(t,0,1.5,.15,.2);
+  $('scrimTop').style.opacity = env(t,10.35,15.2,.5,.01)*0.9;
+
+  // streaks around cuts
+  ST.forEach(s=>{const q=p(t,s.c-0.18+s.dl,s.c+0.22+s.dl);s.d.style.opacity=(q>0&&q<1)?Math.sin(q*Math.PI):0;
+    s.d.style.transform=`translateX(${-s.w+(1080+s.w*2)*oC(q)}px)`});
+
+  // HOOK 0-1.5
+  {const a=env(t,0,1.5,.3,.18);
+   set('hookTag',a*(p(t,.25,.5)),(1-oE(p(t,.25,.6)))*-40);
+   const h1=p(t,0,.35); set('hook1',a*h1,(1-oE(h1))*-260,0,1,(1-oE(h1))*18);
+   const h2=p(t,.08,.45); set('hook2',a*cl(h2*2),0,0,1+ (1-oE(h2))*.45,(1-oE(h2))*14);
+   const hs=p(t,.3,.75); set('hookStripe',a,0,0,1,0); $('hookStripe').style.transform=`scaleX(${oE(hs)})`;}
+
+  // LABEL 1.5-4.4 (brand on crest, model joins on STO badge)
+  {const a=env(t,1.5,4.4,.3,.22);
+   const pp=p(t,1.5,1.85); $('labelPanel').style.opacity=a; $('labelPanel').style.transform=`scaleX(${oE(pp)})`;
+   $('labelStripe').style.opacity=a; $('labelStripe').style.transform=`scaleX(${oE(p(t,1.58,1.95))})`;
+   set('labelYear',a*p(t,1.75,1.95),(1-oE(p(t,1.75,2.1)))*30);
+   const b=p(t,1.65,2.0); set('labelBrand',a*cl(b*1.5),(1-oE(b))*-120,0,1,(1-oE(b))*10);
+   const m=p(t,2.9,3.25); const mm=$('labelModel'); mm.style.transform=`translateY(${(1-oE(m))*170}px)`; $('labelModelWrap').style.opacity=a;
+   // brackets: crest (1.5-2.9) then STO badge (2.9-4.4)
+   let box, bo;
+   if(t<2.9){const q=p(t,1.55,1.95); box=[140-120*(1-oE(q)),760-160*(1-oE(q)),980+60*(1-oE(q)),1480+160*(1-oE(q))]; bo=env(t,1.55,2.9,.2,.12)}
+   else {const q=p(t,2.95,3.35); box=[190-140*(1-oE(q)),800-120*(1-oE(q)),890+140*(1-oE(q)),1080+120*(1-oE(q))]; bo=env(t,2.95,4.4,.2,.2)}
+   const [x0,y0,x1,y1]=box; $('br').style.opacity=bo;
+   const cs=[['c1',x0,y0],['c2',x1-90,y0],['c3',x0,y1-90],['c4',x1-90,y1-90]];
+   cs.forEach(([id,x,y])=>{$(id).style.transform=`translate(${x}px,${y}px)`});
+  }
+
+  // WINDOW 4.4-7.4
+  {const a=env(t,4.4,7.4,.3,.22);
+   $('winPanel').style.opacity=a; $('winPanel').style.transform=`scaleY(${oE(p(t,4.4,4.75))})`;
+   set('winTag',a*p(t,4.55,4.8),(1-oE(p(t,4.55,4.9)))*40);
+   const w=p(t,4.6,5.0); set('winTime',a*cl(w*1.6),0,(1-oE(w))*60,1+(1-oE(w))*.2,(1-oE(w))*12);
+   $('barBg').style.opacity=a*p(t,4.9,5.1); $('bar11').style.opacity=a*p(t,4.95,5.15); $('bar1').style.opacity=a*p(t,5.0,5.2);
+   $('barFill').style.opacity=a; $('barFill').style.transform=`scaleX(${oC(p(t,5.0,6.6))})`;
+   set('winEnds',a*p(t,5.5,5.75),(1-oE(p(t,5.5,5.9)))*-50);}
+
+  // REQUIREMENTS 7.4-10.4
+  {const a=env(t,7.4,10.4,.3,.22);
+   $('reqPanel').style.opacity=a; $('reqPanel').style.transform=`scaleY(${oE(p(t,7.4,7.75))})`;
+   $('reqStripe').style.opacity=a; $('reqStripe').style.transform=`scaleX(${oE(p(t,7.5,7.9))})`;
+   set('reqHead',a*p(t,7.6,7.85),(1-oE(p(t,7.6,7.95)))*40);
+   [['req1',7.75],['req2',7.95],['req3',8.15]].forEach(([id,s])=>{const q=p(t,s,s+.35);set(id,a*cl(q*1.8),(1-oE(q))*-140,0,1,(1-oE(q))*10)});}
+
+  // END CARD 10.4-15
+  {const a=env(t,10.4,15.5,.35,.01);
+   const l=p(t,10.45,10.95); set('endLogo',a*cl(l*1.4),0,(1-oE(l))*-40,0.9+0.1*oE(l));
+   $('endPanel').style.opacity=a; $('endPanel').style.transform=`scaleY(${oE(p(t,10.6,10.95))})`;
+   $('endStripe').style.opacity=a; $('endStripe').style.transform=`scaleX(${oE(p(t,10.65,11.05))})`;
+   set('endEnds',a*p(t,10.8,11.05),(1-oE(p(t,10.8,11.15)))*40);
+   const c=p(t,11.0,11.4); set('endCta',a*cl(c*1.6),0,0,1+(1-oE(c))*.25,(1-oE(c))*10);
+   set('endPhone',a*p(t,11.3,11.55),(1-oE(p(t,11.3,11.7)))*-60);
+   set('endWeb',a*p(t,11.55,11.8),0,(1-oE(p(t,11.55,11.9)))*20);
+   // gentle pulse on the phone number after it lands
+   if(t>12.2){const s=1+0.025*Math.sin((t-12.2)*Math.PI*1.4);$('endPhone').style.transform=`scale(${s})`;$('endPhone').style.transformOrigin='left center'}}
+};
+window.renderAt(0);
+</script>
+</body></html>
