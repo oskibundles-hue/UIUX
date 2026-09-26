@@ -33,15 +33,19 @@
   const PLAY_DUR = T.playEnd - T.play;
 
   // ---- Geometry ---------------------------------------------------------------------------------------------
-  const PX = (u) => 240 + 480 * u, PY = (v) => 820 - 480 * v;
-  const P0 = [240, 820], P1 = [576, 820], P3 = [720, 340];
-  const P2X = 336, P2Y0 = 340, P2Y1 = 100;
+  // The whole graph-editor block (plot, labels, header) sits PLOT_DY below the storyboard's first draft so the
+  // dragged P2 handle (y1 1.50 lands 240 px above the box top) parks clear of the HUD band (y < 96) and the TL label.
+  const PLOT_DY = 40;
+  const OY = 820 + PLOT_DY; // plot origin y (box top = OY − 480)
+  const PX = (u) => 240 + 480 * u, PY = (v) => OY - 480 * v;
+  const P0 = [240, OY], P1 = [576, OY], P3 = [720, OY - 480];
+  const P2X = 336, P2Y0 = OY - 480, P2Y1 = OY - 720;
   const TRACK_X0 = 1040, TRACK_X1 = 1680, TRACK_Y = 400;
   const DOT_R = 28;
   const TRACK_LABEL_BASE = 452; // storyboard says 432, but the resting Ø56 dot (bottom 428) would sit on the "0"
   const EASE_X = 1040, EASE_BASE = 700, EASE_SIZE = 200, EASE_DROP = 152;
   const HEADER = 'cubic-bezier(0.70, 0.00, 0.20, 1.00)';
-  const HEAD_X = 240, HEAD_BASE = 900;
+  const HEAD_X = 240, HEAD_BASE = 900 + PLOT_DY;
   const ODO_I = HEADER.lastIndexOf('1.00') + 2; // tenths digit of y2
   const Y2_I = HEADER.lastIndexOf('1.00');
 
@@ -355,7 +359,7 @@
           ctx.strokeStyle = R.rgba(FOG, 0.3 * Math.min(1, g * 1.6) * fade);
           const x = Math.round(PX(k / 8)) + 0.5, y = Math.round(PY(k / 8)) - 0.5;
           ctx.beginPath();
-          ctx.moveTo(x, 820); ctx.lineTo(x, 820 - 480 * g);
+          ctx.moveTo(x, OY); ctx.lineTo(x, OY - 480 * g);
           ctx.moveTo(240, y); ctx.lineTo(240 + 480 * g, y);
           ctx.stroke();
         }
@@ -369,8 +373,8 @@
           ctx.lineWidth = 2;
           ctx.lineCap = 'square';
           ctx.beginPath();
-          ctx.moveTo(240, 820); ctx.lineTo(240 + 480 * a, 820);
-          ctx.moveTo(240, 820); ctx.lineTo(240, 820 - 480 * a);
+          ctx.moveTo(240, OY); ctx.lineTo(240 + 480 * a, OY);
+          ctx.moveTo(240, OY); ctx.lineTo(240, OY - 480 * a);
           ctx.stroke();
           ctx.lineCap = 'butt';
         }
@@ -381,12 +385,12 @@
         const a = seg(t, 5.3, 5.42, 'outQuad') * (1 - seg(t, T.retract, T.retract + 0.07));
         if (a > 0.002) {
           ctx.fillStyle = R.rgba(FOG, a);
-          this.label(ctx, 'TIME', 480, 848, 'center');
-          this.label(ctx, '0', 232, 848, 'right');
-          this.label(ctx, '1', 720, 848, 'center');
-          this.label(ctx, '1', 228, 345, 'right');
+          this.label(ctx, 'TIME', 480, OY + 28, 'center');
+          this.label(ctx, '0', 232, OY + 28, 'right');
+          this.label(ctx, '1', 720, OY + 28, 'center');
+          this.label(ctx, '1', 228, OY - 475, 'right');
           ctx.save();
-          ctx.translate(212, 580);
+          ctx.translate(212, OY - 240);
           ctx.rotate(-Math.PI / 2);
           this.label(ctx, 'VALUE', 0, 5, 'center');
           ctx.restore();
@@ -435,7 +439,7 @@
         const X = Math.round(PX(x));
         if (grow > 0.002) {
           ctx.fillStyle = SIGNAL;
-          ctx.fillRect(X - 1, 820 - 544 * grow, 2, 544 * grow);
+          ctx.fillRect(X - 1, OY - 544 * grow, 2, 544 * grow);
         }
         const rideA = 1 - seg(t, T.retract + 0.1, T.retract + 0.16);
         const ride = t < T.retract ? [PX(x), PY(v)] : endPt;

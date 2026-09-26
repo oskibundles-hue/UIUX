@@ -769,14 +769,30 @@
       const bars = [[570, barH(T_U), T_U], [1200, barH(T_U_R), T_U_R]];
       ctx.fillStyle = INK;
       for (const [x, h] of bars) if (h >= 0.5) ctx.fillRect(x, 540 - h, 150, h);
-      // value labels: JetBrains Mono 700 28 px, centred above each bar, counting 0 → 100 with its height
+      // value labels: JetBrains Mono 700 28 px, centred above each bar, counting 0 → 100 with its height.
+      // The label rides the bar up but parks at its rest baseline (134, label top y 113) once the bar passes
+      // it, so the spring's ~12 % overshoot never lifts it into the HUD band (y < 96). While the overshooting
+      // bar covers the parked label, the covered part is knocked out in Paper: the bar visibly passes
+      // through its "100" and the label stays legible.
       ctx.font = `700 28px ${MONO}`;
       for (const [x, h, t0] of bars) {
         if (t < t0) continue; // no stray "0" on the axis before its bar starts
         const v = String(Math.round(100 * clamp(h / 390)));
         const w = v.length * this.u28.adv;
-        ctx.fillText(v, Math.round(x + 75 - w / 2), Math.round(540 - h - 16));
+        const lx = Math.round(x + 75 - w / 2), ly = Math.max(134, Math.round(540 - h - 16));
+        ctx.fillStyle = INK;
+        ctx.fillText(v, lx, ly);
+        if (540 - h < ly) {
+          ctx.save();
+          ctx.beginPath();
+          ctx.rect(x, 540 - h, 150, h);
+          ctx.clip();
+          ctx.fillStyle = PAPER;
+          ctx.fillText(v, lx, ly);
+          ctx.restore();
+        }
       }
+      ctx.fillStyle = INK;
       // ---- bowl: Ink half-donut (r 240 → 390) sweeping left stem → bottom → right stem (inOutCubic),
       // flat start, round leading cap, built as one filled path (no seams).
       const sw = E.inOutCubic(clamp((t - T_U_R) / (T_U_LOCK - T_U_R)));

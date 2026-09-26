@@ -42,6 +42,7 @@
   const DOT_R = 44;
   const GROUND = 780; //             baseline of the sentence = ground line
   const REST_Y = GROUND - DOT_R; //  736: grounded dot centre
+  const NOTICE_Y = GROUND - DOT_R * 0.85; // 742.6: centre of the held notice pose (R 37.4, bottom on y 780)
   const START = [1731, 656]; //      s01 handoff: Ø88 at (1731,656), bottom on WIDE's baseline (700)
   const START_FLOOR = 700;
   const SENT = 'Timing is everything';
@@ -319,7 +320,9 @@
         const k = R.kf(t, [[T_NOTICE, 1], [T_NOTICE + R.E16, 0.825, 'inOutSine'], [T_NOTICE + R.E16 + 0.1, 0.85, 'inOutSine']]);
         const ps = poseSquash(xS, GROUND, 1 + 0.06 * w, 1 - 0.05 * w, 0);
         if (k === 1) return ps;
-        return poseRound(xS, REST_Y, k); // notice: uniform scale about the centre
+        // notice: uniform scale anchored at the contact point, so the dot stays seated on the
+        // baseline (bottom on y 780) while it shrinks; centre 780 − 44k (742.6 at the 0.85 hold)
+        return poseRound(xS, GROUND - DOT_R * k, k);
       }
       return null; // dive: drawn as a plain disc
     },
@@ -387,7 +390,8 @@
      */
     diveCentre(t) {
       const u = t - T_DIVE, e = E.inOutCubic(Math.min(1, Math.max(0, u / 0.1875)));
-      const p0x = this.xS, p0y = REST_Y, p1x = this.xS - 199, p1y = REST_Y - 176, p2x = 960, p2y = 540;
+      // starts exactly on the held notice pose: centre (xS, 780 − 44·0.85 = 742.6), bottom on the baseline
+      const p0x = this.xS, p0y = NOTICE_Y, p1x = this.xS - 199, p1y = NOTICE_Y - 176, p2x = 960, p2y = 540;
       const a = (1 - e) * (1 - e), b = 2 * e * (1 - e), c = e * e;
       return [a * p0x + b * p1x + c * p2x, a * p0y + b * p1y + c * p2y];
     },
@@ -533,7 +537,9 @@
         ctx.strokeStyle = rgba(PAPER_RGB, (1 - pr) * (1 - pr) * 0.9);
         ctx.lineWidth = 1;
         ctx.beginPath();
-        ctx.arc(this.xS, REST_Y, 44 + 26 * E.swift(pr), 0, TAU);
+        // concentric with the dot: its centre sinks 736 → 742.6 as the notice scale (anchored at the
+        // contact point) shrinks it, so the ring follows the pose centre instead of the old REST_Y
+        ctx.arc(this.xS, this.pose(t).cy, 44 + 26 * E.swift(pr), 0, TAU);
         ctx.stroke();
       }
 
