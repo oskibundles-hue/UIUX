@@ -7,6 +7,44 @@ covers which look to reach for.
 
 ---
 
+## THE STANDARD: `locked-on` (Supercar Experience ads)
+
+**Made the standard by Omarie on 2026-09-26:** "That is amazing make that a standard."
+Every SE car ad starts from this treatment unless the job says otherwise. Reference build:
+`flash-special-showcase/` ("LOCKED ON", GT3 RS, 18 s 9:16). Read its README before you start.
+
+What makes an ad `locked-on`, in order of appearance:
+
+1. **Hook on frame 0.** A black panel with the offer headline (e.g. FLASH SPECIAL / TODAY ONLY / ENDS 1 PM)
+   and the SE lockup, fully built on the first frame so the story preview reads.
+2. **Badge lock-on.** Gold corner brackets and a leader line *tracked* onto the maker's badge in
+   the footage (`lib/track.py`, numpy template tracking). The brand, model and year · class callout types on
+   beside it. Needs a shot of at least 1 s where the badge moves smoothly. A turning car won't track
+   (the Black Series grille failed), so use a headlight or the badge instead.
+3. **Kinetic type** with true sub-frame motion blur and gold glints (`lib/kinetic.js` +
+   `lib/kcapture.js`). The price lands in a **slot reel** with no readable wrong digit on the way.
+4. **Type behind the car.** A giant word (model designation or price) sits *between* the background
+   and the car, with a 2.5D push (`lib/matte_lib.py`, `lib/warehouse.py`). This only works on a
+   **locked-off shot**: tracing one car takes about 20 min, and a moving shot needs frame-by-frame roto,
+   so don't promise it.
+5. **Edit energy.** Whip transitions, eased speed ramps, a short freeze with a light sweep across the
+   car, and one night grade across all shots (`lib/fx.py`, `lib/edl.py`). Keep the FX tasteful; the reviewers
+   flagged anything that read as a glitch (blown wheels, halos).
+6. **End card.** Car name, offer lines, the price whole and clear of the car, TEXT OR DM TO BOOK,
+   the phone for the ad's city, the site and @SUPERCAR_EXPERIENCE_, plus the requirements line.
+7. **Sound.** The clip's own music, continuous and never chopped at cuts, extended by whole bars if
+   it's short (no time-stretch). Designed accents (ticks, whooshes, impacts) sit about 45% under it, and the
+   music drops into its own tape stop before the end-card hit. -14 LUFS, true peak <= -1.5 dBTP,
+   last 50 ms silent (`audio/bed_music.py`).
+8. **Process.** Every figure is sourced, copy passes SlopMonster 5/5, then review under four lenses
+   (claims, brand, legibility, craft) until nothing is blocking. Deliver a two-pass ~11.5 Mb/s copy for the
+   phone and Dropbox; the master stays in the repo.
+
+**Use `quick-promo` instead** only when the ad has to go out in under ~30 minutes. `locked-on`
+takes a few hours of build and review.
+
+---
+
 ## Approved layouts
 
 Two treatments are approved and **equal**. Pick per job, on the footage — not by
@@ -151,6 +189,7 @@ Keeping them separate is deliberate: a test on one axis stays interpretable.
 | 2026-09-26 | SE flash-special quick cuts: Huracán STO, GT3 RS, AMG GT Black Series | "That was amazing", then "I approve those ads for when we need quick story ads for promotions" — `quick-promo` approved as the go-to for promo stories |
 | 2026-09-26 | Polished STO flash special (HUD lock-on) | "These animated graphics are way better... keep these up. I wanna implement these in my vlogs too" — the animated HUD level is the bar; vlog versions to follow. Also: "Keep music as well if the videos ever have any" |
 | 2026-09-26 | GT3 RS showcase "LOCKED ON" (tracked lock-on, type behind the car, kinetic price reel, clip music) | "Approved" — the showcase techniques are signed off for SE ads |
+| 2026-09-26 | GT3 RS showcase "LOCKED ON" | "That is amazing make that a standard" — `locked-on` is now THE standard for SE ads (section at the top) |
 
 Add a row when the shop reacts to something. This file is the reason a future ad
 does not have to re-litigate a settled look.

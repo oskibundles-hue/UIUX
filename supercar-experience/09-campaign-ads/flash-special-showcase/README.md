@@ -1,6 +1,6 @@
 # Flash special showcase: "LOCKED ON" (Porsche 911 GT3 RS), 18 s 9:16 story
 
-**Status: APPROVED by Omarie, 26 Sept 2026.** Delivered to Dropbox: `Supercar Experience/04 Flash Special Stories (2026-09-26)/05 GT3 RS Showcase - LOCKED ON/`.
+**Status: APPROVED by Omarie, 26 Sept 2026, and made THE STANDARD for SE ads** (`locked-on` in `../HOUSE-STYLE.md`). Delivered to Dropbox: `Supercar Experience/04 Flash Special Stories (2026-09-26)/05 GT3 RS Showcase - LOCKED ON/`.
 
 This is the motion-graphics version of the 26 Sept 2026 flash special. It carries the same offer as the
 approved quick cuts (`../flash-special-quick-cut/`), built with the full toolkit:
