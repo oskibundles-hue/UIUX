@@ -40,6 +40,7 @@
   const POP_DUR = 5 / 60;
   const COLLAPSE_DUR = 0.1171875;
   const TIGHT = { stiffness: 420, damping: 26 };
+  const CURSOR_TAIL = 2; // frames the montage caption's block cursor lingers after the word completes (as s00/s06)
   // squeeze onion skins: [time lag in frames, peak opacity]
   const GHOSTS = [[0.25, 0.42], [0.5, 0.26], [0.75, 0.13]];
 
@@ -288,6 +289,15 @@
         style: { left: '72px', fontFamily: mono, fontWeight: '500', fontSize: '20px', letterSpacing: '0.12em', whiteSpace: 'pre', display: 'none' },
       }, capLayer);
       S.capM.style.lineHeight = '1';
+      // Block cursor (s06's / the HUD's typing language): Signal, 0.6 em × cap height, rides the insertion point.
+      {
+        const mg = document.createElement('canvas').getContext('2d');
+        mg.font = `500 20px ${mono}`;
+        const capH = mg.measureText('H').actualBoundingBoxAscent;
+        S.capCur = R.el('div', {
+          style: { width: Math.round(0.6 * 20) + 'px', height: Math.round(capH) + 'px', top: Math.round(976 - capH) + 'px', background: P.signal, display: 'none' },
+        }, capLayer);
+      }
       S.caps = [];
       for (let i = 0; i < 6; i++) {
         const c = R.el('div', {
@@ -306,6 +316,10 @@
       S.caps.forEach((c) => { c.style.display = 'block'; c.textContent = 'X'; });
       const rr = root.getBoundingClientRect();
       const k = rr.width / R.W || 1;
+      // montage caption advance (0.6 em + 0.12 em tracking): the cursor's x = 72 + typed · advance
+      S.capM.textContent = 'DDDDDDDDDD';
+      S.capMAdv = S.capM.getBoundingClientRect().width / k / 10;
+      S.capM.textContent = 'D';
       const baselineOf = (el) => {
         const mk = document.createElement('span');
         mk.style.cssText = 'display:inline-block;width:0;height:0;vertical-align:baseline';
@@ -948,12 +962,18 @@
   // Captions
   // ------------------------------------------------------------------------------------------------------------
   function updateCaptions(S, t, f) {
-    // montage caption (x 72, baseline 976): types on at 3 chars/frame from each cut, HUD colour
-    let txt = '', col = P.paper;
+    // montage caption (x 72, baseline 976): types on at 3 chars/frame from each cut, HUD colour, behind a Signal
+    // block cursor that rides the insertion point while typing and lingers 2 frames after (s06 / the HUD's tail)
+    let txt = '', col = P.paper, cursor = false;
+    const typeOn = (full, T) => {
+      const since = f - firstFrame(T);
+      cursor = since < Math.ceil(full.length / 3) + CURSOR_TAIL;
+      return full.slice(0, 3 * (since + 1));
+    };
     if (t < T_E) {
-      txt = 'D — GLITCH'.slice(0, 3 * (f - firstFrame(T_IN) + 1));
+      txt = typeOn('D — GLITCH', T_IN);
     } else if (t < T_ROW) {
-      txt = 'E — SHAPE'.slice(0, 3 * (f - firstFrame(T_E) + 1));
+      txt = typeOn('E — SHAPE', T_E);
       col = P.ink;
     }
     if (txt) {
@@ -961,6 +981,10 @@
       S.capM.style.color = col;
       S.capM.style.display = 'block';
     } else if (S.capM.style.display !== 'none') S.capM.style.display = 'none';
+    if (txt && cursor) {
+      S.capCur.style.left = Math.round(72 + txt.length * S.capMAdv) + 'px';
+      S.capCur.style.display = 'block';
+    } else if (S.capCur.style.display !== 'none') S.capCur.style.display = 'none';
 
     // row captions (baseline 744): 2 chars/frame, 1-frame stagger L→R from the reveal; wipe out right→left
     const k = f - firstFrame(T_REV);

@@ -40,7 +40,7 @@
   const RING = { cx: 236, cy: 980, r: 28, sw: 12 };      // "C." monogram, 60° opening at 3 o'clock
   const MDOT = { x: 264, y: 980, d: 16, y0: 940, dx: 48 }; // its dot (enters from (312, 940), lands in the opening)
   const YEAR = { text: 'SHOWREEL 2026', size: 30, ls: 0.24, x: 200, base: 336 };
-  const TAG = { text: 'EVERY FRAME, ON PURPOSE.', size: 22, ls: 0.16, x: 1720, base: 752 };
+  const TAG = { text: 'EVERY FRAME, ON PURPOSE.', size: 26, ls: 0.16, x: 1720, base: 752 };
   const ROLE = { text: 'Motion Designer', size: 96, x: 200, base: 752 };
 
   const C_HAIR = R.mixColor(P.ink, P.paper, 0.35);      // Paper @35% on Ink (opaque: overlaps stay uniform)
@@ -250,7 +250,7 @@
       // Global FX (storyboard, s08 rows)
       R.cue(13.125, 'chroma', { amt: 10, dur: 0.2 });                      // final hit
       R.cue(13.125, 'flash', { amt: 1.0, dur: 0.15, color: '#FFFFFF' });   // FINAL HIT (masks the s07→s08 handoff)
-      R.cue(13.125, 'shake', { amt: 14, dur: 0.32 });                      // final hit (storyboard 0.35: the last 0.03 s is < 0.1 px and trips a compositor race, see report)
+      R.cue(13.125, 'shake', { amt: 14, dur: 0.35 });                      // final hit
       R.cue(13.125, 'zoom', { amt: 0.06, dur: 0.3 });                      // final hit
       R.cue(13.59375, 'shake', { amt: 3, dur: 0.1 });                      // period lands
       R.cue(14.53125, 'zoom', { amt: 0.01, dur: 0.12 });                   // the final tick

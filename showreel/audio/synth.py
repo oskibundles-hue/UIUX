@@ -320,6 +320,24 @@ SCENE_FX = {
 PICTURE_PAN = {
     ('whoosh', 1.9921875): 'rl',    # s02 leap: the dot arcs from (1731,656) to (470,736), "panned right->left"
 }
+# Per-event mix overrides, matched on (type, t) within 1 ms like PICTURE_PAN (picture and arrangement events).
+#   gain       dB on top of SFX_MIX, applied after the micro ride (so it may go past MICRO's +-range)
+#   duck       dB the music dips under this event (the SFX_MIX duck path; replaces the type's own depth)
+#   low_shelf  (Hz, dB) RBJ low shelf on this event's own buffer
+EVENT_MIX = {
+    # s08 "the period lands" (f816): the F5 pop, the bar-2 callback, sat under the final hit's Fm(add9) hall
+    # and 43 Hz boom (its F5 band rose +8 dB over the 50 ms before it, vs +13..+48 at the other landings).
+    # Louder than MICRO's target on purpose: an intentional outlier in qa.py's micro table.
+    ('pop', 13.59375): dict(gain=7.0, duck=2.0),
+    # the drop (f450-f506): its sfx sub layers ruled bar 5 below 70 Hz (50 Hz 1/3-oct +14.5 dB over 1 kHz vs
+    # +8..+10.5 in the other groove bars). The mega impact keeps its long 808 untouched (a 70 Hz -3 dB shelf
+    # on it cost THE DROP 0.7 dB K-weighted, +9.4 -> +8.6 over the breath, for no gain on the bar figure);
+    # the beat-2 impulse and the RANGE snap ("a bright stab") lose most of their sub: the groove's kick + sub
+    # already carry beats 2 and 3. The groove itself and the 13.125 final hit keep their low end.
+    ('subdrop', 7.5): dict(gain=-4.0),
+    ('impact', 7.96875): dict(low_shelf=(100.0, -9.0)),
+    ('impact', 8.4375): dict(low_shelf=(100.0, -12.0)),
+}
 DEDUPE_WINDOW = 0.030           # an R.cue reinforcement is dropped if any sound event is this close
 YIELD_WINDOW = 0.12             # arrangement FX yield to a same-type picture event this close
 PASS_WINDOW = 0.03              # a swell passes a silence if it lands this close to the silence's end
@@ -2342,6 +2360,13 @@ def render(cues_path, mute=(), solo=()):
             ev['ride_db'] = micro_ride(buf * g, kbed, s)
             ev['gain_db'] += ev['ride_db']
             g *= undb(ev['ride_db'])
+        em = next((o for (ty, tt), o in EVENT_MIX.items() if ty == typ and abs(tt - ev['t']) <= 0.001), {})
+        if em.get('low_shelf'):
+            buf = filt(buf, ('lowshelf', em['low_shelf'][0], 0.7071, em['low_shelf'][1]))
+        if em.get('gain'):
+            ev['event_db'] = float(em['gain'])
+            ev['gain_db'] += ev['event_db']
+            g *= undb(ev['event_db'])
         e, kill = epoch_of(sfx_cuts, ev['t'] + off)
         if not ev['passes']:
             buf = kill_after(buf, s, kill)
@@ -2349,8 +2374,9 @@ def render(cues_path, mute=(), solo=()):
         verb = ev.get('verb', mx.get('verb'))
         if verb:
             mix_into(fxsend[e], buf, s, g * verb)
-        if mx.get('duck'):
-            mix_into(duck_trig, np.full(1, mx['duck'] * ev['amt']), s)
+        duck = em.get('duck', mx.get('duck'))
+        if duck:
+            mix_into(duck_trig, np.full(1, duck * ev['amt']), s)
         counts[typ] = counts.get(typ, 0) + 1
     fxverb = np.zeros((2, n))
     for e, snd in enumerate(fxsend):
@@ -2510,7 +2536,7 @@ def main(argv=None):
             write_wav(os.path.join(d, k + '.wav'), v * info['pregain'], 32)
         write_wav(os.path.join(d, 'master.wav'), master, 32)
         keys = ('type', 't', 'anchor', 'dur', 'amt', 'pitch', 'pitched', 'count', 'dir', 'pan', 'tone', 'verb',
-                'source', 'seed', 'passes', 'gain_db', 'ride_db')
+                'source', 'seed', 'passes', 'gain_db', 'ride_db', 'event_db')
         side = dict(cues=os.path.abspath(a.cues) if a.cues else None, pregain=info['pregain'],
                     silences=[list(sp) for sp in info['spans']],
                     events=[{k: ev[k] for k in keys if k in ev} for ev in info['events']],
