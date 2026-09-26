@@ -126,8 +126,9 @@
     setup(root) {
       root.style.pointerEvents = 'none';
       this.panel = R.el('div', { style: { width: W + 'px', height: H + 'px', overflow: 'hidden', background: PAPER } }, root);
-      // Motion-blurred leading edge of the whip: a Paper ramp just LEFT of the (fully opaque) panel,
-      // as long as the edge's travel over ~⅓ frame, so the seam smears like the rest of the camera move.
+      // Motion-blurred leading edge of the whip: a Paper ramp just LEFT of the (fully opaque) panel, as
+      // long as the edge's travel over half a frame (the same 180° shutter s05 uses for its streaks), so
+      // the seam smears like the rest of the one camera move.
       this.edge = R.el('div', { style: { width: '1px', height: H + 'px', transformOrigin: '0 0', background: `linear-gradient(to right, ${R.rgba(PAPER, 0)}, ${R.rgba(PAPER, 1)})`, display: 'none' } }, root);
       const cv = R.canvas(this.panel);
       this.ctx = cv.ctx;
@@ -499,6 +500,8 @@
       const txt = R.svg('text', { x: ox, y: oy, 'clip-path': `url(#${NS}reveal)`, mask: `url(#${NS}slot)`, style: `font-family:${DISPLAY};font-weight:600;font-size:1109px;font-stretch:100%;font-kerning:none` }, this.aBody);
       txt.textContent = 'A';
       this.aBumps = [0, 1, 2].map(() => R.svg('circle', { cx: 0, cy: 0, r: 0 }, this.aBody));
+      // each bump drags a smaller wake circle behind it, so in stills it reads as a travelling swell
+      this.aWakes = [0, 1, 2].map(() => R.svg('circle', { cx: 0, cy: 0, r: 0 }, this.aBody));
 
       // Seven Paper blobs rush in from beyond the frame edges on curved paths and land on the A's strokes.
       const S = [sx, sy];
@@ -525,6 +528,8 @@
       });
       // Rounded, convex ends for the two crossbar halves while the slot is open (they reach for the dot).
       this.aEnds = [0, 1].map(() => R.svg('circle', { cx: AX, cy: 0, r: 0 }, goo));
+      // Meniscus: the crossbar surface wets up both sides of the dot while it presses into the membrane.
+      this.aMenisci = [0, 1].map(() => R.svg('circle', { cx: AX, cy: 0, r: 0 }, goo));
       this.aBulge = R.svg('circle', { cx: AX, cy: 0, r: 0 }, goo);
       this.aNeck = [0, 1, 2, 3, 4].map(() => R.svg('circle', { cx: AX, cy: 0, r: 0 }, goo));
       this.aDrops = [0, 1].map(() => R.svg('circle', { cx: AX, cy: 0, r: 0, fill: PAPER }, svg));
@@ -532,25 +537,19 @@
       this.aFilter = filt;
     },
 
-    polyLen(pts) {
-      let L = 0;
-      for (let i = 1; i < pts.length; i++) L += Math.hypot(pts[i][0] - pts[i - 1][0], pts[i][1] - pts[i - 1][1]);
-      return L;
-    },
-
     /** Dot state inside the A vignette (screen space): sinks onto the crossbar, then drips through. */
     aDot(t) {
-      if (t < T_A_SET) return { y: AY, sx: 1, sy: 1, v: 0 };
+      if (t < T_A_SET) return { y: AY, sx: 1, sy: 1 };
       if (t < T_A_DRIP) {
         const q = (t - T_A_SET) / (T_A_DRIP - T_A_SET);
         const y = AY + 50 * E.inQuad(q);
         const press = clamp((y + DOT_R - (this.aCrossTop - 16)) / 30); // squashes as it presses the membrane
         const sx = 1 + 0.08 * press;
-        return { y, sx, sy: 1 / sx, v: (100 * q) / (T_A_DRIP - T_A_SET) };
+        return { y, sx, sy: 1 / sx };
       }
       const tau = t - T_A_DRIP;
       const V0 = 1800, G = 13000; // the membrane snaps: launched at 1800 px/s, then gravity
-      return { y: 590 + V0 * tau + 0.5 * G * tau * tau, sx: 0.8, sy: 1.25, v: V0 + G * tau };
+      return { y: 590 + V0 * tau + 0.5 * G * tau * tau, sx: 0.8, sy: 1.25 };
     },
 
     drawA(t) {
@@ -605,19 +604,30 @@
         b.clip.setAttribute('r', rv.toFixed(2));
       }
 
-      // ---- three Ø40 bumps ride the outer flanks at 900 px/s (downhill)
-      const bumpIn = E.swift(clamp((t - T_A_SET) / 0.06));
+      // ---- three Ø40 bumps ride the outer flanks at 900 px/s (downhill). Their centres sit 6 px INSIDE
+      // the edge, so the goo turns each into a smooth swell (≈14 px proud) rather than a knob, and a
+      // Ø24 wake 26 px behind stretches it into a travelling ripple. They grow in on the settle and
+      // flatten out before the cut, so the A reads clean on the drip and on the last frames.
+      const bumpIn = E.swift(clamp((t - T_A_SET) / 0.06)) * (1 - E.inOutQuad(clamp((t - 10.69) / 0.07)));
       const n = this.aCont.length;
+      const onCont = (s, off) => {
+        const k0 = Math.floor(s), fk = s - k0;
+        const ia = ((k0 % n) + n) % n, ib = (((k0 + 1) % n) + n) % n;
+        const pa = this.aCont[ia], pb = this.aCont[ib], na = this.aNrm[ia], nb = this.aNrm[ib];
+        const nx = lerp(na[0], nb[0], fk), ny = lerp(na[1], nb[1], fk);
+        return [lerp(pa[0], pb[0], fk) + nx * off, lerp(pa[1], pb[1], fk) + ny * off];
+      };
       for (let i = 0; i < 3; i++) {
         const bp = this.aBumpPlan[i];
         const s = (bp.s0 + bp.dir * 900 * (t - T_A_SET)) / this.aStep;
-        const k0 = Math.floor(s), fk = s - k0;
-        const pa = this.aCont[((k0 % n) + n) % n], pb = this.aCont[(((k0 + 1) % n) + n) % n];
-        const na = this.aNrm[((k0 % n) + n) % n];
-        const x = lerp(pa[0], pb[0], fk) + na[0] * 7, y = lerp(pa[1], pb[1], fk) + na[1] * 7;
+        const [x, y] = onCont(s, -6);
         const el = this.aBumps[i];
         el.setAttribute('cx', x.toFixed(2)); el.setAttribute('cy', y.toFixed(2));
         el.setAttribute('r', (20 * bumpIn).toFixed(2));
+        const [wx, wy] = onCont(s - (bp.dir * 26) / this.aStep, -8);
+        const wk = this.aWakes[i];
+        wk.setAttribute('cx', wx.toFixed(2)); wk.setAttribute('cy', wy.toFixed(2));
+        wk.setAttribute('r', (12 * bumpIn).toFixed(2));
       }
 
       // ---- the dot sinks onto the crossbar (membrane bulges below), then drips through
@@ -650,6 +660,17 @@
         el.setAttribute('cx', (AX + sgn * (slotW / 2 + endR - 20)).toFixed(2));
         el.setAttribute('cy', (cbTop + (cbMid - cbTop) * cut + endR * (1 - cut) * 0.2).toFixed(2));
         el.setAttribute('r', slotW > 0.5 ? (endR * (0.55 + 0.45 * cut)).toFixed(2) : 0);
+      }
+      // meniscus: grows with the press, pulled down through the slot with the dot on the snap
+      {
+        const press = tauD < 0 ? clamp((dot.y + DOT_R * dot.sy - (cbTop - 6)) / 24) : 1 - clamp(tauD / (2 / FPS));
+        const halfW = DOT_R * dot.sx;
+        for (let k = 0; k < 2; k++) {
+          const el = this.aMenisci[k];
+          el.setAttribute('cx', (AX + (k ? 1 : -1) * (halfW * 0.86)).toFixed(2));
+          el.setAttribute('cy', (cbTop + 5).toFixed(2));
+          el.setAttribute('r', (17 * E.outQuad(clamp(press))).toFixed(2));
+        }
       }
       // membrane bulge: pushed below the crossbar by the dot's weight; heals on WOBBLE after the snap
       const L_BREAK = 96;
@@ -714,7 +735,7 @@
     drawU(ctx, t) {
       const lt = t - T_U;
       // ---- dashed Fog 2 px axis at y 540 (x 160 → 1760, dash 12/8), drawn out from the hub
-      const reach = 800 * E.swift(clamp(lt / 0.2));
+      const reach = 800 * E.swift(clamp((lt + 2 / FPS) / 0.2)); // pre-rolled 2 frames: the cut lands mid-draw
       ctx.save();
       ctx.beginPath();
       ctx.rect(AX - reach, 530, 2 * reach, 20);
@@ -728,6 +749,7 @@
       ctx.setLineDash([]);
       ctx.restore();
       // tick labels every 160 px (−5 … 5), set as the axis reaches them
+      ctx.letterSpacing = '0px';
       ctx.font = `500 14px ${MONO}`;
       ctx.fillStyle = FOG;
       ctx.textBaseline = 'alphabetic';
@@ -744,12 +766,13 @@
         const s = R.spring(t - t0, BAR_SPRING);
         return 390 * (1 + (s - 1) * settle);
       };
-      const bars = [[570, barH(T_U)], [1200, barH(T_U_R)]];
+      const bars = [[570, barH(T_U), T_U], [1200, barH(T_U_R), T_U_R]];
       ctx.fillStyle = INK;
       for (const [x, h] of bars) if (h >= 0.5) ctx.fillRect(x, 540 - h, 150, h);
       // value labels: JetBrains Mono 700 28 px, centred above each bar, counting 0 → 100 with its height
       ctx.font = `700 28px ${MONO}`;
-      for (const [x, h] of bars) {
+      for (const [x, h, t0] of bars) {
+        if (t < t0) continue; // no stray "0" on the axis before its bar starts
         const v = String(Math.round(100 * clamp(h / 390)));
         const w = v.length * this.u28.adv;
         ctx.fillText(v, Math.round(x + 75 - w / 2), Math.round(540 - h - 16));
@@ -798,10 +821,11 @@
       this.panel.style.background = GROUND[v];
       const speed = Math.abs(dP(t)) / DP_MAX; // 0..1
       const smear = 1 + 2.5 * speed; // halftone smear: peak 3.5 mid-whip, 1.0 on landing
-      const blurLen = (0.35 * Math.abs(dP(t))) / FPS; // ≤ 143 px at peak speed
-      if (blurLen > 1 && px < W) {
+      const blurLen = (0.5 * Math.abs(dP(t))) / FPS; // 180° shutter: ≤ 205 px at peak speed
+      if (blurLen >= 2 && px < W) { // (sub-2 px on the first/last overlap frames: panel only, per the handoff)
         this.edge.style.display = 'block';
-        this.edge.style.transform = `translate3d(${(px - blurLen).toFixed(3)}px,0,0) scaleX(${blurLen.toFixed(3)})`;
+        // overlaps the panel by 2 px so the two antialiased edges never leave a conflation hairline
+        this.edge.style.transform = `translate3d(${(px - blurLen).toFixed(3)}px,0,0) scaleX(${(blurLen + 2).toFixed(3)})`;
       } else this.edge.style.display = 'none';
 
       ctx.clearRect(0, 0, W, H);
@@ -810,8 +834,8 @@
       if (v === 0) {
         this.drawC(ctx, t, smear);
         // the dot rides in with the world, smeared like it, then pulses with the ripple on the and
-        const k = 1 + 0.9 * speed;
-        sx *= k; sy *= 1 / Math.sqrt(k);
+        const k = 1 + 0.6 * speed; // stretch along the pan, volume-preserving (craft note 4)
+        sx *= k; sy *= 1 / k;
         const pulse = 1 + 0.07 * impulse(t - T_C_AND, TIGHT);
         sx *= pulse; sy *= pulse;
       } else if (v === 1) {
