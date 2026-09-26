@@ -1,8 +1,9 @@
 #!/usr/bin/env node
 // Render the reel frame-by-frame in headless Chromium and encode it with ffmpeg.
 //
-//   node tools/render.mjs                         full 1080p60 master -> dist/showreel.mp4 (muxes dist/soundtrack.wav if present)
-//   node tools/render.mjs --preview               540p30 quick check  -> .cache/preview.mp4
+//   node tools/render.mjs                         1080p60 web cut (CRF 21) -> dist/showreel.mp4 (muxes dist/soundtrack.wav)
+//   node tools/render.mjs --master                1080p60 high-quality master (CRF 16) -> dist/showreel-master.mp4
+//   node tools/render.mjs --preview               quick check (30 fps, fast preset) -> .cache/preview.mp4
 //   options: --from S --to S   --workers N   --scale 0.5   --fps 60|30   --crf 16   --out FILE   --audio FILE|none
 //            --only ids   --keep (keep PNG frames)   --reuse (skip frames already on disk)
 import fs from 'node:fs';
@@ -20,7 +21,9 @@ if (!Number.isInteger(step)) throw new Error('--fps must divide 60');
 const from = a.from !== undefined ? parseTime(a.from) : 0;
 const to = a.to !== undefined ? parseTime(a.to) : DUR;
 const workers = Number(a.workers || Math.max(1, Math.min(4, os.cpus().length - 1)));
-const out = path.resolve(a.out || (preview ? path.join(ROOT, '.cache', 'preview.mp4') : path.join(ROOT, 'dist', 'showreel.mp4')));
+const master = !!a.master;
+const out = path.resolve(a.out || (preview ? path.join(ROOT, '.cache', 'preview.mp4')
+  : path.join(ROOT, 'dist', master ? 'showreel-master.mp4' : 'showreel.mp4')));
 const framesDir = path.join(ROOT, '.cache', preview ? 'frames-preview' : 'frames');
 const ffmpeg = findFfmpeg();
 
@@ -74,8 +77,9 @@ const args = ['-y', '-hide_banner', '-loglevel', 'error', '-framerate', String(o
 if (audio) args.push('-ss', String(from), '-t', String(to - from), '-i', audio);
 args.push(
   '-vf', 'scale=out_color_matrix=bt709:out_range=tv:flags=lanczos+accurate_rnd+full_chroma_int,format=yuv420p',
-  '-c:v', 'libx264', '-preset', preview ? 'veryfast' : 'slow', '-crf', String(a.crf || (preview ? 23 : 16)),
-  '-profile:v', 'high', '-g', String(outFps), '-bf', '2',
+  '-c:v', 'libx264', '-preset', preview ? 'veryfast' : 'slow', '-crf', String(a.crf || (preview ? 23 : master ? 16 : 21)),
+  // ref=4 keeps 1080p60 inside level 4.2's DPB so older hardware decoders play it.
+  '-profile:v', 'high', '-level', '4.2', '-x264-params', 'ref=4', '-g', String(outFps), '-bf', '2',
   '-colorspace', 'bt709', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-color_range', 'tv',
   '-movflags', '+faststart',
 );

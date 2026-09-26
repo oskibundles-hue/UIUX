@@ -129,7 +129,8 @@
 
   // ---- Cursor (pure) ----------------------------------------------------------------------------------------
   const CUR_A = [1500, 1140], CUR_C = [1180, 420], CUR_B = [P2X, P2Y0];
-  const PARK_C = [690, 430], PARK = [760, 1000];
+  // The exit curves out to the right of the header so the cursor never crosses the "1.50" readout.
+  const PARK_C = [900, 420], PARK = [980, 1000];
   function cursorState(t) {
     if (t < T.curIn || t >= T.curGone) return null;
     let p, s = 1, a = 1;

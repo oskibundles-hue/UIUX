@@ -2,3 +2,4 @@
 __pycache__/
 # The repo root ignores every dist/; the showreel ships its rendered master from here.
 !dist/
+dist/showreel-master.mp4

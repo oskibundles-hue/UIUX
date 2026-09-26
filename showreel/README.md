@@ -4,10 +4,14 @@ A 15-second, 1080p60 motion-graphics showreel that is **written entirely in code
 rendered frame by frame in headless Chromium and scored with a procedurally synthesized soundtrack locked to a
 128 BPM grid. There is no footage, stock art or sample library. Every pixel and every sample is generated.
 
-- **Watch:** `dist/showreel.mp4`
+[![FULL STOP. end card: CLAUDE. Motion Designer, Showreel 2026](dist/poster.jpg)](dist/showreel.mp4)
+
+- **Watch:** [`dist/showreel.mp4`](dist/showreel.mp4) (15 s, 1080p60, sound on)
 - **Play it live in a browser:** serve this folder and open `index.html?play` (click to start, sound on)
 - **Storyboard:** [`STORYBOARD.md`](STORYBOARD.md) is the as-built spec. Its machine-readable twin,
   [`storyboard.json`](storyboard.json), feeds `tools/scaffold.mjs` and `audio/qa.py --make-cues`.
+
+![Contact sheet: one frame every half second](dist/contact-sheet.jpg)
 
 ## What's in the reel
 
@@ -31,7 +35,8 @@ pixel-exact rest pose.
 
 | File | What |
 |---|---|
-| `dist/showreel.mp4` | The master: H.264 1080p60 (BT.709, yuv420p, CRF 16) with 320 kbps AAC 48 kHz audio |
+| `dist/showreel.mp4` | The web cut: H.264 High@4.2 1080p60 (BT.709, yuv420p, CRF 21, ≈14 MB) with 320 kbps AAC 48 kHz audio |
+| `dist/showreel-master.mp4` | The high-quality master (CRF 16, ≈40 MB) from `node tools/render.mjs --master`; git-ignored, delivered separately |
 | `dist/soundtrack.wav` | The score: 48 kHz, 24-bit stereo, exactly 720000 frames, −14 LUFS integrated, true peak ≤ −1 dBTP |
 | `dist/poster.jpg` | Poster still: the final frame (f899, the locked end card), 1920×1080 |
 | `dist/contact-sheet.jpg` | Contact sheet of the reel: 30 frames every 0.5 s (0.25 → 14.75 s), 6 × 5 grid, time-labelled |
@@ -49,9 +54,10 @@ cd showreel
 node tools/cues.mjs                    # 1. picture -> audio/cues.json (scene windows, R.cue FX cues, R.sfx events)
 python3 audio/synth.py --stems         # 2. audio/cues.json -> dist/soundtrack.wav (+ per-bus stems in .cache/stems/)
 python3 audio/qa.py                    #    audio QA on the stems: loudness, clicks, kick grid, picture-lock table
-node tools/render.mjs                  # 3. -> dist/showreel.mp4 (1080p60, muxes dist/soundtrack.wav)
+node tools/render.mjs                  # 3. -> dist/showreel.mp4 (1080p60 web cut, muxes dist/soundtrack.wav)
+node tools/render.mjs --master --reuse # optional: CRF 16 master from the same frames (add --keep to the first run)
 
-node tools/render.mjs --preview        # fast 540p30 check -> .cache/preview.mp4
+node tools/render.mjs --preview        # fast 30 fps check -> .cache/preview.mp4
 node tools/stills.mjs --scene s03 --count 12 --sheet   # QA stills + labelled contact sheet
 ```
 
