@@ -479,13 +479,13 @@
           ctx.beginPath(); ctx.arc(p2r[0], p2r[1], 11 + 11 * h, 0, R.TAU); ctx.fill();
         }
         if (s2 > 0.01 && !gone) this.square(ctx, p2r[0], p2r[1], 18 * s2, SIGNAL);
-        // Press ripple (Signal 1.5 px, r 9 → 48, fades over 0.2 s)
+        // Press ripple (Signal 1.5 px, r 9 → 48, fades over 0.2 s), anchored at the press point
         if (t >= T.press && t < T.press + 0.2) {
           const k = (t - T.press) / 0.2;
           const r = lerp(9, 48, E.outCubic(k));
           ctx.strokeStyle = R.rgba(SIGNAL, 1 - E.inQuad(k));
           ctx.lineWidth = 1.5;
-          ctx.beginPath(); ctx.arc(P2X, p2y(t), r, 0, R.TAU); ctx.stroke();
+          ctx.beginPath(); ctx.arc(P2X, P2Y0, r, 0, R.TAU); ctx.stroke(); // emitted where the press happened: it stays and marks the drag's origin
         }
       }
 

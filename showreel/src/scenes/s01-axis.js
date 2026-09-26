@@ -10,14 +10,18 @@
  *    wght (9 samples @ wdth 100) and wdth (11 samples @ wght 900) with fixed-axis FontFace clones on a canvas
  *    (advance = measureText, ink = coverage-weighted pixel scan). update() interpolates; it never reads layout.
  *  - Seven persistent letter columns, each an overflow-hidden slot whose bottom edge is baseline + 8:
- *    rise (LIGHT) → vertical slot swap (HEAVY) → inward horizontal rolls + a centre pinch (NARROW: the two R's
- *    squeeze the A out) → outward rolls + centre collapse (WIDE) → drop through the baseline.
+ *    LIGHT rises out of the baseline → vertical slot swap to HEAVY (old letters leave through the cap line) →
+ *    squeeze-flips to NARROW, staggered from the centre out (the A folds away and splits into the two R's; the
+ *    word is crushed narrow and pops back) → gather-and-burst flips to WIDE (the R's fold away) → the letters
+ *    drop through the baseline, right to left.
  *  - Every frame the row is laid out from interpolated advances + kerning + tracking and centred on x = 960 by
  *    its INK box; rest poses are blended onto whole-pixel glyph origins so resting type never shimmers.
- *  - Squash & stretch as a container scale about the baseline (960,700): TIGHT impulse (HEAVY), POP spring
- *    (NARROW), keyed squash → overshoot → settle (WIDE), 3-frame anticipations before NARROW and WIDE.
+ *  - Squash & stretch as a container scale about the baseline (960,700): TIGHT impulse (HEAVY), launched POP
+ *    spring (NARROW), keyed crouch → overshoot → settle (WIDE), 3-frame anticipations before NARROW and WIDE.
  *  - Blueprint: Volt construction lines at the baseline and the live cap line, a Volt-light mono axis readout
- *    with odometer digits, a construction circle that predicts the full stop, then the lines retract into it.
+ *    that types on and rolls its digits, a construction circle that predicts the full stop, which then pops
+ *    into it (outBack 1.3); the lines retract into the dot and the rest pose is a 2D override: Ink + dot only.
+ *  - Local helpers (engine has none): impulse() spring response, backOut(s), keys() chains, interp() tables.
  */
 (function () {
   'use strict';
@@ -36,8 +40,12 @@
   const T_WIDE = R.pos(1, 4); //            1.40625   beat 4
   const T_DOT = R.pos(1, 4, 2); //          1.640625  and-of-4: the dot is born
   const T_EXIT = R.pos(1, 4, 3); //         1.7578125 last 16th: exit
-  const T_RETRACT_END = 1.8411; //                    construction lines gone
+  const T_RETRACT_END = 1.835; //                     lines + readout gone (spec ≤1.8411): f110 shows the last stubs
   const T_REST = R.bar(2) - 2 / 60; //      1.841667  rest pose, held to the cut
+  // Letter drop: the storyboard's 0.07 s would finish W at 1.853, after the 2D-override rest (1.8417), so the
+  // last letters would be cut off mid-fall. 0.058 s lands W at 1.8408: every letter falls all the way out, and
+  // no frame is left holding a lone horizontal bar (E's top arm, D's bowl) that reads as a dash.
+  const DROP = 0.058;
   const AXD = R.E16; //                               axis tweens (outExpo)
   const ANT = 3 / 60; //                              anticipation length
   const FLIP = R.E16; //                              squeeze-flip length (NARROW, WIDE)
@@ -51,21 +59,23 @@
   const MASK_BELOW = 8; //                  slot bottom edge = baseline + 8
   const DOT_X = 1731, DOT_Y = 656, DOT_R = 44;
   const WIDE_INK = 1422;
-  const TRACK = -0.01; //                   house tracking (em)
+  // Tracking (em). LIGHT breathes from the house -0.01em to +0.02em; the heavy words sit at 0, the tracking the
+  // storyboard's reference measurements were taken at (FS1 ≈ 422, cap 290, WIDE y 410 → 700).
+  const TRACK_LIGHT = -0.01, TRACK_BREATH = 0.02, TRACK = 0;
   const READ_X = 96;
   const READ_SIZE = 16;
 
   // ------------------------------------------------------------------------------------------ type data
-  // Persistent letter columns. seq = the glyph each column shows in LIGHT, HEAVY, NARROW, WIDE.
-  // side: -1 left of centre, +1 right (roll directions); rank: centre-out stagger index (frames).
+  // Persistent letter columns. seq = the glyph each column shows in LIGHT, HEAVY, NARROW, WIDE; kern = the pair
+  // it forms with the next letter of that word; rank = centre-out stagger index (frames) for NARROW and WIDE.
   const COLS = [
-    { seq: ['L', 'H', 'N', 'W'], side: -1, rank: 2, kern: ['LI', 'HE', 'NA', 'WI'] },
-    { seq: ['I', 'E', 'A', 'I'], side: -1, rank: 1, kern: ['IG', 'EA', 'AR', 'ID'] },
-    { seq: ['G', 'A'], side: 0, rank: 0, kern: ['GH', 'AV'] }, //   A is pinched out by the two R's
-    { seq: ['H', 'V', 'O', 'D'], side: 1, rank: 1, kern: ['HT', 'VY', 'OW', 'DE'] },
-    { seq: ['T', 'Y', 'W', 'E'], side: 1, rank: 2, kern: [null, null, null, null] },
-    { seq: ['R'], side: -1, rank: 0, kern: ['RR'] }, //                NARROW's first R
-    { seq: ['R'], side: 1, rank: 0, kern: ['RO'] }, //                 NARROW's second R
+    { seq: ['L', 'H', 'N', 'W'], rank: 2, kern: ['LI', 'HE', 'NA', 'WI'] },
+    { seq: ['I', 'E', 'A', 'I'], rank: 1, kern: ['IG', 'EA', 'AR', 'ID'] },
+    { seq: ['G', 'A'], rank: 0, kern: ['GH', 'AV'] }, //   HEAVY's A folds away; the two R's unfold beside it
+    { seq: ['H', 'V', 'O', 'D'], rank: 1, kern: ['HT', 'VY', 'OW', 'DE'] },
+    { seq: ['T', 'Y', 'W', 'E'], rank: 2, kern: [null, null, null, null] },
+    { seq: ['R'], rank: 0, kern: ['RR'] }, //                NARROW's first R
+    { seq: ['R'], rank: 0, kern: ['RO'] }, //                NARROW's second R
   ];
   const ROW = [0, 1, 5, 2, 6, 3, 4]; // visual order, left → right
 
@@ -118,41 +128,50 @@
     return 62 + 63 * E.outExpo(clamp((t - T_WIDE) / AXD));
   }
   function trackAt(t) {
-    if (t < T_BREATH) return TRACK;
-    if (t < T_HEAVY) return TRACK + 0.03 * E.inOutSine((t - T_BREATH) / (T_HEAVY - T_BREATH));
-    return lerp(TRACK + 0.03, TRACK, E.outExpo(clamp((t - T_HEAVY) / AXD)));
+    if (t < T_BREATH) return TRACK_LIGHT;
+    if (t < T_HEAVY) return lerp(TRACK_LIGHT, TRACK_BREATH, E.inOutSine((t - T_BREATH) / (T_HEAVY - T_BREATH)));
+    return lerp(TRACK_BREATH, TRACK, E.outExpo(clamp((t - T_HEAVY) / AXD)));
   }
 
   // Container scale about (960, BASE): returns [sx, sy].
-  const POP = { stiffness: 380, damping: 18 };
+  const TIGHT = { stiffness: 420, damping: 26 }; //                  house TIGHT (as an impulse, peak 1.06)
+  const POP_KICK = { stiffness: 380, damping: 18, velocity: 14 }; // house POP, launched (peaks ≈1.18)
+  const ANT_AMT = 0.025;
+  const ANT_SLAM = 4 / 60, ANT_SLAM_AMT = 0.035;
   function scaleAt(t) {
     // HEAVY: TIGHT impulse 1 → 1.06 → 1, faded to exactly 1 before the NARROW anticipation.
     if (t < T_NARROW - ANT) {
-      if (t < T_HEAVY) return [1, 1];
+      // Anticipation into THE HOOK (4 frames): LIGHT inhales (uniform 1 → 0.965) and is released by the slam.
+      if (t < T_HEAVY) {
+        const a = E.inOutSine(clamp((t - (T_HEAVY - ANT_SLAM)) / ANT_SLAM));
+        return [1 - ANT_SLAM_AMT * a, 1 - ANT_SLAM_AMT * a];
+      }
       const u = t - T_HEAVY;
-      const s = 1 + impulse(u, 420, 26, 0.06) * (1 - R.smoothstep(0.25, 0.4, u));
+      const back = ANT_SLAM_AMT * (1 - E.outExpo(clamp(u / 0.06)));
+      const s = 1 - back + impulse(u, TIGHT.stiffness, TIGHT.damping, 0.06) * (1 - R.smoothstep(0.16, 0.3, u));
       return [s, s];
     }
-    // Anticipation into NARROW: widen and squat a touch.
+    // Anticipation into NARROW (3 frames): widen and squat, the opposite of what comes.
     if (t < T_NARROW) {
       const a = E.inOutSine((t - (T_NARROW - ANT)) / ANT);
-      return [1 + 0.012 * a, 1 - 0.012 * a];
+      return [1 + ANT_AMT * a, 1 - ANT_AMT * a];
     }
+    // NARROW: scaleY 1 → 1.14 on a launched POP spring; scaleX gives back the overshoot (volume).
     const narrow = (tt) => {
-      const p = R.spring(tt - T_NARROW, POP);
-      return [lerp(1.012, 1, p), lerp(0.988, 1.14, p)];
+      const p = R.spring(tt - T_NARROW, POP_KICK);
+      const sy = lerp(1 - ANT_AMT, 1.14, p);
+      return [lerp(1 + ANT_AMT, 1, clamp(p)) - 0.3 * Math.max(0, sy - 1.14), sy];
     };
     if (t < T_WIDE - ANT) return narrow(t);
     const pre = narrow(T_WIDE - ANT);
     // Anticipation into WIDE: pinch in and rise.
     const a0 = E.inOutSine(clamp((t - (T_WIDE - ANT)) / ANT));
-    const ax = pre[0] - 0.014 * a0, ay = pre[1] + 0.014 * a0;
-    if (t < T_WIDE) return [ax, ay];
-    // WIDE: squash 0.92, overshoot 1.03, settled by 1.64 (horizontal follow-through mirrors it).
-    const sx0 = pre[0] - 0.014, sy0 = pre[1] + 0.014;
-    const T1 = T_WIDE + 0.05, T2 = T1 + 0.07, T3 = T2 + 0.06, T4 = T3 + 0.05;
-    const sy = keys(t, [[T_WIDE, sy0], [T1, 0.92, 'outCubic'], [T2, 1.03, 'inOutSine'], [T3, 0.995, 'inOutSine'], [T4, 1, 'inOutSine']]);
-    const sx = keys(t, [[T_WIDE, sx0], [T1, 1.04, 'outCubic'], [T2, 0.985, 'inOutSine'], [T3, 1.0025, 'inOutSine'], [T4, 1, 'inOutSine']]);
+    if (t < T_WIDE) return [pre[0] - ANT_AMT * a0, pre[1] + ANT_AMT * a0];
+    // WIDE: the word crouches to scaleY 0.92 while it gathers, bursts back up through 1.03 and is settled by
+    // 1.64; scaleX overshoots when the burst lands (follow-through of the width tween, which cannot pass 125).
+    const sx0 = pre[0] - ANT_AMT, sy0 = pre[1] + ANT_AMT;
+    const sy = keys(t, [[T_WIDE, sy0], [1.47, 0.92, 'outCubic'], [1.535, 1.03, 'inOutSine'], [1.59, 0.995, 'inOutSine'], [1.635, 1, 'inOutSine']]);
+    const sx = keys(t, [[T_WIDE, sx0], [1.445, 0.99, 'outCubic'], [1.505, 1.04, 'inOutSine'], [1.57, 0.99, 'inOutSine'], [1.625, 1, 'inOutSine']]);
     return [sx, sy];
   }
 
@@ -174,7 +193,7 @@
       return fam;
     }
     const REF = 1000; //                     advances / kerning
-    const INK = 400, CW = 760, CH = 460, OX = 140, OY = 380; // ink scans
+    const INK = 240, CW = 460, CH = 280, OX = 90, OY = 230; //  ink scans (±0.1 px at FS1)
     const cv = document.createElement('canvas');
     cv.width = CW;
     cv.height = CH;
@@ -282,7 +301,7 @@
       const M = await measureArchivo();
       this.M = M;
 
-      // FS1: WIDE (900/125, house tracking) inks exactly WIDE_INK px.
+      // FS1: WIDE (900/125, tracking 0) inks exactly WIDE_INK px.
       const g = (F, key, ch, x) => interp(F.xs, F[key][ch], x);
       const kn = (F, p, x) => interp(F.xs, F.kern[p], x);
       const wideEm =
@@ -292,7 +311,7 @@
         g(M.wd, 'inkR', 'E', 125) - g(M.wd, 'inkL', 'W', 125);
       const FS = (this.FS = WIDE_INK / wideEm);
       this.CAP = M.cap * FS;
-      this.maskTop = BASE - M.roundTop * FS - MASK_BELOW;
+      this.maskTop = Math.floor(BASE - M.roundTop * FS - MASK_BELOW);
       this.maskH = BASE + MASK_BELOW - this.maskTop;
       const fontFS = `900 ${FS}px ${R.font.display}`;
       this.glyphTop = BASE - baselineOffset(fontFS, `${FS}px`) - this.maskTop; // glyph span top inside a slot
@@ -347,25 +366,39 @@
       ];
       this.cursor = R.el('div', { style: { width: Math.round(cellW - 2) + 'px', height: '13px', background: VOLT_LIGHT, display: 'none' } }, this.read);
 
+      this.odoByCell = [];
+      for (const o of this.odo) this.odoByCell[o.i] = o;
+      this.cursor.style.top = '4px';
+
       // ---- the dot: canvas arc (same primitive as s02, so the shared still is pixel-identical)
       const dc = R.canvas(root);
       this.dctx = dc.ctx;
+
+      // ---- whole-pixel rest poses: glyph-origin rounding offsets for HEAVY and WIDE at rest
+      this.snapH = [];
+      this.snapW = [];
+      const LH = this.layout(0.8), LW = this.layout(1.7);
+      for (let ci = 0; ci < COLS.length; ci++) {
+        const xh = LH.shift + LH.states[ci].x, xw = LW.shift + LW.states[ci].x;
+        this.snapH[ci] = Math.round(xh) - xh;
+        this.snapW[ci] = Math.round(xw) - xw;
+      }
     },
 
     // ---------------------------------------------------------------------------------------- per-glyph metrics
     /** Metrics of glyph ch at the current axes, in px. */
     gm(ch, ax) {
       const M = this.M, FS = this.FS;
-      const F = ax.wd === 100 ? M.wg : M.wd;
-      const x = ax.wd === 100 ? ax.wg : ax.wd;
+      // weight family while the width axis is at 100 (if it has the glyph), else the width family (wght 900)
+      const F = ax.wd === 100 && M.wg.adv[ch] ? M.wg : M.wd;
+      const x = F === M.wg ? ax.wg : ax.wd;
       return { adv: interp(F.xs, F.adv[ch], x) * FS, inkL: interp(F.xs, F.inkL[ch], x) * FS, inkR: interp(F.xs, F.inkR[ch], x) * FS };
     },
     kern(p, ax) {
       if (!p) return 0;
       const M = this.M;
-      const F = ax.wd === 100 ? M.wg : M.wd;
-      const x = ax.wd === 100 ? ax.wg : ax.wd;
-      return interp(F.xs, F.kern[p], x) * this.FS;
+      const F = ax.wd === 100 && M.wg.kern[p] ? M.wg : M.wd;
+      return interp(F.xs, F.kern[p], F === M.wg ? ax.wg : ax.wd) * this.FS;
     },
 
     /**
@@ -375,8 +408,7 @@
      */
     column(ci, t, ax) {
       const c = COLS[ci], FS = this.FS, pad = this.pad, D = 1.1 * FS;
-      const st = { w: 0, kern: 0, trk: 0, inkL: 0, inkR: 0, mL: 0, mR: 0, gl: [] };
-      const side = c.side;
+      const st = { w: 0, kern: 0, trk: 0, inkL: 0, inkR: 0, mL: 0, mR: 0, mT: this.maskTop, gl: [] };
       if (ci >= 5) {
         // the two R's: unfold out of the A's slot in NARROW, fold away in WIDE
         if (t < T_NARROW) return st;
@@ -399,6 +431,8 @@
         st.mR = Math.max(a.adv, a.inkR, e > 0 ? Math.max(b.adv, b.inkR) : 0) + pad;
         if (e < 1) st.gl.push({ k: 0, x: 0, y: D * (1 - rise) - D * e, sx: 1 });
         if (e > 0) st.gl.push({ k: 1, x: 0, y: D * (1 - e), sx: 1 });
+        // during the swap the slot's top edge is the cap construction line: letters leave through it
+        if (e > 0 && e < 1) st.mT = Math.round(BASE - this.CAP);
         return st;
       }
 
@@ -416,7 +450,7 @@
       this.flip(st, this.gm(c.seq[2], AX62), this.gm(c.seq[3], ax), this.kern(c.kern[2], AX62), this.kern(c.kern[3], ax), q, 2, 3, AX62, null, SPLIT_W);
       if (t >= T_EXIT) {
         const order = [3, 2, null, 1, 0][ci]; // E first, then D, I, W
-        const qd = clamp((t - (T_EXIT + order / 120)) / 0.07);
+        const qd = clamp((t - (T_EXIT + order / 120)) / DROP);
         const y = D * E.inCubic(qd);
         for (const gl of st.gl) gl.y += y;
       }
@@ -424,45 +458,50 @@
     },
 
     /**
-     * Squeeze-flip inside one slot: glyph a folds to zero width (linear, SPLIT of the time), then glyph b
-     * unfolds (swift). a = null → unfold only; b = null → fold only (the slot then closes for good).
-     * The allocation follows the glyph, so in the centred row every letter folds about its own centre.
+     * Squeeze-flip inside one slot: glyph a folds shut (linear over the first `split` of the flip), then glyph b
+     * unfolds (swift). Only the ink folds — the side bearings ease from a's to b's — so letters keep their
+     * spacing while they turn. a = null → unfold only, b = null → fold only (the slot opens/closes entirely).
      */
     flip(st, a, b, kA, kB, q, ia = 0, ib = 0, axA = null, axB = null, split = SPLIT) {
       const pad = this.pad;
-      let m, f, k, kn, gax;
+      let m, f, k, gax;
       if (q < split) {
         if (!a) return st;
         f = 1 - clamp(q / split);
-        m = a; k = ia; kn = kA; gax = axA;
+        m = a; k = ia; gax = axA;
       } else {
         if (!b) return st;
         f = E.swift(clamp((q - split) / (1 - split)));
-        m = b; k = ib; kn = kB; gax = axB;
+        m = b; k = ib; gax = axB;
       }
+      const inkW = (m.inkR - m.inkL) * f;
+      let lb, rb;
+      if (a && b) {
+        const u = E.inOutSine(clamp(q));
+        lb = lerp(a.inkL, b.inkL, u);
+        rb = lerp(a.adv - a.inkR, b.adv - b.inkR, u);
+        st.kern = lerp(kA, kB, u);
+        st.trk = 1;
+      } else {
+        lb = m.inkL * f;
+        rb = (m.adv - m.inkR) * f;
+        st.kern = (a ? kA : kB) * f;
+        st.trk = f;
+      }
+      st.w = lb + inkW + rb;
+      st.inkL = lb;
+      st.inkR = lb + inkW;
       if (f <= 0) return st;
-      st.w = m.adv * f;
-      st.kern = kn * f;
-      st.trk = a && b ? 1 : f;
-      st.inkL = m.inkL * f;
-      st.inkR = m.inkR * f;
-      st.mL = Math.min(0, st.inkL) - pad;
-      st.mR = Math.max(st.w, st.inkR) + pad;
-      st.gl.push({ k, x: 0, y: 0, sx: f, ax: gax });
+      st.mL = Math.min(0, lb) - pad;
+      st.mR = Math.max(st.w, lb + inkW) + pad;
+      st.gl.push({ k, x: lb - m.inkL * f, y: 0, sx: f, ax: gax });
       return st;
     },
 
-    update(t) {
-      if (!this.M) return;
-      const rest = t >= T_REST;
+    /** Row layout at time t: per-column states with pen x, and the shift that centres the ink box on 960. */
+    layout(t) {
       const ax = { wg: wghtAt(t), wd: wdthAt(t) };
-      const [sx, sy] = scaleAt(t);
-      const FS = this.FS;
-
-      // ------------------------------------------------ the word
-      this.word.style.display = rest ? 'none' : 'block';
-      this.word.style.transform = sx === 1 && sy === 1 ? 'none' : `scale(${sx.toFixed(5)},${sy.toFixed(5)})`;
-      const trackPx = trackAt(t) * FS;
+      const trackPx = trackAt(t) * this.FS;
       const states = [];
       let x = 0;
       for (let r = 0; r < ROW.length; r++) {
@@ -472,17 +511,37 @@
         states[ci] = s;
         if (r < ROW.length - 1) x += s.w + s.kern + s.trk * trackPx;
       }
-      const inkLeft = states[0].x + states[0].inkL;
-      const inkRight = states[4].x + states[4].inkR;
-      const shift = CX - (inkLeft + inkRight) / 2;
+      const shift = CX - (states[0].x + states[0].inkL + states[4].x + states[4].inkR) / 2;
+      return { ax, states, shift };
+    },
+
+    /** Whole-pixel snap for resting type: offsets toward round(origin), blended in as each rest pose settles. */
+    snap(t, ci) {
+      const H = this.snapH[ci], W = this.snapW[ci];
+      if (t < T_NARROW) return H * R.smoothstep(0.62, 0.7, t);
+      if (t < T_NARROW + 0.03) return H * (1 - (t - T_NARROW) / 0.03);
+      if (t >= T_WIDE) return W * R.smoothstep(1.5, 1.58, t);
+      return 0;
+    },
+
+    update(t) {
+      if (!this.M) return;
+      const rest = t >= T_REST; // 2D override: only the dot from here to the cut
+      const [sx, sy] = scaleAt(t);
+
+      // ------------------------------------------------ the word
+      this.word.style.display = rest ? 'none' : 'block';
+      this.word.style.transform = sx === 1 && sy === 1 ? 'none' : `scale(${sx.toFixed(5)},${sy.toFixed(5)})`;
+      const { ax, states, shift } = this.layout(t);
       const wStr = ax.wg.toFixed(2), sStr = ax.wd.toFixed(3) + '%';
       for (let ci = 0; ci < COLS.length; ci++) {
         const col = this.cols[ci], s = states[ci];
         const vis = !rest && s.gl.length > 0 && s.mR - s.mL > 0.5;
         col.slot.style.display = vis ? 'block' : 'none';
-        const left = shift + s.x + s.mL;
-        col.slot.style.left = left.toFixed(3) + 'px';
+        col.slot.style.left = (shift + s.x + s.mL + this.snap(t, ci)).toFixed(3) + 'px';
         col.slot.style.width = Math.max(0, s.mR - s.mL).toFixed(3) + 'px';
+        col.slot.style.top = s.mT + 'px';
+        col.slot.style.height = BASE + MASK_BELOW - s.mT + 'px';
         for (let k = 0; k < col.glyphs.length; k++) col.glyphs[k].style.display = 'none';
         if (!vis) continue;
         for (const gl of s.gl) {
@@ -490,84 +549,74 @@
           el.style.display = 'block';
           el.style.fontWeight = gl.ax ? gl.ax.wg.toFixed(2) : wStr;
           el.style.fontStretch = gl.ax ? gl.ax.wd.toFixed(3) + '%' : sStr;
-          const gx = gl.x - s.mL;
-          el.style.transform = `translate(${gx.toFixed(3)}px,${gl.y.toFixed(3)}px)` + (gl.sx !== 1 ? ` scale(${gl.sx.toFixed(5)},1)` : '');
+          el.style.transform = `translate(${(gl.x - s.mL).toFixed(3)}px,${(gl.y + this.maskTop - s.mT).toFixed(3)}px)` + (gl.sx !== 1 ? ` scale(${gl.sx.toFixed(5)},1)` : '');
         }
       }
 
-      // ------------------------------------------------ construction lines
+      // ------------------------------------------------ construction lines: baseline + live cap line
       const capY = BASE - this.CAP * sy;
       const shoot = E.outCubic(clamp((t + 0.02) / (R.E8 + 0.02)));
       const ret = E.inCubic(clamp((t - T_EXIT) / (T_RETRACT_END - T_EXIT)));
-      let xL = lerp(CX - CX * shoot, DOT_X, ret), xR = lerp(CX + (R.W - CX) * shoot, DOT_X, ret);
-      const yB = lerp(BASE, DOT_Y, ret), yC = lerp(capY, DOT_Y, ret);
+      const xL = Math.round(lerp(CX - CX * shoot, DOT_X, ret)), xR = Math.round(lerp(CX + (R.W - CX) * shoot, DOT_X, ret));
       const linesOn = !rest && t < T_RETRACT_END && xR - xL >= 1;
-      for (const [el, y] of [[this.lineBase, Math.round(yB)], [this.lineCap, Math.round(yC) - 1]]) {
+      const rows = [Math.round(lerp(BASE, DOT_Y, ret)), Math.round(lerp(capY, DOT_Y, ret)) - 1];
+      [this.lineBase, this.lineCap].forEach((el, i) => {
         el.style.display = linesOn ? 'block' : 'none';
-        el.style.left = Math.round(xL) + 'px';
-        el.style.width = Math.max(0, Math.round(xR) - Math.round(xL)) + 'px';
-        el.style.top = y + 'px';
-      }
+        el.style.left = xL + 'px';
+        el.style.width = Math.max(0, xR - xL) + 'px';
+        el.style.top = rows[i] + 'px';
+      });
 
-      // ------------------------------------------------ construction circle (predicts the full stop)
-      const ccIn = seg(t, T_WIDE + 0.07, 0.15, 'swift');
-      const ccOn = !rest && ccIn > 0 && t < T_DOT + 0.05;
-      this.svg.style.display = ccOn ? 'block' : 'none';
-      this.cc.style.strokeDasharray = `${(this.ccLen * ccIn).toFixed(2)} ${this.ccLen.toFixed(2)}`;
+      // ------------------------------------------------ construction circle: predicts the full stop, then is filled
+      const ccIn = seg(t, 1.52, 0.1, 'swift');
+      // the ring is swallowed the moment the growing dot reaches it (no 1 px halo hugging the full stop)
+      const dsNow = t < T_DOT ? 0 : backOut((t - T_DOT) / AXD, 3.4);
+      this.svg.style.display = !rest && ccIn > 0 && dsNow < 0.9 ? 'block' : 'none';
+      this.cc.style.strokeDasharray = `${(this.ccLen * ccIn).toFixed(2)} ${(this.ccLen + 1).toFixed(2)}`;
       this.ccH.style.opacity = ccIn.toFixed(3);
 
-      // ------------------------------------------------ readout
-      const baseY = Math.round(capY - 16);
+      // ------------------------------------------------ axis readout (types on, odometer digits, wipes out)
       this.read.style.display = rest ? 'none' : 'block';
-      this.read.style.top = baseY - this.readBase + 'px';
+      this.read.style.top = Math.round(capY - 16) - this.readBase + 'px';
       const typed = (t - 0.03) / (0.12 / 19);
       for (let i = 0; i < this.cells.length; i++) {
         const c = this.cells[i];
-        c.cell.style.display = typed >= i + 1 ? 'block' : 'none';
-        c.a.style.transform = 'none';
-        c.b.style.display = 'none';
-        c.a.textContent = c.ch;
-      }
-      for (const o of this.odo) {
-        const c = this.cells[o.i];
-        let cur = c.ch;
-        for (const [tc, from, to, k] of o.ev) {
-          if (t < tc) break;
-          const q = E.swift(clamp((t - tc - (k * 2) / 60) / R.E16));
-          cur = to;
-          if (q < 1) {
-            c.a.textContent = from;
-            c.b.textContent = to;
-            c.a.style.transform = `translateY(${-Math.round(20 * q)}px)`;
-            c.b.style.display = 'block';
-            c.b.style.transform = `translateY(${Math.round(20 * (1 - q))}px)`;
-          } else {
-            c.a.textContent = to;
+        let ta = c.ch, ya = 0, tb = '', yb = 0, showB = false;
+        const o = this.odoByCell[i];
+        if (o) {
+          ta = o.ev[0][1];
+          for (const [tc, from, to, k] of o.ev) {
+            if (t < tc) break;
+            const q = E.swift(clamp((t - tc - k / 60) / R.E16));
+            if (q < 1) { ta = from; ya = -Math.round(20 * q); tb = to; yb = Math.round(20 * (1 - q)); showB = true; }
+            else { ta = to; ya = 0; showB = false; }
           }
         }
-        if (t < o.ev[0][0]) c.a.textContent = o.ev[0][1];
+        c.cell.style.display = typed >= i + 1 ? 'block' : 'none';
+        if (c.a.textContent !== ta) c.a.textContent = ta;
+        if (c.b.textContent !== tb) c.b.textContent = tb;
+        c.a.style.transform = ya ? `translateY(${ya}px)` : 'none';
+        c.b.style.display = showB ? 'block' : 'none';
+        c.b.style.transform = `translateY(${yb}px)`;
       }
       const typing = t >= 0.03 && t < 0.03 + 0.12 + 1 / 60;
       this.cursor.style.display = typing ? 'block' : 'none';
       this.cursor.style.left = (Math.min(19, Math.floor(Math.max(0, typed))) * this.readCell + 1).toFixed(2) + 'px';
-      this.cursor.style.top = '4px';
       const wipe = E.inCubic(clamp((t - T_EXIT) / (T_RETRACT_END - T_EXIT)));
       this.read.style.clipPath = wipe > 0 ? `inset(0 0 0 ${(wipe * 100).toFixed(2)}%)` : 'none';
 
-      // ------------------------------------------------ the dot
+      // ------------------------------------------------ the dot (hanging full stop; the handoff element)
       const ctx = this.dctx;
       ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, R.W, R.H);
-      if (t >= T_DOT) {
-        const s = rest ? 1 : backOut((t - T_DOT) / AXD, 3.4);
-        if (s > 0) {
-          ctx.setTransform(s, 0, 0, s, DOT_X, DOT_Y);
-          ctx.beginPath();
-          ctx.arc(0, 0, DOT_R, 0, R.TAU);
-          ctx.setTransform(1, 0, 0, 1, 0, 0);
-          ctx.fillStyle = PAL.signal;
-          ctx.fill();
-        }
+      const ds = t < T_DOT ? 0 : rest ? 1 : backOut((t - T_DOT) / AXD, 3.4);
+      if (ds > 0) {
+        ctx.setTransform(ds, 0, 0, ds, DOT_X, DOT_Y);
+        ctx.beginPath();
+        ctx.arc(0, 0, DOT_R, 0, R.TAU);
+        ctx.setTransform(1, 0, 0, 1, 0, 0);
+        ctx.fillStyle = PAL.signal;
+        ctx.fill();
       }
     },
   });
