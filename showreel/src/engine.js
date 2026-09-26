@@ -851,7 +851,10 @@
     // Sub-0.1 px shake and sub-0.02% zoom tails are invisible but make the compositor re-raster
     // (a visible shimmer on hairlines and small type), so they snap to exactly zero.
     const sx = Math.abs(fx.shakeX) < 0.1 ? 0 : fx.shakeX, sy = Math.abs(fx.shakeY) < 0.1 ? 0 : fx.shakeY;
-    const s = fx.zoom < 0.0002 ? 1 : 1 + fx.zoom;
+    // While RGB split is active, overscan by the split distance so the shifted channels never
+    // expose an unfilled (teal/red) strip at the frame edges.
+    const overscan = fx.chroma > 0.25 ? (2 * fx.chroma + 6) / R.W : 0;
+    const s = fx.zoom + overscan < 0.0002 ? 1 : 1 + fx.zoom + overscan;
     camera.style.transform = sx || sy || s !== 1 ? `translate3d(${sx.toFixed(2)}px,${sy.toFixed(2)}px,0) scale(${s.toFixed(4)})` : 'none';
     if (fx.chroma > 0.25) {
       const dx = Math.cos(fx.chromaAngle) * fx.chroma, dy = Math.sin(fx.chromaAngle) * fx.chroma;
