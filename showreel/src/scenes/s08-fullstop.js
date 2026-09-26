@@ -38,7 +38,7 @@
   const DOT1 = { x: 1764, y: 570, d: 60 };              // the hanging period (bottom on the baseline)
   const HAIR_Y = [370, 648];
   const RING = { cx: 236, cy: 980, r: 28, sw: 12 };      // "C." monogram, 60° opening at 3 o'clock
-  const MDOT = { x: 264, y: 980, d: 16, y0: 940 };       // its dot
+  const MDOT = { x: 264, y: 980, d: 16, y0: 940, dx: 48 }; // its dot (enters from (312, 940), lands in the opening)
   const YEAR = { text: 'SHOWREEL 2026', size: 30, ls: 0.24, x: 200, base: 336 };
   const TAG = { text: 'EVERY FRAME, ON PURPOSE.', size: 22, ls: 0.16, x: 1720, base: 752 };
   const ROLE = { text: 'Motion Designer', size: 96, x: 200, base: 752 };
@@ -50,7 +50,7 @@
   // ---- Motion tuning -----------------------------------------------------------------------------------
   const LS_FROM = -0.03, LS_PEAK = 0.02;                // em: starts tight, POP kick swings it open, settles
   const LS_DELAY = 0.05;                                // the letters stay tight while the E shoves the dot
-  const SX_AMP = 0.015, SX_DELAY = 0.083;                // extra scaleX overshoot (TIGHT impulse) once the dot has cleared the E
+  const SX_AMP = 0.015, SX_DELAY = 0.083;               // extra scaleX overshoot (TIGHT impulse) once the dot has cleared the E
   const FOLLOW_END = 13.55;                             // letter-spacing and scaleX are exactly neutral from here
   const STRETCH_K = 0.3;                                // in-flight stretch per (displacement per frame / diameter)
 
@@ -90,6 +90,22 @@
     return 1 + SX_AMP * sxImpulse(tr - SX_DELAY) * followWin(t);
   }
   const relEase = (t) => (t <= T_F0 ? 0 : E.swift(Math.min(1, (t - T_F0) / REL)));
+
+  // Convex hull of two circles (head: centre h, radius a; tail: centre q, radius b) as an SVG path.
+  function hullPath(hx, hy, a, qx, qy, b) {
+    const dx = hx - qx, dy = hy - qy, c = Math.hypot(dx, dy) || 1e-6;
+    const th = Math.atan2(dy, dx), al = Math.asin(clamp((a - b) / c, -0.99, 0.99));
+    const pts = [], NH = 28, NT = 14;
+    for (let k = 0; k <= NH; k++) {                        // front arc around the head
+      const g = th + Math.PI / 2 + al - (k * (Math.PI + 2 * al)) / NH;
+      pts.push([hx + a * Math.cos(g), hy + a * Math.sin(g)]);
+    }
+    for (let k = 0; k <= NT; k++) {                        // back arc around the tail
+      const g = th - Math.PI / 2 - al - (k * (Math.PI - 2 * al)) / NT;
+      pts.push([qx + b * Math.cos(g), qy + b * Math.sin(g)]);
+    }
+    return R.poly.toPath(pts, true);
+  }
 
   // piecewise-linear lookup in a sorted [[x, y...], ...] table
   function lookup(tab, x, col) {
@@ -234,7 +250,7 @@
       // Global FX (storyboard, s08 rows)
       R.cue(13.125, 'chroma', { amt: 10, dur: 0.2 });                      // final hit
       R.cue(13.125, 'flash', { amt: 1.0, dur: 0.15, color: '#FFFFFF' });   // FINAL HIT (masks the s07→s08 handoff)
-      R.cue(13.125, 'shake', { amt: 14, dur: 0.35 });                      // final hit
+      R.cue(13.125, 'shake', { amt: 14, dur: 0.32 });                      // final hit (storyboard 0.35: the last 0.03 s is < 0.1 px and trips a compositor race, see report)
       R.cue(13.125, 'zoom', { amt: 0.06, dur: 0.3 });                      // final hit
       R.cue(13.59375, 'shake', { amt: 3, dur: 0.1 });                      // period lands
       R.cue(14.53125, 'zoom', { amt: 0.01, dur: 0.12 });                   // the final tick
@@ -255,21 +271,25 @@
       // Everything of s08 lives on one wrapper so the end-card push-in never touches the HUD (s00).
       const wrap = (this.wrap = R.el('div', { style: { width: R.W + 'px', height: R.H + 'px', transformOrigin: '960px 540px' } }, root));
 
-      // Hairlines + registration crosses
-      this.hair = HAIR_Y.map((y) => R.el('div', { style: { top: y + 'px', height: '1px', width: '0px', background: C_HAIR } }, wrap));
+      // Hairlines + registration crosses: SVG rects (unsnapped geometry), so their rows can be pinned to whole
+      // device pixels under the push-in (see update) and their drawn ends glide with sub-pixel AA.
+      const rules = R.svgLayer(wrap);
+      this.hair = HAIR_Y.map((y) => ({ y, el: R.svg('rect', { x: 960, y, width: 0, height: 1, fill: C_HAIR, display: 'none' }, rules) }));
       this.crosses = [];
       for (const y of HAIR_Y) {
         for (const x of [W1.inkL, W1.inkR - 1]) {
           this.crosses.push({
             x, y,
-            h: R.el('div', { style: { height: '1px', background: C_CROSS } }, wrap),
-            v: R.el('div', { style: { width: '1px', background: C_CROSS } }, wrap),
+            h: R.svg('rect', { height: 1, fill: C_CROSS, display: 'none' }, rules),
+            v: R.svg('rect', { x, width: 1, fill: C_CROSS, display: 'none' }, rules),
           });
         }
       }
 
       // The protagonist sits just beneath the word: its smear trails out from behind the E.
       this.dot = R.el('div', { style: { background: P.signal } }, wrap);
+      const smearSvg = R.svgLayer(wrap);
+      this.smear = R.svg('path', { fill: P.signal, d: 'M0 0' }, smearSvg);
 
       // THE canonical element (identical CSS to s07's rest pose; only restyled from here on)
       this.word = R.el('div', {
@@ -280,6 +300,16 @@
           textAlign: 'center', whiteSpace: 'nowrap', top: M.top0 + 'px', transformOrigin: '960px 0px',
         },
       }, wrap);
+
+      // On the handoff frame the disc is rasterised exactly as s07 draws it (a canvas arc on the frame's pixel
+      // grid, stacked above the word as in s07, so the word is not promoted to its own compositing layer):
+      // s07's rest pose and s08's first frame match pixel for pixel, rim AA included.
+      const hc = R.canvas(wrap, { w: 128, h: 128, style: { left: DOT0.x - 64 + 'px', top: DOT0.y - 64 + 'px' } });
+      hc.ctx.fillStyle = P.signal;
+      hc.ctx.beginPath();
+      hc.ctx.arc(64, 64, DOT0.d / 2, 0, R.TAU);
+      hc.ctx.fill();
+      this.handoffDisc = hc.canvas;
 
       // Role: letters rise through a mask whose bottom sits just under the descenders
       const roleTop = ROLE.base - M.roleOff;
@@ -325,6 +355,11 @@
       }, svg);
       R.drawStroke(this.ring, 0);   // caches the path length in setup
       this.mdot = R.el('div', { style: { background: P.signal, borderRadius: '50%' } }, wrap);
+
+      // small-type lines whose baselines are held on whole device rows during the push-in (see update)
+      const kLast = (this.kLast = +(1 + (0.012 * ((R.FPS * T_END - 1) / R.FPS - T_LOCK)) / (T_END - T_LOCK)).toFixed(6));
+      this.pinned = [[this.year, YEAR.base], [this.tag, TAG.base], [this.roleWhole, ROLE.base]].map(([el, base]) => (
+        { el, base, dEnd: Math.round(540 + (base - 540) * kLast) }));
     },
 
     // --- the word's state at global t ---
@@ -337,17 +372,16 @@
       const ls = lsEm(t) * size, sx = scaleX(t), dx = M.dx1 * e;
       // Blink adds tracking after every glyph (ink box grows by 5·ls and drifts by −ls/2): re-centre it.
       const tx = dx + 0.5 * ls * sx;
-      const inkR0 = lookup(M.tab, e, 2) + dx;                           // E's ink edge without follow-through
-      const inkR = 960 + tx + sx * (lookup(M.tab, e, 2) + 2 * ls - 960); // E's ink edge as drawn
-      return { e, stretch, size, top, ls, sx, tx, inkR0, inkR };
+      const inkR0 = lookup(M.tab, e, 2) + dx;   // the E's ink edge before follow-through (what the dot rides)
+      return { e, stretch, size, top, ls, sx, tx, inkR0 };
     },
 
     // --- the protagonist's flight (t < T_LAND): centre + along-velocity stretch ---
     flightPos(t) {
-      const M = this.M;
       const tau = clamp((t - T_F0) / (T_LAND - T_F0));
       const w = this.wordAt(t);
-      // rides the E's (base) ink edge: 46 → 44 px right of it, so it is kicked up-right, then pops vertically
+      // x rides the E's ink edge, 46 → 44 px right of it (on the release ease, so x never doubles back):
+      // kicked up-right while the word expands, then a clean vertical pop and drop. y is the storyboard arc.
       const g0 = DOT0.x - this.M.tab[0][2], g1 = DOT1.x - W1.inkR;
       return {
         x: w.inkR0 + lerp(g0, g1, w.e),
@@ -360,8 +394,18 @@
       const M = this.M;
 
       // ---- push-in (linear, s08 content only) ----
-      const push = t > T_LOCK ? 1 + (0.012 * (t - T_LOCK)) / (T_END - T_LOCK) : 1;
-      this.wrap.style.transform = push === 1 ? 'none' : `scale(${push.toFixed(6)})`;
+      const push = t > T_LOCK ? +(1 + (0.012 * (t - T_LOCK)) / (T_END - T_LOCK)).toFixed(6) : 1;
+      this.wrap.style.transform = push === 1 ? 'none' : `scale(${push})`;
+      // Small type (mono year, serif role, mono tagline): Blink snaps text baselines to whole device pixels,
+      // so under the push-in each line would hop 1 px at arbitrary frames (twice per line) while everything
+      // else glides. Instead each line's baseline is held on its rest pixel row and moves to its final row
+      // exactly on the beat-4 tick, where the tick's zoom punch moves the whole frame anyway. Horizontal
+      // positions keep gliding (horizontal subpixel text is smooth). Deviation from the exact scale ≤ 1.3 px.
+      for (const L of this.pinned) {
+        const D = t >= T_TICK ? L.dEnd : L.base;          // target device row of the baseline
+        const dy = push === 1 ? 0 : (D - 540) / push - (L.base - 540);
+        L.el.style.transform = Math.abs(dy) < 1e-4 ? 'none' : `translateY(${dy.toFixed(4)}px)`;
+      }
 
       // ---- RELEASE: restyle the canonical element ----
       const w = this.wordAt(t);
@@ -378,22 +422,33 @@
       // ---- hairlines (drawn outward from x 960) + registration crosses ----
       const hq = E.swift(clamp((t - T_HAIR) / (T_LAND - T_HAIR)));
       const half = 760 * hq;
+      // local y that puts a rule's row exactly on a whole device row: held on its rest row, moved to its
+      // final row on the beat-4 tick together with the small type (the rows and the type stay locked).
+      const rowY = (y) => {
+        if (push === 1) return { y, h: 1 };
+        const D = t >= T_TICK ? Math.round(540 + (y - 540) * this.kLast) : y;
+        return { y: 540 + (D - 540) / push, h: 1 / push };
+      };
       for (const h of this.hair) {
-        h.style.left = (960 - half).toFixed(3) + 'px';
-        h.style.width = (2 * half).toFixed(3) + 'px';
-        h.style.display = half > 0.01 ? 'block' : 'none';
+        const r = rowY(h.y);
+        h.el.setAttribute('display', half > 0.01 ? 'inline' : 'none');
+        h.el.setAttribute('x', (960 - half).toFixed(3));
+        h.el.setAttribute('width', (2 * half).toFixed(3));
+        h.el.setAttribute('y', r.y.toFixed(4));
+        h.el.setAttribute('height', r.h.toFixed(6));
       }
       const cq = t < T_LAND ? 0 : E.punch(clamp((t - T_LAND) / 0.1));
       const arm = 6 * cq;
       for (const c of this.crosses) {
-        const on = arm > 0.05;
-        c.h.style.display = c.v.style.display = on ? 'block' : 'none';
-        c.h.style.left = (c.x - arm).toFixed(3) + 'px';
-        c.h.style.top = c.y + 'px';
-        c.h.style.width = (2 * arm + 1).toFixed(3) + 'px';
-        c.v.style.left = c.x + 'px';
-        c.v.style.top = (c.y - arm).toFixed(3) + 'px';
-        c.v.style.height = (2 * arm + 1).toFixed(3) + 'px';
+        const on = arm > 0.05, r = rowY(c.y), dy = r.y - c.y;
+        c.h.setAttribute('display', on ? 'inline' : 'none');
+        c.v.setAttribute('display', on ? 'inline' : 'none');
+        c.h.setAttribute('x', (c.x - arm).toFixed(3));
+        c.h.setAttribute('y', r.y.toFixed(4));
+        c.h.setAttribute('width', (2 * arm + 1).toFixed(3));
+        c.h.setAttribute('height', r.h.toFixed(6));
+        c.v.setAttribute('y', (c.y - arm + dy).toFixed(4));
+        c.v.setAttribute('height', (2 * arm + 1).toFixed(3));
       }
 
       // ---- role: letters rise through the mask (swift 0.234 s, stagger 1/120 s) ----
@@ -428,23 +483,26 @@
       this.drawMonoDot(t);
     },
 
-    // Place a disc/ellipse/capsule element: centre (cx, cy), size w × h, rotated by `rot` radians.
-    place(el, cx, cy, w, h, rot, capsule) {
+    // Place a disc/ellipse element: centre (cx, cy), size w × h, rotated by `rot` radians.
+    place(el, cx, cy, w, h, rot) {
       const s = el.style;
       s.width = w.toFixed(3) + 'px';
       s.height = h.toFixed(3) + 'px';
-      s.borderRadius = capsule ? (Math.min(w, h) / 2).toFixed(3) + 'px' : '50%';
+      s.borderRadius = '50%';
       const tx = cx - w / 2, ty = cy - h / 2;
       s.transform = `translate(${tx.toFixed(3)}px,${ty.toFixed(3)}px)` + (rot ? ` rotate(${rot.toFixed(5)}rad)` : '');
     },
 
     drawDot(t) {
       const el = this.dot;
-      el.style.display = 'block';
+      const handoff = t <= T_F0;                        // the canonical first frame
+      this.handoffDisc.style.display = handoff ? 'block' : 'none';
+      el.style.display = handoff ? 'none' : 'block';
+      this.smear.style.display = 'none';
+      if (handoff) return;
       if (t < T_LAND) {
         const tr = t - T_F0;
         const c = this.flightPos(t);
-        if (tr <= 0) { this.place(el, c.x, c.y, c.d, c.d, 0, false); return; }
         // velocity from the frame-to-frame displacement (the smear direction)
         const prev = this.flightPos(Math.max(T_F0, t - 1 / R.FPS));
         let vx = c.x - prev.x, vy = c.y - prev.y;
@@ -454,10 +512,21 @@
         const fr = tr * R.FPS;
         const smear = fr < 1 ? lerp(1, 2.2, fr) : fr < 2 ? lerp(2.2, 1.4, fr - 1) : fr < 3 ? lerp(1.4, 1, fr - 2) : 1;
         const s = Math.max(smear, Math.min(1.35, 1 + (STRETCH_K * dist) / c.d));
+        if (s > 1.38) {
+          // Smear frame: a tapered teardrop (full head, thin tail trailing back along the path) whose
+          // leading edge sits where the round disc's leading edge would be.
+          const Rr = c.d / 2, a = Rr * (1 - 0.065 * (s - 1)), b = Rr * Math.max(0.28, 1 - 0.6 * (s - 1));
+          const hx = c.x + vx * (Rr - a), hy = c.y + vy * (Rr - a);
+          const len = c.d * s - a - b;
+          this.smear.setAttribute('d', hullPath(hx, hy, a, hx - vx * len, hy - vy * len, b));
+          this.smear.style.display = 'inline';
+          el.style.display = 'none';
+          return;
+        }
         const L = c.d * s, T = c.d / s;
-        // keep the leading edge where the round disc's leading edge would be; the smear trails behind
+        // keep the leading edge where the round disc's leading edge would be; the stretch trails behind
         const back = (L - c.d) / 2;
-        this.place(el, c.x - vx * back, c.y - vy * back, L, T, Math.atan2(vy, vx), s > 1.39);
+        this.place(el, c.x - vx * back, c.y - vy * back, L, T, Math.atan2(vy, vx));
         return;
       }
       // ---- touchdown, micro-bounces, settle ----
@@ -484,7 +553,7 @@
       let b = 1;
       if (t >= T_TICK) b = R.kf(t, [[T_TICK, 1], [14.5703125, 1.14, 'outCubic'], [14.6484375, 1, 'inOutSine']]);
       const wd = D * sx * b, ht = D * sy * b;
-      this.place(el, DOT1.x, bottom - ht / 2, wd, ht, 0, false);
+      this.place(el, DOT1.x, bottom - ht / 2, wd, ht, 0);
     },
 
     drawMonoDot(t) {
@@ -493,17 +562,23 @@
       if (t < tIn) { el.style.display = 'none'; return; }
       el.style.display = 'block';
       if (t < T_TICK) {
-        const u = (t - tIn) / (T_TICK - tIn);
+        // A short arc into the mouth of the C: y is the storyboard's inQuad drop from 940; x slides in from
+        // the right (linear in u) so the dot never crosses the ring's 330° tip (a straight drop at x 264
+        // passes through it on the frame before contact). Stretch along velocity, leading edge held.
+        const u = (t - tIn) / (T_TICK - tIn), dur = T_TICK - tIn;
+        const x = MDOT.x + MDOT.dx * (1 - u);
         const y = MDOT.y0 + (MDOT.y - MDOT.y0) * u * u;
-        const v = (2 * (MDOT.y - MDOT.y0) * u) / (T_TICK - tIn);   // px/s
-        const s = Math.min(1.3, 1 + 0.00012 * v);
-        this.place(el, MDOT.x, y - (D * s - D) / 2, D / s, D * s, 0, false);
+        const vx = -MDOT.dx / dur, vy = (2 * (MDOT.y - MDOT.y0) * u) / dur;   // px/s
+        // it materialises small (Ø9.6) at the top of the arc and reaches full size a frame before contact
+        const g = 0.6 + 0.4 * Math.min(1, 1.5 * u), d = D * g;
+        const v = Math.hypot(vx, vy), s = Math.min(1.3, 1 + 0.00012 * v), back = (d * s - d) / 2;
+        this.place(el, x - (vx / v) * back, y - (vy / v) * back, d * s, d / s, Math.atan2(vy, vx));
         return;
       }
       // 2-frame squash anchored at its lowest point, a one-frame rebound, then round
       const q = R.kf(t - T_TICK, [[0, 1], [0.02, 0.9], [0.036, 0.3], [0.053, -0.06], [0.07, 0.015], [0.09, 0]]);
       const sy = 1 - 0.18 * q, sx = 1 / sy;
-      this.place(el, MDOT.x, MDOT.y + D / 2 - (D * sy) / 2, D * sx, D * sy, 0, false);
+      this.place(el, MDOT.x, MDOT.y + D / 2 - (D * sy) / 2, D * sx, D * sy, 0);
     },
   });
 })();
