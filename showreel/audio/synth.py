@@ -1732,6 +1732,27 @@ def build_events(fx_cues, sounds, scenes):
 # =====================================================================================================
 # 5. MASTER + IO
 # =====================================================================================================
+def bar_curve(song, key, n, idle, log=False, ramp=0.01):
+    """Per-sample automation from a per-bar key: a number holds for the bar, (start, end) ramps across
+    it (geometric if log). Bars without the key sit at `idle`. Changes complete by each downbeat (a short
+    forward-looking smoothing), so a new value is already in place when the bar's first hit lands.
+    Returns None if no bar uses the key."""
+    if not any(key in bd for bd in song.bars):
+        return None
+    cur = np.full(n, float(idle))
+    for bi, bd in enumerate(song.bars):
+        if key not in bd:
+            continue
+        v = bd[key]
+        a, b = (v, v) if isinstance(v, (int, float)) else (float(v[0]), float(v[1]))
+        s0, s1 = smp(bi * BAR), min(n, smp((bi + 1) * BAR))
+        u = np.arange(s1 - s0) / max(1, s1 - s0)
+        cur[s0:s1] = a * (b / a) ** u if log and a > 0 and b > 0 else a + (b - a) * u
+    w = max(1, int(ramp * SR))
+    c = np.concatenate([[0.0], np.cumsum(np.concatenate([cur, np.full(w, cur[-1])]))])
+    return (c[w:w + n] - c[:n]) / w
+
+
 def render(cues_path, mute=(), solo=(), verbose=True):
     t_start = time.time()
     n = N_FRAMES
@@ -1756,10 +1777,17 @@ def render(cues_path, mute=(), solo=(), verbose=True):
 
     drums = sum(parts[p] for p in DRUM_PARTS) + room
     tonal = sum(parts[p] for p in ('sub', 'bass', 'stab', 'saw', 'pad')) + hall + dly
+    for key, mode, idle in (('hp', 'hp', 10.0), ('lp', 'lp', 20000.0)):
+        curve = bar_curve(song, key, n, idle, log=True)
+        if curve is not None:
+            tonal = svf(tonal, curve, q=0.75, mode=mode)
     for bi, bd in enumerate(song.bars):
         if bd.get('gate'):
             edit_gate(tonal, bi, bd['gate'])
     music = drums + tonal
+    level = bar_curve(song, 'level', n, 0.0)
+    if level is not None:
+        music *= 10.0 ** (level / 20.0)
     orig = music.copy()
     for bi, bd in enumerate(song.bars):
         if bd.get('stutter'):
@@ -1808,6 +1836,8 @@ def render(cues_path, mute=(), solo=(), verbose=True):
 
     mixbus = music + sfx
     stems = dict(kick=parts['kick'], drums=drums, tonal=tonal, music=music, sfx=sfx)
+    stems.update(('part-' + p, parts[p]) for p in PARTS if parts[p].any())
+    stems.update({'ret-room': room, 'ret-hall': hall, 'ret-delay': dly, 'ret-fxverb': fxverb * undb(RETURNS['fxverb'])})
     master, info = master_chain(mixbus, verbose)
     info.update(counts=counts, events=events, scenes=scenes, render_s=time.time() - t_start)
     for k in stems:
