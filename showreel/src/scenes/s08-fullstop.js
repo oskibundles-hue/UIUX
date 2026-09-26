@@ -304,7 +304,7 @@
       this.year = R.el('div', {
         style: { left: M.yearX + 'px', top: (YEAR.base - M.yearOff) + 'px', fontFamily: R.font.mono, fontWeight: '500', fontSize: YEAR.size + 'px', lineHeight: '1', letterSpacing: (YEAR.ls * YEAR.size) + 'px', whiteSpace: 'pre', color: C_YEAR, fontVariantNumeric: 'tabular-nums' },
       }, wrap);
-      this.cursorH = Math.round(Math.min(0.75 * YEAR.size, M.yearCap + 0.5));
+      this.cursorH = Math.round(Math.min(0.75 * YEAR.size, M.yearCap));   // block cursor = cap height (0.6 em × ≈0.75 em)
       this.cursor = R.el('div', { style: { width: Math.round(0.6 * YEAR.size) + 'px', height: this.cursorH + 'px', top: (YEAR.base - this.cursorH) + 'px', background: P.signal } }, wrap);
 
       // Tagline, revealed left→right 2 cells per frame
