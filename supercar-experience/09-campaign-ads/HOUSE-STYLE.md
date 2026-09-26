@@ -10,7 +10,7 @@ covers which look to reach for.
 ## THE STANDARD: `locked-on` (Supercar Experience ads)
 
 **Made the standard by Omarie on 2026-09-26:** "That is amazing make that a standard."
-Every SE car ad starts from this treatment unless the job says otherwise. Reference build:
+Every SE car ad starts from this treatment unless the job says otherwise. Style guide page: https://claude.ai/artifact/WCe1qHhTrMDw7bkDaskeQm (source in `flash-special-showcase/style-guide/`). Reference build:
 `flash-special-showcase/` ("LOCKED ON", GT3 RS, 18 s 9:16). Read its README before you start.
 
 What makes an ad `locked-on`, in order of appearance:
