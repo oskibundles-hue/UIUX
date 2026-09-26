@@ -263,7 +263,7 @@
       const ax = Math.round(apex0[0]), sx1 = Math.round(apex1[0] * 2) / 2;
       this.labels = [
         // stem tracks the top of the crouching dot, retracts when it leaves
-        Object.assign({ text: 'ANTICIPATION', x: 1703, y: 560, align: 'left', tIn: T_IN - FR, rate: 2,
+        Object.assign({ text: 'ANTICIPATION', x: 1703, y: 560, align: 'left', tIn: T_IN, rate: 2,
           stem: (t) => { const ps = self.pose(Math.min(t, T_LEAP - 1e-4)); return [ps.cx - DOT_R * ps.c, 567, ps.cy - DOT_R * ps.d - 5]; },
           stemOff: T_LEAP }, fadeAll),
         Object.assign({ text: 'ARCS', x: ax, y: 196, align: 'center', tIn: T_LEAP + 0.56 * hop0.T, rate: 1,
@@ -450,7 +450,7 @@
       ctx.textBaseline = 'alphabetic';
       ctx.textAlign = 'left';
       for (const L of this.labels) {
-        if (t < L.tIn) continue;
+        if (t <= L.tIn) continue; // strictly after: local time 0 is exactly the inherited still
         const a = 1 - seg(t, L.tOut, L.tOut + L.fade);
         if (a <= 0) continue;
         const n = Math.min(L.text.length, Math.floor((t - L.tIn) / FR * L.rate + 1e-6) + 1);

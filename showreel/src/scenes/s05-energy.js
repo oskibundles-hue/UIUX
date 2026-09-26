@@ -43,7 +43,8 @@
     SIGNAL_TOP: 1, // Signal drawn over the additive sparks: the burst stays hot orange, not white
     STREAK_MAX: 110, STREAK_MAX_SNAP: 130,
     SPRING_K: 3.4, DELAY_MAX: 0.06, LAND_STEPS: 8,
-    HAZE_ALPHA: 0.3, HAZE_FADE: 0.15, HAZE_SINK: 0.4, HAZE_DRAG: 2.2,
+    HAZE_ALPHA: 0.3, HAZE_FADE: 0.15, HAZE_SINK: 1.0, HAZE_DRAG: 4, HAZE_RANDOM: 0.2,
+    LAND_MIX: [0.6, 0.85, 1, 1], LAND_W: 2,
     JITTER_T: 0.8, // |noise| above this shifts a square by 1 px
     SHUTTER: 0.5,
     SPEED_LV: [380, 1000], SPEED_A: [0.45, 0.72, 1], // speed thresholds (px/s) and brightness per level
@@ -232,7 +233,7 @@
           for (let i = 0; i < N; i++) {
             const dx = S.x[i] < 200 ? 200 - S.x[i] : S.x[i] > 1720 ? S.x[i] - 1720 : 0;
             const dy = S.y[i] < 428 ? 428 - S.y[i] : S.y[i] > 652 ? S.y[i] - 652 : 0;
-            cost[i] = Math.sqrt(dx * dx + dy * dy) + R.hash(i, 404) * C.SELECT_NOISE;
+            cost[i] = Math.sqrt(dx * dx + dy * dy) + R.hash(i, 404) * C.SELECT_NOISE + (R.hash(i, 405) < C.HAZE_RANDOM ? 1e6 : 0);
           }
           const all = Array.from({ length: N }, (_, i) => i).sort((a, b) => cost[a] - cost[b] || a - b);
           idx = Int32Array.from(all.slice(0, NT));
@@ -316,7 +317,7 @@
       // landing: colour cools to Paper over 4 frames
       this.landCol = [];
       // (Volt and Acid heat through Signal: the letters form from fire, not from a pastel rainbow)
-      for (let g = 0; g < 4; g++) for (let b = 0; b < 4; b++) this.landCol.push(R.mixColor(g === G_PAPER ? PAL.paper : PAL.signal, PAL.paper, (b + 1) / 4));
+      for (let g = 0; g < 4; g++) for (let b = 0; b < 4; b++) this.landCol.push(R.mixColor(g === G_PAPER ? PAL.paper : PAL.signal, PAL.paper, C.LAND_MIX[b]));
     },
 
     update(lt, p, t) {
@@ -479,7 +480,7 @@
         ctx.strokeStyle = R.rgba([PAL.signal, PAL.paper, PAL.volt, PAL.acid][g], C.FLIGHT_A[g]);
         ctx.stroke(flight[b]);
       }
-      ctx.lineWidth = 3;
+      ctx.lineWidth = C.LAND_W;
       for (let b = 0; b < 16; b++) {
         ctx.strokeStyle = this.landCol[b];
         ctx.stroke(land[b]);

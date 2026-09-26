@@ -35,6 +35,9 @@
   const DEPTH = 4200, SLAB = 350;
   const Z_NEAR = 900; // storyboard culling plane: nothing nearer than z = 900 is drawn (all of it is off-screen)
   const FAR_EXT = 640; // far wall overhang: only ever seen through the flare of the >90° hinge overshoot
+  const NEAR_EXT = 320; // walls continue 320 px in front of the hinge line: invisible while unfolding, but
+  //                        they keep the frame corners inside the corridor when it rolls before the dolly
+  const RING_W = 4, RING_LIT_W = 10; // depth ring width; a lit (Paper) ring is drawn heavier so the chase reads
   const SHADE_MAX = 0.7;
 
   // Lettering: Archivo 440 px, tracking -0.01em, two instances per wall starting at depths 150 and 2250,
@@ -284,7 +287,8 @@
       const roll = (rollAngle(t) * Math.PI) / 180;
       const D = dolly(t);
       const shadeOp = R.clamp(th / 90);
-      const fade = R.seg(t, T_FADE0, T_FADE1, 'inOutSine');
+      const fade = R.seg(t, T_FADE0, T_FADE1, 'inOutSine'); // lettering + labels (storyboard timing)
+      const ringFade = R.seg(t, T0, T_FADE0, 'outCubic'); // rings from the first 3D frame: they ripple out of the centre as the box folds
       const word = this.words[styleAt(t)];
 
       // floor point (x across, d = depth from the hinge) -> screen, before the roll
@@ -295,7 +299,7 @@
         return out;
       };
       const hw = (d) => HALF - d * cT; // frustum half-width at depth d
-      const dNear = sT > 1e-6 ? Math.max(0, (D - Z_NEAR) / sT) : 0;
+      const dNear = sT > 1e-6 ? Math.max(-NEAR_EXT, (D - Z_NEAR) / sT) : -NEAR_EXT;
       const dFar = cT > 1e-6 ? Math.min(DEPTH, HALF / cT) : DEPTH;
       const yAt = (d) => CY + (HALF - d * cT) * (PERSP / (PERSP - (D - d * sT)));
 
@@ -345,7 +349,7 @@
         grad.addColorStop(i / NS, shadeCol((SHADE_MAX * d * shadeOp) / DEPTH));
       }
 
-      // rings: 4 px quads at d = 350 r
+      // depth rings: quads at d = 350 r (a lit ring is Paper and heavier)
       const lit = new Set();
       for (const tc of CHASE) {
         const i = f - Math.ceil(tc * 60 - 1e-6);
@@ -353,11 +357,13 @@
       }
       const ringsInk = new Path2D(), ringsLit = new Path2D();
       for (let r = 1; r <= 11; r++) {
-        const d = SLAB * r;
-        if (d - 2 < dNear || d + 2 > dFar) continue;
-        const pth = lit.has(r) ? ringsLit : ringsInk;
-        const a = proj(CX - hw(d - 2) - 2, d - 2, [0, 0]), b = proj(CX + hw(d - 2) + 2, d - 2, [0, 0]);
-        const c = proj(CX + hw(d + 2) + 2, d + 2, [0, 0]), dd = proj(CX - hw(d + 2) - 2, d + 2, [0, 0]);
+        const on = lit.has(r);
+        const d = SLAB * r, hwid = (on ? RING_LIT_W : RING_W) / 2;
+        if (d - hwid < dNear || d + hwid > dFar) continue;
+        const pth = on ? ringsLit : ringsInk;
+        const d0 = d - hwid, d1 = d + hwid;
+        const a = proj(CX - hw(d0) - 2, d0, [0, 0]), b = proj(CX + hw(d0) + 2, d0, [0, 0]);
+        const c = proj(CX + hw(d1) + 2, d1, [0, 0]), dd = proj(CX - hw(d1) - 2, d1, [0, 0]);
         pth.moveTo(a[0], a[1]); pth.lineTo(b[0], b[1]); pth.lineTo(c[0], c[1]); pth.lineTo(dd[0], dd[1]); pth.closePath();
       }
 
@@ -427,7 +433,7 @@
         rot(w);
         ctx.fill(wall);
       }
-      if (fade > 0) {
+      if (ringFade > 0) {
         ctx.font = this.labFont;
         ctx.letterSpacing = `${0.12 * LAB_FS}px`;
         ctx.textBaseline = 'alphabetic';
@@ -435,18 +441,21 @@
           rot(w);
           ctx.save();
           ctx.clip(wall);
-          ctx.globalAlpha = fade;
+          ctx.globalAlpha = ringFade;
           ctx.fillStyle = P.ink;
           ctx.fill(ringsInk);
-          ctx.fill(text, 'evenodd');
           ctx.fillStyle = P.paper;
           ctx.fill(ringsLit);
-          ctx.fillStyle = P.ink;
-          for (const L of labels) {
-            rot(w);
-            const m = L.m;
-            ctx.transform(m[0], m[1], m[2], m[3], m[4], m[5]);
-            ctx.fillText(L.s, 0, 0);
+          if (fade > 0) {
+            ctx.globalAlpha = fade;
+            ctx.fillStyle = P.ink;
+            ctx.fill(text, 'evenodd');
+            for (const L of labels) {
+              rot(w);
+              const m = L.m;
+              ctx.transform(m[0], m[1], m[2], m[3], m[4], m[5]);
+              ctx.fillText(L.s, 0, 0);
+            }
           }
           ctx.restore();
         }
