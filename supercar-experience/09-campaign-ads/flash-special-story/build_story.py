@@ -20,7 +20,7 @@ import argparse, json, os, re, shutil, subprocess, sys, wave
 from pathlib import Path
 
 import numpy as np
-from PIL import Image, ImageDraw, ImageFont
+from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 HERE = Path(__file__).resolve().parent
 WORK = HERE / ".work"
@@ -32,26 +32,30 @@ OUT_NAME = "SCE_Lamborghini-Huracan-STO_Flash-Special-11AM-1PM_15s-9x16.mp4"
 
 FPS = 24
 TOTAL = 372                       # 15.500 s
-PLATE_FRAMES = 328                # 0000-0327 footage; 0328-0371 end card (black)
+PLATE_FRAMES = 313                # 0000-0312 footage; 0313-0371 end card (black)
 W, H = 1080, 1920
 
 # (name, src_in_frame, src_out_frame_excl, speed, out_frames, interpolation)
-# Every range sits wholly inside one take (cue.md section 1).
+# Every range sits wholly inside one take, except B5+B7, which is one continuous source range whose
+# in-source cut (357) lands exactly on output frame 174 (7.250 s). See cue.md section 1.
 BEATS = [
-    ("B1 hook",        393, 437, 1.0, 44, None),
-    ("B2 brand lock",   56,  77, 0.7, 30, "repeat"),   # cue fallback: 0.7x blend ghosted the crest lettering
-    ("B3 model lock",  148, 180, 0.8, 40, "blend"),
-    ("B4 flash window", 279, 322, 1.0, 43, None),
-    ("B5 requirements", 324, 355, 1.0, 31, None),
-    ("B6 requirements", 182, 233, 1.0, 51, None),
-    ("B7 clean breath", 358, 383, 1.0, 25, None),
-    ("B8 the ask",     498, 562, 1.0, 64, None),
+    ("B1 hook",          393, 437, 1.0, 44, None),
+    ("B2 brand lock",     55,  78, 1.0, 23, None),     # whole crest take at 1.0x; tone-locked below (strobe)
+    ("B3 model lock",    148, 180, 0.8, 40, "blend"),
+    ("B4 flash window",  279, 312, 1.0, 33, None),
+    ("B5+B7 requirements", 323, 382, 1.0, 59, None),   # side profile 323-356 | wide roll-by 357-381
+    ("B6 hero (clean)",  189, 233, 1.0, 44, None),
+    ("B8 the ask",       498, 568, 1.0, 70, None),     # tone-locked below (reel white-balance steps)
 ]
-B6_FIRST, B6_LAST = 188, 238      # plate frames that get the CSS-style push 1.00 -> 1.03
-B6_T0, B6_T1 = 7.833, 9.958
+B2_FIRST = 44                     # plate frames 44-66  <- src 55-77
+B6_FIRST, B6_LAST = 199, 242      # plate frames that get the push 1.00 -> 1.03
+B6_T0, B6_T1 = 199 / 24, 243 / 24
+B8_FIRST, B8_LAST = 243, 312      # plate frames 243-312 <- src 498-567
+B8_REF = range(510, 531)          # src frames 21.25-22.08 s: the blue-white facade state (reference look)
 GRADE = "eq=contrast=1.04:saturation=0.96:gamma=1.0,vignette=angle=PI/5"
+TO_RGB = "scale=in_color_matrix=bt709:in_range=tv:out_range=pc"
 
-QA_TIMES = [0.000, 1.000, 2.500, 3.900, 5.900, 7.500, 8.800, 10.400, 12.200, 14.900]
+QA_TIMES = [0.000, 1.000, 2.500, 3.600, 5.500, 5.958, 7.100, 8.000, 9.400, 11.000, 12.500, 14.600]
 POSTER_T = 1.000
 
 
@@ -61,6 +65,92 @@ def run(cmd, **kw):
 
 
 # ---------------------------------------------------------------- 1. plate
+def _extract16(ff, src, a, b, d):
+    """Ungraded source frames a..b-1 as 16-bit RGB (BT.709 limited -> full), as a float32 array (n, H, W, 3)."""
+    p = subprocess.run([str(ff), "-loglevel", "error", "-i", str(src), "-vf",
+                        f"trim=start_frame={a}:end_frame={b},setpts=PTS-STARTPTS,{TO_RGB},format=rgb48le",
+                        "-fps_mode", "passthrough", "-f", "rawvideo", "-"], capture_output=True, check=True)
+    x = np.frombuffer(p.stdout, "<u2").reshape(-1, H, W, 3)
+    if len(x) != b - a:
+        sys.exit(f"extract16 {a}-{b}: got {len(x)} frames")
+    return x
+
+
+Q = np.linspace(0.002, 0.998, 250)
+
+
+def _quantiles(fr):
+    s = fr[::4, ::4].reshape(-1, 3).astype(np.float32)
+    return np.stack([np.quantile(s[:, c], Q) for c in range(3)])            # (3, len(Q))
+
+
+def _match(fr, qsrc, qref):
+    """Per-channel quantile (histogram) match of one frame to a reference distribution, in 16-bit float."""
+    out = np.empty(fr.shape, np.float32)
+    for c in range(3):
+        xp = qsrc[c] + np.arange(len(Q)) * 1e-3                                # strictly increasing
+        fp = qref[c]
+        v = fr[..., c].astype(np.float32)
+        y = np.interp(v, xp, fp)
+        lo, hi = v < xp[0], v > xp[-1]                                         # linear tails beyond the quantiles
+        y[lo] = fp[0] * v[lo] / max(xp[0], 1.0)
+        y[hi] = fp[-1] + (v[hi] - xp[-1]) * (65535 - fp[-1]) / max(65535 - xp[-1], 1.0)
+        out[..., c] = y
+    return np.clip(out, 0, 65535)
+
+
+def _grade_into(ff, frames16, d, first, tmp):
+    """Write 16-bit frames, run the house grade on them exactly like the main pass, land them as plate frames."""
+    shutil.rmtree(tmp, ignore_errors=True); tmp.mkdir(parents=True)
+    raw = tmp / "in.rgb48"
+    with open(raw, "wb") as f:
+        for fr in frames16:
+            f.write(np.round(fr).astype("<u2").tobytes())
+    run([ff, "-y", "-loglevel", "error", "-f", "rawvideo", "-pix_fmt", "rgb48le", "-s", f"{W}x{H}", "-r", FPS,
+         "-i", raw, "-vf", "scale=out_color_matrix=bt709:out_range=tv,format=yuv444p," + GRADE + f",{TO_RGB},format=rgb24",
+         "-fps_mode", "passthrough", "-start_number", first, d / "%04d.png"])
+    raw.unlink()
+
+
+def tone_lock(ff, src, d):
+    """B2: the crest take carries a light strobe (luma 50 <-> 160 every 2-3 frames). Each frame is quantile-matched
+    to the take's own mean distribution (per-channel barycentre), so the strobe is gone and the look is its average.
+    B8: the reel's grade steps white balance inside the locked-off LVCC take (src 507, 547). Each frame is matched to
+    the blue-white state (src 510-530), so the facade holds one colour for the whole ask."""
+    x = _extract16(ff, src, 55, 78, d)
+    qs = [_quantiles(f) for f in x]
+    qref = np.mean(qs, 0)
+    _grade_into(ff, [_match(f, q, qref) for f, q in zip(x, qs)], d, B2_FIRST, WORK / "tl")
+    ref = _extract16(ff, src, B8_REF.start, B8_REF.stop, d)
+    qref = np.mean([_quantiles(f) for f in ref], 0)
+    del ref
+    x = _extract16(ff, src, 498, 568, d)
+    _grade_into(ff, [_match(f, _quantiles(f), qref) for f in x], d, B8_FIRST, WORK / "tl")
+    del x
+    print("tone lock: B2 (strobe) and B8 (white balance) matched")
+
+
+def b8_cleanup(d):
+    """Third-party marks on the LVCC facade (IBIE banner and sponsor logos, y ~11-25%) are darkened and softened;
+    a poster face in the right-hand doorway is softened. Masks are soft and static (the in-camera push is slow)."""
+    yy = np.arange(H, dtype=np.float32)[:, None] / H
+    xx = np.arange(W, dtype=np.float32)[None, :] / W
+    band = np.clip((0.34 - yy) / 0.08, 0, 1) * np.ones_like(xx)                  # 1 above y 26%, 0 below y 34%
+    band = band * band * (3 - 2 * band)                                          # smoothstep
+    dark = 1 - 0.58 * band                                                       # 58% darker at the top
+    for f in range(B8_FIRST, B8_LAST + 1):
+        p = d / f"{f:04d}.png"
+        im = Image.open(p).convert("RGB")
+        a = np.asarray(im, np.float32)
+        b = np.asarray(im.filter(ImageFilter.GaussianBlur(9)), np.float32)
+        k = (f - B8_FIRST) / (B8_LAST - B8_FIRST)
+        cx, cy = 0.745 + 0.02 * k, 0.425 + 0.004 * k                            # doorway poster (see cue.md D12)
+        face = np.exp(-(((xx - cx) / 0.05) ** 2 + ((yy - cy) / 0.028) ** 2)) * 1.0
+        mix = np.clip(np.maximum(band, face), 0, 1)[..., None]
+        out = (a * (1 - mix) + b * mix) * (dark * (1 - 0.35 * face))[..., None]
+        Image.fromarray(np.clip(out + 0.5, 0, 255).astype(np.uint8)).save(p, compress_level=1)
+
+
 def build_plate(ff, src):
     d = WORK / "plate"
     shutil.rmtree(d, ignore_errors=True)
@@ -75,12 +165,14 @@ def build_plate(ff, src):
             f += f",tpad=stop_mode=clone:stop=3,trim=end_frame={nout},setpts=PTS-STARTPTS"
         parts.append(f + f"[v{i}]")
     parts.append("".join(f"[v{i}]" for i in range(n)) + f"concat=n={n}:v=1:a=0,settb=1/24,setpts=N," + GRADE +
-                 ",scale=in_color_matrix=bt709:in_range=tv:out_range=pc,format=rgb24[out]")
+                 f",{TO_RGB},format=rgb24[out]")
     run([ff, "-y", "-loglevel", "error", "-i", src, "-filter_complex", ";".join(parts),
          "-map", "[out]", "-an", "-fps_mode", "passthrough", "-start_number", "0", d / "%04d.png"])
     got = len(list(d.glob("*.png")))
     if got != PLATE_FRAMES:
         sys.exit(f"plate: expected {PLATE_FRAMES} frames, got {got}")
+    tone_lock(ff, src, d)
+    b8_cleanup(d)
     # B6 push: scale 1.00 -> 1.03 linear in t, origin 50% 45% (plate only)
     ox, oy = 0.50 * W, 0.45 * H
     for f in range(B6_FIRST, B6_LAST + 1):
