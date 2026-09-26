@@ -207,7 +207,8 @@ def synth_bed(path_raw):
     add(env_ramp(0.8 * np.sin(2 * np.pi * 60 * x) * np.exp(-14 * x), a=0.0005), 11.042)
 
     st = np.stack([L, R], 1)
-    st *= 0.89 / max(1e-9, np.max(np.abs(st)))
+    st /= max(1e-9, np.max(np.abs(st)))
+    st = np.tanh(2.2 * st) / np.tanh(2.2) * 0.89     # gentle saturation on the thumps: lower crest, audible on phones
     pcm = (st * 32767).astype("<i2")
     with wave.open(str(path_raw), "wb") as w:
         w.setnchannels(2); w.setsampwidth(2); w.setframerate(SR)
@@ -220,10 +221,10 @@ def build_audio(ff):
     synth_bed(raw)
     # two-pass loudnorm: I -14, TP -1.0, LRA 7
     p = subprocess.run([str(ff), "-hide_banner", "-i", str(raw), "-af",
-                        "loudnorm=I=-14:TP=-1.0:LRA=7:print_format=json", "-f", "null", "-"],
+                        "loudnorm=I=-14:TP=-1.5:LRA=7:print_format=json", "-f", "null", "-"],
                        capture_output=True, text=True, check=True)
     m = json.loads(p.stderr[p.stderr.rindex("{"): p.stderr.rindex("}") + 1])
-    af = (f"loudnorm=I=-14:TP=-1.0:LRA=7:measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
+    af = (f"loudnorm=I=-14:TP=-1.5:LRA=7:measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
           f"measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true,"
           f"aresample=48000,apad,atrim=end_sample={int(round(DUR * SR))}")
     run([ff, "-y", "-loglevel", "error", "-i", raw, "-af", af, "-ac", "2", "-ar", "48000", "-c:a", "pcm_s16le", bed])
@@ -249,13 +250,20 @@ def encode(ff):
 
 # ---------------------------------------------------------------- 5. QA
 def probe(ff, path):
-    p = subprocess.run([str(ff), "-hide_banner", "-i", str(path), "-map", "0", "-c", "copy", "-f", "null", "-"],
-                       capture_output=True, text=True)
-    e = p.stderr
+    def null(*extra):
+        return subprocess.run([str(ff), "-hide_banner", "-stats", "-i", str(path), *extra, "-f", "null", "-"],
+                              capture_output=True, text=True).stderr.replace("\r", "\n")
+    e = null("-map", "0:v")
+    a = null("-map", "0:a")
+    lo = null("-map", "0:a", "-af", "ebur128=peak=true")
     streams = [s.strip() for s in re.findall(r"Stream #0:\d.*", e)]
-    dur = re.search(r"Duration: ([\d:.]+)", e).group(1)
-    frames = re.findall(r"frame=\s*(\d+)", e)
-    return {"duration": dur, "streams": streams[:2], "video_frames": int(frames[-1]) if frames else None}
+    return {"container_duration": re.search(r"Duration: ([\d:.]+)", e).group(1),
+            "video_frames": int(re.findall(r"frame=\s*(\d+)", e)[-1]),
+            "video_decoded_time": re.findall(r"time=([\d:.]+)", e)[-1],
+            "audio_decoded_time": re.findall(r"time=([\d:.]+)", a)[-1],
+            "integrated_lufs": float(re.findall(r"I:\s+(-?[\d.]+) LUFS", lo)[-1]),
+            "true_peak_dbfs": float(re.findall(r"Peak:\s+(-?[\d.]+) dBFS", lo)[-1]),
+            "streams": streams[:2]}
 
 
 def stills(ff, mp4):
@@ -291,6 +299,30 @@ def stills(ff, mp4):
     return paths
 
 
+def safe_zone_report():
+    """Overlay ink (alpha > 8) on footage frames must sit inside y 14%-80% (stories profile bar / reply bar).
+    Transit scan-line frames are exempt (they sweep through in < 0.2 s)."""
+    exempt = set(range(43, 46)) | set(range(259, 265))
+    worst = [100.0, 0.0, 100.0, 0.0]
+    bad = []
+    for f in range(PLATE_FRAMES):
+        if f in exempt:
+            continue
+        px = np.asarray(Image.open(WORK / f"overlay/{f:05d}.png").convert("RGBA"))
+        a = (px[..., 3] > 8) & (px[..., :3].max(2) > 60)      # visible ink; black scrims/shadows excluded
+        ys = np.nonzero(a.any(1))[0]
+        if not len(ys):
+            continue
+        xs = np.nonzero(a.any(0))[0]
+        y0, y1, x0, x1 = ys[0] / H * 100, ys[-1] / H * 100, xs[0] / W * 100, xs[-1] / W * 100
+        worst = [min(worst[0], y0), max(worst[1], y1), min(worst[2], x0), max(worst[3], x1)]
+        if y0 < 14 or y1 > 80:
+            bad.append((f, round(y0, 1), round(y1, 1)))
+    print(f"safe zones: overlay ink spans y {worst[0]:.1f}-{worst[1]:.1f}%, x {worst[2]:.1f}-{worst[3]:.1f}% "
+          f"(ticker text runs full width under its edge fade); out-of-band frames: {bad or 'none'}")
+    return bad
+
+
 def main():
     ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--src", default=str(DEFAULT_SRC))
@@ -308,7 +340,9 @@ def main():
         print("3/5 audio"); build_audio(a.ffmpeg)
     print("4/5 encode"); out = encode(a.ffmpeg)
     print("5/5 QA"); stills(a.ffmpeg, out)
+    safe_zone_report()
     info = probe(a.ffmpeg, out)
+    (WORK / "probe.json").write_text(json.dumps(info, indent=2))
     print(json.dumps(info, indent=2))
     print("done:", out)
 

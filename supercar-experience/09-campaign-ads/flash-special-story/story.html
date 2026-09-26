@@ -47,7 +47,10 @@ const E = {
   oBack: (p, s = 1.2) => 1 + (s + 1) * Math.pow(p - 1, 3) + s * Math.pow(p - 1, 2),
 };
 const EPS = 1e-4;
-const on = (t, a, b) => t >= a - EPS && t < b - EPS;           // visible in [a, b)
+// visible in [a, b): cue times are 3-decimal renderings of frame boundaries (9.417 = frame 226 = 9.41667),
+// so compare on the 24 fps frame grid
+const FR = x => Math.round(x * 24 - 1e-6);
+const on = (t, a, b) => { const f = FR(t); return f >= FR(a) && f < FR(b); };
 const ease = (t, a, b, fn) => fn(P(t, a, b));
 const rgb = (c1, c2, p) => `rgb(${c1.map((v, i) => Math.round(lerp(v, c2[i], p))).join(',')})`;
 
@@ -174,7 +177,7 @@ function scanLine(parent, thick, alpha) {
   return { g, alpha };
 }
 function scanSet(sl, t, a, b) {
-  if (!on(t, a, b + 1 / 48)) { hide(sl.g); return; }
+  if (!on(t, a, b + 1 / 24)) { hide(sl.g); return; }        // frames a..b inclusive
   const p = P(t, a, b);
   st(sl.g, { ty: lerp(Y(.14), Y(.86), p), o: sl.alpha });
 }
@@ -327,7 +330,10 @@ function renderAt(t) {
   /* ===== B3 MODEL LOCK 3.083-4.750 ===== */
   if (on(t, 3.083, 4.750)) {
     const pin = P(t, 3.083, 3.125), pc = ease(t, 3.125, 3.500, E.oExpo);
-    let l = lerp(X(.035), X(.20), pc), r = lerp(X(.965), X(.80), pc), tp = lerp(Y(.15), Y(.455), pc), b = lerp(Y(.80), Y(.535), pc);
+    // the STO lettering drifts/grows in the take (measured x 23.2-76.1% @3.5 s -> 19.8-78.8% @4.583 s),
+    // so the lock box tracks it, keeping ~3% clear of the letters
+    const bl = .20 - .0307 * (t - 3.5), bri = .80 + .0227 * (t - 3.5);
+    let l = lerp(X(.035), X(bl), pc), r = lerp(X(.965), X(bri), pc), tp = lerp(Y(.15), Y(.455), pc), b = lerp(Y(.80), Y(.535), pc);
     const tick = on(t, 3.500, 3.625) ? 8 * Math.sin(Math.PI * P(t, 3.500, 3.625)) : 0;
     const rel = ease(t, 4.583, 4.667, E.oCub);
     const d = tick - 20 * rel;
@@ -392,7 +398,7 @@ function renderAt(t) {
     R.rows.forEach((rw, i) => {
       const s = 6.708 + .167 * i;
       const out = ease(t, 9.250, 9.417, E.iCub);
-      if (t < 9.250 - EPS) {
+      if (!on(t, 9.250, 99)) {
         // reveal
         const ps = ease(t, s, s + .25, E.ioQuad), scanX = lerp(x0, x1, ps);
         L(rw.lab, { o: t < s ? 0 : 1, clipR: clamp((scanX - rw.lab.left) / rw.lab.vis, 0, 1) });
@@ -425,8 +431,10 @@ function renderAt(t) {
     st(R.askS, { clip: stripeReveal(R.askS, ease(t, 11.417, 11.792, E.oCub), 'lr'), o: (t < 11.417 ? 0 : 1) * exO });
   } else { L(R.ask1, { o: 0 }); L(R.ask2, { o: 0 }); hide(R.askS); }
   if (on(t, 11.208, 13.417)) {
-    const k = P(t, 11.000, 13.417);                              // box follows the camera push
-    const tl = lerp(X(.06), X(.05), k), tr = lerp(X(.82), X(.95), k), tt = lerp(Y(.41), Y(.40), k), tb = lerp(Y(.58), Y(.585), k);
+    // box follows the in-camera push. Measured on the plate (car nose x 81.5% @11.00, 88% @11.58, 93.5% @13.29):
+    // the move decelerates, so the box eases on 1-exp(-(t-11)/0.8), normalised to reach the cue's end box at 13.417.
+    const k = (1 - Math.exp(-Math.max(0, t - 11.0) / 0.8)) / (1 - Math.exp(-2.417 / 0.8));
+    const tl = lerp(X(.06), X(.05), k), tr = lerp(X(.83), X(.95), k), tt = lerp(Y(.41), Y(.40), k), tb = lerp(Y(.58), Y(.585), k);
     const pl = ease(t, 11.208, 11.583, E.oExpo);
     const ex = ease(t, 13.250, 13.417, E.iCub);
     R.brC.set(lerp(X(.035), tl, pl), lerp(Y(.15), tt, pl), lerp(X(.965), tr, pl), lerp(Y(.80), tb, pl),
@@ -434,7 +442,7 @@ function renderAt(t) {
   } else R.brC.set(0, 0, 0, 0, 0);
 
   /* ===== B9 END CARD 13.667-15.500 ===== */
-  if (t >= 13.667 - EPS) {
+  if (on(t, 13.667, 99)) {
     R.end.style.display = '';
     const pl = ease(t, 13.667, 14.083, E.oCub);
     st(R.logo, { o: pl, s: lerp(.96, 1, pl) });
