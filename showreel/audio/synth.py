@@ -65,6 +65,8 @@ SWING_PARTS = ('hat', 'shaker', 'rim', 'tick')
 #   gate        step pattern gating the tonal bus (sub/bass/synths + their reverb/delay): x open, . shut
 #   stutter     per-step edits of the whole music bus: 2 3 4 6 8 = retrigger the step's head N times,
 #               r = reverse, b = replay the first step of the beat, x = mute, d = bitcrush, t = tape-slow
+#   level       music-bus level in dB for this bar (number, or (start, end) for a ramp); default 0
+#   hp / lp     (start_hz, end_hz) highpass / lowpass sweep on the tonal bus across the bar
 #   mute        list of parts silenced in this bar           snare_rise  semitones a roll climbs over the bar
 PARTS = ('kick', 'clap', 'snare', 'tom', 'hat', 'ohat', 'shaker', 'rim', 'tick',
          'sub', 'bass', 'stab', 'saw', 'pad')
@@ -81,26 +83,26 @@ SONG = [
         tick='..x. .... x... .x..',
     ),
     dict(  # bar 2 · 1.875 s · GROOVE IN: four-on-the-floor, ducked sub, offbeat hats, clap on 2 & 4
-        section='groove', energy=0.55, chords='Fm9 . Dbmaj7 .',
+        section='groove', energy=0.55, chords='Fm9 . Dbmaj7 .', level=-2.5,
         kick=FOUR, clap=CLAP, ohat=OFFH,
-        sub='x_______ x_______',
+        sub='5_______ 5_______',
         stab='x..x ..x. ..x. .x..', stab_cut=(0.40, 0.50),
         tick='..x. .... x... .x..',
     ),
     dict(  # bar 3 · 3.750 s · GROOVE: 16th hats, shaker and rim join, the stab keeps opening
-        section='groove', energy=0.65, chords='Abmaj7 . Eb .',
+        section='groove', energy=0.65, chords='Abmaj7 . Eb .', level=-2.0,
         kick=FOUR, clap=CLAP, ohat=OFFH,
         hat='.o.o .o.o .o.o .o.o', shaker='4242 4242 4242 4252', rim='.... ..x. .... ..x.',
-        sub='x_______ x_______',
+        sub='6_______ 6_______',
         stab='x..x ..x. ..x. .x..', stab_cut=(0.50, 0.60),
     ),
     dict(  # bar 4 · 5.625 s · BUILD: stab variation, toms + snare fill over beats 3-4, riser into the drop
-        section='build', energy=0.75, chords='Dbmaj7 . Csus4 C',
+        section='build', energy=0.75, chords='Dbmaj7 . Csus4 C', level=(-2.0, -0.5), hp=(20, 380),
         kick='x...x...x.......', clap='....x...........', ohat='..x...x.........',
         hat='.o.o .o.o .... ....', shaker='4242 4242 4252 5262',
         tom='.... .... hhml ....',
         snare='........ ........ ........ 6789XXXX',
-        sub='x_______ x___....',
+        sub='6_______ 6___....',
         stab='x..x ..x. x.x. x...', stab_cut=(0.60, 0.74),
         gate='xxxx xxxx xxxx xxx.',
     ),
@@ -168,7 +170,7 @@ MIX = {
     'shaker': dict(gain=-23.0, pan=-0.30, room=0.10),
     'rim':    dict(gain=-19.0, pan=-0.22, room=0.12, delay=0.20),
     'tick':   dict(gain=-17.0, pan=0.25, room=0.10, delay=0.35),
-    'sub':    dict(gain=-6.0, duck=15.0),
+    'sub':    dict(gain=-11.0, duck=15.0),
     'bass':   dict(gain=-10.0, duck=7.0),
     'stab':   dict(gain=-12.5, hall=0.22, delay=0.24, duck=3.0),
     'saw':    dict(gain=-15.0, hall=0.20, delay=0.10, duck=4.5),
@@ -971,10 +973,10 @@ def v_pad(notes, length, seed=0):
     t = tvec(n)
     rng = rng_for('pad', seed)
     x = supersaw([hz(m) for m in notes], n, voices=5, detune=0.16, spread=1.0, rng=rng)
-    x += 0.35 * sine(hz(notes[0] - 12), n)[None, :]
-    fc = 700.0 + 3000.0 * np.exp(-t / (0.35 * length))
+    x += 0.25 * sine(hz(notes[0]), n)[None, :]
+    fc = 600.0 + 3000.0 * np.exp(-t / (0.3 * length))
     y = svf(x, fc, q=0.7)
-    env = np.where(t < 0.25, 1.0, np.exp(-np.maximum(t - 0.25, 0.0) / (0.24 * length)))
+    env = np.where(t < 0.2, 1.0, np.exp(-np.maximum(t - 0.2, 0.0) / (0.2 * length)))
     y *= env * (1.0 - np.exp(-t / 0.006))
     return norm(fades(y, 0.0, 0.05))
 
@@ -1015,10 +1017,10 @@ def s_impact(amt=1.0, tone='std', seed=0, **_):
     k = v_kick(seed=seed, length=0.9, f_hi=165.0, f_lo=F1 * 0.97, tau_p=0.04, decay=0.28 if huge else 0.2,
                hold=0.03, click=0.45, drive=2.6)
     kick[:k.shape[0]] = k
-    boom = sine(F1 * (1 + 0.45 * np.exp(-t / 0.05))) * (1 - np.exp(-t / 0.003)) * np.exp(-t / (0.9 if huge else 0.6))
+    boom = sine(F1 * (1 + 0.45 * np.exp(-t / 0.05))) * (1 - np.exp(-t / 0.003)) * np.exp(-t / (0.5 if huge else 0.32))
     boom = np.tanh(1.8 * boom) / math.tanh(1.8)
     nz = svf(noise_st(rng, n, 0.5), 600.0 + 9500.0 * np.exp(-t / (0.16 if huge else 0.11)), q=0.75)
-    nz = norm(nz) * (1 - np.exp(-t / 0.0015)) * (0.75 * np.exp(-t / 0.09) + 0.25 * np.exp(-t / (0.5 if huge else 0.35)))
+    nz = norm(nz) * (1 - np.exp(-t / 0.0015)) * (0.75 * np.exp(-t / 0.09) + 0.25 * np.exp(-t / (0.4 if huge else 0.3)))
     thud = norm(filt(rng.standard_normal(n), ('bp', 120, 1.2))) * np.exp(-t / 0.08)
     clang = sum(np.sin(TAU * f * t + rng.uniform(0, TAU)) * np.exp(-t / d)
                 for f, d in ((233, 0.5), (377, 0.35), (611, 0.25), (947, 0.18), (1433, 0.12))) / 3.0
@@ -1158,7 +1160,7 @@ def s_subdrop(amt=1.0, seed=0, **_):
     n = int(1.7 * SR)
     t = tvec(n)
     f = 28.0 + (hz(41) - 28.0) * np.exp(-t / 0.3)
-    x = sine(f) * (1 - np.exp(-t / 0.004)) * np.exp(-t / 0.65)
+    x = sine(f) * (1 - np.exp(-t / 0.004)) * np.exp(-t / 0.42)
     x = filt(np.tanh(2.2 * x) / math.tanh(2.2), ('lp', 500, 0.7), ('hp', 22, 0.7))
     return stereo(norm(fades(x, 0.0005, 0.1), amt)), 0.0
 
@@ -1395,10 +1397,10 @@ def parse_chord(sym):
 
 
 def voicing(ch, center=62.0, rootless=True):
-    """Close-position voicing whose average pitch sits nearest `center`. Rootless for 4+ note chords
-    (the bass carries the root): Fm9 -> Ab3 C4 Eb4 G4, the classic minor-9 stab."""
+    """Close-position voicing whose average pitch sits nearest `center`, avoiding semitone clusters.
+    Rootless for 5+ note chords (the bass carries the root): Fm9 -> Ab3 C4 Eb4 G4, the minor-9 stab."""
     ivs = list(ch['ivs'])
-    if rootless and len(ivs) >= 4:
+    if rootless and len(ivs) >= 5:
         ivs = ivs[1:]
     pcs = [(ch['root'] + iv) % 12 for iv in ivs]
     best, best_score = None, 1e9
@@ -1410,6 +1412,7 @@ def voicing(ch, center=62.0, rootless=True):
         k = round((center - sum(stack) / len(stack)) / 12.0)
         stack = [s + 12 * k for s in stack]
         score = abs(sum(stack) / len(stack) - center) + 0.1 * (stack[-1] - stack[0])
+        score += 1.5 * sum(1 for a, b in zip(stack, stack[1:]) if b - a == 1)
         if score < best_score:
             best, best_score = stack, score
     return [float(v) for v in best]
@@ -1744,7 +1747,7 @@ def render(cues_path, mute=(), solo=(), verbose=True):
         if mx.get('duck'):
             parts[p] *= 10.0 ** (-mx['duck'] * env / 20.0)
     room = convolve(filt(sends['room'], ('hp', 250, 0.7)), make_ir('room', 0.9, 0.55, 0.3, predelay=0.006, er=0.5))
-    hall = convolve(filt(sends['hall'], ('hp', 220, 0.7)), make_ir('hall', 3.0, 2.2, 0.9, predelay=0.022, er=0.3))
+    hall = convolve(filt(sends['hall'], ('hp', 220, 0.7)), make_ir('hall', 2.6, 1.9, 0.8, predelay=0.022, er=0.3))
     dly = pingpong(sends['delay'], 0.75 * BEAT, feedback=0.42)
     space = 10.0 ** (-RETURN_DUCK * env / 20.0)
     hall *= undb(RETURNS['hall']) * space
@@ -1792,7 +1795,7 @@ def render(cues_path, mute=(), solo=(), verbose=True):
         if mx.get('duck'):
             mix_into(duck_trig, np.full(1, mx['duck'] * ev['amt']), s)
         counts[typ] = counts.get(typ, 0) + 1
-    fxverb = convolve(filt(fxsend, ('hp', 200, 0.7)), make_ir('fxverb', 3.2, 2.4, 1.0, predelay=0.015, er=0.2))
+    fxverb = convolve(filt(fxsend, ('hp', 200, 0.7)), make_ir('fxverb', 2.6, 1.8, 0.8, predelay=0.015, er=0.2))
     sfx += fxverb * undb(RETURNS['fxverb'])
     if 'sfx' in mute or (solo and 'sfx' not in solo):
         sfx[:] = 0.0
@@ -1826,7 +1829,7 @@ def master_chain(x, verbose=True):
     pre = lufs(x)
     g0 = undb(-20.0 - pre) if pre > -69 else 1.0
     x = x * g0
-    x, gr = compressor(x, thr_db=-21.0, ratio=2.0, attack=0.02, release=0.2, knee_db=6.0)
+    x, gr = compressor(x, thr_db=-17.0, ratio=1.8, attack=0.025, release=0.25, knee_db=8.0, rms_ms=25.0)
     ceiling = CEILING_DBTP - 0.15
     drive = float(np.clip(TARGET_LUFS - lufs(x), -20.0, 30.0))
     y = x
