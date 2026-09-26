@@ -518,16 +518,22 @@
       let dx = S.dRx + off, dw = S.dRw;
       if (k === smearK) {
         // stretch the band horizontally about the anchor (a pixel-sort streak)
-        const st = 1.6 + 1.2 * R.hash(roll, 3, 704);
+        const st = 1.45 + 0.9 * R.hash(roll, 3, 704);
         dx = AX + off + (S.dRx - AX) * st;
         dw = S.dRw * st;
       }
-      g.globalCompositeOperation = 'source-over';
-      g.drawImage(S.dSignal, 0, sy, S.dRw, h, dx - split, y0, dw, h);
-      g.globalCompositeOperation = 'screen';
-      g.drawImage(S.dVolt, 0, sy, S.dRw, h, dx + split, y0, dw, h);
-      g.globalCompositeOperation = 'source-over';
-      if (k !== dropK) g.drawImage(S.dPaper, 0, sy, S.dRw, h, dx, y0, dw, h);
+      if (k === dropK) {
+        // plate dropout: this band shows a single colour plate only (pure Signal or pure Volt, never a blend)
+        const vol = R.hash(roll, 4, 704) < 0.5;
+        g.drawImage(vol ? S.dVolt : S.dSignal, 0, sy, S.dRw, h, dx + (vol ? split : -split) * 0.5, y0, dw, h);
+      } else {
+        g.globalCompositeOperation = 'source-over';
+        g.drawImage(S.dSignal, 0, sy, S.dRw, h, dx - split, y0, dw, h);
+        g.globalCompositeOperation = 'screen';
+        g.drawImage(S.dVolt, 0, sy, S.dRw, h, dx + split, y0, dw, h);
+        g.globalCompositeOperation = 'source-over';
+        g.drawImage(S.dPaper, 0, sy, S.dRw, h, dx, y0, dw, h);
+      }
       // the protagonist in the counter is sliced with the D
       if (y1 > AY - 56 && y0 < AY + 56) {
         g.save();
