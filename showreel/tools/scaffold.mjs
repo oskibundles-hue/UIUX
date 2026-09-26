@@ -24,8 +24,7 @@ R.scene({
   id: ${JSON.stringify(s.id)},
   start: ${s.start},
   end: ${s.end},
-  z: ${(i + 1) * 10},
-  bg: R.pal.graphite,
+  z: ${s.z ?? (i + 1) * 10},${s.id.startsWith('s00') ? '' : '\n  bg: R.pal.graphite,'}
   setup(root) {
     this.label = R.el('div', { text: ${JSON.stringify(`${s.id} · ${s.name}`)}, style: { left: '120px', top: '470px', font: \`800 72px \${R.font.display}\`, color: R.pal.fog } }, root);
     this.bar = R.el('div', { style: { left: '120px', top: '590px', height: '6px', width: '0px', background: R.pal.fog } }, root);

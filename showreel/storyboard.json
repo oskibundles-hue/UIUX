@@ -1,0 +1,4156 @@
+{
+  "lens": "ecd-synthesis",
+  "title": "FULL STOP.",
+  "subtitle": "CLAUDE — Motion Designer — Showreel 2026",
+  "spec": "15.000 s · 900 frames · 1920×1080 · 60 fps · 128 BPM · 4/4 · 8 bars · F minor",
+  "logline": "A single Signal-orange full stop is born at the end of a word, learns to move, and travels through every discipline of motion design (weight, timing, space, easing, energy, print, grid, liquid, data, glitch, shape) until it lands, with a squash and two small bounces, as the period after CLAUDE.",
+  "motif": "THE FULL STOP. One flat Signal #FF4A1C disc is the protagonist and the connective tissue of every transition. It is born as the period of WIDE, becomes a character that stamps 'Timing is everything.' into existence, a portal we dive through, the light at the end of a type corridor, the object a live bezier curve eases, the seed of a 12,000-particle explosion, the ripple source of a halftone, a module of a grid, a bubble in liquid, the origin of a chart, the heart of a glitch, the full stop of an E, and finally the hanging period of 'CLAUDE.' and the dot of the original 'C.' monogram. Rules: (1) at every handoff the dot is a perfect flat circle (no stroke, glow or gradient); (2) it is the only object that crosses cuts; (3) in the montage it is centre-locked (Ø112 at (960,540)) on every cut so the eye never has to search; (4) typographic rule of the reel: the full stop always HANGS outside the measure (WIDE. / Timing is everything. / CLAUDE.). Around it sits one editorial system: a Swiss grid, Volt blueprint lines, JetBrains Mono annotations and a persistent HUD frame whose beat meter proves the picture is locked to the music.",
+  "arc": "HOOK (0.000–1.875 (bar 1)): Frame 0 is already moving: hairline LIGHT rises while blueprint lines shoot out, then SLAMS into black HEAVY on beat 2. Every word performs the axis it names (LIGHT, HEAVY, NARROW, WIDE), one per beat, and the dot is born on the and-of-4 as WIDE's hanging full stop. BUILD (1.875–7.031 (bars 2–4)): One continuous take with no hard cut. The dot learns to move (12 principles, stamping 'Timing is everything.'), dives into itself (exponential zoom) into a Signal field that unfolds into a 3D type corridor, rushes into a Paper wall that becomes a bezier graph editor where a cursor drags a handle out of the box and the dot is literally eased with overshoot. BREATH (7.031–7.500 (bar 4, beat 4)): Lights out. Tape-stop, letterbox, a ring implodes and the dot compresses and trembles: the reel's biggest anticipation, one beat of near-silence. DROP (7.500–9.375 (bar 5)): The dot detonates into 12,000 particles, curls into two vortices, breathes again, then snaps into a crisp dot-matrix RANGE. Whip-pan. RANGE (9.375–12.656 (bars 6–7)): A centre-locked montage that accelerates from beats to 8ths to 16ths: C halftone, L grid, A liquid, U data, D glitch, E shape. It covertly spells the name, revealed on beat 3 of bar 7 as a specimen row 'CLAUDE.' when the dot lands as its period. SQUEEZE (12.656–13.125 (bar 7, beat 4)): The row flattens to plain type and condenses to width 62 with a tremble; the drums drop out; the last 16th is silent. RESOLVE (13.125–15.000 (bar 8)): The final hit releases the name to width 125 (anticipation and release applied to a logotype). The dot is flung, lands as the hanging period and bounces twice. Role, year, tagline and monogram set in; everything is locked by 14.0625; on beat 4 a tiny dot drops into the 'C.' monogram; the card holds.",
+  "arc_sections": [
+    {
+      "section": "HOOK",
+      "window": "0.000–1.875 (bar 1)",
+      "what": "Frame 0 is already moving: hairline LIGHT rises while blueprint lines shoot out, then SLAMS into black HEAVY on beat 2. Every word performs the axis it names (LIGHT, HEAVY, NARROW, WIDE), one per beat, and the dot is born on the and-of-4 as WIDE's hanging full stop."
+    },
+    {
+      "section": "BUILD",
+      "window": "1.875–7.031 (bars 2–4)",
+      "what": "One continuous take with no hard cut. The dot learns to move (12 principles, stamping 'Timing is everything.'), dives into itself (exponential zoom) into a Signal field that unfolds into a 3D type corridor, rushes into a Paper wall that becomes a bezier graph editor where a cursor drags a handle out of the box and the dot is literally eased with overshoot."
+    },
+    {
+      "section": "BREATH",
+      "window": "7.031–7.500 (bar 4, beat 4)",
+      "what": "Lights out. Tape-stop, letterbox, a ring implodes and the dot compresses and trembles: the reel's biggest anticipation, one beat of near-silence."
+    },
+    {
+      "section": "DROP",
+      "window": "7.500–9.375 (bar 5)",
+      "what": "The dot detonates into 12,000 particles, curls into two vortices, breathes again, then snaps into a crisp dot-matrix RANGE. Whip-pan."
+    },
+    {
+      "section": "RANGE",
+      "window": "9.375–12.656 (bars 6–7)",
+      "what": "A centre-locked montage that accelerates from beats to 8ths to 16ths: C halftone, L grid, A liquid, U data, D glitch, E shape. It covertly spells the name, revealed on beat 3 of bar 7 as a specimen row 'CLAUDE.' when the dot lands as its period."
+    },
+    {
+      "section": "SQUEEZE",
+      "window": "12.656–13.125 (bar 7, beat 4)",
+      "what": "The row flattens to plain type and condenses to width 62 with a tremble; the drums drop out; the last 16th is silent."
+    },
+    {
+      "section": "RESOLVE",
+      "window": "13.125–15.000 (bar 8)",
+      "what": "The final hit releases the name to width 125 (anticipation and release applied to a logotype). The dot is flung, lands as the hanging period and bounces twice. Role, year, tagline and monogram set in; everything is locked by 14.0625; on beat 4 a tiny dot drops into the 'C.' monogram; the card holds."
+    }
+  ],
+  "grid": {
+    "bpm": 128,
+    "beat": 0.46875,
+    "bar": 1.875,
+    "eighth": 0.234375,
+    "sixteenth": 0.1171875,
+    "fps": 60,
+    "frames": 900,
+    "duration": 15.0,
+    "key": "F minor"
+  },
+  "scenes": [
+    {
+      "id": "s00-frame",
+      "name": "The Frame — persistent editorial HUD",
+      "start": 0.0,
+      "end": 15.0,
+      "z": 900,
+      "bg": "none (transparent)",
+      "frames": [
+        0,
+        899
+      ],
+      "musical": "1.1.1 → 8.4.4",
+      "length_beats": 32.0,
+      "showcases": [
+        "Swiss editorial system as art-direction glue",
+        "UI typography and odometer micro-interactions",
+        "rhythm made visible (a beat meter that lands on every kick)"
+      ],
+      "layout": [
+        "Drawn above every scene (z 900) and below the engine post-FX (so shake and zoom move it with the picture). Root has NO background.",
+        "All text: JetBrains Mono 500, 15 px, uppercase, letter-spacing 0.12em, opacity 0.9, colour = HUD colour (schedule below). Crisp: no filters; translate only.",
+        "Crop marks: four L-corners, arms 28 px, stroke 2 px, square caps; corner vertices at (32,32), (1888,32), (32,1048), (1888,1048); arms run inward along the frame edges.",
+        "TL: \"CLAUDE — MOTION DESIGNER\", left x=72, baseline 76 (≈259 px wide).",
+        "TR: \"SHOWREEL 2026\", right-aligned x=1848, baseline 76.",
+        "BL: chapter index \"NN / WORD\", left x=72, baseline 1016.",
+        "BR: timecode \"TC 00:00:SS:FF\" right-aligned x=1848, baseline 1016 (≈151 px wide); SS = floor(t), FF = floor(t·60) mod 60, zero-padded, pure function of t (last frame reads TC 00:00:14:59).",
+        "BR beat meter: four 10×10 squares with top y=1005, left x = 1614, 1630, 1646, 1662. The square at index floor(t/0.46875) mod 4 is filled Signal; the others are 1.5 px outlines in the HUD colour. On each bar downbeat the first square is Paper for 2 frames before turning Signal."
+      ],
+      "action": "[0.0–0.2] Crop marks draw from each vertex outward: arm = 28·swift(clamp((t + 1/60)/0.2)); frame 0 already shows ~45%. All labels are fully set on frame 0 (the hook needs no fade). [0.0] Chapter \"01 / WEIGHT\". [1.875] Chapter \"02 / TIMING\". On every change the digits roll up out of a one-line mask (0.117 s, swift, 2-frame stagger per digit) and the word re-types left→right at 1 char/frame. [3.75] Chapter \"03 / SPACE\". [5.15625] Chapter \"04 / EASING\". [7.03125–7.5] Letterbox bars (110 px, engine) cover the HUD for the breath. This is intended: the frame goes dark. [7.5] Chapter \"05 / ENERGY\" (changes as the bars snap out). [9.375] Chapter \"06 / RANGE\" (holds through the montage and the squeeze). [13.125–13.359375] TL, TR and BL texts wipe out left→right through a mask (whip). Crop marks, timecode and beat meter stay to the last frame. The BL slot is free for the s08 monogram. [14.53125–15.0] THE FULL BAR: the beat meter stops advancing and all four squares stay filled Signal to the end.",
+      "beats": [
+        {
+          "t": 0.0,
+          "t_end": 0.2,
+          "bar_beat": "1.1.1",
+          "frame": 0,
+          "what": "Crop marks draw from each vertex outward: arm = 28·swift(clamp((t + 1/60)/0.2)); frame 0 already shows ~45%. All labels are fully set on frame 0 (the hook needs no fade).",
+          "minor": false
+        },
+        {
+          "t": 0.0,
+          "t_end": null,
+          "bar_beat": "1.1.1",
+          "frame": 0,
+          "what": "Chapter \"01 / WEIGHT\".",
+          "minor": false
+        },
+        {
+          "t": 1.875,
+          "t_end": null,
+          "bar_beat": "2.1.1",
+          "frame": 113,
+          "what": "Chapter \"02 / TIMING\". On every change the digits roll up out of a one-line mask (0.117 s, swift, 2-frame stagger per digit) and the word re-types left→right at 1 char/frame.",
+          "minor": false
+        },
+        {
+          "t": 3.75,
+          "t_end": null,
+          "bar_beat": "3.1.1",
+          "frame": 225,
+          "what": "Chapter \"03 / SPACE\".",
+          "minor": false
+        },
+        {
+          "t": 5.15625,
+          "t_end": null,
+          "bar_beat": "3.4.1",
+          "frame": 310,
+          "what": "Chapter \"04 / EASING\".",
+          "minor": false
+        },
+        {
+          "t": 7.03125,
+          "t_end": 7.5,
+          "bar_beat": "4.4.1",
+          "frame": 422,
+          "what": "Letterbox bars (110 px, engine) cover the HUD for the breath. This is intended: the frame goes dark.",
+          "minor": false
+        },
+        {
+          "t": 7.5,
+          "t_end": null,
+          "bar_beat": "5.1.1",
+          "frame": 450,
+          "what": "Chapter \"05 / ENERGY\" (changes as the bars snap out).",
+          "minor": false
+        },
+        {
+          "t": 9.375,
+          "t_end": null,
+          "bar_beat": "6.1.1",
+          "frame": 563,
+          "what": "Chapter \"06 / RANGE\" (holds through the montage and the squeeze).",
+          "minor": false
+        },
+        {
+          "t": 13.125,
+          "t_end": 13.359375,
+          "bar_beat": "8.1.1",
+          "frame": 788,
+          "what": "TL, TR and BL texts wipe out left→right through a mask (whip). Crop marks, timecode and beat meter stay to the last frame. The BL slot is free for the s08 monogram.",
+          "minor": false
+        },
+        {
+          "t": 14.53125,
+          "t_end": 15.0,
+          "bar_beat": "8.4.1",
+          "frame": 872,
+          "what": "THE FULL BAR: the beat meter stops advancing and all four squares stay filled Signal to the end.",
+          "minor": false
+        }
+      ],
+      "on_screen_text": [
+        "CLAUDE — MOTION DESIGNER",
+        "SHOWREEL 2026",
+        "01 / WEIGHT … 06 / RANGE",
+        "TC 00:00:SS:FF"
+      ],
+      "handoff_in": "Present from frame 0. Crop marks mid-draw; all labels set.",
+      "handoff_out": "Final frame 899: crop marks (Paper), BR timecode \"TC 00:00:14:59\" and the beat meter with all four squares Signal. No TL/TR/BL text.",
+      "overlap_notes": "Spans the whole film on top of every scene. The montage captions (s06/s07, x=72, baseline 976) sit directly above the BL chapter line and are drawn by those scenes.",
+      "sound": "No sound of its own. The lit square must coincide with every kick: it is the visual metronome that proves picture and sound lock.",
+      "sfx": [],
+      "fx_cues_owned": [],
+      "build_risks": "Colour switches must happen on exact frames (use the schedule; no fades). Keep text crisp: no transforms except the odometer and wipe masks. Grid collisions: scenes keep critical content inside the safe area."
+    },
+    {
+      "id": "s01-axis",
+      "name": "Axis — LIGHT / HEAVY / NARROW / WIDE",
+      "start": 0.0,
+      "end": 1.875,
+      "z": 10,
+      "bg": "Ink",
+      "frames": [
+        0,
+        112
+      ],
+      "musical": "1.1.1 → 1.4.4",
+      "length_beats": 4.0,
+      "showcases": [
+        "variable-font weight AND width animation on the beat",
+        "self-describing kinetic typography",
+        "per-letter mask reveals and slot swaps",
+        "squash & stretch on type (volume preserved)",
+        "blueprint construction lines",
+        "birth of the protagonist"
+      ],
+      "layout": [
+        "Words: Archivo, Paper, one font-size FS1 for the whole scene, solved at setup so WIDE (wght 900, font-stretch 125%) has an ink width of exactly 1422 px (reference FS1 ≈ 422 px; flat cap 290 px). Baseline y=700; each word centred on x=960 by its INK box.",
+        "Reference ink widths at FS1: LIGHT (100/100%) ≈ 1166, HEAVY (900/100%) ≈ 1576, NARROW (900/62%) ≈ 1395, WIDE (900/125%) = 1422 → WIDE ink box x 249→1671.",
+        "Each letter lives in its own overflow-hidden slot whose bottom edge is baseline + 8 px, so letters can rise from and fall through the baseline. Precompute per-letter advances at setup for each word at 5 samples along each axis tween and interpolate (no layout reads in update).",
+        "Construction lines: Volt 1 px, full width, at the baseline (y=700) and at the live cap line y = 700 − 290·scaleY.",
+        "Axis readout: JetBrains Mono 500 16 px, Volt-light #718EF8, left x=96, baseline 16 px above the live cap line: \"wght 100   wdth 100\"; changed digits roll (odometer, 0.117 s)."
+      ],
+      "action": "[0.0–0.234375] Frame 0 is mid-motion. \"LIGHT\" at wght 100, font-stretch 100%. Letters rise out of the baseline mask (translateY 110%→0, swift, 0.28 s, 1-frame stagger L→R); the tween clock starts at t = −0.06, so frame 0 shows ~35% of every hairline letter. Construction lines shoot outward from x=960 to both edges (outCubic, 0→0.234). Readout types on 0.03→0.15. [0.234375–0.46875] LIGHT breathes: letter-spacing −0.01em → +0.02em (inOutSine), so nothing is ever static. [0.46875–0.69] THE HOOK SLAM (beat 2): wght 100→900 over 0.117 s (outExpo) on the LIGHT glyphs; at 0.52734375 each slot swaps glyph (old exits up 0→−110%, new enters from below 110%→0, 0.1 s, 1-frame stagger L→R) → \"HEAVY\". A local TIGHT scale spring 1.0→1.06→1.0 on top of the global zoom punch. Readout rolls to \"wght 900\". [0.9375–1.2] NARROW (beat 3): font-stretch 100%→62% over 0.117 s (outExpo) with volume-preserving stretch: scaleY 1.0→1.14 on a POP spring (peaks ≈1.18, settles 1.14 by 1.2). Slots re-flow 5→6: old letters collapse to zero slot width while new letters slide in horizontally through their masks, staggered from the centre outward (1 frame). The cap construction line rides up to y≈369. Readout \"wdth 62\". [1.40625–1.640625] WIDE (beat 4): font-stretch 62%→125% over 0.117 s (outExpo) with squash: scaleY 1.14→0.92 then springs to 1.0 (overshoot 1.03, settled by 1.64). Slots 6→4. WIDE at rest: ink box x 249→1671, y 410→700. Readout \"wdth 125\". [1.640625–1.7578125] THE DOT IS BORN (and-of-4): Signal disc Ø88 centred (1731,656), its bottom on the baseline and its left edge 16 px right of WIDE's ink: a hanging full stop, \"WIDE.\". Scale 0→1.3→1.0 (outBack, 0.117 s). Absolute position; it does not depend on font measurement. [1.7578125–1.8528] Exit (last 16th): WIDE's letters drop through the baseline mask (0→110%, inCubic, 0.07 s each, stagger 1/120 s right→left starting at E; all gone by 1.853). Construction lines retract toward (1731,656) (inCubic, done 1.8411). Readout wipes out. [1.8417–1.875] REST POSE: Ink, only the dot.",
+      "beats": [
+        {
+          "t": 0.0,
+          "t_end": 0.234375,
+          "bar_beat": "1.1.1",
+          "frame": 0,
+          "what": "Frame 0 is mid-motion. \"LIGHT\" at wght 100, font-stretch 100%. Letters rise out of the baseline mask (translateY 110%→0, swift, 0.28 s, 1-frame stagger L→R); the tween clock starts at t = −0.06, so frame 0 shows ~35% of every hairline letter. Construction lines shoot outward from x=960 to both edges (outCubic, 0→0.234). Readout types on 0.03→0.15.",
+          "minor": false
+        },
+        {
+          "t": 0.234375,
+          "t_end": 0.46875,
+          "bar_beat": "1.1.3",
+          "frame": 15,
+          "what": "LIGHT breathes: letter-spacing −0.01em → +0.02em (inOutSine), so nothing is ever static.",
+          "minor": false
+        },
+        {
+          "t": 0.46875,
+          "t_end": 0.69,
+          "bar_beat": "1.2.1",
+          "frame": 29,
+          "what": "THE HOOK SLAM (beat 2): wght 100→900 over 0.117 s (outExpo) on the LIGHT glyphs; at 0.52734375 each slot swaps glyph (old exits up 0→−110%, new enters from below 110%→0, 0.1 s, 1-frame stagger L→R) → \"HEAVY\". A local TIGHT scale spring 1.0→1.06→1.0 on top of the global zoom punch. Readout rolls to \"wght 900\".",
+          "minor": false
+        },
+        {
+          "t": 0.9375,
+          "t_end": 1.2,
+          "bar_beat": "1.3.1",
+          "frame": 57,
+          "what": "NARROW (beat 3): font-stretch 100%→62% over 0.117 s (outExpo) with volume-preserving stretch: scaleY 1.0→1.14 on a POP spring (peaks ≈1.18, settles 1.14 by 1.2). Slots re-flow 5→6: old letters collapse to zero slot width while new letters slide in horizontally through their masks, staggered from the centre outward (1 frame). The cap construction line rides up to y≈369. Readout \"wdth 62\".",
+          "minor": false
+        },
+        {
+          "t": 1.40625,
+          "t_end": 1.640625,
+          "bar_beat": "1.4.1",
+          "frame": 85,
+          "what": "WIDE (beat 4): font-stretch 62%→125% over 0.117 s (outExpo) with squash: scaleY 1.14→0.92 then springs to 1.0 (overshoot 1.03, settled by 1.64). Slots 6→4. WIDE at rest: ink box x 249→1671, y 410→700. Readout \"wdth 125\".",
+          "minor": false
+        },
+        {
+          "t": 1.640625,
+          "t_end": 1.7578125,
+          "bar_beat": "1.4.3",
+          "frame": 99,
+          "what": "THE DOT IS BORN (and-of-4): Signal disc Ø88 centred (1731,656), its bottom on the baseline and its left edge 16 px right of WIDE's ink: a hanging full stop, \"WIDE.\". Scale 0→1.3→1.0 (outBack, 0.117 s). Absolute position; it does not depend on font measurement.",
+          "minor": false
+        },
+        {
+          "t": 1.7578125,
+          "t_end": 1.8528,
+          "bar_beat": "1.4.4",
+          "frame": 106,
+          "what": "Exit (last 16th): WIDE's letters drop through the baseline mask (0→110%, inCubic, 0.07 s each, stagger 1/120 s right→left starting at E; all gone by 1.853). Construction lines retract toward (1731,656) (inCubic, done 1.8411). Readout wipes out.",
+          "minor": false
+        },
+        {
+          "t": 1.8417,
+          "t_end": 1.875,
+          "bar_beat": "1.4.4",
+          "frame": 111,
+          "what": "REST POSE: Ink, only the dot.",
+          "minor": false
+        }
+      ],
+      "on_screen_text": [
+        "LIGHT",
+        "HEAVY",
+        "NARROW",
+        "WIDE",
+        ".",
+        "wght 100 → wght 900",
+        "wdth 100 → wdth 62 → wdth 125"
+      ],
+      "handoff_in": "Film start. Ink. Nothing inherited.",
+      "handoff_out": "@1.875 (rest from 1.8417): Ink #0B0B0F; exactly one element, a flat Signal disc Ø88 centred (1731,656), scale 1, no squash, no rotation. No lines, no text.",
+      "overlap_notes": "None. Hard handoff on a shared still frame (the lone dot).",
+      "sound": "Bar 1 is a cold open: hits only, no groove. 0.000 impact (kick + sub F1 + 20 ms noise transient) under a very quiet high-passed bed of glassy 16th plucks (F5 Ab5 C6 F6) for LIGHT. 0.46875 the SLAM: kick + clap + distorted sub + low tom + short room. 0.9375 a 'squeeze' stab (band-passed saw chord bending down 5 semitones over 0.1 s). 1.40625 a wide 7-voice detuned supersaw Fm stab with a reverse-cymbal tail. 1.640625 the dot's 'bloop' (sine 400→1200 Hz, 60 ms). 1.7578 a short falling whoosh.",
+      "sfx": [
+        {
+          "t": 0.0,
+          "type": "impact",
+          "opts": {
+            "amt": 0.8,
+            "tone": "sub"
+          },
+          "note": "cold open"
+        },
+        {
+          "t": 0.0,
+          "type": "shimmer",
+          "opts": {
+            "dur": 0.46875,
+            "amt": 0.3
+          },
+          "note": "glassy LIGHT bed"
+        },
+        {
+          "t": 0.46875,
+          "type": "impact",
+          "opts": {
+            "amt": 1.0
+          },
+          "note": "HEAVY slam"
+        },
+        {
+          "t": 0.9375,
+          "type": "swish",
+          "opts": {
+            "amt": 0.5
+          },
+          "note": "NARROW squeeze"
+        },
+        {
+          "t": 1.40625,
+          "type": "impact",
+          "opts": {
+            "amt": 0.55
+          },
+          "note": "WIDE stab"
+        },
+        {
+          "t": 1.640625,
+          "type": "pop",
+          "opts": {
+            "pitch": 2.0
+          },
+          "note": "the dot is born"
+        },
+        {
+          "t": 1.7578125,
+          "type": "whoosh",
+          "opts": {
+            "dur": 0.1171875,
+            "dir": "down"
+          },
+          "note": "letters drop"
+        }
+      ],
+      "fx_cues_owned": [
+        0.0,
+        0.0,
+        0.46875,
+        0.46875,
+        0.9375,
+        1.40625,
+        1.40625
+      ],
+      "build_risks": "font-stretch changes glyph advances every frame: position slots from precomputed advances, never from per-frame layout reads. Slot counts change 5→6→4 (zero-width collapse). Keep font-stretch within 62–125% and express overshoot with scaleX/scaleY only. Wait for document.fonts before measuring FS1.",
+      "handoff_out_state": {
+        "t": 1.875,
+        "rest_from": 1.8417,
+        "bg": "#0B0B0F",
+        "elements": [
+          {
+            "kind": "disc",
+            "color": "#FF4A1C",
+            "cx": 1731,
+            "cy": 656,
+            "d": 88,
+            "scale": 1,
+            "rotation": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "s02-timing",
+      "name": "Timing — the dot learns to move",
+      "start": 1.875,
+      "end": 3.75,
+      "z": 20,
+      "bg": "Ink",
+      "frames": [
+        113,
+        224
+      ],
+      "musical": "2.1.1 → 2.4.4",
+      "length_beats": 4.0,
+      "showcases": [
+        "character animation with the 12 principles (anticipation, squash & stretch, arcs, slow in/out, follow-through, timing)",
+        "decaying bounce rhythm mapped to the grid (3 16ths → 8th → 8th → 16th)",
+        "animator notation: onion skins, motion-path arcs, spacing ticks, principle labels",
+        "editorial serif kinetic type stamped into existence by impacts; type that takes the hit",
+        "exponential dive into the dot"
+      ],
+      "layout": [
+        "Ground line: Fog 1.5 px @40% at y=780, drawing outward from x=1731 to both edges 1.875→2.109 (swift).",
+        "Sentence \"Timing is everything\" (the dot is its period): Instrument Serif italic 200 px, Paper, baseline 780, placed so its ink starts at x=200. Reference ink boxes (measure at setup): Timing 200→741 (centre 470), is 765→882 (centre 823), everything 917→1699 (centre 1308). Words are invisible until stamped: each letter scales from scaleY 0 anchored at the baseline (no mask, so descenders are safe).",
+        "Dot: Signal Ø88 (r 44). Grounded pose = bottom on y=780 (centre y 736).",
+        "Hops are analytic: x linear in time, y(τ) = y0 + (y1−y0)·τ − 4h·τ(1−τ), τ ∈ [0,1] over the hop window. Stretch 1.25 along / 0.8 across the velocity in flight; squash anchored at the contact point on landing.",
+        "Notation: JetBrains Mono 500 14 px uppercase Volt-light #718EF8 labels with 1 px Volt leader lines. Onion skins: Fog 1.5 px outline circles Ø88 at the analytic positions for t − 2k/60 (k = 1..6), opacity 0.45→0.08. Motion path: Volt 2 px dashed (8 on / 10 off) parabola, drawn 0.06 s ahead of the dot."
+      ],
+      "action": "[1.875–1.9921875] ANTICIPATION (one 16th): the dot squashes to scaleX 1.3 / scaleY 0.77 anchored at its bottom (y=700) and leans left (skewX 8°). Label \"ANTICIPATION\" right-aligned at (1700, baseline 596), leader to the top of the dot. [1.9921875–2.34375] LEAP (three 16ths): arc from (1731,656) to (470,736), y0 656, y1 736, h = 445.1 (apex y≈250 near τ 0.48). Stretched along velocity; onion skins and the dashed path show the arc. Label \"ARCS\" centred at (1110, baseline 222). [2.34375–2.578125] LAND 1 on the snare, on \"Timing\": 2-frame squash 1.5 × 0.667 at the contact point; Paper 1.5 px impact ring r 44→140 fading over 0.2 s. \"Timing\" erupts: per-letter scaleY 0→1.12→1 from the baseline (POP), 1-frame stagger outward from the impact x. The word takes the hit: whole-word scaleY 0.94 at impact, recovering on TIGHT. Label \"SQUASH & STRETCH\" centred at (470, baseline 560). Rebound hop to \"is\": (470,736)→(823,736), h = 266 (apex 470). [2.578125–2.8125] LAND 2 on \"is\": squash 1.4 × 0.71; \"is\" erupts. Label \"SLOW IN / SLOW OUT\" centred at (646, baseline 412) above a Volt spacing chart: small ticks along the hop arc at the dot's positions every 2 frames, bunched at the apex. Hop to \"everything\": (823,736)→(1308,736), h = 216 (apex 520). [2.8125–2.9296875] LAND 3 on beat 3: \"everything\" erupts as a ripple both ways from the impact (1 frame per letter). 16th hop to the full-stop position (1759,736) (ink right edge of \"everything\" + 60), h = 96 (apex 640). [2.9296875–3.046875] THE FULL STOP LANDS (2.9297): squash 1.3 × 0.77, then a micro-hop in place, h = 36 (apex 700), landing 3.0469. Labels ANTICIPATION, ARCS, SQUASH & STRETCH and SLOW IN / SLOW OUT fade out 2.9297→3.0469; \"FOLLOW-THROUGH\" appears centred at (1759, baseline 640). [3.046875–3.1640625] Settle wobble on WOBBLE: scale 1.06 × 0.95 decaying to 1. Onion skins and paths gone by 3.1. \"FOLLOW-THROUGH\" fades 3.164→3.281. The sentence reads \"Timing is everything.\" cleanly from ≈2.95 to 3.52 (≥0.56 s). [3.28125–3.3984375] Beat 4: the dot NOTICES THE CAMERA. Anticipation toward the viewer: uniform scale 1→0.85 (inOutSine, 0.117 s), held; a single Paper 1 px outline pulse r 44→70 fading. [3.515625–3.7167] THE DIVE: the dot flies at the camera. u = t − 3.515625; radius R(u) = 37.4·e^(18u); centre = lerp((1759,736), (960,540), inOutCubic(min(1, u/0.1875))). The sentence layer scales 1→2.2 about the dot (inExpo) and blurs 0→6 px (CSS blur on this small layer only). Reference radii: frame 219 R 420, frame 221 R 765, frame 222 R 1033, frame 223 R 1395 (the frame is covered; the corner distance is 1101.5). [3.7167–3.75] REST POSE (frames 223–224): 2D override, the whole frame flat Signal #FF4A1C. Nothing else.",
+      "beats": [
+        {
+          "t": 1.875,
+          "t_end": 1.9921875,
+          "bar_beat": "2.1.1",
+          "frame": 113,
+          "what": "ANTICIPATION (one 16th): the dot squashes to scaleX 1.3 / scaleY 0.77 anchored at its bottom (y=700) and leans left (skewX 8°). Label \"ANTICIPATION\" right-aligned at (1700, baseline 596), leader to the top of the dot.",
+          "minor": false
+        },
+        {
+          "t": 1.9921875,
+          "t_end": 2.34375,
+          "bar_beat": "2.1.2",
+          "frame": 120,
+          "what": "LEAP (three 16ths): arc from (1731,656) to (470,736), y0 656, y1 736, h = 445.1 (apex y≈250 near τ 0.48). Stretched along velocity; onion skins and the dashed path show the arc. Label \"ARCS\" centred at (1110, baseline 222).",
+          "minor": false
+        },
+        {
+          "t": 2.34375,
+          "t_end": 2.578125,
+          "bar_beat": "2.2.1",
+          "frame": 141,
+          "what": "LAND 1 on the snare, on \"Timing\": 2-frame squash 1.5 × 0.667 at the contact point; Paper 1.5 px impact ring r 44→140 fading over 0.2 s. \"Timing\" erupts: per-letter scaleY 0→1.12→1 from the baseline (POP), 1-frame stagger outward from the impact x. The word takes the hit: whole-word scaleY 0.94 at impact, recovering on TIGHT. Label \"SQUASH & STRETCH\" centred at (470, baseline 560). Rebound hop to \"is\": (470,736)→(823,736), h = 266 (apex 470).",
+          "minor": false
+        },
+        {
+          "t": 2.578125,
+          "t_end": 2.8125,
+          "bar_beat": "2.2.3",
+          "frame": 155,
+          "what": "LAND 2 on \"is\": squash 1.4 × 0.71; \"is\" erupts. Label \"SLOW IN / SLOW OUT\" centred at (646, baseline 412) above a Volt spacing chart: small ticks along the hop arc at the dot's positions every 2 frames, bunched at the apex. Hop to \"everything\": (823,736)→(1308,736), h = 216 (apex 520).",
+          "minor": false
+        },
+        {
+          "t": 2.8125,
+          "t_end": 2.9296875,
+          "bar_beat": "2.3.1",
+          "frame": 169,
+          "what": "LAND 3 on beat 3: \"everything\" erupts as a ripple both ways from the impact (1 frame per letter). 16th hop to the full-stop position (1759,736) (ink right edge of \"everything\" + 60), h = 96 (apex 640).",
+          "minor": false
+        },
+        {
+          "t": 2.9296875,
+          "t_end": 3.046875,
+          "bar_beat": "2.3.2",
+          "frame": 176,
+          "what": "THE FULL STOP LANDS (2.9297): squash 1.3 × 0.77, then a micro-hop in place, h = 36 (apex 700), landing 3.0469. Labels ANTICIPATION, ARCS, SQUASH & STRETCH and SLOW IN / SLOW OUT fade out 2.9297→3.0469; \"FOLLOW-THROUGH\" appears centred at (1759, baseline 640).",
+          "minor": false
+        },
+        {
+          "t": 3.046875,
+          "t_end": 3.1640625,
+          "bar_beat": "2.3.3",
+          "frame": 183,
+          "what": "Settle wobble on WOBBLE: scale 1.06 × 0.95 decaying to 1. Onion skins and paths gone by 3.1. \"FOLLOW-THROUGH\" fades 3.164→3.281. The sentence reads \"Timing is everything.\" cleanly from ≈2.95 to 3.52 (≥0.56 s).",
+          "minor": false
+        },
+        {
+          "t": 3.28125,
+          "t_end": 3.3984375,
+          "bar_beat": "2.4.1",
+          "frame": 197,
+          "what": "Beat 4: the dot NOTICES THE CAMERA. Anticipation toward the viewer: uniform scale 1→0.85 (inOutSine, 0.117 s), held; a single Paper 1 px outline pulse r 44→70 fading.",
+          "minor": false
+        },
+        {
+          "t": 3.515625,
+          "t_end": 3.7167,
+          "bar_beat": "2.4.3",
+          "frame": 211,
+          "what": "THE DIVE: the dot flies at the camera. u = t − 3.515625; radius R(u) = 37.4·e^(18u); centre = lerp((1759,736), (960,540), inOutCubic(min(1, u/0.1875))). The sentence layer scales 1→2.2 about the dot (inExpo) and blurs 0→6 px (CSS blur on this small layer only). Reference radii: frame 219 R 420, frame 221 R 765, frame 222 R 1033, frame 223 R 1395 (the frame is covered; the corner distance is 1101.5).",
+          "minor": false
+        },
+        {
+          "t": 3.7167,
+          "t_end": 3.75,
+          "bar_beat": "2.4.4",
+          "frame": 224,
+          "what": "REST POSE (frames 223–224): 2D override, the whole frame flat Signal #FF4A1C. Nothing else.",
+          "minor": false
+        }
+      ],
+      "on_screen_text": [
+        "Timing is everything.",
+        "ANTICIPATION",
+        "ARCS",
+        "SQUASH & STRETCH",
+        "SLOW IN / SLOW OUT",
+        "FOLLOW-THROUGH"
+      ],
+      "handoff_in": "Identical to s01 out: Ink, Signal disc Ø88 at (1731,656), at rest.",
+      "handoff_out": "@3.75 (rest from 3.7167): 100% flat Signal #FF4A1C, full frame. Nothing else.",
+      "overlap_notes": "None. s03 opens on the identical solid-Signal frame.",
+      "sound": "The groove starts at 1.875: four-on-the-floor kick, off-8th closed hats, sub bass in 8ths (F1 F1 Ab1 C2), clap on 2.34375 and 3.28125 (the first landing IS the clap). Character foley: an anticipation 'stretch' (sine bending up an octave over 0.12 s) at 1.875; a leap whoosh panned right→left from 1.99; woody marimba plucks with a soft thud per landing climbing the F-minor triad (F4 2.34375, Ab4 2.578125, C5 2.8125, F5 2.9297 for the full stop); tiny ticks for the micro-hop; a soft 'blink' click at 3.28125; a reverse swell sucked into the bar-3 downbeat.",
+      "sfx": [
+        {
+          "t": 1.875,
+          "type": "blip",
+          "opts": {
+            "pitch": 0.5
+          },
+          "note": "anticipation stretch"
+        },
+        {
+          "t": 1.9921875,
+          "type": "whoosh",
+          "opts": {
+            "dur": 0.3515625,
+            "dir": "up"
+          },
+          "note": "leap (lands 2.34375)"
+        },
+        {
+          "t": 2.34375,
+          "type": "pop",
+          "opts": {
+            "pitch": 1.0
+          },
+          "note": "land 1, F4"
+        },
+        {
+          "t": 2.578125,
+          "type": "pop",
+          "opts": {
+            "pitch": 1.189
+          },
+          "note": "land 2, Ab4"
+        },
+        {
+          "t": 2.8125,
+          "type": "pop",
+          "opts": {
+            "pitch": 1.498
+          },
+          "note": "land 3, C5"
+        },
+        {
+          "t": 2.9296875,
+          "type": "pop",
+          "opts": {
+            "pitch": 2.0
+          },
+          "note": "full stop, F5"
+        },
+        {
+          "t": 3.046875,
+          "type": "tick",
+          "opts": {
+            "pitch": 2.0
+          },
+          "note": "micro-hop"
+        },
+        {
+          "t": 3.28125,
+          "type": "click",
+          "opts": {
+            "pitch": 1.2
+          },
+          "note": "notices the camera"
+        },
+        {
+          "t": 3.515625,
+          "type": "reverse",
+          "opts": {
+            "dur": 0.234375
+          },
+          "note": "dive, lands 3.75"
+        }
+      ],
+      "fx_cues_owned": [
+        2.34375,
+        2.8125,
+        3.515625
+      ],
+      "build_risks": "Arcs and onion skins are the same analytic path sampled at earlier times, never stored history. Italic overhang makes word boxes lie: measure ink bounds for landing targets at setup. The dive must use the 2D override from frame 223 so no disc edge can survive into s03.",
+      "handoff_out_state": {
+        "t": 3.75,
+        "rest_from": 3.7167,
+        "bg": "#FF4A1C",
+        "elements": []
+      }
+    },
+    {
+      "id": "s03-space",
+      "name": "Space — the corridor",
+      "start": 3.75,
+      "end": 5.15625,
+      "z": 30,
+      "bg": "Ink",
+      "frames": [
+        225,
+        309
+      ],
+      "musical": "3.1.1 → 3.3.4",
+      "length_beats": 3.0,
+      "showcases": [
+        "CSS 3D architecture (perspective, preserve-3d) built from type",
+        "hinge/unfold transition from a flat colour field into depth",
+        "camera dolly and rush; rotational springs with overshoot on the beat",
+        "variable axes snapping inside 3D space",
+        "depth rings as a Swiss grid in perspective"
+      ],
+      "layout": [
+        "Scene root: perspective 1000px, perspective-origin 960px 540px. A \"world\" div (preserve-3d, transform-origin 960px 540px 0) with transform translateZ(D) rotateZ(roll).",
+        "Corridor cross-section: a square 1920×1920 centred on (960,540): x 0→1920, y −420→1500; depth z 0 (near) → −4200 (far).",
+        "Build ONE wall (the floor, the plane y=1500, 1920 wide × 4200 deep) and clone it three times, rotated about the corridor axis by 90°, 180° and 270°. This gives exact 4-fold symmetry, so every 90° roll lands on an identical corridor.",
+        "Each wall is 12 slabs of 350 px depth (hide a slab while its near edge z > 900 after the dolly; overlap slab seams by 2 px).",
+        "Wall surface: Signal, plus an Ink shading overlay graded along depth from 0% (near) to 70% (far, reads Signal-deep #541E13) whose opacity equals the unfold progress.",
+        "Depth rings: an Ink 4 px line across each wall at every slab boundary (11 per wall, forming concentric squares); labels \"03.1\"…\"03.12\" in JetBrains Mono 500 20 px Ink, 40 px in from each boundary's left end.",
+        "Wall type: \"SPACE\" in Archivo 440 px, Ink, two instances per wall starting at depths 150 and 2250, baseline parallel to the depth axis, reading near→far. Glyph tops point to screen-left on the floor (the clones carry the orientation round). Reference lengths: ≈1894 px at 900/125%, ≈1797 px at 100/125%, ≈1053 px at 900/62%.",
+        "Far wall: a Paper square 1920×1920 at z = −4200 with a Signal disc of world Ø56 at its centre (on screen Ø10.8 at scale 0.192 before the dolly)."
+      ],
+      "action": "[3.75] First frame: all four walls are folded flat into the screen plane (fold angle 0°), covering the frame in uniform Signal. Shading overlay, text and rings are at opacity 0. The frame is identical to s02's last frame. [3.75–4.21875] UNFOLD: each wall hinges on its near edge (floor about y=1500, ceiling y=−420, left x=0, right x=1920). Fold angle θ = 90°·spring(t − 3.75, HINGE), overshooting to ≈98° near 3.97 and settling by ≈4.17: a box unfolding into a corridor. Shading opacity = min(1, θ/90°). Text and rings fade 0→1 between 3.8671875 and 3.984375 (hides z-fighting while the walls are near-coplanar). The far Paper square and its dot show through the opening flaps from the first frames. [4.21875–4.6875] ROLL 1 on the snare: roll 0→90° (ROLL spring, ≈9% overshoot, settled ≈4.55). On the same frame every wall word snaps to wght 100 (hairline): a hard switch, no tween. DOLLY: D 0→1200 (glide) over 4.21875→4.6875. [4.6875–5.1229] ROLL 2 on beat 3: roll 90→180° (ROLL spring). Words snap to wght 900 + font-stretch 62%. RUSH: D 1200→4200 over 4.6875→5.1229 (whip / inExpo), bringing the far wall to scale 1. RING CHASE on every 16th (4.6875, 4.8046875, 4.921875, 5.0390625): a Paper pulse runs along the depth rings from the far wall toward the camera, one ring per frame, each ring Paper for 2 frames. [5.1229–5.15625] REST POSE (frames 308–309): 2D override that hides the 3D world and draws full-frame Paper + Signal disc Ø56 at (960,540). This is exact and independent of any 3D rounding or residual roll.",
+      "beats": [
+        {
+          "t": 3.75,
+          "t_end": null,
+          "bar_beat": "3.1.1",
+          "frame": 225,
+          "what": "First frame: all four walls are folded flat into the screen plane (fold angle 0°), covering the frame in uniform Signal. Shading overlay, text and rings are at opacity 0. The frame is identical to s02's last frame.",
+          "minor": false
+        },
+        {
+          "t": 3.75,
+          "t_end": 4.21875,
+          "bar_beat": "3.1.1",
+          "frame": 225,
+          "what": "UNFOLD: each wall hinges on its near edge (floor about y=1500, ceiling y=−420, left x=0, right x=1920). Fold angle θ = 90°·spring(t − 3.75, HINGE), overshooting to ≈98° near 3.97 and settling by ≈4.17: a box unfolding into a corridor. Shading opacity = min(1, θ/90°). Text and rings fade 0→1 between 3.8671875 and 3.984375 (hides z-fighting while the walls are near-coplanar). The far Paper square and its dot show through the opening flaps from the first frames.",
+          "minor": false
+        },
+        {
+          "t": 4.21875,
+          "t_end": 4.6875,
+          "bar_beat": "3.2.1",
+          "frame": 254,
+          "what": "ROLL 1 on the snare: roll 0→90° (ROLL spring, ≈9% overshoot, settled ≈4.55). On the same frame every wall word snaps to wght 100 (hairline): a hard switch, no tween. DOLLY: D 0→1200 (glide) over 4.21875→4.6875.",
+          "minor": false
+        },
+        {
+          "t": 4.6875,
+          "t_end": 5.1229,
+          "bar_beat": "3.3.1",
+          "frame": 282,
+          "what": "ROLL 2 on beat 3: roll 90→180° (ROLL spring). Words snap to wght 900 + font-stretch 62%. RUSH: D 1200→4200 over 4.6875→5.1229 (whip / inExpo), bringing the far wall to scale 1. RING CHASE on every 16th (4.6875, 4.8046875, 4.921875, 5.0390625): a Paper pulse runs along the depth rings from the far wall toward the camera, one ring per frame, each ring Paper for 2 frames.",
+          "minor": false
+        },
+        {
+          "t": 5.1229,
+          "t_end": 5.15625,
+          "bar_beat": "3.3.4",
+          "frame": 308,
+          "what": "REST POSE (frames 308–309): 2D override that hides the 3D world and draws full-frame Paper + Signal disc Ø56 at (960,540). This is exact and independent of any 3D rounding or residual roll.",
+          "minor": false
+        }
+      ],
+      "on_screen_text": [
+        "SPACE (×8, two per wall, in perspective)",
+        "03.1 … 03.12"
+      ],
+      "handoff_in": "@3.75: 100% flat Signal (s02 rest pose). Walls coplanar and flat on frame 225.",
+      "handoff_out": "@5.15625 (rest from 5.1229): full-frame Paper #F3F0EA; one flat Signal disc Ø56 centred (960,540). Nothing else.",
+      "overlap_notes": "None. Ends on beat 4 of bar 3 (a snare): the cut into the graph editor is an accent.",
+      "sound": "3.75 sub boom + a low 'door' whoosh (filtered noise sweeping down) as the box unfolds. The pad enters on Abmaj7 and moves to Eb at 4.6875; a 16th F-minor-pentatonic arp opens its filter across the bar. Roll 'clunks' (low tom + metallic click) on 4.21875 and 4.6875. Ring-chase ticks on 16ths from 4.6875, climbing. 4.6875→5.15625: an accelerating whoosh with a pitch riser, cut clean on 5.15625.",
+      "sfx": [
+        {
+          "t": 3.75,
+          "type": "impact",
+          "opts": {
+            "amt": 0.7,
+            "tone": "sub"
+          },
+          "note": "box unfolds"
+        },
+        {
+          "t": 3.75,
+          "type": "whoosh",
+          "opts": {
+            "dur": 0.3515625,
+            "dir": "down"
+          },
+          "note": "door"
+        },
+        {
+          "t": 4.21875,
+          "type": "swish",
+          "opts": {
+            "amt": 0.5
+          },
+          "note": "roll 1"
+        },
+        {
+          "t": 4.21875,
+          "type": "click",
+          "opts": {
+            "pitch": 0.5
+          },
+          "note": "roll 1 clunk"
+        },
+        {
+          "t": 4.6875,
+          "type": "swish",
+          "opts": {
+            "amt": 0.6
+          },
+          "note": "roll 2"
+        },
+        {
+          "t": 4.6875,
+          "type": "click",
+          "opts": {
+            "pitch": 0.5
+          },
+          "note": "roll 2 clunk"
+        },
+        {
+          "t": 4.6875,
+          "type": "tick",
+          "opts": {
+            "pitch": 1.0
+          },
+          "note": "ring chase"
+        },
+        {
+          "t": 4.8046875,
+          "type": "tick",
+          "opts": {
+            "pitch": 1.12
+          },
+          "note": "ring chase"
+        },
+        {
+          "t": 4.921875,
+          "type": "tick",
+          "opts": {
+            "pitch": 1.26
+          },
+          "note": "ring chase"
+        },
+        {
+          "t": 5.0390625,
+          "type": "tick",
+          "opts": {
+            "pitch": 1.5
+          },
+          "note": "ring chase"
+        },
+        {
+          "t": 4.6875,
+          "type": "whoosh",
+          "opts": {
+            "dur": 0.46875,
+            "dir": "up"
+          },
+          "note": "rush, lands 5.15625"
+        }
+      ],
+      "fx_cues_owned": [
+        3.75,
+        3.75,
+        4.21875,
+        4.6875,
+        4.921875,
+        4.921875,
+        5.0390625
+      ],
+      "build_risks": "preserve-3d with 4200-deep planes: slab culling near the camera, 2 px seam overlaps, and tiny distinct z offsets while coplanar. Never put a filter on the world or on a wall (filters flatten preserve-3d); blur leaf text layers only, if at all. Springs are closed-form. The 2D rest override makes the handoff exact. Fallback if Chromium clips badly: shorten the corridor to 3000 deep and rush to D = 3000.",
+      "handoff_out_state": {
+        "t": 5.15625,
+        "rest_from": 5.1229,
+        "bg": "#F3F0EA",
+        "elements": [
+          {
+            "kind": "disc",
+            "color": "#FF4A1C",
+            "cx": 960,
+            "cy": 540,
+            "d": 56,
+            "scale": 1,
+            "rotation": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "s04-easing",
+      "name": "Easing — the graph editor",
+      "start": 5.15625,
+      "end": 7.03125,
+      "z": 40,
+      "bg": "Paper",
+      "frames": [
+        310,
+        421
+      ],
+      "musical": "3.4.1 → 4.3.4",
+      "length_beats": 4.0,
+      "showcases": [
+        "UI/product micro-interactions (cursor travel, hover, press, drag, ripple, odometer, type-on)",
+        "motion tooling as subject: a live cubic-bezier editor whose overshoot leaves its box",
+        "easing literacy: spacing chart with ghosts and a real overshoot",
+        "variable-font width driven by an eased value",
+        "line draw-on / un-draw"
+      ],
+      "layout": [
+        "Paper background. Swiss 12-column hairlines (Fog 1 px at every column edge; margins 96, gutters 16) at 20% from 5.15625 to 5.2734375, then 8%.",
+        "LEFT, graph editor: plot square x 240→720, y 340→820 (480×480), origin (240,820); normalized (u,v) → px (240 + 480u, 820 − 480v). Axes Ink 2 px; inner 8×8 grid Fog 1 px @30%; labels JetBrains Mono 500 14 px Fog: \"TIME\" right-aligned at (720, baseline 848), \"VALUE\" rotated −90° centred at (212,580), \"0\" at (228,848), \"1\" at (716,848) and at (220,346).",
+        "Curve: Ink 5 px, round caps, P0 (240,820) → P3 (720,340). Handles: Volt 2 px lines P0→P1 and P3→P2; P1 and P2 are Signal 18×18 squares; P0 and P3 are Ink Ø12 discs. Initial curve cubic-bezier(0.70, 0.00, 0.20, 1.00): P1 = (576,820), P2 = (336,340).",
+        "Header: JetBrains Mono 500 26 px Ink, left x=240, baseline 900: \"cubic-bezier(0.70, 0.00, 0.20, 1.00)\".",
+        "RIGHT, preview: track Ink 2 px from (1040,400) to (1680,400), Ink 12 px end ticks, Fog 8 px ticks at every 1/8 (x = 1040 + 80k); Fog 14 px mono \"0\" and \"1\" centred under the ends (baseline 432).",
+        "\"EASE\": Archivo wght 800, 200 px, Ink, ink-left x=1040, baseline 700. font-stretch = (62 + 63·clamp(v,0,1))%; for v > 1 add scaleX = 1 + 0.5·(v − 1) (origin left). Reference ink width 360 px at 62% and 678 px at 125%.",
+        "Readout: JetBrains Mono 500 26 px Ink, left x=1040, baseline 770: \"v 0.00\" (tabular, 2 decimals).",
+        "Dot: Signal Ø56. Cursor: classic arrow 34 px tall, Ink fill, 2 px Paper outline, hotspot at the tip."
+      ],
+      "action": "[5.15625] First frame: Paper and the dot at (960,540) (s03 rest pose). Arrival flash cue 0.35. [5.15625–5.390625] The dot hops from (960,540) to the track start (1040,400) on a short arc (outBack) and lands with a 2-frame squash (1.25 × 0.8) on the line. Axes draw from the origin outward (swift); plot grid fades in; the track and ticks draw left→right from ≈5.2 (swift). [5.2–5.5167] Header types on at 2 chars/frame (37 chars) behind a 2 px Ink caret. [5.2734375–5.44921875] \"EASE\" rises out of a baseline mask at font-stretch 62% (swift); \"v 0.00\" types on. [5.2734375–5.5078125] Cursor enters from (1500,1140) on a quadratic curve (control (1180,420)) to P2 at (336,340) (glide). [5.5078125–5.625] HOVER: the P2 square scales 1→1.2 (swift), the anticipation of the press. [5.625–5.859375] PRESS on the bar-4 downbeat: cursor scale 0.9 for 3 frames; P2 1.2→0.9→1.0 (POP); a Signal 1.5 px ripple ring from P2 (r 9→48, fading 0.2 s). DRAG (inOutCubic): P2 (336,340) → (336,100), i.e. y1 1.00 → 1.50, dragged OUT of the plot box (no clipping). The curve redraws live and its top bulges above the box. The header's last number rolls odometer-style \"1.00\" → \"1.50\" (per-digit roll, 2-frame stagger). [5.859375–6.09375] RELEASE: cursor pop 1.05 for 2 frames, then it glides to (760,1000) and fades out 6.09→6.21. The header now reads \"cubic-bezier(0.70, 0.00, 0.20, 1.50)\". [6.09375–6.5625] PLAY on the snare, exactly one beat. x = (t − 6.09375)/0.46875; v = cubicBezier(0.70, 0, 0.20, 1.50)(x), solved like R.cubicBezier. Dot x = 1040 + 640·v (y 400). A Signal 2 px playhead sweeps the plot at X = 240 + 480x with a Signal Ø10 dot riding the curve. SPACING CHART: every 3 frames a Fog 1.5 px outline circle Ø56 is stamped at the dot's position and stays (reference x 1040, 1049, 1082, 1162, 1365, 1646, 1731, 1745, 1728, 1695): bunched at the start, flung through the middle, ghosts beyond the end. \"EASE\" stretches lock-step with v. The readout counts with v and flashes \"v 1.10\" in Signal for 3 frames at the peak (6.4357, v 1.102, dot x 1745). Track ticks pop (scale 1→1.6→1 over 4 frames) as the dot passes them: 6.2230, 6.2577, 6.2784, 6.2929, 6.3048, 6.3166, 6.3316 and the end tick at 6.3566. [6.5625–6.796875] HOLD on beat 3: the dot sits exactly at 1680 (v = 1). \"EASE\" is at full width and legible, the readout says \"v 1.00\", and the spacing chart is complete. [6.796875–6.9979] RETRACT: everything un-draws (reverse dash offset, inCubic). The curve and handles retract into P0, the axes into the origin and the track right→left. The header deletes right→left at 3 chars/frame, \"EASE\" wipes down through its mask (whip), the readout clears and the hairlines fade to 0. The ghosts slide into the dot like beads pulled on a string (inCubic, 1-frame stagger). The dot arcs from (1680,400) back to (960,540) (snap) and arrives at 6.9979. [6.9979–7.03125] REST POSE (frames 420–421): Paper and the dot Ø56 at (960,540).",
+      "beats": [
+        {
+          "t": 5.15625,
+          "t_end": null,
+          "bar_beat": "3.4.1",
+          "frame": 310,
+          "what": "First frame: Paper and the dot at (960,540) (s03 rest pose). Arrival flash cue 0.35.",
+          "minor": false
+        },
+        {
+          "t": 5.15625,
+          "t_end": 5.390625,
+          "bar_beat": "3.4.1",
+          "frame": 310,
+          "what": "The dot hops from (960,540) to the track start (1040,400) on a short arc (outBack) and lands with a 2-frame squash (1.25 × 0.8) on the line. Axes draw from the origin outward (swift); plot grid fades in; the track and ticks draw left→right from ≈5.2 (swift).",
+          "minor": false
+        },
+        {
+          "t": 5.2,
+          "t_end": 5.5167,
+          "bar_beat": "3.4.1",
+          "frame": 312,
+          "what": "Header types on at 2 chars/frame (37 chars) behind a 2 px Ink caret.",
+          "minor": true
+        },
+        {
+          "t": 5.2734375,
+          "t_end": 5.44921875,
+          "bar_beat": "3.4.2",
+          "frame": 317,
+          "what": "\"EASE\" rises out of a baseline mask at font-stretch 62% (swift); \"v 0.00\" types on.",
+          "minor": false
+        },
+        {
+          "t": 5.2734375,
+          "t_end": 5.5078125,
+          "bar_beat": "3.4.2",
+          "frame": 317,
+          "what": "Cursor enters from (1500,1140) on a quadratic curve (control (1180,420)) to P2 at (336,340) (glide).",
+          "minor": false
+        },
+        {
+          "t": 5.5078125,
+          "t_end": 5.625,
+          "bar_beat": "3.4.4",
+          "frame": 331,
+          "what": "HOVER: the P2 square scales 1→1.2 (swift), the anticipation of the press.",
+          "minor": false
+        },
+        {
+          "t": 5.625,
+          "t_end": 5.859375,
+          "bar_beat": "4.1.1",
+          "frame": 338,
+          "what": "PRESS on the bar-4 downbeat: cursor scale 0.9 for 3 frames; P2 1.2→0.9→1.0 (POP); a Signal 1.5 px ripple ring from P2 (r 9→48, fading 0.2 s). DRAG (inOutCubic): P2 (336,340) → (336,100), i.e. y1 1.00 → 1.50, dragged OUT of the plot box (no clipping). The curve redraws live and its top bulges above the box. The header's last number rolls odometer-style \"1.00\" → \"1.50\" (per-digit roll, 2-frame stagger).",
+          "minor": false
+        },
+        {
+          "t": 5.859375,
+          "t_end": 6.09375,
+          "bar_beat": "4.1.3",
+          "frame": 352,
+          "what": "RELEASE: cursor pop 1.05 for 2 frames, then it glides to (760,1000) and fades out 6.09→6.21. The header now reads \"cubic-bezier(0.70, 0.00, 0.20, 1.50)\".",
+          "minor": false
+        },
+        {
+          "t": 6.09375,
+          "t_end": 6.5625,
+          "bar_beat": "4.2.1",
+          "frame": 366,
+          "what": "PLAY on the snare, exactly one beat. x = (t − 6.09375)/0.46875; v = cubicBezier(0.70, 0, 0.20, 1.50)(x), solved like R.cubicBezier. Dot x = 1040 + 640·v (y 400). A Signal 2 px playhead sweeps the plot at X = 240 + 480x with a Signal Ø10 dot riding the curve. SPACING CHART: every 3 frames a Fog 1.5 px outline circle Ø56 is stamped at the dot's position and stays (reference x 1040, 1049, 1082, 1162, 1365, 1646, 1731, 1745, 1728, 1695): bunched at the start, flung through the middle, ghosts beyond the end. \"EASE\" stretches lock-step with v. The readout counts with v and flashes \"v 1.10\" in Signal for 3 frames at the peak (6.4357, v 1.102, dot x 1745). Track ticks pop (scale 1→1.6→1 over 4 frames) as the dot passes them: 6.2230, 6.2577, 6.2784, 6.2929, 6.3048, 6.3166, 6.3316 and the end tick at 6.3566.",
+          "minor": false
+        },
+        {
+          "t": 6.5625,
+          "t_end": 6.796875,
+          "bar_beat": "4.3.1",
+          "frame": 394,
+          "what": "HOLD on beat 3: the dot sits exactly at 1680 (v = 1). \"EASE\" is at full width and legible, the readout says \"v 1.00\", and the spacing chart is complete.",
+          "minor": false
+        },
+        {
+          "t": 6.796875,
+          "t_end": 6.9979,
+          "bar_beat": "4.3.3",
+          "frame": 408,
+          "what": "RETRACT: everything un-draws (reverse dash offset, inCubic). The curve and handles retract into P0, the axes into the origin and the track right→left. The header deletes right→left at 3 chars/frame, \"EASE\" wipes down through its mask (whip), the readout clears and the hairlines fade to 0. The ghosts slide into the dot like beads pulled on a string (inCubic, 1-frame stagger). The dot arcs from (1680,400) back to (960,540) (snap) and arrives at 6.9979.",
+          "minor": false
+        },
+        {
+          "t": 6.9979,
+          "t_end": 7.03125,
+          "bar_beat": "4.3.4",
+          "frame": 420,
+          "what": "REST POSE (frames 420–421): Paper and the dot Ø56 at (960,540).",
+          "minor": false
+        }
+      ],
+      "on_screen_text": [
+        "cubic-bezier(0.70, 0.00, 0.20, 1.00) → cubic-bezier(0.70, 0.00, 0.20, 1.50)",
+        "EASE",
+        "TIME",
+        "VALUE",
+        "0",
+        "1",
+        "v 0.00 → v 1.00 (peak v 1.10)"
+      ],
+      "handoff_in": "@5.15625: full-frame Paper, Signal disc Ø56 at (960,540) (s03 rest pose).",
+      "handoff_out": "@7.03125 (rest from 6.9979): full-frame Paper; one flat Signal disc Ø56 centred (960,540). Nothing else. s05 cuts the ground to Ink on frame 422 while the dot stays identical (a lights-out match cut).",
+      "overlap_notes": "None.",
+      "sound": "The drums thin to kick + rim on 2 and 4 + soft hats (UI lightness). 5.15625 a soft bloom chime; key ticks for the header; a faint air whoosh for the cursor; 5.625 the press is a crisp click plus a high 'tink' (on the kick); the drag is a sine glide rising a fifth; 5.859 a release pop; 6.09375 a pitched 'swoop' whose pitch follows v, including the overshoot bend; hat-like ticks as the dot passes the track ticks; from 6.5625 a snare roll (8ths, then 16ths from 6.797) with noise and saw risers; 6.797 a reverse zip for the retract. The tape-stop on 7.03125 belongs to s05.",
+      "sfx": [
+        {
+          "t": 5.15625,
+          "type": "blip",
+          "opts": {
+            "pitch": 2.0
+          },
+          "note": "arrival bloom"
+        },
+        {
+          "t": 5.2,
+          "type": "type",
+          "opts": {
+            "count": 19,
+            "dur": 0.3167
+          },
+          "note": "header typing"
+        },
+        {
+          "t": 5.625,
+          "type": "click",
+          "opts": {
+            "pitch": 1.0
+          },
+          "note": "press"
+        },
+        {
+          "t": 5.625,
+          "type": "tick",
+          "opts": {
+            "pitch": 3.0
+          },
+          "note": "tink"
+        },
+        {
+          "t": 5.625,
+          "type": "swish",
+          "opts": {
+            "amt": 0.25
+          },
+          "note": "drag glide"
+        },
+        {
+          "t": 5.859375,
+          "type": "pop",
+          "opts": {
+            "pitch": 1.5
+          },
+          "note": "release"
+        },
+        {
+          "t": 6.09375,
+          "type": "whoosh",
+          "opts": {
+            "dur": 0.46875,
+            "dir": "up"
+          },
+          "note": "play swoop"
+        },
+        {
+          "t": 6.223,
+          "type": "tick",
+          "opts": {
+            "pitch": 1.0
+          },
+          "note": "tick 1/8"
+        },
+        {
+          "t": 6.2577,
+          "type": "tick",
+          "opts": {
+            "pitch": 1.06
+          },
+          "note": "tick 2/8"
+        },
+        {
+          "t": 6.2784,
+          "type": "tick",
+          "opts": {
+            "pitch": 1.12
+          },
+          "note": "tick 3/8"
+        },
+        {
+          "t": 6.2929,
+          "type": "tick",
+          "opts": {
+            "pitch": 1.19
+          },
+          "note": "tick 4/8"
+        },
+        {
+          "t": 6.3048,
+          "type": "tick",
+          "opts": {
+            "pitch": 1.26
+          },
+          "note": "tick 5/8"
+        },
+        {
+          "t": 6.3166,
+          "type": "tick",
+          "opts": {
+            "pitch": 1.33
+          },
+          "note": "tick 6/8"
+        },
+        {
+          "t": 6.3316,
+          "type": "tick",
+          "opts": {
+            "pitch": 1.41
+          },
+          "note": "tick 7/8"
+        },
+        {
+          "t": 6.3566,
+          "type": "tick",
+          "opts": {
+            "pitch": 1.5
+          },
+          "note": "end tick"
+        },
+        {
+          "t": 6.5625,
+          "type": "riser",
+          "opts": {
+            "dur": 0.46875
+          },
+          "note": "build into the tape-stop"
+        },
+        {
+          "t": 6.796875,
+          "type": "reverse",
+          "opts": {
+            "dur": 0.1875
+          },
+          "note": "retract zip"
+        }
+      ],
+      "fx_cues_owned": [
+        5.15625,
+        5.625
+      ],
+      "build_risks": "Solve the bezier exactly like R.cubicBezier (Newton + bisection) so the preview matches the plotted curve. The curve bulge above y=340 must not be clipped. Ghosts and tick times are analytic (positions at play start + 3k/60). The cursor path is a pure function of t.",
+      "handoff_out_state": {
+        "t": 7.03125,
+        "rest_from": 6.9979,
+        "bg": "#F3F0EA",
+        "elements": [
+          {
+            "kind": "disc",
+            "color": "#FF4A1C",
+            "cx": 960,
+            "cy": 540,
+            "d": 56,
+            "scale": 1,
+            "rotation": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "s05-energy",
+      "name": "Energy — breath, drop, chaos into RANGE",
+      "start": 7.03125,
+      "end": 9.375,
+      "z": 50,
+      "bg": "Ink",
+      "frames": [
+        422,
+        562
+      ],
+      "musical": "4.4.1 → 5.4.4",
+      "length_beats": 5.0,
+      "showcases": [
+        "macro anticipation: a one-beat held breath before the drop",
+        "generative particle system (12k Canvas 2D particles, curl noise, vortices, streaks)",
+        "shockwave",
+        "emergent typography: chaos snapping into a Swiss dot-matrix",
+        "whip-pan exit on a shared camera function"
+      ],
+      "layout": [
+        "One full-frame canvas on Ink. Letterbox (110 px) comes from the engine cue; never draw bars.",
+        "Particles: 12,000; colours 64% Signal (source-over), 22% Paper and 11% Volt (both \"lighter\", capped alpha 0.8), 3% Acid. Drawn as velocity-aligned streaks, length |v|/60 × 1.5 (min 1.5 px), width 1.5–3 px, batched into one path per colour.",
+        "Simulation: R.sim with dt 1/120 from 7.5, deterministic seeds. Radial launch 700–2800 px/s (exponential distribution) plus 12% tangential swirl; drag 2.2/s; curl-noise advection from R.noise3 (scale 0.0022, time 0.35, strength 380 px/s); two counter-rotating vortex fields centred (640,540) and (1280,540), tangential 520 px/s × exp(−d/420).",
+        "RANGE targets: R.textPoints(\"RANGE\", {weight 900, stretch \"expanded\", size ≈326, x 960, y 540, step 5}), with the size solved so the ink width is 1520 (x 200→1720, cap ≈224), giving ≈7,000 targets. Assign particles to targets by sorting both by angle around (960,540), so the paths swirl coherently.",
+        "Shared whip function (also used by s06): u = (t − 9.140625)/0.234375, P(t) = 1920·inOutCubic(u). s05 content x-offset = −P(t)."
+      ],
+      "action": "[7.03125] LIGHTS OUT (hard cut, beat 4): Ink, the dot Ø56 at (960,540) identical to s04's last frame. Letterbox snaps in (engine). [7.03125–7.5] THE BREATH: the dot compresses Ø56→Ø26 (inCubic) with a growing tremble (R.wiggle ≈40 Hz, amplitude 0→3 px). A thin Signal 2 px ring implodes from Ø1400 to Ø26 (inQuart), arriving at 7.44140625 (one 32nd before the drop), trailed by 3 fainter Fog 1 px rings at 1-frame delays (alpha 0.5, 0.35, 0.2). From 7.4414 to 7.5 the dot holds at Ø26, trembling. [7.5–7.96875] THE DROP: the dot detonates into 12,000 particles (all spawned inside the Ø26 disc). A Paper 3 px shockwave ring r 0→1500 (outQuart, 0.35 s, alpha 1→0). The particles bloom outward and curl into the two counter-rotating vortices. [7.96875–8.4375] Beat 2: a second impulse, every particle kicked radially outward from (960,540) by +600 px/s. The frame breathes. [8.4375–8.55] ORDER FROM CHAOS on beat 3: particles spring to their RANGE targets (SOFT spring from each particle's cached state at its start time; start delay 0–0.117 s proportional to distance). On arrival (progress > 0.95) each lerps over 4 frames into a 3×3 px Paper square at its target, so by ≈8.55 the letters read as a crisp dot-matrix. The ≈5,000 spare particles keep orbiting as a low Signal/Volt haze (alpha 0.3) behind. Letter squares jitter ±1 px (R.noise2 per target, 12 Hz). [8.4375–9.140625] \"RANGE\" holds, legible for 0.70 s. [9.140625–9.375] WHIP (and-of-4): the whole layer translates x = −P(t); streak length grows by |P'(t)|/60 × 1.2 (up to ≈200 px) as horizontal motion blur. Fully off-screen at 9.375. s06 enters on top along the same curve.",
+      "beats": [
+        {
+          "t": 7.03125,
+          "t_end": null,
+          "bar_beat": "4.4.1",
+          "frame": 422,
+          "what": "LIGHTS OUT (hard cut, beat 4): Ink, the dot Ø56 at (960,540) identical to s04's last frame. Letterbox snaps in (engine).",
+          "minor": false
+        },
+        {
+          "t": 7.03125,
+          "t_end": 7.5,
+          "bar_beat": "4.4.1",
+          "frame": 422,
+          "what": "THE BREATH: the dot compresses Ø56→Ø26 (inCubic) with a growing tremble (R.wiggle ≈40 Hz, amplitude 0→3 px). A thin Signal 2 px ring implodes from Ø1400 to Ø26 (inQuart), arriving at 7.44140625 (one 32nd before the drop), trailed by 3 fainter Fog 1 px rings at 1-frame delays (alpha 0.5, 0.35, 0.2). From 7.4414 to 7.5 the dot holds at Ø26, trembling.",
+          "minor": false
+        },
+        {
+          "t": 7.5,
+          "t_end": 7.96875,
+          "bar_beat": "5.1.1",
+          "frame": 450,
+          "what": "THE DROP: the dot detonates into 12,000 particles (all spawned inside the Ø26 disc). A Paper 3 px shockwave ring r 0→1500 (outQuart, 0.35 s, alpha 1→0). The particles bloom outward and curl into the two counter-rotating vortices.",
+          "minor": false
+        },
+        {
+          "t": 7.96875,
+          "t_end": 8.4375,
+          "bar_beat": "5.2.1",
+          "frame": 479,
+          "what": "Beat 2: a second impulse, every particle kicked radially outward from (960,540) by +600 px/s. The frame breathes.",
+          "minor": false
+        },
+        {
+          "t": 8.4375,
+          "t_end": 8.55,
+          "bar_beat": "5.3.1",
+          "frame": 507,
+          "what": "ORDER FROM CHAOS on beat 3: particles spring to their RANGE targets (SOFT spring from each particle's cached state at its start time; start delay 0–0.117 s proportional to distance). On arrival (progress > 0.95) each lerps over 4 frames into a 3×3 px Paper square at its target, so by ≈8.55 the letters read as a crisp dot-matrix. The ≈5,000 spare particles keep orbiting as a low Signal/Volt haze (alpha 0.3) behind. Letter squares jitter ±1 px (R.noise2 per target, 12 Hz).",
+          "minor": false
+        },
+        {
+          "t": 8.4375,
+          "t_end": 9.140625,
+          "bar_beat": "5.3.1",
+          "frame": 507,
+          "what": "\"RANGE\" holds, legible for 0.70 s.",
+          "minor": false
+        },
+        {
+          "t": 9.140625,
+          "t_end": 9.375,
+          "bar_beat": "5.4.3",
+          "frame": 549,
+          "what": "WHIP (and-of-4): the whole layer translates x = −P(t); streak length grows by |P'(t)|/60 × 1.2 (up to ≈200 px) as horizontal motion blur. Fully off-screen at 9.375. s06 enters on top along the same curve.",
+          "minor": false
+        }
+      ],
+      "on_screen_text": [
+        "RANGE"
+      ],
+      "handoff_in": "@7.03125: Ink (cut from Paper); Signal disc Ø56 at (960,540), identical to s04's last frame.",
+      "handoff_out": "Overlap 9.140625–9.375: s06 (on top) slides in its opaque world panel at x = 1920 − P(t) while s05 keeps drawing its layer at x = −P(t) underneath. At 9.375 s05 is fully covered and stops.",
+      "overlap_notes": "s06 overlaps 9.140625–9.375 (one 8th) and is ON TOP. s05 renders its full layer offset by −P(t) until 9.375.",
+      "sound": "7.03125 TAPE-STOP: the whole mix pitch-dives to zero over 0.18 s, then near-silence; a reverse cymbal plus a reversed impact swell from 7.03 into 7.5, and a sub 'inhale' (30→55 Hz) matched to the ring implosion. 7.5 DROP: a mega impact (kick + long 808 on F1 + noise burst + crash) and a sub drop, then the full groove: four-on-the-floor, clap on 2 and 4, rolling 16th hats with accents, a pumping 8th sub-bass line, supersaw stabs on off-beat 8ths (Fm9 → Dbmaj7), and a granular glitter layer for the particles. 7.96875 a secondary impact. 8.32→8.4375 a reverse zip into a bright stab on the RANGE snap. 9.140625 a whoosh right→left into 9.375.",
+      "sfx": [
+        {
+          "t": 7.03125,
+          "type": "tapestop",
+          "opts": {
+            "dur": 0.18
+          },
+          "note": "lights out"
+        },
+        {
+          "t": 7.03125,
+          "type": "reverse",
+          "opts": {
+            "dur": 0.46875
+          },
+          "note": "swell into the drop"
+        },
+        {
+          "t": 7.5,
+          "type": "impact",
+          "opts": {
+            "amt": 1.2,
+            "tone": "huge"
+          },
+          "note": "THE DROP"
+        },
+        {
+          "t": 7.5,
+          "type": "subdrop",
+          "opts": {
+            "amt": 1.0
+          },
+          "note": "drop"
+        },
+        {
+          "t": 7.5,
+          "type": "shimmer",
+          "opts": {
+            "dur": 0.9375,
+            "amt": 0.6
+          },
+          "note": "particle glitter"
+        },
+        {
+          "t": 7.96875,
+          "type": "impact",
+          "opts": {
+            "amt": 0.5
+          },
+          "note": "second impulse"
+        },
+        {
+          "t": 8.3203125,
+          "type": "reverse",
+          "opts": {
+            "dur": 0.1171875
+          },
+          "note": "zip into the snap"
+        },
+        {
+          "t": 8.4375,
+          "type": "impact",
+          "opts": {
+            "amt": 0.45
+          },
+          "note": "RANGE snap"
+        },
+        {
+          "t": 8.4375,
+          "type": "shimmer",
+          "opts": {
+            "dur": 0.46875,
+            "amt": 0.4
+          },
+          "note": "snap sparkle"
+        },
+        {
+          "t": 9.140625,
+          "type": "whoosh",
+          "opts": {
+            "dur": 0.234375,
+            "dir": "down"
+          },
+          "note": "whip R→L"
+        }
+      ],
+      "fx_cues_owned": [
+        7.03125,
+        7.03125,
+        7.03125,
+        7.5,
+        7.5,
+        7.5,
+        7.5,
+        7.96875,
+        7.96875,
+        8.4375,
+        8.4375,
+        9.140625
+      ],
+      "build_risks": "Seekability: cache the sim from 7.5 (225 steps × 12k particles, typed arrays), re-initialised by R.sim on backward seeks; the snap and whip phases are analytic blends from cached states. \"lighter\" over Ink blows out quickly, so cap alpha. Target sampling needs the font loaded (fonts are ready before setup). Batch strokes per colour."
+    },
+    {
+      "id": "s06-range-1",
+      "name": "Range I — C · L · A · U",
+      "start": 9.140625,
+      "end": 11.25,
+      "z": 60,
+      "bg": "none (each vignette draws its own full-frame ground)",
+      "frames": [
+        549,
+        674
+      ],
+      "musical": "5.4.3 → 6.4.4",
+      "length_beats": 4.5,
+      "showcases": [
+        "whip-pan landing on a shared camera function",
+        "halftone print texture (the dot multiplied)",
+        "Swiss modular grid and a square→circle module morph",
+        "liquid/metaball motion with a drip-through follow-through",
+        "data-viz animation (bars, half-donut sweep, counters) forming a letter",
+        "centre-locked one-beat montage"
+      ],
+      "layout": [
+        "CENTRE-LOCK RULE: on every cut frame (9.375, 9.84375, 10.3125, 10.78125) the protagonist is a flat Signal disc Ø112 at (960,540). It does a 3-frame squash-pop on the cut (1.25 × 0.8 → 1, POP). Inside a vignette it may move, but it always starts at the anchor.",
+        "Each vignette is one huge letter (cap ≈780) whose counter or negative space holds the anchor. Caption: JetBrains Mono 500 20 px uppercase, tracking 0.12em, HUD colour, left x=72, baseline 976 (directly above the HUD chapter line); types on at 3 chars/frame from the cut.",
+        "Reference glyph placements, measured in the pipeline Chromium at font-size 1109 px (re-derive at setup with the same method: largest inscribed circle of the counter): C (900, 100%) origin x 510, baseline 922 → ink x 560→1323, y 146→935, counter r 150; D (900, 100%) origin x 516, baseline 922 → ink x 598→1329, y 159→922, counter r 118; A (wght 600, 100%) origin x 572, baseline 913 → ink x 578→1353, y 152→913, counter incircle Ø178 centred on the anchor.",
+        "Structure the module as four vignette functions draw(localT) plus the whip wrapper; the root has no background, so everything left of the incoming panel is transparent during the overlap."
+      ],
+      "action": "[9.140625–9.375] WHIP IN (on top of s05): the C world, fully alive with its ripple running, is drawn inside a wrapper at x = 1920 − P(t) (the same P as s05) with an opaque Paper background over its whole 1920×1080 rect. Halftone dots are smeared horizontally by 1 + |P'(t)|/5000 (peak ≈3.5 mid-whip, 1.0 on landing). [9.375–9.84375] C — HALFTONE (Paper): the C (placement above) rendered on canvas as a halftone. Square lattice, pitch 22 px, rotated 15°; each cell's coverage c is sampled once from an offscreen glyph raster. Dot Ø = 21·c·(0.72 + 0.28·sin(2π(d/200 − 4·(t − 9.375)/0.46875))), where d = distance from the anchor, so rings ripple outward from the protagonist 4 times per beat. Dot colour = mix(Ink, Signal, clamp(1 − d/260)): a heat bloom around the source. On the and (9.609375) the ripple amplitude pulses 0.28→0.6→0.28 (TIGHT). Caption \"C — HALFTONE\". [9.84375–10.078125] L — GRID (Ink): a 13 × 7 module grid, modules 112×112, pitch 128. Column centres x = 960 + 128(c − 7), c = 1..13; row centres y = 540 + 128(r − 4), r = 1..7. Graphite 1 px outlines (Fog for 2 frames on the cut). The L is 20 modules: stem = columns 5–6 × rows 1–6, foot = columns 7–10 × rows 5–6 (ink box x 648→1400, y 100→852). The anchor is module (7,4), nestled in the L's crook. Modules fill Paper along the stroke path (stem top → corner → foot end) at 2 modules/frame, each popping 0.6→1 (swift, 4 frames); complete by ≈10.01. Dimension lines Volt 1 px with 6 px end ticks and Volt-light JetBrains Mono 14 px labels typed at 2 chars/frame: \"COL 05–06\" (line x 648→888 at y 880, label centred (768, baseline 904)); \"GUTTER 16\" (bracket x 888→904 at y 880, label left (912, baseline 904)); \"MODULE 112 × 112\" (vertical line at x 1414, y 612→724, label left (1424, baseline 680)). [10.078125–10.3125] On the and: every L module morphs square → circle (corner radius 0→56, POP). The L becomes a dot-matrix of Paper Ø112 circles; the protagonist is the only Signal one. Caption \"L — GRID\". [10.3125–10.4296875] A — LIQUID (Volt): the Paper goo layer (SVG feGaussianBlur stdDeviation 14 + feColorMatrix alpha threshold \"0 0 0 22 −9\", container clipped to the A box + 160 px). CONVERGE (one 16th): 7 Paper blobs (Ø70–220) rush in from beyond the frame edges (bottom-left, bottom-right, left, right, top-left, top-right, bottom) on curved paths (swift) and merge; the A glyph inside the goo group is revealed by a union of circles growing from the blob arrival points (r 0→700, swift). The protagonist floats at the anchor inside the counter as the liquid closes around it. [10.4296875–10.546875] The A settles with liquid overshoot (WOBBLE). Three bumps (Ø40) ride its contour at 900 px/s. The dot sinks from y 540 to 590 (inQuad) onto the crossbar, and the membrane bulges down (a Ø60 goo blob pushed below the crossbar). [10.546875–10.78125] DRIP-THROUGH (and): the goo necks around the dot and snaps back (two crossbar blobs part and rejoin over 3 frames), and the dot falls through between the legs (v0 600 px/s, g 13,000 px/s², stretch 0.8 × 1.25 along velocity), exiting the bottom edge by ≈10.75. Two Paper droplets (Ø18, Ø10) trail it and are reabsorbed. The crossbar heals on WOBBLE. The A reads clean from ≈10.43 to 10.78. Caption \"A — LIQUID\". [10.78125–11.1328125] U — DATA (Paper): a dashed Fog 2 px axis at y=540 from x 160 to 1760 (dash 12/8), with JetBrains Mono 14 px Fog tick labels every 160 px. Stems are Ink bars 150 wide (x 570→720 and 1200→1350) growing from y 540 to 150 (POP-like spring stiffness 260, damping 18); left starts 10.78125, right starts 10.8984375. Value labels (JetBrains Mono 700 28 px Ink) centred above each bar count 0→100 with its height. Bowl: an Ink half-donut centred (960,540), inner r 240, outer r 390 (stroke 150), sweeping clockwise from the left stem through the bottom (960,930) to the right stem, 10.8984375→11.1328125 (inOutCubic), with a flat start and a round leading cap; Fog 1 px ticks every 10% outside it. Readout JetBrains Mono 700 56 px Ink centred at (960, baseline 340): \"0%\"→\"100%\". The protagonist sits at the hub (960,540), the origin of the chart, on the axis. The U ink box is x 570→1350, y 150→930. [11.1328125–11.2167] DATA POINT LOCKED: the sweep completes and the dot pops 1→1.2→1 (key frames 11.1328 → 11.1621 outCubic → 11.2109 inOutSine), settling before the rest frames. Caption \"U — DATA\". [11.2167–11.25] REST POSE (frames 673–674): the complete U chart on Paper; dot Ø112 at (960,540), scale 1.",
+      "beats": [
+        {
+          "t": 9.140625,
+          "t_end": 9.375,
+          "bar_beat": "5.4.3",
+          "frame": 549,
+          "what": "WHIP IN (on top of s05): the C world, fully alive with its ripple running, is drawn inside a wrapper at x = 1920 − P(t) (the same P as s05) with an opaque Paper background over its whole 1920×1080 rect. Halftone dots are smeared horizontally by 1 + |P'(t)|/5000 (peak ≈3.5 mid-whip, 1.0 on landing).",
+          "minor": false
+        },
+        {
+          "t": 9.375,
+          "t_end": 9.84375,
+          "bar_beat": "6.1.1",
+          "frame": 563,
+          "what": "C — HALFTONE (Paper): the C (placement above) rendered on canvas as a halftone. Square lattice, pitch 22 px, rotated 15°; each cell's coverage c is sampled once from an offscreen glyph raster. Dot Ø = 21·c·(0.72 + 0.28·sin(2π(d/200 − 4·(t − 9.375)/0.46875))), where d = distance from the anchor, so rings ripple outward from the protagonist 4 times per beat. Dot colour = mix(Ink, Signal, clamp(1 − d/260)): a heat bloom around the source. On the and (9.609375) the ripple amplitude pulses 0.28→0.6→0.28 (TIGHT). Caption \"C — HALFTONE\".",
+          "minor": false
+        },
+        {
+          "t": 9.84375,
+          "t_end": 10.078125,
+          "bar_beat": "6.2.1",
+          "frame": 591,
+          "what": "L — GRID (Ink): a 13 × 7 module grid, modules 112×112, pitch 128. Column centres x = 960 + 128(c − 7), c = 1..13; row centres y = 540 + 128(r − 4), r = 1..7. Graphite 1 px outlines (Fog for 2 frames on the cut). The L is 20 modules: stem = columns 5–6 × rows 1–6, foot = columns 7–10 × rows 5–6 (ink box x 648→1400, y 100→852). The anchor is module (7,4), nestled in the L's crook. Modules fill Paper along the stroke path (stem top → corner → foot end) at 2 modules/frame, each popping 0.6→1 (swift, 4 frames); complete by ≈10.01. Dimension lines Volt 1 px with 6 px end ticks and Volt-light JetBrains Mono 14 px labels typed at 2 chars/frame: \"COL 05–06\" (line x 648→888 at y 880, label centred (768, baseline 904)); \"GUTTER 16\" (bracket x 888→904 at y 880, label left (912, baseline 904)); \"MODULE 112 × 112\" (vertical line at x 1414, y 612→724, label left (1424, baseline 680)).",
+          "minor": false
+        },
+        {
+          "t": 10.078125,
+          "t_end": 10.3125,
+          "bar_beat": "6.2.3",
+          "frame": 605,
+          "what": "On the and: every L module morphs square → circle (corner radius 0→56, POP). The L becomes a dot-matrix of Paper Ø112 circles; the protagonist is the only Signal one. Caption \"L — GRID\".",
+          "minor": false
+        },
+        {
+          "t": 10.3125,
+          "t_end": 10.4296875,
+          "bar_beat": "6.3.1",
+          "frame": 619,
+          "what": "A — LIQUID (Volt): the Paper goo layer (SVG feGaussianBlur stdDeviation 14 + feColorMatrix alpha threshold \"0 0 0 22 −9\", container clipped to the A box + 160 px). CONVERGE (one 16th): 7 Paper blobs (Ø70–220) rush in from beyond the frame edges (bottom-left, bottom-right, left, right, top-left, top-right, bottom) on curved paths (swift) and merge; the A glyph inside the goo group is revealed by a union of circles growing from the blob arrival points (r 0→700, swift). The protagonist floats at the anchor inside the counter as the liquid closes around it.",
+          "minor": false
+        },
+        {
+          "t": 10.4296875,
+          "t_end": 10.546875,
+          "bar_beat": "6.3.2",
+          "frame": 626,
+          "what": "The A settles with liquid overshoot (WOBBLE). Three bumps (Ø40) ride its contour at 900 px/s. The dot sinks from y 540 to 590 (inQuad) onto the crossbar, and the membrane bulges down (a Ø60 goo blob pushed below the crossbar).",
+          "minor": false
+        },
+        {
+          "t": 10.546875,
+          "t_end": 10.78125,
+          "bar_beat": "6.3.3",
+          "frame": 633,
+          "what": "DRIP-THROUGH (and): the goo necks around the dot and snaps back (two crossbar blobs part and rejoin over 3 frames), and the dot falls through between the legs (v0 600 px/s, g 13,000 px/s², stretch 0.8 × 1.25 along velocity), exiting the bottom edge by ≈10.75. Two Paper droplets (Ø18, Ø10) trail it and are reabsorbed. The crossbar heals on WOBBLE. The A reads clean from ≈10.43 to 10.78. Caption \"A — LIQUID\".",
+          "minor": false
+        },
+        {
+          "t": 10.78125,
+          "t_end": 11.1328125,
+          "bar_beat": "6.4.1",
+          "frame": 647,
+          "what": "U — DATA (Paper): a dashed Fog 2 px axis at y=540 from x 160 to 1760 (dash 12/8), with JetBrains Mono 14 px Fog tick labels every 160 px. Stems are Ink bars 150 wide (x 570→720 and 1200→1350) growing from y 540 to 150 (POP-like spring stiffness 260, damping 18); left starts 10.78125, right starts 10.8984375. Value labels (JetBrains Mono 700 28 px Ink) centred above each bar count 0→100 with its height. Bowl: an Ink half-donut centred (960,540), inner r 240, outer r 390 (stroke 150), sweeping clockwise from the left stem through the bottom (960,930) to the right stem, 10.8984375→11.1328125 (inOutCubic), with a flat start and a round leading cap; Fog 1 px ticks every 10% outside it. Readout JetBrains Mono 700 56 px Ink centred at (960, baseline 340): \"0%\"→\"100%\". The protagonist sits at the hub (960,540), the origin of the chart, on the axis. The U ink box is x 570→1350, y 150→930.",
+          "minor": false
+        },
+        {
+          "t": 11.1328125,
+          "t_end": 11.2167,
+          "bar_beat": "6.4.4",
+          "frame": 668,
+          "what": "DATA POINT LOCKED: the sweep completes and the dot pops 1→1.2→1 (key frames 11.1328 → 11.1621 outCubic → 11.2109 inOutSine), settling before the rest frames. Caption \"U — DATA\".",
+          "minor": false
+        },
+        {
+          "t": 11.2167,
+          "t_end": 11.25,
+          "bar_beat": "6.4.4",
+          "frame": 674,
+          "what": "REST POSE (frames 673–674): the complete U chart on Paper; dot Ø112 at (960,540), scale 1.",
+          "minor": false
+        }
+      ],
+      "on_screen_text": [
+        "C",
+        "L",
+        "A",
+        "U",
+        "C — HALFTONE",
+        "L — GRID",
+        "A — LIQUID",
+        "U — DATA",
+        "COL 05–06",
+        "GUTTER 16",
+        "MODULE 112 × 112",
+        "0 → 100",
+        "0% → 100%"
+      ],
+      "handoff_in": "During 9.140625–9.375 s05 shows Ink particle streaks panning left at −P(t); s06 starts transparent except for its opaque world panel entering from x=1920.",
+      "handoff_out": "@11.25 (rest from 11.2167): the finished U chart on Paper, with the Signal disc Ø112 at (960,540), scale 1. s07 cuts to the glitched D on Ink with the dot at the SAME place and size (a centre-locked match cut).",
+      "overlap_notes": "ON TOP of s05 from 9.140625 to 9.375, drawing only its opaque world panel at x = 1920 − P(t) (transparent left of the panel edge). From 9.375 it covers the frame.",
+      "sound": "The full groove continues (kick, clap on 9.84375 and 10.78125, 16th hats, pumping bass). Each cut layers its own signature on the beat: 9.375 a bitcrushed stab and downsampled hat fizz (halftone); 9.84375 clicky mechanical 16ths for the module fills and a square-wave blip on 10.078 for the square→circle morph (grid); 10.3125 a resonant filter 'bloop' and a bubbly gurgle, with a droplet 'plip' at 10.5469 (liquid); 10.78125 rising data blips on 16ths and a sine glide F4→F5 for the arc sweep (data). A snare fill in 16ths 11.015625→11.25.",
+      "sfx": [
+        {
+          "t": 9.375,
+          "type": "glitch",
+          "opts": {
+            "dur": 0.1
+          },
+          "note": "halftone fizz"
+        },
+        {
+          "t": 9.609375,
+          "type": "blip",
+          "opts": {
+            "pitch": 1.5
+          },
+          "note": "ripple pulse"
+        },
+        {
+          "t": 9.84375,
+          "type": "tick",
+          "opts": {
+            "pitch": 1.0
+          },
+          "note": "module fill"
+        },
+        {
+          "t": 9.9609375,
+          "type": "tick",
+          "opts": {
+            "pitch": 1.0
+          },
+          "note": "module fill"
+        },
+        {
+          "t": 10.078125,
+          "type": "blip",
+          "opts": {
+            "pitch": 0.75
+          },
+          "note": "square→circle"
+        },
+        {
+          "t": 10.1953125,
+          "type": "tick",
+          "opts": {
+            "pitch": 1.0
+          },
+          "note": "module click"
+        },
+        {
+          "t": 10.3125,
+          "type": "pop",
+          "opts": {
+            "pitch": 0.5
+          },
+          "note": "liquid bloop"
+        },
+        {
+          "t": 10.3125,
+          "type": "swish",
+          "opts": {
+            "amt": 0.4
+          },
+          "note": "blobs rush in"
+        },
+        {
+          "t": 10.546875,
+          "type": "pop",
+          "opts": {
+            "pitch": 2.5
+          },
+          "note": "drip plip"
+        },
+        {
+          "t": 10.78125,
+          "type": "blip",
+          "opts": {
+            "pitch": 1.0
+          },
+          "note": "data"
+        },
+        {
+          "t": 10.8984375,
+          "type": "blip",
+          "opts": {
+            "pitch": 1.19
+          },
+          "note": "data"
+        },
+        {
+          "t": 11.015625,
+          "type": "blip",
+          "opts": {
+            "pitch": 1.5
+          },
+          "note": "data"
+        },
+        {
+          "t": 10.8984375,
+          "type": "whoosh",
+          "opts": {
+            "dur": 0.234375,
+            "dir": "up"
+          },
+          "note": "arc sweep"
+        },
+        {
+          "t": 11.1328125,
+          "type": "pop",
+          "opts": {
+            "pitch": 2.0
+          },
+          "note": "data point locked"
+        }
+      ],
+      "fx_cues_owned": [
+        9.375,
+        9.375,
+        9.84375,
+        9.84375,
+        10.3125,
+        10.3125,
+        10.78125,
+        10.78125
+      ],
+      "build_risks": "Four sub-renderers in one module (~600 lines): keep each a draw(ctx, localT) function. Halftone ≈1,500 dots per frame; sample coverage once. The goo filter is the expensive part: keep its container tight. The whip panel must be opaque over its whole rect. The pop must settle before 11.2167 so the dot is exactly Ø112 on the rest frames.",
+      "handoff_out_state": {
+        "t": 11.25,
+        "rest_from": 11.2167,
+        "bg": "#F3F0EA (U chart)",
+        "elements": [
+          {
+            "kind": "disc",
+            "color": "#FF4A1C",
+            "cx": 960,
+            "cy": 540,
+            "d": 112,
+            "scale": 1,
+            "rotation": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "s07-range-2",
+      "name": "Range II — D · E · the specimen row · the squeeze",
+      "start": 11.25,
+      "end": 13.125,
+      "z": 70,
+      "bg": "Ink",
+      "frames": [
+        675,
+        787
+      ],
+      "musical": "7.1.1 → 7.4.4",
+      "length_beats": 4.0,
+      "showcases": [
+        "glitch/datamosh texture with RGB split",
+        "shape-layer animation with overshoot, speed lines and a collision",
+        "an accelerating edit (8ths → 16ths)",
+        "a type-specimen layout revealing that the techniques spelled the name",
+        "anticipation squeeze on a logotype (width 62, tremble, silence)"
+      ],
+      "layout": [
+        "Montage anchor as in s06: the dot is Ø112 at (960,540) on the D and E cut frames.",
+        "SPECIMEN ROW: six cells 240×340 with 24 px gaps. Cell i (0..5) spans x = 142 + 264i → [142,382] [406,646] [670,910] [934,1174] [1198,1438] [1462,1702], y 370→710. Captions: JetBrains Mono 500 16 px Fog uppercase, centred on each cell, baseline 744.",
+        "Mini letters: each cell shows its vignette's treatment at cap ≈200, i.e. the vignette geometry scaled by s = 0.2564 about the letter box centre and centred on the cell (cx, 540). There are no protagonist dots inside the minis. C: Paper cell, Ink halftone at pitch 8 px, slow ripple. L: Ink cell, Graphite micro-grid, 20 Paper circle-modules. A: Volt cell, Paper A (a light goo or rounded joins, 2 wobbling bumps). U: Paper cell, Ink bars and half-donut. D: Ink cell, Paper D with Signal/Volt split ±6 px and 5 slices ±8 px re-rolled every 4 frames. E: Acid cell, Ink rectangle E.",
+        "Plain glyphs for the flatten: Archivo wght 900, font-stretch 100%, 291 px (flat cap 200), Paper, ink-centred in each cell.",
+        "CANONICAL CONDENSED WORD (shared with s08): ONE element with textContent \"CLAUDE\", font-family Archivo; font-weight 900; font-stretch 62%; font-size 370px; line-height 1 (set after any font shorthand); letter-spacing 0; font-kerning normal; colour Paper; position absolute; left 0; width 1920px; text-align center; top = 670 − 0.833·370 ≈ 361.8 px (baseline y=670; measure the 0.833 ratio at setup with a 0×0 baseline marker). Reference ink box ≈ x 427→1496, flat cap top ≈416."
+      ],
+      "action": "[11.25–11.484375] D — GLITCH (Ink): the D (placement in s06) in Paper, with a Signal copy at x −22 and a Volt copy at x +22 beneath it (\"screen\"). 14 horizontal slices of the D box, each offset by R.hash(slice, floor(frame/2)) mapped to ±90 px (re-rolled every 2 frames); the protagonist in the counter is sliced with it. 6 flicker blocks (Signal/Volt/Acid, 30–220 × 8–40 px) at seeded spots on alternate frames; 2 px Paper scanlines every 4 px at 8%. From 11.3671875 the offsets scale ×0.25 (the glitch half-resolves so the D reads). Caption \"D — GLITCH\". [11.484375–11.71875] E — SHAPE (Acid, the reel's only full-frame Acid moment): Ink rectangles; stem x 460→650, y 150→930; top arm x 650→1140, y 150→320; middle arm x 650→888, y 455→625; bottom arm x 650→1140, y 760→930. The stem drops from above (translateY −1100→0, swift, 5 frames) with a 1-frame landing squash (scaleY 0.92 at its base); the arms then extend out of the stem to the right (scaleX 0→1 from x 650, punch), 1-frame stagger top→bottom, each trailing three 4 px Ink speed lines that retract over 6 frames. The middle arm's overshoot kisses the protagonist, which squashes 0.85 × 1.18 and springs back (TIGHT): the E's full stop. Caption \"E — SHAPE\". [11.71875–11.8359375] THE ROW (Ink), accelerating to 16ths: cells pop in pairs, C+L on 11.71875, A+U on 11.8359375, D+E on 11.953125 (scale 0.7→1, swift, 5 frames, with a 1-frame Paper 2 px outline flash). The dot anticipates at the anchor (squash 1.3 × 0.77, drawn above the cells). [11.8359375–12.1875] The dot LEAPS (on the A+U pop): an arc from (960,540) to (1750,682), with y(τ) = 540 + 142τ − 4·407.9·τ(1−τ) (apex ≈200) and x linear, over 0.3515625 s, shrinking Ø112→Ø56 and stretched along its velocity. [12.0703125–12.1875] The whole row glitch-stutters: slices offset ±40 px for 7 frames (seeded on the frame index). [12.1875–12.65625] THE REVEAL on beat 3: the row snaps clean and legible, C L A U D E. The dot lands as its period at (1750,682), Ø56, bottom on the cell baseline y=710, with a 2-frame squash 1.4 × 0.71 and a TIGHT settle: \"CLAUDE.\". Captions type on at 2 chars/frame: HALFTONE, GRID, LIQUID, DATA, GLITCH, SHAPE. Each cell idles at low amplitude (ripple, wobble, flicker). Legible hold 0.47 s. [12.65625–12.890625] FLATTEN (beat 4, the drums drop out): captions wipe out right→left (0.1 s); each cell's ground and technique collapse toward the cell centre (clip-path inset, whip, 0.117 s, 1-frame stagger L→R), revealing a plain Paper glyph at the same position and size underneath. All six are plain Paper letters on Ink by ≈12.83. The dot stays put. [12.890625–13.0917] SQUEEZE (anticipation): each letter animates from its cell position to its slot in the canonical condensed word (per-letter x from Range rects on the canonical element measured at setup): font-size 291→370, font-stretch 100%→62%, snap ease, arriving 13.0917. The dot slides from (1750,682) Ø56 to (1542,638) Ø64 (snap). A tremble of ±2 px (R.noise2) on the word and dot, windowed by sin(π·u) over 13.0391→13.0917, returns to exactly 0. [13.0917–13.125] REST POSE (frames 786–787): swap the six spans for the single canonical element (no per-letter spans on the rest frames): Ink ground, condensed \"CLAUDE\", and the dot Ø64 at (1542,638). Nothing else.",
+      "beats": [
+        {
+          "t": 11.25,
+          "t_end": 11.484375,
+          "bar_beat": "7.1.1",
+          "frame": 675,
+          "what": "D — GLITCH (Ink): the D (placement in s06) in Paper, with a Signal copy at x −22 and a Volt copy at x +22 beneath it (\"screen\"). 14 horizontal slices of the D box, each offset by R.hash(slice, floor(frame/2)) mapped to ±90 px (re-rolled every 2 frames); the protagonist in the counter is sliced with it. 6 flicker blocks (Signal/Volt/Acid, 30–220 × 8–40 px) at seeded spots on alternate frames; 2 px Paper scanlines every 4 px at 8%. From 11.3671875 the offsets scale ×0.25 (the glitch half-resolves so the D reads). Caption \"D — GLITCH\".",
+          "minor": false
+        },
+        {
+          "t": 11.484375,
+          "t_end": 11.71875,
+          "bar_beat": "7.1.3",
+          "frame": 690,
+          "what": "E — SHAPE (Acid, the reel's only full-frame Acid moment): Ink rectangles; stem x 460→650, y 150→930; top arm x 650→1140, y 150→320; middle arm x 650→888, y 455→625; bottom arm x 650→1140, y 760→930. The stem drops from above (translateY −1100→0, swift, 5 frames) with a 1-frame landing squash (scaleY 0.92 at its base); the arms then extend out of the stem to the right (scaleX 0→1 from x 650, punch), 1-frame stagger top→bottom, each trailing three 4 px Ink speed lines that retract over 6 frames. The middle arm's overshoot kisses the protagonist, which squashes 0.85 × 1.18 and springs back (TIGHT): the E's full stop. Caption \"E — SHAPE\".",
+          "minor": false
+        },
+        {
+          "t": 11.71875,
+          "t_end": 11.8359375,
+          "bar_beat": "7.2.1",
+          "frame": 704,
+          "what": "THE ROW (Ink), accelerating to 16ths: cells pop in pairs, C+L on 11.71875, A+U on 11.8359375, D+E on 11.953125 (scale 0.7→1, swift, 5 frames, with a 1-frame Paper 2 px outline flash). The dot anticipates at the anchor (squash 1.3 × 0.77, drawn above the cells).",
+          "minor": false
+        },
+        {
+          "t": 11.8359375,
+          "t_end": 12.1875,
+          "bar_beat": "7.2.2",
+          "frame": 711,
+          "what": "The dot LEAPS (on the A+U pop): an arc from (960,540) to (1750,682), with y(τ) = 540 + 142τ − 4·407.9·τ(1−τ) (apex ≈200) and x linear, over 0.3515625 s, shrinking Ø112→Ø56 and stretched along its velocity.",
+          "minor": false
+        },
+        {
+          "t": 12.0703125,
+          "t_end": 12.1875,
+          "bar_beat": "7.2.4",
+          "frame": 725,
+          "what": "The whole row glitch-stutters: slices offset ±40 px for 7 frames (seeded on the frame index).",
+          "minor": false
+        },
+        {
+          "t": 12.1875,
+          "t_end": 12.65625,
+          "bar_beat": "7.3.1",
+          "frame": 732,
+          "what": "THE REVEAL on beat 3: the row snaps clean and legible, C L A U D E. The dot lands as its period at (1750,682), Ø56, bottom on the cell baseline y=710, with a 2-frame squash 1.4 × 0.71 and a TIGHT settle: \"CLAUDE.\". Captions type on at 2 chars/frame: HALFTONE, GRID, LIQUID, DATA, GLITCH, SHAPE. Each cell idles at low amplitude (ripple, wobble, flicker). Legible hold 0.47 s.",
+          "minor": false
+        },
+        {
+          "t": 12.65625,
+          "t_end": 12.890625,
+          "bar_beat": "7.4.1",
+          "frame": 760,
+          "what": "FLATTEN (beat 4, the drums drop out): captions wipe out right→left (0.1 s); each cell's ground and technique collapse toward the cell centre (clip-path inset, whip, 0.117 s, 1-frame stagger L→R), revealing a plain Paper glyph at the same position and size underneath. All six are plain Paper letters on Ink by ≈12.83. The dot stays put.",
+          "minor": false
+        },
+        {
+          "t": 12.890625,
+          "t_end": 13.0917,
+          "bar_beat": "7.4.3",
+          "frame": 774,
+          "what": "SQUEEZE (anticipation): each letter animates from its cell position to its slot in the canonical condensed word (per-letter x from Range rects on the canonical element measured at setup): font-size 291→370, font-stretch 100%→62%, snap ease, arriving 13.0917. The dot slides from (1750,682) Ø56 to (1542,638) Ø64 (snap). A tremble of ±2 px (R.noise2) on the word and dot, windowed by sin(π·u) over 13.0391→13.0917, returns to exactly 0.",
+          "minor": false
+        },
+        {
+          "t": 13.0917,
+          "t_end": 13.125,
+          "bar_beat": "7.4.4",
+          "frame": 786,
+          "what": "REST POSE (frames 786–787): swap the six spans for the single canonical element (no per-letter spans on the rest frames): Ink ground, condensed \"CLAUDE\", and the dot Ø64 at (1542,638). Nothing else.",
+          "minor": false
+        }
+      ],
+      "on_screen_text": [
+        "D",
+        "E",
+        "D — GLITCH",
+        "E — SHAPE",
+        "C L A U D E (specimen row)",
+        "HALFTONE · GRID · LIQUID · DATA · GLITCH · SHAPE",
+        "CLAUDE."
+      ],
+      "handoff_in": "@11.25: a hard cut from the U chart (Paper) to the glitched D (Ink), with the dot Ø112 locked at (960,540) across the cut.",
+      "handoff_out": "@13.125 (rest from 13.0917): Ink #0B0B0F; the canonical condensed \"CLAUDE\" (Archivo 900, font-stretch 62%, 370 px, letter-spacing 0, Paper, text-align centre across 1920, baseline 670 → top ≈361.8, ink ≈ x 427→1496); a flat Signal disc Ø64 centred (1542,638) (bottom on the baseline, 14 px right of the E). Nothing else.",
+      "overlap_notes": "None. The 13.125 white flash cue covers any sub-pixel mismatch.",
+      "sound": "11.25 a glitch stutter (the previous 8th of the mix re-triggered in 32nds, bitcrushed). 11.484375 a sharp synth stab + snare + three 'shwip's for the arms. 11.71875 / 11.8359 / 11.9531 16th glitch stutters rising F→Ab→C; a buffer-repeat on 12.0703. 12.1875 a big Fm(add9) stab + clap + a 'plip' as the period lands. 12.65625: the drums drop out, leaving a riser (noise + saw) that stops dead at 13.0078, a 32nd snare roll, a sub inhale, and the reverse swell of the final hit peaking into 13.125. 13.0078→13.125: silence except the swell's peak (the gap).",
+      "sfx": [
+        {
+          "t": 11.25,
+          "type": "glitch",
+          "opts": {
+            "dur": 0.234375
+          },
+          "note": "D"
+        },
+        {
+          "t": 11.484375,
+          "type": "impact",
+          "opts": {
+            "amt": 0.45
+          },
+          "note": "E stab"
+        },
+        {
+          "t": 11.5677,
+          "type": "swish",
+          "opts": {
+            "amt": 0.35
+          },
+          "note": "arm 1"
+        },
+        {
+          "t": 11.5844,
+          "type": "swish",
+          "opts": {
+            "amt": 0.35
+          },
+          "note": "arm 2"
+        },
+        {
+          "t": 11.601,
+          "type": "swish",
+          "opts": {
+            "amt": 0.35
+          },
+          "note": "arm 3"
+        },
+        {
+          "t": 11.71875,
+          "type": "glitch",
+          "opts": {
+            "dur": 0.06,
+            "pitch": 1.0
+          },
+          "note": "row pop F"
+        },
+        {
+          "t": 11.8359375,
+          "type": "glitch",
+          "opts": {
+            "dur": 0.06,
+            "pitch": 1.189
+          },
+          "note": "row pop Ab"
+        },
+        {
+          "t": 11.953125,
+          "type": "glitch",
+          "opts": {
+            "dur": 0.06,
+            "pitch": 1.498
+          },
+          "note": "row pop C"
+        },
+        {
+          "t": 11.8359375,
+          "type": "whoosh",
+          "opts": {
+            "dur": 0.3515625,
+            "dir": "up"
+          },
+          "note": "dot leap (lands 12.1875)"
+        },
+        {
+          "t": 12.0703125,
+          "type": "glitch",
+          "opts": {
+            "dur": 0.1171875
+          },
+          "note": "buffer repeat"
+        },
+        {
+          "t": 12.1875,
+          "type": "pop",
+          "opts": {
+            "pitch": 2.0
+          },
+          "note": "period lands"
+        },
+        {
+          "t": 12.1875,
+          "type": "type",
+          "opts": {
+            "count": 8,
+            "dur": 0.1333
+          },
+          "note": "captions"
+        },
+        {
+          "t": 12.65625,
+          "type": "riser",
+          "opts": {
+            "dur": 0.3515625
+          },
+          "note": "tension, stops dead at 13.0078"
+        },
+        {
+          "t": 12.65625,
+          "type": "reverse",
+          "opts": {
+            "dur": 0.46875
+          },
+          "note": "final-hit swell, peaks 13.125"
+        },
+        {
+          "t": 12.890625,
+          "type": "swish",
+          "opts": {
+            "amt": 0.35
+          },
+          "note": "squeeze"
+        }
+      ],
+      "fx_cues_owned": [
+        11.25,
+        11.25,
+        11.484375,
+        11.71875,
+        11.8359375,
+        11.953125,
+        12.0703125,
+        12.1875,
+        12.65625,
+        12.65625,
+        12.890625,
+        12.94921875
+      ],
+      "build_risks": "The minis are simplified re-implementations of the s06 looks (spec above), not imports. Glitch randomness is keyed on frame index. The rest frames MUST use the single canonical element (s08 renders the identical element on its first frame).",
+      "handoff_out_state": {
+        "t": 13.125,
+        "rest_from": 13.0917,
+        "bg": "#0B0B0F",
+        "elements": [
+          {
+            "kind": "text",
+            "text": "CLAUDE",
+            "font": "Archivo",
+            "weight": 900,
+            "stretch": "62%",
+            "size_px": 370,
+            "letter_spacing": 0,
+            "color": "#F3F0EA",
+            "align": "center",
+            "box_left": 0,
+            "box_width": 1920,
+            "baseline_y": 670,
+            "line_height": 1,
+            "ink_box_ref": [
+              427,
+              416,
+              1496,
+              670
+            ]
+          },
+          {
+            "kind": "disc",
+            "color": "#FF4A1C",
+            "cx": 1542,
+            "cy": 638,
+            "d": 64,
+            "scale": 1,
+            "rotation": 0
+          }
+        ]
+      }
+    },
+    {
+      "id": "s08-fullstop",
+      "name": "Full Stop — the name card",
+      "start": 13.125,
+      "end": 15.0,
+      "z": 80,
+      "bg": "Ink",
+      "frames": [
+        788,
+        899
+      ],
+      "musical": "8.1.1 → 8.4.4",
+      "length_beats": 4.0,
+      "showcases": [
+        "logotype resolve through anticipation → release on the width axis",
+        "the protagonist's final bow: smear, arc, squash, two follow-through bounces",
+        "editorial hierarchy (grotesk / serif italic / mono) on a Swiss lockup with hanging punctuation",
+        "an original monogram built from a stroke draw and a dot drop",
+        "a held final beat with no dead frames"
+      ],
+      "layout": [
+        "FINAL LOCKUP (everything below is static from 14.0625):",
+        "• \"CLAUDE\": the canonical element restyled to Archivo 900, font-stretch 125%, font-size 284 px (solved so the ink width = 1520: 5.3525 px of ink per px of font-size), letter-spacing 0, Paper, text-align centre across 1920, baseline 600 → top = 600 − 0.833·284 ≈ 363.4. Ink box ≈ x 200→1720, flat cap top ≈405 (round ≈401).",
+        "• Period: flat Signal disc Ø60 centred (1764,570), bottom on the baseline, 14 px right of the E. It HANGS outside the measure; the word stays centred.",
+        "• Hairlines: Paper 1 px @35% at y=370 and y=648 from x 200 to 1720; 12 px registration crosses (Paper 1 px @60%) centred on the 4 hairline ends.",
+        "• \"SHOWREEL 2026\": JetBrains Mono 500, 30 px, letter-spacing 0.24em, Paper @85%, ink-left x=200, baseline 336.",
+        "• \"Motion Designer\": Instrument Serif italic 96 px, Paper, ink-left x=200, baseline 752 (≈570 px wide).",
+        "• Tagline \"EVERY FRAME, ON PURPOSE.\": JetBrains Mono 400, 22 px, letter-spacing 0.16em, Fog, ink-right x=1720, baseline 752 (shares the role's baseline).",
+        "• Monogram \"C.\" (original mark): box x 200→272, y 944→1016 (the old HUD chapter slot, aligned to the name's left edge). A Paper ring centred (236,980), centreline radius 28, stroke 12, butt caps, with a 60° opening centred at 3 o'clock (the arc runs from 30° to 330°); plus a Signal Ø16 dot that lands in the opening at (264,980).",
+        "• HUD (s00) keeps crop marks, timecode and the beat meter."
+      ],
+      "action": "[13.125–13.359375] FINAL HIT (the white flash covers the first frames). The first frame is the canonical condensed state. RELEASE over one 8th (swift): font-stretch 62%→125% and font-size 370→284 on the same ease; baseline 670→600; letter-spacing −0.03em → +0.02em → 0 on a POP spring (reaches exactly 0 by ≈13.55); an extra scaleX 1.04→1.0 overshoot (TIGHT). [13.125–13.59375] THE BOW: the expansion flings the dot. x = 1542 + 222τ, y(τ) = 638 − 68τ − 4·403.3·τ(1−τ), τ = (t − 13.125)/0.46875 (apex ≈200 at τ 0.52), always clear of the expanding E. Diameter 64→60. Smear frames on the first 2 frames (stretch 2.2 then 1.4 along velocity), then a normal stretch in flight. [13.2421875–13.59375] Hairlines draw outward from x=960 to 200 and 1720 (swift); the registration crosses pop on at 13.59375. [13.59375–13.83] LANDING on beat 2 as the period at (1764,570): a 2-frame squash 1.45 × 0.69 anchored on the baseline (y 600), then micro-bounces: 34 px landing 13.7109375, 10 px landing 13.76953125, settled by 13.83 (TIGHT). \"Motion Designer\" rises through a baseline mask (translateY 100%→0, swift 0.234 s, stagger 1/120 s per letter), complete by ≈13.95. [13.828125–14.0625] On the and: \"SHOWREEL 2026\" types on at 1 char/frame (13 chars, done 14.045) behind a Signal block cursor (0.6 em × 0.75 em) that disappears on 14.0625. The tagline reveals left→right through a mask at 2 chars/frame (done ≈14.03). The monogram ring stroke-draws from 30° clockwise to 330° (swift, done 14.0625). [14.0625–14.53125] LOCK on beat 3: every element final and still: CLAUDE, Motion Designer and SHOWREEL 2026 are fully legible from here to the end (0.94 s). A slow LINEAR push-in on a wrapper (s08 content only) begins: scale 1.000→1.012 about (960,540) by 15.0. [14.53125–14.6484375] THE FINAL TICK on beat 4: the Signal Ø16 dot drops into the monogram opening (from y 940, 3 frames, inQuad) with a 2-frame squash, so the mark reads \"C.\". On the same frame the big period blinks (scale 1→1.14→1: key frames 14.53125 → 14.5703 outCubic → 14.6484 inOutSine). The HUD beat meter fills all four squares Signal. [14.6484375–15.0] HELD: nothing moves except the push-in and the engine grain. Final frame 899 is the complete card.",
+      "beats": [
+        {
+          "t": 13.125,
+          "t_end": 13.359375,
+          "bar_beat": "8.1.1",
+          "frame": 788,
+          "what": "FINAL HIT (the white flash covers the first frames). The first frame is the canonical condensed state. RELEASE over one 8th (swift): font-stretch 62%→125% and font-size 370→284 on the same ease; baseline 670→600; letter-spacing −0.03em → +0.02em → 0 on a POP spring (reaches exactly 0 by ≈13.55); an extra scaleX 1.04→1.0 overshoot (TIGHT).",
+          "minor": false
+        },
+        {
+          "t": 13.125,
+          "t_end": 13.59375,
+          "bar_beat": "8.1.1",
+          "frame": 788,
+          "what": "THE BOW: the expansion flings the dot. x = 1542 + 222τ, y(τ) = 638 − 68τ − 4·403.3·τ(1−τ), τ = (t − 13.125)/0.46875 (apex ≈200 at τ 0.52), always clear of the expanding E. Diameter 64→60. Smear frames on the first 2 frames (stretch 2.2 then 1.4 along velocity), then a normal stretch in flight.",
+          "minor": false
+        },
+        {
+          "t": 13.2421875,
+          "t_end": 13.59375,
+          "bar_beat": "8.1.2",
+          "frame": 795,
+          "what": "Hairlines draw outward from x=960 to 200 and 1720 (swift); the registration crosses pop on at 13.59375.",
+          "minor": false
+        },
+        {
+          "t": 13.59375,
+          "t_end": 13.83,
+          "bar_beat": "8.2.1",
+          "frame": 816,
+          "what": "LANDING on beat 2 as the period at (1764,570): a 2-frame squash 1.45 × 0.69 anchored on the baseline (y 600), then micro-bounces: 34 px landing 13.7109375, 10 px landing 13.76953125, settled by 13.83 (TIGHT). \"Motion Designer\" rises through a baseline mask (translateY 100%→0, swift 0.234 s, stagger 1/120 s per letter), complete by ≈13.95.",
+          "minor": false
+        },
+        {
+          "t": 13.828125,
+          "t_end": 14.0625,
+          "bar_beat": "8.2.3",
+          "frame": 830,
+          "what": "On the and: \"SHOWREEL 2026\" types on at 1 char/frame (13 chars, done 14.045) behind a Signal block cursor (0.6 em × 0.75 em) that disappears on 14.0625. The tagline reveals left→right through a mask at 2 chars/frame (done ≈14.03). The monogram ring stroke-draws from 30° clockwise to 330° (swift, done 14.0625).",
+          "minor": false
+        },
+        {
+          "t": 14.0625,
+          "t_end": 14.53125,
+          "bar_beat": "8.3.1",
+          "frame": 844,
+          "what": "LOCK on beat 3: every element final and still: CLAUDE, Motion Designer and SHOWREEL 2026 are fully legible from here to the end (0.94 s). A slow LINEAR push-in on a wrapper (s08 content only) begins: scale 1.000→1.012 about (960,540) by 15.0.",
+          "minor": false
+        },
+        {
+          "t": 14.53125,
+          "t_end": 14.6484375,
+          "bar_beat": "8.4.1",
+          "frame": 872,
+          "what": "THE FINAL TICK on beat 4: the Signal Ø16 dot drops into the monogram opening (from y 940, 3 frames, inQuad) with a 2-frame squash, so the mark reads \"C.\". On the same frame the big period blinks (scale 1→1.14→1: key frames 14.53125 → 14.5703 outCubic → 14.6484 inOutSine). The HUD beat meter fills all four squares Signal.",
+          "minor": false
+        },
+        {
+          "t": 14.6484375,
+          "t_end": 15.0,
+          "bar_beat": "8.4.2",
+          "frame": 879,
+          "what": "HELD: nothing moves except the push-in and the engine grain. Final frame 899 is the complete card.",
+          "minor": false
+        }
+      ],
+      "on_screen_text": [
+        "CLAUDE.",
+        "Motion Designer",
+        "SHOWREEL 2026",
+        "EVERY FRAME, ON PURPOSE.",
+        "C. (original monogram)"
+      ],
+      "handoff_in": "Identical to s07 out: Ink; canonical condensed \"CLAUDE\" (Archivo 900, 62%, 370 px, baseline 670, centred); Signal disc Ø64 at (1542,638).",
+      "handoff_out": "End of film. Frame 899: Ink; CLAUDE at 125% / 284 px (ink x 200→1720, baseline 600) with the hanging Signal period Ø60 at (1764,570); hairlines at y 370 and 648; SHOWREEL 2026 (200, 336); Motion Designer (200, 752); tagline right-aligned at 1720 (752); the C. monogram at (200,944)–(272,1016); push-in ≈1.012; HUD crop marks, TC 00:00:14:59, full meter.",
+      "overlap_notes": "None. It begins on s07's exact end state under the 13.125 white flash. The HUD removes its TL/TR/BL text by 13.36, which frees the monogram slot.",
+      "sound": "13.125 the massive final impact: kick + 40 Hz sub boom (1.5 s decay) + crash + a wide Fm(add9) stab into a long hall. No drums after this. A soft upward whoosh for the dot's flight. 13.59375 the woody pluck on F5 (a callback to the bar-2 landings) with micro-bounce ticks on 13.7109 and 13.7695. An airy shimmer and soft keyboard ticks for the type-on from 13.828. 14.53125 THE FULL STOP: a clean sine tick on F6 (40 ms) + a soft sub click. The reverb tail decays to −40 dB by 14.98 and the engine's end fade makes the last frames near-silent.",
+      "sfx": [
+        {
+          "t": 13.125,
+          "type": "impact",
+          "opts": {
+            "amt": 1.3,
+            "tone": "huge"
+          },
+          "note": "FINAL HIT"
+        },
+        {
+          "t": 13.125,
+          "type": "subdrop",
+          "opts": {
+            "amt": 1.0
+          },
+          "note": "final hit"
+        },
+        {
+          "t": 13.125,
+          "type": "shimmer",
+          "opts": {
+            "dur": 1.6,
+            "amt": 0.5
+          },
+          "note": "tail"
+        },
+        {
+          "t": 13.125,
+          "type": "whoosh",
+          "opts": {
+            "dur": 0.234375,
+            "dir": "up"
+          },
+          "note": "dot flight"
+        },
+        {
+          "t": 13.59375,
+          "type": "pop",
+          "opts": {
+            "pitch": 2.0
+          },
+          "note": "period lands, F5"
+        },
+        {
+          "t": 13.7109375,
+          "type": "tick",
+          "opts": {
+            "pitch": 2.0
+          },
+          "note": "bounce"
+        },
+        {
+          "t": 13.76953125,
+          "type": "tick",
+          "opts": {
+            "pitch": 2.5
+          },
+          "note": "bounce"
+        },
+        {
+          "t": 13.828125,
+          "type": "type",
+          "opts": {
+            "count": 13,
+            "dur": 0.2167
+          },
+          "note": "SHOWREEL 2026"
+        },
+        {
+          "t": 13.828125,
+          "type": "shimmer",
+          "opts": {
+            "dur": 0.5,
+            "amt": 0.3
+          },
+          "note": "reveal air"
+        },
+        {
+          "t": 14.53125,
+          "type": "blip",
+          "opts": {
+            "pitch": 4.0
+          },
+          "note": "THE FULL STOP, F6 sine"
+        },
+        {
+          "t": 14.53125,
+          "type": "click",
+          "opts": {
+            "pitch": 0.5
+          },
+          "note": "soft sub click"
+        }
+      ],
+      "fx_cues_owned": [
+        13.125,
+        13.125,
+        13.125,
+        13.125,
+        13.59375,
+        14.53125
+      ],
+      "build_risks": "Use the canonical element and only restyle it (font-stretch, font-size, top, letter-spacing), so frame 788 matches s07. The 284 px size is solved from the measured ink ratio; re-measure at setup and keep the ink width at 1520. The monogram draw uses stroke-dasharray via R.drawStroke. Put the push-in on a wrapper and leave the HUD out of it."
+    }
+  ],
+  "fx_cues": [
+    {
+      "t": 0.0,
+      "type": "shake",
+      "amount": 4,
+      "dur": 0.15,
+      "owner": "s01",
+      "note": "cold-open impact",
+      "engine_call": "R.cue(0.0, 'shake', {amt: 4, dur: 0.15});"
+    },
+    {
+      "t": 0.0,
+      "type": "zoom",
+      "amount": 0.03,
+      "dur": 0.2,
+      "owner": "s01",
+      "note": "cold-open punch: frame 0 lands 3% zoomed",
+      "engine_call": "R.cue(0.0, 'zoom', {amt: 0.03, dur: 0.2});"
+    },
+    {
+      "t": 0.46875,
+      "type": "shake",
+      "amount": 10,
+      "dur": 0.2,
+      "owner": "s01",
+      "note": "HEAVY slam",
+      "engine_call": "R.cue(0.46875, 'shake', {amt: 10, dur: 0.2});"
+    },
+    {
+      "t": 0.46875,
+      "type": "zoom",
+      "amount": 0.06,
+      "dur": 0.234375,
+      "owner": "s01",
+      "note": "HEAVY slam: THE HOOK",
+      "engine_call": "R.cue(0.46875, 'zoom', {amt: 0.06, dur: 0.234375});"
+    },
+    {
+      "t": 0.9375,
+      "type": "zoom",
+      "amount": 0.025,
+      "dur": 0.15,
+      "owner": "s01",
+      "note": "NARROW squeeze",
+      "engine_call": "R.cue(0.9375, 'zoom', {amt: 0.025, dur: 0.15});"
+    },
+    {
+      "t": 1.40625,
+      "type": "chroma",
+      "amount": 4,
+      "dur": 0.12,
+      "owner": "s01",
+      "note": "WIDE chroma kiss",
+      "engine_call": "R.cue(1.40625, 'chroma', {amt: 4, dur: 0.12});"
+    },
+    {
+      "t": 1.40625,
+      "type": "zoom",
+      "amount": 0.035,
+      "dur": 0.18,
+      "owner": "s01",
+      "note": "WIDE",
+      "engine_call": "R.cue(1.40625, 'zoom', {amt: 0.035, dur: 0.18});"
+    },
+    {
+      "t": 2.34375,
+      "type": "shake",
+      "amount": 4,
+      "dur": 0.12,
+      "owner": "s02",
+      "note": "dot lands on \"Timing\"",
+      "engine_call": "R.cue(2.34375, 'shake', {amt: 4, dur: 0.12});"
+    },
+    {
+      "t": 2.8125,
+      "type": "shake",
+      "amount": 5,
+      "dur": 0.14,
+      "owner": "s02",
+      "note": "dot lands on \"everything\"",
+      "engine_call": "R.cue(2.8125, 'shake', {amt: 5, dur: 0.14});"
+    },
+    {
+      "t": 3.515625,
+      "type": "vignette",
+      "amount": 0.45,
+      "dur": 0.234375,
+      "in": 0.2,
+      "out": 0.02,
+      "owner": "s02",
+      "note": "OPTIONAL engine extension: tunnel vision during the dive",
+      "engine_call": "R.cue(3.515625, 'vignette', {amt: 0.45, dur: 0.234375, in: 0.2, out: 0.02});"
+    },
+    {
+      "t": 3.75,
+      "type": "chroma",
+      "amount": 8,
+      "dur": 0.2,
+      "owner": "s03",
+      "note": "through the dot into the corridor",
+      "engine_call": "R.cue(3.75, 'chroma', {amt: 8, dur: 0.2});"
+    },
+    {
+      "t": 3.75,
+      "type": "zoom",
+      "amount": 0.04,
+      "dur": 0.2,
+      "owner": "s03",
+      "note": "box unfold starts",
+      "engine_call": "R.cue(3.75, 'zoom', {amt: 0.04, dur: 0.2});"
+    },
+    {
+      "t": 4.21875,
+      "type": "chroma",
+      "amount": 3,
+      "dur": 0.1,
+      "owner": "s03",
+      "note": "roll 1",
+      "engine_call": "R.cue(4.21875, 'chroma', {amt: 3, dur: 0.1});"
+    },
+    {
+      "t": 4.6875,
+      "type": "chroma",
+      "amount": 4,
+      "dur": 0.1,
+      "owner": "s03",
+      "note": "roll 2 + rush",
+      "engine_call": "R.cue(4.6875, 'chroma', {amt: 4, dur: 0.1});"
+    },
+    {
+      "t": 4.921875,
+      "type": "chroma",
+      "amount": 5,
+      "dur": 0.1171875,
+      "curve": 0,
+      "owner": "s03",
+      "note": "rush ramp step 1 (curve 0 = held)",
+      "engine_call": "R.cue(4.921875, 'chroma', {amt: 5, dur: 0.1171875, curve: 0});"
+    },
+    {
+      "t": 4.921875,
+      "type": "vignette",
+      "amount": 0.5,
+      "dur": 0.2008,
+      "in": 0.15,
+      "out": 0.02,
+      "owner": "s03",
+      "note": "OPTIONAL engine extension: rush tunnel vision",
+      "engine_call": "R.cue(4.921875, 'vignette', {amt: 0.5, dur: 0.2008, in: 0.15, out: 0.02});"
+    },
+    {
+      "t": 5.0390625,
+      "type": "chroma",
+      "amount": 9,
+      "dur": 0.0838,
+      "curve": 0,
+      "owner": "s03",
+      "note": "rush ramp step 2, hard off at 5.1229 so the rest frames are clean",
+      "engine_call": "R.cue(5.0390625, 'chroma', {amt: 9, dur: 0.0838, curve: 0});"
+    },
+    {
+      "t": 5.15625,
+      "type": "flash",
+      "amount": 0.35,
+      "dur": 0.1,
+      "color": "#FFFFFF",
+      "owner": "s04",
+      "note": "arrival into the Paper UI",
+      "engine_call": "R.cue(5.15625, 'flash', {amt: 0.35, dur: 0.1, color: \"#FFFFFF\"});"
+    },
+    {
+      "t": 5.625,
+      "type": "shake",
+      "amount": 2,
+      "dur": 0.08,
+      "owner": "s04",
+      "note": "cursor press",
+      "engine_call": "R.cue(5.625, 'shake', {amt: 2, dur: 0.08});"
+    },
+    {
+      "t": 7.03125,
+      "type": "grain",
+      "amount": 0.04,
+      "dur": 0.46875,
+      "owner": "s05",
+      "note": "breath texture",
+      "engine_call": "R.cue(7.03125, 'grain', {amt: 0.04, dur: 0.46875});"
+    },
+    {
+      "t": 7.03125,
+      "type": "letterbox",
+      "amount": 110,
+      "dur": 0.46875,
+      "in": 0.1,
+      "out": 0.05,
+      "owner": "s05",
+      "note": "bars snap in on lights-out, out on the drop (fully gone at 7.5)",
+      "engine_call": "R.cue(7.03125, 'letterbox', {amt: 110, dur: 0.46875, in: 0.1, out: 0.05});"
+    },
+    {
+      "t": 7.03125,
+      "type": "vignette",
+      "amount": 0.6,
+      "dur": 0.46875,
+      "in": 0.1,
+      "out": 0.03,
+      "owner": "s05",
+      "note": "OPTIONAL engine extension: breath darkness",
+      "engine_call": "R.cue(7.03125, 'vignette', {amt: 0.6, dur: 0.46875, in: 0.1, out: 0.03});"
+    },
+    {
+      "t": 7.5,
+      "type": "chroma",
+      "amount": 12,
+      "dur": 0.3,
+      "owner": "s05",
+      "note": "drop",
+      "engine_call": "R.cue(7.5, 'chroma', {amt: 12, dur: 0.3});"
+    },
+    {
+      "t": 7.5,
+      "type": "flash",
+      "amount": 1.0,
+      "dur": 0.1,
+      "color": "#FFFFFF",
+      "owner": "s05",
+      "note": "THE DROP (white)",
+      "engine_call": "R.cue(7.5, 'flash', {amt: 1.0, dur: 0.1, color: \"#FFFFFF\"});"
+    },
+    {
+      "t": 7.5,
+      "type": "shake",
+      "amount": 18,
+      "dur": 0.45,
+      "owner": "s05",
+      "note": "drop",
+      "engine_call": "R.cue(7.5, 'shake', {amt: 18, dur: 0.45});"
+    },
+    {
+      "t": 7.5,
+      "type": "zoom",
+      "amount": 0.08,
+      "dur": 0.3,
+      "owner": "s05",
+      "note": "drop",
+      "engine_call": "R.cue(7.5, 'zoom', {amt: 0.08, dur: 0.3});"
+    },
+    {
+      "t": 7.96875,
+      "type": "shake",
+      "amount": 5,
+      "dur": 0.15,
+      "owner": "s05",
+      "note": "second particle impulse",
+      "engine_call": "R.cue(7.96875, 'shake', {amt: 5, dur: 0.15});"
+    },
+    {
+      "t": 7.96875,
+      "type": "zoom",
+      "amount": 0.03,
+      "dur": 0.15,
+      "owner": "s05",
+      "note": "second particle impulse",
+      "engine_call": "R.cue(7.96875, 'zoom', {amt: 0.03, dur: 0.15});"
+    },
+    {
+      "t": 8.4375,
+      "type": "flash",
+      "amount": 0.3,
+      "dur": 0.08,
+      "color": "#FF4A1C",
+      "owner": "s05",
+      "note": "Signal flash: particles snap into RANGE",
+      "engine_call": "R.cue(8.4375, 'flash', {amt: 0.3, dur: 0.08, color: \"#FF4A1C\"});"
+    },
+    {
+      "t": 8.4375,
+      "type": "shake",
+      "amount": 6,
+      "dur": 0.15,
+      "owner": "s05",
+      "note": "RANGE snap",
+      "engine_call": "R.cue(8.4375, 'shake', {amt: 6, dur: 0.15});"
+    },
+    {
+      "t": 9.140625,
+      "type": "chroma",
+      "amount": 14,
+      "dur": 0.234375,
+      "angle": 0,
+      "owner": "s05",
+      "note": "whip smear, horizontal split",
+      "engine_call": "R.cue(9.140625, 'chroma', {amt: 14, dur: 0.234375, angle: 0});"
+    },
+    {
+      "t": 9.375,
+      "type": "shake",
+      "amount": 6,
+      "dur": 0.15,
+      "owner": "s06",
+      "note": "whip lands on C",
+      "engine_call": "R.cue(9.375, 'shake', {amt: 6, dur: 0.15});"
+    },
+    {
+      "t": 9.375,
+      "type": "zoom",
+      "amount": 0.04,
+      "dur": 0.15,
+      "owner": "s06",
+      "note": "whip lands on C",
+      "engine_call": "R.cue(9.375, 'zoom', {amt: 0.04, dur: 0.15});"
+    },
+    {
+      "t": 9.84375,
+      "type": "chroma",
+      "amount": 3,
+      "dur": 0.1,
+      "owner": "s06",
+      "note": "cut to L",
+      "engine_call": "R.cue(9.84375, 'chroma', {amt: 3, dur: 0.1});"
+    },
+    {
+      "t": 9.84375,
+      "type": "shake",
+      "amount": 4,
+      "dur": 0.1,
+      "owner": "s06",
+      "note": "cut to L",
+      "engine_call": "R.cue(9.84375, 'shake', {amt: 4, dur: 0.1});"
+    },
+    {
+      "t": 10.3125,
+      "type": "chroma",
+      "amount": 3,
+      "dur": 0.1,
+      "owner": "s06",
+      "note": "cut to A",
+      "engine_call": "R.cue(10.3125, 'chroma', {amt: 3, dur: 0.1});"
+    },
+    {
+      "t": 10.3125,
+      "type": "shake",
+      "amount": 4,
+      "dur": 0.1,
+      "owner": "s06",
+      "note": "cut to A",
+      "engine_call": "R.cue(10.3125, 'shake', {amt: 4, dur: 0.1});"
+    },
+    {
+      "t": 10.78125,
+      "type": "chroma",
+      "amount": 3,
+      "dur": 0.1,
+      "owner": "s06",
+      "note": "cut to U",
+      "engine_call": "R.cue(10.78125, 'chroma', {amt: 3, dur: 0.1});"
+    },
+    {
+      "t": 10.78125,
+      "type": "shake",
+      "amount": 4,
+      "dur": 0.1,
+      "owner": "s06",
+      "note": "cut to U",
+      "engine_call": "R.cue(10.78125, 'shake', {amt: 4, dur: 0.1});"
+    },
+    {
+      "t": 11.25,
+      "type": "chroma",
+      "amount": 18,
+      "dur": 0.234375,
+      "owner": "s07",
+      "note": "glitch D",
+      "engine_call": "R.cue(11.25, 'chroma', {amt: 18, dur: 0.234375});"
+    },
+    {
+      "t": 11.25,
+      "type": "shake",
+      "amount": 6,
+      "dur": 0.15,
+      "owner": "s07",
+      "note": "glitch D",
+      "engine_call": "R.cue(11.25, 'shake', {amt: 6, dur: 0.15});"
+    },
+    {
+      "t": 11.484375,
+      "type": "zoom",
+      "amount": 0.05,
+      "dur": 0.12,
+      "owner": "s07",
+      "note": "Acid E punch",
+      "engine_call": "R.cue(11.484375, 'zoom', {amt: 0.05, dur: 0.12});"
+    },
+    {
+      "t": 11.71875,
+      "type": "shake",
+      "amount": 3,
+      "dur": 0.06,
+      "owner": "s07",
+      "note": "row pair 1",
+      "engine_call": "R.cue(11.71875, 'shake', {amt: 3, dur: 0.06});"
+    },
+    {
+      "t": 11.8359375,
+      "type": "shake",
+      "amount": 3,
+      "dur": 0.06,
+      "owner": "s07",
+      "note": "row pair 2",
+      "engine_call": "R.cue(11.8359375, 'shake', {amt: 3, dur: 0.06});"
+    },
+    {
+      "t": 11.953125,
+      "type": "shake",
+      "amount": 3,
+      "dur": 0.06,
+      "owner": "s07",
+      "note": "row pair 3",
+      "engine_call": "R.cue(11.953125, 'shake', {amt: 3, dur: 0.06});"
+    },
+    {
+      "t": 12.0703125,
+      "type": "chroma",
+      "amount": 10,
+      "dur": 0.1171875,
+      "owner": "s07",
+      "note": "row stutter",
+      "engine_call": "R.cue(12.0703125, 'chroma', {amt: 10, dur: 0.1171875});"
+    },
+    {
+      "t": 12.1875,
+      "type": "zoom",
+      "amount": 0.02,
+      "dur": 0.12,
+      "owner": "s07",
+      "note": "CLAUDE. revealed",
+      "engine_call": "R.cue(12.1875, 'zoom', {amt: 0.02, dur: 0.12});"
+    },
+    {
+      "t": 12.65625,
+      "type": "grain",
+      "amount": 0.03,
+      "dur": 0.46875,
+      "owner": "s07",
+      "note": "tension",
+      "engine_call": "R.cue(12.65625, 'grain', {amt: 0.03, dur: 0.46875});"
+    },
+    {
+      "t": 12.65625,
+      "type": "vignette",
+      "amount": 0.45,
+      "dur": 0.46875,
+      "in": 0.35,
+      "out": 0.02,
+      "owner": "s07",
+      "note": "OPTIONAL engine extension: squeeze tension",
+      "engine_call": "R.cue(12.65625, 'vignette', {amt: 0.45, dur: 0.46875, in: 0.35, out: 0.02});"
+    },
+    {
+      "t": 12.890625,
+      "type": "shake",
+      "amount": 1,
+      "dur": 0.05859375,
+      "curve": 0,
+      "owner": "s07",
+      "note": "rumble step 1 (held)",
+      "engine_call": "R.cue(12.890625, 'shake', {amt: 1, dur: 0.05859375, curve: 0});"
+    },
+    {
+      "t": 12.94921875,
+      "type": "shake",
+      "amount": 2,
+      "dur": 0.05859375,
+      "curve": 0,
+      "owner": "s07",
+      "note": "rumble step 2 (held); stops dead at 13.0078 for the silent 16th",
+      "engine_call": "R.cue(12.94921875, 'shake', {amt: 2, dur: 0.05859375, curve: 0});"
+    },
+    {
+      "t": 13.125,
+      "type": "chroma",
+      "amount": 10,
+      "dur": 0.2,
+      "owner": "s08",
+      "note": "final hit",
+      "engine_call": "R.cue(13.125, 'chroma', {amt: 10, dur: 0.2});"
+    },
+    {
+      "t": 13.125,
+      "type": "flash",
+      "amount": 1.0,
+      "dur": 0.15,
+      "color": "#FFFFFF",
+      "owner": "s08",
+      "note": "FINAL HIT (masks the s07→s08 handoff)",
+      "engine_call": "R.cue(13.125, 'flash', {amt: 1.0, dur: 0.15, color: \"#FFFFFF\"});"
+    },
+    {
+      "t": 13.125,
+      "type": "shake",
+      "amount": 14,
+      "dur": 0.35,
+      "owner": "s08",
+      "note": "final hit",
+      "engine_call": "R.cue(13.125, 'shake', {amt: 14, dur: 0.35});"
+    },
+    {
+      "t": 13.125,
+      "type": "zoom",
+      "amount": 0.06,
+      "dur": 0.3,
+      "owner": "s08",
+      "note": "final hit",
+      "engine_call": "R.cue(13.125, 'zoom', {amt: 0.06, dur: 0.3});"
+    },
+    {
+      "t": 13.59375,
+      "type": "shake",
+      "amount": 3,
+      "dur": 0.1,
+      "owner": "s08",
+      "note": "period lands",
+      "engine_call": "R.cue(13.59375, 'shake', {amt: 3, dur: 0.1});"
+    },
+    {
+      "t": 14.53125,
+      "type": "zoom",
+      "amount": 0.01,
+      "dur": 0.12,
+      "owner": "s08",
+      "note": "the final tick",
+      "engine_call": "R.cue(14.53125, 'zoom', {amt: 0.01, dur: 0.12});"
+    }
+  ],
+  "fx_semantics": [
+    "Engine vocabulary (src/engine.js R.cue): flash {amt 0..1, dur, color}, shake {amt px, dur, freq}, chroma {amt px, dur, angle rad}, zoom {amt extra scale, dur}, letterbox {amt px, dur, in, out}, grain {amt, dur}.",
+    "flash, shake, chroma and zoom decay as (1 − k)^curve with k = (t − t0)/dur (curve defaults to 2). curve 0 = held for dur (used for ramps as stair-steps).",
+    "Base levels are engine constants: grain 0.045 and vignette 0.22. A grain cue adds its amt for dur.",
+    "vignette cues are an OPTIONAL extension (not in the engine yet; R.fxAt ignores unknown types). Semantics if added: opacity eases from the 0.22 base to amt with E.snap over \"in\", holds, and returns over \"out\".",
+    "Cues are global and registered by the owning scene in setup, so the soundtrack reinforcement (FX_CUE_SOUNDS in audio/synth.py) hears them."
+  ],
+  "hud_color_schedule": [
+    {
+      "t": 0.0,
+      "color": "Paper",
+      "hex": "#F3F0EA",
+      "why": "s01/s02 on Ink"
+    },
+    {
+      "t": 3.75,
+      "color": "Ink",
+      "hex": "#0B0B0F",
+      "why": "s03 opens on a solid Signal field, then the corridor"
+    },
+    {
+      "t": 7.03125,
+      "color": "Paper",
+      "hex": "#F3F0EA",
+      "why": "lights out (covered by the letterbox until 7.5)"
+    },
+    {
+      "t": 9.375,
+      "color": "Ink",
+      "hex": "#0B0B0F",
+      "why": "C on Paper"
+    },
+    {
+      "t": 9.84375,
+      "color": "Paper",
+      "hex": "#F3F0EA",
+      "why": "L on Ink, A on Volt"
+    },
+    {
+      "t": 10.78125,
+      "color": "Ink",
+      "hex": "#0B0B0F",
+      "why": "U on Paper"
+    },
+    {
+      "t": 11.25,
+      "color": "Paper",
+      "hex": "#F3F0EA",
+      "why": "D on Ink"
+    },
+    {
+      "t": 11.484375,
+      "color": "Ink",
+      "hex": "#0B0B0F",
+      "why": "E on Acid"
+    },
+    {
+      "t": 11.71875,
+      "color": "Paper",
+      "hex": "#F3F0EA",
+      "why": "row, squeeze and end card on Ink, to the end"
+    }
+  ],
+  "music_plan": "BAR 1 (0.0) COLD OPEN / AXIS [Fm9]: Hits only, no groove: one hit per word. 1.1 impact (sub F1) under a quiet high-passed bed of glassy 16th plucks (F5 Ab5 C6 F6) for LIGHT; 1.2 SLAM (kick + clap + distorted sub + low tom + room) for HEAVY; 1.3 a squeeze stab (band-passed saw chord bending −5 st over 0.1 s) for NARROW; 1.4 a wide 7-voice detuned supersaw Fm stab with a reverse-cymbal tail for WIDE; 1.4.3 the dot 'bloop'; 1.4.4 a falling whoosh. BAR 2 (1.875) GROOVE IN / TIMING [Fm9 . Dbmaj7 .]: Four-on-the-floor kick, off-8th closed hats, sub bass in 8ths F1 F1 Ab1 C2, clap on 2 and 4 (2.34375 = the first landing, 3.28125 = 'notices the camera'). The picture supplies marimba plucks climbing F4 Ab4 C5 F5 on the landings. A reverse swell 3.5156→3.75 into the dive. BAR 3 (3.75) SPACE → EASING [Abmaj7 . Eb .]: 3.75 sub boom + door whoosh. A pad plus a 16th F-minor-pentatonic arp opening its filter. Roll clunks on 4.21875 and 4.6875; ring-chase ticks on 16ths from 4.6875; an accelerating whoosh and riser 4.6875→5.15625, cut clean. On beat 4 (5.15625) the drums THIN for the graph editor: kick + rim + soft hats, UI lightness. BAR 4 (5.625) EASING → BREATH [Dbmaj7 . Csus4 C]: Kick on 1 (5.625 = the cursor press), rim on 2 and 4, soft 16th hats; UI foley on top (press click + tink, drag glide, the play swoop tracking v, tick pops). A snare roll from 6.5625 (8ths, then 16ths from 6.797) with noise and saw risers. 7.03125 TAPE-STOP: the whole music bus pitch-dives to zero over 0.18 s, then near-silence; a reverse cymbal, a reversed impact and a sub inhale (30→55 Hz) swell into 7.5. BAR 5 (7.5) DROP / ENERGY [Fm9 → Dbmaj7]: A mega impact (kick + long 808 F1 + noise burst + crash) and a sub drop. Full groove: four-on-the-floor, clap on 2 and 4, rolling 16th hats with accents, a pumping 8th sub bass, supersaw stabs on off-beat 8ths, a granular glitter layer. 7.96875 a secondary impact; 8.32→8.4375 a reverse zip into a bright stab on the RANGE snap; 9.140625 a whoosh right→left. BAR 6 (9.375) RANGE I (C · L · A · U) [Dbmaj7 . Eb .]: The groove continues; each one-beat cut adds its signature from the picture (bitcrush fizz, mechanical clicks and a square blip, a resonant bloop and drip, data blips and a glide). A snare fill in 16ths 11.015625→11.25. BAR 7 (11.25) RANGE II → SQUEEZE [Fm9 . Eb .]: 11.25 a glitch stutter (the previous 8th re-triggered in 32nds, bitcrushed); 11.484375 a stab + snare + 3 shwips; 16th stutters rising F→Ab→C on the row pops; a buffer-repeat on 12.0703; 12.1875 a big Fm(add9) stab + clap + plip (the period lands). 12.65625 (beat 4): drums out, leaving a riser, a 32nd snare roll, a sub inhale and the reverse swell of the final hit. 13.0078125→13.125: total silence except the swell's peak (the gap). BAR 8 (13.125) FINAL HIT + TAIL [Fm(add9)]: 13.125 a massive impact (kick + 40 Hz sub boom with 1.5 s decay + crash + a wide Fm(add9) stab into a long hall). No drums after this. A dot-flight whoosh up; 13.59375 a woody pluck F5 (callback to bar 2) with two micro-bounce ticks; keyboard ticks and air under the reveals from 13.828; 14.53125 THE FULL STOP, a clean sine tick F6 (40 ms) + soft sub click. The tail decays to −40 dB by 14.98, then the engine fades to digital silence.",
+  "music_bars": [
+    {
+      "bar": 1,
+      "t0": 0.0,
+      "section": "COLD OPEN / AXIS",
+      "energy": 0.35,
+      "harmony": "Fm9",
+      "plan": "Hits only, no groove: one hit per word. 1.1 impact (sub F1) under a quiet high-passed bed of glassy 16th plucks (F5 Ab5 C6 F6) for LIGHT; 1.2 SLAM (kick + clap + distorted sub + low tom + room) for HEAVY; 1.3 a squeeze stab (band-passed saw chord bending −5 st over 0.1 s) for NARROW; 1.4 a wide 7-voice detuned supersaw Fm stab with a reverse-cymbal tail for WIDE; 1.4.3 the dot 'bloop'; 1.4.4 a falling whoosh.",
+      "synth_song_hint": "section 'hook', energy 0.35: kick 'x...x...........' (beats 1–2 only), clap '....x...........', tom '....l...........', stab 'x...x...x...x...' with stab_cut (0.35, 0.80), tick 'gggg gggg gggg gggg' at low level."
+    },
+    {
+      "bar": 2,
+      "t0": 1.875,
+      "section": "GROOVE IN / TIMING",
+      "energy": 0.55,
+      "harmony": "Fm9 . Dbmaj7 .",
+      "plan": "Four-on-the-floor kick, off-8th closed hats, sub bass in 8ths F1 F1 Ab1 C2, clap on 2 and 4 (2.34375 = the first landing, 3.28125 = 'notices the camera'). The picture supplies marimba plucks climbing F4 Ab4 C5 F5 on the landings. A reverse swell 3.5156→3.75 into the dive.",
+      "synth_song_hint": "as the current bar 2 (groove), with the stab thinned so the landing plucks sit on top."
+    },
+    {
+      "bar": 3,
+      "t0": 3.75,
+      "section": "SPACE → EASING",
+      "energy": 0.65,
+      "harmony": "Abmaj7 . Eb .",
+      "plan": "3.75 sub boom + door whoosh. A pad plus a 16th F-minor-pentatonic arp opening its filter. Roll clunks on 4.21875 and 4.6875; ring-chase ticks on 16ths from 4.6875; an accelerating whoosh and riser 4.6875→5.15625, cut clean. On beat 4 (5.15625) the drums THIN for the graph editor: kick + rim + soft hats, UI lightness.",
+      "synth_song_hint": "kick FOUR; hats '.o.o .o.o .o.o ....'; rim '.... .... .... x...'; shaker only in beats 1–3."
+    },
+    {
+      "bar": 4,
+      "t0": 5.625,
+      "section": "EASING → BREATH",
+      "energy": 0.75,
+      "harmony": "Dbmaj7 . Csus4 C",
+      "plan": "Kick on 1 (5.625 = the cursor press), rim on 2 and 4, soft 16th hats; UI foley on top (press click + tink, drag glide, the play swoop tracking v, tick pops). A snare roll from 6.5625 (8ths, then 16ths from 6.797) with noise and saw risers. 7.03125 TAPE-STOP: the whole music bus pitch-dives to zero over 0.18 s, then near-silence; a reverse cymbal, a reversed impact and a sub inhale (30→55 Hz) swell into 7.5.",
+      "synth_song_hint": "snare '........ ........ 5.5.6.6. ........'; stutter '.... .... .... txxx' (tape-slow the first 16th of beat 4, mute the rest); hp sweep (20, 380)."
+    },
+    {
+      "bar": 5,
+      "t0": 7.5,
+      "section": "DROP / ENERGY",
+      "energy": 1.0,
+      "harmony": "Fm9 → Dbmaj7",
+      "plan": "A mega impact (kick + long 808 F1 + noise burst + crash) and a sub drop. Full groove: four-on-the-floor, clap on 2 and 4, rolling 16th hats with accents, a pumping 8th sub bass, supersaw stabs on off-beat 8ths, a granular glitter layer. 7.96875 a secondary impact; 8.32→8.4375 a reverse zip into a bright stab on the RANGE snap; 9.140625 a whoosh right→left.",
+      "synth_song_hint": "as the current bar 5 (drop)."
+    },
+    {
+      "bar": 6,
+      "t0": 9.375,
+      "section": "RANGE I (C · L · A · U)",
+      "energy": 1.0,
+      "harmony": "Dbmaj7 . Eb .",
+      "plan": "The groove continues; each one-beat cut adds its signature from the picture (bitcrush fizz, mechanical clicks and a square blip, a resonant bloop and drip, data blips and a glide). A snare fill in 16ths 11.015625→11.25.",
+      "synth_song_hint": "as the current bar 6 (drop 2), with clap '....x.......x.xx' feeding the fill."
+    },
+    {
+      "bar": 7,
+      "t0": 11.25,
+      "section": "RANGE II → SQUEEZE",
+      "energy": 1.0,
+      "harmony": "Fm9 . Eb .",
+      "plan": "11.25 a glitch stutter (the previous 8th re-triggered in 32nds, bitcrushed); 11.484375 a stab + snare + 3 shwips; 16th stutters rising F→Ab→C on the row pops; a buffer-repeat on 12.0703; 12.1875 a big Fm(add9) stab + clap + plip (the period lands). 12.65625 (beat 4): drums out, leaving a riser, a 32nd snare roll, a sub inhale and the reverse swell of the final hit. 13.0078125→13.125: total silence except the swell's peak (the gap).",
+      "synth_song_hint": "stutter '8d.. .... b... xxxx' (beat 1 retrigger + crush; beat 4 muted); snare '.... .... .... 789X' then mute the last 16th; level ramp to −inf on the last 16th except the reverse FX."
+    },
+    {
+      "bar": 8,
+      "t0": 13.125,
+      "section": "FINAL HIT + TAIL",
+      "energy": 0.2,
+      "harmony": "Fm(add9)",
+      "plan": "13.125 a massive impact (kick + 40 Hz sub boom with 1.5 s decay + crash + a wide Fm(add9) stab into a long hall). No drums after this. A dot-flight whoosh up; 13.59375 a woody pluck F5 (callback to bar 2) with two micro-bounce ticks; keyboard ticks and air under the reveals from 13.828; 14.53125 THE FULL STOP, a clean sine tick F6 (40 ms) + soft sub click. The tail decays to −40 dB by 14.98, then the engine fades to digital silence.",
+      "synth_song_hint": "as the current bar 8 (resolve): pad sustained, a single stab; FX impact/subdrop/shimmer on 8.1.0 (picture declares the same, so arrangement FX yield)."
+    }
+  ],
+  "hit_list": [
+    {
+      "t": 0.0,
+      "frame": 0,
+      "bar_beat": "1.1.1",
+      "what": "cold-open impact, LIGHT"
+    },
+    {
+      "t": 0.46875,
+      "frame": 29,
+      "bar_beat": "1.2.1",
+      "what": "HEAVY slam (the hook)"
+    },
+    {
+      "t": 0.9375,
+      "frame": 57,
+      "bar_beat": "1.3.1",
+      "what": "NARROW squeeze"
+    },
+    {
+      "t": 1.40625,
+      "frame": 85,
+      "bar_beat": "1.4.1",
+      "what": "WIDE stab"
+    },
+    {
+      "t": 1.640625,
+      "frame": 99,
+      "bar_beat": "1.4.3",
+      "what": "the dot is born"
+    },
+    {
+      "t": 1.875,
+      "frame": 113,
+      "bar_beat": "2.1.1",
+      "what": "groove in, anticipation"
+    },
+    {
+      "t": 2.34375,
+      "frame": 141,
+      "bar_beat": "2.2.1",
+      "what": "land 1 \"Timing\" (clap)"
+    },
+    {
+      "t": 2.578125,
+      "frame": 155,
+      "bar_beat": "2.2.3",
+      "what": "land 2 \"is\""
+    },
+    {
+      "t": 2.8125,
+      "frame": 169,
+      "bar_beat": "2.3.1",
+      "what": "land 3 \"everything\""
+    },
+    {
+      "t": 2.9296875,
+      "frame": 176,
+      "bar_beat": "2.3.2",
+      "what": "THE FULL STOP lands"
+    },
+    {
+      "t": 3.28125,
+      "frame": 197,
+      "bar_beat": "2.4.1",
+      "what": "notices the camera (clap)"
+    },
+    {
+      "t": 3.75,
+      "frame": 225,
+      "bar_beat": "3.1.1",
+      "what": "box unfolds"
+    },
+    {
+      "t": 4.21875,
+      "frame": 254,
+      "bar_beat": "3.2.1",
+      "what": "roll 1"
+    },
+    {
+      "t": 4.6875,
+      "frame": 282,
+      "bar_beat": "3.3.1",
+      "what": "roll 2 + rush"
+    },
+    {
+      "t": 5.15625,
+      "frame": 310,
+      "bar_beat": "3.4.1",
+      "what": "arrival in the graph editor"
+    },
+    {
+      "t": 5.625,
+      "frame": 338,
+      "bar_beat": "4.1.1",
+      "what": "cursor press"
+    },
+    {
+      "t": 5.859375,
+      "frame": 352,
+      "bar_beat": "4.1.3",
+      "what": "release"
+    },
+    {
+      "t": 6.09375,
+      "frame": 366,
+      "bar_beat": "4.2.1",
+      "what": "PLAY"
+    },
+    {
+      "t": 6.4357,
+      "frame": 387,
+      "bar_beat": "4.2.3",
+      "what": "overshoot peak v 1.10 (picture-derived)"
+    },
+    {
+      "t": 6.5625,
+      "frame": 394,
+      "bar_beat": "4.3.1",
+      "what": "settle, snare roll starts"
+    },
+    {
+      "t": 7.03125,
+      "frame": 422,
+      "bar_beat": "4.4.1",
+      "what": "LIGHTS OUT + tape-stop"
+    },
+    {
+      "t": 7.5,
+      "frame": 450,
+      "bar_beat": "5.1.1",
+      "what": "THE DROP"
+    },
+    {
+      "t": 7.96875,
+      "frame": 479,
+      "bar_beat": "5.2.1",
+      "what": "second impulse"
+    },
+    {
+      "t": 8.4375,
+      "frame": 507,
+      "bar_beat": "5.3.1",
+      "what": "RANGE snap"
+    },
+    {
+      "t": 9.140625,
+      "frame": 549,
+      "bar_beat": "5.4.3",
+      "what": "whip"
+    },
+    {
+      "t": 9.375,
+      "frame": 563,
+      "bar_beat": "6.1.1",
+      "what": "C lands"
+    },
+    {
+      "t": 9.609375,
+      "frame": 577,
+      "bar_beat": "6.1.3",
+      "what": "ripple pulse"
+    },
+    {
+      "t": 9.84375,
+      "frame": 591,
+      "bar_beat": "6.2.1",
+      "what": "L"
+    },
+    {
+      "t": 10.078125,
+      "frame": 605,
+      "bar_beat": "6.2.3",
+      "what": "square→circle"
+    },
+    {
+      "t": 10.3125,
+      "frame": 619,
+      "bar_beat": "6.3.1",
+      "what": "A"
+    },
+    {
+      "t": 10.546875,
+      "frame": 633,
+      "bar_beat": "6.3.3",
+      "what": "drip-through"
+    },
+    {
+      "t": 10.78125,
+      "frame": 647,
+      "bar_beat": "6.4.1",
+      "what": "U"
+    },
+    {
+      "t": 11.1328125,
+      "frame": 668,
+      "bar_beat": "6.4.4",
+      "what": "data point locked"
+    },
+    {
+      "t": 11.25,
+      "frame": 675,
+      "bar_beat": "7.1.1",
+      "what": "D glitch"
+    },
+    {
+      "t": 11.484375,
+      "frame": 690,
+      "bar_beat": "7.1.3",
+      "what": "E"
+    },
+    {
+      "t": 11.71875,
+      "frame": 704,
+      "bar_beat": "7.2.1",
+      "what": "row pair 1"
+    },
+    {
+      "t": 11.8359375,
+      "frame": 711,
+      "bar_beat": "7.2.2",
+      "what": "row pair 2 + dot leap"
+    },
+    {
+      "t": 11.953125,
+      "frame": 718,
+      "bar_beat": "7.2.3",
+      "what": "row pair 3"
+    },
+    {
+      "t": 12.0703125,
+      "frame": 725,
+      "bar_beat": "7.2.4",
+      "what": "row stutter"
+    },
+    {
+      "t": 12.1875,
+      "frame": 732,
+      "bar_beat": "7.3.1",
+      "what": "CLAUDE. revealed"
+    },
+    {
+      "t": 12.65625,
+      "frame": 760,
+      "bar_beat": "7.4.1",
+      "what": "drums out, flatten"
+    },
+    {
+      "t": 12.890625,
+      "frame": 774,
+      "bar_beat": "7.4.3",
+      "what": "squeeze"
+    },
+    {
+      "t": 13.0078125,
+      "frame": 781,
+      "bar_beat": "7.4.4",
+      "what": "SILENCE (the gap)"
+    },
+    {
+      "t": 13.125,
+      "frame": 788,
+      "bar_beat": "8.1.1",
+      "what": "FINAL HIT"
+    },
+    {
+      "t": 13.59375,
+      "frame": 816,
+      "bar_beat": "8.2.1",
+      "what": "period lands"
+    },
+    {
+      "t": 13.828125,
+      "frame": 830,
+      "bar_beat": "8.2.3",
+      "what": "type-on"
+    },
+    {
+      "t": 14.0625,
+      "frame": 844,
+      "bar_beat": "8.3.1",
+      "what": "lock"
+    },
+    {
+      "t": 14.53125,
+      "frame": 872,
+      "bar_beat": "8.4.1",
+      "what": "THE FINAL TICK"
+    }
+  ],
+  "sfx_timeline": [
+    {
+      "t": 0.0,
+      "scene": "s01-axis",
+      "type": "impact",
+      "opts": {
+        "amt": 0.8,
+        "tone": "sub"
+      },
+      "note": "cold open"
+    },
+    {
+      "t": 0.0,
+      "scene": "s01-axis",
+      "type": "shimmer",
+      "opts": {
+        "dur": 0.46875,
+        "amt": 0.3
+      },
+      "note": "glassy LIGHT bed"
+    },
+    {
+      "t": 0.46875,
+      "scene": "s01-axis",
+      "type": "impact",
+      "opts": {
+        "amt": 1.0
+      },
+      "note": "HEAVY slam"
+    },
+    {
+      "t": 0.9375,
+      "scene": "s01-axis",
+      "type": "swish",
+      "opts": {
+        "amt": 0.5
+      },
+      "note": "NARROW squeeze"
+    },
+    {
+      "t": 1.40625,
+      "scene": "s01-axis",
+      "type": "impact",
+      "opts": {
+        "amt": 0.55
+      },
+      "note": "WIDE stab"
+    },
+    {
+      "t": 1.640625,
+      "scene": "s01-axis",
+      "type": "pop",
+      "opts": {
+        "pitch": 2.0
+      },
+      "note": "the dot is born"
+    },
+    {
+      "t": 1.7578125,
+      "scene": "s01-axis",
+      "type": "whoosh",
+      "opts": {
+        "dur": 0.1171875,
+        "dir": "down"
+      },
+      "note": "letters drop"
+    },
+    {
+      "t": 1.875,
+      "scene": "s02-timing",
+      "type": "blip",
+      "opts": {
+        "pitch": 0.5
+      },
+      "note": "anticipation stretch"
+    },
+    {
+      "t": 1.9921875,
+      "scene": "s02-timing",
+      "type": "whoosh",
+      "opts": {
+        "dur": 0.3515625,
+        "dir": "up"
+      },
+      "note": "leap (lands 2.34375)"
+    },
+    {
+      "t": 2.34375,
+      "scene": "s02-timing",
+      "type": "pop",
+      "opts": {
+        "pitch": 1.0
+      },
+      "note": "land 1, F4"
+    },
+    {
+      "t": 2.578125,
+      "scene": "s02-timing",
+      "type": "pop",
+      "opts": {
+        "pitch": 1.189
+      },
+      "note": "land 2, Ab4"
+    },
+    {
+      "t": 2.8125,
+      "scene": "s02-timing",
+      "type": "pop",
+      "opts": {
+        "pitch": 1.498
+      },
+      "note": "land 3, C5"
+    },
+    {
+      "t": 2.9296875,
+      "scene": "s02-timing",
+      "type": "pop",
+      "opts": {
+        "pitch": 2.0
+      },
+      "note": "full stop, F5"
+    },
+    {
+      "t": 3.046875,
+      "scene": "s02-timing",
+      "type": "tick",
+      "opts": {
+        "pitch": 2.0
+      },
+      "note": "micro-hop"
+    },
+    {
+      "t": 3.28125,
+      "scene": "s02-timing",
+      "type": "click",
+      "opts": {
+        "pitch": 1.2
+      },
+      "note": "notices the camera"
+    },
+    {
+      "t": 3.515625,
+      "scene": "s02-timing",
+      "type": "reverse",
+      "opts": {
+        "dur": 0.234375
+      },
+      "note": "dive, lands 3.75"
+    },
+    {
+      "t": 3.75,
+      "scene": "s03-space",
+      "type": "impact",
+      "opts": {
+        "amt": 0.7,
+        "tone": "sub"
+      },
+      "note": "box unfolds"
+    },
+    {
+      "t": 3.75,
+      "scene": "s03-space",
+      "type": "whoosh",
+      "opts": {
+        "dur": 0.3515625,
+        "dir": "down"
+      },
+      "note": "door"
+    },
+    {
+      "t": 4.21875,
+      "scene": "s03-space",
+      "type": "swish",
+      "opts": {
+        "amt": 0.5
+      },
+      "note": "roll 1"
+    },
+    {
+      "t": 4.21875,
+      "scene": "s03-space",
+      "type": "click",
+      "opts": {
+        "pitch": 0.5
+      },
+      "note": "roll 1 clunk"
+    },
+    {
+      "t": 4.6875,
+      "scene": "s03-space",
+      "type": "swish",
+      "opts": {
+        "amt": 0.6
+      },
+      "note": "roll 2"
+    },
+    {
+      "t": 4.6875,
+      "scene": "s03-space",
+      "type": "click",
+      "opts": {
+        "pitch": 0.5
+      },
+      "note": "roll 2 clunk"
+    },
+    {
+      "t": 4.6875,
+      "scene": "s03-space",
+      "type": "tick",
+      "opts": {
+        "pitch": 1.0
+      },
+      "note": "ring chase"
+    },
+    {
+      "t": 4.6875,
+      "scene": "s03-space",
+      "type": "whoosh",
+      "opts": {
+        "dur": 0.46875,
+        "dir": "up"
+      },
+      "note": "rush, lands 5.15625"
+    },
+    {
+      "t": 4.8046875,
+      "scene": "s03-space",
+      "type": "tick",
+      "opts": {
+        "pitch": 1.12
+      },
+      "note": "ring chase"
+    },
+    {
+      "t": 4.921875,
+      "scene": "s03-space",
+      "type": "tick",
+      "opts": {
+        "pitch": 1.26
+      },
+      "note": "ring chase"
+    },
+    {
+      "t": 5.0390625,
+      "scene": "s03-space",
+      "type": "tick",
+      "opts": {
+        "pitch": 1.5
+      },
+      "note": "ring chase"
+    },
+    {
+      "t": 5.15625,
+      "scene": "s04-easing",
+      "type": "blip",
+      "opts": {
+        "pitch": 2.0
+      },
+      "note": "arrival bloom"
+    },
+    {
+      "t": 5.2,
+      "scene": "s04-easing",
+      "type": "type",
+      "opts": {
+        "count": 19,
+        "dur": 0.3167
+      },
+      "note": "header typing"
+    },
+    {
+      "t": 5.625,
+      "scene": "s04-easing",
+      "type": "click",
+      "opts": {
+        "pitch": 1.0
+      },
+      "note": "press"
+    },
+    {
+      "t": 5.625,
+      "scene": "s04-easing",
+      "type": "tick",
+      "opts": {
+        "pitch": 3.0
+      },
+      "note": "tink"
+    },
+    {
+      "t": 5.625,
+      "scene": "s04-easing",
+      "type": "swish",
+      "opts": {
+        "amt": 0.25
+      },
+      "note": "drag glide"
+    },
+    {
+      "t": 5.859375,
+      "scene": "s04-easing",
+      "type": "pop",
+      "opts": {
+        "pitch": 1.5
+      },
+      "note": "release"
+    },
+    {
+      "t": 6.09375,
+      "scene": "s04-easing",
+      "type": "whoosh",
+      "opts": {
+        "dur": 0.46875,
+        "dir": "up"
+      },
+      "note": "play swoop"
+    },
+    {
+      "t": 6.223,
+      "scene": "s04-easing",
+      "type": "tick",
+      "opts": {
+        "pitch": 1.0
+      },
+      "note": "tick 1/8"
+    },
+    {
+      "t": 6.2577,
+      "scene": "s04-easing",
+      "type": "tick",
+      "opts": {
+        "pitch": 1.06
+      },
+      "note": "tick 2/8"
+    },
+    {
+      "t": 6.2784,
+      "scene": "s04-easing",
+      "type": "tick",
+      "opts": {
+        "pitch": 1.12
+      },
+      "note": "tick 3/8"
+    },
+    {
+      "t": 6.2929,
+      "scene": "s04-easing",
+      "type": "tick",
+      "opts": {
+        "pitch": 1.19
+      },
+      "note": "tick 4/8"
+    },
+    {
+      "t": 6.3048,
+      "scene": "s04-easing",
+      "type": "tick",
+      "opts": {
+        "pitch": 1.26
+      },
+      "note": "tick 5/8"
+    },
+    {
+      "t": 6.3166,
+      "scene": "s04-easing",
+      "type": "tick",
+      "opts": {
+        "pitch": 1.33
+      },
+      "note": "tick 6/8"
+    },
+    {
+      "t": 6.3316,
+      "scene": "s04-easing",
+      "type": "tick",
+      "opts": {
+        "pitch": 1.41
+      },
+      "note": "tick 7/8"
+    },
+    {
+      "t": 6.3566,
+      "scene": "s04-easing",
+      "type": "tick",
+      "opts": {
+        "pitch": 1.5
+      },
+      "note": "end tick"
+    },
+    {
+      "t": 6.5625,
+      "scene": "s04-easing",
+      "type": "riser",
+      "opts": {
+        "dur": 0.46875
+      },
+      "note": "build into the tape-stop"
+    },
+    {
+      "t": 6.796875,
+      "scene": "s04-easing",
+      "type": "reverse",
+      "opts": {
+        "dur": 0.1875
+      },
+      "note": "retract zip"
+    },
+    {
+      "t": 7.03125,
+      "scene": "s05-energy",
+      "type": "tapestop",
+      "opts": {
+        "dur": 0.18
+      },
+      "note": "lights out"
+    },
+    {
+      "t": 7.03125,
+      "scene": "s05-energy",
+      "type": "reverse",
+      "opts": {
+        "dur": 0.46875
+      },
+      "note": "swell into the drop"
+    },
+    {
+      "t": 7.5,
+      "scene": "s05-energy",
+      "type": "impact",
+      "opts": {
+        "amt": 1.2,
+        "tone": "huge"
+      },
+      "note": "THE DROP"
+    },
+    {
+      "t": 7.5,
+      "scene": "s05-energy",
+      "type": "subdrop",
+      "opts": {
+        "amt": 1.0
+      },
+      "note": "drop"
+    },
+    {
+      "t": 7.5,
+      "scene": "s05-energy",
+      "type": "shimmer",
+      "opts": {
+        "dur": 0.9375,
+        "amt": 0.6
+      },
+      "note": "particle glitter"
+    },
+    {
+      "t": 7.96875,
+      "scene": "s05-energy",
+      "type": "impact",
+      "opts": {
+        "amt": 0.5
+      },
+      "note": "second impulse"
+    },
+    {
+      "t": 8.3203125,
+      "scene": "s05-energy",
+      "type": "reverse",
+      "opts": {
+        "dur": 0.1171875
+      },
+      "note": "zip into the snap"
+    },
+    {
+      "t": 8.4375,
+      "scene": "s05-energy",
+      "type": "impact",
+      "opts": {
+        "amt": 0.45
+      },
+      "note": "RANGE snap"
+    },
+    {
+      "t": 8.4375,
+      "scene": "s05-energy",
+      "type": "shimmer",
+      "opts": {
+        "dur": 0.46875,
+        "amt": 0.4
+      },
+      "note": "snap sparkle"
+    },
+    {
+      "t": 9.140625,
+      "scene": "s05-energy",
+      "type": "whoosh",
+      "opts": {
+        "dur": 0.234375,
+        "dir": "down"
+      },
+      "note": "whip R→L"
+    },
+    {
+      "t": 9.375,
+      "scene": "s06-range-1",
+      "type": "glitch",
+      "opts": {
+        "dur": 0.1
+      },
+      "note": "halftone fizz"
+    },
+    {
+      "t": 9.609375,
+      "scene": "s06-range-1",
+      "type": "blip",
+      "opts": {
+        "pitch": 1.5
+      },
+      "note": "ripple pulse"
+    },
+    {
+      "t": 9.84375,
+      "scene": "s06-range-1",
+      "type": "tick",
+      "opts": {
+        "pitch": 1.0
+      },
+      "note": "module fill"
+    },
+    {
+      "t": 9.9609375,
+      "scene": "s06-range-1",
+      "type": "tick",
+      "opts": {
+        "pitch": 1.0
+      },
+      "note": "module fill"
+    },
+    {
+      "t": 10.078125,
+      "scene": "s06-range-1",
+      "type": "blip",
+      "opts": {
+        "pitch": 0.75
+      },
+      "note": "square→circle"
+    },
+    {
+      "t": 10.1953125,
+      "scene": "s06-range-1",
+      "type": "tick",
+      "opts": {
+        "pitch": 1.0
+      },
+      "note": "module click"
+    },
+    {
+      "t": 10.3125,
+      "scene": "s06-range-1",
+      "type": "pop",
+      "opts": {
+        "pitch": 0.5
+      },
+      "note": "liquid bloop"
+    },
+    {
+      "t": 10.3125,
+      "scene": "s06-range-1",
+      "type": "swish",
+      "opts": {
+        "amt": 0.4
+      },
+      "note": "blobs rush in"
+    },
+    {
+      "t": 10.546875,
+      "scene": "s06-range-1",
+      "type": "pop",
+      "opts": {
+        "pitch": 2.5
+      },
+      "note": "drip plip"
+    },
+    {
+      "t": 10.78125,
+      "scene": "s06-range-1",
+      "type": "blip",
+      "opts": {
+        "pitch": 1.0
+      },
+      "note": "data"
+    },
+    {
+      "t": 10.8984375,
+      "scene": "s06-range-1",
+      "type": "blip",
+      "opts": {
+        "pitch": 1.19
+      },
+      "note": "data"
+    },
+    {
+      "t": 10.8984375,
+      "scene": "s06-range-1",
+      "type": "whoosh",
+      "opts": {
+        "dur": 0.234375,
+        "dir": "up"
+      },
+      "note": "arc sweep"
+    },
+    {
+      "t": 11.015625,
+      "scene": "s06-range-1",
+      "type": "blip",
+      "opts": {
+        "pitch": 1.5
+      },
+      "note": "data"
+    },
+    {
+      "t": 11.1328125,
+      "scene": "s06-range-1",
+      "type": "pop",
+      "opts": {
+        "pitch": 2.0
+      },
+      "note": "data point locked"
+    },
+    {
+      "t": 11.25,
+      "scene": "s07-range-2",
+      "type": "glitch",
+      "opts": {
+        "dur": 0.234375
+      },
+      "note": "D"
+    },
+    {
+      "t": 11.484375,
+      "scene": "s07-range-2",
+      "type": "impact",
+      "opts": {
+        "amt": 0.45
+      },
+      "note": "E stab"
+    },
+    {
+      "t": 11.5677,
+      "scene": "s07-range-2",
+      "type": "swish",
+      "opts": {
+        "amt": 0.35
+      },
+      "note": "arm 1"
+    },
+    {
+      "t": 11.5844,
+      "scene": "s07-range-2",
+      "type": "swish",
+      "opts": {
+        "amt": 0.35
+      },
+      "note": "arm 2"
+    },
+    {
+      "t": 11.601,
+      "scene": "s07-range-2",
+      "type": "swish",
+      "opts": {
+        "amt": 0.35
+      },
+      "note": "arm 3"
+    },
+    {
+      "t": 11.71875,
+      "scene": "s07-range-2",
+      "type": "glitch",
+      "opts": {
+        "dur": 0.06,
+        "pitch": 1.0
+      },
+      "note": "row pop F"
+    },
+    {
+      "t": 11.8359375,
+      "scene": "s07-range-2",
+      "type": "glitch",
+      "opts": {
+        "dur": 0.06,
+        "pitch": 1.189
+      },
+      "note": "row pop Ab"
+    },
+    {
+      "t": 11.8359375,
+      "scene": "s07-range-2",
+      "type": "whoosh",
+      "opts": {
+        "dur": 0.3515625,
+        "dir": "up"
+      },
+      "note": "dot leap (lands 12.1875)"
+    },
+    {
+      "t": 11.953125,
+      "scene": "s07-range-2",
+      "type": "glitch",
+      "opts": {
+        "dur": 0.06,
+        "pitch": 1.498
+      },
+      "note": "row pop C"
+    },
+    {
+      "t": 12.0703125,
+      "scene": "s07-range-2",
+      "type": "glitch",
+      "opts": {
+        "dur": 0.1171875
+      },
+      "note": "buffer repeat"
+    },
+    {
+      "t": 12.1875,
+      "scene": "s07-range-2",
+      "type": "pop",
+      "opts": {
+        "pitch": 2.0
+      },
+      "note": "period lands"
+    },
+    {
+      "t": 12.1875,
+      "scene": "s07-range-2",
+      "type": "type",
+      "opts": {
+        "count": 8,
+        "dur": 0.1333
+      },
+      "note": "captions"
+    },
+    {
+      "t": 12.65625,
+      "scene": "s07-range-2",
+      "type": "riser",
+      "opts": {
+        "dur": 0.3515625
+      },
+      "note": "tension, stops dead at 13.0078"
+    },
+    {
+      "t": 12.65625,
+      "scene": "s07-range-2",
+      "type": "reverse",
+      "opts": {
+        "dur": 0.46875
+      },
+      "note": "final-hit swell, peaks 13.125"
+    },
+    {
+      "t": 12.890625,
+      "scene": "s07-range-2",
+      "type": "swish",
+      "opts": {
+        "amt": 0.35
+      },
+      "note": "squeeze"
+    },
+    {
+      "t": 13.125,
+      "scene": "s08-fullstop",
+      "type": "impact",
+      "opts": {
+        "amt": 1.3,
+        "tone": "huge"
+      },
+      "note": "FINAL HIT"
+    },
+    {
+      "t": 13.125,
+      "scene": "s08-fullstop",
+      "type": "subdrop",
+      "opts": {
+        "amt": 1.0
+      },
+      "note": "final hit"
+    },
+    {
+      "t": 13.125,
+      "scene": "s08-fullstop",
+      "type": "shimmer",
+      "opts": {
+        "dur": 1.6,
+        "amt": 0.5
+      },
+      "note": "tail"
+    },
+    {
+      "t": 13.125,
+      "scene": "s08-fullstop",
+      "type": "whoosh",
+      "opts": {
+        "dur": 0.234375,
+        "dir": "up"
+      },
+      "note": "dot flight"
+    },
+    {
+      "t": 13.59375,
+      "scene": "s08-fullstop",
+      "type": "pop",
+      "opts": {
+        "pitch": 2.0
+      },
+      "note": "period lands, F5"
+    },
+    {
+      "t": 13.7109375,
+      "scene": "s08-fullstop",
+      "type": "tick",
+      "opts": {
+        "pitch": 2.0
+      },
+      "note": "bounce"
+    },
+    {
+      "t": 13.76953125,
+      "scene": "s08-fullstop",
+      "type": "tick",
+      "opts": {
+        "pitch": 2.5
+      },
+      "note": "bounce"
+    },
+    {
+      "t": 13.828125,
+      "scene": "s08-fullstop",
+      "type": "type",
+      "opts": {
+        "count": 13,
+        "dur": 0.2167
+      },
+      "note": "SHOWREEL 2026"
+    },
+    {
+      "t": 13.828125,
+      "scene": "s08-fullstop",
+      "type": "shimmer",
+      "opts": {
+        "dur": 0.5,
+        "amt": 0.3
+      },
+      "note": "reveal air"
+    },
+    {
+      "t": 14.53125,
+      "scene": "s08-fullstop",
+      "type": "blip",
+      "opts": {
+        "pitch": 4.0
+      },
+      "note": "THE FULL STOP, F6 sine"
+    },
+    {
+      "t": 14.53125,
+      "scene": "s08-fullstop",
+      "type": "click",
+      "opts": {
+        "pitch": 0.5
+      },
+      "note": "soft sub click"
+    }
+  ],
+  "why_it_wins": "It is one idea carried all the way through, so fifteen seconds of range read as authorship rather than a tech demo. The plainest mark in typography becomes a character, a portal, a vanishing point, an eased object, a particle seed, a halftone cell, a grid module, a bubble, a data origin and finally the period after the name. Type is the spine and the variable axes carry meaning: LIGHT is hairline, NARROW is condensed, and the name's closing width-62 squeeze and width-125 release is anticipation and release applied to a logotype. It speaks to motion people in their own language (onion skins, spacing charts, a live bezier editor whose overshoot leaves its box) while giving everyone else a hook on beat 2, a drop, a montage that secretly spells CLAUDE and a satisfying landing. The rhythm is composed: a slam per beat, a continuous take, a silent breath, the drop, cuts accelerating from beats to 8ths to 16ths, a silent 16th and the final hit, then a held beat. And it is built to be built: every handoff is a rest pose held for two frames (a dot at exact pixels, a solid colour field, or one canonical text element), the one overlap shares a single whip formula, and all type numbers come from measurements taken in the pipeline's own Chromium.",
+  "scores": {
+    "typographer": {
+      "title": "FULL STOP.",
+      "hook": 8,
+      "range_wow": 9,
+      "coherence": 9,
+      "rhythm_sync": 8,
+      "ending": 9,
+      "feasibility_handoffs": 7,
+      "average": 8.33,
+      "verdict": "Strongest spine: one motif, a self-describing variable-type hook, the only pitch with an insider showpiece (live bezier editor) and a climax that pays off as the name. Weak spots: the first half-second is a quiet hairline word; six of eight modules are exactly one bar long; several handoffs break on the last rendered frame (the inExpo rush reaches scale 1 only on the cut frame, so the last corridor frame shows the far wall at ~0.74 with the walls still visible; the zoom-through's corner coverage on its last frame depends on an unspecified centre ease; s01's staggered letter drop runs to 1.908, past the 1.875 handoff); the end-card numbers assume cap 220 at 1440 px, but Archivo at width 125 measures a cap of ≈185–188 at that width; s07 has to re-implement six techniques in miniature."
+    },
+    "one-take": {
+      "title": "FULL STOP. One dot, one take.",
+      "hook": 8,
+      "range_wow": 8,
+      "coherence": 7,
+      "rhythm_sync": 6,
+      "ending": 7,
+      "feasibility_handoffs": 9,
+      "average": 7.5,
+      "verdict": "Best handoff discipline (rest poses held two frames, flat discs and colour fields, one shared portal formula) and a good exponential dive. But 'MAKE IT MOVE' is a stock line, the drop only arrives at 9.375 (62% in), which leaves 3.75 s of climax, and the ten portal worlds (14-frame texture strobes, planet and moon, op-art) dilute the art direction into a demo. The end card finishes typing at ≈14.3 (≈0.7 s of full hold), and the '00:00:15:00' timecode can never be shown (the last frame is 14:59)."
+    },
+    "generative": {
+      "title": "ONE PIXEL",
+      "hook": 8,
+      "range_wow": 8,
+      "coherence": 6,
+      "rhythm_sync": 8,
+      "ending": 7,
+      "feasibility_handoffs": 7,
+      "average": 7.33,
+      "verdict": "Spectacular 0.234 s particle burst and good musical architecture (drop on bar 5, 8th hypercuts, silent tape-stop 8th). The shared whip formula across the only overlap is excellent. But the pixel motif disappears for long stretches, the 7-card bento dashboard reads as a SaaS promo and the wireframe/terrain act as a tech demo. The monogram-first ending is conventional, and the bento and hypercut modules are over budget and duplicate other scenes."
+    },
+    "principles": {
+      "title": "PIP",
+      "hook": 7,
+      "range_wow": 8,
+      "coherence": 8,
+      "rhythm_sync": 7,
+      "ending": 9,
+      "feasibility_handoffs": 6,
+      "average": 7.5,
+      "verdict": "The only pitch with real character acting (a cast with timing, reactions, a leapfrog) and the most memorable last beat (smear-frame slam, the name erupting from the impact, a wink). But the first 0.47 s is a ball falling with no hit; the half-time bar 5 plus a drop at 9.375 sag the middle; and the cartoon register ('SMILES PER SECOND', eyes on everything) undercuts senior polish. Several cuts hand over mid-motion (the ball at ~1200 px/s), which two engineers would have to match in velocity, not just pose; the cast and panel scenes are each over 700 lines."
+    }
+  },
+  "provenance": [
+    {
+      "idea": "Spine: the full stop as protagonist, the LIGHT/HEAVY/NARROW/WIDE axis hook, the Timing oner with animator notation, the zoom-into-the-dot into a CSS-3D type corridor, the bezier graph editor, breath then drop then particle RANGE, the C-L-A-U-D-E technique montage, the specimen-row reveal, the width-62 squeeze and width-125 release, the HUD frame with beat meter, the C. monogram tick",
+      "source": "typographer (P1)"
+    },
+    {
+      "idea": "Rest-pose handoff protocol (outgoing reaches the pose at T - 2/60 and holds; incoming renders it on its first frame); exponential dive d = d0·e^(k·u) so the zoom-through reaches full coverage by a known frame; handoffs as flat discs and colour fields",
+      "source": "one-take (P2)"
+    },
+    {
+      "idea": "\"Every frame, on purpose.\" tagline",
+      "source": "one-take (P2) and generative (P3)"
+    },
+    {
+      "idea": "One shared whip-pan function for the only overlap (outgoing x = -P(t), incoming x = 1920 - P(t)), so the seam is one continuous camera move; the silent tape-stop 16th before the final hit",
+      "source": "generative (P3)"
+    },
+    {
+      "idea": "Centre-locked montage match cuts (the dot at the same place and size on every cut); \"type takes the impact\" (words flex under landings); smear frames on the final flight; the multi-bounce settle; the incoming scene owns frame ceil(60·T)",
+      "source": "principles (P4)"
+    },
+    {
+      "idea": "ECD fixes: re-timed modules to 4/4/3/4/5/4/4/4 beats; every handoff re-derived so the last rendered frame is exact (2D rest-pose overrides for the 3D rush and the dive); single-handle graph-editor drag (cause and effect is legible); A drips through its own crossbar; U built as a chart with the dot at its origin; hanging-punctuation end card on the grid; all type sizes solved from Archivo metrics measured in the pipeline Chromium; FX mapped to the engine's cue vocabulary and sounds to its R.sfx vocabulary; key moved to F minor to match audio/synth.py",
+      "source": "ECD synthesis"
+    }
+  ],
+  "house_style": {
+    "palette": [
+      {
+        "name": "Ink",
+        "hex": "#0B0B0F",
+        "role": "Primary ground. Statements, energy, the end card."
+      },
+      {
+        "name": "Paper",
+        "hex": "#F3F0EA",
+        "role": "Type on Ink; ground for \"systems\" moments (graph editor, halftone, data)."
+      },
+      {
+        "name": "Signal",
+        "hex": "#FF4A1C",
+        "role": "THE DOT, plus heat: impact flashes, the corridor, cursors and handles, one flash colour. Never body text."
+      },
+      {
+        "name": "Volt",
+        "hex": "#2B59FF",
+        "role": "Blueprint accent: construction lines, dimension lines, bezier handles; one full-frame moment (A, liquid)."
+      },
+      {
+        "name": "Acid",
+        "hex": "#D7FF3A",
+        "role": "Sparingly: ≤3% of pixels anywhere, except the single E (shape) 8th and its row cell."
+      },
+      {
+        "name": "Graphite",
+        "hex": "#1C1C22",
+        "role": "Secondary surfaces, grid lines on Ink."
+      },
+      {
+        "name": "Fog",
+        "hex": "#8A8A93",
+        "role": "Annotations, ghosts, onion skins, secondary labels."
+      }
+    ],
+    "derived_tints": [
+      {
+        "name": "Volt-light",
+        "hex": "#718EF8",
+        "role": "mix(Volt, Paper, 0.35): small Volt labels on Ink (legibility)."
+      },
+      {
+        "name": "Signal-deep",
+        "hex": "#541E13",
+        "role": "mix(Signal, Ink, 0.70): the far end of the corridor shading."
+      },
+      {
+        "name": "any mix()/alpha of two palette colours",
+        "hex": "",
+        "role": "Allowed. No other hues, no pure white or black (except engine flash white and letterbox black), no blurred drop shadows."
+      }
+    ],
+    "type": [
+      {
+        "face": "Archivo (variable)",
+        "usage": "Hero display. wght 100–900, width via CSS font-stretch 62%–125% (canvas: keywords only, extra-condensed = 62.5%, expanded = 125%). Default tracking -0.01em, never tighter than -0.03em. Measured: flat cap height 0.6875 em, round overshoot 0.700 em, baseline overshoot 0.0125 em, x-height 0.531 em; with line-height 1 the baseline sits 0.833 em below the line-box top."
+      },
+      {
+        "face": "Instrument Serif italic",
+        "usage": "One editorial line per act only: \"Timing is everything\" and \"Motion Designer\". Cap 0.734 em; line-height 1 baseline at 0.84 em."
+      },
+      {
+        "face": "JetBrains Mono",
+        "usage": "Labels, readouts, timecode, code. 500 weight, uppercase, tracking 0.12em (labels) / 0.24em (the end-card year line); tabular figures; advance 0.6 em; line-height 1 baseline at 0.86 em."
+      },
+      {
+        "face": "Sizes",
+        "usage": "Must-read words: ≥ 48 px display / ≥ 26 px mono, on screen and fully static ≥ 0.35 s (key messages ≥ 0.5 s). Annotations may be 14–16 px (decorative, never must-read)."
+      }
+    ],
+    "grid": [
+      "Frame 1920×1080, centre C = (960,540). Safe area x 96→1824, y 96→984. The outer band belongs to the HUD (s00) and the montage captions (x = 72).",
+      "Editorial grid: 12 columns, 96 px margins, 16 px gutters (column 129.33 px). Hairlines when shown: Fog 1 px at 8% (20% on arrival flashes).",
+      "Montage anchor: (960,540). Glyph vignettes use cap ≈ 780 px so the cut rhythm reads as one system.",
+      "End-card measure: x 200→1720 (the name spans it exactly); the period hangs outside at x 1734→1794."
+    ],
+    "easing": [
+      {
+        "name": "R.ease.swift",
+        "curve": "cubic-bezier(0.16, 1, 0.30, 1)",
+        "use": "Default \"arrive\": reveals, draws, snaps into place."
+      },
+      {
+        "name": "R.ease.snap",
+        "curve": "cubic-bezier(0.85, 0, 0.15, 1)",
+        "use": "Hard in-out between two held poses (dot relocations, the squeeze)."
+      },
+      {
+        "name": "R.ease.whip",
+        "curve": "cubic-bezier(0.70, 0, 0.84, 0)",
+        "use": "Accelerate into a cut: exits, rushes, retracts."
+      },
+      {
+        "name": "R.ease.glide",
+        "curve": "cubic-bezier(0.45, 0, 0.10, 1)",
+        "use": "Camera moves and cursor travel."
+      },
+      {
+        "name": "R.ease.punch",
+        "curve": "cubic-bezier(0.20, 1.6, 0.40, 1)",
+        "use": "Overshoot pops (arms, badges)."
+      },
+      {
+        "name": "R.ease.anticipate",
+        "curve": "cubic-bezier(0.60, -0.40, 0.40, 1)",
+        "use": "Moves that dip back first."
+      },
+      {
+        "name": "inOutCubic",
+        "curve": "Penner",
+        "use": "The shared whip-pan P(t) and drags."
+      }
+    ],
+    "springs": [
+      {
+        "name": "TIGHT",
+        "params": "{stiffness: 420, damping: 26}",
+        "use": "ζ≈0.63, ~8% overshoot, settles ≈0.30 s: type and UI snaps."
+      },
+      {
+        "name": "POP",
+        "params": "{stiffness: 380, damping: 18}",
+        "use": "ζ≈0.46, ~19% overshoot, settles ≈0.44 s: landings, pops, letter eruptions."
+      },
+      {
+        "name": "SOFT",
+        "params": "{stiffness: 180, damping: 16}",
+        "use": "ζ≈0.60, ~10% overshoot, settles ≈0.50 s: big masses (particles to targets)."
+      },
+      {
+        "name": "WOBBLE",
+        "params": "{stiffness: 300, damping: 10}",
+        "use": "ζ≈0.29, ~39% overshoot: liquid and settle wobbles only."
+      },
+      {
+        "name": "HINGE",
+        "params": "{stiffness: 240, damping: 19}",
+        "use": "Corridor unfold (~9% overshoot past 90°)."
+      },
+      {
+        "name": "ROLL",
+        "params": "{stiffness: 320, damping: 22}",
+        "use": "Corridor 90° rolls."
+      }
+    ],
+    "handoff_protocol": [
+      "A scene is visible on frame f iff start ≤ f/60 < end (engine rule). An event at grid time T first appears on frame ceil(60·T); audio hits land exactly on T (picture ≤ 16.7 ms late, well inside lip-sync tolerance).",
+      "REST POSE: at a hard handoff time T the outgoing scene reaches the specified handoff state no later than T - 2/60 and holds it (its last rendered frame is ≤ T - 1/60). The incoming scene draws that identical state at local time 0 and starts moving on its first frame.",
+      "2D OVERRIDE: when a handoff is reached through 3D or an exponential zoom, the outgoing scene hides that machinery for the rest frames and draws the handoff state as a flat 2D layer, so rounding can never leak across the cut.",
+      "Canonical text: any word shared across a cut is ONE text element with identical CSS in both scenes (specified in the handoff); it is never rebuilt from per-letter spans on the handoff frames.",
+      "The only overlap (9.140625–9.375) uses one shared pan function P(t); the incoming scene is on top and transparent outside its own panel."
+    ],
+    "motion_rules": [
+      "Pure function of t. Set every animated property every frame. Seed all randomness with R.rand/R.hash keyed on an index or floor(frame/k). No CSS transitions or animations, Math.random, or Date.",
+      "Key poses land on grid frames. Accents go on the snare (beats 2 and 4) or off-beat 8ths; cuts go on downbeats or snares.",
+      "Anticipation before every big move (≥ 2 frames); follow-through after every stop (overshoot or settle wobble). Nothing starts or stops dead unless it is a deliberate hard cut.",
+      "Squash & stretch preserves volume (sx·sy = 1 ± 0.02), anchors at the contact point on impact, and aligns to the velocity vector in flight (rotate by atan2(vy, vx)).",
+      "Arcs, not lines: anything travelling more than 200 px follows a curve.",
+      "Staggers: 1 frame per letter by default, 2–3 frames per word; never more than 4 frames in the montage.",
+      "No cross-dissolves between scenes (cut, wipe, match, morph, whip or flash only). Opacity fades only on secondary elements and only up to 0.2 s.",
+      "Fake motion blur with streaks, smears (stretch along velocity) and onion skins. No CSS blur on full-frame or 3D layers except where a scene says so.",
+      "At rest, snap text translation to whole pixels so it does not shimmer.",
+      "Linear timing only for timecode, constant spins and the end-card push-in.",
+      "Global FX go through R.cue and sounds through R.sfx, registered in setup, so the soundtrack and the post-FX see them. Scenes never draw their own flashes, shakes or letterbox.",
+      "Never draw or imitate the Anthropic/Claude logo or spark. The only mark is the \"C.\" monogram (a gapped ring plus a dot). No emails, URLs or phone numbers."
+    ]
+  },
+  "open_questions": [
+    "The engine has no \"vignette\" cue yet. The four vignette cues are marked OPTIONAL and are harmlessly ignored by R.fxAt until someone adds ~10 lines (semantics given).",
+    "CSS 3D corridor: 4200-deep preserve-3d planes may clip or seam in headless Chromium. Slab culling and the 2D rest override contain the risk; fallback is a 3000-deep corridor.",
+    "The A drip-through is ambitious for 28 frames (converge 7, settle 7, drip 14). Fallback: the dot drips off the crossbar edge without passing through the membrane.",
+    "Canvas text uses stretch keywords only (normal / expanded / extra-condensed = 62.5%). DOM text uses exact percentages, so canvas-sampled type (RANGE targets, halftone C) differs by <1% from DOM type. No handoff depends on canvas type.",
+    "Key: F minor (matches audio/synth.py) instead of the pitches' A minor; note names in the sound notes are written in F minor.",
+    "All type metrics were measured in this Chromium build with the bundled woff2 files (Archivo flat cap 0.6875 em; \"CLAUDE\" ink 2.9075 / 5.3525 px per px of font-size at 62.5% / 125%). Builders re-measure at setup; handoff coordinates are absolute and do not move if measurements drift."
+  ]
+}

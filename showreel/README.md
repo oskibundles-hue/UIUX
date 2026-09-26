@@ -31,6 +31,8 @@ src/engine.js         deterministic runtime: timing grid, easing, springs, keyfr
 src/scenes/*.js       one module per scene; manifest.js lists the load order
 tools/render.mjs      Chromium frame capture (parallel pages) -> ffmpeg (BT.709, yuv420p)
 tools/stills.mjs      stills + contact sheets for visual QA
+tools/determinism.mjs checks a scene renders identically in order and shuffled
+tools/scaffold.mjs    manifest + placeholder scenes from storyboard.json
 tools/cues.mjs        exports scene windows, FX cues and sound events -> audio/cues.json
 audio/synth.py        numpy soundtrack: drums, sub, stabs, risers, impacts; picture-synced from cues.json
 fonts/                Archivo (variable wght+wdth), Instrument Serif, JetBrains Mono (all SIL OFL 1.1)
@@ -115,6 +117,7 @@ R.cue(t, 'chroma', {amt: 10, dur: 0.2});
 R.cue(t, 'zoom', {amt: 0.05, dur: 0.3});
 R.cue(t, 'invert', {dur: 0.05});
 R.cue(t, 'letterbox', {amt: 110, dur: 1.2});
+R.cue(t, 'vignette', {amt: 0.5, dur: 0.47, in: 0.1, out: 0.03});
 R.sfx(t, 'impact' | 'whoosh' | 'swish' | 'click' | 'tick' | 'pop' | 'blip' | 'glitch' | 'riser' | 'reverse' | 'subdrop' | 'shimmer' | 'type' | 'tapestop', {...});
 ```
 
@@ -124,6 +127,7 @@ R.sfx(t, 'impact' | 'whoosh' | 'swish' | 'click' | 'tick' | 'pop' | 'blip' | 'gl
 node tools/stills.mjs --scene s03 --count 12 --sheet          # whole scene, labelled contact sheet
 node tools/stills.mjs --only s03 --from 4.1 --to 4.4 --every 2 --sheet   # motion check, every 2nd frame
 node tools/stills.mjs --times 3.75,5.617 --name handoff        # both sides of a handoff (all scenes)
+node tools/determinism.mjs --scene s03                          # in-order vs shuffled render must match
 ```
 
 `stills.mjs` exits non-zero and prints any page error, so fix those first. Look at the actual PNGs: check

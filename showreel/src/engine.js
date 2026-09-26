@@ -690,6 +690,7 @@
    *   R.cue(t, 'invert', {dur: 0.06})                            // hard invert for dur
    *   R.cue(t, 'letterbox', {amt: 120, dur: 1.2, in: 0.2, out: 0.2}) // bars of amt px, eased in/out
    *   R.cue(t, 'grain',  {amt: 0.12, dur: 1})                    // extra grain on top of the base
+   *   R.cue(t, 'vignette', {amt: 0.5, dur: 0.47, in: 0.1, out: 0.03}) // vignette opacity from base 0.22 to amt, eased in/out
    * Envelopes: flash/shake/chroma/zoom decay as (1 - k)^curve (curve default 2).
    */
   R.cue = (t, type, o = {}) => {
@@ -729,7 +730,7 @@
   }
   /** Evaluate all FX at global time t (pure). */
   R.fxAt = (t) => {
-    const fx = { flash: 0, flashColor: '#ffffff', shakeX: 0, shakeY: 0, chroma: 0, chromaAngle: 0, zoom: 0, invert: false, letterbox: 0, grain: R.config.grain };
+    const fx = { flash: 0, flashColor: '#ffffff', shakeX: 0, shakeY: 0, chroma: 0, chromaAngle: 0, zoom: 0, invert: false, letterbox: 0, grain: R.config.grain, vignette: R.config.vignette };
     let flashBest = 0;
     for (const c of R.cues) {
       if (t < c.t) continue;
@@ -764,6 +765,15 @@
           break;
         }
         case 'grain': if (t - c.t < (c.dur ?? 1)) fx.grain += c.amt ?? 0.08; break;
+        case 'vignette': {
+          // Eases from the base vignette to amt over `in` (snap), holds, returns over `out`.
+          const dur = c.dur ?? 0.5, i = c.in ?? 0.1, o = c.out ?? 0.05, lt = t - c.t;
+          if (lt < dur) {
+            const v = lt < i ? E.snap(lt / i) : lt > dur - o ? 1 - E.snap((lt - (dur - o)) / o) : 1;
+            fx.vignette = Math.max(fx.vignette, R.lerp(R.config.vignette, c.amt ?? 0.5, v));
+          }
+          break;
+        }
         default: break;
       }
     }
@@ -848,6 +858,7 @@
     } else {
       camera.style.filter = fx.invert ? 'invert(1)' : 'none';
     }
+    vignetteEl.style.opacity = fx.vignette.toFixed(3);
     flashEl.style.opacity = fx.flash.toFixed(3);
     flashEl.style.background = fx.flashColor;
     lbTop.style.height = fx.letterbox.toFixed(1) + 'px';
