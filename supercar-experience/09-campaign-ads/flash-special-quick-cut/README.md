@@ -1,5 +1,8 @@
 # Flash special story, quick cut (Lamborghini Huracán STO)
 
+**Approved 2026-09-26 as the go-to treatment for quick promo story ads** (`quick-promo` in
+`../HOUSE-STYLE.md`). Start the next promo story from `story2.html`.
+
 A 15 s 9:16 Instagram/Facebook story for a two-hour flash special today, 11 AM to 1 PM. Cut fast so it
 could go out when the window opened. The polished version is built next to it in `../flash-special-story/`.
 
