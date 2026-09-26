@@ -4,7 +4,8 @@
 // Layers (bottom → top):
 //   glyphs   DOM: six plain Paper letters (flatten + squeeze) and the ONE canonical condensed "CLAUDE" (rest frames)
 //   stage    one full-frame canvas: the D glitch, the E shape build, the specimen row (cells, stutter, collapse)
-//   dot      DOM Signal disc (the protagonist) from the E onward; inside the D it is drawn into the sliced canvas
+//            and, on top of everything in it, the protagonist (a canvas disc: raster is independent of render order,
+//            unlike a transformed DOM disc whose compositor layer made its edge pixels history-dependent)
 //   captions DOM JetBrains Mono: the montage caption (x 72, baseline 976) and the six row captions (baseline 744)
 //
 // Everything is a pure function of t. All randomness is R.hash keyed on slice/block index and the frame index.
@@ -39,6 +40,8 @@
   const POP_DUR = 5 / 60;
   const COLLAPSE_DUR = 0.1171875;
   const TIGHT = { stiffness: 420, damping: 26 };
+  // squeeze onion skins: [time lag in frames, peak opacity]
+  const GHOSTS = [[0.25, 0.42], [0.5, 0.26], [0.75, 0.13]];
 
   // ----------------------------------------------------------------------------------------------------------
   // Geometry (frame px)
@@ -55,6 +58,7 @@
   const CANON_SIZE = 370, CANON_BASE = 670; //  canonical condensed word (shared with s08)
   const PERIOD = { x: 1750, y: 682, d: 56 }; // the row's full stop (bottom on the cell baseline 710)
   const FINAL = { x: 1542, y: 638, d: 64 }; //  handoff to s08 (bottom on the word's baseline 670)
+  const SEAT_Y = PLAIN_BASE - PERIOD.d / 2; //   612: the period re-seated on the plain letters' baseline
   // E — SHAPE (full frame)
   const STEM = { x0: 460, x1: 650, y0: 150, y1: 930 };
   const ARMS = [
@@ -70,7 +74,6 @@
     { edge: 'top', dy: -28, gap: 34, frac: 0.46, delay: 0.5 / 60 },
     { edge: 'bot', dy: 14, gap: 18, frac: 0.62, delay: 1 / 60 },
   ];
-  const PLAIN_TOP_SEAT = { y: 612 }; // the period's centre once re-seated on the plain baseline (bottom 640)
 
   // ----------------------------------------------------------------------------------------------------------
   // Small helpers
@@ -115,15 +118,17 @@
     return { l: x0 + 1 - colMax[x0] / 255 - ox, r: x1 + colMax[x1] / 255 - ox, t: y0 + 1 - rowMax[y0] / 255 - oy, b: y1 + rowMax[y1] / 255 - oy };
   }
   /**
-   * Largest inscribed circle of a glyph's enclosed counter (exact Felzenszwalb EDT), glyph drawn at (ox, oy).
-   * Returns the centroid of the max-distance plateau (a D's counter is taller than wide) and the radius.
+   * Largest inscribed circle of a glyph's enclosed counter (exact Felzenszwalb EDT), glyph drawn at (ox, oy),
+   * computed over the glyph's ink box (+8 px). Returns the centroid of the max-distance plateau (a D's counter
+   * is taller than wide) in frame pixels, and the radius.
    */
-  function counterCircle(font, ch, ox, oy) {
-    const W = R.W, H = R.H;
+  function counterCircle(font, ch, ox, oy, box) {
+    const bx = Math.floor(ox + box.l) - 8, by = Math.floor(oy + box.t) - 8;
+    const W = Math.ceil(box.r - box.l) + 16, H = Math.ceil(box.b - box.t) + 16;
     const { g } = offscreen(W, H, true);
     g.font = font;
     g.fillStyle = '#fff';
-    g.fillText(ch, ox, oy);
+    g.fillText(ch, ox - bx, oy - by);
     const d = g.getImageData(0, 0, W, H).data;
     const N = W * H, ink = new Uint8Array(N), outside = new Uint8Array(N);
     for (let i = 0; i < N; i++) ink[i] = d[i * 4 + 3] >= 128 ? 1 : 0;
@@ -173,7 +178,7 @@
       if (ink[i] || outside[i] || Math.sqrt(f[i]) < rmax - 0.75) continue;
       sx += i % W; sy += (i / W) | 0; cnt++;
     }
-    return cnt ? { x: sx / cnt, y: sy / cnt, r: rmax } : null;
+    return cnt ? { x: bx + sx / cnt, y: by + sy / cnt, r: rmax } : null;
   }
   /** Sin-windowed ±2 px tremble (R.noise2) over [T_TREM, T_REST]; exactly 0 outside the window. */
   function tremble(t, ch) {
@@ -211,7 +216,7 @@
       // ---- Picture-locked sound ----
       R.sfx(11.25, 'glitch', { dur: 0.234375 }); //                        D
       R.sfx(11.484375, 'impact', { amt: 0.45 }); //                        E stab
-      R.sfx(ARM_T0, 'swish', { amt: 0.35 }); //                            arm 1 (picture: 11.5292)
+      R.sfx(ARM_T0, 'swish', { amt: 0.35 }); //                            arm 1 (11.525: fires on the stem's squash frame)
       R.sfx(ARM_T0 + 1 / 60, 'swish', { amt: 0.35 }); //                   arm 2
       R.sfx(ARM_T0 + 2 / 60, 'swish', { amt: 0.35 }); //                   arm 3
       R.sfx(11.71875, 'glitch', { dur: 0.06, pitch: 1.0 }); //             row pop F
@@ -228,13 +233,7 @@
       // ---- DOM layers ----
       const full = { width: R.W + 'px', height: R.H + 'px' };
       S.glyphLayer = R.el('div', { style: full }, root);
-      const cv = R.canvas(root);
-      S.cv = cv.canvas;
-      S.ctx = cv.ctx;
-      S.dot = R.el('div', {
-        style: { width: '112px', height: '112px', borderRadius: '50%', background: P.signal, transformOrigin: '0 0', display: 'none' },
-      }, root);
-      S.dotD = 112;
+      S.ctx = R.canvas(root).ctx;
       const capLayer = R.el('div', { style: full }, root);
       // goo filter for the A mini (Paper shapes → blur → alpha threshold, as in s06's liquid A)
       const svg = R.svg('svg', { width: 0, height: 0, style: 'position:absolute;left:0;top:0' }, root);
@@ -244,6 +243,23 @@
 
       // Six plain Paper letters (one span each; font-size stays 370 and the 291→370 size ramp is a scale about the
       // baseline origin, so no per-frame integer rounding of font metrics can make them jitter).
+      // Onion-skin trail for the squeeze snap (beneath the letters): GHOSTS[j] lags 1/4, 1/2, 3/4 frame behind.
+      // Shown only while a letter moves more than a few px per frame, so every held pose is clean.
+      S.ghosts = GHOSTS.map(() => {
+        const row = [];
+        for (let i = 0; i < 6; i++) {
+          const gEl = R.el('div', {
+            text: LETTERS[i],
+            style: {
+              fontFamily: R.font.display, fontWeight: '900', fontStretch: '100%', fontSize: CANON_SIZE + 'px',
+              letterSpacing: '0px', fontKerning: 'normal', color: P.paper, whiteSpace: 'pre', display: 'none',
+            },
+          }, S.glyphLayer);
+          gEl.style.lineHeight = '1';
+          row.push(gEl);
+        }
+        return row;
+      });
       S.spans = [];
       for (let i = 0; i < 6; i++) {
         const s = R.el('div', {
@@ -309,6 +325,7 @@
       }
       S.spanBase = S.spans.map((s) => baselineOf(s));
       S.spans.forEach((s, i) => { s.style.transformOrigin = `0px ${S.spanBase[i]}px`; });
+      S.ghosts.forEach((row) => row.forEach((gEl, i) => { gEl.style.transformOrigin = `0px ${S.spanBase[i]}px`; }));
       S.capMBase = baselineOf(S.capM);
       S.capM.style.top = Math.round(976 - S.capMBase) + 'px';
       S.capBase = baselineOf(S.caps[0]);
@@ -339,12 +356,12 @@
 
       // ---- D — GLITCH: re-derive the placement so the counter's inscribed circle sits on the anchor ----
       const DFONT = '900 1109px Archivo';
-      let dOx = 516, dOy = 922;
-      const cc = counterCircle(DFONT, 'D', dOx, dOy);
+      const dInk = inkBox(DFONT, 'D');
+      let dOx = 516, dOy = 922; // s06 reference placement
+      const cc = counterCircle(DFONT, 'D', dOx, dOy, dInk);
       if (cc) { dOx += Math.round(AX - cc.x); dOy += Math.round(AY - cc.y); }
       S.dCounter = cc;
       S.dOrigin = [dOx, dOy];
-      const dInk = inkBox(DFONT, 'D');
       // source region for the three layers (Paper, Signal, Volt)
       S.dRx = Math.floor(dOx + dInk.l) - 4;
       S.dRy = Math.floor(dOy + dInk.t) - 4;
@@ -364,6 +381,8 @@
       S.dTop = Math.floor(dOy + dInk.t);
       S.dBot = Math.ceil(dOy + dInk.b);
       S.dSl = new Int32Array(15);
+      S.dOff = new Float64Array(14);
+      S.dStr = new Float64Array(14);
       // scanline pattern: 2 px Paper @ 8% every 4 px
       const sp = offscreen(4, 4);
       sp.g.fillStyle = R.rgba(P.paper, 0.08);
@@ -477,10 +496,12 @@
       g.globalAlpha = 1;
       g.filter = 'none';
       g.clearRect(0, 0, R.W, R.H);
-      if (t < T_E) drawD(S, g, t, f);
-      else if (t < T_ROW) drawE(S, g, t);
-      else drawRow(S, g, t, f);
-      updateDot(S, t);
+      if (t < T_E) drawD(S, g, t, f); // the D draws its own (sliced) protagonist
+      else {
+        if (t < T_ROW) drawE(S, g, t);
+        else drawRow(S, g, t, f);
+        drawDot(g, t);
+      }
       updateCaptions(S, t, f);
       updateGlyphs(S, t);
     },
@@ -516,11 +537,14 @@
       const split = 22 + Math.round((amp / 90) * 10 * (R.hash(k, roll, 702) - 0.5));
       const sy = y0 - S.dRy;
       let dx = S.dRx + off, dw = S.dRw;
+      S.dOff[k] = off;
+      S.dStr[k] = 1;
       if (k === smearK) {
         // stretch the band horizontally about the anchor (a pixel-sort streak)
         const st = 1.45 + 0.9 * R.hash(roll, 3, 704);
         dx = AX + off + (S.dRx - AX) * st;
         dw = S.dRw * st;
+        S.dStr[k] = st;
       }
       if (k === dropK) {
         // plate dropout: this band shows a single colour plate only (pure Signal or pure Volt, never a blend)
@@ -533,19 +557,6 @@
         g.drawImage(S.dVolt, 0, sy, S.dRw, h, dx + split, y0, dw, h);
         g.globalCompositeOperation = 'source-over';
         g.drawImage(S.dPaper, 0, sy, S.dRw, h, dx, y0, dw, h);
-      }
-      // the protagonist in the counter is sliced with the D
-      if (y1 > AY - 56 && y0 < AY + 56) {
-        g.save();
-        g.beginPath();
-        g.rect(0, y0, R.W, h);
-        g.clip();
-        g.fillStyle = P.signal;
-        g.beginPath();
-        if (cut || k !== smearK) g.arc(AX + (cut ? 0 : off), AY, 56, 0, TAU);
-        else g.ellipse(AX + off, AY, 56 * (dw / S.dRw), 56, 0, 0, TAU);
-        g.fill();
-        g.restore();
       }
     }
     // flicker blocks on alternate frames (seeded spots hugging the slice seams)
@@ -564,6 +575,22 @@
     }
     g.fillStyle = S.scan;
     g.fillRect(0, 0, R.W, R.H);
+    // the protagonist in the counter, sliced with the D (drawn above the scanlines so it stays a flat disc;
+    // intact on the cut frame so the centre-locked match cut holds)
+    g.fillStyle = P.signal;
+    for (let k = 0; k < 14; k++) {
+      const y0 = sl[k], y1 = sl[k + 1];
+      if (y1 <= AY - 56 || y0 >= AY + 56 || y1 <= y0) continue;
+      g.save();
+      g.beginPath();
+      g.rect(0, y0, R.W, y1 - y0);
+      g.clip();
+      g.beginPath();
+      if (cut) g.arc(AX, AY, 56, 0, TAU);
+      else g.ellipse(AX + S.dOff[k], AY, 56 * S.dStr[k], 56, 0, 0, TAU);
+      g.fill();
+      g.restore();
+    }
   }
 
   // ------------------------------------------------------------------------------------------------------------
@@ -662,12 +689,17 @@
       }
     }
     if (stutter) {
+      // 10 bands of seeded height, each offset up to ±40 px, re-seeded on every frame of the stutter
       dst.setTransform(1, 0, 0, 1, 0, 0);
-      const n = 10, h = CH / n;
-      for (let k = 0; k < n; k++) {
+      let sum = 0;
+      for (let k = 0; k < 10; k++) sum += 0.4 + 1.2 * R.hash(k, f, 902);
+      let acc = 0, y0 = 0;
+      for (let k = 0; k < 10; k++) {
+        acc += 0.4 + 1.2 * R.hash(k, f, 902);
+        const y1 = k === 9 ? CH : Math.round((CH * acc) / sum);
         const off = Math.round(glitchOff(R.hash(k, f, 901), 40));
-        const y0 = Math.round(k * h), y1 = Math.round((k + 1) * h);
-        g.drawImage(S.rowBuf.c, 0, y0, R.W, y1 - y0, off, CY0 + y0, R.W, y1 - y0);
+        if (y1 > y0) g.drawImage(S.rowBuf.c, 0, y0, R.W, y1 - y0, off, CY0 + y0, R.W, y1 - y0);
+        y0 = y1;
       }
     }
   }
@@ -682,7 +714,7 @@
       case 2: miniA(S, g, t); break;
       case 3: miniU(S, g, t); break;
       case 4: miniD(S, g, t, f); break;
-      default: miniE(g); break;
+      default: miniE(g, t); break;
     }
   }
 
@@ -803,37 +835,37 @@
   }
 
   // E — SHAPE: the vignette's rectangles scaled 200/780 about the E box centre, centred on the cell
-  function miniE(g) {
+  // Idle: the arms breathe on the beat (a 0→3 px push, 1-frame stagger top → bottom), echoing the punch-out.
+  function miniE(g, t) {
+    const arm = (k) => 3 * Math.pow(0.5 - 0.5 * Math.cos(TAU * (t - T_ROW - k / 60) / 0.46875), 2);
     g.fillStyle = P.ink;
     g.fillRect(1495, 440, 49, 200);
-    g.fillRect(1543, 440, 126, 44);
-    g.fillRect(1543, 518, 62, 44);
-    g.fillRect(1543, 596, 126, 44);
+    g.fillRect(1543, 440, 126 + arm(0), 44);
+    g.fillRect(1543, 518, 62 + arm(1), 44);
+    g.fillRect(1543, 596, 126 + arm(2), 44);
   }
 
   // ------------------------------------------------------------------------------------------------------------
-  // The protagonist (DOM disc) from the E cut onward
+  // The protagonist from the E cut onward (drawn last into the stage canvas, above the cells and the DOM glyphs)
   // ------------------------------------------------------------------------------------------------------------
-  function updateDot(S, t) {
-    const el = S.dot;
-    if (t < T_E) {
-      if (el.style.display !== 'none') el.style.display = 'none';
-      return;
-    }
-    if (el.style.display !== 'block') el.style.display = 'block';
+  function drawDot(g, t) {
     let d = 112, x = AX, y = AY, sx = 1, sy = 1, rot = 0, skew = 0, anchor = 'center';
     if (t < T_ROW) {
       // E: centre-locked, kissed by the middle arm
       sx = kissSquash(t);
       sy = 1 / sx;
     } else if (t < T_AU) {
-      // anticipation at the anchor: squash 1.3 × 0.77 on its contact point, leaning into the leap
-      const a = EZ.swift(R.seg(t, T_ROW, T_ROW + 4 / 60));
+      // anticipation at the anchor: squash toward 1.3 × 0.77 on its contact point, leaning into the leap. It
+      // reacts to the pair pop (fast first 60%), then keeps LOADING through the 8th (slow ease-in to the full
+      // crouch on the last frame) with a building tremble, so the hold is a coiling spring, not a dead frame.
+      const a = 0.6 * EZ.swift(R.seg(t, T_ROW, T_ROW + 3 / 60)) + 0.4 * EZ.inCubic(R.seg(t, T_ROW + 3 / 60, T_AU - 1 / 60));
       sx = lerp(1, 1.3, a);
-      sy = lerp(1, 0.77, a);
-      skew = -7 * a;
+      sy = 1 / sx; // volume-preserving (1.3 × 0.769)
+      skew = -9 * a;
       anchor = 'bottom';
       y = AY + 56;
+      const load = R.smoothstep(T_ROW + 3 / 60, T_AU - 1 / 60, t);
+      x += 1.5 * load * clamp(2.6 * R.noise2(t * 61, 5.3), -1, 1);
     } else if (t < T_REV) {
       // the leap: x linear, y parabolic (apex ≈ 200), shrinking Ø112 → Ø56, stretched along its velocity
       const u = (t - T_AU) / LEAP_DUR;
@@ -861,7 +893,7 @@
       } else if (t < T_HOP_DN) {
         // the hop: 710 → 640 (bottom) on a short arc, stretched along its (vertical) velocity
         anchor = 'center';
-        const D = T_HOP_DN - T_HOP_UP, u = (t - T_HOP_UP) / D, rise = PLAIN_TOP_SEAT.y - PERIOD.y, h = 40;
+        const D = T_HOP_DN - T_HOP_UP, u = (t - T_HOP_UP) / D, rise = SEAT_Y - PERIOD.y, h = 40;
         y = PERIOD.y + rise * u - 4 * h * u * (1 - u);
         const vy = (rise - 4 * h * (1 - 2 * u)) / D;
         const st = 1 + 0.22 * R.smoothstep(300, 2600, Math.abs(vy));
@@ -882,21 +914,34 @@
         const tr = tremble(t, 1);
         x += tr[0];
         bottom += tr[1];
+        // the snap's fast frames (≈779–781 move up to ~90 px/frame): smear along the velocity (exactly 1 at rest)
+        const dq = q - EZ.snap(R.seg(t - 1 / 60, T_SQ, T_REST));
+        const vx = (FINAL.x - PERIOD.x) * dq, vy = (CANON_BASE - PLAIN_BASE) * dq;
+        const st = 1 + 0.45 * R.smoothstep(12, 80, Math.hypot(vx, vy));
+        if (st > 1) {
+          // stretch backwards from the leading edge (it never reaches further toward the E than the round dot)
+          const vl = Math.hypot(vx, vy), back = ((st - 1) * d) / 2;
+          anchor = 'center';
+          x -= (vx / vl) * back;
+          y = bottom - d / 2 - (vy / vl) * back;
+          rot = Math.atan2(vy, vx);
+          sx = st;
+          sy = 1 / st;
+        }
       }
       if (anchor === 'bottom') y = bottom;
     }
-    if (d !== S.dotD) {
-      el.style.width = d + 'px';
-      el.style.height = d + 'px';
-      S.dotD = d;
-    }
-    const oy = anchor === 'bottom' ? -d : -d / 2;
-    let tf = `translate(${x}px,${y}px)`;
-    if (rot) tf += ` rotate(${rot}rad)`;
-    if (skew) tf += ` skewX(${skew}deg)`;
-    if (sx !== 1 || sy !== 1) tf += ` scale(${sx},${sy})`;
-    tf += ` translate(${-d / 2}px,${oy}px)`;
-    el.style.transform = tf;
+    // (x, y) is the disc centre, or its contact point when anchored at the bottom; squash/stretch pivots there
+    g.save();
+    g.translate(x, y);
+    if (rot) g.rotate(rot);
+    if (skew) g.transform(1, 0, Math.tan(R.deg(skew)), 1, 0, 0);
+    if (sx !== 1 || sy !== 1) g.scale(sx, sy);
+    g.fillStyle = P.signal;
+    g.beginPath();
+    g.arc(0, anchor === 'bottom' ? -d / 2 : 0, d / 2, 0, TAU);
+    g.fill();
+    g.restore();
   }
 
   // ------------------------------------------------------------------------------------------------------------
@@ -947,18 +992,33 @@
       const dd = showSpans ? 'block' : 'none';
       if (s.style.display !== dd) s.style.display = dd;
     }
-    if (!showSpans) return;
-    const q = EZ.snap(R.seg(t, T_SQ, T_REST));
-    const sc = lerp(PLAIN_SIZE / CANON_SIZE, 1, q);
-    const stretch = lerp(100, 62, q);
-    const base = lerp(PLAIN_BASE, CANON_BASE, q);
-    const tr = tremble(t, 0);
-    for (let i = 0; i < 6; i++) {
-      const s = S.spans[i];
-      const x = lerp(S.plainX0[i], S.canonX[i], q) + tr[0];
-      const y = base - S.spanBase[i] + tr[1];
-      s.style.fontStretch = stretch.toFixed(3) + '%';
-      s.style.transform = `translate(${x}px,${y}px) scale(${sc})`;
+    const q = showSpans ? EZ.snap(R.seg(t, T_SQ, T_REST)) : 0;
+    // onion skins: only while the snap moves the letters fast (a smear on ≈779–781; never on a held pose)
+    for (let j = 0; j < GHOSTS.length; j++) {
+      const [lag, peak] = GHOSTS[j];
+      const qg = EZ.snap(R.seg(t - lag / 60, T_SQ, T_REST));
+      let maxMove = 0;
+      for (let i = 0; i < 6; i++) maxMove = Math.max(maxMove, Math.abs(S.canonX[i] - S.plainX0[i]) * (q - qg));
+      const op = showSpans ? peak * R.smoothstep(4, 16, maxMove) : 0;
+      for (let i = 0; i < 6; i++) {
+        const gEl = S.ghosts[j][i];
+        const dd = op > 0.004 ? 'block' : 'none';
+        if (gEl.style.display !== dd) gEl.style.display = dd;
+        if (dd === 'none') continue;
+        setLetter(S, gEl, i, qg, [0, 0]);
+        gEl.style.opacity = op.toFixed(3);
+      }
     }
+    if (!showSpans) return;
+    const tr = tremble(t, 0);
+    for (let i = 0; i < 6; i++) setLetter(S, S.spans[i], i, q, tr);
+  }
+  /** One letter's squeeze pose at progress q: size 291→370 (scale about the baseline origin), width 100→62%. */
+  function setLetter(S, el, i, q, tr) {
+    const sc = lerp(PLAIN_SIZE / CANON_SIZE, 1, q);
+    const x = lerp(S.plainX0[i], S.canonX[i], q) + tr[0];
+    const y = lerp(PLAIN_BASE, CANON_BASE, q) - S.spanBase[i] + tr[1];
+    el.style.fontStretch = lerp(100, 62, q).toFixed(3) + '%';
+    el.style.transform = `translate(${x}px,${y}px) scale(${sc})`;
   }
 })();
