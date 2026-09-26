@@ -8,8 +8,7 @@ Instagram downloads the video straight from a Dropbox link, so the full-quality
 
 - **Dry run by default.** Nothing posts without `--publish`.
 - **Right account only.** It refuses if the token belongs to any account other than
-  `account_username` in `post.json`. That field ships blank, so nothing can post until
-  someone fills it in.
+  `account_username` in `post.json` (`nq.young`).
 - **No double posts.** It refuses if a post containing "The floor goes down" is already on
   the account. It checks before uploading and again right before publishing, in case
   another agent posts it in between. It never retries the publish call.
@@ -28,7 +27,8 @@ Instagram downloads the video straight from a Dropbox link, so the full-quality
    web, open the environment's settings and edit its environment variables. Never paste it
    into a chat or commit it. Store the video's direct Dropbox link (ending `raw=1`) as
    `IG_VIDEO_URL`.
-4. Put the account name in `post.json` → `account_username` (for example `nq.young`).
+4. `post.json` → `account_username` is already set to `nq.young`. Generate the token for
+   that account; a token for any other account is refused.
 
 ## Run
 

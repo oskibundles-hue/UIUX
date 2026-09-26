@@ -268,10 +268,10 @@ class PostReelTest(unittest.TestCase):
         self.assertEqual(code, 2, out.getvalue())
         self.assertIn("no video", out.getvalue())
 
-    def test_shipped_post_json_is_valid_but_needs_an_account(self):
+    def test_shipped_post_json_targets_nq_young(self):
         cfg_path = os.path.join(os.path.dirname(os.path.abspath(post_reel.__file__)), "post.json")
-        with open(cfg_path, encoding="utf-8") as f:
-            cfg = json.load(f)
+        cfg = post_reel.load_config(cfg_path)
+        self.assertEqual(cfg["account_username"], "nq.young")
         self.assertEqual(cfg["expected_size_bytes"], 299378366)
         self.assertNotIn("video_url", cfg)  # the link must stay out of this public repo
         self.assertLessEqual(len(cfg["caption"]), 2200)
