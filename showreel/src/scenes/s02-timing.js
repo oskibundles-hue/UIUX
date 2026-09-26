@@ -510,12 +510,15 @@
         ctx.fill();
         return;
       }
-      // THE DIVE: exponential approach, centre eased to frame centre
+      // THE DIVE: exponential approach R = 37.4·e^(18u), centre eased to frame centre. While the
+      // centre travels fast the disc keeps the reel's smear language (volume-preserving stretch
+      // along its velocity, ≈ a 180° shutter); it is a perfect circle again before it fills the frame.
       const u = t - T_DIVE;
       const Rr = 37.4 * Math.exp(18 * u);
-      const c = this.diveCentre(t);
-      ctx.beginPath();
-      ctx.arc(c[0], c[1], Rr, 0, TAU);
+      const c = this.diveCentre(t), c2 = this.diveCentre(t + 1e-3);
+      const vx = (c2[0] - c[0]) / 1e-3, vy = (c2[1] - c[1]) / 1e-3;
+      const s = 1 + Math.min(0.3, Math.hypot(vx, vy) / 120 / (2 * Rr));
+      tracePose(ctx, s > 1.001 ? poseStretch(c[0], c[1], s, Math.atan2(vy, vx)) : poseRound(c[0], c[1]), Rr);
       ctx.fill();
     },
   });

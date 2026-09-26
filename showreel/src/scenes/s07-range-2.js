@@ -564,7 +564,7 @@
   // E — SHAPE (11.484375 → 11.71875)
   // ------------------------------------------------------------------------------------------------------------
   const armTip = (k, t) => {
-    const ta = T_LAND + k / 60;
+    const ta = ARM_T0 + k / 60;
     if (t < ta) return STEM.x1;
     return STEM.x1 + ARMS[k].len * EZ.punch(R.seg(t, ta, ta + ARM_DUR));
   };
@@ -572,25 +572,25 @@
     g.fillStyle = P.acid;
     g.fillRect(0, 0, R.W, R.H);
     g.fillStyle = P.ink;
-    // stem: drops from above (swift, 5 frames), 1-frame landing squash anchored at its base
-    const ty = -1100 * (1 - EZ.swift(R.seg(t, T_E, T_LAND)));
-    let sy = 1;
-    if (t >= T_LAND && t < T_LAND + 1 / 60) sy = 0.92;
+    // stem: slams down from above (−1100 → 0) straight into a 1-frame landing squash anchored at its base
+    const ty = -1100 * (1 - EZ.outQuad(R.seg(t, T_E, T_FIRE)));
+    const sy = t >= T_FIRE && t < T_FIRE + 1 / 60 ? 0.92 : 1;
     const sx = 1 / sy, cx = (STEM.x0 + STEM.x1) / 2;
     const w = (STEM.x1 - STEM.x0) * sx, h = (STEM.y1 - STEM.y0) * sy;
     g.fillRect(cx - w / 2, STEM.y1 + ty - h, w, h);
     // arms punch out of the stem, 1-frame stagger top → bottom, each trailing three speed lines
     for (let k = 0; k < 3; k++) {
-      const ta = T_LAND + k / 60;
+      const ta = ARM_T0 + k / 60;
       if (t < ta) continue;
       const A = ARMS[k], tip = armTip(k, t);
       g.fillRect(STEM.x1, A.y0, tip - STEM.x1, A.y1 - A.y0);
       for (const L of SPEED) {
-        const q = R.seg(t, ta + L.delay, ta + 6 / 60);
-        if (q >= 1 || t < ta + L.delay) continue;
-        const xe = tip - L.gap;
-        const xs = STEM.x1 + 6 + (xe - STEM.x1 - 6) * EZ.inCubic(q);
-        if (xe - xs < 2) continue;
+        const t0 = ta + L.delay;
+        if (t < t0) continue;
+        const q = R.seg(t, t0, ta + 6 / 60);
+        const len = L.frac * A.len * Math.pow(1 - q, 2.2);
+        const xe = tip - L.gap, xs = Math.max(STEM.x1 + 10, xe - len);
+        if (xe - xs < 14) continue;
         const y = Math.round(L.edge === 'top' ? A.y0 + L.dy : A.y1 + L.dy) - 2;
         g.fillRect(xs, y, xe - xs, 4);
       }
@@ -598,7 +598,7 @@
   }
   /** The middle arm's overshoot kisses the dot: contact-driven squash to 0.85 × 1.18, then a TIGHT release. */
   function kissSquash(t) {
-    const ta = T_LAND + 1 / 60;
+    const ta = ARM_T0 + 1 / 60;
     const tPeak = ta + 0.42 * ARM_DUR; // punch() peaks at u ≈ 0.42 (1.110)
     const peakTip = STEM.x1 + ARMS[1].len * 1.1102;
     const rest = AX - 56;
@@ -641,14 +641,11 @@
       drawCell(S, dst, i, t, f);
       dst.restore();
       if (t - tp < 1 / 60) {
-        // 1-frame Paper outline flash on the pop
-        dst.save();
-        dst.translate(cx, CCY);
-        dst.scale(s, s);
+        // 1-frame Paper 2 px outline flash on the pop, 5 px outside the (scaled) cell so it reads on every ground
+        const hw = (CW * s) / 2 + 6, hh = (CH * s) / 2 + 6;
         dst.strokeStyle = P.paper;
-        dst.lineWidth = 2 / s;
-        dst.strokeRect(-CW / 2 + 1 / s, -CH / 2 + 1 / s, CW - 2 / s, CH - 2 / s);
-        dst.restore();
+        dst.lineWidth = 2;
+        dst.strokeRect(Math.round(cx - hw), Math.round(CCY - hh), Math.round(2 * hw), Math.round(2 * hh));
       }
     }
     if (stutter) {
