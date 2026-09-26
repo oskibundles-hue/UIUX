@@ -1,0 +1,463 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=1080">
+<title>SE STO Flash Special</title>
+<!--
+  Supercar Experience, Lamborghini Huracán STO, 2-hour flash special. Story 9:16, 15.5 s, 24 fps.
+  Motion-graphics layer only (transparent). The plate is composited underneath by build_story.py.
+  window.renderAt(t) sets every element for time t (seconds). Pure function of t: no CSS animation,
+  no transitions, no rAF, no clock, no randomness. window.storyReady resolves once fonts are in and
+  the layout (cap-top metrics) is built. Timings follow cue.md section 2.
+-->
+<style>
+@font-face{font-family:'SEBebas';src:url('../../07-fonts/BebasNeue-Regular.ttf') format('truetype')}
+@font-face{font-family:'SEMichroma';src:url('../../07-fonts/Michroma-Regular.ttf') format('truetype')}
+:root{--gold:#FBD101;--white:#FFFFFF;--black:#000000}
+html,body{margin:0;padding:0;width:1080px;height:1920px;overflow:hidden;background:transparent}
+#stage{position:absolute;left:0;top:0;width:1080px;height:1920px;overflow:hidden}
+.a{position:absolute;left:0;top:0}
+.lyr{position:absolute;left:0;top:0;width:1080px;height:1920px}
+.g{color:var(--gold)}
+.w{color:var(--white)}
+.stripe{background:linear-gradient(90deg,var(--gold) 0 78%,var(--white) 78% 100%)}
+.cn{position:absolute;box-sizing:border-box;border:0 solid var(--gold)}
+.dm{display:inline-block;width:9px;height:9px;background:var(--gold);transform:rotate(45deg);
+    margin:0 22px 0 calc(22px - .14em);vertical-align:middle;position:relative;top:-2px}
+</style></head>
+<body><div id="stage"></div>
+<script>
+(function(){
+'use strict';
+const W = 1080, H = 1920;
+const X = f => f * W, Y = f => f * H;
+const GOLD = [251, 209, 1], WHITE = [255, 255, 255];
+const FONT = { B: 'SEBebas', M: 'SEMichroma' };
+
+/* ---------- easing + timing helpers (all pure) ---------- */
+const clamp = (v, a, b) => Math.min(b, Math.max(a, v));
+const P = (t, a, b) => clamp((t - a) / (b - a), 0, 1);
+const lerp = (a, b, p) => a + (b - a) * p;
+const E = {
+  lin: p => p,
+  oExpo: p => p >= 1 ? 1 : 1 - Math.pow(2, -10 * p),
+  oCub: p => 1 - Math.pow(1 - p, 3),
+  iCub: p => p * p * p,
+  ioCub: p => p < .5 ? 4 * p * p * p : 1 - Math.pow(-2 * p + 2, 3) / 2,
+  ioQuad: p => p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2,
+  oBack: (p, s = 1.2) => 1 + (s + 1) * Math.pow(p - 1, 3) + s * Math.pow(p - 1, 2),
+};
+const EPS = 1e-4;
+const on = (t, a, b) => t >= a - EPS && t < b - EPS;           // visible in [a, b)
+const ease = (t, a, b, fn) => fn(P(t, a, b));
+const rgb = (c1, c2, p) => `rgb(${c1.map((v, i) => Math.round(lerp(v, c2[i], p))).join(',')})`;
+
+/* ---------- DOM helpers ---------- */
+const stage = document.getElementById('stage');
+function el(tag, cls, parent, css) {
+  const e = document.createElement(tag);
+  if (cls) e.className = cls;
+  if (css) e.style.cssText = css;
+  (parent || stage).appendChild(e);
+  return e;
+}
+function layer() { return el('div', 'lyr', stage); }
+function st(e, o) {                                              // set transform / opacity / clip in one go
+  const tr = [];
+  if (o.tx || o.ty) tr.push(`translate(${(o.tx || 0).toFixed(2)}px,${(o.ty || 0).toFixed(2)}px)`);
+  if (o.sx != null || o.sy != null) tr.push(`scale(${o.sx == null ? 1 : o.sx},${o.sy == null ? 1 : o.sy})`);
+  else if (o.s != null && o.s !== 1) tr.push(`scale(${o.s})`);
+  e.style.transform = tr.join(' ');
+  e.style.opacity = o.o == null ? 1 : o.o;
+  e.style.display = (o.o === 0) ? 'none' : '';
+  e.style.clipPath = o.clip || 'none';
+}
+function hide(e) { e.style.display = 'none'; }
+
+/* cap-top metrics per font/size, measured with canvas once the fonts are loaded */
+const ctx = document.createElement('canvas').getContext('2d');
+const mcache = {};
+function met(f, fs) {
+  const k = f + fs;
+  if (!mcache[k]) {
+    ctx.font = `${fs}px ${FONT[f]}`;
+    const m = ctx.measureText('H');
+    mcache[k] = { asc: m.fontBoundingBoxAscent, desc: m.fontBoundingBoxDescent, cap: m.actualBoundingBoxAscent };
+  }
+  return mcache[k];
+}
+
+/* A text line placed by its cap top. wrap = mask box (overflow toggled per frame), inner = the text.
+   align: left (x = left edge), right (x = right edge), center (x = centre). */
+function line(parent, o) {
+  const f = o.f, fs = o.fs, ls = o.ls || 0, m = met(f, fs);
+  const L = Math.ceil(m.asc + m.desc);
+  const padT = Math.ceil(fs * .42), padB = Math.ceil(fs * .32), padX = 48;
+  const wrap = el('div', 'a', parent);
+  const inner = el('div', o.cls || 'w', wrap,
+    `position:absolute;left:${padX}px;top:${(padT - (m.asc - m.cap) + (L - m.asc - m.desc) / 2).toFixed(2)}px;` +
+    `font-family:${FONT[f]};font-size:${fs}px;line-height:${L}px;letter-spacing:${ls}em;white-space:nowrap;` +
+    (o.align === 'center' ? `text-indent:${ls}em;` : '') + (o.shadow ? `text-shadow:${o.shadow};` : ''));
+  inner.innerHTML = o.html;
+  const wRaw = inner.getBoundingClientRect().width;
+  const lsPx = ls * fs;
+  const vis = o.align === 'center' ? wRaw - 2 * lsPx : wRaw - lsPx; // visible ink advance
+  const left = o.align === 'right' ? o.x - vis : o.align === 'center' ? o.x - vis / 2 - lsPx : o.x;
+  const wh = padT + m.cap + padB;
+  wrap.style.cssText = `left:${(left - padX).toFixed(2)}px;top:${(o.cap - padT).toFixed(2)}px;width:${Math.ceil(wRaw + 2 * padX)}px;height:${wh}px;`;
+  return { wrap, inner, vis, left, capTop: o.cap, capH: m.cap, base: o.cap + m.cap, padX, padT, wh, wRaw,
+           mid: o.cap + m.cap / 2, right: left + vis, origin: `${padX}px ${padT + m.cap}px` };
+}
+/* per-frame state of a line */
+function L(ln, s) {
+  // s: {o, tx, ty, s, origin, rise (0..1 of masked rise, 1 = settled), up (0..1 masked exit upward),
+  //     clipR (0..1 visible fraction from left), clipL (0..1 hidden fraction from left), color}
+  if (s.o === 0) { hide(ln.wrap); return; }
+  const rise = s.rise == null ? 1 : s.rise, up = s.up || 0;
+  const masking = rise < 1 || up > 0;
+  ln.wrap.style.overflow = masking ? 'hidden' : 'visible';
+  ln.inner.style.transform = masking ? `translateY(${((1 - rise) * 1.05 * ln.wh - up * 1.05 * ln.wh).toFixed(2)}px)` : 'none';
+  let clip = null;
+  if (s.clipR != null && s.clipR < 1) {
+    const vis = ln.padX + s.clipR * ln.vis;
+    clip = `inset(-60px ${Math.max(0, ln.wRaw + 2 * ln.padX - vis).toFixed(2)}px -60px -60px)`;
+  } else if (s.clipL != null && s.clipL > 0) {
+    clip = `inset(-60px -60px -60px ${(ln.padX + s.clipL * ln.vis).toFixed(2)}px)`;
+  }
+  ln.wrap.style.transformOrigin = s.origin || ln.origin;
+  st(ln.wrap, { o: s.o == null ? 1 : s.o, tx: s.tx, ty: s.ty, s: s.s, clip });
+  if (s.color) ln.inner.style.color = s.color;
+}
+
+/* a horizontal stripe (gold 78 / white 22), revealed by clip */
+function stripe(parent, x, y, w, h) {
+  return el('div', 'a stripe', parent, `left:${x}px;top:${y}px;width:${w}px;height:${h}px`);
+}
+function stripeReveal(e, p, mode) {                          // mode: 'lr' (left->right), 'rl' retract, 'center'
+  if (p <= 0) return 'inset(0 100% 0 0)';
+  if (p >= 1) return 'none';
+  if (mode === 'center') return `inset(0 ${(50 * (1 - p)).toFixed(3)}% 0 ${(50 * (1 - p)).toFixed(3)}%)`;
+  return `inset(0 ${(100 * (1 - p)).toFixed(3)}% 0 0)`;
+}
+
+/* L-brackets. corners: subset of ['tl','tr','bl','br'] */
+function brackets(parent, stroke, arm, corners, alpha) {
+  const g = el('div', 'lyr', parent);
+  const cs = {};
+  (corners || ['tl', 'tr', 'bl', 'br']).forEach(k => {
+    const c = el('div', 'cn', g);
+    c.style.borderTopWidth = k[0] === 't' ? stroke + 'px' : 0;
+    c.style.borderBottomWidth = k[0] === 'b' ? stroke + 'px' : 0;
+    c.style.borderLeftWidth = k[1] === 'l' ? stroke + 'px' : 0;
+    c.style.borderRightWidth = k[1] === 'r' ? stroke + 'px' : 0;
+    cs[k] = c;
+  });
+  return {
+    g, set(l, t, r, b, o, armScale) {
+      if (o <= 0) { hide(g); return; }
+      const a = arm * (armScale == null ? 1 : armScale);
+      for (const k in cs) {
+        const c = cs[k];
+        c.style.width = a + 'px'; c.style.height = a + 'px';
+        c.style.left = (k[1] === 'l' ? l : r - a).toFixed(2) + 'px';
+        c.style.top = (k[0] === 't' ? t : b - a).toFixed(2) + 'px';
+        c.style.display = a < .5 ? 'none' : '';
+      }
+      st(g, { o: o * (alpha == null ? 1 : alpha) });
+    }
+  };
+}
+/* a horizontal scan line with a soft trail above it (moving down) */
+function scanLine(parent, thick, alpha) {
+  const g = el('div', 'a', parent, `left:0;top:0;width:${W}px;height:${thick}px`);
+  el('div', 'a', g, `left:0;top:${-110}px;width:${W}px;height:110px;background:linear-gradient(to bottom,rgba(251,209,1,0),rgba(251,209,1,.22))`);
+  el('div', 'a', g, `left:0;top:0;width:${W}px;height:${thick}px;background:var(--gold);box-shadow:0 0 14px rgba(251,209,1,.8)`);
+  return { g, alpha };
+}
+function scanSet(sl, t, a, b) {
+  if (!on(t, a, b + 1 / 48)) { hide(sl.g); return; }
+  const p = P(t, a, b);
+  st(sl.g, { ty: lerp(Y(.14), Y(.86), p), o: sl.alpha });
+}
+
+/* ---------- build ---------- */
+let R = null;                                                // element registry, filled by build()
+function build() {
+  R = {};
+  const SH_B3 = '0 2px 18px rgba(0,0,0,.45)';
+  const SH_B8 = '0 2px 14px rgba(0,0,0,.35)';
+  const x0 = X(.075);                                          // 81 px, the type column
+
+  /* 1. hook scrim */
+  R.hookScrim = el('div', 'lyr', stage,
+    'background:linear-gradient(to bottom,rgba(0,0,0,0) 12%,rgba(0,0,0,.45) 18%,rgba(0,0,0,.45) 32%,rgba(0,0,0,0) 38%)');
+  /* 2. mid scrim */
+  R.midScrim = el('div', 'lyr', stage,
+    'background:linear-gradient(to bottom,rgba(0,0,0,0) 34%,rgba(0,0,0,.80) 38%,rgba(0,0,0,.80) 62%,rgba(0,0,0,0) 66%)');
+  /* 3. tag plate (B2) */
+  const tagL = layer();
+  R.tagPlate = el('div', 'a', tagL, `left:54px;top:374px;width:616px;height:202px;background:rgba(0,0,0,.85)`);
+  R.tagStripe = stripe(R.tagPlate, 0, 196, 616, 6);
+  /* 4. title block */
+  R.title = layer();
+  el('div', 'a', R.title, `left:54px;top:1238px;width:853px;height:183px;background:rgba(0,0,0,.80)`);
+  R.titleBr = brackets(R.title, 4, 40, ['tl', 'br']);
+  const mark = el('img', 'a', R.title, `left:${x0}px;top:${(Y(.6925) - 28).toFixed(1)}px;height:56px;width:88px`);
+  mark.src = '../../02-logos/png/sce-icon-mark-only--white.png';
+  R.titleName = line(R.title, { f: 'B', fs: 64, x: 197, cap: Y(.662), html: 'LAMBORGHINI HURACÁN STO', cls: 'w' });
+  R.titleSub = line(R.title, { f: 'M', fs: 22, x: 197, cap: Y(.703), ls: .2, html: '2023 · LAS VEGAS', cls: 'g' });
+  R.titleStripe = stripe(R.title, R.titleSub.right + 24, R.titleSub.mid - 3, 200, 6);
+  /* 5. ticker */
+  R.ticker = layer();
+  el('div', 'a', R.ticker, `left:0;top:1463px;width:${W}px;height:50px;background:rgba(0,0,0,.85)`);
+  const tmask = el('div', 'a', R.ticker, `left:0;top:1440px;width:${W}px;height:100px;` +
+    '-webkit-mask-image:linear-gradient(to right,transparent 3%,#000 7%,#000 93%,transparent 97%);' +
+    'mask-image:linear-gradient(to right,transparent 3%,#000 7%,#000 93%,transparent 97%)');
+  const tm = met('M', 22);
+  const tickerHTML = 'SUPERCAR EXPERIENCE<i class="dm"></i>2-HOUR FLASH SPECIAL<i class="dm"></i>11AM – 1PM TODAY<i class="dm"></i>SUPERCAREXP.VIP<i class="dm"></i>';
+  R.tickerRun = el('div', 'a w', tmask, `white-space:nowrap;font-family:${FONT.M};font-size:22px;letter-spacing:.14em;` +
+    `line-height:${Math.ceil(tm.asc + tm.desc)}px;top:${(Y(.775) - 1440 - tm.cap / 2 - (tm.asc - tm.cap)).toFixed(2)}px`);
+  const one = el('span', '', R.tickerRun); one.innerHTML = tickerHTML;
+  R.tickerLoop = one.getBoundingClientRect().width;
+  for (let i = 0; i < 3; i++) { const s = el('span', '', R.tickerRun); s.innerHTML = tickerHTML; }
+  /* 6/7. brackets */
+  const brL = layer();
+  R.brA = brackets(brL, 6, 70);                                // B2 crest lock
+  R.brB = brackets(brL, 6, 50);                                // B3 STO lock
+  R.brC = brackets(brL, 4, 40, null, .5);                      // B8 soft lock
+  /* 8. type */
+  const ty = layer();
+  // B1 hook
+  R.h1 = line(ty, { f: 'B', fs: 210, x: x0, cap: Y(.150), html: '2-HOUR', cls: 'g' });
+  R.h2 = line(ty, { f: 'B', fs: 150, x: x0, cap: Y(.242), html: 'FLASH SPECIAL', cls: 'w' });
+  R.h3 = line(ty, { f: 'M', fs: 34, x: x0, cap: Y(.316), ls: .18, html: 'ENDS <span class="g">1PM</span> TODAY', cls: 'w' });
+  R.hS = stripe(ty, x0, 651, 180, 8);
+  // B2 tag
+  R.tBrand = line(ty, { f: 'M', fs: 22, x: x0, cap: Y(.212), ls: .22, html: 'BRAND', cls: 'g' });
+  R.tLambo = line(ty, { f: 'B', fs: 110, x: x0, cap: Y(.234), html: 'LAMBORGHINI', cls: 'w' });
+  // B3 model
+  R.mModel = line(ty, { f: 'M', fs: 22, x: x0, cap: Y(.342), ls: .22, html: 'MODEL · 2023', cls: 'g', shadow: SH_B3 });
+  R.mName = line(ty, { f: 'B', fs: 120, x: x0, cap: Y(.372), html: 'HURACÁN STO', cls: 'w', shadow: SH_B3 });
+  // B4 readout
+  R.ro = el('div', 'lyr', ty);
+  R.roHead = line(R.ro, { f: 'M', fs: 24, x: x0, cap: Y(.410), ls: .2, html: 'FLASH WINDOW · TODAY', cls: 'g' });
+  R.roStripe = stripe(R.ro, x0, Y(.432), 300, 8);
+  const ty0 = Y(.490), tx1 = X(.80);
+  R.track = el('div', 'a', R.ro, `left:${x0}px;top:${(ty0 - 3).toFixed(1)}px;width:${tx1 - x0}px;height:6px;transform-origin:0 50%`);
+  el('div', 'a', R.track, `left:0;top:0;width:100%;height:6px;background:rgba(255,255,255,.35)`);
+  el('div', 'a', R.track, `left:0;top:-9px;width:3px;height:24px;background:#fff`);
+  el('div', 'a', R.track, `left:${tx1 - x0 - 3}px;top:-9px;width:3px;height:24px;background:#fff`);
+  R.fill = el('div', 'a', R.ro, `left:${x0}px;top:${(ty0 - 5).toFixed(1)}px;width:${tx1 - x0}px;height:10px;background:var(--gold);transform-origin:0 50%`);
+  R.dot = el('div', 'a', R.ro, `left:${x0 - 9}px;top:${(ty0 - 9).toFixed(1)}px;width:18px;height:18px;border-radius:50%;background:var(--gold);box-shadow:0 0 16px rgba(251,209,1,.7)`);
+  R.pulse = el('div', 'a', R.ro, `left:${tx1 - 1.5 - 12}px;top:${(ty0 - 12).toFixed(1)}px;width:24px;height:24px;box-sizing:border-box;border:2px solid var(--gold);border-radius:50%`);
+  R.l11 = line(R.ro, { f: 'B', fs: 96, x: x0, cap: Y(.512), html: '11AM', cls: 'w' });
+  R.l1 = line(R.ro, { f: 'B', fs: 96, x: tx1, cap: Y(.512), html: '1PM', cls: 'w', align: 'right' });
+  // B5/B6 requirements
+  R.rq = el('div', 'lyr', ty);
+  R.rqHead = line(R.rq, { f: 'M', fs: 24, x: x0, cap: Y(.400), ls: .2, html: 'REQUIREMENTS', cls: 'g' });
+  R.rqStripe = stripe(R.rq, x0, Y(.422), 300, 8);
+  const rows = [['01', 'VALID DRIVER’S LICENSE'], ['02', '21+'], ['03', 'INSURANCE']];
+  const rcaps = [.450, .506, .562];
+  const bm = met('B', 80), im = met('M', 26);
+  R.rows = rows.map((r, i) => {
+    const cap = Y(rcaps[i]);
+    const lab = line(R.rq, { f: 'B', fs: 80, x: X(.16), cap, html: r[1], cls: 'w' });
+    const idx = line(R.rq, { f: 'M', fs: 26, x: x0, cap: cap + bm.cap - im.cap, html: r[0], cls: 'g' });
+    const scan = el('div', 'a', R.rq, `left:${x0}px;top:${(lab.mid - 2).toFixed(1)}px;width:${tx1 - x0}px;height:4px;` +
+      'background:linear-gradient(to right,rgba(251,209,1,0),rgba(251,209,1,.55) 60%,var(--gold));transform-origin:0 50%;box-shadow:0 0 10px rgba(251,209,1,.5)');
+    const pip = el('div', 'a', R.rq, `left:${tx1 - 7}px;top:${(lab.mid - 7).toFixed(1)}px;width:14px;height:14px;background:var(--gold)`);
+    return { lab, idx, scan, pip };
+  });
+  // B8 ask
+  R.ask1 = line(ty, { f: 'B', fs: 140, x: x0, cap: Y(.610), html: 'BOOK BEFORE <span class="g">1PM</span>', cls: 'w', shadow: SH_B8 });
+  R.ask2 = line(ty, { f: 'M', fs: 36, x: x0, cap: Y(.684), ls: .04, html: 'CALL <span class="g">(888) 678-6079</span>', cls: 'w', shadow: SH_B8 });
+  R.askS = stripe(ty, x0, Y(.714), 320, 8);
+  /* 9. scan lines and pulses */
+  const fx = layer();
+  R.scan1 = scanLine(fx, 3, .7);
+  R.scan2 = scanLine(fx, 3, .6);
+  /* 10. end card */
+  R.end = el('div', 'lyr', stage, 'background:#000');
+  R.logo = el('img', 'a', R.end, `left:${540 - 280}px;top:547px;width:560px;height:333px;transform-origin:50% 50%`);
+  R.logo.src = '../../02-logos/png/sce-stacked--white.png';
+  R.endS = stripe(R.end, 540 - 180, Y(.486), 360, 8);
+  R.endH = line(R.end, { f: 'B', fs: 92, x: 540, cap: Y(.510), html: 'FLASH SPECIAL ENDS 1PM', cls: 'g', align: 'center' });
+  R.endC = [
+    line(R.end, { f: 'M', fs: 32, x: 540, cap: Y(.576), ls: .16, html: 'SUPERCAREXP.VIP', cls: 'w', align: 'center' }),
+    line(R.end, { f: 'M', fs: 32, x: 540, cap: Y(.610), ls: .08, html: '(888) 678-6079', cls: 'w', align: 'center' }),
+    line(R.end, { f: 'M', fs: 24, x: 540, cap: Y(.644), ls: .12, html: '@SUPERCAR_EXPERIENCE_', cls: 'w', align: 'center' }),
+  ];
+  R.endC[2].inner.style.opacity = .75;
+}
+
+/* ---------- render: every element is a pure function of t ---------- */
+function renderAt(t) {
+  if (!R) return;
+  const x0 = X(.075);
+
+  /* ===== B1 HOOK 0.000-1.833 ===== */
+  if (on(t, 0, 1.833)) {
+    R.hookScrim.style.opacity = 1 - P(t, 1.667, 1.833);
+    R.hookScrim.style.display = '';
+    const ex = ease(t, 1.667, 1.833, E.iCub), exT = -30 * ex, exO = 1 - ex;
+    L(R.h1, { s: lerp(1.06, 1, ease(t, 0, .292, E.oExpo)), ty: exT, o: exO });
+    L(R.h2, { s: lerp(1.04, 1, ease(t, .083, .333, E.oExpo)), ty: exT, o: exO });
+    const p3 = ease(t, .292, .625, E.oCub);
+    L(R.h3, { o: p3 * exO, ty: 20 * (1 - p3) + exT });
+    const ps = ease(t, .417, .792, E.oCub), pr = ease(t, 1.667, 1.833, E.iCub);
+    st(R.hS, { o: exO, ty: exT, clip: t < 1.667 ? stripeReveal(R.hS, ps, 'lr') : stripeReveal(R.hS, 1 - pr, 'lr') });
+  } else { hide(R.hookScrim); [R.h1, R.h2, R.h3].forEach(l => L(l, { o: 0 })); hide(R.hS); }
+
+  /* ===== B2 BRAND LOCK 1.833-3.083 ===== */
+  if (on(t, 1.833, 3.083)) {
+    // brackets: frame 44 start box (5-95 / 15-80), contract to lock (6-94 / 32-77), tick 8px inward, release at exit
+    const pc = ease(t, 1.875, 2.250, E.oExpo);
+    let l = lerp(X(.05), X(.06), pc), r = lerp(X(.95), X(.94), pc), tp = lerp(Y(.15), Y(.32), pc), b = lerp(Y(.80), Y(.77), pc);
+    const tick = on(t, 2.250, 2.375) ? 8 * Math.sin(Math.PI * P(t, 2.250, 2.375)) : 0;
+    const rel = ease(t, 3.000, 3.083, E.oCub);
+    const d = tick - 20 * rel;
+    l += d; r -= d; tp += d; b -= d;
+    R.brA.set(l, tp, r, b, P(t, 1.833, 1.917) * (1 - rel));
+    const pp = ease(t, 1.875, 2.208, E.oCub);
+    st(R.tagPlate, { tx: -24 * (1 - pp), o: pp });
+    st(R.tagStripe, { clip: stripeReveal(R.tagStripe, ease(t, 2.000, 2.333, E.oCub), 'lr') });
+    L(R.tBrand, { o: P(t, 1.958, 2.208) });
+    L(R.tLambo, { rise: ease(t, 1.917, 2.250, E.oExpo), o: t < 1.917 ? 0 : 1 });
+  } else { R.brA.set(0, 0, 0, 0, 0); hide(R.tagPlate); L(R.tBrand, { o: 0 }); L(R.tLambo, { o: 0 }); }
+
+  /* ===== B3 MODEL LOCK 3.083-4.750 ===== */
+  if (on(t, 3.083, 4.750)) {
+    const pin = P(t, 3.083, 3.125), pc = ease(t, 3.125, 3.500, E.oExpo);
+    let l = lerp(X(.035), X(.20), pc), r = lerp(X(.965), X(.80), pc), tp = lerp(Y(.15), Y(.455), pc), b = lerp(Y(.80), Y(.535), pc);
+    const tick = on(t, 3.500, 3.625) ? 8 * Math.sin(Math.PI * P(t, 3.500, 3.625)) : 0;
+    const rel = ease(t, 4.583, 4.667, E.oCub);
+    const d = tick - 20 * rel;
+    l += d; r -= d; tp += d; b -= d;
+    R.brB.set(l, tp, r, b, Math.max(pin, t >= 3.125 ? 1 : 0) * (1 - rel));
+    const up = ease(t, 4.583, 4.708, E.iCub);
+    L(R.mModel, { o: t < 3.250 || up >= 1 ? 0 : 1, clipR: ease(t, 3.250, 3.583, E.oCub), up });
+    L(R.mName, { o: t < 3.167 || up >= 1 ? 0 : 1, rise: ease(t, 3.167, 3.542, E.oExpo), up });
+  } else { R.brB.set(0, 0, 0, 0, 0); L(R.mModel, { o: 0 }); L(R.mName, { o: 0 }); }
+
+  /* ===== HUD furniture 4.667-9.417: mid scrim, title block, ticker ===== */
+  const hudOut = ease(t, 9.208, 9.417, E.iCub);
+  if (on(t, 4.667, 9.417)) {
+    st(R.midScrim, { o: P(t, 4.667, 4.875) * (1 - hudOut) });
+  } else hide(R.midScrim);
+  if (on(t, 4.792, 9.417)) {
+    const pe = ease(t, 4.792, 5.250, E.oCub);
+    st(R.title, { ty: 30 * (1 - pe), o: pe * (1 - hudOut) });
+    const pb = ease(t, 5.000, 5.250, E.oCub);
+    R.titleBr.set(54, 1238, 907, 1421, pb > 0 ? 1 : 0, pb);
+    const pw = ease(t, 4.792, 5.125, E.oCub);
+    st(R.ticker, { o: 1 - hudOut, clip: pw >= 1 ? 'none' : `inset(0 ${(100 * (1 - pw)).toFixed(3)}% 0 0)` });
+    const loop = R.tickerLoop, trav = 60 * (t - 4.792);
+    const x = 54 - (((trav % loop) + loop) % loop);
+    R.tickerRun.style.transform = `translateX(${x.toFixed(2)}px)`;
+  } else { hide(R.title); hide(R.ticker); }
+
+  /* ===== B4 FLASH WINDOW readout 4.792-6.542 ===== */
+  if (on(t, 4.792, 6.542)) {
+    const ex = ease(t, 6.417, 6.542, E.iCub);
+    st(R.ro, { tx: -40 * ex, o: 1 - ex });
+    const ph = ease(t, 4.792, 5.125, E.oCub);
+    L(R.roHead, { o: ph, ty: 16 * (1 - ph) });
+    st(R.roStripe, { clip: stripeReveal(R.roStripe, ease(t, 4.875, 5.375, E.oCub), 'lr'), o: t < 4.875 ? 0 : 1 });
+    const ptk = ease(t, 4.917, 5.208, E.oCub);
+    st(R.track, { sx: ptk, o: ptk > 0 ? 1 : 0 });
+    const pf = ease(t, 5.208, 6.125, E.ioCub);
+    st(R.fill, { sx: pf, o: pf > 0 ? 1 : 0 });
+    const trackW = X(.80) - x0;
+    const dotO = t < 5.208 ? 0 : 1 - P(t, 6.125, 6.208);
+    st(R.dot, { tx: pf * trackW, o: dotO, s: 1 - .4 * P(t, 6.125, 6.208) });
+    if (on(t, 6.125, 6.475)) {
+      const pp = ease(t, 6.125, 6.475, E.oCub);
+      st(R.pulse, { s: lerp(1, 64 / 24, pp), o: .8 * (1 - pp) });
+    } else hide(R.pulse);
+    const p11 = P(t, 5.000, 5.250);
+    L(R.l11, { o: p11 > 0 ? Math.min(1, p11 * 1.6) : 0, s: lerp(.9, 1, E.oBack(p11)) });
+    const p1 = P(t, 5.083, 5.333);
+    const bump = on(t, 6.125, 6.375) ? Math.sin(Math.PI * P(t, 6.125, 6.375)) * .08 : 0;
+    const originR = `${R.l1.padX + R.l1.vis}px ${R.l1.padT + R.l1.capH / 2}px`;
+    L(R.l1, { o: p1 > 0 ? Math.min(1, p1 * 1.6) : 0, s: lerp(.9, 1, E.oBack(p1)) + bump, origin: originR,
+              color: rgb(WHITE, GOLD, P(t, 6.125, 6.208)) });
+  } else hide(R.ro);
+
+  /* ===== B5 + B6 REQUIREMENTS 6.583-9.417 ===== */
+  if (on(t, 6.583, 9.417)) {
+    R.rq.style.display = '';
+    const ph = ease(t, 6.583, 6.875, E.oCub), hx = 1 - ease(t, 9.250, 9.375, E.iCub);
+    L(R.rqHead, { o: ph * hx, ty: 16 * (1 - ph) });
+    st(R.rqStripe, { clip: stripeReveal(R.rqStripe, ease(t, 6.625, 7.083, E.oCub), 'lr'), o: (t < 6.625 ? 0 : 1) * hx });
+    const x1 = X(.80);
+    R.rows.forEach((rw, i) => {
+      const s = 6.708 + .167 * i;
+      const out = ease(t, 9.250, 9.417, E.iCub);
+      if (t < 9.250 - EPS) {
+        // reveal
+        const ps = ease(t, s, s + .25, E.ioQuad), scanX = lerp(x0, x1, ps);
+        L(rw.lab, { o: t < s ? 0 : 1, clipR: clamp((scanX - rw.lab.left) / rw.lab.vis, 0, 1) });
+        L(rw.idx, { o: P(t, s, s + .1) });
+        const so = t < s ? 0 : 1 - P(t, s + .25, s + .33);
+        st(rw.scan, { sx: Math.max(ps, .001), o: so });
+        const pp = P(t, s + .25, s + .45);
+        st(rw.pip, { s: pp > 0 ? Math.max(0, E.oBack(pp)) : 0, o: pp > 0 ? 1 : 0 });
+      } else {
+        // HUD OUT: clip left->right with a leading gold scan
+        L(rw.lab, { clipL: out });
+        L(rw.idx, { o: 1 - out });
+        st(rw.pip, { o: 1 - out });
+        const lead = rw.lab.left + out * rw.lab.vis;
+        st(rw.scan, { sx: Math.max(.001, (lead - x0) / (x1 - x0)), o: out < 1 ? 1 - out * .6 : 0 });
+      }
+    });
+  } else hide(R.rq);
+
+  /* ===== transit scan lines ===== */
+  scanSet(R.scan1, t, 1.792, 1.875);
+  scanSet(R.scan2, t, 10.792, 11.000);
+
+  /* ===== B8 THE ASK 11.000-13.417 ===== */
+  if (on(t, 11.042, 13.417)) {
+    const ex = ease(t, 13.250, 13.417, E.iCub), exO = 1 - ex, exT = 12 * ex;
+    L(R.ask1, { rise: ease(t, 11.042, 11.458, E.oExpo), o: exO, ty: exT });
+    const p2 = ease(t, 11.250, 11.583, E.oCub);
+    L(R.ask2, { o: p2 * exO, ty: 16 * (1 - p2) + exT });
+    st(R.askS, { clip: stripeReveal(R.askS, ease(t, 11.417, 11.792, E.oCub), 'lr'), o: (t < 11.417 ? 0 : 1) * exO });
+  } else { L(R.ask1, { o: 0 }); L(R.ask2, { o: 0 }); hide(R.askS); }
+  if (on(t, 11.208, 13.417)) {
+    const k = P(t, 11.000, 13.417);                              // box follows the camera push
+    const tl = lerp(X(.06), X(.05), k), tr = lerp(X(.82), X(.95), k), tt = lerp(Y(.41), Y(.40), k), tb = lerp(Y(.58), Y(.585), k);
+    const pl = ease(t, 11.208, 11.583, E.oExpo);
+    const ex = ease(t, 13.250, 13.417, E.iCub);
+    R.brC.set(lerp(X(.035), tl, pl), lerp(Y(.15), tt, pl), lerp(X(.965), tr, pl), lerp(Y(.80), tb, pl),
+              Math.min(1, P(t, 11.208, 11.292)) * (1 - ex));
+  } else R.brC.set(0, 0, 0, 0, 0);
+
+  /* ===== B9 END CARD 13.667-15.500 ===== */
+  if (t >= 13.667 - EPS) {
+    R.end.style.display = '';
+    const pl = ease(t, 13.667, 14.083, E.oCub);
+    st(R.logo, { o: pl, s: lerp(.96, 1, pl) });
+    const ps = ease(t, 13.833, 14.208, E.ioCub);
+    st(R.endS, { clip: stripeReveal(R.endS, ps, 'center'), o: ps > 0 ? 1 : 0 });
+    L(R.endH, { rise: ease(t, 13.917, 14.250, E.oExpo), o: t < 13.917 ? 0 : 1 });
+    R.endC.forEach((ln, i) => {
+      const p = ease(t, 14.042 + .125 * i, 14.042 + .125 * i + .292, E.oCub);
+      L(ln, { o: p, ty: 14 * (1 - p) });
+    });
+  } else hide(R.end);
+}
+
+window.storyReady = (async () => {
+  await Promise.all([document.fonts.load('100px SEBebas', 'ÁH'), document.fonts.load('100px SEMichroma', 'H')]);
+  await document.fonts.ready;
+  await Promise.all([...document.images].map(i => i.decode ? i.decode().catch(() => {}) : 0));
+  build();
+  await Promise.all([...document.images].map(i => i.decode ? i.decode().catch(() => {}) : 0));
+  renderAt(0);
+  return true;
+})();
+window.renderAt = renderAt;
+})();
+</script>
+</body></html>
