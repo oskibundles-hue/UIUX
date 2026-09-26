@@ -848,8 +848,11 @@
 
   function applyFx(t) {
     const fx = R.fxAt(t);
-    const s = 1 + fx.zoom;
-    camera.style.transform = `translate3d(${fx.shakeX.toFixed(2)}px,${fx.shakeY.toFixed(2)}px,0) scale(${s.toFixed(4)})`;
+    // Sub-0.1 px shake and sub-0.02% zoom tails are invisible but make the compositor re-raster
+    // (a visible shimmer on hairlines and small type), so they snap to exactly zero.
+    const sx = Math.abs(fx.shakeX) < 0.1 ? 0 : fx.shakeX, sy = Math.abs(fx.shakeY) < 0.1 ? 0 : fx.shakeY;
+    const s = fx.zoom < 0.0002 ? 1 : 1 + fx.zoom;
+    camera.style.transform = sx || sy || s !== 1 ? `translate3d(${sx.toFixed(2)}px,${sy.toFixed(2)}px,0) scale(${s.toFixed(4)})` : 'none';
     if (fx.chroma > 0.25) {
       const dx = Math.cos(fx.chromaAngle) * fx.chroma, dy = Math.sin(fx.chromaAngle) * fx.chroma;
       chromaR.setAttribute('dx', dx.toFixed(2)); chromaR.setAttribute('dy', dy.toFixed(2));
