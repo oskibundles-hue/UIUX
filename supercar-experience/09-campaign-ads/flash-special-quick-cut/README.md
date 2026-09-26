@@ -14,7 +14,7 @@ could go out when the window opened. The polished version is built next to it in
 | 2023 · EXOTIC · LAMBORGHINI · HURACAN STO | `01-brand-core/brand-tokens.json` (site listing: "2023 - Exotic") |
 | TODAY ONLY · 11AM–1PM · ENDS AT 1PM | Omarie's brief ("till 1 o'clock", two hours) |
 | TO DRIVE IT, YOU NEED · VALID DRIVER'S LICENSE · AGE 21+ · INSURANCE | Omarie's brief |
-| FLASH SPECIAL ENDS 1PM · CALL OR DM TO BOOK · (888) 678-6079 · SUPERCAREXP.VIP · @SUPERCAR_EXPERIENCE_ | brand tokens |
+| FLASH SPECIAL ENDS 1PM · TEXT OR DM TO BOOK · (725) 425-3583 · SUPERCAREXP.VIP · @SUPERCAR_EXPERIENCE_ | brand tokens |
 
 No discount figure is shown because none was given. Add one only from a named source.
 Copy passed SlopMonster at 5/5.
@@ -60,3 +60,10 @@ The Dropbox connector can't upload video, but a cloud session can go through a *
 front of each filename, so move the files into place afterwards. Chromium needs the proxy CA in its NSS store first
 (`certutil -d sql:$HOME/.pki/nssdb -A -t "C,," -n ccr-agent-proxy -i /root/.ccr/agent-proxy-ca.crt`,
 from `libnss3-tools`). Don't use `--ignore-certificate-errors`.
+
+## Phone fix (26 Sept 2026)
+
+The first renders showed (888) 678-6079, which supercarexp.vip lists as the **Scottsdale** line,
+on Las Vegas footage. Omarie chose the site-wide text line **(725) 425-3583**, and the CTA now reads
+TEXT OR DM TO BOOK. All three were re-rendered and replaced in Dropbox, with the old ones archived.
+`brand-tokens.json` now carries every line under `brand.phones`, so pick the one that matches the ad's city.

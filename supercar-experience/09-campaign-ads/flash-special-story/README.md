@@ -23,8 +23,8 @@ expire it at 1 PM PT. Don't repost it on another day.
 | 4.46–5.83 | STO front-on through the city | RENTAL FLASH WINDOW · TODAY: an 11AM → 1PM bar fills and lands on the cut. The title block and ticker come in here |
 | 5.83–8.29 | side profile, then wide roll-by | 1PM turns gold on the cut, then REQUIREMENTS: 01 VALID DRIVER'S LICENSE · 02 21+ · 03 INSURANCE |
 | 8.29–10.13 | STO head-on under the canopy, slow push | no type (the hero shot, clean) |
-| 10.13–13.04 | STO parked at the Las Vegas Convention Center | **BOOK BEFORE 1PM PT** / CALL FOR THE FLASH RATE / **(888) 678-6079** |
-| 13.04–15.50 | black end card | SE stacked logo / RENTAL FLASH SPECIAL / **ENDS TODAY · 1PM PT** / SUPERCAREXP.VIP / (888) 678-6079 / @SUPERCAR_EXPERIENCE_ |
+| 10.13–13.04 | STO parked at the Las Vegas Convention Center | **BOOK BEFORE 1PM PT** / TEXT OR DM TO BOOK / **(725) 425-3583** |
+| 13.04–15.50 | black end card | SE stacked logo / RENTAL FLASH SPECIAL / **ENDS TODAY · 1PM PT** / SUPERCAREXP.VIP / (725) 425-3583 / @SUPERCAR_EXPERIENCE_ |
 
 ## Where each on-screen claim comes from
 
@@ -32,11 +32,11 @@ expire it at 1 PM PT. Don't repost it on another day.
 |---|---|
 | 2-HOUR FLASH SPECIAL · ENDS TODAY · 1PM PT · 11AM – 1PM PT TODAY · BOOK BEFORE 1PM PT | Omarie's brief: "a two hour flash special till 1 o'clock on our rental car", today. PT is the brief's time zone |
 | RENTAL FLASH SPECIAL · RENTAL FLASH WINDOW | Omarie's brief ("on our rental car") |
-| CALL FOR THE FLASH RATE | a call to action; it names no figure |
+| TEXT OR DM TO BOOK | a call to action; it names no figure |
 | VALID DRIVER'S LICENSE · 21+ · INSURANCE | Omarie's brief, word for word except for the added possessive |
 | LAMBORGHINI · HURACÁN STO | `01-brand-core/brand-tokens.json` label "LAMBORGHINI HURACAN STO" (with the accent restored). The crest and the STO badge also appear in the footage |
 | 2023 · LAS VEGAS | brand tokens ("2023 - Exotic - Las Vegas"). The site lists "2023 Lamborghini STO" |
-| SUPERCAREXP.VIP · (888) 678-6079 · @SUPERCAR_EXPERIENCE_ | brand tokens |
+| SUPERCAREXP.VIP · (725) 425-3583 · @SUPERCAR_EXPERIENCE_ | brand tokens |
 
 The ad shows no discount, dollar figure, price, spec or countdown number, because the client gave no figure.
 The regular $999 / 4 HRS rate is left off on purpose, since it would confuse a "special". The timeline bar fills
@@ -111,3 +111,11 @@ longer line grows to the right. Keep type inside x 80%: "BOOK BEFORE 1PM PT" (Be
 like "BOOK BEFORE 12:30PM PT" would need a smaller size. If the window is no longer two hours, change "2-HOUR" in
 the hook (`R.h1`) and in the ticker too. Run any new copy through SlopMonster, but don't rewrite the client's
 own words.
+
+## Phone fix (26 Sept 2026, 12:40 PM PT)
+
+The first render showed (888) 678-6079. On supercarexp.vip that is the **Scottsdale** location line,
+but this ad says LAS VEGAS. Omarie chose the site-wide text line **(725) 425-3583**, with the ask
+line reading TEXT OR DM TO BOOK, the same as the approved quick cuts. He kept AGE 21+ on purpose:
+the site allows 21–24 with a $299 underage fee. Site lines: text (725) 425-3583 · Las Vegas
+(888) 678-6077 · Scottsdale (888) 678-6079 · Boise (208) 914-5640.

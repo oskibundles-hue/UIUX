@@ -22,7 +22,7 @@ reason. Everything else in `story.html` / `build_story.py` follows the text belo
 | D13 | Timeline B4 → B5 → B6 (reqs) → B7 (breath) → B8 | B4 → B5+B7 (reqs) → **B6 clean hero** → B8; B4 = src 279–311 ends exactly on the fill arrival | Round-1 review: the hero head-on shot sat under the requirements (clean 0.58 s) and the 1PM payoff landed on a near-black frame. Now the requirements live on the side profile + wide roll-by (one continuous source range 323–381, in-source cut on 7.250), HUD is out at 8.292 and B6 runs clean 1.83 s with its push; the 1PM gold beat lands on the first frames of the bright B5 side profile. Ask starts 10.167, 1.875 s after HUD out (≥ 1.6). |
 | D14 | B8 soft brackets eased to a fixed end box | Right edge follows the measured nose (+2%): 83.5% @10.125 → 94.6% @12.875 (table `NOSE` in story.html); brackets release 12.208–12.375 while the text holds | New source range; keeps the box inside x 95.5%. |
 | D15 | Mid scrim 0.80 throughout the HUD | 0.62 over B4, 0.80 from the B5 cut | The B4 plate mid band is 68–122 luma; at 0.80 it read as black. The readout (Bebas 96 + gold bar) holds at 0.62. |
-| D16 | Copy | 'ENDS TODAY · 1PM PT' (hook), 'RENTAL FLASH WINDOW · TODAY', ticker '2-HOUR RENTAL FLASH SPECIAL ◆ 11AM – 1PM PT TODAY', ask 'BOOK BEFORE 1PM PT' (Bebas 120) / 'CALL FOR THE FLASH RATE' / '(888) 678-6079', end card 'RENTAL FLASH SPECIAL' / 'ENDS TODAY · 1PM PT' | Round-1 review: nothing said rental, and 1PM had no time zone (SE also lists the STO in Boise, on Mountain time). PT is the brief's zone and the car's listing is Las Vegas. All lines 5/5 CLEAN on SlopMonster. '21+' left exactly as the client wrote it (see §6). |
+| D16 | Copy | 'ENDS TODAY · 1PM PT' (hook), 'RENTAL FLASH WINDOW · TODAY', ticker '2-HOUR RENTAL FLASH SPECIAL ◆ 11AM – 1PM PT TODAY', ask 'BOOK BEFORE 1PM PT' (Bebas 120) / 'TEXT OR DM TO BOOK' / '(725) 425-3583', end card 'RENTAL FLASH SPECIAL' / 'ENDS TODAY · 1PM PT' | Round-1 review: nothing said rental, and 1PM had no time zone (SE also lists the STO in Boise, on Mountain time). PT is the brief's zone and the car's listing is Las Vegas. All lines 5/5 CLEAN on SlopMonster. '21+' left exactly as the client wrote it (see §6). |
 | D17 | End card: lines staggered 0.125 s from 14.042, handle 24 px at 75% | End card 13.042–15.500 (2.46 s); contacts in together (0.042 s stagger) from 13.375; handle Michroma 26, 100% white | Round-1 review: handle held 1.00 s, phone 1.17 s. Now every contact line is complete by 13.625 and held ≥ 1.88 s (measured on the MP4). |
 | D18 | (build bug) | Overlay PNGs normalised to RGBA; `verify_sync` compares 13 MP4 frames to plate+overlay | Chromium writes a fully opaque page (the end card) as RGB PNG; the format change re-initialised ffmpeg's filter graph and slipped the end card 7 frames late (in round 0 too). |
 | D19 | Sound bed: sub drone + sub hits | Re-voiced for phone speakers: A-minor pad 220–880 Hz with harmonics, impacts = sub + saturated 240→70 Hz body + 1.5–8 kHz crack + metallic ring, 0.7–6 kHz whooshes, harmonic fill sweep, bell ping | Round-1 review: bed was 100% below 150 Hz. Now 86% of the pad is in 150–500 Hz; through a 200 Hz high-pass (phone sim) momentary loudness never drops below −24 LUFS (median −16.7); round 0 was below −30 for 47% of the runtime. Loudnorm TP −2.0 → −14.2 LUFS, −1.4 dBTP after AAC. |
@@ -99,7 +99,7 @@ LAMBORGHINI rise 1.875–2.208. B3, the HUD entry, the B4 readout and the requir
 shifted 7 frames earlier (story.html `u = t + 7/24`): B4 fill 4.917–5.833 and the 1PM gold/pulse at 5.833 (the B5 cut);
 readout exit 6.125–6.250; REQUIREMENTS 6.292, rows 6.417 / 6.583 / 6.750. HUD OUT in real time: title/ticker/scrim fade
 8.083–8.292, rows clip 8.125–8.292. B6 8.292–10.125 carries no type; scan line 9.917–10.125. The ask keeps its entry
-motion shifted 21 frames (`v = t + 21/24`): headline rise 10.167–10.583, 'CALL FOR THE FLASH RATE' 10.375–10.708,
+motion shifted 21 frames (`v = t + 21/24`): headline rise 10.167–10.583, 'TEXT OR DM TO BOOK' 10.375–10.708,
 phone 10.458–10.792, stripe 10.542–10.917; brackets fly in 10.333–10.708, follow the nose, release 12.208–12.375;
 text exit 12.583–12.750. End card from 13.042: logo 13.042–13.458, stripe 13.208–13.583, 'RENTAL FLASH SPECIAL'
 13.250–13.500, 'ENDS TODAY · 1PM PT' rise 13.292–13.625, contacts 13.375 / 13.417 / 13.458 (+0.25 s each). Copy per D16.
@@ -151,7 +151,7 @@ text exit 12.583–12.750. End card from 13.042: logo 13.042–13.458, stripe 13
 ### B8 THE ASK 11.000–13.667
 - No scrim (asphalt band 16–27 luma); `text-shadow: 0 2px 14px rgba(0,0,0,.35)`.
 - 'BOOK BEFORE 1PM' Bebas 140 cap top 61.0%, '1PM' GOLD, masked rise 11.042–11.458.
-- 'CALL (888) 678-6079' Michroma 36 0.04em cap top 68.4%, number GOLD, 11.250–11.583.
+- 'CALL (725) 425-3583' Michroma 36 0.04em cap top 68.4%, number GOLD, 11.250–11.583.
 - Stripe 320x8 top 71.4%, 11.417–11.792.
 - Soft lock brackets GOLD 50%, 4px/40px, fly in 11.208–11.583 (easeOutExpo); box follows the camera push (D6).
 - Exit 13.250–13.417 fade + translateY 0→12. 13.417–13.667 clean footage. Hard cut to black at 13.667.
@@ -160,7 +160,7 @@ text exit 12.583–12.750. End card from 13.042: logo 13.042–13.458, stripe 13
 - #000. Stacked SE logo (white) 560px wide, top 28.5%, opacity + scale 0.96→1 13.667–14.083.
 - Stripe 360x8 top 48.6%, reveals outward from the centre 13.833–14.208.
 - 'FLASH SPECIAL ENDS 1PM' Bebas 92 GOLD cap top 51.0%, masked rise 13.917–14.250.
-- 'SUPERCAREXP.VIP' Michroma 32 0.16em cap top 57.6%; '(888) 678-6079' Michroma 32 0.08em cap top 61.0%; '@SUPERCAR_EXPERIENCE_' Michroma 24 WHITE 75% 0.12em cap top 64.4%. Each 0.292 s from 14.042 / 14.167 / 14.292.
+- 'SUPERCAREXP.VIP' Michroma 32 0.16em cap top 57.6%; '(725) 425-3583' Michroma 32 0.08em cap top 61.0%; '@SUPERCAR_EXPERIENCE_' Michroma 24 WHITE 75% 0.12em cap top 64.4%. Each 0.292 s from 14.042 / 14.167 / 14.292.
 - Holds to the last frame. No fade-out.
 
 ## 3. Safe zones (stories)
@@ -171,12 +171,12 @@ text exit 12.583–12.750. End card from 13.042: logo 13.042–13.458, stripe 13
 ## 4. Claims ledger
 - '2-HOUR FLASH SPECIAL', 'ENDS TODAY · 1PM PT', '11AM – 1PM PT TODAY', 'BOOK BEFORE 1PM PT', 'ENDS TODAY · 1PM PT': the client's brief (2-hour flash special until 1 o'clock, today 2026-09-26); PT = the brief's time zone.
 - 'RENTAL' / 'RENTAL FLASH SPECIAL' / 'RENTAL FLASH WINDOW': the client's brief ('on our rental car').
-- 'CALL FOR THE FLASH RATE': a CTA, names no figure.
+- 'TEXT OR DM TO BOOK': a CTA, names no figure.
 - No %, no $, no prices, no specs, no countdown digits. The timeline bar fills once as a graphic.
 - LAMBORGHINI / HURACÁN STO: tokens label (accent restored) and the badges visible in the footage.
 - 2023 and LAS VEGAS: tokens ('2023 - Exotic - Las Vegas'); the site lists '2023 Lamborghini STO'.
 - VALID DRIVER'S LICENSE / 21+ / INSURANCE: client's words, possessive only.
-- supercarexp.vip, (888) 678-6079, @supercar_experience_: tokens.
+- supercarexp.vip, (725) 425-3583, @supercar_experience_: tokens.
 
 ## 5. Audio
 Source AAC not used (unknown provenance). Original bed synthesised in numpy (seed 20260926), 48 kHz stereo, voiced for
@@ -200,4 +200,4 @@ continuous from 0.0 to 15.5 with the SFX at −6 dB relative and a 0.5 s fade-ou
 5. Michroma licence: tokens mark it `bundled:false`; used under SE's existing licence.
 6. **Confirm with Omarie: location.** 'LAS VEGAS' comes from the car's listing, and 'PT' from the brief's time zone. SE also lists the 2023 STO in Scottsdale and Boise (Boise is on Mountain time). If the special covers every location, drop 'LAS VEGAS' from the title block and restate the time per market.
 7. **Confirm with Omarie: 21+.** The site says 'Renter Must Be 25+ (Ages 21–24 With $299 Underage Fee)'. '21+' is the client's own wording and stays as written. If he wants it, a small line such as '21–24 UNDERAGE FEE APPLIES' (quoted from the site) fits under row 02. Either way, staff must mention the fee on calls.
-8. The flash rate is unnamed (no figure given). Staff must know the rate when people call or DM ('CALL FOR THE FLASH RATE').
+8. The flash rate is unnamed (no figure given). Staff must know the rate when people call or DM ('TEXT OR DM TO BOOK').

@@ -3,7 +3,14 @@
     "name": "Supercar Experience",
     "website": "supercarexp.vip",
     "instagram": "@supercar_experience_",
-    "phone": "(888) 678-6079"
+    "phone": "(888) 678-6079",
+    "phoneNote": "'phone' is the SCOTTSDALE location line on supercarexp.vip. For an ad that isn't Scottsdale-only, use phones.text (in every page header) or the city's own line. Checked 2026-09-26.",
+    "phones": {
+      "text": "(725) 425-3583",
+      "lasVegas": "(888) 678-6077",
+      "scottsdale": "(888) 678-6079",
+      "boise": "(208) 914-5640"
+    }
   },
   "color": {
     "gold": {

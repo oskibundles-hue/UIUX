@@ -1,0 +1,363 @@
+<!doctype html>
+<!--
+  front.html -- FRONT motion layer of the SE flash-special showcase ("LOCKED ON", Porsche 911 GT3 RS).
+  Transparent 1080x1920. window.renderAt(t) is a pure function of t (seconds, 24000/1001 fps timeline);
+  lib/kcapture.js renders it with sub-frame motion blur, build.py composites it over the plate.
+
+  Loads (written by build.py from their sources, so run `python3 build.py` once before opening):
+    .work/config.js    window.CONFIG   <- config.json (THE ONLY place prices / hours / end time live)
+    .work/timeline.js  window.TL       <- lib/edl.py (source frame shown at every output frame)
+    .work/tracks.js    window.TRACKS   <- lib/data/tracks.json (rnd-track: crest f79-108, door f167-177)
+  Libraries: lib/kinetic.js (window.KT, rnd-type), lib/lock.js (window.TrackLock, rnd-track).
+  Every line below is the final build cue (cue.md, "FRONT-LAYER GRAPHICS"). Positions are INK top-left.
+-->
+<html><head><meta charset="utf-8"><title>Showcase Front Layer</title>
+<style>
+@font-face{font-family:Bebas;src:url('../../07-fonts/BebasNeue-Regular.ttf')}
+@font-face{font-family:Michroma;src:url('../../07-fonts/Michroma-Regular.ttf')}
+:root{--gold:#FBD101;--white:#FFFFFF;--black:#000000}
+html,body{margin:0;padding:0;background:transparent;width:1080px;height:1920px;overflow:hidden}
+*{box-sizing:border-box}
+.a{position:absolute;left:0;top:0}
+.beb{font-family:Bebas;letter-spacing:0;line-height:1;white-space:pre}
+.mic{font-family:Michroma;letter-spacing:.08em;line-height:1;white-space:pre}
+.gold{color:var(--gold)}.white{color:var(--white)}
+.mask{overflow:hidden;padding:0 30px 0 0}
+.edge{width:4px;margin-left:-2px;background:#fff;box-shadow:0 0 30px 10px rgba(255,255,255,.45),0 0 8px 2px rgba(255,255,255,.8);border-radius:2px}
+.stripe{height:8px}
+</style>
+<script src=".work/config.js"></script>
+<script src=".work/timeline.js"></script>
+<script src=".work/tracks.js"></script>
+<script src="lib/kinetic.js"></script>
+<script src="lib/lock.js"></script>
+<script>
+// capture plan: 28 samples over a 270-degree shutter on the whips and the reels
+window.KT_PLAN = { k: 10, shutter: 180, spans: [
+  { a: 3.24, b: 3.43, k: 28, shutter: 270 }, { a: 8.23, b: 8.36, k: 28, shutter: 270 },
+  { a: 8.60, b: 9.50, k: 28, shutter: 270 }, { a: 15.18, b: 15.44, k: 28, shutter: 270 } ] };
+</script>
+</head><body>
+<div id="stage" class="a" style="width:1080px;height:1920px">
+
+  <!-- A. HOOK PANEL -->
+  <div id="hook" class="a">
+    <div id="hookPanel" class="a" style="left:54px;top:280px;width:1026px;height:410px;background:rgba(0,0,0,.86)"></div>
+    <div id="hookStripe" class="a stripe" style="left:54px;top:280px;width:846px"></div>
+    <div id="hFlashW" class="a"><div id="hFlash" class="mic gold" style="font-size:36px"></div></div>
+    <div id="hTodayW" class="a"><div id="hToday" class="beb white" style="font-size:210px"></div></div>
+    <div id="hEndsW" class="a"><div class="mask"><div id="hEnds" class="beb gold" style="font-size:96px"></div></div></div>
+  </div>
+
+  <!-- B + C. TRACKED BRACKETS (door flash, crest callout) -->
+  <svg id="brk" class="a" width="1080" height="1920" viewBox="0 0 1080 1920" style="overflow:visible">
+    <g id="brkU" fill="none" stroke="rgba(0,0,0,.45)" stroke-width="8" stroke-linecap="square"><path id="pBu"/><path id="pTu"/><path id="pLu" stroke-width="5"/></g>
+    <g id="brkO" fill="none" stroke="#FBD101" stroke-width="4" stroke-linecap="square"><path id="pBo"/><path id="pTo"/><path id="pLo" stroke-width="2"/></g>
+  </svg>
+
+  <!-- C. CREST LABEL -->
+  <div id="crestW" class="a">
+    <div id="crest" class="a" style="width:506px;height:240px">
+      <div id="cPanel" class="a" style="width:506px;height:240px;background:rgba(0,0,0,.86)"></div>
+      <div id="cStripe" class="a" style="width:506px;height:6px"></div>
+      <div id="cBrandW" class="a"><div id="cBrand" class="mic gold" style="font-size:34px"></div></div>
+      <div id="cModelW" class="a"><div id="cModelG"><div id="cModel" class="beb white" style="font-size:124px"></div></div>
+        <div id="cEdge" class="a edge" style="height:110px;opacity:0"></div></div>
+      <div id="cYearW" class="a"><div id="cYear" class="mic white" style="font-size:30px"></div></div>
+    </div>
+  </div>
+
+  <!-- D. OFFER PANEL -->
+  <div id="offer" class="a" style="width:1080px;height:1920px">
+    <div id="oPanel" class="a" style="left:54px;top:280px;width:846px;height:540px;background:rgba(0,0,0,.88)"></div>
+    <div id="oStripeCap" class="a stripe" style="left:54px;top:280px;width:846px"></div>
+    <div id="oHoursW" class="a"><div id="oHours" class="beb white" style="font-size:120px"></div></div>
+    <div id="oPriceW" class="a"><div id="oPriceG"><div id="oPrice" class="beb gold" style="font-size:330px"></div></div></div>
+    <div id="oStripe" class="a stripe" style="left:90px;top:750px;width:722px"></div>
+    <div id="oDoorW" class="a"><div id="oDoor" class="mic white" style="font-size:40px"></div>
+      <div id="oEdge" class="a edge" style="height:56px;opacity:0"></div></div>
+  </div>
+
+  <!-- F. REQUIREMENTS (+ top scrim, kept under the end card) -->
+  <div id="topScrim" class="a" style="width:1080px;height:560px;background:linear-gradient(180deg,rgba(0,0,0,.45) 0,rgba(0,0,0,.45) 269px,rgba(0,0,0,0) 560px)"></div>
+  <div id="req" class="a">
+    <div id="rNeedW" class="a"><div class="mask"><div id="rNeed" class="mic gold" style="font-size:30px"></div></div></div>
+    <div id="rLicW" class="a"><div class="mask"><div id="rLic" class="beb white" style="font-size:78px"></div></div></div>
+    <div id="rAgeW" class="a"><div class="mask"><div id="rAge" class="beb white" style="font-size:78px"></div></div></div>
+    <div id="rStripe" class="a" style="left:62px;top:515px;width:498px;height:6px"></div>
+  </div>
+
+  <!-- G. END CARD (front layer; the giant $1,200 behind the car is the Python layer) -->
+  <div id="end" class="a">
+    <div id="eLogoW" class="a" style="left:62px;top:282px"><img id="eLogo" src="../../02-logos/png/sce-primary-horizontal--white.png" style="width:360px;display:block">
+      <div id="eEdge" class="a edge" style="height:64px;top:-6px;opacity:0"></div></div>
+    <div id="eOfferW" class="a"><div class="mask"><div id="eOffer" class="beb white" style="font-size:100px"></div></div></div>
+    <div id="eStripe" class="a stripe" style="left:62px;top:446px;width:520px"></div>
+    <div id="eWhenW" class="a"><div id="eWhen" class="beb gold" style="font-size:72px"></div>
+      <div id="eEdge2" class="a edge" style="height:62px;opacity:0"></div></div>
+    <div id="eCtaW" class="a"><div class="mask"><div id="eCta" class="beb white" style="font-size:84px"></div></div></div>
+    <div id="eContactW" class="a"><div id="eContact" class="mic white" style="font-size:28px"></div></div>
+    <div id="eReqW" class="a"><div id="eReq" class="mic white" style="font-size:24px;opacity:.85"></div></div>
+  </div>
+</div>
+
+<script>
+const C = window.CONFIG, FPS = TL.fps, E = KT.ease, P = KT.p, cl = KT.cl, lerp = KT.lerp;
+const $ = id => document.getElementById(id);
+const fT = i => i / FPS;                      // frame index -> time
+const G = {};
+
+// ---------------------------------------------------------------- ink placement (build time)
+const cv = document.createElement('canvas').getContext('2d');
+function ink(fam, size, text) {
+  cv.font = `${size}px ${fam}`; cv.letterSpacing = fam === 'Michroma' ? (0.08 * size) + 'px' : '0px';
+  const m = cv.measureText(text);
+  return { aA: m.actualBoundingBoxAscent, aD: m.actualBoundingBoxDescent, fA: m.fontBoundingBoxAscent,
+           fD: m.fontBoundingBoxDescent, left: m.actualBoundingBoxLeft };
+}
+// position wrapper `w` so the ink of its (line-height:1) text starts at (x, y)
+function place(w, fam, size, text, x, y, ox = 0, oy = 0) {
+  const m = ink(fam, size, text), hl = (size - (m.fA + m.fD)) / 2;
+  w.style.left = (x + m.left - ox) + 'px'; w.style.top = (y - (hl + m.fA - m.aA) - oy) + 'px';
+}
+function setLine(id, text, gold) {         // split into glyphs; '·' in gold
+  const el = $(id); el.textContent = text;
+  const g = KT.measure(KT.split(el, { perspective: 0 }));
+  if (gold) g.forEach(s => { if (s.dataset.ch === '·') s.style.color = '#FBD101'; });
+  return g;
+}
+
+// ---------------------------------------------------------------- source position of the plate
+const beatOf = id => TL.beats[id];
+function srcPos(t, id) {                    // continuous source frame of beat `id` at time t
+  const [i0, i1] = beatOf(id), x = t * FPS, a = i0, b = i1 - 1;
+  if (x <= a) return TL.p[a] + (x - a) * (TL.p[a + 1] - TL.p[a]);
+  if (x >= b) return TL.p[b] + (x - b) * (TL.p[b] - TL.p[b - 1]);
+  const i = Math.floor(x); return lerp(TL.p[i], TL.p[i + 1], x - i);
+}
+
+// ---------------------------------------------------------------- brackets
+const SAFE_R = 907;
+function bracketRect(b) {                   // padded object box, right edge kept inside x 907
+  const pad = 0.12 * Math.min(b.w, b.h) + 10;
+  let x0 = b.x - pad, y0 = b.y - pad, x1 = b.x + b.w + pad, y1 = b.y + b.h + pad;
+  x1 = Math.min(x1, SAFE_R);
+  return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
+}
+function drawBrackets(r, op, leader) {
+  const svg = $('brk');
+  if (!r || op <= 0) { svg.style.display = 'none'; svg.style.setProperty('--d', '0'); return; }
+  svg.style.display = 'block'; svg.style.opacity = op;
+  const L = Math.min(34, r.w / 2, r.h / 2), T = Math.min(14, r.w / 4, r.h / 4);
+  const x0 = r.x, y0 = r.y, x1 = r.x + r.w, y1 = r.y + r.h, mx = (x0 + x1) / 2, my = (y0 + y1) / 2;
+  const f = v => v.toFixed(2);
+  const br = `M${f(x0)},${f(y0 + L)}V${f(y0)}H${f(x0 + L)}M${f(x1 - L)},${f(y0)}H${f(x1)}V${f(y0 + L)}` +
+             `M${f(x1)},${f(y1 - L)}V${f(y1)}H${f(x1 - L)}M${f(x0 + L)},${f(y1)}H${f(x0)}V${f(y1 - L)}`;
+  const tk = T > 1 ? `M${f(mx)},${f(y0)}v${T}M${f(mx)},${f(y1)}v${-T}M${f(x0)},${f(my)}h${T}M${f(x1)},${f(my)}h${-T}` : '';
+  let ld = '';
+  if (leader && leader.k > 0) { const yTop = lerp(y0, leader.y, E.inOutCubic(cl(leader.k))); ld = `M${f(x0)},${f(y0)}V${f(yTop)}`; }
+  $('pBu').setAttribute('d', br); $('pBo').setAttribute('d', br);
+  $('pTu').setAttribute('d', tk); $('pTo').setAttribute('d', tk);
+  $('pLu').setAttribute('d', ld); $('pLo').setAttribute('d', ld);
+  svg.style.setProperty('--d', `"${br}|${ld}"`);   // lets KT.signature see the SVG move (motion-blur detection)
+}
+const lerpR = (a, b, k) => ({ x: lerp(a.x, b.x, k), y: lerp(a.y, b.y, k), w: lerp(a.w, b.w, k), h: lerp(a.h, b.h, k) });
+const shrink = (r, k) => ({ x: r.x + r.w / 2 * k, y: r.y + r.h / 2 * k, w: r.w * (1 - k), h: r.h * (1 - k) });
+
+// ---------------------------------------------------------------- build
+(async () => {
+  await document.fonts.load('100px Bebas'); await document.fonts.load('40px Michroma'); await KT.ready();
+  // A
+  $('hFlash').textContent = 'FLASH SPECIAL'; $('hToday').textContent = 'TODAY ONLY';
+  const endsTxt = 'ENDS ' + C.endTime;
+  place($('hFlashW'), 'Michroma', 36, 'FLASH SPECIAL', 90, 318);
+  place($('hTodayW'), 'Bebas', 210, 'TODAY ONLY', 90, 370);
+  place($('hEndsW'), 'Bebas', 96, endsTxt, 90, 596);
+  G.flash = setLine('hFlash', 'FLASH SPECIAL'); G.today = setLine('hToday', 'TODAY ONLY');
+  G.ends = setLine('hEnds', endsTxt);
+  KT.stripe($('hookStripe'));
+  // C (coordinates relative to the label panel at 54,470)
+  place($('cBrandW'), 'Michroma', 34, C.brand, 26, 22);
+  place($('cModelW'), 'Bebas', 124, C.model, 26, 70);
+  const yearTxt = C.year + ' · ' + C.cls;
+  place($('cYearW'), 'Michroma', 30, yearTxt, 26, 202);
+  G.brand = setLine('cBrand', C.brand); G.model = setLine('cModel', C.model); G.year = setLine('cYear', yearTxt, true);
+  G.brand.forEach(s => { s.style.transformOrigin = '50% 100%'; });
+  KT.stripe($('cStripe'));
+  // D
+  const hoursTxt = C.hours + ' HOURS';
+  place($('oHoursW'), 'Bebas', 120, hoursTxt, 90, 305);
+  place($('oPriceW'), 'Bebas', 330, C.price, 90, 430);
+  place($('oDoorW'), 'Michroma', 40, 'OUT THE DOOR', 90, 765);
+  G.hours = setLine('oHours', hoursTxt); $('oDoor').textContent = 'OUT THE DOOR';
+  G.slot = KT.slot($('oPrice'), C.price, { seed: 7, ghosts: 16 });
+  const pg = G.slot.all.map(n => (n.firstChild && n.firstChild.firstChild && n.firstChild.firstChild.dataset &&
+                                   n.firstChild.firstChild.dataset.true) ? n.firstChild.firstChild : n);
+  pg.host = $('oPrice'); G.price = KT.measure(pg);
+  G.lands = [9.000, 9.107, 9.214, 9.429];
+  KT.stripe($('oStripeCap')); KT.stripe($('oStripe'));
+  // F
+  place($('rNeedW'), 'Michroma', 30, 'YOU NEED', 62, 290);
+  place($('rLicW'), 'Bebas', 78, "VALID DRIVER'S LICENSE", 62, 330);
+  place($('rAgeW'), 'Bebas', 78, '21+ · INSURANCE', 62, 420);
+  G.need = setLine('rNeed', 'YOU NEED'); G.lic = setLine('rLic', "VALID DRIVER'S LICENSE");
+  G.age = setLine('rAge', '21+ · INSURANCE', true);
+  KT.stripe($('rStripe'));
+  // G
+  const eOffer = C.hours + ' HOURS · OUT THE DOOR', eWhen = 'TODAY ONLY · ENDS ' + C.endTime;
+  const eContact = C.phone + ' · ' + C.url, eReq = '21+ · VALID LICENSE · INSURANCE';
+  place($('eOfferW'), 'Bebas', 100, eOffer, 62, 356);
+  place($('eWhenW'), 'Bebas', 72, eWhen, 62, 466);
+  place($('eCtaW'), 'Bebas', 84, 'CALL OR DM TO BOOK', 62, 1340);
+  place($('eContactW'), 'Michroma', 28, eContact, 62, 1428);
+  place($('eReqW'), 'Michroma', 24, eReq, 62, 1478);
+  G.eOffer = setLine('eOffer', eOffer, true); $('eWhen').textContent = eWhen;
+  G.eCta = setLine('eCta', 'CALL OR DM TO BOOK'); G.eContact = setLine('eContact', eContact, true);
+  G.eReq = setLine('eReq', eReq, true);
+  KT.stripe($('eStripe'));
+  await new Promise(r => $('eLogo').complete ? r() : ($('eLogo').onload = r));
+  window.renderAt(0);
+  window.__ktReady = true;
+})();
+
+// ---------------------------------------------------------------- helpers
+const show = (id, on) => { $(id).style.display = on ? 'block' : 'none'; };
+function flipX(g, t, st, sg, dur, from) {         // per-glyph perspective flip (perspective on EACH glyph)
+  g.forEach((s, i) => { const q = P(t, st + i * sg, st + i * sg + dur), e = E.outBack(q, 1.25);
+    s.style.opacity = q <= 0 ? 0 : Math.min(1, q * 3.5);
+    s.style.transform = `perspective(700px) rotateX(${(1 - e) * from}deg)`; });
+}
+function trackLeft(g, t, st, dur, from, to, size) { // letter-spacing collapse, left anchored
+  const e = E.outExpo(P(t, st, st + dur)), extra = (from - to) * size * (1 - e);
+  g.forEach((s, i) => { s.style.opacity = cl(P(t, st, st + dur) * 2.2); s.style.transform = `translateX(${i * extra}px)`; });
+}
+const pulse = (t, tl) => { const q = (t - tl) / (4 / FPS); return q > 0 && q < 1 ? Math.sin(Math.PI * q) : 0; };
+const glintShadow = (el, s) => { el.style.filter = s > 0 ? `drop-shadow(0 0 ${(6 * s).toFixed(2)}px rgba(255,255,255,.35))` : 'none'; };
+
+// ---------------------------------------------------------------- renderAt
+window.renderAt = function (t) {
+  // ================= A. HOOK 0.000-3.429 =================
+  const hookOn = t < 3.46;
+  show('hook', hookOn);
+  if (hookOn) {
+    KT.rise(G.ends, t, { start: 0.429, stagger: 0.025, dur: 0.22, dy: 1.1, ease: E.outExpo });
+    const gs = KT.glint(G.today, t, { start: 0.857, dur: 0.45, base: '#FFFFFF', warm: '#FFF6D0', hot: '#FFFFFF',
+                                      width: 0.18 * G.today.W, angle: 108 });
+    glintShadow($('hTodayW'), gs);
+    const wh = (id, st) => KT.whip($(id), t, { start: st, dur: 0.16, dx: 0, dy: -300, ease: E.inCubic });
+    wh('hEndsW', 3.25); wh('hTodayW', 3.27); wh('hFlashW', 3.29);
+    wh('hookPanel', 3.29); wh('hookStripe', 3.29);
+  }
+
+  // ================= B/C. BRACKETS =================
+  const iDoor0 = beatOf(7)[0], iDoor1 = beatOf(7)[1];
+  const tD0 = fT(iDoor0) - 0.5 / FPS, tD1 = fT(iDoor1) - 0.5 / FPS;   // frame-edge times of the door shot
+  const tC0 = 6.300, tLock = fT(beatOf(12)[0]) - 0.5 / FPS, tCx = 8.235;
+  let rect = null, op = 0, leader = null;
+  if (t >= tD0 && t < tD1) {
+    const p = srcPos(t, 7), box = TrackLock.at(TRACKS.door, p / FPS), tgt = bracketRect(box);
+    const j = (t - tD0) * FPS, a = E.outExpo(cl(j / 5));
+    const src = { x: tgt.x - tgt.w * 0.35, y: tgt.y - tgt.h * 0.35, w: tgt.w * 1.7, h: tgt.h * 1.7 };
+    rect = lerpR(src, tgt, a); op = cl(a * 3);
+    const kc = E.inCubic(P(t, tD1 - 2 / FPS, tD1));                  // collapse over the last 2 frames
+    rect = shrink(rect, kc); op *= 1 - kc * 0.6;
+  }
+  let crestLab = null;
+  if (t >= tC0 && t < tCx + 0.12) {
+    const p = t < tLock ? TL.p[beatOf(12)[0]] : srcPos(t, 12);
+    const box = TrackLock.at(TRACKS.crest, p / FPS), tgt = bracketRect(box);
+    const off = { x: -300, y: 1900, w: 400, h: 400 };
+    const a = E.outExpo(cl((t - tC0) / (tLock + 7 / FPS - tC0)));
+    rect = lerpR(off, tgt, a); op = 1;
+    const kc = E.inCubic(P(t, tCx, tCx + 0.12));
+    rect = shrink(rect, kc); op = 1 - kc * 0.7;
+    const j = (t - tLock) * FPS;
+    crestLab = TrackLock.follow(TRACKS.crest, p / FPS, { x: 54, y: 470 }, { x: .2, y: .35 }, 8);
+    crestLab = TrackLock.clampSafe({ x: crestLab.x, y: crestLab.y, w: 506, h: 240 });
+    const wq = KT.p(t, tCx, tCx + 0.12);
+    leader = { k: wq > 0 ? 0 : (j - 3) / 6, y: crestLab.y + 240 };
+  }
+  drawBrackets(rect, op, leader);
+
+  // ================= C. CREST LABEL 6.45-8.357 =================
+  const crestOn = t >= 6.44 && t < tCx + 0.13 && crestLab;
+  show('crestW', crestOn);
+  if (crestOn) {
+    const c = $('crest');
+    c.style.left = crestLab.x + 'px'; c.style.top = crestLab.y + 'px';
+    const rv = E.outExpo(P(t, 6.45, 6.75));
+    $('cPanel').style.clipPath = `inset(0 ${(100 - 100 * rv).toFixed(3)}% 0 0)`;
+    KT.drawStripe($('cStripe'), t, { start: 6.45, dur: 0.30 });
+    flipX(G.brand, t, 6.50, 0.03, 0.17, -100);
+    KT.wipe($('cModelG'), t, { start: 6.62, dur: 0.36, dir: 'right', edge: $('cEdge'), ease: E.inOutCubic, pad: 4 });
+    trackLeft(G.year, t, 6.80, 0.30, 0.6, 0.08, 30);
+    const gs = KT.glint(G.model, t, { start: 7.71, dur: 0.39, base: '#FFFFFF', warm: '#FFF6D0', hot: '#FFFFFF',
+                                      width: 0.18 * G.model.W, angle: 108 });
+    glintShadow($('cModelW'), gs);
+    KT.whip($('crestW'), t, { start: tCx, dur: 0.12, dx: 0, dy: -280, ease: E.inCubic });
+  }
+
+  // ================= D. OFFER 8.655-12.000 =================
+  const tO = 207.5 / FPS;                                              // output frame 208 = 8.655 s
+  const offerOn = t >= tO && t < 12.0;
+  show('offer', offerOn);
+  if (offerOn) {
+    const k = (t - tO) * FPS, s = 1 + 0.08 * (1 - E.outExpo(cl(k / 5)));
+    const fi = Math.round(t * FPS), sh = (fi === 208 || fi === 209) ? TL.shake[fi] : [0, 0];
+    const o = $('offer'); o.style.transformOrigin = '477px 550px';
+    o.style.transform = `translate(${sh[0]}px,${sh[1]}px) scale(${s.toFixed(5)})`;
+    o.style.opacity = 1 - P(t, 11.917, 12.0);
+    KT.track(G.hours, t, { start: 8.66, dur: 0.29, spread: 2.2 });
+    const R = KT.slotAt(G.slot, t, { lands: G.lands });
+    R.forEach((r, i) => { const w = G.slot.reels[i].win; w.style.transformOrigin = '50% 62%';
+      w.style.transform = `scale(${(1 + 0.04 * pulse(t, G.lands[i])).toFixed(5)})`; });
+    KT.drawStripe($('oStripe'), t, { start: 9.43, dur: 0.27 });
+    KT.wipe($('oDoor'), t, { start: 9.55, dur: 0.35, dir: 'right', edge: $('oEdge'), ease: E.inOutCubic, pad: 4 });
+    const gs = KT.glint(G.price, t, { start: 10.29, dur: 0.46, base: '#FBD101', warm: '#FFE866', hot: '#FFFFFF',
+                                      width: 0.18 * G.price.W, angle: 108 });
+    $('oPriceG').style.filter = gs > 0 ? `drop-shadow(0 0 ${(22 * gs).toFixed(2)}px rgba(251,209,1,${(.45 * gs).toFixed(3)}))` : 'none';
+  }
+
+  // ================= F. REQUIREMENTS 12.857-15.43 =================
+  const reqOn = t >= 12.80 && t < 15.44;
+  show('req', reqOn);
+  $('topScrim').style.display = t >= 12.78 ? 'block' : 'none';
+  $('topScrim').style.opacity = E.outCubic(P(t, 12.78, 13.0));
+  if (reqOn) {
+    const rs = (g, st) => KT.rise(g, t, { start: st, stagger: 0.006, dur: 0.25, dy: 1.1, ease: E.outExpo });
+    rs(G.need, 12.857); rs(G.lic, 12.930); rs(G.age, 13.000);
+    KT.drawStripe($('rStripe'), t, { start: 12.90, dur: 0.30 });
+    KT.whip($('req'), t, { start: 15.33, dur: 0.10, dx: 0, dy: -260, ease: E.inCubic });
+  }
+
+  // ================= G. END CARD 15.50-18.0 =================
+  const endOn = t >= 15.45;
+  show('end', endOn);
+  if (endOn) {
+    KT.wipe($('eLogo'), t, { start: 15.643, dur: 0.257, dir: 'right', edge: $('eEdge'), ease: E.inOutCubic, pad: 2 });
+    KT.rise(G.eOffer, t, { start: 15.50, stagger: 0.012, dur: 0.35, dy: 1.1, ease: E.outExpo });
+    KT.drawStripe($('eStripe'), t, { start: 15.55, dur: 0.25 });
+    KT.wipe($('eWhen'), t, { start: 15.60, dur: 0.25, dir: 'right', edge: $('eEdge2'), ease: E.inOutCubic, pad: 4 });
+    KT.rise(G.eCta, t, { start: 15.75, stagger: 0.012, dur: 0.35, dy: 1.1, ease: E.outExpo });
+    const qc = E.outCubic(P(t, 15.86, 16.10));
+    $('eContactW').style.opacity = qc; $('eContactW').style.transform = `translateY(${(12 * (1 - qc)).toFixed(3)}px)`;
+    $('eReqW').style.opacity = E.outCubic(P(t, 16.00, 16.20));
+  }
+};
+
+// QA helper: ink rects of every visible text line at time t (build.py checks x <= 907, 269 <= y <= 1536)
+window.inkAudit = function (t) {
+  window.renderAt(t);
+  const ids = ['hFlash', 'hToday', 'hEnds', 'cBrand', 'cModel', 'cYear', 'oHours', 'oPrice', 'oDoor', 'rNeed', 'rLic', 'rAge',
+               'eLogo', 'eOffer', 'eWhen', 'eCta', 'eContact', 'eReq'];
+  const out = [];
+  for (const id of ids) {
+    const el = $(id); let vis = true, n = el;
+    while (n && n !== document.body) { const cs = getComputedStyle(n); if (cs.display === 'none' || +cs.opacity === 0) { vis = false; break; } n = n.parentElement; }
+    if (!vis) continue;
+    const r = el.getBoundingClientRect(); out.push({ id, x0: r.left, x1: r.right, y0: r.top, y1: r.bottom });
+  }
+  return out;
+};
+</script>
+</body></html>

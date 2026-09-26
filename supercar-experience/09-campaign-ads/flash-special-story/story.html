@@ -272,8 +272,8 @@ function build() {
   });
   // B8 ask
   R.ask1 = line(ty, { f: 'B', fs: 120, x: x0, cap: Y(.610), html: 'BOOK BEFORE <span class="g">1PM PT</span>', cls: 'w', shadow: SH_B8 });
-  R.ask2 = line(ty, { f: 'M', fs: 26, x: x0, cap: Y(.673), ls: .14, html: 'CALL FOR THE FLASH RATE', cls: 'w', shadow: SH_B8 });
-  R.ask3 = line(ty, { f: 'M', fs: 40, x: x0, cap: Y(.696), ls: .04, html: '(888) 678-6079', cls: 'g', shadow: SH_B8 });
+  R.ask2 = line(ty, { f: 'M', fs: 26, x: x0, cap: Y(.673), ls: .14, html: 'TEXT OR DM TO BOOK', cls: 'w', shadow: SH_B8 });
+  R.ask3 = line(ty, { f: 'M', fs: 40, x: x0, cap: Y(.696), ls: .04, html: '(725) 425-3583', cls: 'g', shadow: SH_B8 });
   R.askS = stripe(ty, x0, Y(.726), 320, 8);
   /* 9. scan lines and pulses */
   const fx = layer();
@@ -288,7 +288,7 @@ function build() {
   R.endH = line(R.end, { f: 'B', fs: 92, x: 540, cap: Y(.525), html: 'ENDS TODAY · 1PM PT', cls: 'g', align: 'center' });
   R.endC = [
     line(R.end, { f: 'M', fs: 32, x: 540, cap: Y(.589), ls: .16, html: 'SUPERCAREXP.VIP', cls: 'w', align: 'center' }),
-    line(R.end, { f: 'M', fs: 32, x: 540, cap: Y(.622), ls: .08, html: '(888) 678-6079', cls: 'w', align: 'center' }),
+    line(R.end, { f: 'M', fs: 32, x: 540, cap: Y(.622), ls: .08, html: '(725) 425-3583', cls: 'w', align: 'center' }),
     line(R.end, { f: 'M', fs: 26, x: 540, cap: Y(.655), ls: .12, html: '@SUPERCAR_EXPERIENCE_', cls: 'w', align: 'center' }),
   ];
 }
