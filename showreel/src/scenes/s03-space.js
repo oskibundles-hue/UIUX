@@ -8,7 +8,8 @@
 //   * the walls are the four faces of a square frustum (a rigid hinged rectangle, clipped where it would pass
 //     behind its neighbours), so no two faces overlap on screen and depth order is exact at every fold angle;
 //     during the >90° hinge overshoot the faces flare and still meet at the corners;
-//   * depth shading is a perspective-correct gradient (stops solved in screen space);
+//   * depth shading is a perspective-correct gradient (stops solved in screen space); while the box unfolds it
+//     is normalised to the visible depth and the floor + ceiling take a little extra "fold light" (UNFOLD_END);
 //   * "SPACE" is vector type: outlines traced from Archivo at setup, every vertex projected per frame, so the
 //     letters stay razor sharp from 0.19× to 10×; rings are projected quads, labels are affine sprites;
 //   * real motion blur: each frame averages N sub-frames across a 180° shutter, N adapted to the fastest
@@ -43,6 +44,21 @@
   const NEAR_EXT = 320; // walls continue 320 px in front of the hinge line: invisible while unfolding, but they
   //                       keep the frame corners inside the corridor when it rolls before the dolly has moved
   const SHADE_MAX = 0.7;
+  // Unfold shading (frames 226-234). With 4200-deep walls hinged at the frame edges the four flaps meet at the
+  // vanishing point at d = 960/cos θ, so until θ = 76.8° most of the depth is hidden and the storyboard's gradient
+  // (θ/90 · d/4200) stays faint (3.6% Ink at the vanishing point on frame 228): the hinge read as a flat hold.
+  //   * the gradient is normalised to the visible depth, d/dFar: 0 at the hinge, full at the vanishing point
+  //     (dFar = 4200 from θ = 76.8° on, where the two agree);
+  //   * the opacity runs ahead of θ/90: (84/90)(0.55√u + 0.45u²), u = θ/72: a fast attack so the first unfold
+  //     frames already carry depth, and a late push so the vanishing point keeps deepening into the portal
+  //     (a flat 1.6θ/90 saturates by θ ≈ 55° and the build then fades as the dark centre shrinks); it holds
+  //     84/90 from θ = 72° and rejoins θ/90 at θ = UNFOLD_END;
+  //   * fold light: the floor and ceiling carry an extra Ink overlay (never past SHADE_MAX) so the four flaps
+  //     separate along the diagonal creases: 0.16, in with the hinge (out-cubic over its first 22°), relaxing
+  //     to 0.104 by θ = 72° as the depth shading takes over, then released while the portal opens (72° -> 84°).
+  // Every sub-frame of frame 235 onwards has θ > 84.1°, so from there on the shading is exactly the storyboard's.
+  const UNFOLD_END = 84, UNFOLD_OP_AT = 72;
+  const CREASE = 0.16, CREASE_IN = 22, CREASE_OUT = 72, CREASE_RELAX = 0.35;
   const RING_W = 4, RING_LIT_W = 10; // depth ring; a lit (Paper) ring is drawn heavier so the chase reads
 
   // Lettering: Archivo 440 px, tracking -0.01em, two instances per wall starting at depths 150 and 2250,
@@ -499,7 +515,14 @@
       const { cT, sT, D, dNear, dFar } = c;
       const q = this.q;
       const hw = (d) => HALF - d * cT; // frustum half-width at depth d
-      const shadeOp = R.clamp(c.th / 90);
+      // shading opacity: the storyboard's θ/90, run ahead while the box unfolds; plus the fold light (see UNFOLD_END)
+      const th = c.th, uo = Math.min(1, th / UNFOLD_OP_AT);
+      const shadeOp = R.clamp(Math.max(th / 90, (UNFOLD_END / 90) * (0.55 * Math.sqrt(uo) + 0.45 * uo * uo)));
+      const crease = th < UNFOLD_END
+        ? CREASE * (1 - (1 - Math.min(1, th / CREASE_IN)) ** 3) // snaps in with the hinge
+          * (1 - CREASE_RELAX * R.smoothstep(CREASE_IN, CREASE_OUT, th)) // relaxes as the depth shading takes over
+          * (1 - R.smoothstep(CREASE_OUT, UNFOLD_END, th)) // releases as the portal opens
+        : 0;
       const fade = R.seg(t, T_FADE0, T_FADE1, 'inOutSine'); // lettering + labels (storyboard timing)
       const ringFade = R.seg(t, T0, T_FADE0, 'outQuad'); // rings from the first 3D frame: they ripple out of the centre as the box folds
 
@@ -548,16 +571,20 @@
       }
       // perspective-correct depth shading: the gradient runs from the visible near edge (clamped to the frame's
       // corner radius) to the far edge; 12 stops, denser towards the far end where the perspective curve bends;
-      // the depth under each stop is solved exactly (max error vs the true curve ≈ 1 level of 255)
+      // the depth under each stop is solved exactly (max error vs the true curve ≈ 1 level of 255). The shade is
+      // normalised to the visible depth d / dFar (= d / DEPTH once the walls clear the portal, θ ≥ 76.8°).
       const yAt = (d) => CY + (HALF - d * cT) * (PERSP / (PERSP - (D - d * sT)));
       const y0 = Math.min(yAt(dNear), CY + 1110), y1 = yAt(dFar);
       const grad = ctx.createLinearGradient(0, y0, 0, y1);
+      const gradFC = crease > 0 ? ctx.createLinearGradient(0, y0, 0, y1) : null; // floor + ceiling, with fold light
       const NS = 12;
       for (let i = 0; i <= NS; i++) {
         const u = 1 - (1 - i / NS) ** 2;
         const y = y0 + (y1 - y0) * u - CY;
-        const d = R.clamp((HALF * PERSP - y * (PERSP - D)) / (y * sT + PERSP * cT), 0, DEPTH);
-        grad.addColorStop(u, shadeCol((SHADE_MAX * d * shadeOp) / DEPTH));
+        const d = R.clamp((HALF * PERSP - y * (PERSP - D)) / (y * sT + PERSP * cT), 0, dFar);
+        const sh = (SHADE_MAX * d * shadeOp) / dFar;
+        grad.addColorStop(u, shadeCol(sh));
+        if (gradFC) gradFC.addColorStop(u, shadeCol(Math.max(sh, Math.min(SHADE_MAX, sh + crease))));
       }
 
       // depth rings + lettering: the union of k copies spread across this sub-frame's slice of the shutter
@@ -597,9 +624,9 @@
         const a = c.roll + (w * Math.PI) / 2, ca = Math.cos(a), sa = Math.sin(a);
         ctx.setTransform(ca, sa, -sa, ca, CX - (ca * CX - sa * CY), CY - (sa * CX + ca * CY));
       };
-      ctx.fillStyle = grad;
       for (let w = 0; w < 4; w++) {
         rot(w);
+        ctx.fillStyle = gradFC && w % 2 === 0 ? gradFC : grad; // w = 0, 2: floor, ceiling (no roll during the unfold)
         ctx.fill(wall);
       }
       if (ringFade <= 0) return;
