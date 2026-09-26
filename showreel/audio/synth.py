@@ -12,6 +12,9 @@ Renders a 48 kHz / 24-bit / stereo WAV of exactly DURATION seconds (720000 frame
   4. Sequencer    patterns -> parts -> buses, sidechain, music-bus edits (gate, stutter, glitch, tapestop)
   5. Master + IO  glue compressor, oversampled soft clipper, true-peak limiter, LUFS targeting, WAV, report
 
+QA: `python3 audio/synth.py --stems && python3 audio/qa.py` prints integrity / loudness / kick-grid / click
+checks and writes waveform + spectrogram PNGs to .cache/audio-qa/.
+
 Picture sync: tools/cues.mjs exports scene windows, R.cue FX cues and R.sfx sound events to audio/cues.json.
 Every R.sfx event is rendered on the SFX bus at its exact sample. FX cues add optional reinforcement layers
 (FX_CUE_SOUNDS) unless a sound event lands within DEDUPE_WINDOW. Scene cuts get an optional sweetener
@@ -35,6 +38,13 @@ import numpy as np
 # =====================================================================================================
 # 1. ARRANGEMENT: everything musical lives in this section. Re-map it to the storyboard by editing data.
 # =====================================================================================================
+# Re-mapping cheat sheet (all data, no DSP code):
+#   - a bar's role / density / harmony ....... its dict in SONG (patterns, chords, level, hp/lp, gate, stutter)
+#   - hits, risers, reverses, sweeps ......... FX (musical positions) or SCENE_FX (anchored to scene ids)
+#   - balance ................................ MIX (music parts), RETURNS, SFX_MIX (picture sounds)
+#   - quick A/B .............................. MUTE / SOLO here, or --mute / --solo on the command line
+# The picture's own R.sfx events always play; a built-in FX of the same type within YIELD_WINDOW of one
+# steps aside, so the defaults below never double up with the storyboard's hits.
 BPM = 128
 BARS = 8
 DURATION = 15.0                 # seconds; the file is always exactly DURATION * SR frames
@@ -173,7 +183,7 @@ MIX = {
     'shaker': dict(gain=-16.0, pan=-0.30, room=0.10),
     'rim':    dict(gain=-6.5, pan=-0.22, room=0.12, delay=0.30),
     'tick':   dict(gain=-8.0, pan=0.25, room=0.10, delay=0.45),
-    'sub':    dict(gain=-3.5, duck=12.0),
+    'sub':    dict(gain=-6.0, duck=12.0),     # QA: -2.5 dB, the sub out-weighed the kick (+1.9 LU in the drop)
     'bass':   dict(gain=-1.5, duck=6.0),
     'stab':   dict(gain=-4.0, hall=0.30, delay=0.50, duck=3.0),
     'saw':    dict(gain=-2.5, hall=0.25, delay=0.15, duck=4.5),
@@ -360,6 +370,11 @@ def iir(x, sections, tail=None):
         return x.copy()
     L = fft_len(n + (_tail(sections) if tail is None else tail))
     return np.fft.irfft(np.fft.rfft(x, L) * _response(sections, L), L)[..., :n]
+
+
+def dc_block(x, r=0.9995):
+    """Classic DC blocker y[n] = x[n] - x[n-1] + r*y[n-1] (corner ~ (1 - r) * SR / 2pi = 3.8 Hz at 48 kHz)."""
+    return iir(x, [(np.array([1.0, -1.0]), np.array([1.0, -r]))])
 
 
 def filt(x, *stages):
@@ -737,7 +752,8 @@ def limiter(x, ceiling_db=-1.0, lookahead=0.005, release_db_s=30.0, os_factor=4)
     gdb = 20.0 * np.log10(np.maximum(m, 1e-9))
     ramp = np.arange(n) * (release_db_s / SR)
     gdb = np.minimum.accumulate(gdb - ramp) + ramp
-    gg = np.concatenate([np.ones(L), 10.0 ** (gdb / 20.0)])
+    gg = 10.0 ** (gdb / 20.0)
+    gg = np.concatenate([np.full(L, gg[0]), gg])       # a hit on sample 0 is already limited
     c = np.concatenate([[0.0], np.cumsum(gg)])
     ga = (c[L + 1:] - c[:-L - 1]) / (L + 1)
     return x * ga, ga
@@ -1012,8 +1028,8 @@ def render_sub(notes, n):
     f = tf[0] + iir(tf - tf[0], [onepole_ba(0.008)])
     a = iir(ta, [onepole_ba(0.005)])
     x = sine(f)
-    x = np.tanh(1.7 * (x + 0.15 * x * x)) / math.tanh(1.7)
-    return filt(x, ('hp', 18, 0.7)) * a
+    x = np.tanh(1.7 * (x + 0.15 * x * x)) / math.tanh(1.7)     # asymmetric -> even harmonics (and DC)
+    return dc_block(x) * a
 
 
 # ---- R.sfx vocabulary -----------------------------------------------------------------------------------
@@ -1049,7 +1065,7 @@ def s_impact(amt=1.0, tone='std', seed=0, **_):
 def s_whoosh(dur=0.3, dir='up', amt=1.0, seed=0, lo=320.0, hi=5200.0, **_):
     """Air movement that swells to its peak at t + dur: stereo noise through a swept resonant bandpass
     (+ a lowpassed body layer), panning across, short tail after the peak."""
-    dur = float(np.clip(dur, 0.05, 6.0))
+    dur = float(np.clip(dur, *DUR_RANGE['whoosh']))
     tail = max(0.07, 0.3 * dur)
     n = int((dur + tail) * SR)
     t = tvec(n)
@@ -1130,7 +1146,7 @@ def s_glitch_layer(dur=0.2, amt=1.0, seed=0, **_):
 def s_riser(dur=BAR, amt=1.0, seed=0, **_):
     """Tension build ending at t + dur: noise through a bandpass sweeping 250 Hz -> 11 kHz with rising
     resonance and width, plus a supersaw gliding up two octaves under an accelerating tremolo."""
-    dur = float(np.clip(dur, 0.1, 8.0))
+    dur = float(np.clip(dur, *DUR_RANGE['riser']))
     n = int(dur * SR)
     t = tvec(n)
     rng = rng_for('riser', seed)
@@ -1153,7 +1169,7 @@ def s_riser(dur=BAR, amt=1.0, seed=0, **_):
 def s_reverse(dur=0.47, amt=1.0, seed=0, chord_notes=None, **_):
     """Reverse swell landing at t + dur: a bright chord stab + noise burst is convolved with a long
     synthesized room, time-reversed and trimmed so its tail swells into the landing point."""
-    dur = float(np.clip(dur, 0.05, 6.0))
+    dur = float(np.clip(dur, *DUR_RANGE['reverse']))
     rng = rng_for('reverse', seed)
     notes = chord_notes or [56, 60, 63, 67]
     src = v_stab(notes, 5000.0, vel=1.0, gate=0.12, seed=seed).mean(axis=0)
@@ -1161,6 +1177,9 @@ def s_reverse(dur=0.47, amt=1.0, seed=0, chord_notes=None, **_):
     src[:hit.shape[0]] += 0.5 * hit
     ir = make_ir('reverse', dur + 0.6, 3.0, 1.8, predelay=0.0, hp=250, lp=12000, er=0.0, onset=0.006)
     wet = convolve(src, ir, keep_tail=True)[:, ::-1]
+    env = np.convolve(np.abs(wet).max(axis=0), np.ones(240) / 240, mode='same')
+    tail = wet.shape[1] - int(0.3 * SR)                        # end the swell at its loudest point
+    wet = wet[:, :tail + int(np.argmax(env[tail:])) + 1]
     m = int(dur * SR)
     seg = wet[:, -m:] if wet.shape[1] >= m else np.pad(wet, ((0, 0), (m - wet.shape[1], 0)))
     seg = seg * (np.linspace(0.0, 1.0, m) ** 1.5)
@@ -1180,7 +1199,7 @@ def s_subdrop(amt=1.0, seed=0, **_):
 
 def s_shimmer(dur=0.9, amt=1.0, seed=0, **_):
     """Airy sparkle: random high sine grains on the F minor pentatonic (C6..A#7), random pans."""
-    dur = float(np.clip(dur, 0.05, 8.0))
+    dur = float(np.clip(dur, *DUR_RANGE['shimmer']))
     n = int((dur + 0.15) * SR)
     rng = rng_for('shimmer', seed)
     midis = [m for m in range(84, 107) if m % 12 in (5, 8, 10, 0, 3)]
@@ -1251,6 +1270,12 @@ RENDERERS = dict(impact=s_impact, whoosh=s_whoosh, swish=s_swish, click=s_click,
                  shimmer=s_shimmer, type=s_type, air=s_air, thump=s_thump, zap=s_zap)
 DEFAULT_DUR = dict(whoosh=0.3, swish=0.15, glitch=0.2, riser=BAR, reverse=0.47, shimmer=0.9, type=0.3,
                    tapestop=0.3)
+# (min, max) dur in seconds, shared by the renderers and normalize_event so the scheduled anchor always matches
+# the rendered sound. END_ANCHORED types land at t + dur: a longer request keeps its landing point and starts
+# later instead (the quiet first part of the build is dropped).
+DUR_RANGE = dict(whoosh=(0.05, 10.0), riser=(0.1, 10.0), reverse=(0.05, 10.0), shimmer=(0.05, 10.0))
+DUR_RANGE_DEFAULT = (0.01, 10.0)
+END_ANCHORED = ('whoosh', 'riser', 'reverse')
 
 
 # ---- music-bus edits ----------------------------------------------------------------------------------
@@ -1369,7 +1394,7 @@ def edit_tapestop(bus, orig, t, dur, resume=None):
     if s0 >= bus.shape[1]:
         return
     if resume is None:
-        resume = (math.floor((t + dur) / BEAT + 1e-6) + 1) * BEAT
+        resume = math.ceil((t + dur) / BEAT - 1e-6) * BEAT      # first beat at or after the stop's end
     seg = np.zeros((2, max(n, smp(resume) - s0)))      # tape-read, then silence until the resume point
     seg[:, :n] = tape_read(orig, max(0, s0), n, dur)
     k = int(0.3 * n)
@@ -1429,7 +1454,7 @@ def voicing(ch, center=62.0, rootless=True):
         k = round((center - sum(stack) / len(stack)) / 12.0)
         stack = [s + 12 * k for s in stack]
         score = abs(sum(stack) / len(stack) - center) + 0.1 * (stack[-1] - stack[0])
-        score += 1.5 * sum(1 for a, b in zip(stack, stack[1:]) if b - a == 1)
+        score += 6.0 * sum(1 for a, b in zip(stack, stack[1:]) if b - a == 1)     # QA: was 1.5, too weak to avoid them
         if score < best_score:
             best, best_score = stack, score
     return [float(v) for v in best]
@@ -1525,6 +1550,32 @@ class Song:
         c0, c1 = self.bars[bi].get(part + '_cut', (0.6, 0.6))
         u = (t - bi * BAR) / BAR
         return 120.0 * 100.0 ** (c0 + (c1 - c0) * u)
+
+
+BAR_KEYS = {'section', 'energy', 'chords', 'level', 'hp', 'lp', 'gate', 'stutter', 'mute', 'snare_rise'}
+PATTERN_CHARS = dict(part=set('.-_xXog123456789'), tom=set('.-_hmlHML'), gate=set('.-xXog123456789'),
+                     stutter=set('.-234568rbxdt'))
+
+
+def check_song(song):
+    """Warn (never fail) about ARRANGEMENT typos that would otherwise be silently ignored or misread:
+    unknown bar keys, unknown pattern characters, muting a part that does not exist, bar count."""
+    if len(song) != BARS:
+        warn('SONG has %d bars but BARS = %d (the file stays %.3f s)' % (len(song), BARS, DURATION))
+    known = BAR_KEYS | set(PARTS) | {p + '_cut' for p in PARTS} | {p + '_notes' for p in PARTS}
+    for bi, bd in enumerate(song):
+        for k, v in bd.items():
+            if k not in known:
+                warn('SONG bar %d: unknown key %r ignored' % (bi + 1, k))
+                continue
+            kind = ('tom' if k == 'tom' else 'part' if k in PARTS else k if k in ('gate', 'stutter') else None)
+            if kind:
+                bad = sorted(set(str(v).replace(' ', '').replace('|', '')) - PATTERN_CHARS[kind])
+                if bad:
+                    warn('SONG bar %d: %s pattern %r has unknown characters %s' % (bi + 1, k, v, ''.join(bad)))
+        for p in bd.get('mute', ()):
+            if p not in PARTS:
+                warn('SONG bar %d: mute %r is not a part' % (bi + 1, p))
 
 
 def render_parts(song, n):
@@ -1689,7 +1740,11 @@ def normalize_event(e, source):
         return float(np.clip(v if math.isfinite(v) else d, lo, hi))
 
     ev = dict(type=typ, t=float(e['t']), source=source, amt=num('amt', 1.0, 0.0, 2.0))
-    ev['dur'] = num('dur', DEFAULT_DUR.get(typ, 0.3), 0.01, 10.0)
+    lo, hi = DUR_RANGE.get(typ, DUR_RANGE_DEFAULT)
+    dur = num('dur', DEFAULT_DUR.get(typ, 0.3), lo, 1e4)
+    if dur > hi and typ in END_ANCHORED:     # keep the landing point, start later
+        ev['t'] += dur - hi
+    ev['dur'] = min(dur, hi)
     ev['pitch'] = num('pitch', 1.0, 0.25, 4.0)
     ev['count'] = int(num('count', 6, 1, 400))
     ev['dir'] = 'down' if str(e.get('dir', 'up')).lower() == 'down' else 'up'
@@ -1700,7 +1755,7 @@ def normalize_event(e, source):
         warn('sfx %s at t=%.3f is outside the reel: ignored' % (typ, ev['t']))
         return None
     ev['seed'] = '%s@%d' % (typ, int(round(ev['t'] * 1000)))
-    ev['anchor'] = ev['t'] + (ev['dur'] if typ in ('whoosh', 'riser', 'reverse') else 0.0)
+    ev['anchor'] = ev['t'] + (ev['dur'] if typ in END_ANCHORED else 0.0)
     ev['keep'] = bool(e.get('keep', False))
     return ev
 
@@ -1750,7 +1805,8 @@ def build_events(fx_cues, sounds, scenes):
             if ev:
                 events.append(ev)
     all_t = [ev['t'] for ev in events] + [ev['anchor'] for ev in events]
-    for c in fx_cues:
+    reinforced = []
+    for c in sorted(fx_cues, key=lambda c: c['t']):
         rule = FX_CUE_SOUNDS.get(c.get('type'))
         if not rule:
             continue
@@ -1760,10 +1816,13 @@ def build_events(fx_cues, sounds, scenes):
             continue
         if amt < rule.get('min_amt', 0.0) or any(abs(a - c['t']) <= DEDUPE_WINDOW for a in all_t):
             continue
+        if any(s == rule['sound'] and abs(a - c['t']) <= DEDUPE_WINDOW for s, a in reinforced):
+            continue                                 # two cues of one kind in a row: one layer, not two
         scale = {'shake': 1 / 14.0, 'chroma': 1 / 12.0}.get(c.get('type'), 1.0)
         ev = normalize_event(dict(t=c['t'], type=rule['sound'], amt=min(1.2, amt * scale)), 'fx:' + c['type'])
         if ev:
             events.append(ev)
+            reinforced.append((rule['sound'], c['t']))
     return sorted(events, key=lambda e: (e['t'], e['type'], e['source']))
 
 
@@ -1791,10 +1850,11 @@ def bar_curve(song, key, n, idle, log=False, ramp=0.01):
     return (c[w:w + n] - c[:n]) / w
 
 
-def render(cues_path, mute=(), solo=(), verbose=True):
+def render(cues_path, mute=(), solo=()):
     t_start = time.time()
     n = N_FRAMES
     mute, solo = set(MUTE) | set(mute), set(SOLO) | set(solo)
+    check_song(SONG)
     song = Song(SONG, mute, solo)
     scenes, fx_cues, sounds = load_cues(cues_path)
     events = build_events(fx_cues, sounds, scenes)
@@ -1885,12 +1945,12 @@ def render(cues_path, mute=(), solo=(), verbose=True):
 
 
 def master_pre(x):
-    """Mastering, fixed part: HP 20 Hz, -1.5 dB shelf above 9 kHz, lows made mono (M/S: side highpassed at 120 Hz,
+    """Mastering, fixed part: DC blocker + HP 20 Hz, -1.5 dB shelf above 9 kHz, lows made mono (M/S: side highpassed at 120 Hz,
     zero-phase), pre-fade of the tail, level-normalized to -20 LUFS so the glue compressor always sees
     the same program level, then gentle glue (1.8:1, 25 ms RMS, 25/250 ms)."""
     n = x.shape[-1]
     ef = int(END_FADE * SR)
-    x = filt(x, ('hp', 20, 0.7), ('highshelf', 9000, 0.7, -1.5))
+    x = filt(dc_block(x), ('hp', 20, 0.7), ('highshelf', 9000, 0.7, -1.5))
     m, s = 0.5 * (x[0] + x[1]), 0.5 * (x[0] - x[1])
     s = zerophase(s, lambda f: f ** 4 / (f ** 4 + 120.0 ** 4))
     x = np.stack([m + s, m - s])
@@ -1910,13 +1970,18 @@ def master_finish(x, target):
     ceiling = CEILING_DBTP - 0.15
     drive = float(np.clip(target - lufs(x), -20.0, 30.0))
     y = x
-    for _ in range(6):
+    prev = None
+    for _ in range(10):
         y = soft_clip(x * undb(drive), ceiling=undb(ceiling + 1.2), knee=0.72)
         y, _ga = limiter(y, ceiling)
         cur = lufs(y)
         if abs(cur - target) < 0.03 or cur <= -69.0:
             break
-        drive = float(np.clip(drive + target - cur, -20.0, 30.0))
+        slope = 1.0                                  # secant step: limiting makes loudness grow < 1 dB/dB
+        if prev is not None and abs(drive - prev[0]) > 1e-6:
+            slope = float(np.clip((cur - prev[1]) / (drive - prev[0]), 0.15, 1.5))
+        prev = (drive, cur)
+        drive = float(np.clip(drive + (target - cur) / slope, -20.0, 30.0))
     y[:, n - ef:] *= 0.5 + 0.5 * np.cos(np.pi * np.arange(1, ef + 1) / ef)
     y[:, -1] = 0.0
     fi = int(0.001 * SR)
