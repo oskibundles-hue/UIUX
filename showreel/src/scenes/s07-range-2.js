@@ -591,8 +591,15 @@
         const len = L.frac * A.len * Math.pow(1 - q, 2.2);
         const xe = tip - L.gap, xs = Math.max(STEM.x1 + 10, xe - len);
         if (xe - xs < 14) continue;
-        const y = Math.round(L.edge === 'top' ? A.y0 + L.dy : A.y1 + L.dy) - 2;
-        g.fillRect(xs, y, xe - xs, 4);
+        // tapered streak: 1 px at the tail, 4 px at the head
+        const yc = Math.round(L.edge === 'top' ? A.y0 + L.dy : A.y1 + L.dy);
+        g.beginPath();
+        g.moveTo(xs, yc - 0.5);
+        g.lineTo(xe, yc - 2);
+        g.lineTo(xe, yc + 2);
+        g.lineTo(xs, yc + 0.5);
+        g.closePath();
+        g.fill();
       }
     }
   }
