@@ -48,3 +48,15 @@ The hook reads TODAY ONLY / FLASH SPECIAL rather than 2-HOUR, so it does not cla
     python3 plate.py <ffmpeg> gt3rs <source clip>      # or: bs
     PAGE="story2.html#gt3rs" node render.js seq .work/seq_gt3rs 24
     # then the same overlay/encode step as build.sh, with plate_gt3rs.mp4 and .work/seq_gt3rs
+
+## Delivered to Dropbox
+
+`Supercar Experience/04 Flash Special Stories (2026-09-26)/`, one numbered folder per car plus `00 README.md`.
+Sizes were checked against the local renders.
+
+The Dropbox connector can't upload video, but a cloud session can go through a **file request**:
+`create_file_request` on the target folder, then Playwright on `dropbox.com/request/<id>`
+("Add files" → "Files from computer" → name + email → Upload). Dropbox puts the uploader's name in
+front of each filename, so move the files into place afterwards. Chromium needs the proxy CA in its NSS store first
+(`certutil -d sql:$HOME/.pki/nssdb -A -t "C,," -n ccr-agent-proxy -i /root/.ccr/agent-proxy-ca.crt`,
+from `libnss3-tools`). Don't use `--ignore-certificate-errors`.
