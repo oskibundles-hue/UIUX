@@ -500,11 +500,9 @@
         this.place(el, MDOT.x, y - (D * s - D) / 2, D / s, D * s, 0, false);
         return;
       }
-      // 2-frame squash anchored at its lowest point, then a quick settle to round
-      const u = t - T_TICK;
-      let q = u < 2 / R.FPS ? 1 : osc(u - 2 / R.FPS, 3780, 78, 1, 0) * (1 - R.smoothstep(0.07, 0.1, u));
-      if (u >= 0.1) q = 0;
-      const sy = 1 - 0.23 * q, sx = 1 / sy;
+      // 2-frame squash anchored at its lowest point, a one-frame rebound, then round
+      const q = R.kf(t - T_TICK, [[0, 1], [0.02, 0.9], [0.036, 0.3], [0.053, -0.06], [0.07, 0.015], [0.09, 0]]);
+      const sy = 1 - 0.18 * q, sx = 1 / sy;
       this.place(el, MDOT.x, MDOT.y + D / 2 - (D * sy) / 2, D * sx, D * sy, 0, false);
     },
   });

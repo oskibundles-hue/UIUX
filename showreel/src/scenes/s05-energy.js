@@ -42,9 +42,9 @@
     A_SIGNAL: [0.72, 0.86, 1], A_PAPER: [0.3, 0.4, 0.55], A_VOLT: [0.4, 0.55, 0.7], A_ACID: [1, 1, 1],
     SIGNAL_TOP: 1, // Signal drawn over the additive sparks: the burst stays hot orange, not white
     STREAK_MAX: 110, STREAK_MAX_SNAP: 130,
-    SPRING_K: 3.4, DELAY_MAX: 0.06, LAND_STEPS: 8,
+    SPRING_Z: 0.596, T95: 0.055, DELAY_MAX: 0.06, LAND_STEPS: 8, LAND_TRAIL: 1,
     HAZE_ALPHA: 0.3, HAZE_FADE: 0.15, HAZE_SINK: 1.0, HAZE_DRAG: 4, HAZE_RANDOM: 0.2,
-    LAND_MIX: [0.6, 0.85, 1, 1], LAND_W: 2,
+    LAND_MIX: [0.6, 0.85, 1, 1], LAND_W: 2, HAZE_CORE_R: 170,
     JITTER_T: 0.8, // |noise| above this shifts a square by 1 px
     SHUTTER: 0.5,
     SPEED_LV: [380, 1000], SPEED_A: [0.45, 0.72, 1], // speed thresholds (px/s) and brightness per level
@@ -129,8 +129,15 @@
   const TRX = new Float64Array(4), TRY = new Float64Array(4); //         scratch trail points
   let LAND_AT = 0; // first step where the spring progress passes 0.95
   (function springTables() {
-    const w0 = Math.sqrt(180) * C.SPRING_K;
-    const zeta = 16 / (2 * Math.sqrt(180));
+    // damped spring with ratio ζ, stiffness solved so progress 1 − A reaches 0.95 at T95 (from rest)
+    const zeta = C.SPRING_Z;
+    const unit = (x) => { // A(τ) for ω0 = 1 at τ = x
+      const wd = Math.sqrt(1 - zeta * zeta);
+      return Math.exp(-zeta * x) * (Math.cos(wd * x) + (zeta / wd) * Math.sin(wd * x));
+    };
+    let x95 = 0;
+    while (1 - unit(x95) < 0.95) x95 += 1e-4;
+    const w0 = x95 / C.T95;
     const wd = w0 * Math.sqrt(1 - zeta * zeta), a = zeta * w0;
     for (let k = 0; k < SP_N; k++) {
       const tau = k * DT, e = Math.exp(-a * tau), c = Math.cos(wd * tau), s = Math.sin(wd * tau);
@@ -233,7 +240,9 @@
           for (let i = 0; i < N; i++) {
             const dx = S.x[i] < 200 ? 200 - S.x[i] : S.x[i] > 1720 ? S.x[i] - 1720 : 0;
             const dy = S.y[i] < 428 ? 428 - S.y[i] : S.y[i] > 652 ? S.y[i] - 652 : 0;
-            cost[i] = Math.sqrt(dx * dx + dy * dy) + R.hash(i, 404) * C.SELECT_NOISE + (R.hash(i, 405) < C.HAZE_RANDOM ? 1e6 : 0);
+            const dc = Math.min(Math.hypot(S.x[i] - 640, S.y[i] - 540), Math.hypot(S.x[i] - 1280, S.y[i] - 540));
+            const reserve = R.hash(i, 405) < C.HAZE_RANDOM && dc > C.HAZE_CORE_R;
+            cost[i] = Math.sqrt(dx * dx + dy * dy) + R.hash(i, 404) * C.SELECT_NOISE + (reserve ? 1e6 : 0);
           }
           const all = Array.from({ length: N }, (_, i) => i).sort((a, b) => cost[a] - cost[b] || a - b);
           idx = Int32Array.from(all.slice(0, NT));
@@ -418,7 +427,8 @@
           const landing = k >= LAND_AT;
           const pa = landing ? land[grp[i] * 4 + Math.min(3, Math.floor(((k - LAND_AT) / LAND_STEPS) * 4))] : flight[grp[i] * 3 + wb[i]];
           let n = 0;
-          for (let kk = k; kk >= k - 3 && kk >= 0; kk--) {
+          const kMin = landing && C.LAND_TRAIL ? Math.max(LAND_AT, k - 3) : k - 3;
+          for (let kk = k; kk >= kMin && kk >= 0; kk--) {
             const a = SP_A[kk], b = SP_B[kk], c = SP_C[kk], sn = SP_S[kk] * sg;
             let px = tx + (X0 * c - Y0 * sn) * a + V0x * b, py = ty + (X0 * sn + Y0 * c) * a + V0y * b;
             if (kk >= LAND_AT) { const e = outCubic(Math.min(1, (kk - LAND_AT) / LAND_STEPS)); px += (tx - px) * e; py += (ty - py) * e; }
