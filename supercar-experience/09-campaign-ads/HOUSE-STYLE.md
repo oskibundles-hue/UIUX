@@ -150,6 +150,7 @@ Keeping them separate is deliberate: a test on one axis stays interpretable.
 | 2026-09-08 | Aventador S, layout variations | "the third was very fitting" — `centred` approved, on par with `hud`, chosen per job |
 | 2026-09-26 | SE flash-special quick cuts: Huracán STO, GT3 RS, AMG GT Black Series | "That was amazing", then "I approve those ads for when we need quick story ads for promotions" — `quick-promo` approved as the go-to for promo stories |
 | 2026-09-26 | Polished STO flash special (HUD lock-on) | "These animated graphics are way better... keep these up. I wanna implement these in my vlogs too" — the animated HUD level is the bar; vlog versions to follow. Also: "Keep music as well if the videos ever have any" |
+| 2026-09-26 | GT3 RS showcase "LOCKED ON" (tracked lock-on, type behind the car, kinetic price reel, clip music) | "Approved" — the showcase techniques are signed off for SE ads |
 
 Add a row when the shop reacts to something. This file is the reason a future ad
 does not have to re-litigate a settled look.
