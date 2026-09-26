@@ -13,13 +13,22 @@ Renders a 48 kHz / 24-bit / stereo WAV of exactly DURATION seconds (720000 frame
   5. Master + IO  glue compressor, oversampled soft clipper, true-peak limiter, LUFS targeting, WAV, report
 
 QA: `python3 audio/synth.py --stems && python3 audio/qa.py` prints integrity / loudness / kick-grid / click
-checks and writes waveform + spectrogram PNGs to .cache/audio-qa/.
+checks, the storyboard's picture-lock table and the micro-sfx levels, and writes waveform + spectrogram PNGs
+to .cache/audio-qa/. Before the scenes export their cues: `python3 audio/qa.py --make-cues` writes the
+storyboard's sounds to .cache/storyboard-cues.json; render with `--cues .cache/storyboard-cues.json`.
 
 Picture sync: tools/cues.mjs exports scene windows, R.cue FX cues and R.sfx sound events to audio/cues.json.
 Every R.sfx event is rendered on the SFX bus at its exact sample. FX cues add optional reinforcement layers
 (FX_CUE_SOUNDS) unless a sound event lands within DEDUPE_WINDOW. Scene cuts get an optional sweetener
 (SCENE_SWEETENER). Arrangement FX yield to picture events of the same type nearby (YIELD_WINDOW), so once
 the picture declares its own hits the built-in ones step aside instead of doubling up.
+
+Hard stops: a tape-stop and a bar's 'silence' steps end an epoch. Whatever was triggered before the resume
+point (voices, reverb and delay tails) never sounds after it, so the drop and the final hit start clean, and
+a silence is digital silence on both buses (through the mastering filters too) except the swells that land
+exactly where it ends. The kick is the metronome: stutters and glitches edit the rest of the mix, not it.
+Picture micro sfx (click tick pop blip type zap) ride the bed: MICRO sets each one a fixed distance under
+the music at its moment, within a limited range around its SFX_MIX gain.
 """
 import argparse
 import json
@@ -122,9 +131,9 @@ SONG = [
         #   three soft hits that dodge the landings (2.344 2.578 2.813 2.930 3.047 3.281) so the picture's
         #   plucks sit on top. Reverse swell 3.515625 -> 3.75 into the dive (picture; FX fallback).
         section='groove', energy=0.55, chords='Fm9 . Dbmaj7 .', level=-1.5,
-        kick=FOUR, clap=CLAP, hat=OFFH,
-        sub='x.x.x.x. x.x.x.x.', sub_notes='F1 F1 Ab1 C2',
-        stab='o..o .... ...o ....', stab_cut=(0.40, 0.48),
+        kick=FOUR, clap=CLAP, hat=OFFH, kick_opts=dict(gain=-2.5, decay=0.06),     # a tighter kick: the drop
+        sub='x.x.x.x. x.x.x.x.', sub_notes='F1 F1 Ab1 C2', sub_opts=dict(gain=-4.0),  # brings the full one
+        stab='x..x .... ...x ....', stab_cut=(0.52, 0.58), stab_opts=dict(gain=2.0),
     ),
     dict(  # bar 3 · 3.750 s · SPACE -> EASING: 3.75 sub boom + door (picture), pad Abmaj7 -> Eb at 4.6875, a 16th
         #   F-minor-pentatonic arp opening its filter, roll clunks (low tom + the picture's click) on 4.21875
@@ -132,8 +141,8 @@ SONG = [
         section='space', energy=0.65, chords='Abmaj7 . Eb .', level=-1.5,
         kick=FOUR, clap='....x...........', hat='.o.o .o.o .o.o ..g.', shaker='4242 4242 4242 ....',
         rim='.... .... .... x...', tom='.... l... l... ....',
-        sub='x.x.x.x. x.x.....',
-        pad='x_______ x_______', pad_opts=dict(attack=0.12, decay_db=10.0),
+        sub='x.x.x.x. x.x.....', sub_opts=dict(gain=5.0),
+        pad='x_______ x_______', pad_opts=dict(attack=0.12, decay_db=10.0, gain=-2.0),
         arp='xxxx xxxx xxxx xxxx', arp_cut=(0.28, 0.80),
         arp_notes='F4 Ab4 C5 Eb5 F5 Eb5 C5 Ab4 Bb4 C5 Eb5 F5 Ab5 F5 Eb5 C5',
     ),
@@ -143,9 +152,10 @@ SONG = [
         #   to 7.5: only the swells that land on the drop pass (reverse, reverse cymbal, sub inhale 30 -> 55 Hz)
         section='breath', energy=0.75, chords='Dbmaj7 . Csus4 C', level=(-2.0, -0.5), hp=(20, 380),
         kick='x...............', rim='....x.......x...', hat='gogo gogo gogo gogo',
-        snare='.... .... 5.67 8...',
-        sub='x.x.x.x. x.x.x...',
-        pad='x_______ x___x___', pad_opts=dict(attack=0.06, decay_db=8.0),
+        snare='.... .... 7.89 X...', snare_opts=dict(gain=4.0),     # audit: the roll sat 5-9 dB under the play
+        #                                                  swoop's peak + the riser in its own band; now it reads
+        sub='x.x.x.x. x.x.x...', sub_opts=dict(gain=-2.0),
+        pad='x_______ x___x___', pad_opts=dict(attack=0.06, decay_db=8.0, gain=-5.0),   # UI lightness: foley on top
         stab='.... .... .... x...', stab_cut=(0.62, 0.62),
         silence='.... .... .... ..xx', silence_fade=0.04,
     ),
@@ -176,10 +186,11 @@ SONG = [
         #   last 16th (13.0078125 -> 13.125) is total silence except the swell peaking into the final hit
         section='squeeze', energy=1.0, chords='Fm9 . Fmadd9 Eb', snare_rise=4,
         kick='x...x...x.......', clap='....x...x.......', hat='oxXx oxXx oxXx ....', ohat='..x...x...x.....',
-        snare='....x... ........ ........ 6789XX..',
+        snare='....X... ........ ........ 6789XX..',
         sub='x.x.x.x. x.x.....',
         bass='.xxx .xxx .xxx ....', bass_notes='F2 F2 F3',
-        stab='..X. .... .... ....', stab_cut=(0.90, 0.90),
+        stab='..X. .... .... ....', stab_cut=(0.90, 0.90), stab_opts=dict(gain=5.0),  # audit: E sat level with the
+        #                                                  stutter before it (-14.7 vs -13.8 dBFS); now it punches
         arp='.... XXX. .... ....', arp_notes='F5 Ab5 C6', arp_cut=(0.85, 0.85),
         saw='.... .... X... ....', saw_notes='F3+Ab3+C4+G4+C5', saw_cut=(0.90, 0.90),
         gate='xxxx xxxx xxxx xxx.',
@@ -231,9 +242,10 @@ FX = [
 ]
 
 # Mix table. gain in dB; pan -1..1; room/hall/delay = send levels (linear); duck = sidechain depth in dB
-# (keyed to the kick part). Parts are normalized one-shots, so gains are the whole level story.
+# (keyed to the kick part); eq = RBJ biquad stages on the part bus. Parts are normalized one-shots, so gains
+# are the whole level story.
 MIX = {
-    'kick':   dict(gain=0.0),
+    'kick':   dict(gain=0.0, eq=[('lowshelf', 75, 0.7, -3.0)]),      # audit: 50 Hz sat +16 dB over 1 kHz
     'clap':   dict(gain=0.5, room=0.30, hall=0.05),
     'snare':  dict(gain=-9.0, room=0.30, hall=0.08),
     'tom':    dict(gain=-7.0, room=0.30, hall=0.06),
@@ -243,7 +255,7 @@ MIX = {
     'rim':    dict(gain=-6.5, pan=-0.22, room=0.12, delay=0.30),
     'tick':   dict(gain=-8.0, pan=0.25, room=0.10, delay=0.45),
     'crash':  dict(gain=-10.0, room=0.10, hall=0.12),
-    'sub':    dict(gain=-8.0, duck=12.0),
+    'sub':    dict(gain=-9.5, duck=12.0),
     'boom':   dict(gain=-4.0, room=0.15),
     'bass':   dict(gain=-1.5, duck=6.0),
     'stab':   dict(gain=-4.0, hall=0.30, delay=0.50, duck=3.0),
@@ -264,23 +276,28 @@ SFX_MIX = {
     'impact':   dict(gain=-2.0, verb=0.22, duck=3.0),
     'whoosh':   dict(gain=-4.0, verb=0.18),
     'swish':    dict(gain=-4.0, verb=0.12),
-    'click':    dict(gain=-8.0, verb=0.06),
-    'tick':     dict(gain=-9.0, verb=0.06),
-    'pop':      dict(gain=-14.0, verb=0.08),
-    'blip':     dict(gain=-17.0, verb=0.15),
+    'click':    dict(gain=-1.0, verb=0.06),     # micro sfx: audit had them 12-22 dB under the music; now
+    'tick':     dict(gain=-9.0, verb=0.06),     # about -8 dB under the bed at their moments (audio/qa.py)
+    'pop':      dict(gain=-6.0, verb=0.08),
+    'blip':     dict(gain=-8.0, verb=0.15),
     'glitch':   dict(gain=-11.0, verb=0.04),
     'riser':    dict(gain=-4.0, verb=0.22),
-    'reverse':  dict(gain=-3.0, verb=0.10),
-    'subdrop':  dict(gain=-15.0, duck=2.0),
+    'reverse':  dict(gain=-7.0, verb=0.10),
+    'subdrop':  dict(gain=-18.5, duck=2.0),
     'shimmer':  dict(gain=-13.0, verb=0.55),
-    'type':     dict(gain=-8.0, verb=0.05),
+    'type':     dict(gain=-7.0, verb=0.05),
     'tapestop': dict(gain=0.0),
-    'revcym':   dict(gain=-8.0, verb=0.08),
-    'inhale':   dict(gain=-6.0),
+    'revcym':   dict(gain=-10.0, verb=0.08),
+    'inhale':   dict(gain=-13.0),
     'air':      dict(gain=-17.0, verb=0.35),
     'thump':    dict(gain=-10.0),
-    'zap':      dict(gain=-19.0, verb=0.05),
+    'zap':      dict(gain=-9.0, verb=0.05),
 }
+# Micro sfx ride the bed like a mixer's fader: each one is set `target` dB under the music at its moment
+# (K-weighted RMS over its own audible length), moving at most `range` dB from its SFX_MIX gain above. The
+# audit found them 12-22 dB under the music; a fixed gain cannot hold them where they read as sound design
+# because the bed swings by more than 12 dB across the reel (the loud corridor vs the light graph editor).
+MICRO = dict(types=('click', 'tick', 'pop', 'blip', 'type', 'zap'), target=-8.0, range=6.0)
 # R.cue reinforcement. min_amt uses the cue's own units (flash 0..1, shake px, chroma px).
 FX_CUE_SOUNDS = {
     'flash':  dict(sound='air', min_amt=0.8),
@@ -296,6 +313,12 @@ SCENE_SWEETENER = dict(enabled=True, type='swish', amt=0.6, guard=0.25)   # on e
 SCENE_FX = {
     # 's05-energy': [('start', 'impact', dict(amt=1.0))],
     # 's07-range-2': [('end', 'riser', dict(dur=BAR, anchor='end'))],
+}
+# Pan direction for picture whooshes that do not pass their own `pan` ('lr' / 'rl' / 'center'), matched on
+# (type, t) within 1 ms. The default follows `dir` (up = left -> right, down = right -> left), which is wrong
+# where the storyboard's motion says otherwise.
+PICTURE_PAN = {
+    ('whoosh', 1.9921875): 'rl',    # s02 leap: the dot arcs from (1731,656) to (470,736), "panned right->left"
 }
 DEDUPE_WINDOW = 0.030           # an R.cue reinforcement is dropped if any sound event is this close
 YIELD_WINDOW = 0.12             # arrangement FX yield to a same-type picture event this close
@@ -1195,9 +1218,10 @@ def s_impact(amt=1.0, tone='std', seed=0, **_):
     return norm(fades(x, 0.0003, 0.55 * n / SR), amt), 0.0
 
 
-def s_whoosh(dur=0.3, dir='up', amt=1.0, seed=0, lo=320.0, hi=5200.0, **_):
+def s_whoosh(dur=0.3, dir='up', amt=1.0, seed=0, lo=320.0, hi=5200.0, pan=None, **_):
     """Air movement that swells to its peak at t + dur: stereo noise through a swept resonant bandpass
-    (+ a lowpassed body layer), panning across, short tail after the peak."""
+    (+ a lowpassed body layer), panning across while it is loud (left -> right for 'up', right -> left for
+    'down', or pan='lr' / 'rl' / 'center'), short tail after the peak."""
     dur = float(np.clip(dur, *DUR_RANGE['whoosh']))
     tail = max(0.07, 0.3 * dur)
     n = int((dur + tail) * SR)
@@ -1211,7 +1235,8 @@ def s_whoosh(dur=0.3, dir='up', amt=1.0, seed=0, lo=320.0, hi=5200.0, **_):
     nz = noise_st(rng, n, 0.55)
     air = svf(nz, fc, q=1.6, mode='bp') + 0.35 * filt(svf(nz, fc * 0.3, q=0.7), ('hp', 90, 0.7))
     env = np.minimum(x, 1.0) ** 2.6 * np.exp(-np.maximum(t - dur, 0.0) / (tail / 3.5))
-    p = (-0.65 + 1.3 * np.minimum(x, 1.0)) * (1 if dir != 'down' else -1)
+    way = {'lr': 1.0, 'rl': -1.0, 'center': 0.0}.get(pan, 1.0 if dir != 'down' else -1.0)
+    p = (-0.8 + 1.6 * np.minimum(x, 1.0) ** 2) * way
     out = np.stack([air[0] * (1.0 - np.maximum(p, 0.0)), air[1] * (1.0 + np.minimum(p, 0.0))]) * env
     return norm(fades(out, 0.003, 0.01), amt), 0.0
 
@@ -1332,7 +1357,19 @@ def s_reverse(dur=0.47, amt=1.0, seed=0, chord_notes=None, **_):
     wet = wet[:, :tail + int(np.argmax(env[tail:])) + 1]
     m = int(dur * SR)
     seg = wet[:, -m:] if wet.shape[1] >= m else np.pad(wet, ((0, 0), (m - wet.shape[1], 0)))
-    seg = seg * (np.linspace(0.0, 1.0, m) ** 1.5)
+    # rising to the landing: the reversed room's last ~20 ms plateau with +-1 dB of noise jitter, which put the
+    # measured peak up to 20 ms early; a +3 dB lift over the last 30 ms makes it peak on the landing itself
+    u = np.clip((np.arange(m) - (m - int(0.03 * SR))) / (0.03 * SR), 0.0, 1.0)
+    seg = seg * (np.linspace(0.0, 1.0, m) ** 1.5) * (1.0 + 0.41 * u * u)
+    # the reversed IR's first milliseconds (the swell's peak) come out anti-correlated between L and R: the
+    # swell was -4 dB in mono right where it lands (the gap before the final hit). It narrows into its landing.
+    # Power-preserving (5 ms smoothed), so the swell still peaks exactly on its landing.
+    mid, side = 0.5 * (seg[0] + seg[1]), 0.5 * (seg[0] - seg[1])
+    k = np.ones(int(0.005 * SR)) / int(0.005 * SR)
+    p_old = np.convolve(mid * mid + side * side, k, mode='same')
+    side = side * np.linspace(0.9, 0.3, m)
+    p_new = np.convolve(mid * mid + side * side, k, mode='same')
+    seg = np.stack([mid + side, mid - side]) * np.sqrt((p_old + 1e-12) / (p_new + 1e-12))
     return norm(fades(seg, 0.01, 0.003), amt), 0.0
 
 
@@ -1851,7 +1888,9 @@ def render_parts(song, n, cuts=()):
         return h['notes'] if h.get('notes') else default(song.chord_at(h['t'] + 1e-6))
 
     for h in song.hits('kick'):
-        place('kick', once('kick', v_kick), h['t'], dyn(h), h['energy'], song.opts('kick', h['bar'])[1])
+        vo, over = song.opts('kick', h['bar'])
+        place('kick', once(('kick',) + tuple(sorted(vo.items())), lambda vo=vo: v_kick(**vo)), h['t'], dyn(h),
+              h['energy'], over)
     for j, h in enumerate(song.hits('clap')):
         place('clap', once(('clap', j % 3), lambda j=j: v_clap(j % 3)), h['t'], dyn(h), h['energy'],
               song.opts('clap', h['bar'])[1])
@@ -2026,6 +2065,12 @@ def normalize_event(e, source):
     ev['pitch'] = num('pitch', 1.0, 0.25, 4.0)
     ev['count'] = int(num('count', 6, 1, 400))
     ev['dir'] = 'down' if str(e.get('dir', 'up')).lower() == 'down' else 'up'
+    if str(e.get('pan', '')).lower() in ('lr', 'rl', 'center'):
+        ev['pan'] = str(e['pan']).lower()
+    elif source == 'picture':
+        ev['pan'] = next((p for (ty, tt), p in PICTURE_PAN.items() if ty == typ and abs(tt - ev['t']) <= 0.001), None)
+        if ev['pan'] is None:
+            del ev['pan']
     ev['tone'] = str(e.get('tone', 'huge' if typ == 'impact' and ev['amt'] >= 1.3 else 'std'))
     ev['pitched'] = e.get('pitch') is not None
     if e.get('resume') is not None:
@@ -2143,6 +2188,23 @@ def bar_curve(song, key, n, idle, log=False, ramp=0.01):
     return (c[w:w + n] - c[:n]) / w
 
 
+def micro_ride(buf, kbed, s):
+    """dB that sets a micro sfx (buf, at its mix gain, placed at sample s) MICRO['target'] dB under the
+    K-weighted bed kbed, over the event's audible length (within 30 dB of its peak, 20..400 ms), limited to
+    +-MICRO['range']."""
+    e = np.abs(buf).max(axis=0) if buf.ndim == 2 else np.abs(buf)
+    k = int(0.005 * SR)
+    env = np.convolve(e, np.ones(k) / k, mode='same')
+    live = np.flatnonzero(env > env.max() * 10 ** (-30 / 20))
+    s = max(0, s)
+    L = min(int(np.clip(live[-1] + 1 if live.size else k, 0.02 * SR, 0.4 * SR)), e.shape[0], kbed.shape[-1] - s)
+    if L <= 0 or not e.any():
+        return 0.0
+    ev_db = 10.0 * np.log10(np.mean(np.square(iir(buf[..., :L], K_WEIGHTING))) + 1e-24)
+    bed_db = 10.0 * np.log10(np.mean(np.square(kbed[:, s:s + L])) + 1e-24)
+    return float(np.clip(MICRO['target'] - (ev_db - bed_db), -MICRO['range'], MICRO['range']))
+
+
 def silence_spans(song):
     """[(t0, t1, fade)] from the per-bar 'silence' patterns; consecutive silent steps merge into one span."""
     spans = []
@@ -2197,6 +2259,9 @@ def render(cues_path, mute=(), solo=()):
     sfx_cuts = sorted(set(t1 for _, t1, _ in spans))
 
     parts, sends = render_parts(song, n, music_cuts)
+    for p, mx in MIX.items():                    # per-part EQ (RBJ biquad stages), before the sidechain key
+        if mx.get('eq') and parts[p].any():
+            parts[p] = filt(parts[p], *mx['eq'])
     # sidechain: every part with a duck depth pumps against the kick (per-bar 'duck' scales the depth)
     env = duck_env(parts['kick']) ** DUCK_SHAPE
     dk = bar_curve(song, 'duck', n, 1.0)
@@ -2221,7 +2286,8 @@ def render(cues_path, mute=(), solo=()):
     dly *= undb(RETURNS['delay']) * space
     room *= undb(RETURNS['room'])
 
-    drums = sum(parts[p] for p in DRUM_PARTS) + room
+    beat = sum(parts[p] for p in DRUM_PARTS if p != 'kick') + room
+    drums = beat + parts['kick']
     synths = sum(parts[p] for p in SYNTH_PARTS) + hall + dly
     for bi, bd in enumerate(song.bars):          # the trance gate chops synths + space, never the sub
         if bd.get('gate'):
@@ -2231,10 +2297,12 @@ def render(cues_path, mute=(), solo=()):
         curve = bar_curve(song, key, n, idle, log=True)
         if curve is not None:
             tonal = svf(tonal, curve, q=0.75, mode=mode)
-    music = drums + tonal
     level = bar_curve(song, 'level', n, 0.0)
-    if level is not None:
-        music *= 10.0 ** (level / 20.0)
+    lv = 10.0 ** (level / 20.0) if level is not None else 1.0
+    # the kick is the metronome (the HUD beat meter lights on it): stutters and glitches edit the rest of the
+    # music bus and never eat it; the tape-stop and the silences take it with everything else
+    kick_bus = parts['kick'] * lv
+    music = (beat + tonal) * lv
     orig = music.copy()
     for bi, bd in enumerate(song.bars):
         if bd.get('stutter'):
@@ -2247,6 +2315,7 @@ def render(cues_path, mute=(), solo=()):
     fxsend = [np.zeros(n) for _ in range(len(sfx_cuts) + 1)]
     counts = {}
     duck_trig = np.zeros(n)
+    kbed = iir(music + kick_bus, K_WEIGHTING) if MICRO.get('range') else None
     for ev in events:
         ev['passes'] = ev['type'] in END_ANCHORED and any(abs(ev['anchor'] - t1) <= PASS_WINDOW for _, t1, _ in spans)
         typ = ev['type']
@@ -2257,6 +2326,7 @@ def render(cues_path, mute=(), solo=()):
                 edit_glitch(music, orig, ev['t'], ev['dur'], rng_for('glitch', ev['seed']))
             else:
                 edit_tapestop(music, orig, ev['t'], ev['dur'], ev.get('resume'))
+                edit_tapestop(kick_bus, kick_bus.copy(), ev['t'], ev['dur'], ev.get('resume'))
         if typ == 'tapestop':
             counts[typ] = counts.get(typ, 0) + 1
             continue
@@ -2267,6 +2337,11 @@ def render(cues_path, mute=(), solo=()):
         buf, off = RENDERERS[typ](**kw)
         g = undb(mx.get('gain', 0.0))
         s = smp(ev['t'] + off)
+        ev['gain_db'] = mx.get('gain', 0.0)
+        if kbed is not None and typ in MICRO['types']:
+            ev['ride_db'] = micro_ride(buf * g, kbed, s)
+            ev['gain_db'] += ev['ride_db']
+            g *= undb(ev['ride_db'])
         e, kill = epoch_of(sfx_cuts, ev['t'] + off)
         if not ev['passes']:
             buf = kill_after(buf, s, kill)
@@ -2288,13 +2363,14 @@ def render(cues_path, mute=(), solo=()):
         sfx[:] = 0.0
         sfx_pass[:] = 0.0
         counts = {}
+    music += kick_bus
     # music dips under big hits (trigger -> 5 ms attack, 280 ms release, in dB)
     if duck_trig.any():
         d = iir(duck_trig, [onepole_ba(0.28)]) * (0.28 * SR)
         d = iir(d, [onepole_ba(0.005)])
         music *= 10.0 ** (-np.minimum(d, 9.0) / 20.0)
-    if spans:                                    # hard silences on both buses (reverb returns included)
-        mask = silence_mask(spans, n)
+    mask = silence_mask(spans, n) if spans else None
+    if mask is not None:                         # hard silences on both buses (reverb returns included)
         music *= mask
         sfx *= mask
     sfx += sfx_pass
@@ -2303,24 +2379,29 @@ def render(cues_path, mute=(), solo=()):
     stems = dict(kick=parts['kick'], drums=drums, tonal=tonal, music=music, sfx=sfx, swell=sfx_pass)
     stems.update(('part-' + p, parts[p]) for p in PARTS if parts[p].any())
     stems.update({'ret-room': room, 'ret-hall': hall, 'ret-delay': dly, 'ret-fxverb': fxverb * undb(RETURNS['fxverb'])})
-    xpre, pre_info = master_pre(mixbus)
-    master, drive = master_finish(xpre, TARGET_LUFS)
+    xpre, pre_info = master_pre(mixbus, mask, sfx_pass)
+    master, drive = master_finish(xpre, TARGET_LUFS, mask)
     info = master_info(master, pre_info, drive)
     info.update(counts=counts, events=events, scenes=scenes, render_s=time.time() - t_start, xpre=xpre,
-                yielded=yielded, spans=spans)
+                yielded=yielded, spans=spans, mask=mask)
     return master, stems, info
 
 
-def master_pre(x):
+def master_pre(x, mask=None, thru=None):
     """Mastering, fixed part: DC blocker + HP 20 Hz, -1.5 dB shelf above 9 kHz, lows made mono (M/S: side highpassed at 120 Hz,
     zero-phase), pre-fade of the tail, level-normalized to -20 LUFS so the glue compressor always sees
-    the same program level, then gentle glue (1.8:1, 25 ms RMS, 25/250 ms)."""
+    the same program level, then gentle glue (1.8:1, 25 ms RMS, 25/250 ms). With a silence mask the linear
+    stage runs separately on the swells that pass the silences (thru) and on everything else, which is
+    masked again, so filter ringing from a dead stop never leaks into the silence."""
     n = x.shape[-1]
     ef = int(END_FADE * SR)
-    x = filt(dc_block(x), ('hp', 20, 0.7), ('highshelf', 9000, 0.7, -1.5))
-    m, s = 0.5 * (x[0] + x[1]), 0.5 * (x[0] - x[1])
-    s = zerophase(s, lambda f: f ** 4 / (f ** 4 + 120.0 ** 4))
-    x = np.stack([m + s, m - s])
+
+    def linear(v):
+        v = filt(dc_block(v), ('hp', 20, 0.7), ('highshelf', 9000, 0.7, -1.5))
+        m, s = 0.5 * (v[0] + v[1]), 0.5 * (v[0] - v[1])
+        s = zerophase(s, lambda f: f ** 4 / (f ** 4 + 120.0 ** 4))
+        return np.stack([m + s, m - s])
+    x = linear(x) if mask is None else linear(x - thru) * mask + linear(thru)
     x[:, n - ef:] *= 0.5 + 0.5 * np.cos(np.pi * np.arange(1, ef + 1) / ef)
     pre = lufs(x)
     g0 = undb(-20.0 - pre) if pre > -69 else 1.0
@@ -2328,10 +2409,12 @@ def master_pre(x):
     return x, dict(g0=g0, glue_gr_max=float(-gr.min()))
 
 
-def master_finish(x, target):
+def master_finish(x, target, mask=None):
     """Mastering, loudness part: drive into the 4x oversampled soft clipper and the true-peak limiter,
     drive iterated until the internal BS.1770 meter reads `target`; then the end fade to digital
-    silence and a 1 ms safety fade-in. Returns (y, drive_db)."""
+    silence and a 1 ms safety fade-in. Inside silences (mask < 1) the clipper is bypassed: only a swell
+    sounds there, far below its knee, and its band-limited resampler must not ring into the silence.
+    Returns (y, drive_db)."""
     n = x.shape[-1]
     ef = int(END_FADE * SR)
     ceiling = CEILING_DBTP - 0.15
@@ -2340,6 +2423,8 @@ def master_finish(x, target):
     prev = None
     for _ in range(10):
         y = soft_clip(x * undb(drive), ceiling=undb(ceiling + 1.2), knee=0.72)
+        if mask is not None:
+            y = y * mask + x * undb(drive) * (1.0 - mask)
         y, _ga = limiter(y, ceiling)
         cur = lufs(y)
         if abs(cur - target) < 0.03 or cur <= -69.0:
@@ -2411,7 +2496,7 @@ def main(argv=None):
         if not meas or abs(float(meas.get('input_i', TARGET_LUFS)) - TARGET_LUFS) <= 0.05:
             break
         offset = float(meas['input_i']) - info['lufs_internal']
-        master, drive = master_finish(info['xpre'], TARGET_LUFS - offset)
+        master, drive = master_finish(info['xpre'], TARGET_LUFS - offset, info['mask'])
         info.update(master_info(master, info, drive))
         write_wav(a.out, master, 24)
         meas = ffmpeg_loudness(a.out)
@@ -2424,12 +2509,11 @@ def main(argv=None):
         for k, v in stems.items():
             write_wav(os.path.join(d, k + '.wav'), v * info['pregain'], 32)
         write_wav(os.path.join(d, 'master.wav'), master, 32)
-        keys = ('type', 't', 'anchor', 'dur', 'amt', 'pitch', 'pitched', 'count', 'dir', 'tone', 'verb', 'source',
-                'seed', 'passes')
+        keys = ('type', 't', 'anchor', 'dur', 'amt', 'pitch', 'pitched', 'count', 'dir', 'pan', 'tone', 'verb',
+                'source', 'seed', 'passes', 'gain_db', 'ride_db')
         side = dict(cues=os.path.abspath(a.cues) if a.cues else None, pregain=info['pregain'],
                     silences=[list(sp) for sp in info['spans']],
-                    events=[dict({k: ev[k] for k in keys if k in ev}, gain_db=SFX_MIX.get(ev['type'], {}).get('gain', 0.0))
-                            for ev in info['events']],
+                    events=[{k: ev[k] for k in keys if k in ev} for ev in info['events']],
                     yielded=[dict(type=f['type'], anchor=f['anchor'], picture_t=q['t']) for f, q in info['yielded']])
         with open(os.path.join(d, 'render.json'), 'w', encoding='utf-8') as fh:
             json.dump(side, fh, indent=1)

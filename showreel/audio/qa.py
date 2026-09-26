@@ -302,7 +302,7 @@ def first_sound(x, thr=1e-4):
     return a[0] / SR if a.size else float('nan')
 
 
-def onsets_in(x, t0, t1, fwd=0.0015, bwd=0.010, min_rise=4.0, min_gap=0.025, floor_db=-70.0):
+def onsets_in(x, t0, t1, fwd=0.0015, bwd=0.010, min_rise=4.0, min_gap=0.045, floor_db=-70.0):
     """Onsets in [t0, t1): peaks (>= min_gap apart) of the forward / backward window energy ratio that rise
     by min_rise dB over a level above floor_db. 0.25 ms resolution; works on noisy decays (snare rolls)."""
     p = np.mean(np.square(x), axis=0)
@@ -323,19 +323,19 @@ def onsets_in(x, t0, t1, fwd=0.0015, bwd=0.010, min_rise=4.0, min_gap=0.025, flo
                 out[-1] = (t, r[k])
             continue
         out.append((t, r[k]))
-    return [t for t, _ in out]
+    return [round(float(t), 4) for t, _ in out]
 
 
 def event_buf(ev, side, song=None):
     """One sound event from render.json rendered alone, exactly as the mixer places it (same renderer, seed,
     SFX_MIX gain and stems pregain). -> (stereo buffer, start time)."""
-    kw = {k: v for k, v in ev.items() if k not in ('type', 'gain_db', 'source', 'passes', 'anchor')}
+    kw = {k: v for k, v in ev.items() if k not in ('type', 'gain_db', 'ride_db', 'source', 'passes', 'anchor')}
     if ev['type'] == 'reverse':
         song = song or synth.Song(synth.SONG)
         kw['chord_notes'] = synth.voicing(song.chord_at(ev['t'] + ev['dur'] + 1e-6), 64.0)
     buf, off = synth.RENDERERS[ev['type']](**kw)
     buf = synth.stereo(buf) if buf.ndim == 1 else buf
-    return buf * synth.undb(ev['gain_db']) * side['pregain'], ev['t'] + off
+    return buf * synth.undb(ev.get('gain_db', 0.0)) * side['pregain'], ev['t'] + off
 
 
 def find_event(side, typ, t, source=None, tol=0.002):
@@ -382,6 +382,20 @@ def shift_st(m, t0, t1, rng_st=9):
     return lags[int(np.argmax(xc))] / 8.0
 
 
+def new_note(x, t, win=0.04, fmin=150.0, fmax=5000.0):
+    """Name of the note that starts at t: the strongest positive spectral change (after vs before t)."""
+    a, b = cut(x, t, t + win).mean(axis=0), cut(x, t - win, t).mean(axis=0)
+    if b.size < a.size:
+        b = np.pad(b, (a.size - b.size, 0))
+    w = np.hanning(a.size)
+    S1, S0 = np.abs(np.fft.rfft(a * w, 1 << 16)), np.abs(np.fft.rfft(b * w, 1 << 16))
+    f = np.fft.rfftfreq(1 << 16, 1.0 / SR)
+    sel = (f >= fmin) & (f <= fmax)
+    f0 = f[sel][int(np.argmax(np.maximum(S1 - S0, 0.0)[sel]))]
+    m = int(round(12 * np.log2(f0 / 440.0) + 69))
+    return '%s%d' % (NOTE_NAMES[m % 12], m // 12 - 1)
+
+
 def centroid(x, t0, t1):
     m = cut(x, t0, t1).mean(axis=0)
     S = np.abs(np.fft.rfft(m * np.hanning(m.size)))
@@ -420,6 +434,22 @@ def lock_report(stems_dir, out_json=None):
         row(T, what + ': onset', 'music + master onset at %.5f' % T,
             'music %.4f (+%.1f dB rise), master %.4f (+%.1f dB)' % (to, r, tm, rm),
             abs(to - T) < 0.003 and abs(tm - T) < 0.003 and r > 6)
+    pon = onsets_in(P('pluck'), 0.0, 0.47)
+    names = [new_note(P('pluck'), t) for t in pon]
+    pl = cut(P('pluck'), 0.0, 0.8).mean(axis=0)
+    Sp = np.abs(np.fft.rfft(pl)) ** 2
+    fp = np.fft.rfftfreq(pl.size, 1.0 / SR)
+    lowp = 10 * np.log10(Sp[fp < 300].sum() / Sp.sum())
+    row(0.0, 'LIGHT bed: glassy 16th plucks F5 Ab5 C6 F6, high-passed', 'onsets 0/.117/.234/.352; F5 Ab5 C6 F6',
+        'onsets %s; %s; energy < 300 Hz %.0f dB' % (pon, ' '.join(names), lowp),
+        len(pon) == 4 and names == ['F5', 'Ab5', 'C6', 'F6'] and lowp < -30)
+    bm = cut(P('boom'), 0.47, 0.75).mean(axis=0)
+    Sb = np.abs(np.fft.rfft(bm * np.hanning(bm.size), 1 << 17))
+    fb = np.fft.rfftfreq(1 << 17, 1.0 / SR)
+    h1 = Sb[(fb > 38) & (fb < 50)].max()
+    h3 = Sb[(fb > 120) & (fb < 145)].max()
+    row(0.46875, 'SLAM: distorted sub', 'F1 with strong odd harmonics', 'F1 + 3rd harmonic at %+.1f dB' % synth.todb(h3 / h1),
+        synth.todb(h3 / h1) > -20)
     ms = P('stab').mean(axis=0)
     b = shift_st(ms, 0.9375, 1.0475)
     row(0.9375, 'NARROW: bend of the band-passed saw chord', '-5 st over 0.1 s (-4.0 between windows at +10 ms / +120 ms)',
@@ -436,20 +466,28 @@ def lock_report(stems_dir, out_json=None):
     cl = [round(v, 4) for v in onsets_in(P('clap'), 1.8, 3.75)]
     row(2.34375, 'claps on the landing and on "notices the camera"', '[2.34375, 3.28125]', str(cl),
         len(cl) == 2 and abs(cl[0] - 2.34375) < 0.002 and abs(cl[1] - 3.28125) < 0.002)
-    env_t = np.arange(3.40, 3.80, 0.002)
-    swl = [lvl(sfx, a, a + 0.004) for a in env_t]
-    tp = env_t[int(np.argmax(swl))] + 0.002
-    row(3.75, 'dive: reverse swell 3.515625 -> 3.75', 'sfx peak at 3.75', 'sfx swell peak %.4f s' % tp, abs(tp - 3.75) < 0.01)
+    song = synth.Song(synth.SONG)
+    ev = find_event(side, 'reverse', 3.515625) if side else None
+    tp = peak_time(*event_buf(ev, side, song)) if ev else float('nan')
+    row(3.75, 'dive: reverse swell 3.515625 -> 3.75', 'swell peaks at 3.75', '%s swell peaks at %.4f s' % (
+        ev['source'] if ev else 'no', tp), abs(tp - 3.75) < 0.01)
     low = synth.filt(M, ('lp', 120, 0.7))
     to, r = onset(low, 3.75, fwd=0.004)
     row(3.75, 'sub boom (box unfolds)', 'low-band (<120 Hz) onset 3.75', '%.4f s (+%.1f dB)' % (to, r), abs(to - 3.75) < 0.005)
-    b = shift_st(P('pad').mean(axis=0), 4.55, 4.75, rng_st=12) if 'pad' in part else float('nan')
-    row(4.6875, 'pad Abmaj7 -> Eb', 'pad spectrum moves at 4.6875', 'shift %+.1f st between 4.55 and 4.75' % b, b != 0)
+    c0, c1 = chroma(P('pad'), 4.25, 4.65), chroma(P('pad'), 4.75, 5.15)
+    row(4.6875, 'pad Abmaj7 -> Eb at 4.6875', 'Ab C Eb G -> Eb G Bb', '%s -> %s' % (' '.join(c0[:4]), ' '.join(c1[:4])),
+        set(c0[:4]) == {'Ab', 'C', 'Eb', 'G'} and set(c1[:3]) == {'Eb', 'G', 'Bb'})
+    pa = chroma(P('arp'), 3.75, 5.625)
+    row(3.75, 'arp: 16ths of F minor pentatonic', 'F Ab Bb C Eb only', ' '.join(pa[:6]),
+        set(pa[:5]) == {'F', 'Ab', 'Bb', 'C', 'Eb'} and len(onsets_in(P('arp'), 3.74, 5.62, min_gap=0.08)) == 16)
     c0, c1 = centroid(P('arp'), 3.75, 4.2), centroid(P('arp'), 5.15, 5.6)
     row(3.75, 'arp opens its filter across bar 3', 'brighter at the end', 'centroid %.0f Hz -> %.0f Hz' % (c0, c1), c1 > 1.3 * c0)
-    d3, d4 = lvl(dr, 4.6875, 5.15625), lvl(dr, 5.15625, 5.625)
-    row(5.15625, 'drums THIN (kick + rim + soft hat)', 'drums quieter in beat 4', 'beat 3 %.1f dBFS -> beat 4 %.1f dBFS' % (d3, d4),
-        d4 < d3 - 1.5)
+    nk = dr - P('kick')
+    d3, d4 = lvl(nk, 4.6875, 5.15625), lvl(nk, 5.15625, 5.625)
+    o3 = sum(len(onsets_in(P(q), 4.6875, 5.15)) for q in ('clap', 'hat', 'shaker', 'tom', 'rim'))
+    o4 = sum(len(onsets_in(P(q), 5.15625, 5.62)) for q in ('clap', 'hat', 'shaker', 'tom', 'rim'))
+    row(5.15625, 'drums THIN (kick + rim + soft hat)', 'fewer, quieter hits in beat 4',
+        'non-kick drums %.1f -> %.1f dBFS, %d -> %d hits' % (d3, d4, o3, o4), d4 < d3 - 3 and o4 < o3)
     sn = [round(v, 4) for v in onsets_in(P('snare'), 6.4, 7.1)]
     row(6.5625, 'snare roll: 8ths then 16ths from 6.796875', '[6.5625, 6.7969, 6.9141, 7.0312]', str(sn),
         len(sn) == 4 and abs(sn[0] - 6.5625) < 0.002 and abs(sn[1] - 6.796875) < 0.002)
@@ -468,29 +506,46 @@ def lock_report(stems_dir, out_json=None):
         '%.1f -> %.1f dBFS (<90 Hz, 7.10 / 7.46)' % (lvl(inh, 7.10, 7.14), lvl(inh, 7.44, 7.48)),
         lvl(inh, 7.44, 7.48) > lvl(inh, 7.10, 7.14) + 6)
     to, r = onset(M, 7.5)
-    a, bb = lufs_s(M, 7.1, 7.5), lufs_s(M, 7.5, 7.9)
-    row(7.5, 'THE DROP', 'onset 7.5, big loudness jump', 'onset %.4f (+%.1f dB), LUFS-S %.1f -> %.1f' % (to, r, a, bb),
-        abs(to - 7.5) < 0.003 and bb - a > 10)
-    dens4 = len(onsets_in(dr, 5.625, 7.03))
-    dens5 = len(onsets_in(dr, 7.5, 9.375))
-    row(7.5, 'drop density (drum-stem onsets per bar)', 'bar 5 >> bar 4', 'bar 4: %d, bar 5: %d' % (dens4, dens5), dens5 > 2 * dens4)
+    km = synth.iir(M, synth.K_WEIGHTING)
+    a, bb = lvl(km, 7.2656, 7.5), lvl(km, 7.5, 7.96875)
+    row(7.5, 'THE DROP', 'onset 7.5; drop >= 8 dB over the breath', 'onset %.4f (+%.1f dB); K-weighted RMS breath %.1f -> '
+        'drop beat %.1f dBFS' % (to, r, a, bb), abs(to - 7.5) < 0.003 and bb - a >= 8)
+
+    def layers(t0, t1):
+        return sorted(q for q, v in part.items() if lvl(v, t0, t1) > -45)
+    la, lb = layers(6.5625, 7.03125), layers(7.5, 7.96875)
+    oa = sum(len(onsets_in(P(q), 6.5625, 7.03)) for q in synth.DRUM_PARTS)
+    ob = sum(len(onsets_in(P(q), 7.5, 7.96)) for q in synth.DRUM_PARTS)
+    row(7.5, 'drop density: layers sounding, last beat before the breath -> first beat of the drop',
+        'many more layers', '%d (%s) -> %d (%s); drum hits %d -> %d' % (len(la), ' '.join(la), len(lb), ' '.join(lb), oa, ob),
+        len(lb) >= len(la) + 3)
+    ko, co = onsets_in(P('kick'), 7.45, 7.55), onsets_in(P('crash'), 7.45, 7.55)
+    row(7.5, 'drop keeps its musical kick + crash under the picture impact', 'kick and crash at 7.5',
+        'kick %s, crash %s' % (ko, co), bool(ko) and bool(co) and abs(ko[0] - 7.5) < 0.002 and abs(co[0] - 7.5) < 0.002)
     to, r = onset(M, 7.96875)
     row(7.96875, 'secondary impact', 'onset 7.96875', '%.4f (+%.1f dB)' % (to, r), abs(to - 7.96875) < 0.003)
     to = onsets_in(P('stab'), 8.3, 8.6)
     row(8.4375, 'reverse zip into the bright stab', 'stab at 8.4375', 'stab onset %s, stab centroid %.0f Hz' % (
         [round(v, 4) for v in to], centroid(P('stab'), 8.44, 8.55)), bool(to) and abs(to[0] - 8.4375) < 0.002)
-    w = cut(sfx - sw, 9.15, 9.375)
-    k = w.shape[1] // 2
-    lr0 = rms_db(w[0, :k]) - rms_db(w[1, :k])
-    lr1 = rms_db(w[0, k:]) - rms_db(w[1, k:])
-    row(9.140625, 'whip whoosh R -> L into 9.375', 'right first, left at the end', 'L-R %+.1f dB -> %+.1f dB' % (lr0, lr1),
-        lr0 < -1 and lr1 > 1)
+    ev = find_event(side, 'whoosh', 9.140625) if side else None
+    if ev:
+        w, t0w = event_buf(ev, side)
+        k = int((ev['anchor'] - t0w) * SR)
+        a0, a1 = w[:, k // 3:2 * k // 3], w[:, 2 * k // 3:k]
+        lr0, lr1 = rms_db(a0[0]) - rms_db(a0[1]), rms_db(a1[0]) - rms_db(a1[1])
+        pt = peak_time(w, t0w)
+    else:
+        lr0 = lr1 = pt = float('nan')
+    row(9.140625, 'whip whoosh R -> L into 9.375', 'right first, left at the end, peak 9.375',
+        'L-R %+.1f dB -> %+.1f dB, peak %.4f s' % (lr0, lr1, pt), lr0 < -1 and lr1 > 1 and abs(pt - 9.375) < 0.03)
     sn = [round(v, 4) for v in onsets_in(P('snare'), 10.9, 11.25)]
     row(11.015625, 'snare fill in 16ths', '[11.0156, 11.1328]', str(sn), len(sn) == 2 and abs(sn[0] - 11.015625) < 0.002)
-    mm = cut(mus, 11.25, 11.484375).mean(axis=0)
+    mm = cut(mus - kk, 11.25, 11.484375).mean(axis=0)          # the edits work on the mix minus the kick
     L32 = int(round(synth.S16 / 2 * SR))
     rr = float(np.dot(mm[:-L32], mm[L32:]) / (np.sqrt(np.dot(mm[:-L32], mm[:-L32]) * np.dot(mm[L32:], mm[L32:])) + 1e-12))
-    row(11.25, 'glitch stutter: previous 8th re-triggered in 32nds', 'repeats every 32nd', 'autocorr @32nd %.2f' % rr, rr > 0.3)
+    kd = onsets_in(kk, 11.2, 11.3)
+    row(11.25, 'glitch stutter: previous 8th re-triggered in 32nds', 'repeats every 32nd; downbeat kick kept',
+        'autocorr @32nd %.2f (mix minus kick); kick %s' % (rr, kd), rr > 0.5 and bool(kd) and abs(kd[0] - 11.25) < 0.002)
     s1 = [round(v, 4) for v in onsets_in(P('stab'), 11.4, 11.6)]
     s2 = [round(v, 4) for v in onsets_in(P('snare'), 11.4, 11.6)]
     row(11.484375, 'stab + snare', 'both at 11.484375', 'stab %s, snare %s' % (s1, s2),
@@ -511,20 +566,18 @@ def lock_report(stems_dir, out_json=None):
     hat_after = max(pk(P('hat'), 12.66, 13.12), pk(P('ohat'), 12.66, 13.12))
     sr = onsets_in(P('snare'), 12.6, 13.1)
     row(12.65625, 'drums OUT, 32nd snare roll', 'no kick / hats; roll of 32nds to 12.949',
-        'kick %.0f dBFS, hats %.0f dBFS, %d snare hits %.4f..%.4f' % (kick_after, hat_after, len(sr), sr[0] if sr else 0,
-                                                                        sr[-1] if sr else 0),
+        'kick %.0f dBFS, hats %.0f dBFS, %d snare hits %.4f..%.4f' % (
+            kick_after, hat_after, len(sr), sr[0] if sr else 0, sr[-1] if sr else 0),
         kick_after < -80 and hat_after < -80 and len(sr) == 6 and abs(sr[-1] - 12.94921875) < 0.002)
     g0, g1 = 13.0078125, 13.125
     gm = pk(mus, g0, g1)
     gs = pk(sfx - sw, g0, g1)
     row(g0, 'THE GAP: music bus', '< -50 dBFS', 'peak %.1f dBFS' % gm, gm < -50)
     row(g0, 'THE GAP: sfx bus minus the swell', '< -50 dBFS', 'peak %.1f dBFS' % gs, gs < -50)
-    mg, sg = cut(M, g0 + 0.001, g1 - 0.001).mean(axis=0), cut(sw, g0 + 0.001, g1 - 0.001).mean(axis=0)
-    gain = float(np.dot(mg, sg) / (np.dot(sg, sg) + 1e-18))
-    resid = rms_db((mg - gain * sg)[None, :]) - rms_db(mg[None, :])
-    row(g0, 'THE GAP: master = only the swell', 'residual << swell', 'swell %.1f dBFS, residual %.1f dB under it' % (
-        rms_db(mg[None, :]), -resid), resid < -30)
-    tp = env_t = None
+    mg, sg = cut(M, g0 + 0.001, g1 - 0.001), cut(sw, g0 + 0.001, g1 - 0.001)
+    cc = float(np.corrcoef(mg.mean(axis=0), sg.mean(axis=0))[0, 1])
+    row(g0, 'THE GAP: master = only the swell', 'master follows the swell stem',
+        'master %.1f dBFS vs swell stem %.1f dBFS, correlation %.3f' % (rms_db(mg), rms_db(sg), cc), cc > 0.98)
     et = np.arange(12.9, 13.13, 0.002)
     swl = [lvl(sw, a, a + 0.004) for a in et]
     tp = et[int(np.argmax(swl))] + 0.002
@@ -532,8 +585,27 @@ def lock_report(stems_dir, out_json=None):
     to, r = onset(M, 13.125)
     row(13.125, 'FINAL HIT', 'onset 13.125', 'onset %.4f (+%.1f dB), peak %.1f dBFS' % (to, r, pk(M, 13.125, 13.3)),
         abs(to - 13.125) < 0.003)
-    dk = max(pk(P(p), 13.2, 15.0) for p in ('kick', 'snare', 'clap', 'hat', 'ohat', 'rim', 'tom'))
-    row(13.2, 'no drums after the final hit', 'silent', 'drum parts peak %.0f dBFS after 13.2 s' % dk, dk < -80)
+    ko, co = onsets_in(P('kick'), 13.1, 13.15), onsets_in(P('crash'), 13.1, 13.15)
+    sc = chroma(P('saw'), 13.13, 13.6)
+    sw_s = cut(P('saw'), 13.13, 13.6)
+    sm = rms_db(sw_s[0] - sw_s[1]) - rms_db(sw_s[0] + sw_s[1])
+    row(13.125, 'final hit: kick + crash + wide Fm(add9) stab', 'kick, crash at 13.125; F Ab C G; wide',
+        'kick %s, crash %s; stab %s; side/mid %.1f dB' % (ko, co, ' '.join(sc[:4]), sm),
+        bool(ko) and bool(co) and set(sc[:4]) == {'F', 'Ab', 'C', 'G'} and sm > -10)
+    low = synth.filt(M, ('lp', 70, 0.7), ('lp', 70, 0.7))
+    l0, l15 = lvl(low, 13.175, 13.225), lvl(low, 14.625, 14.675)
+    mm = cut(M, 13.3, 14.2).mean(axis=0)
+    Sm = np.abs(np.fft.rfft(mm * np.hanning(mm.size), 1 << 18))
+    fm = np.fft.rfftfreq(1 << 18, 1.0 / SR)
+    sel = (fm > 20) & (fm < 100)
+    row(13.125, 'final hit: ~40 Hz sub boom, ~1.5 s decay', 'boom near 40 Hz, gone (>30 dB down) by +1.5 s',
+        '%.1f Hz; <70 Hz %.1f dBFS at +0.05 s -> %.1f dBFS at +1.5 s' % (fm[sel][np.argmax(Sm[sel])], l0, l15),
+        35 < fm[sel][np.argmax(Sm[sel])] < 50 and l0 - l15 > 30)
+    hl = [lvl(st['ret-hall'], a, a + 0.1) for a in (13.3, 14.0, 14.7)] if 'ret-hall' in st else [float('nan')] * 3
+    row(13.125, 'final stab into a long hall', 'hall tail rings through bar 8', 'hall return %s dBFS at 13.3 / 14.0 / 14.7 s' % (
+        ' / '.join('%.1f' % v for v in hl)), hl[1] > -45 and hl[0] > hl[1] > hl[2])
+    after = sorted((round(v, 3), q) for q in synth.DRUM_PARTS for v in onsets_in(P(q), 13.15, 15.0))
+    row(13.15, 'no drums after the final hit', 'no drum onsets after 13.125', str(after[:6]) if after else 'none', not after)
     hitpk = pk(M, 13.125, 13.4)
     tail = lvl(M, 14.96, 14.98)
     tail_pre = lvl(M, 14.84, 14.86)
@@ -562,10 +634,8 @@ def micro_levels(stems_dir, types=('click', 'tick', 'pop', 'blip', 'type', 'zap'
     for ev in side['events']:
         if ev['type'] not in types:
             continue
-        kw = {k: v for k, v in ev.items() if k not in ('type', 'gain_db', 'source', 'passes', 'anchor')}
-        buf, off = synth.RENDERERS[ev['type']](**kw)
-        buf = synth.stereo(buf) if buf.ndim == 1 else buf
-        buf = buf * synth.undb(ev['gain_db']) * side['pregain']
+        buf, t_ev = event_buf(ev, side)
+        off = t_ev - ev['t']
         e = np.abs(buf).max(axis=0)
         k = int(0.005 * SR)
         env = np.convolve(e, np.ones(k) / k, mode='same')
@@ -576,19 +646,24 @@ def micro_levels(stems_dir, types=('click', 'tick', 'pop', 'blip', 'type', 'zap'
         ev_db = rms_db(kb)
         bed = rms_db(kw_m[:, s0:s0 + L])
         out.append(dict(t=ev['t'], type=ev['type'], pitch=ev.get('pitch'), source=ev['source'], dur=L / SR,
-                        event_db=ev_db, bed_db=bed, diff=ev_db - bed))
+                        event_db=ev_db, bed_db=bed, diff=ev_db - bed, ride_db=ev.get('ride_db', 0.0)))
     if not out:
         print('micro sfx   none')
         return out
     print('micro sfx   level vs the music bed at its moment (K-weighted RMS over the event, target -6..-10 dB)')
+    bedded = [o for o in out if o['bed_db'] > -40.0]
     for ty in types:
-        ds = [o['diff'] for o in out if o['type'] == ty]
+        ds = [o['diff'] for o in bedded if o['type'] == ty]
         if ds:
-            print('  %-6s n=%2d  median %+5.1f dB  range %+5.1f .. %+5.1f dB' % (ty, len(ds), float(np.median(ds)), min(ds),
-                                                                                  max(ds)))
-    ds = [o['diff'] for o in out]
-    print('  all     n=%2d  median %+5.1f dB  within -12..-4: %d' % (len(ds), float(np.median(ds)),
-                                                                    sum(1 for d in ds if -12 <= d <= -4)))
+            print('  %-6s n=%2d  median %+5.1f dB  range %+5.1f .. %+5.1f dB' % (
+                ty, len(ds), float(np.median(ds)), min(ds), max(ds)))
+    ds = [o['diff'] for o in bedded]
+    print('  all     n=%2d  median %+5.1f dB  within -10..-6: %d, within -12..-4: %d' % (
+        len(ds), float(np.median(ds)), sum(1 for d in ds if -10.05 <= d <= -5.95), sum(1 for d in ds if -12 <= d <= -4)))
+    for o in out:
+        if o['bed_db'] <= -40.0:
+            print('  solo    %.4f %s over a %.0f dBFS bed (the music has decayed): %.1f dBFS' % (
+                o['t'], o['type'], o['bed_db'], o['event_db']))
     return out
 
 
