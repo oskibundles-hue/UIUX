@@ -60,6 +60,30 @@ as text, never their logo; duck the music about 11 dB under all speech and alway
 master and the music stem. Never use passwords, speed talk, unsafe-driving talk, fleet faults, weapons
 or anything someone asks to have taken out. The style guide page has a Vlog section.
 
+**How a vlog is made now (the fast path, 2026-09-27).** Omarie asked for the 6 h 45 min Sep 15 process to be "extremely
+faster without cutting performance". The fast path goes like this:
+1. `10-vlog-locked-on/engine/vlog.py links → ingest → index` surveys the day from Dropbox unattended.
+   - It streams every clip once and keeps only audio and keyframes, so no original sits on disk.
+   - It writes transcripts, HOST/OTHER speaker labels, ranked moments (`moments.md`) and never-use flags (`flags.json`).
+2. Cut from `moments.md` and check each pick against `flags.json`.
+3. `vlog.py plan → fetch` pulls only the byte ranges the cut uses.
+4. In the day's build folder, run `./render.sh --draft` for a 540×960 review cut. Gates run first: lock-on, caption
+   swaps, blocked shots, caption sync, loudness and quote-card speaker.
+5. Run `./render.sh` for the full-quality render. Review fixes re-render only what they touch.
+
+Measured on Sep 15:
+
+| step | before | now |
+|---|---|---|
+| survey (169 GB, 46 clips) | 80 min | 19 min |
+| moments and flags | 30–40 min by hand | 103 s |
+| full render | about 27 min | about 18 min |
+| lock-on fix re-render | 25–35 min | about 4.5 min |
+| review draft | none | about 2 min |
+
+The new master scores at least as well as the approved one (SSIM 0.9918 against 0.9912 on its own source), and the
+mix is bit-identical.
+
 ---
 
 ## Approved layouts
