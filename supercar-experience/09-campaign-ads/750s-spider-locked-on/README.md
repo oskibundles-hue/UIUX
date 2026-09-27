@@ -126,6 +126,40 @@ Round 3 confirmed 20 of the round-2 items fixed at full resolution, with no regr
 | The hook's in-between frames were 17 % softer (a 12 Hz sharp/soft cadence) | A light unsharp mask on the in-between frames of the hero shot only; the gradient over f1-5 is now within 5 % frame to frame |
 | Nits | The badge truss averages a true box over one source frame (even cadence); the hook panel starts leaving 2 frames before its rows are gone; the requirements rows (no figures) whip with their panel; the end-card sky chroma is lifted to 0.8; the bridge plate's shadows are lifted a little more |
 
+## Placement versions: 4:5 and 1:1 feed cuts
+
+The same approved ad, cut for the feed placements. The edit, plate, grade, sky matte, graphics timing and sound
+are identical; each version is a crop window of the 1080x1920 plate per shot (`lib/formats.py`), re-composited so the
+vignette, crash punch and grain sit on the new frame. The 9:16 files are untouched.
+
+| Version | File | Window (plate rows) | Graphics |
+|---|---|---|---|
+| 4:5, 1080x1350 | `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-4x5.mp4` (8.1 Mb/s) | y 228-1578 on every shot | the approved 9:16 layers as they are. Every 9:16 line sits in the story safe zone (y 269-1536), which fits the window with ~41 px top and bottom, so the 4:5 is the approved composition, cropped |
+| 1:1, 1080x1080 | `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-1x1.mp4` (6.5 Mb/s) | graphics y 226-1306; the badge shot (frames 69-110) y 450-1530 so the brackets on the speedmark stay in frame. The picture drops to y 320-1400 on the hook shots (frames 0-68) and the front 3/4 pass (235-245), where the car drives at the lens, so its splitter stays in frame | the approved 9:16 layers, except two moments laid out for the square (`front_1x1.html`, used on frames 0-68 and 332-431 only): the hook panel is 364 px tall instead of 432 (the SE lockup moves up onto the 5 HOURS · $1,299 row), and on the end card TEXT OR DM TO BOOK, the phone, the site and the handle stand in a right-hand column beside the price, with the two requirement lines under the taillight |
+
+Every line of copy, every figure and its qualifier, and the age line are the same as the approved 9:16; the 1:1 end
+card only puts the phone and the site on two lines. `front.html` is byte-identical to the approved version, so the
+approved 9:16 layer stays cached, and `build.py` will not re-encode over the approved 9:16 files (their SHA-256 is in
+`lib/formats.py` APPROVED) unless run with `--force`. Stills, posters and contact sheets are in `exports/qa_4x5/`,
+`exports/qa_1x1/`, `exports/poster-4x5.jpg`, `poster-endcard-1x1.jpg` etc.
+
+Placement review (four lenses on both versions: framing, legibility, claims and brand, technical and code; each
+lens's findings re-checked by a skeptic). No claims or legibility defect in either version: every string, figure and
+qualifier matches the 9:16, and no text is cut on a held frame. Found and fixed:
+
+| Finding | Fix |
+|---|---|
+| 1:1: the hero car drives at the lens and its front splitter left the square (hook frames 15-24; the front 3/4 pass, 238-245) | The picture window drops to plate y 320-1400 on those shots while the graphics keep theirs, and the square's hook panel is 364 px (the lockup moved up onto the offer row). The splitter now stays 40-65 px inside the frame |
+| Editing `front.html` changed the approved 9:16 layer's cache key: a plain build would have re-rendered it (Chromium's glyph raster is not bit-reproducible) and re-encoded over the approved files | `front.html` is back to the approved bytes; the square layout is `front_1x1.html`. The build refuses to re-encode over an approved render (SHA-256 in `lib/formats.py` APPROVED) without `--force` |
+| The compositing workers read the format from a global, so with the spawn start method (macOS) they would have composited 9:16 into the wrong folder | The format is passed to each worker |
+| The 1:1 used a fresh render of the whole front layer, so its graphics between the hook and the end card were not the approved raster (sub-pixel glyph shifts) | The 1:1 composites the approved 9:16 layer on every frame except its own hook and end card |
+| Not changed: the requirement rows whip out through the top edge for 2 blurred frames (10.68-10.72 s) in both crops | A skeptic judged it an ordinary exit (the panel leaves with them, no figures); kept as the approved motion |
+
+```bash
+python3 build.py --format 4x5          # every stage cached; only the composite, encode and QA run
+python3 build.py --format 1x1          # also renders the square's hook and end card (front_1x1.html -> .work/front_1x1/)
+```
+
 ## Change a figure
 
 Edit `config.json`, then run `python3 build.py`. Only the layers that changed re-render.
@@ -162,6 +196,7 @@ Stages, each cached in `.work/` (ignored by git):
 | `config.json` | every figure and claim string, with sources |
 | `cue.md` | the build cue as built: beat table, layer stack, graphics positions |
 | `front.html` / `mid.html` | the front motion layer / the behind-the-car type layer (`window.renderAt(t)`) |
+| `front_1x1.html` | `front.html` with the 1:1 placement's hook panel and end card (the lines marked `SQ`) |
 | `build.py` | the one-command build |
 | `lib/edl.py` | the beat table on the music's 130 BPM grid (timing and plate FX, no copy) |
 | `lib/plate.py` | the plate: sampling, day grade, streaks, pushes, whips, impacts, leaks, plate blur, grad, light sweep |
@@ -171,4 +206,5 @@ Stages, each cached in `.work/` (ignored by git):
 | `lib/plate_find.py`, `lib/data/plate_track.json` | the licence-plate box on the rear chase shot (f348-368) |
 | `audio/bed.py` (+ `bed.wav`, `bed_sync.json`) | the sound bed: the clip's music plus accents, mastered |
 | `lib/fx.py`, `kinetic.js`, `lock.js`, `kcapture.js`, `accum.py`, `track.py`, `audio/synth.py` | vendored unchanged from `../flash-special-showcase/` |
-| `exports/` | `poster.jpg` (frame 0, the complete hook), `poster-endcard.jpg`, `contact-sheet.jpg`, `qa/` |
+| `lib/formats.py` | the placement versions: the crop window of every shot for 4:5 and 1:1, safe boxes, rates |
+| `exports/` | `poster.jpg` (frame 0, the complete hook), `poster-endcard.jpg`, `contact-sheet.jpg`, `qa/`; the same with `-4x5` / `-1x1` and `qa_4x5/`, `qa_1x1/` for the placement versions |
