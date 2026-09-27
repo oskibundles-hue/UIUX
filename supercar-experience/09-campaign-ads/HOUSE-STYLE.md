@@ -43,6 +43,19 @@ What makes an ad `locked-on`, in order of appearance:
 **Use `quick-promo` instead** only when the ad has to go out in under ~30 minutes. `locked-on`
 takes a few hours of build and review.
 
+### `locked-on` for vlogs
+
+The vlog version is built on the Sep 15 Egnyte rally (`10-vlog-locked-on/2026-09-15-rally-v2/`,
+components and 22 variations in `10-vlog-locked-on/vlog-kit/`, codes A1–I3). On top of the eight rules:
+survey and transcribe every clip before cutting and pick moments by what people say; keep the day in
+order and stamp each chapter with the camera clock; keep the SE banner on the side (A2 edge tab,
+right edge between 14% and 55%); tag a car only when it is positively identified in frame and release
+the tag with LOCK LOST when the car leaves on a pan; caption every line (H1); check who is speaking
+before labelling a quote; label guests by company only (EGNYTE GUEST), never by name, and show a client
+as text, never their logo; duck the music about 11 dB under all speech and always deliver a no-music
+master and the music stem. Never use passwords, speed talk, unsafe-driving talk, fleet faults, weapons
+or anything someone asks to have taken out. The style guide page has a Vlog section.
+
 ---
 
 ## Approved layouts

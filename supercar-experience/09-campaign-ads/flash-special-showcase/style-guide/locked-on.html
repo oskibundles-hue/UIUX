@@ -151,7 +151,7 @@
   .ch-name { font-family: var(--display); font-size: 24px; line-height: 1; display: block; }
   .ch-d { font-size: 14px; color: var(--muted); line-height: 1.4; display: block; margin-top: 4px; }
   .ch-t { font-family: var(--label); font-size: 9px; letter-spacing: 1.5px; color: var(--faint); font-variant-numeric: tabular-nums; }
-  .kitgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 18px 14px; }
+  .kitgrid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px 12px; }
   .kit { display: grid; gap: 6px; align-content: start; }
   .kit img { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border: 1px solid var(--line); display: block; }
   .kit.used img { border-color: var(--gold); }
@@ -160,7 +160,7 @@
   .kit .code small { font-family: var(--label); font-size: 8px; letter-spacing: 1.5px; color: var(--gold); border: 1px solid var(--gold); padding: 2px 5px; }
   .kit .kn { font-family: var(--label); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text); }
   .kit p { font-size: 14px; color: var(--muted); line-height: 1.4; }
-  .groups { display: grid; gap: 34px; }
+  .groups { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 330px), 1fr)); gap: 34px 28px; align-items: start; }
   .group-h { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
   .group-h b { font-family: var(--display); font-weight: 400; font-size: 34px; color: var(--gold); line-height: 1; }
   .group-h span { font-family: var(--label); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
@@ -461,8 +461,23 @@
     </div>
     <div class="reel-row">
       <video id="kitreel" src="media/kit-reel.mp4" poster="media/kit/A2.jpg" playsinline muted controls preload="metadata"></video>
-      <div class="groups" id="kitgroups"></div>
+      <div class="panel">
+        <h3>The set in the Sep 15 vlog</h3>
+        <dl class="kv">
+          <dt>Banner</dt><dd>A2 edge tab, with × EGNYTE on the hook</dd>
+          <dt>People</dt><dd>B1 name lock on the host</dd>
+          <dt>Cars</dt><dd>C1 convoy hop with I2 lock lost; C3 lead-car lock on the Cullinan</dd>
+          <dt>Clock</dt><dd>D1 at dinner and on the drive back</dd>
+          <dt>Route</dt><dd>E1, run as a strip across the top of the convoy montage</dd>
+          <dt>Quote</dt><dd>F1 for Omarie's pick of the fleet</dd>
+          <dt>Titles</dt><dd>G1 chapter slams with the camera clock</dd>
+          <dt>Captions</dt><dd>H1 boxed, on every line</dd>
+          <dt>Cuts</dt><dd>I1 gold sweep at each chapter change</dd>
+        </dl>
+        <p class="muted" style="font-size:15px">The reel shows every variation moving, each tagged with its code. To change the set, reply with codes, for example "use A1 instead of A2".</p>
+      </div>
     </div>
+    <div class="groups" id="kitgroups"></div>
 
     <div class="sec-head" style="margin-top:12px">
       <div class="eyebrow">Vlog rules</div>
