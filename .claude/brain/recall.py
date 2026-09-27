@@ -9,18 +9,18 @@ usage: python3 .claude/brain/recall.py "how do I deliver finished work" [--top 1
 """
 import glob, json, math, os, re, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from nqos_config import MEM
+from nqos_config import MEM, HAVE_NOTES, NO_NOTES
 CACHE = os.path.join(os.path.dirname(os.path.abspath(__file__)), ".memory_cache.json")
 VERSION = 3
 STOP = set("""a an and are as at be but by do does for from how i if in is it its me my of on or so that the their then there
 this to was we what when where which who why will with you your about into over under should can could would any all our
-he him his she her they them us has have had get gets did done make makes go goes going just also one ones""".split())
+he him his she her they them us has have had get gets did done make makes go goes going just also one ones much many""".split())
 # words the owner uses -> words the notes use (add your own) (both directions are added at query time)
 SYN = {
     "delete": ["archive", "remove", "trash"], "dashboard": ["control", "room", "os"], "link": ["url", "artifact"],
     "agent": ["model", "mesh", "subagent"], "model": ["mesh", "router", "lane", "class"], "cost": ["token", "usage", "spend"], "remember": ["memory", "note", "save"],
     "morning": ["report", "daily", "day"], "voice": ["speak", "speech", "jarvis"], "fast": ["speed", "latency", "second"],
-    "script": ["tool", "gate", "py"], "time": ["pm", "am", "schedule", "nightly"], "check": ["verify", "gate", "confirm"],
+    "script": ["tool", "gate", "py"], "horsepower": ["hp", "output"], "font": ["type", "typeface", "archivo"], "zone": ["timezone", "pacific", "pdt", "pst"], "time": ["pm", "am", "schedule", "nightly"], "check": ["verify", "gate", "confirm"],
 }
 def stem(w):
     for suf, rep in (("ies", "y"), ("ing", ""), ("ed", ""), ("es", ""), ("ly", ""), ("s", "")):
@@ -134,6 +134,8 @@ def main():
     a = [x for x in sys.argv[1:] if not x.startswith("--") and not (sys.argv[sys.argv.index(x) - 1] == "--top")]
     if not a: sys.exit(__doc__)
     q = " ".join(a); full = "--full" in sys.argv
+    if not HAVE_NOTES:
+        print(json.dumps({"query": q, "top": None, "runner_up": None, "error": NO_NOTES}) if "--json" in sys.argv else NO_NOTES); return
     top = int(sys.argv[sys.argv.index("--top") + 1]) if "--top" in sys.argv else 1
     notes, df, avg = index(); N = len(notes); qs = qterms(q)
     ranked = sorted(((score(qs, n, df, N, avg), n) for n in notes), key=lambda x: -x[0])

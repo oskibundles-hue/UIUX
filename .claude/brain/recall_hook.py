@@ -9,7 +9,7 @@ Gate features:  python3 .claude/brain/recall_hook.py --features "question"
 import json, math, os, re, sys, time
 HERE = os.path.dirname(os.path.abspath(__file__))
 sys.path.insert(0, HERE)
-from nqos_config import WORK
+from nqos_config import WORK, HAVE_NOTES
 # gate (tune by hand against real prompts): the prompt's own words (no synonyms) must hit the top note
 MIN_WORDS, MIN_HITS, MIN_STRONG = 3, 2, 2   # >=2 real word hits, >=2 of them in the note's title/index line/headings
 # filler that matched everything in an off-topic test set (stemmed at load)
@@ -54,6 +54,7 @@ def main():
     if "--features" in sys.argv:
         q = " ".join(a for a in sys.argv[1:] if a != "--features"); f = features(q)
         print(json.dumps(None if f is None else {k: f[k] for k in ("score", "hits", "n_hits", "n_strong", "idf", "n_words")} | {"note": f["note"]["file"], "fires": confident(f)})); return
+    if not HAVE_NOTES: return  # private notes repo not attached: stay silent
     try:
         data = json.load(sys.stdin); prompt = data.get("prompt", "") or ""
         if prompt.lstrip().startswith(SKIP_PREFIXES) or len(prompt.split()) < MIN_WORDS: return
