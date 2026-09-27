@@ -192,6 +192,8 @@ def sfx_cues(scene):
             for i, s in enumerate(p['segs']):
                 if i == 0:
                     cue('tickAcquire', s['t'], 'convoy lock acquire', 0); cue('tickLock', s['t'] + 0.26, 'convoy lock', 0)
+                elif s.get('mode') == 'relock':        # lock lost as the car leaves frame: silent; the tick lands on the re-lock
+                    cue('tickLock', s['t'] + s.get('lost', 0.36) + 9 / FPS, f'convoy re-lock {i + 1}', 0)
                 else:
                     cue('tickLock', s['t'] + 9 / FPS, f'convoy hop {i + 1}', 0)
         elif ty == 'v2slam':

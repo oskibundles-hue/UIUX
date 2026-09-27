@@ -572,11 +572,14 @@
       // last valid box of the previous target (frozen once its track is gone)
       const lastOf = (k, tt) => { for (let d = 0; d < 40; d++) { const b = boxOf(k, tt - d / FPS); if (b) return b; } return null; };
       let tgt = boxOf(i, t) || lastOf(i, t);
-      if (!tgt) { show(root, false); return; }
-      let r = tgt, lostK = 0, pl = 0, lostRect = null;
       // a lost target's rect, pulled inside the frame (a track can end half off-screen)
       const fitIn = q => { const w = Math.min(q.w, 560), h = Math.min(q.h, 380), cx = cl(q.x + q.w / 2, 60 + w / 2, 1020 - w / 2), cy = cl(q.y + q.h / 2, 400 + h / 2, 1450 - h / 2);
         return { x: cx - w / 2, y: cy - h / 2, w, h }; };
+      // rally-v2 copy: during a LOCK LOST phase the next car's track may not have started yet (it is still out of
+      // frame); hold the lost state on the previous car's last rect instead of hiding the whole lock
+      if (!tgt && s.mode === 'relock' && i > 0 && t < s.t + (s.lost ?? 0.36)) { const pq = lastOf(i - 1, s.t); if (pq) tgt = fitIn(pq); }
+      if (!tgt) { show(root, false); return; }
+      let r = tgt, lostK = 0, pl = 0, lostRect = null;
       const lostAt = tt => { const sr = grow(fitIn(lastOf(i - 1, s.t)), 1.25), tsn0 = s.t + (s.lost ?? 0.36);
         const qd = E.inOutCubic(P(tt, s.t, tsn0)), cxs = lerp(sr.x + sr.w / 2, 480, 0.5 * qd), cys = lerp(sr.y + sr.h / 2, 1020, 0.5 * qd);
         return { x: cxs - sr.w / 2, y: cys - sr.h / 2, w: sr.w, h: sr.h }; };

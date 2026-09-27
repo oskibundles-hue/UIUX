@@ -823,7 +823,7 @@
     "t0": 30.9,
     "t1": 40.8,
     "p": {
-     "total": 5,
+     "total": 6,
      "exit": 40.45,
      "label": "CAR",
      "segs": [
@@ -835,9 +835,10 @@
       },
       {
        "track": "lineup_corvette",
-       "t": 32.97,
+       "t": 32.3,
        "make": "CORVETTE Z06",
-       "mode": "hop"
+       "mode": "relock",
+       "lost": 0.73
       },
       {
        "track": "lineup_huracan",
@@ -846,18 +847,27 @@
        "mode": "hop"
       },
       {
+       "track": "lineup_amg",
+       "t": 35.86,
+       "make": "MERCEDES-AMG GT BLACK SERIES",
+       "mode": "relock",
+       "lost": 0.71
+      },
+      {
        "track": "lineup_gt3rs",
-       "t": 36.73,
+       "t": 37.18,
        "make": "PORSCHE 911 GT3 RS",
        "mode": "hop"
       },
       {
        "track": "lineup_cullinan",
-       "t": 38.64,
+       "t": 37.8,
        "make": "ROLLS-ROYCE CULLINAN",
-       "mode": "hop"
+       "mode": "relock",
+       "lost": 0.84
       }
-     ]
+     ],
+     "_about": "each car is released with the LOCK LOST treatment as it leaves frame on a pan (Urus 32.30, Huracán 35.86, GT3 RS 37.80) and the next car is locked when it is in frame (snap = t + lost); hops only while both cars are in frame"
     }
    },
    {
@@ -1279,6 +1289,18 @@
     845,
     437,
     314
+   ]
+  },
+  "lineup_amg": {
+   "shot": 11,
+   "f0": 1090,
+   "f1": 1150,
+   "anchor": 1119,
+   "box": [
+    90,
+    828,
+    395,
+    140
    ]
   },
   "lineup_cullinan": {

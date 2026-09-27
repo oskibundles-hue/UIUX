@@ -30,7 +30,7 @@ No `_DELIVERY` copy: the master is already 10.95 Mb/s, under the 11.5 Mb/s deliv
 | G1 ×7 | **Chapter slams** (kit G1): camera-clock tag HH:MM · CH 0N / 07 over the title, 1.55x → 1 slam with motion blur, stripe, glint, a plate punch | 7.05 RALLY DAY · 26.08 THE LINEUP · 54.29 EGNYTE ARRIVES · 79.04 ROLL OUT · 87.74 RED ROCK · 116.81 THE DRIVE BACK · 147.97 THE VERDICT (≈1.9 s each) | top band, title y 350 (faces stay clear) |
 | I1 ×6 | **Gold light sweep** at every chapter change: the layer draws the band, the plate switches along its centre line (old shot keeps playing on the right) | 25.88 · 54.09 · 78.84 · 87.54 · 116.61 · 147.77 (0.36 s) | full frame |
 | B1 | **Host name lock** (kit B1): OMARIE · @NQ.YOUNG on the tracked face | 9.2 – 11.35 | tracked |
-| C1 | **Convoy lock-on hop** (kit C1) while Omarie names the lineup, counter CAR 0N / 05: LAMBORGHINI URUS → CORVETTE Z06 → LAMBORGHINI HURACÁN EVO → PORSCHE 911 GT3 RS → ROLLS-ROYCE CULLINAN | 30.96 / 32.97 / 35.08 / 36.73 / 38.64, out 40.45 | tracked on the lineup walk |
+| C1 | **Convoy lock-on hop** (kit C1 + I2 lock lost / re-acquire) while Omarie names the lineup, counter CAR 0N / 06: LAMBORGHINI URUS → CORVETTE Z06 → LAMBORGHINI HURACÁN EVO → MERCEDES-AMG GT BLACK SERIES → PORSCHE 911 GT3 RS → ROLLS-ROYCE CULLINAN. A car that leaves frame on a pan is released with LOCK LOST and the next one is locked once it is in frame; a direct hop only while both cars are in frame | Urus 30.96; LOCK LOST 32.30 → Corvette 33.03; Huracán 35.08; LOCK LOST 35.86 → Black Series 36.57; GT3 RS 37.18 (on "GT3s"); LOCK LOST 37.80 → Cullinan 38.64; out 40.45 | tracked on the lineup walk |
 | CTA | **CTA chip**: TEXT OR DM TO BOOK · (725) 425-3583 · @SUPERCAR_EXPERIENCE_ | 45.15 – 54.0 ("If you ever need to book with us for a large event…") | top-left |
 | SLAM | **SAFELY.** kinetic slam | lands 63.66 on the word (63.63), out 64.6 | top band |
 | R8 | **Lock-on** LOCKED ON · AUDI R8 | 67.85 – 69.5 | tracked |
@@ -59,7 +59,7 @@ Every in / out time and how each anchor was found: `cue.md`. All copy lives in `
 | SUPERCAR EXPERIENCE · RALLY DAY · LAS VEGAS (side banner) | the vlog kit's A2 banner copy |
 | HH:MM · CH 0N / 07 and the chapter titles | titles: the EDL (`chapters`); CH 03 is EGNYTE ARRIVES (Omarie, 27 Sept). Clocks: the camera clock of the chapter's first frame = the file name's start time + the shot's in-point (see "Clocks" below) |
 | OMARIE · @NQ.YOUNG | the approved follow card ("Omarie Young @nq.young") |
-| CAR 0N / 05 + LAMBORGHINI URUS, CORVETTE Z06, LAMBORGHINI HURACÁN EVO, PORSCHE 911 GT3 RS, ROLLS-ROYCE CULLINAN | Omarie naming the lineup on camera ("Black Series, Uruses, Corvette, Huracán EVOs, GT3s, Rolls-Royce Cullinan"), each label only on the car that is in frame and identified on the footage (see "Lock-ons") |
+| CAR 0N / 06 + LAMBORGHINI URUS, CORVETTE Z06, LAMBORGHINI HURACÁN EVO, MERCEDES-AMG GT BLACK SERIES, PORSCHE 911 GT3 RS, ROLLS-ROYCE CULLINAN; LOCK LOST | Omarie naming the lineup on camera ("Black Series, Uruses, Corvette, Huracán EVOs, GT3s, Rolls-Royce Cullinan"), each label only on the car that is in frame and identified on the footage (see "Lock-ons") |
 | TEXT OR DM TO BOOK · (725) 425-3583 · @SUPERCAR_EXPERIENCE_ (CTA chip) | the approved Locked-On end card and `brand-tokens.json` `phones.text`; shown while Omarie says "If you ever need to book with us for a large event…" |
 | SAFELY. | Omarie's own word ("That's our number one thing. Safely."), on the word |
 | LOCKED ON · AUDI R8 | Omarie: "you'll get the R8… the R8, Audi R8"; the car on screen |
@@ -116,8 +116,8 @@ per clip and ducked 10 dB under speech. Five B-roll clips whose own audio has so
 silent (0010 34 s, 0004 47 s, 0015 163 s, 0025 36 s, 0005 55 s: "apparently Roma pulling in" would talk over the guest).
 
 **Locked-On accents** (the SE-LO pack, `10-motion-sfx/locked-on-sfx/`): the open hit on frame 0, whooshes on every whip, the
-banner slide, the sweeps and the cards, a drop hit on each chapter slam and on SAFELY., acquire/lock ticks on every lock-on
-and convoy hop, reel ticks on every route stop, a tick per quote-wall word, the end-card hit. Each is set to 45 % of the
+banner slide, the sweeps and the cards, a drop hit on each chapter slam and on SAFELY., acquire/lock ticks on every lock-on,
+convoy hop and re-lock (a lock lost is silent), reel ticks on every route stop, a tick per quote-wall word, the end-card hit. Each is set to 45 % of the
 music's unducked RMS over the accent's own energetic span and ducked a further 6 dB under speech (every cue and its gain:
 `cue.md`).
 
@@ -149,7 +149,7 @@ numpy), the last 60 ms exact zeros. On the delivered master: -14.11 LUFS integra
   the approved v1 cut had its plates blurred.)
 - **Lock-ons** are tracked on the rendered shots with `lib/track_mid.py` from a sharp anchor frame, both ways (QA sheets:
   `exports/qa/track_*.jpg`). Labels only where the car is identified on the footage: the widebody Urus, the white C8 Corvette
-  Z06 (front fascia), the blue Huracán EVO, the white 911 GT3 RS (swan-neck wing, hood vents), the black Cullinan (Pantheon
+  Z06 (front fascia), the blue Huracán EVO, the orange Mercedes-AMG GT Black Series (fixed rear wing; the car Omarie names first, identified in review), the white 911 GT3 RS (swan-neck wing, hood vents), the black Cullinan (Pantheon
   grille), the white R8, the red colour-shift Roma (rear lights, matte red-grey wrap; the car in front of it is a black R8), the
   purple Urus.
 - **Clocks:** camera clock = the file name's start time + the in-point (DJI_20260915HHMMSS, iPhone creation time UTC-7).
@@ -180,7 +180,7 @@ the rendered shots) → `join` (transitions, plate blurs, punches → `.work/pla
 | `config.json` | paths, per-shot reframe / look / ramp, source slips, transitions, plate blurs, clocks, tracks, music slot, audio levels, every on-screen element |
 | `cue.md` | every element and transition with its in / out and how it was placed |
 | `story.html` | the layer page: `window.renderAt(t)`, a pure function of t |
-| `lib/sekit.js` | the vlog kit's component library, copied from `../vlog-kit/lib/sekit.js` (27 Sept, 03:27). Three changes, each marked `rally-v2 copy`: more internal helpers are exported (`SEK.helpers`); an accented capital (HURACÁN) sits on the H cap height instead of pushing its word down; the G1 slam exit lifts 0.35 cap and fades (it used to travel 1.2 caps up, out of the safe area) |
+| `lib/sekit.js` | the vlog kit's component library, copied from `../vlog-kit/lib/sekit.js` (27 Sept, 03:27). Four changes, each marked `rally-v2 copy`: more internal helpers are exported (`SEK.helpers`); an accented capital (HURACÁN) sits on the H cap height instead of pushing its word down; the G1 slam exit lifts 0.35 cap and fades (it used to travel 1.2 caps up, out of the safe area); in the C1 hop, a LOCK LOST phase whose next car is not tracked yet (still out of frame) holds on the last car's rect instead of hiding the whole lock |
 | `lib/v2kit.js` | this vlog's own components (hook, CTA chip, SAFELY. slam, route card / route panel, place tag, quote wall, car lock, end card) |
 | `lib/plate.py` | the picture edit and grade |
 | `lib/music.py`, `lib/mix.py` | the placeholder music bed and the mix |
@@ -211,6 +211,10 @@ the rendered shots) → `join` (transitions, plate blurs, punches → `.work/pla
 12. **Shot 17 (59.79 s, guests signing in) is slipped:** the EDL's 0015 340.0–342.4 s opens on an arm and a ring over the
     lens for 1.2 s. It now plays the clean rest of the take, 341.36–343.16 s, at 0.75x (59.94p source, so the slow motion is
     smooth); its nat is slipped with it. `config.json` `slips` holds it; delete the entry to go back to the EDL.
+13. **CH2 lineup hop: six cars and three LOCK LOSTs** (review, 27 Sept). The Urus, Huracán and GT3 RS each leave frame on a
+    pan before the next car is in; their tracks ran on off-screen, so the brackets and leader pointed at the frame edge or the
+    wrong car. Each is now released with the kit's I2 LOCK LOST treatment as it leaves, and the orange AMG GT Black Series
+    has its own lock. The other locks (R8, lead Cullinan, Roma, Urus on the strip) stay on their car to the exit (QA sheets).
 
 ## Open items
 
@@ -221,8 +225,9 @@ the rendered shots) → `join` (transitions, plate blurs, punches → `.work/pla
    GUEST on the card). Worth a glance that the speaker is an Egnyte guest, not crew.
 3. **CORVETTE Z06, HURACÁN EVO** are read from the cars' fronts and Omarie's own naming ("Corvette, Huracán EVOs"); if
    either is a different trim, change `make` in `config.json` `C1.segs` (MAKE only, e.g. CHEVROLET CORVETTE, is the safe fallback).
-4. **The "Black Series" Omarie names first is not in frame** when they say it (a black car at the far wall is), so the hop
-   starts on the Urus they name next. The orange AMG GT Black Series appears only small in the background at 37 s.
+4. **The "Black Series" Omarie names first is not in frame** when they say it (30.1 s), so the hop starts on the Urus they
+   name next; the orange AMG GT Black Series gets its own lock when the walk reaches it (36.57 s, CAR 04 / 06). Its lock is
+   0.6 s (it shares the frame with the GT3 RS, which takes the next 0.6 s on the word "GT3s").
 5. **BLUE DIAMOND** on the CH4 route card comes from the brief; nothing on camera names that road.
 6. **Music rights:** the bed is original (synthesised here). If Omarie picks a track, see Sound → Swap it.
 
