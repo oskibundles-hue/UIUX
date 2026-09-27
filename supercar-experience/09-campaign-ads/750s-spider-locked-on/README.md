@@ -1,7 +1,8 @@
 # "ROOF DOWN": McLaren 750S Spider, LOCKED ON, 18 s 9:16 story
 
 **Status: APPROVED for ads (27 Sept 2026) by the requester (Oski), after signing off on every open question
-below. It has not been posted anywhere yet;** each post or ad placement still needs its own go. It is built to
+below; the 4:5 and 1:1 placement versions were approved the same day (see Placement versions). None of them has
+been posted anywhere yet;** each post or ad placement still needs its own go. It is built to
 THE STANDARD for SE ads (`locked-on`, `../HOUSE-STYLE.md` on the SE branch). It started from the approved GT3
 RS showcase's settings and library (`../flash-special-showcase/`, whose `lib/` modules are vendored here).
 
@@ -128,6 +129,16 @@ Round 3 confirmed 20 of the round-2 items fixed at full resolution, with no regr
 
 ## Placement versions: 4:5 and 1:1 feed cuts
 
+**Status: APPROVED for ads (27 Sept 2026) by the requester (Oski). Not posted anywhere yet.** The approved renders
+(`build.py` will not re-encode over them without `--force`; the hashes are also in `lib/formats.py` APPROVED):
+
+| File | SHA-256 |
+|---|---|
+| `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-4x5.mp4` (delivery: 8.1 Mb/s, 18.4 MB) | `dfc2c1c183b0f9ec23bc4688ec5949e8f58e9e3d1e0a7120ce115c70dde610f1` |
+| `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-4x5_master.mp4` (master: CRF 16, 40.4 MB) | `a3138d13b69073a849319fce84255b9f6e81f9ebaf822c659aebd1953416addb` |
+| `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-1x1.mp4` (delivery: 6.5 Mb/s, 14.9 MB) | `b9dab85e7f77fd1e52a26901af2490290a590eddde705c9c4b1a971156603204` |
+| `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-1x1_master.mp4` (master: CRF 16, 32.8 MB) | `f7b2907b52e817e6744b85941ea2ff28d617e8192dbe150e2cb6a6d9fd6fa1a3` |
+
 The same approved ad, cut for the feed placements. The edit, plate, grade, sky matte, graphics timing and sound
 are identical; each version is a crop window of the 1080x1920 plate per shot (`lib/formats.py`), re-composited so the
 vignette, crash punch and grain sit on the new frame. The 9:16 files are untouched.
@@ -140,7 +151,7 @@ vignette, crash punch and grain sit on the new frame. The 9:16 files are untouch
 Every line of copy, every figure and its qualifier, and the age line are the same as the approved 9:16; the 1:1 end
 card only puts the phone and the site on two lines. `front.html` is byte-identical to the approved version, so the
 approved 9:16 layer stays cached, and `build.py` will not re-encode over the approved 9:16 files (their SHA-256 is in
-`lib/formats.py` APPROVED) unless run with `--force`. Stills, posters and contact sheets are in `exports/qa_4x5/`,
+`lib/formats.py` APPROVED) unless run with `--force`; the same guard now covers the approved 4:5 and 1:1. Stills, posters and contact sheets are in `exports/qa_4x5/`,
 `exports/qa_1x1/`, `exports/poster-4x5.jpg`, `poster-endcard-1x1.jpg` etc.
 
 Placement review (four lenses on both versions: framing, legibility, claims and brand, technical and code; each
