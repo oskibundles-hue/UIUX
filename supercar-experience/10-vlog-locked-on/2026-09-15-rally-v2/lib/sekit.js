@@ -1466,6 +1466,10 @@
     } };
   };
 
-  SEK.helpers = { ink, line, el, panel, panelAt };
+  // rally-v2 copy: the one change to the kit file -- more of the internal helpers are exported, so
+  // lib/v2kit.js can build this vlog's own components in the same language (no kit behaviour changes)
+  SEK.helpers = { ink, line, el, panel, panelAt, place, show, svgEl, svgRoot, glint, riseLine, phase, liveDot, liveDotAt,
+    bracketPaths, bracketSet, bracketDraw, grow, lerpRect, padRect, pingSet, pingDraw, routeGeom, routeBuild, routeAt,
+    meter, meterAt, quoteBuild, quoteAt, nameTag, nameTagAt, capPages, fitSize, sigSvg, f2, px, GOLD, SAFE };
   window.SEK = SEK;
 })();
