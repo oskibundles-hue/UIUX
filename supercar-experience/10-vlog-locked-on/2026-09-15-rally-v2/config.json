@@ -4,8 +4,8 @@
   "scratch": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad",
   "ffmpeg": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/ffmpeg",
   "mezz": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/mezz",
-  "edl": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/raw/edl.json",
-  "captions": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/raw/captions.json",
+  "edl": "data/edl.json",
+  "captions": "data/captions.json",
   "sparse": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/raw/sparse",
   "sfx": "../../10-motion-sfx/locked-on-sfx",
   "transcripts": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/raw/tr"

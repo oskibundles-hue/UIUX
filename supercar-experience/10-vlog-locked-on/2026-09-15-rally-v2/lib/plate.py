@@ -37,7 +37,8 @@ import fx  # noqa: E402
 FPS = 30000 / 1001
 W, H = 1080, 1920
 WORK = os.path.join(ROOT, '.work')
-CFG = json.load(open(os.path.join(ROOT, 'config.json')))
+from cfg import load_config  # noqa: E402
+CFG = load_config()
 P = CFG['paths']
 FF = os.environ.get('FFMPEG', P['ffmpeg'])
 EDL = json.load(open(P['edl']))

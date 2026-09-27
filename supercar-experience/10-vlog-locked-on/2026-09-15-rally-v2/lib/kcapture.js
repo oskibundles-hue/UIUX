@@ -25,7 +25,7 @@
  * shutter open / middle / close are captured once. Screenshots go through CDP captureScreenshot with
  * optimizeForSpeed (~40 ms at 1080x1920) instead of page.screenshot (~85 ms).
  */
-const { chromium } = require('/opt/node22/lib/node_modules/playwright');
+const { chromium } = require('./playwright');  // resolves Playwright on this machine (lib/playwright.js)
 const { spawn } = require('child_process');
 const path = require('path'); const fs = require('fs');
 

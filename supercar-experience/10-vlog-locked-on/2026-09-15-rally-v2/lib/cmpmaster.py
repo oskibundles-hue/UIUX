@@ -16,7 +16,9 @@ from PIL import Image
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 sys.path.insert(0, ROOT)
-CFG = json.load(open(os.path.join(ROOT, 'config.json')))
+sys.path.insert(0, HERE)
+from cfg import load_config  # noqa: E402
+CFG = load_config()
 FF = os.environ.get('FFMPEG', CFG['paths']['ffmpeg'])
 WORK = os.path.join(ROOT, '.work')
 NAME = CFG['name']

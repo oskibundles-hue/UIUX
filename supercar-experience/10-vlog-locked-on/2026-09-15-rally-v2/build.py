@@ -37,7 +37,8 @@ WORK = os.path.join(ROOT, '.work')
 EXP = os.path.join(ROOT, 'exports')
 QA = os.path.join(EXP, 'qa')
 sys.path.insert(0, LIB)
-C = json.load(open(os.path.join(ROOT, 'config.json')))
+from cfg import load_config  # noqa: E402  (config.json + this machine's config.local.json)
+C = load_config()
 FF = os.environ.get('FFMPEG', C['paths']['ffmpeg'])
 EDL = json.load(open(C['paths']['edl']))
 CAPS = json.load(open(C['paths']['captions']))
@@ -408,7 +409,7 @@ def st_gates(A):
 
 
 # ================================================================================== front
-NPROC = int(os.environ.get('NPROC', '4'))            # capture / hash processes (4 cores)
+NPROC = int(os.environ.get('NPROC', str(min(os.cpu_count() or 4, 8))))  # capture / hash processes (all cores, up to 8)
 
 
 def _files_sig(paths):
@@ -839,8 +840,8 @@ def audio_qa(path):
 def ink_audit(times):
     js = os.path.join(WORK, 'audit.js')
     open(js, 'w').write("""
-const { chromium } = require('/opt/node22/lib/node_modules/playwright');
-(async () => { const b = await chromium.launch(); const pg = await b.newPage({ viewport: { width: 1080, height: 1920 } });
+const { chromium } = require(%r);
+(async () => { const b = await chromium.launch();""" % os.path.join(LIB, 'playwright.js') + """ const pg = await b.newPage({ viewport: { width: 1080, height: 1920 } });
   await pg.goto('file://' + process.argv[2]); await pg.waitForFunction(() => window.__ktReady === true, null, { timeout: 60000 });
   const ts = JSON.parse(process.argv[3]); const out = {};
   for (const t of ts) out[t] = await pg.evaluate(t => window.inkAudit(t), t);

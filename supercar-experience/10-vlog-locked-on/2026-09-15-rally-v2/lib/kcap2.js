@@ -19,7 +19,7 @@
  *   node kcap2.js <page.html> <outDir> list <fps> <frames.json> [--workers 1] [--scale 1] [--k1] [--noclip] [--noreset]
  *   node kcap2.js <page.html> <outDir> hash <fps> <frames.json|all> <out.json> [--scale 1] [--k1]
  */
-const { chromium } = require('/opt/node22/lib/node_modules/playwright');
+const { chromium } = require('./playwright');  // resolves Playwright on this machine (lib/playwright.js)
 const { spawn } = require('child_process');
 const path = require('path'); const fs = require('fs');
 

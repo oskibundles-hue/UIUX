@@ -8,4 +8,6 @@
 #   FFMPEG=/path/to/ffmpeg ./render.sh
 set -euo pipefail
 cd "$(dirname "$0")"
-exec nice -n 10 python3 build.py "$@"
+# this machine's settings (the Mac setup writes ../vlog.env: VLOG_PY, FFMPEG, PLAYWRIGHT_MODULE, NPROC)
+if [ -f ../vlog.env ]; then . ../vlog.env; fi
+exec nice -n 10 "${VLOG_PY:-python3}" build.py "$@"

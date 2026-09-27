@@ -158,6 +158,13 @@ numpy), the last 60 ms exact zeros. On the delivered master: -14.11 LUFS integra
 
 ## Render and review loop
 
+**Any machine.** `config.json` `paths` hold this build's defaults. The EDL and captions are in `data/`; the
+mezzanines and transcripts are in the cloud scratch folder. A git-ignored `config.local.json` overrides any of them
+per machine (`lib/cfg.py`). `render.sh` reads `../vlog.env`, which gives it the machine's Python, ffmpeg,
+Playwright and core count. The Mac setup and how to rebuild the Sep 15 mezzanines there are in
+`../MAC-SETUP.md`. A Mac's Chromium rasterizes text slightly differently from the cloud's, so a Mac render matches a
+cloud render to the eye but not bit for bit.
+
 The first version took about 6 hours from brief to approval. About 2 h 45 min of that went to the first render, which included writing the code, and each of the 4 review fixes then cost a full 25 to 35 minute re-render. The loop is now built so that **a problem is caught before a render, a
 reviewable cut takes minutes, and a fix only re-renders what it touches.**
 

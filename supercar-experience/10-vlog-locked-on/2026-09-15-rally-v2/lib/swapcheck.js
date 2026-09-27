@@ -6,7 +6,7 @@
  * any of these (an element fading in or out inside a frame is not a swap).
  * Usage: node lib/swapcheck.js story.html out.json [nframes]
  */
-const { chromium } = require('/opt/node22/lib/node_modules/playwright');
+const { chromium } = require('./playwright');  // resolves Playwright on this machine (lib/playwright.js)
 const path = require('path'); const fs = require('fs');
 (async () => {
   const [page, out, nfArg] = process.argv.slice(2);
