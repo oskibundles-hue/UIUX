@@ -39,7 +39,7 @@ const g = k => TL.g0 + k * TL.beat;
 window.KT_PLAN = { k: 10, shutter: 180, spans: [
   { a: 2.68, b: 2.90, k: 28, shutter: 270 }, { a: 2.86, b: 3.20, k: 28, shutter: 270 },
   { a: 4.46, b: 4.63, k: 28, shutter: 270 }, { a: 4.72, b: 5.72, k: 28, shutter: 270 },
-  { a: 6.55, b: 7.06, k: 20, shutter: 270 }, { a: 7.80, b: 7.97, k: 28, shutter: 270 },
+  { a: 6.55, b: 7.06, k: 20, shutter: 270 }, { a: 7.80, b: 8.14, k: 28, shutter: 270 },
   { a: 10.56, b: 10.74, k: 28, shutter: 270 }, { a: 13.85, b: 14.75, k: 20, shutter: 270 } ] };
 </script>
 </head><body>
@@ -81,15 +81,16 @@ window.KT_PLAN = { k: 10, shutter: 180, spans: [
     <div id="oCityW" class="a"><div id="oCity" class="mic gold" style="font-size:30px"></div>
       <div id="oCEdge" class="a edge" style="height:44px;opacity:0"></div></div>
     <div id="oPriceW" class="a"><div id="oPriceG"><div id="oPrice" class="beb gold" style="font-size:330px"></div></div></div>
-    <div id="oStripe" class="a stripe" style="left:90px;top:728px;width:722px"></div>
-    <div id="oDayW" class="a"><div id="oDay" class="beb white" style="font-size:60px"></div>
+    <div id="oStripeW" class="a"><div id="oStripe" class="a stripe" style="left:90px;top:728px;width:722px"></div></div>
+    <div id="oDayW" class="a"><div id="oDayL" class="beb white" style="font-size:60px"></div>
       <div id="oEdge" class="a edge" style="height:60px;opacity:0"></div></div>
+    <div id="oDayPW" class="a"><div id="oDayP" class="beb gold" style="font-size:60px"></div></div>
   </div>
 
   <!-- E. REQUIREMENTS -->
   <div id="req" class="a">
     <div id="rPanel" class="a panel" style="left:54px;top:280px;width:846px;height:292px"></div>
-    <div id="rStripeCap" class="a stripe" style="left:54px;top:280px;width:846px"></div>
+    <div id="rStripeCapW" class="a"><div id="rStripeCap" class="a stripe" style="left:54px;top:280px;width:846px"></div></div>
     <div id="rNeedW" class="a"><div class="mask"><div id="rNeed" class="mic gold" style="font-size:30px"></div></div></div>
     <div id="rLicW" class="a"><div class="mask"><div id="rLic" class="beb white" style="font-size:84px"></div></div></div>
     <div id="rAgeW" class="a"><div class="mask"><div id="rAge" class="beb white" style="font-size:84px"></div></div></div>
@@ -180,8 +181,8 @@ const hoursTxt = C.hours + ' HOURS';
 const T = {
   hTag: C.brand + ' · ' + C.city, hHead: C.model, hOffer: hoursTxt + ' · ' + C.price,
   lBrand: C.brand, lModel: C.model, lYear: C.year + ' · ' + C.cls,
-  oHours: hoursTxt, oCity: C.city, oDay: 'FULL DAY · ' + C.dayPrice,
-  rNeed: 'YOU NEED', rLic: "VALID DRIVER'S LICENSE", rAge: C.age + ' · INSURANCE',
+  oHours: hoursTxt, oCity: C.city, oDayL: 'FULL DAY ·',
+  rNeed: 'YOU NEED', rLic: "VALID DRIVER'S LICENSE", rAge: 'INSURANCE',
   eModel: C.brand + ' ' + C.model, eOffer: hoursTxt + ' · ' + C.city,
   eCta: C.cta, eContact: C.phone + ' · ' + C.url, eHandle: C.handle,
   eReq1: 'RENTERS ' + C.age + ' · ' + C.ageLine, eReq2: "VALID DRIVER'S LICENSE · INSURANCE",
@@ -213,9 +214,11 @@ const T = {
   place($('oHoursW'), 'Bebas', 120, T.oHours, 90, 305);
   { const m = ink('Michroma', 30, T.oCity); place($('oCityW'), 'Michroma', 30, T.oCity, 866 - m.w, 348); }
   place($('oPriceW'), 'Bebas', 330, C.price, 90, 430);
-  place($('oDayW'), 'Bebas', 60, T.oDay, 90, 752);
+  // review r2: only the label wipes; the figure arrives whole (a wipe showed partial figures like $1,7)
+  place($('oDayW'), 'Bebas', 60, T.oDayL, 90, 752);
+  { const m = ink('Bebas', 60, T.oDayL + ' '); place($('oDayPW'), 'Bebas', 60, C.dayPrice, 90 + m.w + 14, 752); }
   G.hours = setLine('oHours', T.oHours); $('oCity').textContent = T.oCity;
-  G.day = setLine('oDay', T.oDay, '#FBD101');
+  G.day = setLine('oDayL', T.oDayL, '#FBD101'); $('oDayP').textContent = C.dayPrice;
   G.slot = KT.slot($('oPrice'), C.price, { seed: 7, ghosts: 16 });
   const pg = G.slot.all.map(n => (n.firstChild && n.firstChild.firstChild && n.firstChild.firstChild.dataset &&
                                    n.firstChild.firstChild.dataset.true) ? n.firstChild.firstChild : n);
@@ -264,8 +267,9 @@ function trackLeft(g, t, st, dur, from, to, size) {
   const e = E.outExpo(P(t, st, st + dur)), extra = (from - to) * size * (1 - e);
   g.forEach((s, i) => { s.style.opacity = cl(P(t, st, st + dur) * 2.2); s.style.transform = `translateX(${i * extra}px)`; });
 }
-// review r1: rows carrying figures fade out over the 2 frames before a whip exit starts, so the vertical
-// smear can never turn a true figure into a readable wrong one ($1,299 read as $1,200 mid-whip)
+// review r1/r2: the text rows fade out as their panel starts its whip exit (from 1 frame before the whip to
+// 2.5 frames into it), so a vertical smear can never turn a true figure into a readable wrong one ($1,299 read
+// as $1,200 mid-whip) and no panel ever sits empty
 function figFade(ids, t, t0) {
   const o = 1 - E.inCubic(P(t, t0 - 2 / FPS, t0 + 0.02));
   for (const id of ids) $(id).style.opacity = o;
@@ -290,7 +294,7 @@ window.renderAt = function (t) {
                                                    hot: '#FFFFFF', width: 0.18 * G.head.W, angle: 108 }));
     const wh = (id, st) => KT.whip($(id), t, { start: st, dur: 0.16, dx: 0, dy: -300, ease: E.inCubic });
     const tw = g(6) - 0.17;
-    figFade(['hOfferM', 'hHead'], t, tw);
+    figFade(['hTag', 'hHead', 'hOfferM', 'hLogo'], t, tw + 1 / FPS);
     wh('hLogoW', tw); wh('hOfferW', tw + 0.01); wh('hHeadW', tw + 0.02); wh('hTagW', tw + 0.03);
     wh('hookPanel', tw + 0.03); wh('hookStripe', tw + 0.03);
   }
@@ -336,7 +340,7 @@ window.renderAt = function (t) {
     flipX(G.brand, t, s0 + 0.03, 0.03, 0.17, -100);
     KT.wipe($('lModelG'), t, { start: s0 + 0.06, dur: 0.26, dir: 'right', edge: $('lEdge'), ease: E.inOutCubic, pad: 4 });
     trackLeft(G.year, t, s0 + 0.12, 0.30, 0.6, 0.08, 30);
-    figFade(['lModelG', 'lYear'], t, tBx);
+    figFade(['lBrand', 'lModelG', 'lYear'], t, tBx + 1 / FPS);
     glintShadow($('lModelW'), KT.glint(G.model, t, { start: g(8), dur: 0.39, base: '#FFFFFF', warm: '#FFF6D0',
                                                      hot: '#FFFFFF', width: 0.18 * G.model.W, angle: 108 }));
     KT.whip($('labW'), t, { start: tBx, dur: 0.12, dx: 0, dy: -280, ease: E.inCubic });
@@ -357,19 +361,23 @@ window.renderAt = function (t) {
     R.forEach((r, i) => { const w = G.slot.reels[i].win; w.style.transformOrigin = '50% 62%';
       w.style.transform = `scale(${(1 + 0.04 * pulse(t, G.lands[i])).toFixed(5)})`; });
     KT.drawStripe($('oStripe'), t, { start: g(12), dur: 0.27 });
-    KT.wipe($('oDay'), t, { start: g(12) + 0.12, dur: 0.35, dir: 'right', edge: $('oEdge'), ease: E.inOutCubic, pad: 4 });
+    KT.wipe($('oDayL'), t, { start: g(12) + 0.12, dur: 0.30, dir: 'right', edge: $('oEdge'), ease: E.inOutCubic, pad: 4 });
+
     const gs = KT.glint(G.price, t, { start: g(14), dur: 0.46, base: '#FBD101', warm: '#FFE866', hot: '#FFFFFF',
                                       width: 0.18 * G.price.W, angle: 108 });
     $('oPriceG').style.filter = gs > 0 ? `drop-shadow(0 0 ${(22 * gs).toFixed(2)}px rgba(251,209,1,${(.45 * gs).toFixed(3)}))` : 'none';
     // exit: every row whips up, top first
     const wo = (id, d) => KT.whip($(id), t, { start: tOx + d, dur: 0.12, dx: 0, dy: -320, ease: E.inCubic });
-    figFade(['oHours', 'oPriceG', 'oDay'], t, tOx);
+    figFade(['oHours', 'oCity', 'oPriceG', 'oDayL', 'oDayP'], t, tOx + 1 / FPS);
+    // the day price arrives whole once its label has wiped in (on the inner element: KT.whip owns the wrapper)
+    $('oDayP').style.opacity = (+$('oDayP').style.opacity) * E.outCubic(P(t, g(12) + 0.40, g(12) + 0.40 + 3 / FPS));
     wo('oHoursW', 0); wo('oCityW', 0); wo('oPanel', 0.02); wo('oStripeCap', 0.02); wo('oPriceW', 0.01);
-    wo('oStripe', 0.02); wo('oDayW', 0.02);
+    wo('oStripeW', 0.02); wo('oDayW', 0.02); wo('oDayPW', 0.02);   // wrappers: KT.whip owns transform/opacity
   }
 
   // ================= E. REQUIREMENTS 8.423 - 10.73 =================
-  const tR = fT(TL.beats[11][0]) - 0.5 / FPS + 0.02, tRx = g(23) - 0.13;   // 7.962 s: right after the offer exits
+  // 8.00 s: one frame after the offer's whip has fully left, so no frame carries both panels (review r2)
+  const tR = fT(TL.beats[11][0]) + 0.5 / FPS, tRx = g(23) - 0.13;
   const reqOn = t >= tR && t < g(23);
   show('req', reqOn);
   if (reqOn) {
@@ -379,9 +387,9 @@ window.renderAt = function (t) {
     const rs = (gl, st) => KT.rise(gl, t, { start: st, stagger: 0.006, dur: 0.25, dy: 1.1, ease: E.outExpo });
     rs(G.need, tR + 0.05); rs(G.lic, tR + 0.12); rs(G.age, tR + 0.19);
     const wo = (id, d) => KT.whip($(id), t, { start: tRx + d, dur: 0.12, dx: 0, dy: -300, ease: E.inCubic });
-    figFade(['rAge'], t, tRx);
+    figFade(['rNeed', 'rLic', 'rAge'], t, tRx + 1 / FPS);
     wo('rNeedW', 0); wo('rLicW', 0.005); wo('rAgeW', 0.01);
-    wo('rPanel', 0.02); wo('rStripeCap', 0.02);
+    wo('rPanel', 0.02); wo('rStripeCapW', 0.02);
   }
 
   // ================= G. END CARD TE - 18.018 (TE = 13.962) =================
@@ -405,7 +413,7 @@ window.renderAt = function (t) {
 // QA helper: ink rects of every visible text line at time t (build.py checks x <= 907, 269 <= y <= 1536)
 window.inkAudit = function (t) {
   window.renderAt(t);
-  const ids = ['hTag', 'hHead', 'hOffer', 'hLogo', 'lBrand', 'lModel', 'lYear', 'oHours', 'oCity', 'oPrice', 'oDay',
+  const ids = ['hTag', 'hHead', 'hOffer', 'hLogo', 'lBrand', 'lModel', 'lYear', 'oHours', 'oCity', 'oPrice', 'oDayL', 'oDayP',
                'rNeed', 'rLic', 'rAge', 'eLogo', 'eModel', 'eOffer', 'eCta', 'eContact', 'eHandle', 'eReq1', 'eReq2'];
   const out = [];
   for (const id of ids) {

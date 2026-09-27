@@ -18,7 +18,7 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 WORK = os.path.join(HERE, '..', '.work')
 FACTOR = 4
 # (first, last) source frame of each shot that plays at a non-integer speed (see lib/edl.py)
-RANGES = [(0, 67), (380, 392), (253, 282), (204, 225), (173, 203), (369, 379), (79, 95)]
+RANGES = [(0, 67), (380, 392), (204, 225), (173, 203), (369, 379), (79, 95)]
 
 
 def path(f0, f1):

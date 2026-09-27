@@ -83,7 +83,12 @@ def _at(p, B):
 def sample(p, span, B):
     """shutter average over [p - span/2, p + span/2] source frames (a 180-degree look at the plate's speed)"""
     k = DENSE_K if dense_for(B) is not None else 1
-    n = int(math.ceil(span * k * 1.2))
+    if B.get('span_min'):
+        # review r2: on the badge shot minterpolate falls back to blending on the fast-moving truss, so its
+        # midpoint in-betweens are double exposures; averaging over a whole source frame on EVERY output frame
+        # gives the truss one even motion blur (no 12 Hz strobe) while the near-static badge stays sharp
+        span = max(span, B['span_min'])
+    n = int(math.ceil(span * k))
     if n <= 1:
         return _at(p, B)
     acc = None
@@ -188,10 +193,15 @@ _yy = np.arange(fx.H, dtype=np.float32)[:, None, None]
 # graduated ND on the sky, lighter since review r1 (0.40 -> 0.28): with the sky chroma lift below it keeps the
 # roof shot's sky blue instead of slate, so the finale sits in the same world as the cobalt desert day before it
 GRAD = (1 - 0.28 * (1 - _smooth(_yy, 150, 900))).astype(np.float32)
-# end-card ND, sky only (x the matte): 45 % down in the band behind the top block and the price (y 250-700,
-# feathered 150-250 and 700-780), eased in over the end-card hit, so the gold price reads by luminance, not hue
-ECARD_BAND = (_smooth(_yy, 150, 250) * (1 - _smooth(_yy, 700, 780))).astype(np.float32)
+# end-card ND on the sky: up to 45 % down behind the top block and the price, eased in over the end-card hit, so
+# the gold price reads by luminance, not hue. Review r2: it ramps in from above the frame (the sky stays
+# monotonic: no light stripe over the logo) and fades out 760-820 at the ridge line; it is gated by a GROWN
+# matte (mnd below), so the thin haze rim the type matte calls "hill" is darkened with the sky, not left as a
+# bright outline along the ridge. Chroma is lifted with it, so the held sky stays blue, not slate.
+ECARD_BAND = (_smooth(_yy, -200, 420) * (1 - _smooth(_yy, 760, 820))).astype(np.float32)
 SKY_CHROMA = 0.45
+ECARD_CHROMA = 0.5
+CLUSTER = (270, 940, 740, 1095)   # badge shot: the instrument cluster (speed / limit readouts) is defocused
 SWEEP = (13.62, 14.05)          # light sweep across the car body, inside the tape stop and its freeze
 CAR_BELOW = _smooth(_yy, 780, 830).astype(np.float32)   # the sweep lights the car body only, never hills or sky
 
@@ -223,6 +233,32 @@ def orb_at(p, s, cx, cy):
     return cx + (ox - cx) * s, cy + (oy - cy) * s, r * s
 
 
+def push(img, s, cx=fx.W / 2, cy=fx.H / 2):
+    """scale about (cx, cy) with a Lanczos resample of the matching source box (review r2: fx.transform's
+    bilinear resample softened every pushed frame, and it skips scale 1.0, so frame 0 -- the poster -- was
+    crisper than the frames after it). Scale 1.0 is an exact identity here too."""
+    W, H = fx.W, fx.H
+    box = (cx - cx / s, cy - cy / s, cx + (W - cx) / s, cy + (H - cy) / s)
+    return np.stack([np.asarray(Image.fromarray(np.ascontiguousarray(img[..., c]), 'F')
+                                .resize((W, H), Image.LANCZOS, box=box), np.float32) for c in range(3)], -1)
+
+
+def blur_box(img, X0, Y0, X1, Y1, sigma=9, darken=1.0, fe=18.0):
+    """defocus a rounded rect with a wide feather, so it reads as depth of field, not a patch"""
+    m = 40
+    cx0, cy0, cx1, cy1 = int(max(X0 - m, 0)), int(max(Y0 - m, 0)), int(min(X1 + m, fx.W)), int(min(Y1 + m, fx.H))
+    crop = img[cy0:cy1, cx0:cx1]
+    bl = fx.gauss(fx.gauss(crop, sigma), sigma) * darken
+    yy, xx = np.mgrid[cy0:cy1, cx0:cx1].astype(np.float32)
+    r = 8.0
+    qx = np.maximum(np.maximum(X0 + r - xx, xx - (X1 - r)), 0)
+    qy = np.maximum(np.maximum(Y0 + r - yy, yy - (Y1 - r)), 0)
+    a = np.clip(0.5 - (np.hypot(qx, qy) - r) / fe, 0, 1)[..., None]
+    out = img.copy()
+    out[cy0:cy1, cx0:cx1] = crop * (1 - a) + bl * a
+    return out
+
+
 def roof_push(i):
     B = edl.beat(16)
     u = (i - B['i0']) / max(edl.NF - 1 - B['i0'], 1)
@@ -238,17 +274,24 @@ def base(i):
     img = sample(row['p'], row['span'], B)
     if B['id'] == 11:
         img = blur_plate(img, row['p'], row['span'])
-    matte = None
+    if B['id'] == 4:
+        # review r2: the instrument cluster reads 33-41 MPH next to a posted 25 on the frames the label does not
+        # cover; defocus it (it is not the subject; the badge is)
+        img = blur_box(img, *CLUSTER)
+    matte = mnd = None
     if B.get('roof'):
         s = roof_push(i)
         cx, cy = edl.PUSH_ROOF_C
-        img = fx.transform(img, scale=s, cx=cx, cy=cy)
+        img = push(img, s, cx, cy)
         matte = sky.matte(img, orb=orb_at(row['p'], s, cx, cy))
+        mnd = np.clip(2.5 * fx.gauss(matte[..., None], 10), 0, 1)    # grown matte, for grading the sky only
     img = grade_for(B)(img)
+    if B.get('lift'):
+        img = np.clip(img, 0, None) ** B['lift']                     # review r2: shadow lift on the darkest plates
     if matte is not None:
         # sky chroma lift (review r1: the roof shot's hazy sky went slate under the ND)
         l = fx.luma(img)[..., None]
-        img = l + (img - l) * (1 + SKY_CHROMA * matte[..., None])
+        img = l + (img - l) * (1 + SKY_CHROMA * mnd)
     if B.get('streak'):
         img = fx.streaks(img, **B['streak'])
     if B.get('roof'):
@@ -259,7 +302,9 @@ def base(i):
         t = row['t']
         ke = fx.smootherstep((t - (edl.T_END - 0.12)) / 0.37)
         if ke > 0:
-            img = img * (1 - 0.45 * ke * ECARD_BAND * matte[..., None])
+            img = img * (1 - 0.45 * ke * ECARD_BAND * mnd)
+            l = fx.luma(img)[..., None]
+            img = l + (img - l) * (1 + ECARD_CHROMA * ke * ECARD_BAND * mnd)
         img = light_sweep(img, matte, t)
         # tape stop: the picture darkens and desaturates as the music winds down, recovering into the end card
         k = fx.smootherstep((t - edl.T_STOP0) / (edl.T_END - edl.T_STOP0)) * (1 - fx.smootherstep((t - edl.T_END) / 0.35))
@@ -269,7 +314,7 @@ def base(i):
     if B['id'] in (1, 2, 3):
         a, b, s0, s1 = edl.PUSH_HOOK
         u = min(max((row['t'] - a) / (b - a), 0), 1)
-        img = fx.transform(img, scale=s0 + (s1 - s0) * (1 - (1 - u) ** 3))
+        img = push(img, s0 + (s1 - s0) * (1 - (1 - u) ** 3))
     return img, matte
 
 
@@ -279,11 +324,11 @@ def impact(img, k, strength, seed):
     k 9-14 instead of stepping to 1.0 on k 14. The vendored fx.py stays identical to the approved copy."""
     P = 48
     pad = np.pad(img, ((P, P), (P, P), (0, 0)), mode='reflect')
-    out = fx.impact(pad, k, strength=strength, seed=seed)[P:-P, P:-P]
+    out = fx.impact(pad, k, strength=strength, seed=seed)
     if 9 <= k < 14:                                   # fx.impact holds max(punch, 1.035) until k 14: ease it
         s = (1 + 0.035 * (1 - fx.smootherstep((k - 9) / 5))) / 1.035
-        out = fx.transform(out, scale=s)
-    return out
+        out = fx.transform(out, scale=s)             # before the crop, so the pad (not a mirror) fills the edges
+    return out[P:-P, P:-P]
 
 
 def finish_fx(img, i):

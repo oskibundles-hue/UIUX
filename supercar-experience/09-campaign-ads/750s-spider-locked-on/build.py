@@ -15,7 +15,7 @@ Stages
   front   front.html via lib/kcapture.js (sub-frame motion blur) -> .work/front/*.png
   mid     mid.html (behind-the-car type) -> .work/mid/*.png, roof shot only
   audio   audio/bed.py -> audio/bed.wav (the clip's own music + accents, -14 LUFS)
-  finish  plate, mid x sky matte, the crash punch, vignette, front, grain -> x264: exports/*_master.mp4 (CRF 16) and the
+  finish  plate, vignette, mid x sky matte, the crash punch, front, grain -> x264: exports/*_master.mp4 (CRF 16) and the
           two-pass ~11.5 Mb/s delivery copy exports/*.mp4, both with the bed muxed as-is
   qa      stills at the check frames, contact sheet, loudness, probe, safe-zone ink audit -> exports/qa/
 
@@ -174,6 +174,8 @@ def over(base, layer_png, matte_png=None):
 
 def composite(i):
     base = np.asarray(Image.open(os.path.join(WORK, 'plate', f'{i:05d}.png')).convert('RGB'), np.float32) / 255
+    # the vignette goes on the picture only, so the brand gold (front and behind-car type) arrives exact
+    base = fx.vignette(base, 0.36)
     if i >= ROOF0:
         base = over(base, os.path.join(WORK, 'mid', f'{i:05d}.png'), os.path.join(WORK, 'matte', f'{i:05d}.png'))
     k = i - edl.CRASH_F
@@ -183,8 +185,6 @@ def composite(i):
         base = fx.transform(base, scale=1 + edl.CRASH_PUNCH * (1 - (1 - (1 - u) ** 3)))
         if k == 0:
             base = base * (1 + edl.CRASH_LIFT)
-    # the vignette goes on the picture, not on the graphics, so the brand gold arrives exact (review r1 nit)
-    base = fx.vignette(base, 0.36)
     base = over(base, os.path.join(WORK, 'front', f'{i:05d}.png'))
     base = fx.grain(base, i, amount=0.02)
     return fx.to_u8(base)

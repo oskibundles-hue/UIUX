@@ -25,7 +25,7 @@ html,body{margin:0;padding:0;background:transparent;width:1080px;height:1920px;o
 const g = k => TL.g0 + k * TL.beat;
 window.KT_PLAN = { k: 8, shutter: 180, spans: [
   { a: 11.10, b: 11.95, k: 20, shutter: 270 }, { a: 12.08, b: 12.40, k: 12, shutter: 180 },
-  { a: 13.48, b: 13.95, k: 20, shutter: 270 }, { a: 13.95, b: 14.50, k: 16, shutter: 180 } ] };
+  { a: 13.48, b: 13.90, k: 20, shutter: 270 }, { a: 13.90, b: 14.50, k: 16, shutter: 180 } ] };
 </script>
 </head><body>
 <div id="stage" class="a" style="width:1080px;height:1920px;transform-origin:540px 1130px">
@@ -68,7 +68,9 @@ const HALO = 'drop-shadow(0 0 3px rgba(0,0,0,.6)) drop-shadow(0 0 22px rgba(0,0,
   G.make = KT.measure(KT.split($('make'), { perspective: 0 }));
   G.giant = KT.measure(KT.split($('giant'), { perspective: 0 }));
   G.price = KT.measure(KT.split($('price'), { perspective: 0 }));
-  $('makeW').style.filter = 'drop-shadow(0 0 2px rgba(0,0,0,.55)) drop-shadow(0 0 10px rgba(0,0,0,.45))';
+  // review r2: a stronger close halo, and 750S in white (thin gold Michroma fell under 3:1 on the lifted sky)
+  $('makeW').style.filter = 'drop-shadow(0 0 3px rgba(0,0,0,.8)) drop-shadow(0 0 16px rgba(0,0,0,.65))';
+  G.make.forEach((s, i) => { if (i >= C.brand.length) s.style.color = '#FFFFFF'; });
   window.renderAt(0);
   window.__ktReady = true;
 })();
@@ -100,7 +102,8 @@ window.renderAt = function (t) {
   const n = G.giant.length;
   G.giant.forEach((s, i) => {
     const q = P(t, g(24) + i * 0.058, g(24) + i * 0.058 + 0.55), e = E.outExpo(q);
-    const k = E.inCubic(P(t, TS + (n - 1 - i) * 0.03, TS + (n - 1 - i) * 0.03 + 0.34));
+    // review r2: the sink finishes by 13.88 s, before the price starts, so no frame double-exposes the two words
+    const k = E.inCubic(P(t, TS + (n - 1 - i) * 0.02, TS + (n - 1 - i) * 0.02 + 0.28));
     s.style.opacity = q <= 0 || k >= 1 ? 0 : 1;
     s.style.transform = `translateY(${((1 - e) * H * 1.35 + k * H * 1.6).toFixed(2)}px)`;
   });
@@ -109,10 +112,12 @@ window.renderAt = function (t) {
   // the price rises from behind the car on the end-card hit and stays; two glints keep the hold alive.
   // review r1: it rises as one word, slower and shorter (outCubic over 0.5 s, 0.6 of its size) with a 180-degree
   // shutter, so the vertical smear stays small and a 9 can never close into a 0 on the way up
+  // review r2: it starts after SPIDER has gone, travels 0.35 of its size, and fades in over its first 3-4
+  // frames, so the comma (which rises past the left buttress tip) never reads as a decimal point
   G.price.forEach(s => {
-    const q = P(t, TE - 0.06, TE + 0.44), e = E.outCubic(q);
-    s.style.opacity = q <= 0 ? 0 : 1;
-    s.style.transform = `translateY(${((1 - e) * 236 * 0.6).toFixed(2)}px)`;
+    const q = P(t, TE + 0.03, TE + 0.45), e = E.outCubic(q);
+    s.style.opacity = E.outCubic(P(t, TE + 0.03, TE + 0.17));
+    s.style.transform = `translateY(${((1 - e) * 236 * 0.35).toFixed(2)}px)`;
   });
   const gl = t < TE + 2 ? KT.glint(G.price, t, { start: TE + 0.9, dur: 0.5, base: '#FBD101', warm: '#FFE866', hot: '#FFFFFF', width: 0.2 * G.price.W, angle: 108 })
                         : KT.glint(G.price, t, { start: TE + 2.6, dur: 0.5, base: '#FBD101', warm: '#FFE866', hot: '#FFFFFF', width: 0.2 * G.price.W, angle: 108 });

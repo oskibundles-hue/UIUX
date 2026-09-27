@@ -73,6 +73,7 @@ def matte(img, orb=None):
     # residual + soft alpha at low res for the topology
     pred_s = _design(xx * DS + DS / 2.0, yy * DS + DS / 2.0) @ coef
     d_s = _flare_is_sky(small, pred_s, xx * DS + DS / 2.0, yy * DS + DS / 2.0, np.linalg.norm(small - pred_s, axis=-1), orb)
+    d_s = np.where((yy * DS < 360) & (small[..., 2] > small[..., 0] + 0.02), 0.0, d_s)   # zenith, as at full res
     sky_s = d_s < (LO + HI) / 2
     top = np.zeros_like(sky_s)
     top[0] = True
