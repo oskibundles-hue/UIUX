@@ -12,14 +12,14 @@ components. **Status: not reviewed yet.**
 
 | File | What |
 |---|---|
-| `… - 1080x1920.mp4` | **the master.** H.264 High, yuv420p bt709, 1080x1920, 29.97 fps, two-pass 10.95 Mb/s, AAC-LC 48 kHz stereo 256k, +faststart, **238.8 MB**. 5230 frames = 174.508 s; video / audio tracks 174.508 / 174.507 s. Loudness on the mp4 (ffmpeg loudnorm): **-14.11 LUFS integrated, -1.82 dBTP true peak**, LRA 3.0; the last 101 ms decode to digital silence |
-| `… - NO MUSIC - 1080x1920.mp4` | the same picture stream with dialog + nat + SFX only (for a trending sound in Instagram): 227.4 MiB, -14.06 LUFS, -1.89 dBTP |
-| `… - PREVIEW 720x1280.mp4` | phone preview, two-pass 1.15 Mb/s, AAC 160k (the mix 0.5 dB lower so AAC holds the true peak): **27.5 MiB** (< 30 MiB), -14.63 LUFS, -2.05 dBTP |
+| `… - 1080x1920.mp4` | **the master.** H.264 High, yuv420p bt709, 1080x1920, 29.97 fps, x264 medium CRF 17.3 (VBV 16M / 22M) 11.16 Mb/s, AAC-LC 48 kHz stereo 256k, +faststart, **243.4 MB**. 5230 frames = 174.508 s; video / audio tracks 174.508 / 174.507 s. Loudness on the mp4 (ffmpeg loudnorm): **-14.11 LUFS integrated, -1.82 dBTP true peak**, LRA 3.0; the last 101 ms decode to digital silence |
+| `… - NO MUSIC - 1080x1920.mp4` | the same video stream (stream copy) with dialog + nat + SFX only (for a trending sound in Instagram): 231.8 MiB, -14.06 LUFS, -1.89 dBTP |
+| `… - PREVIEW 720x1280.mp4` | phone preview, x264 medium CRF 28.5 (VBV 2M) from the same composite pass, AAC 160k (the mix 0.5 dB lower so AAC holds the true peak): **27.7 MiB** (< 30 MiB), -14.63 LUFS, -2.05 dBTP |
 | `… - music-stem.wav` | the music alone, exactly as it sits in the master (ducked, at the master's gain), 24-bit 48 kHz, 50 MB |
 | `poster.jpg`, `contact-sheet.jpg` | frame 0 (the complete hook: the story preview) and one frame every 2 s |
 | `qa/` | first / middle / last frame of every EDL beat (`beat_*`), in / middle / out of every graphic (`el_*`), `beats-sheet.jpg`, `elements-sheet.jpg`, `shots-sheet.jpg` (every shot's first / middle / last frame: the grade check), the tracker sheets `track_*.jpg`, `caption-swaps-sheet.jpg` (the last frame of every caption page and the first of the next: one page per frame, 64 page changes), `swapcheck.json` and `qa_summary.json` |
 
-No `_DELIVERY` copy: the master is already 10.95 Mb/s, under the 11.5 Mb/s delivery rate.
+No `_DELIVERY` copy: the master is already 11.16 Mb/s, under the 11.5 Mb/s delivery rate.
 
 ## What is on screen
 
@@ -156,22 +156,70 @@ numpy), the last 60 ms exact zeros. On the delivered master: -14.11 LUFS integra
   CH1 16:10:24, CH2 18:46:41, CH3 18:53:08, CH4 19:13:07, CH5 20:12:35, CH6 22:45:29, CH7 23:33:26; dinner 21:39:36;
   montage 23:00:08 / 23:07:43 / 23:12:43 / 23:13:45 / 23:19:04 / 23:20:06.
 
-## How to rebuild
+## Render and review loop
+
+The first version took about 6 hours from brief to approval. About 2 h 45 min of that went to the first render, which included writing the code, and each of the 4 review fixes then cost a full 25 to 35 minute re-render. The loop is now built so that **a problem is caught before a render, a
+reviewable cut takes minutes, and a fix only re-renders what it touches.**
 
 ```bash
-./render.sh                          # = python3 build.py: everything
-python3 build.py --stage join,prep,front,compose,qa    # after a layer or transition change
-python3 build.py --stage prep,audio,compose,qa         # after a sound change (music slot, levels)
-python3 build.py --stills 0,776,4200                   # composite single output frames -> .work/stills/
+./render.sh --draft          # 1. review cut: gates, then a 540x960 draft -> exports/draft/  (1 min 48 s warm, 6 min 40 s the first time)
+                             #    read exports/qa/gates.md: errors, automatic fixes, warnings, human checks
+                             # 2. fix config.json, run --draft again (only the changed frames are re-drawn)
+./render.sh                  # 3. full quality -> exports/ (every stage cached; stops on a gate error unless --force)
+                             # 4. a review fix: edit config.json, ./render.sh again (a lock-on fix: about 4.5 min, see the timings)
+python3 lib/cmpmaster.py --approved <dir>   # optional: compare a new render with an approved one
 ```
+
+**What is cached and how** (all under `.work/`; nothing to clear by hand; `--force-front` recaptures the whole layer):
+
+| Stage | Re-runs when | How |
+|---|---|---|
+| shots | a shot's EDL line, reframe, look or mezzanine changes | per-shot signature (`.work/shots/NN.mov.sig`) |
+| track | that track's box or its shot changes | per-track signature in `lib/data/tracks.json` |
+| join | any shot, transition, blur or slam punch changes | `.work/stage_join.sig` |
+| audio | the mix inputs change (config audio/music/master/sfx, the SFX cue list, mezzanines, code) | `.work/stage_audio.sig`; inside it the dialog and nat buses are cached (`.work/cache/`) |
+| front | a frame's layer state changes | per-frame hash of every visible component's DOM (styles, text, SVG) at every motion-blur sample + the page CSS, fonts, logos and capture code (`.work/front/index.json`); identical frames are captured once |
+| compose | a 120-frame segment's layer frames or plate GOPs change | per-segment hash (layer frame hashes + plate packet MD5s of the GOPs it decodes from + encoder settings); changed segments are re-encoded, then all are joined by stream copy and muxed with the AAC (encoded once per mix) |
+
+**Gates** (`lib/gates.py`, stage `gates`, before any capture; report `exports/qa/gates.md`):
+- **Lock-ons:** each lock is checked frame by frame against its tracked box while it is on screen. If less than 40 % of the box is in frame, or the tracker loses the car, the lock is released automatically: a convoy hop becomes a LOCK LOST that snaps to the next car once that car is in frame, and a single lock exits early. Replayed on the reviewed CH2 lineup, the gate finds exactly the three drifts from the review and releases them at 32.37, 35.97 and 37.91 s (the hand fix was 32.30, 35.86 and 37.80). On the current cut it changes nothing.
+- **Swap check:** no frame shows two caption pages, and no frame's motion-blur samples mix two different texts.
+- **Shot scan:** every rendered shot is sampled at 10 fps for black, near-constant and lens-blocked stretches (detail collapses against the shot's own median while a large area goes flat). It finds the arm over the lens in the EDL's original shot 17 (59.79 to 60.69 s) and nothing in the current cut.
+- **Captions:** each caption piece must be within 0.2 s of the speech.
+- **Loudness:** -14 LUFS ±0.5 and true peak at or below -1.5 dBTP, checked on the mix and again on the delivered files.
+- **Quote cards:** every card is listed for a human to confirm the speaker, because the transcripts have no speaker labels. A card labelled GUEST is flagged as a warning.
+
+Errors stop a full render. Automatic fixes, warnings and human checks are listed in `gates.md`.
+
+**Draft:** the layer is captured at half size with one sample per frame (no motion blur) into `.work/front_draft/`, over a half-size copy of the plate that is made once per plate, then encoded with x264 veryfast. The full-quality caches are not touched.
+
+**Capture determinism:** the kit's split glyphs are composited layers (`will-change: transform`), and Chromium keeps a layer's raster state from the frames it drew before. As a result, the same frame used to come out slightly different depending on which frames a capture process had drawn first. Text edges moved by up to 210/255, and the approved layer only reproduces with the original 3-process interleave. `lib/kcap2.js` commits an empty frame before every frame, so each frame is drawn from the same state in any order and any process. Across 100 frames in shuffled order, one frame differed by 1 level. Without this, re-capturing only the changed frames would not match a full run.
+
+**Timings on this build** (4 shared cores; the "before" numbers come from this build's review re-renders on 27 Sept, and the
+"now" numbers were measured on the same cut and config; seconds):
+
+| Stage | Before | Now: first full render | Now: a lock-on fix | Why |
+|---|---|---|---|---|
+| audio (mix) | 252 | 153 | 153 (skipped, 0 s, when the cues do not move) | the two masters are limited in parallel; a redundant limiter pass is skipped; dialog and nat buses are cached; output bit-identical |
+| gates | none | 8 (58 the first time: the shot scan) | 7 | new |
+| layer capture | 460-482 (every change = all 5230 frames) | 498 (hash 14 + capture 484) | 31 (83 changed frames) | per-frame state hash; order-independent capture |
+| compose (master, no-music, preview) | 818 (pass 1 219 + pass 2 456 + no-music remux and two-pass preview 143) | 394 | 43 (2 of 44 segments + mux) | single pass, vignette gain map computed once, filter threads, preview from the same pass, per-segment cache |
+| QA | 94 | 36 | 38 | the master is decoded once for every still and sheet; loudness runs in parallel |
+| join | 347 whenever run | cached | cached | stage signature |
+| **total** | **about 27 min** (a review fix cost 25-35 min) | **about 18 min** | **about 4.5 min** (about 2 min when the fix does not move a sound cue) | |
+
+The fix measured is the CH2 GT3 RS hop moved by 0.07 s (`.work/timings_demo_fix.json`); it ran at 6 min 16 s with the old
+serial mix (258 s), the audio row is the new mix code on the same input. The draft is 540x960 with no motion blur.
 
 Needs Python 3 with numpy and Pillow, Node 22 with Playwright at `/opt/node22/lib/node_modules/playwright` (Chromium is
 preinstalled; never run `playwright install`), and the static ffmpeg (`config.json` `paths.ffmpeg`, or `FFMPEG=`). Inputs: the
 EDL, captions and mezzanines in the session scratchpad (`config.json` `paths`).
 
-Stages (cached in `.work/`): `shots` (every EDL shot graded and reframed from the mezzanine) → `track` (lock-ons and plates on
-the rendered shots) → `join` (transitions, plate blurs, punches → `.work/plate.mov`) → `prep` (scene, clock, SFX cues) → `audio`
-(music bed if no track is supplied, the mix) → `front` (the layer, frame by frame) → `compose` (exports) → `qa`.
+Stages: `shots` (every EDL shot graded and reframed from the mezzanine) → `track` (lock-ons and plates on the rendered shots)
+→ `join` (transitions, plate blurs, punches → `.work/plate.mov`) → `prep` (scene after the lock-on gate, clock, SFX cues) →
+`audio` (music bed if no track is supplied, the mix) → `gates` → `front` (the layer, changed frames only) → `compose`
+(changed segments, then the exports) → `qa`. `python3 build.py --stage compose,qa` runs a subset; `--stills 0,776,4200`
+composites single frames into `.work/stills/`.
 
 ## Files
 
@@ -180,11 +228,14 @@ the rendered shots) → `join` (transitions, plate blurs, punches → `.work/pla
 | `config.json` | paths, per-shot reframe / look / ramp, source slips, transitions, plate blurs, clocks, tracks, music slot, audio levels, every on-screen element |
 | `cue.md` | every element and transition with its in / out and how it was placed |
 | `story.html` | the layer page: `window.renderAt(t)`, a pure function of t |
+| `lib/kcap2.js`, `lib/accum2.py` | the layer capture: per-frame state hashes, order-independent frames, premultiplied motion-blur average (replaces `kcapture.js` / `accum.py` here) |
+| `lib/gates.py` | the pre-render gates (lock-ons, shot scan, captions, loudness, quote cards) |
+| `lib/cmpmaster.py` | compares a render with an approved one (layer frames, SSIM / PSNR, audio) |
 | `lib/sekit.js` | the vlog kit's component library, copied from `../vlog-kit/lib/sekit.js` (27 Sept, 03:27). Six changes, each marked `rally-v2 copy`: more internal helpers are exported (`SEK.helpers`); an accented capital (HURACÁN) sits on the H cap height instead of pushing its word down; the G1 slam exit lifts 0.35 cap and fades (it used to travel 1.2 caps up, out of the safe area); in the C1 hop, a LOCK LOST phase whose next car is not tracked yet (still out of frame) holds on the last car's rect instead of hiding the whole lock; the F1 quote card takes an optional small header tab (FAVOURITE OF THE FLEET); hard swaps land on a frame boundary: a caption page is on screen for whole frames and the next page's pre-roll never overlaps it (the kit showed both pages for up to two frames at each page change), and a gap of 3 frames or less between two pages is closed (no one-frame blink), and captions, the convoy label's text swaps (make → LOCK LOST → make) and the clock's HH:MM are drawn on the frame time, so no motion-blurred frame mixes two texts. `story.html`: the camera clock of a motion-blur sample is read from its own frame, so the first frame of a new shot never mixes two clocks |
 | `lib/v2kit.js` | this vlog's own components (hook, CTA chip, SAFELY. slam, route card / route panel, place tag, quote wall, car lock, end card) |
 | `lib/plate.py` | the picture edit and grade |
 | `lib/music.py`, `lib/mix.py` | the placeholder music bed and the mix |
-| `lib/kinetic.js`, `lib/kcapture.js`, `lib/accum.py`, `lib/track.py`, `lib/track_mid.py`, `lib/trackqa.py`, `lib/fx.py`, `lib/synth.py` | copied unchanged from the kit / showcase / v1 |
+| `lib/kinetic.js`, `lib/kcapture.js` and `lib/accum.py` (kept, no longer used), `lib/track.py`, `lib/track_mid.py`, `lib/trackqa.py`, `lib/fx.py`, `lib/synth.py` | copied unchanged from the kit / showcase / v1 |
 | `lib/srcsheet.py`, `lib/shotview.py`, `lib/gridview.py` | planning and QA sheets |
 | `lib/swapcheck.js` | QA (run by the qa stage): evaluates every frame at each of its motion-blur samples and fails a frame that shows two caption pages at once or whose samples disagree on the caption page, the convoy label text or the clock; result in `exports/qa/swapcheck.json` and `qa_summary.json` `hard_swaps` |
 | `lib/data/tracks.json` | every tracked box (output frames, output px) |
@@ -210,7 +261,7 @@ the rendered shots) → `join` (transitions, plate blurs, punches → `.work/pla
 8. **Nat audio** of five B-roll clips muted because someone else talks over the dialog in them.
 9. **Accents** are 45 % of the unducked music, then a further 6 dB down under speech (so ticks never step on words).
 10. **CH6 route** is a horizontal strip in the top band (the kit's corner panel would cover the guide's and the guests' faces).
-11. **_DELIVERY copy:** not made: the master is 10.95 Mb/s, already under the 11.5 Mb/s delivery rate.
+11. **_DELIVERY copy:** not made: the master is 11.16 Mb/s, already under the 11.5 Mb/s delivery rate.
 12. **Shot 17 (59.79 s, guests signing in) is slipped:** the EDL's 0015 340.0–342.4 s opens on an arm and a ring over the
     lens for 1.2 s. It now plays the clean rest of the take, 341.36–343.16 s, at 0.75x (59.94p source, so the slow motion is
     smooth); its nat is slipped with it. `config.json` `slips` holds it; delete the entry to go back to the EDL.

@@ -5,3 +5,4 @@ exports/*.wav
 audio/*.wav
 __pycache__/
 lib/__pycache__/
+exports/draft/
