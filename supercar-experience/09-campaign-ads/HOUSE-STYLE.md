@@ -190,6 +190,7 @@ Keeping them separate is deliberate: a test on one axis stays interpretable.
 | 2026-09-26 | Polished STO flash special (HUD lock-on) | "These animated graphics are way better... keep these up. I wanna implement these in my vlogs too" — the animated HUD level is the bar; vlog versions to follow. Also: "Keep music as well if the videos ever have any" |
 | 2026-09-26 | GT3 RS showcase "LOCKED ON" (tracked lock-on, type behind the car, kinetic price reel, clip music) | "Approved" — the showcase techniques are signed off for SE ads |
 | 2026-09-26 | GT3 RS showcase "LOCKED ON" | "That is amazing make that a standard" — `locked-on` is now THE standard for SE ads (section at the top) |
+| 2026-09-27 | Sep 15 rally vlog with the Locked-On layer (`10-vlog-locked-on/2026-09-15-rally/`) | "That was great save this" — saved to Dropbox `/Supercar Experience/05 Vlogs/`. Next ask: rebuild the vlog from the raw footage with vlog-specific Locked-On variations, keeping the SE banner on the side, and catch the key moments (team dinner, guests on how they enjoyed it, leading the convoy on the freeway) |
 
 Add a row when the shop reacts to something. This file is the reason a future ad
 does not have to re-litigate a settled look.
