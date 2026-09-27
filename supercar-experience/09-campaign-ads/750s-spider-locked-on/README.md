@@ -18,16 +18,17 @@ price rises from behind the car for the end card.
 | Line | Source |
 |---|---|
 | MCLAREN · 750S SPIDER · 2026 · EXOTIC | supercarexp.vip/cars/2026-mclaren-750s-spider-las-vegas, read 27 Sept 2026 ("2026 McLaren 750S Spider", listed under Exotic) |
-| LAS VEGAS | same listing (Las Vegas is the only location it lists) |
+| LAS VEGAS | the same listing is the Las Vegas one. SE also lists a 750S Spider in Scottsdale (Full Day $1,599, no 5-hour rate), and both listings play this same reel. The ad uses the Las Vegas rates and says LAS VEGAS |
 | 5 HOURS · $1,299 (hook, slot reel, end card) | same listing: "5-Hour Rental $1,299" |
 | FULL DAY · $1,799 | same listing: "Full Day Rental $1,799" |
-| YOU NEED · VALID DRIVER'S LICENSE · INSURANCE | supercarexp.vip: "Valid driver's license and valid matching insurance required"; the approved showcase's wording |
+| YOU NEED · VALID DRIVER'S LICENSE · INSURANCE | supercarexp.vip booking steps: "Must Have a Valid Drivers License", "Must Have Valid Matching Insurance" (the 750S listing adds "Full coverage insurance required"). The on-screen wording is the approved showcase's |
 | 25+ · AGES 21–24 WITH $299 UNDERAGE FEE / RENTERS 25+ · … | supercarexp.vip, 27 Sept 2026: "Renter Must Be 25+ (Ages 21–24 With $299 Underage Fee)". Omarie, 26 Sept (rally vlog): include the age requirement as the site words it |
 | TEXT OR DM TO BOOK · (725) 425-3583 · SUPERCAREXP.VIP · @SUPERCAR_EXPERIENCE_ | the approved GT3 RS showcase (Omarie, 26 Sept: the site-wide text line on Las Vegas footage, TEXT not CALL, and the handle). The site still shows "Questions? Text Us (725) 425-3583" on 27 Sept |
 | SPIDER (giant, behind the car) | the model's name. It is set as the roof stows, which is what makes it a Spider |
 | SE lockups | `../../02-logos/png/sce-primary-horizontal--white.png` |
 
-Every figure is in `config.json`, with its source. The ad shows no horsepower, 0-60, top speed, discount,
+All on-screen copy scores 5/5 CLEAN in SlopMonster (`deslop.py` from the SE branch, run on every line; 68
+words). Every figure is in `config.json`, with its source. The ad shows no horsepower, 0-60, top speed, discount,
 "save $X", testimonial or countdown. The site's standing promo ("50% Off 2nd Day or 3rd Day Free") is left off
 because the approved ads carry no discount unless one is given for the ad. The slot reels only ever show
 blurred intermediates, and they land on the true digits.
@@ -40,10 +41,46 @@ These were the open decisions in the brief. Each default follows the newest appr
 |---|---|---|
 | Car | 2026 McLaren 750S Spider | a priority car; its footage is the listing's own reel; it has no LOCKED ON ad yet (the GT3 RS has one) |
 | Offer | the site's standing rates: 5 hours $1,299, full day $1,799 | the 26 Sept flash offers are expired and must not be reposted; a new promo needs Omarie's figures |
-| City and phone | Las Vegas; the text line (725) 425-3583, TEXT OR DM TO BOOK | the approved LV showcase uses this exact line after fix r2; the listing is LV only |
+| City and phone | Las Vegas; the text line (725) 425-3583, TEXT OR DM TO BOOK | the approved LV showcase uses this exact line after fix r2. The 5-hour rate exists only on the LV listing |
 | Age line | 25+ with the site's $299 underage-fee wording | Omarie's 26 Sept decision on the rally vlog (newer than the 21+ on the older ads) |
 | Music | the clip's own music | house rule 7 and Omarie ("Keep music as well"). **Its rights are not verified: confirm before any paid use** |
+| Grade | one day grade across all shots | the standard says "one night grade"; this clip is sunlit desert, and a night look would read fake and break the sky key. The point of the rule (one cohesive look) is kept |
 | Delivery | the files are sent to the requester only | nothing is posted and nothing is uploaded to Dropbox without a per-action go |
+
+**Questions for Omarie before this runs:**
+1. The footage is Arizona desert (saguaros at 1.5-2.9 s, 7.0-7.5 s and 8.4-9.3 s), and the ad says LAS VEGAS.
+   The site's own Las Vegas listing uses this reel, so the ad makes no false claim. A local viewer may still
+   notice. Is that OK? If not, those shots can be swapped for saguaro-free takes from the same clip.
+2. Is the clip's music cleared for paid use? It came with SE's footage, but the track is not identified.
+3. Should INSURANCE read FULL COVERAGE INSURANCE, to match the listing's wording?
+
+## Sound
+
+The bed is the clip's own music from orig 0.000, with no edit and no time-stretch. The picture is cut to its
+130 BPM grid, and the accents sit at 45 % under it (`audio/bed.py`, `audio/bed_sync.json`). **Nobody has
+listened to it yet; all audio checks were numeric** (loudness, peaks, band energy, the tape-stop pocket).
+Before posting, Omarie should listen on a phone speaker and on headphones, mainly to the drop at 4.73 s, the
+tape stop at 13.50 s and the end-card hit at 13.96 s. The master is -14 LUFS with a -2 dBTP limiter; the
+delivered AAC measures about -14.1 LUFS and -1.8 dBTP.
+
+## Review round 1 (four lenses: claims, brand, legibility, craft; each finding re-checked by a skeptic)
+
+| Finding | Fix |
+|---|---|
+| Blocking: the vertical whip-outs smeared true figures into readable wrong ones ($1,299 read as $1,200, the expired GT3 RS flash figure; 750S read as 700S) | Figure rows fade out over the 2 frames before every whip exit (`figFade` in `front.html`); the end-card price rises as one word, slower and shorter, at a 180-degree shutter. Every exit frame is now in the QA stills |
+| Blocking: the crash hit punched the plate after the sky matte was cut, so SPIDER slid over the car, then snapped back | The crash punch now runs on plate + matted type together (`build.py` composite), easing to 1.0 with no step |
+| Blocking: the sun's flare orb keyed as car where it touched the left buttress and cut a disc out of the P | Inside the orb's disc, anything not darker than the sky model is sky (`lib/sky.py`) |
+| Blocking: 0.5x and ramped shots blended two frames, so every other frame was a double exposure | Every shot at a non-integer speed now samples 4x optical-flow in-betweens (`lib/dense.py`, one pass per shot) |
+| RGB split drew a lime border on the drop frames; the impact's scale floor stepped to 1.0 on one frame | The impact runs on a reflect-padded frame and its floor eases out (`lib/plate.py`); `fx.py` stays identical to the approved copy |
+| Badge callout hung over the black gap; its lines held under 1.2 s | The callout exits before the gap; the brackets lock in 5 frames and the lines set earlier (holds 1.2-1.4 s) |
+| Headlight brackets half under the offer panel | Clamped to the lamp below the panel |
+| Stripe ran through the price's comma; FULL DAY too small | Stripe moved to y 728; FULL DAY · $1,799 in Bebas 60 |
+| Requirements panel: 13 words in 1.7 s | Now 7 words (the fee wording stays on the end card) held about 2.6 s, starting on the text-free rear chase |
+| End-card gold price and top block on a pale sky (1.5:1) | A sky-only ND behind the top block and the price, a sky chroma lift, and close dark halos under the type |
+| The finale read as a different, slate-grey look | The grad ND is lighter (0.28) and the roof shot's sky gets a chroma lift, so it stays blue |
+| Light sweep reached the car late and lit the hills | It is gated to the car body below the horizon and runs 13.62-14.05 s |
+| Tape stop never fell into a pocket (a sub rumble held to the hit) | 40 Hz high-pass, an 80 ms fade, and the track returns exactly on the hit |
+| Nits | The vignette no longer dims the graphics; the end card has the 78/22 stripe; the requirement lines are larger and spaced; the matte band edges are feathered; the source quotes are verbatim |
 
 ## Change a figure
 

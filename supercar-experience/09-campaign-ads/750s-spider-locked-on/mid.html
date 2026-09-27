@@ -25,7 +25,7 @@ html,body{margin:0;padding:0;background:transparent;width:1080px;height:1920px;o
 const g = k => TL.g0 + k * TL.beat;
 window.KT_PLAN = { k: 8, shutter: 180, spans: [
   { a: 11.10, b: 11.95, k: 20, shutter: 270 }, { a: 12.08, b: 12.40, k: 12, shutter: 180 },
-  { a: 13.48, b: 14.50, k: 20, shutter: 270 } ] };
+  { a: 13.48, b: 13.95, k: 20, shutter: 270 }, { a: 13.95, b: 14.50, k: 16, shutter: 180 } ] };
 </script>
 </head><body>
 <div id="stage" class="a" style="width:1080px;height:1920px;transform-origin:540px 1130px">
@@ -54,6 +54,7 @@ function placeBase(w, fam, size, text, x, base) {  // ink left at x, baseline at
   w.style.left = (x + m.left) + 'px'; w.style.top = (base - hl - m.fA) + 'px';
 }
 const GIANT_BASE = 690, PRICE_BASE = 676;
+const HALO = 'drop-shadow(0 0 3px rgba(0,0,0,.6)) drop-shadow(0 0 22px rgba(0,0,0,.45))';
 
 (async () => {
   await document.fonts.load('100px Bebas'); await document.fonts.load('40px Michroma'); await KT.ready();
@@ -67,6 +68,7 @@ const GIANT_BASE = 690, PRICE_BASE = 676;
   G.make = KT.measure(KT.split($('make'), { perspective: 0 }));
   G.giant = KT.measure(KT.split($('giant'), { perspective: 0 }));
   G.price = KT.measure(KT.split($('price'), { perspective: 0 }));
+  $('makeW').style.filter = 'drop-shadow(0 0 2px rgba(0,0,0,.55)) drop-shadow(0 0 10px rgba(0,0,0,.45))';
   window.renderAt(0);
   window.__ktReady = true;
 })();
@@ -104,15 +106,18 @@ window.renderAt = function (t) {
   });
   KT.glint(G.giant, t, { start: TC, dur: 0.5, base: '#FFFFFF', warm: '#FFF1B8', hot: '#FFFFFF', width: 0.16 * G.giant.W, angle: 108 });
 
-  // the price rises from behind the car on the end-card hit and stays; two glints keep the hold alive
-  G.price.forEach((s, i) => {
-    const q = P(t, TE - 0.06 + i * 0.03, TE - 0.06 + i * 0.03 + 0.45), e = E.outExpo(q);
+  // the price rises from behind the car on the end-card hit and stays; two glints keep the hold alive.
+  // review r1: it rises as one word, slower and shorter (outCubic over 0.5 s, 0.6 of its size) with a 180-degree
+  // shutter, so the vertical smear stays small and a 9 can never close into a 0 on the way up
+  G.price.forEach(s => {
+    const q = P(t, TE - 0.06, TE + 0.44), e = E.outCubic(q);
     s.style.opacity = q <= 0 ? 0 : 1;
-    s.style.transform = `translateY(${((1 - e) * 236 * 0.9).toFixed(2)}px)`;
+    s.style.transform = `translateY(${((1 - e) * 236 * 0.6).toFixed(2)}px)`;
   });
   const gl = t < TE + 2 ? KT.glint(G.price, t, { start: TE + 0.9, dur: 0.5, base: '#FBD101', warm: '#FFE866', hot: '#FFFFFF', width: 0.2 * G.price.W, angle: 108 })
                         : KT.glint(G.price, t, { start: TE + 2.6, dur: 0.5, base: '#FBD101', warm: '#FFE866', hot: '#FFFFFF', width: 0.2 * G.price.W, angle: 108 });
-  $('priceW').style.filter = gl > 0 ? `drop-shadow(0 0 ${(18 * gl).toFixed(2)}px rgba(251,209,1,${(.4 * gl).toFixed(3)}))` : 'none';
+  // review r1: a close dark halo under the gold (the matte keeps it off the car), plus the glint's gold bloom
+  $('priceW').style.filter = HALO + (gl > 0 ? ` drop-shadow(0 0 ${(18 * gl).toFixed(2)}px rgba(251,209,1,${(.4 * gl).toFixed(3)}))` : '');
 };
 
 window.inkAudit = function (t) {

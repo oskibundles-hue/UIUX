@@ -38,7 +38,7 @@ html,body{margin:0;padding:0;background:transparent;width:1080px;height:1920px;o
 const g = k => TL.g0 + k * TL.beat;
 window.KT_PLAN = { k: 10, shutter: 180, spans: [
   { a: 2.68, b: 2.90, k: 28, shutter: 270 }, { a: 2.86, b: 3.20, k: 28, shutter: 270 },
-  { a: 4.42, b: 4.62, k: 28, shutter: 270 }, { a: 4.72, b: 5.72, k: 28, shutter: 270 },
+  { a: 4.46, b: 4.63, k: 28, shutter: 270 }, { a: 4.72, b: 5.72, k: 28, shutter: 270 },
   { a: 6.55, b: 7.06, k: 20, shutter: 270 }, { a: 7.80, b: 7.97, k: 28, shutter: 270 },
   { a: 10.56, b: 10.74, k: 28, shutter: 270 }, { a: 13.85, b: 14.75, k: 20, shutter: 270 } ] };
 </script>
@@ -81,34 +81,33 @@ window.KT_PLAN = { k: 10, shutter: 180, spans: [
     <div id="oCityW" class="a"><div id="oCity" class="mic gold" style="font-size:30px"></div>
       <div id="oCEdge" class="a edge" style="height:44px;opacity:0"></div></div>
     <div id="oPriceW" class="a"><div id="oPriceG"><div id="oPrice" class="beb gold" style="font-size:330px"></div></div></div>
-    <div id="oStripe" class="a stripe" style="left:90px;top:704px;width:722px"></div>
-    <div id="oDayW" class="a"><div id="oDay" class="mic white" style="font-size:36px"></div>
-      <div id="oEdge" class="a edge" style="height:52px;opacity:0"></div></div>
+    <div id="oStripe" class="a stripe" style="left:90px;top:728px;width:722px"></div>
+    <div id="oDayW" class="a"><div id="oDay" class="beb white" style="font-size:60px"></div>
+      <div id="oEdge" class="a edge" style="height:60px;opacity:0"></div></div>
   </div>
 
   <!-- E. REQUIREMENTS -->
   <div id="req" class="a">
-    <div id="rPanel" class="a panel" style="left:54px;top:280px;width:846px;height:372px"></div>
+    <div id="rPanel" class="a panel" style="left:54px;top:280px;width:846px;height:292px"></div>
     <div id="rStripeCap" class="a stripe" style="left:54px;top:280px;width:846px"></div>
     <div id="rNeedW" class="a"><div class="mask"><div id="rNeed" class="mic gold" style="font-size:30px"></div></div></div>
     <div id="rLicW" class="a"><div class="mask"><div id="rLic" class="beb white" style="font-size:84px"></div></div></div>
     <div id="rAgeW" class="a"><div class="mask"><div id="rAge" class="beb white" style="font-size:84px"></div></div></div>
-    <div id="rStripe" class="a" style="left:90px;top:556px;width:520px;height:6px"></div>
-    <div id="rFeeW" class="a"><div class="mask"><div id="rFee" class="beb white" style="font-size:46px"></div></div></div>
   </div>
 
   <!-- G. END CARD (front; the giant price behind the car is mid.html) -->
-  <div id="botScrim" class="a" style="top:1100px;width:1080px;height:820px;background:linear-gradient(180deg,rgba(0,0,0,0) 0,rgba(0,0,0,.72) 190px,rgba(0,0,0,.8) 820px)"></div>
+  <div id="botScrim" class="a" style="top:1050px;width:1080px;height:870px;background:linear-gradient(180deg,rgba(0,0,0,0) 0,rgba(0,0,0,.74) 180px,rgba(0,0,0,.82) 870px)"></div>
   <div id="end" class="a">
     <div id="eLogoW" class="a" style="left:62px;top:282px"><img id="eLogo" src="../../02-logos/png/sce-primary-horizontal--white.png" style="width:360px;display:block">
       <div id="eEdge" class="a edge" style="height:64px;top:-6px;opacity:0"></div></div>
     <div id="eModelW" class="a"><div id="eModel" class="mic white" style="font-size:30px"></div></div>
     <div id="eOfferW" class="a"><div class="mask"><div id="eOffer" class="beb white" style="font-size:64px"></div></div></div>
+    <div id="eStripe" class="a stripe" style="left:62px;top:1224px;width:520px;height:6px"></div>
     <div id="eCtaW" class="a"><div class="mask"><div id="eCta" class="beb white" style="font-size:80px"></div></div></div>
     <div id="eContactW" class="a"><div id="eContact" class="beb white" style="font-size:60px"></div></div>
     <div id="eHandleW" class="a"><div id="eHandle" class="beb white" style="font-size:60px"></div></div>
-    <div id="eReq1W" class="a"><div id="eReq1" class="beb white" style="font-size:40px"></div></div>
-    <div id="eReq2W" class="a"><div id="eReq2" class="beb white" style="font-size:40px"></div></div>
+    <div id="eReq1W" class="a"><div id="eReq1" class="beb white" style="font-size:44px"></div></div>
+    <div id="eReq2W" class="a"><div id="eReq2" class="beb white" style="font-size:44px"></div></div>
   </div>
 </div>
 
@@ -182,7 +181,7 @@ const T = {
   hTag: C.brand + ' · ' + C.city, hHead: C.model, hOffer: hoursTxt + ' · ' + C.price,
   lBrand: C.brand, lModel: C.model, lYear: C.year + ' · ' + C.cls,
   oHours: hoursTxt, oCity: C.city, oDay: 'FULL DAY · ' + C.dayPrice,
-  rNeed: 'YOU NEED', rLic: "VALID DRIVER'S LICENSE", rAge: C.age + ' · INSURANCE', rFee: C.ageLine,
+  rNeed: 'YOU NEED', rLic: "VALID DRIVER'S LICENSE", rAge: C.age + ' · INSURANCE',
   eModel: C.brand + ' ' + C.model, eOffer: hoursTxt + ' · ' + C.city,
   eCta: C.cta, eContact: C.phone + ' · ' + C.url, eHandle: C.handle,
   eReq1: 'RENTERS ' + C.age + ' · ' + C.ageLine, eReq2: "VALID DRIVER'S LICENSE · INSURANCE",
@@ -214,7 +213,7 @@ const T = {
   place($('oHoursW'), 'Bebas', 120, T.oHours, 90, 305);
   { const m = ink('Michroma', 30, T.oCity); place($('oCityW'), 'Michroma', 30, T.oCity, 866 - m.w, 348); }
   place($('oPriceW'), 'Bebas', 330, C.price, 90, 430);
-  place($('oDayW'), 'Michroma', 36, T.oDay, 90, 736);
+  place($('oDayW'), 'Bebas', 60, T.oDay, 90, 752);
   G.hours = setLine('oHours', T.oHours); $('oCity').textContent = T.oCity;
   G.day = setLine('oDay', T.oDay, '#FBD101');
   G.slot = KT.slot($('oPrice'), C.price, { seed: 7, ghosts: 16 });
@@ -228,18 +227,21 @@ const T = {
   place($('rNeedW'), 'Michroma', 30, T.rNeed, 90, 314);
   place($('rLicW'), 'Bebas', 84, T.rLic, 90, 360);
   place($('rAgeW'), 'Bebas', 84, T.rAge, 90, 458);
-  place($('rFeeW'), 'Bebas', 46, T.rFee, 90, 582);
   G.need = setLine('rNeed', T.rNeed); G.lic = setLine('rLic', T.rLic);
-  G.age = setLine('rAge', T.rAge, '#FBD101'); G.fee = setLine('rFee', T.rFee);
-  KT.stripe($('rStripeCap')); KT.stripe($('rStripe'));
+  G.age = setLine('rAge', T.rAge, '#FBD101');
+  KT.stripe($('rStripeCap'));
   // G. end card: top block over the (graded-down) sky, bottom stack over the car's tail (scrim)
   place($('eModelW'), 'Michroma', 30, T.eModel, 62, 384);
   place($('eOfferW'), 'Bebas', 64, T.eOffer, 62, 428);
-  place($('eCtaW'), 'Bebas', 80, T.eCta, 62, 1270);
-  place($('eContactW'), 'Bebas', 60, T.eContact, 62, 1352);
-  place($('eHandleW'), 'Bebas', 60, T.eHandle, 62, 1408);
-  place($('eReq1W'), 'Bebas', 40, T.eReq1, 62, 1466);
-  place($('eReq2W'), 'Bebas', 40, T.eReq2, 62, 1504);
+  place($('eCtaW'), 'Bebas', 80, T.eCta, 62, 1246);
+  place($('eContactW'), 'Bebas', 60, T.eContact, 62, 1328);
+  place($('eHandleW'), 'Bebas', 60, T.eHandle, 62, 1384);
+  place($('eReq1W'), 'Bebas', 44, T.eReq1, 62, 1440);
+  place($('eReq2W'), 'Bebas', 44, T.eReq2, 62, 1486);
+  KT.stripe($('eStripe'));
+  // review r1: the top block sits on the roof shot's sky; a close dark halo lifts it to >= 3:1 at phone size
+  const halo = 'drop-shadow(0 0 2px rgba(0,0,0,.55)) drop-shadow(0 0 10px rgba(0,0,0,.45))';
+  for (const id of ['eLogoW', 'eModelW', 'eOfferW']) $(id).style.filter = halo;
   G.eModel = setLine('eModel', T.eModel);
   G.eModel.forEach((s, i) => { if (i < C.brand.length) s.style.color = '#FBD101'; });
   G.eOffer = setLine('eOffer', T.eOffer, '#FBD101');
@@ -262,6 +264,12 @@ function trackLeft(g, t, st, dur, from, to, size) {
   const e = E.outExpo(P(t, st, st + dur)), extra = (from - to) * size * (1 - e);
   g.forEach((s, i) => { s.style.opacity = cl(P(t, st, st + dur) * 2.2); s.style.transform = `translateX(${i * extra}px)`; });
 }
+// review r1: rows carrying figures fade out over the 2 frames before a whip exit starts, so the vertical
+// smear can never turn a true figure into a readable wrong one ($1,299 read as $1,200 mid-whip)
+function figFade(ids, t, t0) {
+  const o = 1 - E.inCubic(P(t, t0 - 2 / FPS, t0 + 0.02));
+  for (const id of ids) $(id).style.opacity = o;
+}
 const pulse = (t, tl) => { const q = (t - tl) / (4 / FPS); return q > 0 && q < 1 ? Math.sin(Math.PI * q) : 0; };
 const glintShadow = (el, s) => { el.style.filter = s > 0 ? `drop-shadow(0 0 ${(6 * s).toFixed(2)}px rgba(255,255,255,.35))` : 'none'; };
 const fadeUp = (id, t, a, b, dy) => { const q = E.outCubic(P(t, a, b)); $(id).style.opacity = q;
@@ -282,29 +290,32 @@ window.renderAt = function (t) {
                                                    hot: '#FFFFFF', width: 0.18 * G.head.W, angle: 108 }));
     const wh = (id, st) => KT.whip($(id), t, { start: st, dur: 0.16, dx: 0, dy: -300, ease: E.inCubic });
     const tw = g(6) - 0.17;
+    figFade(['hOfferM', 'hHead'], t, tw);
     wh('hLogoW', tw); wh('hOfferW', tw + 0.01); wh('hHeadW', tw + 0.02); wh('hTagW', tw + 0.03);
     wh('hookPanel', tw + 0.03); wh('hookStripe', tw + 0.03);
   }
 
   // ================= B/D. BRACKETS =================
   const [iB0, iB1] = TL.beats[4], [iH0, iH1] = TL.beats[8];
-  const tB0 = fT(iB0) - 0.5 / FPS, tBx = g(9) + 0.32;                  // badge shot starts; callout exits 4.45
+  // review r1: the callout exits before the black gap (the whip ends 4.609, before frame 111's shutter opens)
+  const tB0 = fT(iB0) - 0.5 / FPS, tBx = fT(iB1) - 0.5 / FPS - 0.12;
   const tH0 = fT(iH0) - 0.5 / FPS, tH1 = fT(iH1) - 0.5 / FPS;
   let rect = null, op = 0, leader = null, lab = null;
-  if (t >= tB0 && t < tBx + 0.12) {
+  if (t >= tB0 && t < tBx + 0.12 && t < fT(iB1) - 0.5 / FPS) {
     const p = srcPos(Math.max(t, tB0), 4), box = TrackLock.at(TRACKS.badge, p / FPS), tgt = bracketRect(box, 0.12);
     const off = { x: -260, y: 2000, w: 420, h: 420 };                   // fly in from off-frame, bottom left
-    const a = E.outExpo(cl((t - tB0) / (7 / FPS)));
+    const a = E.outExpo(cl((t - tB0) / (5 / FPS)));
     rect = lerpR(off, tgt, a); op = 1;
     const kc = E.inCubic(P(t, tBx, tBx + 0.12));
     rect = shrink(rect, kc); op = 1 - kc * 0.7;
     lab = TrackLock.follow(TRACKS.badge, p / FPS, { x: 54, y: 930 }, { x: .25, y: .25 }, 8);
     lab = { x: lab.x, y: lab.y, w: 640, h: 240 };
     const j = (t - tB0) * FPS;
-    leader = { k: P(t, tBx, tBx + 0.12) > 0 ? 0 : (j - 5) / 6, y: lab.y + 240 };
+    leader = { k: P(t, tBx, tBx + 0.12) > 0 ? 0 : (j - 3) / 4, y: lab.y + 240 };
   }
   if (t >= tH0 && t < tH1) {
     const p = srcPos(t, 8), box = TrackLock.at(TRACKS.headlight, p / FPS), tgt = bracketRect(box, 0.08);
+    { const y0 = Math.max(tgt.y, 836); tgt.h -= y0 - tgt.y; tgt.y = y0; }
     const j = (t - tH0) * FPS, a = E.outExpo(cl(j / 5));
     const src = { x: tgt.x - tgt.w * 0.35, y: tgt.y - tgt.h * 0.35, w: tgt.w * 1.7, h: tgt.h * 1.7 };
     rect = lerpR(src, tgt, a); op = cl(a * 3);
@@ -314,17 +325,18 @@ window.renderAt = function (t) {
   drawBrackets(rect, op, leader);
 
   // ================= B. BADGE LABEL =================
-  const labOn = !!lab && t >= tB0 + 0.1 && t < tBx + 0.13;
+  const labOn = !!lab && t >= tB0 + 0.08 && t < tBx + 0.13 && t < fT(iB1) - 0.5 / FPS;
   show('labW', labOn);
   if (labOn) {
     const L = $('lab'); L.style.left = lab.x + 'px'; L.style.top = lab.y + 'px';
-    const s0 = tB0 + 0.12;
-    const rv = E.outExpo(P(t, s0, s0 + 0.3));
+    const s0 = tB0 + 0.10;
+    const rv = E.outExpo(P(t, s0, s0 + 0.28));
     $('lPanel').style.clipPath = `inset(0 ${(100 - 100 * rv).toFixed(3)}% 0 0)`;
-    KT.drawStripe($('lStripe'), t, { start: s0, dur: 0.30 });
-    flipX(G.brand, t, s0 + 0.05, 0.03, 0.17, -100);
-    KT.wipe($('lModelG'), t, { start: s0 + 0.17, dur: 0.36, dir: 'right', edge: $('lEdge'), ease: E.inOutCubic, pad: 4 });
-    trackLeft(G.year, t, s0 + 0.35, 0.30, 0.6, 0.08, 30);
+    KT.drawStripe($('lStripe'), t, { start: s0, dur: 0.28 });
+    flipX(G.brand, t, s0 + 0.03, 0.03, 0.17, -100);
+    KT.wipe($('lModelG'), t, { start: s0 + 0.06, dur: 0.26, dir: 'right', edge: $('lEdge'), ease: E.inOutCubic, pad: 4 });
+    trackLeft(G.year, t, s0 + 0.12, 0.30, 0.6, 0.08, 30);
+    figFade(['lModelG', 'lYear'], t, tBx);
     glintShadow($('lModelW'), KT.glint(G.model, t, { start: g(8), dur: 0.39, base: '#FFFFFF', warm: '#FFF6D0',
                                                      hot: '#FFFFFF', width: 0.18 * G.model.W, angle: 108 }));
     KT.whip($('labW'), t, { start: tBx, dur: 0.12, dx: 0, dy: -280, ease: E.inCubic });
@@ -351,12 +363,13 @@ window.renderAt = function (t) {
     $('oPriceG').style.filter = gs > 0 ? `drop-shadow(0 0 ${(22 * gs).toFixed(2)}px rgba(251,209,1,${(.45 * gs).toFixed(3)}))` : 'none';
     // exit: every row whips up, top first
     const wo = (id, d) => KT.whip($(id), t, { start: tOx + d, dur: 0.12, dx: 0, dy: -320, ease: E.inCubic });
+    figFade(['oHours', 'oPriceG', 'oDay'], t, tOx);
     wo('oHoursW', 0); wo('oCityW', 0); wo('oPanel', 0.02); wo('oStripeCap', 0.02); wo('oPriceW', 0.01);
     wo('oStripe', 0.02); wo('oDayW', 0.02);
   }
 
   // ================= E. REQUIREMENTS 8.423 - 10.73 =================
-  const tR = fT(TL.beats[12][0]) - 0.5 / FPS, tRx = g(23) - 0.13;
+  const tR = fT(TL.beats[11][0]) - 0.5 / FPS + 0.02, tRx = g(23) - 0.13;   // 7.962 s: right after the offer exits
   const reqOn = t >= tR && t < g(23);
   show('req', reqOn);
   if (reqOn) {
@@ -365,10 +378,9 @@ window.renderAt = function (t) {
     KT.drawStripe($('rStripeCap'), t, { start: tR, dur: 0.3 });
     const rs = (gl, st) => KT.rise(gl, t, { start: st, stagger: 0.006, dur: 0.25, dy: 1.1, ease: E.outExpo });
     rs(G.need, tR + 0.05); rs(G.lic, tR + 0.12); rs(G.age, tR + 0.19);
-    KT.drawStripe($('rStripe'), t, { start: tR + 0.24, dur: 0.30 });
-    rs(G.fee, tR + 0.30);
     const wo = (id, d) => KT.whip($(id), t, { start: tRx + d, dur: 0.12, dx: 0, dy: -300, ease: E.inCubic });
-    wo('rNeedW', 0); wo('rLicW', 0.005); wo('rAgeW', 0.01); wo('rFeeW', 0.015); wo('rStripe', 0.015);
+    figFade(['rAge'], t, tRx);
+    wo('rNeedW', 0); wo('rLicW', 0.005); wo('rAgeW', 0.01);
     wo('rPanel', 0.02); wo('rStripeCap', 0.02);
   }
 
@@ -381,6 +393,7 @@ window.renderAt = function (t) {
     KT.wipe($('eLogo'), t, { start: TE + 0.214, dur: 0.257, dir: 'right', edge: $('eEdge'), ease: E.inOutCubic, pad: 2 });
     trackLeft(G.eModel, t, TE + 0.14, 0.30, 0.6, 0.08, 30);
     KT.rise(G.eOffer, t, { start: TE + 0.07, stagger: 0.012, dur: 0.35, dy: 1.1, ease: E.outExpo });
+    KT.drawStripe($('eStripe'), t, { start: TE + 0.26, dur: 0.3 });
     KT.rise(G.eCta, t, { start: TE + 0.32, stagger: 0.012, dur: 0.35, dy: 1.1, ease: E.outExpo });
     fadeUp('eContactW', t, TE + 0.43, TE + 0.67, 12);
     fadeUp('eHandleW', t, TE + 0.50, TE + 0.72, 12);
@@ -393,7 +406,7 @@ window.renderAt = function (t) {
 window.inkAudit = function (t) {
   window.renderAt(t);
   const ids = ['hTag', 'hHead', 'hOffer', 'hLogo', 'lBrand', 'lModel', 'lYear', 'oHours', 'oCity', 'oPrice', 'oDay',
-               'rNeed', 'rLic', 'rAge', 'rFee', 'eLogo', 'eModel', 'eOffer', 'eCta', 'eContact', 'eHandle', 'eReq1', 'eReq2'];
+               'rNeed', 'rLic', 'rAge', 'eLogo', 'eModel', 'eOffer', 'eCta', 'eContact', 'eHandle', 'eReq1', 'eReq2'];
   const out = [];
   for (const id of ids) {
     const el = $(id); let vis = true, n = el;

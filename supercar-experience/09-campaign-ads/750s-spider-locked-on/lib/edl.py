@@ -101,8 +101,11 @@ WHIPS = [(BEATS[6]['i0'], 'left'), (BEATS[11]['i0'], 'up'), (BEATS[15]['i0'], 'l
 WHIP_K = 3
 
 # impacts: (frame, strength, seed, frames)
-# the crash is a light hit (0.12): a stronger flash washes the white SPIDER out of the sky for a frame
-IMPACTS = [(BEATS[5]['i0'], 1.0, 5, 16), (fr(T_CRASH), 0.12, 9, 10)]
+IMPACTS = [(BEATS[5]['i0'], 1.0, 5, 16)]
+# the crash (12.115 s) is NOT a plate impact (review r1: punching the plate after the sky matte was cut slid the
+# behind-car type over the car for 10 frames, then snapped back). build.py applies it to the composite of plate +
+# matted type instead: a zoom punch 1.035 -> 1.0 over CRASH_N frames (outCubic) and a one-frame 5 % luma lift.
+CRASH_F, CRASH_N, CRASH_PUNCH, CRASH_LIFT = fr(T_CRASH), 10, 0.035, 0.05
 
 # leak bursts: (centre s, peak, side, sigma frames)
 LEAKS = [(g(2), 0.18, 'right', 3.0), (g(6), 0.22, 'left', 3.5), (g(14), 0.22, 'right', 3.0),

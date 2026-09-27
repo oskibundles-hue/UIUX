@@ -15,8 +15,8 @@ from where it would be); the final fade 17.35 -> 17.95 s to digital silence.
 
 ACCENTS (synth.py, the approved generators), each set to 45 % (-7 dB) of the music's RMS over the accent's
 own energetic span (end-card impact 50 %, tape stop = the music itself at its own level):
-  impact_open 0.000 | whooshes: hook exit 2.73, badge exit 4.47, whip 5.654, offer exit 7.84, whip 8.423,
-  whip 10.731, SPIDER rise 11.19 | lock-on ticks: badge acquire 2.90 / lock 3.17, headlight 6.58 / 6.79,
+  impact_open 0.000 | whooshes: hook exit 2.73, badge exit 4.50, whip 5.654, offer exit 7.84, whip 8.423,
+  whip 10.731, SPIDER rise 11.24 | lock-on ticks: badge acquire 2.86 / lock 3.07, headlight 6.58 / 6.79,
   reel lands 5.192 5.308 5.423 5.654 | noise riser 3.23 -> 4.60 (into the black gap) | DROP impact 4.731 |
   crash impact 12.115 | tape stop 13.500 -> 13.962 | reversed cymbal swell into 13.962 | END CARD impact 13.962
 
@@ -47,8 +47,10 @@ N_OUT = int(round(edl.NF / edl.FPS * SR))
 g = edl.g
 T_DROP, T_CRASH, T_STOP0, T_END = edl.T_DROP, edl.T_CRASH, edl.T_STOP0, edl.T_END
 FADE0, FADE1 = 17.35, 17.95
-WHOOSH = [g(6) - 0.15, g(9) + 0.36, g(12), g(17) - 0.12, g(18), g(23), g(24) + 0.05]
-TICKS = [(2.90, 0.8), (3.17, 1.0), (6.58, 0.8), (6.79, 1.0),
+# the badge callout whips out at 4.489 (front.html tBx) and is gone before the black gap
+WHOOSH = [g(6) - 0.15, 4.50, g(12), g(17) - 0.12, g(18), g(23), g(24) + 0.05]
+# badge brackets: acquire on the cut (2.857), locked 5 frames later (3.066); headlight 6.58 / 6.79
+TICKS = [(2.86, 0.8), (3.07, 1.0), (6.58, 0.8), (6.79, 1.0),
          (g(11), 0.8), (g(11) + edl.BEAT / 4, 0.8), (g(11) + edl.BEAT / 2, 0.8), (g(12), 1.0)]
 RISER = (3.23, 4.60)
 ACC_RATIO = 0.45
@@ -81,7 +83,7 @@ def loudness(ff, path):
 def music_gain_curve(n):
     t = np.arange(n) / SR
     a = np.clip((t - T_STOP0) / 0.06, 0, 1)
-    b = np.clip((t - (T_END - 0.05)) / 0.05, 0, 1)
+    b = np.clip((t - (T_END - 0.008)) / 0.008, 0, 1)      # the track is back exactly on the hit
     g_ = db(-80.0 * a * (1 - b))
     g_ *= np.clip(t / 0.008, 0, 1)
     f = np.clip((t - FADE0) / (FADE1 - FADE0), 0, 1)
@@ -124,8 +126,11 @@ def tape_stop(music, t0, t1):
     L = b - a
     u = np.arange(L) / L
     x = S.varispeed(music[a:a + L].copy(), (1 - u) ** 1.3)
-    x = S.fft_filter(x, hi=9000)
-    x *= np.minimum(1, (L - np.arange(L)) / n_of(0.02))[:, None]
+    # review r1: high-pass at 40 Hz (the varispeed tail held a DC-like sub rumble to the end-card hit) and an
+    # 80 ms equal-power fade, so the stop falls into a real pocket before the hit
+    x = S.fft_filter(x, lo=40, hi=9000)
+    fo = np.clip((L - np.arange(L)) / n_of(0.08), 0, 1)
+    x *= np.sin(fo * np.pi / 2)[:, None] ** 2
     return x
 
 

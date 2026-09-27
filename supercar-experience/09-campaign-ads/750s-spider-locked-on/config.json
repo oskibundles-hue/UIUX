@@ -15,9 +15,9 @@
   "age": "25+",
   "ageLine": "AGES 21–24 WITH $299 UNDERAGE FEE",
   "sources": {
-    "brand, model, year, cls, city, price, dayPrice": "supercarexp.vip/cars/2026-mclaren-750s-spider-las-vegas, read 27 Sept 2026: '2026 McLaren 750S Spider', Las Vegas, Exotic; 3-Hour Rental $999, 5-Hour Rental $1,299, Full Day Rental $1,799",
-    "phone, cta, handle, url": "approved LOCKED ON GT3 RS showcase (Omarie, 26 Sept 2026): the site-wide text line (725) 425-3583 with TEXT OR DM TO BOOK; the site shows the same line ('Questions? Text Us') on 27 Sept 2026",
-    "age, ageLine": "supercarexp.vip, 27 Sept 2026: 'Renter Must Be 25+ (Ages 21-24 With $299 Underage Fee)'; Omarie, 26 Sept 2026 (rally vlog): include the age requirement as the site words it",
-    "license, insurance": "supercarexp.vip: 'Valid driver's license and valid matching insurance required'; approved wording VALID DRIVER'S LICENSE / INSURANCE"
+    "brand, model, year, cls, city, price, dayPrice": "supercarexp.vip/cars/2026-mclaren-750s-spider-las-vegas, read 27 Sept 2026: '2026 McLaren 750S Spider', Las Vegas, Exotic; 3-Hour Rental $999, 5-Hour Rental $1,299, Full Day Rental $1,799. (A Scottsdale listing, /cars/2026-mclaren-750s-spider-scottsdale, shows Full Day Rental $1,599 and no 5-hour rate; this ad uses the Las Vegas rates only.)",
+    "phone, cta, handle, url": "approved LOCKED ON GT3 RS showcase (Omarie, 26 Sept 2026): the site-wide text line (725) 425-3583 with TEXT OR DM TO BOOK; the site header shows 'Questions? Text Us (725) 425-3583' on 27 Sept 2026",
+    "age, ageLine": "supercarexp.vip home page, 27 Sept 2026: 'Renter Must Be 25+ (Ages 21–24 With $299 Underage Fee)'; Omarie, 26 Sept 2026 (rally vlog): include the age requirement as the site words it",
+    "license, insurance": "supercarexp.vip home page booking steps, 27 Sept 2026: 'Must Have a Valid Drivers License', 'Must Have Valid Matching Insurance'; the 750S listing: 'Full coverage insurance required'. On screen: the approved showcase's wording VALID DRIVER'S LICENSE / INSURANCE"
   }
 }

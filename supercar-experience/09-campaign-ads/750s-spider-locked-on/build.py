@@ -9,13 +9,13 @@ build.py -- one-command build of "ROOF DOWN" (McLaren 750S Spider, LOCKED ON sta
 
 Stages
   source  decode SCE_McLaren-750S_no-branding.mov in frame order (never -ss) -> .work/src.npy (1080x1920)
-  dense   optical-flow in-betweens of the roof shot (lib/dense.py) -> .work/dense_roof.npy
+  dense   4x optical-flow in-betweens of every shot played at a non-integer speed (lib/dense.py) -> .work/dense_*.npy
   prep    .work/config.js, timeline.js, tracks.js for the HTML layers
   plate   lib/plate.py -> .work/plate/*.png (+ .work/matte/*.png on the roof shot)
   front   front.html via lib/kcapture.js (sub-frame motion blur) -> .work/front/*.png
   mid     mid.html (behind-the-car type) -> .work/mid/*.png, roof shot only
   audio   audio/bed.py -> audio/bed.wav (the clip's own music + accents, -14 LUFS)
-  finish  plate, mid x sky matte, front, vignette, grain -> x264: exports/*_master.mp4 (CRF 16) and the
+  finish  plate, mid x sky matte, the crash punch, vignette, front, grain -> x264: exports/*_master.mp4 (CRF 16) and the
           two-pass ~11.5 Mb/s delivery copy exports/*.mp4, both with the bed muxed as-is
   qa      stills at the check frames, contact sheet, loudness, probe, safe-zone ink audit -> exports/qa/
 
@@ -83,7 +83,8 @@ def st_source(a):
 
 
 def st_dense(a):
-    if not os.path.exists(os.path.join(WORK, 'dense_roof.npy')):
+    import dense
+    if not all(os.path.exists(dense.path(*r)) for r in dense.RANGES):
         run([sys.executable, os.path.join(HERE, 'lib', 'dense.py'), '--ffmpeg', FF])
 
 
@@ -175,8 +176,16 @@ def composite(i):
     base = np.asarray(Image.open(os.path.join(WORK, 'plate', f'{i:05d}.png')).convert('RGB'), np.float32) / 255
     if i >= ROOF0:
         base = over(base, os.path.join(WORK, 'mid', f'{i:05d}.png'), os.path.join(WORK, 'matte', f'{i:05d}.png'))
-    base = over(base, os.path.join(WORK, 'front', f'{i:05d}.png'))
+    k = i - edl.CRASH_F
+    if 0 <= k < edl.CRASH_N:
+        # the crash hit on plate + matted type together, so the type stays locked behind the car (review r1)
+        u = min(k / (edl.CRASH_N - 1), 1.0)
+        base = fx.transform(base, scale=1 + edl.CRASH_PUNCH * (1 - (1 - (1 - u) ** 3)))
+        if k == 0:
+            base = base * (1 + edl.CRASH_LIFT)
+    # the vignette goes on the picture, not on the graphics, so the brand gold arrives exact (review r1 nit)
     base = fx.vignette(base, 0.36)
+    base = over(base, os.path.join(WORK, 'front', f'{i:05d}.png'))
     base = fx.grain(base, i, amount=0.02)
     return fx.to_u8(base)
 
@@ -215,12 +224,15 @@ def st_finish(a):
 
 
 # ------------------------------------------------------------------------------------------ qa
-QA_FRAMES = [0, 12, 24, 25, 46, 47, 68, 69, 76, 90, 108, 110, 112, 113, 115, 124, 128, 135, 136, 150, 158, 163, 168, 169,
-             180, 191, 196, 202, 210, 223, 224, 235, 246, 257, 262, 268, 280, 290, 300, 318, 324, 332, 335, 340, 345,
-             360, 400, 431]
+# every hold, cut and hit, plus every whip-exit frame (review r1: a vertical whip turned $1,299 into a readable
+# $1,200 on frames the QA stills did not cover) and the end-card price rise
+QA_FRAMES = [0, 5, 7, 12, 24, 25, 46, 47, 66, 67, 68, 69, 76, 90, 108, 109, 110, 111, 112, 113, 114, 115, 124, 127, 128,
+             135, 136, 150, 158, 163, 168, 169, 180, 187, 188, 189, 190, 191, 196, 202, 210, 223, 224, 235, 246, 253,
+             254, 255, 256, 257, 262, 268, 273, 277, 281, 290, 293, 299, 300, 318, 324, 332, 334, 335, 336, 337, 338,
+             339, 340, 341, 345, 360, 400, 431]
 
 
-AUDIT_FRAMES = [0, 24, 46, 60, 95, 105, 140, 150, 175, 188, 215, 230, 244, 300, 318, 345, 360, 400, 431]
+AUDIT_FRAMES = [0, 24, 46, 60, 95, 105, 140, 150, 175, 186, 200, 215, 230, 244, 300, 318, 345, 360, 400, 431]
 
 
 def st_qa(a):

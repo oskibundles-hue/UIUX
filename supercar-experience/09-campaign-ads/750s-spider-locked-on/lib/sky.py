@@ -13,7 +13,10 @@ type, everything else (the car, the stowing roof, the far hills) stays in front 
      edges (car, roof, hills). Anything enclosed by sky (lens-flare orbs) is sky; sky reflections on the
      glossy roof are enclosed by the car, so they are not;
   5. alpha: the soft residual alpha only in a thin band around the foreground outline (it carries the
-     car's own anti-aliased edge); 1 outside the band, 0 inside the car.
+     car's own anti-aliased edge); 1 outside the band, 0 inside the car. The band masks are upsampled
+     bilinearly, so the band edges are feathered.
+  Inside the sun's lens-flare orb (a fixed disc on this locked-off shot) anything not darker than the sky
+  model counts as sky before steps 3-4, so the orb can never be keyed as car where it touches a buttress.
 
 matte(img) -> float32 (H, W), 1 = sky (type visible), 0 = car / hills (type hidden).
 """
@@ -46,7 +49,7 @@ def _reconstruct(seed, mask, iters=2000):
     return cur
 
 
-def matte(img):
+def matte(img, orb=None):
     H, W = img.shape[:2]
     small = img[DS // 2::DS, DS // 2::DS].astype(np.float32)
     h, w = small.shape[:2]
@@ -69,7 +72,7 @@ def matte(img):
 
     # residual + soft alpha at low res for the topology
     pred_s = _design(xx * DS + DS / 2.0, yy * DS + DS / 2.0) @ coef
-    d_s = np.linalg.norm(small - pred_s, axis=-1)
+    d_s = _flare_is_sky(small, pred_s, xx * DS + DS / 2.0, yy * DS + DS / 2.0, np.linalg.norm(small - pred_s, axis=-1), orb)
     sky_s = d_s < (LO + HI) / 2
     top = np.zeros_like(sky_s)
     top[0] = True
@@ -88,10 +91,33 @@ def matte(img):
     # reflections on the glossy roof cannot leak and flare orbs in the sky cannot leave rings
     Y2, X2 = np.mgrid[0:H, 0:W]
     pred = (_design(X2.astype(np.float32), Y2.astype(np.float32)) @ coef).astype(np.float32)
-    d = np.linalg.norm(img.astype(np.float32) - pred, axis=-1)
     im = img.astype(np.float32)
+    d = _flare_is_sky(im, pred, X2, Y2, np.linalg.norm(im - pred, axis=-1), orb)
     d = np.where((Y2 < 360) & (im[..., 2] > im[..., 0] + 0.02), 0.0, d)   # deep-blue zenith is always sky
     soft = np.clip((HI - d) / (HI - LO), 0, 1)
-    up = lambda m: np.repeat(np.repeat(m, DS, 0), DS, 1)[:H, :W]
-    a = np.where(up(core), 0.0, np.where(up(near), soft, 1.0))
-    return a.astype(np.float32)
+    # review r1: the band masks are upsampled bilinearly and feathered (nearest-neighbour left 4 px stair-steps
+    # where the soft alpha was not already 0 at the band's inner edge)
+    up = lambda m: _upf(m.astype(np.float32), H, W)
+    a = up(core.astype(np.float32)), up(near.astype(np.float32))
+    a = (1 - a[0]) * (a[1] * soft + (1 - a[1]))
+    return np.clip(a, 0, 1).astype(np.float32)
+
+
+def _upf(m, H, W):
+    from PIL import Image
+    im = Image.fromarray(np.ascontiguousarray(m), 'F').resize((m.shape[1] * DS, m.shape[0] * DS), Image.BILINEAR)
+    return np.asarray(im, np.float32)[:H, :W]
+
+
+def _flare_is_sky(img, pred, xs, ys, d, orb):
+    """review r1: the sun's lens-flare orb is ADDED light on the sky. Where it touched the left buttress tip it
+    keyed as car and punched a disc out of the P of SPIDER (frames 273-281). Inside the orb's disc (orb =
+    (cx, cy, r) in this frame's pixels; the shot is locked off, so it hardly moves), any pixel that is not
+    darker than the sky model counts as sky. The dark buttress is always darker, so the tip stays car. The
+    rule is kept to the disc: a global version also keyed the buttress's bright glassy edge as sky."""
+    if orb is None:
+        return d
+    cx, cy, r = orb
+    inside = (xs - cx) ** 2 + (ys - cy) ** 2 < r * r
+    brighter = (img - pred).min(-1) > -0.04
+    return np.where(inside & brighter, 0.0, d)

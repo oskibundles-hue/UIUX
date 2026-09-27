@@ -30,34 +30,48 @@ WORK = os.path.join(HERE, '..', '.work')
 OUT = os.path.join(WORK, 'plate')
 MOUT = os.path.join(WORK, 'matte')
 FPS = edl.FPS
-DENSE_F0, DENSE_K = 0, 4
+import dense  # noqa: E402
+
+DENSE_K = dense.FACTOR
 PLATE_PAD, PLATE_SIGMA = 16, 12
 
-_SRC = _DENSE = None
+_SRC = None
+_DENSE = {}
 _GRADES = {}
 TL = edl.build()
 PLATE_BOXES = {int(k): v for k, v in json.load(open(os.path.join(HERE, 'data', 'plate_track.json'))).items()}
 
 
 def src():
-    global _SRC, _DENSE
+    global _SRC
     if _SRC is None:
         _SRC = np.load(os.path.join(WORK, 'src.npy'), mmap_mode='r')
-        dp = os.path.join(WORK, 'dense_roof.npy')
-        _DENSE = np.load(dp, mmap_mode='r') if os.path.exists(dp) else None
-    return _SRC, _DENSE
+    return _SRC
+
+
+def dense_for(B):
+    """(f0, frames) of the optical-flow range that covers this beat's shot, or None"""
+    for f0, f1 in dense.RANGES:
+        if f0 <= B['fa'] and B['fb'] <= f1:
+            if (f0, f1) not in _DENSE:
+                _DENSE[(f0, f1)] = np.load(dense.path(f0, f1), mmap_mode='r')
+            return f0, _DENSE[(f0, f1)]
+    return None
 
 
 # ------------------------------------------------------------------------------------ sampling
 def _at(p, B):
-    """source picture at fractional source frame p (float RGB 0..1), clamped to the shot"""
-    S, D = src()
+    """source picture at fractional source frame p (float RGB 0..1), clamped to the shot. Beats that play at
+    a non-integer speed sample the 4x optical-flow in-betweens (lib/dense.py), so no frame is ever a two-frame
+    double exposure; the remaining blend is between in-betweens a quarter frame apart."""
+    S = src()
     p = min(max(p, B['fa']), B['fb'])
-    if B.get('roof') and D is not None:
-        d = (p - DENSE_F0) * DENSE_K
-        i = int(math.floor(d))
+    dn = dense_for(B)
+    if dn is not None:
+        f0, D = dn
+        d = (p - f0) * DENSE_K
+        i = min(int(math.floor(d)), len(D) - 1)
         f = d - i
-        i = min(i, len(D) - 1)
         a = fx.to_f(D[i])
         return a if f < 1e-3 or i + 1 >= len(D) else a * (1 - f) + fx.to_f(D[i + 1]) * f
     i = int(math.floor(p))
@@ -68,7 +82,8 @@ def _at(p, B):
 
 def sample(p, span, B):
     """shutter average over [p - span/2, p + span/2] source frames (a 180-degree look at the plate's speed)"""
-    n = int(math.ceil(span * 1.5))
+    k = DENSE_K if dense_for(B) is not None else 1
+    n = int(math.ceil(span * k * 1.2))
     if n <= 1:
         return _at(p, B)
     acc = None
@@ -117,7 +132,7 @@ class DayGrade:
 
 def grade_for(B):
     if B['id'] not in _GRADES:
-        S, _ = src()
+        S = src()
         _GRADES[B['id']] = DayGrade.fit([S[i] for i in range(B['fa'], B['fb'] + 1, 3)])
     return _GRADES[B['id']]
 
@@ -164,9 +179,21 @@ def leak_amount(t):
     return tot, side
 
 
-_yy = np.linspace(0, 1, fx.H, dtype=np.float32)[:, None, None] * fx.H
-GRAD = (1 - 0.40 * (1 - np.clip((_yy - 150) / 750, 0, 1) ** 2 * (3 - 2 * np.clip((_yy - 150) / 750, 0, 1)))).astype(np.float32)
-SWEEP = (13.72, 14.32)          # light sweep across the car body while the picture is frozen in the tape stop
+def _smooth(y, a, b):
+    x = np.clip((y - a) / (b - a), 0, 1)
+    return x * x * (3 - 2 * x)
+
+
+_yy = np.arange(fx.H, dtype=np.float32)[:, None, None]
+# graduated ND on the sky, lighter since review r1 (0.40 -> 0.28): with the sky chroma lift below it keeps the
+# roof shot's sky blue instead of slate, so the finale sits in the same world as the cobalt desert day before it
+GRAD = (1 - 0.28 * (1 - _smooth(_yy, 150, 900))).astype(np.float32)
+# end-card ND, sky only (x the matte): 45 % down in the band behind the top block and the price (y 250-700,
+# feathered 150-250 and 700-780), eased in over the end-card hit, so the gold price reads by luminance, not hue
+ECARD_BAND = (_smooth(_yy, 150, 250) * (1 - _smooth(_yy, 700, 780))).astype(np.float32)
+SKY_CHROMA = 0.45
+SWEEP = (13.62, 14.05)          # light sweep across the car body, inside the tape stop and its freeze
+CAR_BELOW = _smooth(_yy, 780, 830).astype(np.float32)   # the sweep lights the car body only, never hills or sky
 
 
 def light_sweep(img, matte, t):
@@ -176,12 +203,24 @@ def light_sweep(img, matte, t):
         return img
     u = fx.smootherstep((t - a) / (b - a))
     yy, xx = np.mgrid[0:fx.H:4, 0:fx.W:4].astype(np.float32)
-    d = (xx * 0.8 + yy * 0.6) - (-600 + u * 2400)
+    d = (xx * 0.8 + yy * 0.6) - (200 + u * 1700)
     band = np.exp(-(d / 140) ** 2) * math.sin(math.pi * u)
     band = fx.up(band[..., None], fx.H, fx.W)
-    car = 1 - matte[..., None]
+    car = (1 - matte[..., None]) * CAR_BELOW
     l = np.clip(fx.luma(img), 0, 1)[..., None]
     return img + band * car * (0.10 + 0.35 * l) * 0.9
+
+
+# the sun's lens-flare orb on the roof shot, measured on the source: centre (279, 503) at src f10 drifting to
+# (262, 475) by f60 (sky-model residual centroid), about 75 px across
+ORB = ((10, 279.0, 503.0), (60, 262.0, 475.0), 46.0)
+
+
+def orb_at(p, s, cx, cy):
+    (p0, x0, y0), (p1, x1, y1), r = ORB
+    u = (p - p0) / (p1 - p0)
+    ox, oy = x0 + (x1 - x0) * u, y0 + (y1 - y0) * u
+    return cx + (ox - cx) * s, cy + (oy - cy) * s, r * s
 
 
 def roof_push(i):
@@ -204,8 +243,12 @@ def base(i):
         s = roof_push(i)
         cx, cy = edl.PUSH_ROOF_C
         img = fx.transform(img, scale=s, cx=cx, cy=cy)
-        matte = sky.matte(img)
+        matte = sky.matte(img, orb=orb_at(row['p'], s, cx, cy))
     img = grade_for(B)(img)
+    if matte is not None:
+        # sky chroma lift (review r1: the roof shot's hazy sky went slate under the ND)
+        l = fx.luma(img)[..., None]
+        img = l + (img - l) * (1 + SKY_CHROMA * matte[..., None])
     if B.get('streak'):
         img = fx.streaks(img, **B['streak'])
     if B.get('roof'):
@@ -213,9 +256,12 @@ def base(i):
         # graduated ND on the sky (a car-ad staple): the top of frame is taken down ~40 %, so white and gold
         # type read against it; the car below y 900 is untouched
         img = img * GRAD
-        img = light_sweep(img, matte, row['t'])
-        # tape stop: the picture darkens and desaturates as the music winds down, recovering into the end card
         t = row['t']
+        ke = fx.smootherstep((t - (edl.T_END - 0.12)) / 0.37)
+        if ke > 0:
+            img = img * (1 - 0.45 * ke * ECARD_BAND * matte[..., None])
+        img = light_sweep(img, matte, t)
+        # tape stop: the picture darkens and desaturates as the music winds down, recovering into the end card
         k = fx.smootherstep((t - edl.T_STOP0) / (edl.T_END - edl.T_STOP0)) * (1 - fx.smootherstep((t - edl.T_END) / 0.35))
         if k > 0:
             l = fx.luma(img)[..., None]
@@ -227,11 +273,24 @@ def base(i):
     return img, matte
 
 
+def impact(img, k, strength, seed):
+    """fx.impact on a reflect-padded frame (review r1: its RGB split sampled black from outside the frame and
+    wrapped with np.roll, drawing a lime border on the drop frames), with the 3.5 % scale floor eased out over
+    k 9-14 instead of stepping to 1.0 on k 14. The vendored fx.py stays identical to the approved copy."""
+    P = 48
+    pad = np.pad(img, ((P, P), (P, P), (0, 0)), mode='reflect')
+    out = fx.impact(pad, k, strength=strength, seed=seed)[P:-P, P:-P]
+    if 9 <= k < 14:                                   # fx.impact holds max(punch, 1.035) until k 14: ease it
+        s = (1 + 0.035 * (1 - fx.smootherstep((k - 9) / 5))) / 1.035
+        out = fx.transform(out, scale=s)
+    return out
+
+
 def finish_fx(img, i):
     t = i / FPS
     for f0, strength, seed, n in edl.IMPACTS:
         if f0 <= i < f0 + n:
-            img = fx.impact(img, i - f0, strength=strength, seed=seed)
+            img = impact(img, i - f0, strength, seed)
     amt, side = leak_amount(t)
     if amt > 0.004:
         img = fx.light_leak(img, t, strength=amt, side=side, seed=3 + int(t))
@@ -273,11 +332,12 @@ def groups(frames):
 
 def signature(group):
     h = hashlib.sha1()
-    for f in ('plate.py', 'edl.py', 'fx.py', 'sky.py', os.path.join('data', 'plate_track.json')):
+    for f in ('plate.py', 'edl.py', 'fx.py', 'sky.py', 'dense.py', os.path.join('data', 'plate_track.json')):
         h.update(open(os.path.join(HERE, f), 'rb').read())
     h.update(json.dumps([TL[i] for i in group], sort_keys=True).encode())
-    dp = os.path.join(WORK, 'dense_roof.npy')
-    h.update(str(os.path.getmtime(dp) if os.path.exists(dp) else 0).encode())
+    for r in dense.RANGES:
+        dp = dense.path(*r)
+        h.update(str(os.path.getmtime(dp) if os.path.exists(dp) else 0).encode())
     return h.hexdigest()
 
 
