@@ -93,7 +93,7 @@ def caption_words():
     hide = C['captions']['hide']
     fix = C['captions'].get('fix', {})
     out = []
-    for piece in CAPS:
+    for piece in CAPS + C['captions'].get('extra', []):
         for a, b, w in piece['words']:
             if any(h[0] <= a < h[1] for h in hide):
                 continue
@@ -389,11 +389,14 @@ def st_compose(A):
             '-c:a', 'copy', '-movflags', '+faststart', deliv])
     elif os.path.exists(deliv):
         os.remove(deliv)
+    shutil.copyfile(os.path.join(WORK, 'music_stem.wav'), os.path.join(EXP, f'{NAME} - music-stem.wav'))
     prev = os.path.join(EXP, f'{NAME} - PREVIEW 720x1280.mp4')
     pv = ['-vf', 'scale=720:1280:flags=lanczos', '-c:v', 'libx264', '-preset', 'slow', '-b:v', '1.15M', '-maxrate', '2M', '-bufsize', '3M',
           '-pix_fmt', 'yuv420p', '-passlogfile', plog + 'p']
     sh([FF, '-v', 'error', '-y', '-i', master] + pv + ['-pass', '1', '-an', '-f', 'null', '-'])
-    sh([FF, '-v', 'error', '-y', '-i', master] + pv + ['-pass', '2', '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart', prev])
+    # the preview's audio: the same mix 0.5 dB lower, so the 160k AAC still holds -1.5 dBTP
+    sh([FF, '-v', 'error', '-y', '-i', master, '-i', os.path.join(WORK, 'mix.wav')] + pv +
+       ['-pass', '2', '-map', '0:v', '-map', '1:a', '-af', 'volume=-0.5dB', '-c:a', 'aac', '-b:a', '160k', '-movflags', '+faststart', prev])
     log(f'compose: done in {time.time() - t0:.0f}s ({mbps:.2f} Mb/s master)')
 
 
@@ -468,27 +471,47 @@ const { chromium } = require('/opt/node22/lib/node_modules/playwright');
     return json.loads(r.stdout)
 
 
-def caption_sync(n=12):
-    """spot check: for n caption words spread over the piece list, the onset of speech energy on the dialog stem
-    near the word's start time (first 10 ms bin 10 dB over the preceding 150 ms floor, within -0.12..+0.25 s)."""
-    import wave as _w
+def caption_sync(n=10):
+    """caption timing vs the audio actually in the mix. (1) per caption piece: the lag (-300..+300 ms) that best aligns the
+    caption word mask with the speech-band energy of the dialog stem; (2) n spot words after a pause: speech-band level
+    inside the word minus the 150 ms before it (positive = the word starts where the caption says)."""
+    import synth as SY
     raw = subprocess.run([FF, '-v', 'error', '-i', os.path.join(WORK, 'stem_dialog.wav'), '-f', 'f32le', '-ac', '1', '-ar', '48000', '-'],
                          capture_output=True, check=True).stdout
     x = np.frombuffer(raw, '<f4').astype(np.float64)
+    x = SY.fft_filter(x, lo=300, hi=3400, slope=3)
+    hop = 480
+    env = np.array([np.sqrt((x[k:k + hop] ** 2).mean()) for k in range(0, len(x) - hop, hop)])
+    edb = 20 * np.log10(env + 1e-9)
+    pieces = []
+    for piece in CAPS + C['captions'].get('extra', []):
+        ws = [w for w in piece['words']]
+        if len(ws) < 3:
+            continue
+        a0, a1 = ws[0][0] - 0.4, ws[-1][1] + 0.4
+        i0, i1 = int(a0 * 100), int(a1 * 100)
+        m = np.zeros(i1 - i0)
+        for w0, w1, _ in ws:
+            m[max(0, int(w0 * 100) - i0):max(0, int(w1 * 100) - i0) + 1] = 1
+        best = None
+        for lag in range(-30, 31):
+            seg = edb[i0 + lag:i1 + lag]
+            if len(seg) != len(m):
+                continue
+            c = np.corrcoef(seg, m)[0, 1]
+            if best is None or c > best[1]:
+                best = (lag, c)
+        pieces.append(dict(t=piece['t'], src=piece['src'], lag_ms=best[0] * 10, corr=round(float(best[1]), 2)))
     words = caption_words()
-    pick = [words[int(i)] for i in np.linspace(5, len(words) - 5, n)]
-    out = []
+    cand = [w for p_, w in zip(words, words[1:]) if w[0] - p_[1] >= 0.3]
+    pick = [cand[int(i)] for i in np.linspace(0, len(cand) - 1, min(n, len(cand)))]
+    spots = []
     for a, b, w in pick:
-        i0 = int((a - 0.3) * 48000)
-        seg = x[max(0, i0):int((a + 0.35) * 48000)]
-        env = np.array([20 * np.log10(np.sqrt((seg[k:k + 480] ** 2).mean()) + 1e-9) for k in range(0, len(seg) - 480, 480)])
-        tt = a - 0.3 + np.arange(len(env)) * 0.01
-        floor = np.median(env[(tt >= a - 0.3) & (tt < a - 0.15)]) if ((tt >= a - 0.3) & (tt < a - 0.15)).any() else env.min()
-        on = [t for t, e in zip(tt, env) if a - 0.12 <= t <= a + 0.25 and e > floor + 10]
-        pk = float(env[(tt >= a) & (tt <= b)].max()) if ((tt >= a) & (tt <= b)).any() else None
-        out.append(dict(word=w, t=a, onset=round(on[0], 3) if on else None, offset_ms=round((on[0] - a) * 1000) if on else None,
-                        floor_db=round(float(floor), 1), word_peak_db=round(pk, 1) if pk is not None else None))
-    return out
+        ins = edb[int(a * 100):int(max(b, a + 0.12) * 100)]
+        pre = edb[int((a - 0.15) * 100):int(a * 100)]
+        spots.append(dict(word=w, t=a, word_minus_pre_db=round(float(ins.mean() - pre.mean()), 1)))
+    lags = [p['lag_ms'] for p in pieces]
+    return dict(pieces=pieces, median_lag_ms=float(np.median(lags)), max_abs_lag_ms=int(max(abs(l) for l in lags)), spot_words=spots)
 
 
 def write_cue():
@@ -507,10 +530,12 @@ def write_cue():
         if s['src'] == 'card':
             w(f'| {k} | {s["t"]:.2f} | {f0}-{f1 - 1} | end card | | | the last shot runs {C["endCard"]["plateRun"]} s under the card wipe, then black | |'); continue
         ts = PL.src_times(k)
-        rf = 'keys ' + ' '.join(f'{q[0]:.1f}s:{q[1]:.0f}' for q in c['keys']) if c.get('keys') else f'c {c.get("c0", "centre")} s {c.get("s0", 1.0)}-{c.get("s1", c.get("s0", 1.0))}'
+        rf = 'keys ' + ' '.join(f'{q[0]:.1f}s:{q[1]:.0f}' for q in c['keys']) + f' (s {c["keys"][0][3]})' if c.get('keys') else f'c {c.get("c0", "centre")} s {c.get("s0", 1.0)}-{c.get("s1", c.get("s0", 1.0))}'
         tr = trans.get(k)
         trs = '' if not tr else f'{tr["type"]}' + (f' {tr.get("dir", "")}' if tr['type'] == 'whip' else '') + (f' {tr["dur"]} s' if tr['type'] == 'sweep' else '')
-        sp = 'timelapse' if s['speed'] == 'keyframes' else ('ramp ' + ' '.join(f'{a:.2f}:{b}' for a, b in c['ramp'])) if c.get('ramp') else '1x'
+        sp = 'timelapse' if s['speed'] == 'keyframes' else ('ramp ' + ' '.join(f'{a:.2f}:{b}' for a, b in c['ramp'])) if c.get('ramp') else f'{s["speed"]:g}x'
+        if 'edl_in' in s:
+            sp += f', slipped from the EDL {s["edl_in"]:.2f} s at {s["edl_speed"]:g}x (config `slips`)'
         w(f'| {k} | {s["t"]:.2f} | {f0}-{f1 - 1} | {s["src"]} | {ts[0][0]:.2f}-{ts[-1][0]:.2f} ({sp}) | {c["look"]} | {rf} | {trs} |')
     w('\n## Layer elements\n')
     w('| code | type | in | out | what |')
@@ -550,12 +575,14 @@ def write_cue():
     if os.path.exists(mj):
         M = json.load(open(mj))
         w('\n## Sound\n')
-        w(f'Music: {M["music"]["source"]} ({M["music"].get("bpm")} BPM, first downbeat {M["music"].get("downbeat0")} s). Master {M["master"]["lufs"]} LUFS, '
-          f'true peak {M["master"]["true_peak_db"]} dBTP (numpy BS.1770 on the wav; the mp4 is measured in exports/qa/qa_summary.json).\n')
-        w('| dialog piece | clip | source | at | loudness in | gain |')
-        w('|---|---|---|---|---|---|')
+        w(f'Music: {M["music"]["source"]} ({M["music"].get("bpm")} BPM, first downbeat {M["music"].get("downbeat0")} s), enabled: {M.get("music_enabled")}. '
+          f'Master {M["master"]["lufs"]} LUFS, true peak {M["master"]["true_peak_db"]} dBTP (numpy BS.1770 on the wav; the mp4 is measured in exports/qa/qa_summary.json).\n')
+        w('| dialog piece | clip | source | at | loudness in | gain | music under it (duck, dialog over music) |')
+        w('|---|---|---|---|---|---|---|')
+        dc = {d['i']: d for d in M.get('duck_check', [])}
         for d in M['dialog']:
-            w(f'| {d["i"]} | {d["src"]} | {d["a"]}-{d["b"]} | {d["t"]} | {d["lufs_in"]} LUFS | {d["gain_db"]:+.1f} dB |')
+            k = dc.get(d['i'], {})
+            w(f'| {d["i"]} | {d["src"]} | {d["a"]}-{d["b"]} | {d["t"]} | {d["lufs_in"]} LUFS | {d["gain_db"]:+.1f} dB | {k.get("duck_db", "")} dB, {k.get("dialog_over_music_db", "")} dB |')
         w('\n| nat | source | at | gain |')
         w('|---|---|---|---|')
         for d in M['nat']:
@@ -593,7 +620,7 @@ def st_qa(A):
     fr = decode_frames(master, list(marks))
     for i, nm in marks.items():
         pre = 'beat_' if nm.startswith('beat') else ''
-        Image.fromarray(fr[i]).save(os.path.join(QA, f'{pre}{nm}_f{i:05d}_{i / FPS:07.3f}s.jpg'), quality=88)
+        Image.fromarray(fr[i]).save(os.path.join(QA, f'{pre}{nm}_f{i:05d}_{i / FPS:07.3f}s.jpg'), quality=80)
     Image.fromarray(fr[0] if 0 in fr else decode_frames(master, [0])[0]).save(os.path.join(EXP, 'poster.jpg'), quality=94)
     beat_frames = sorted(i for i, nm in marks.items() if nm.startswith('beat'))
     contact_sheet([(i, fr[i]) for i in beat_frames], os.path.join(QA, 'beats-sheet.jpg'), cols=9, tw=200,
@@ -684,10 +711,27 @@ def main():
     ap.add_argument('--stills')
     ap.add_argument('--tracks')
     ap.add_argument('--from-shots', action='store_true')
+    ap.add_argument('--recapture')
     ap.add_argument('--force-front', action='store_true')
     A = ap.parse_args()
     if A.stills:
         st_prep(A); stills(A, [int(x) for x in A.stills.split(',')]); return
+    if A.recapture:
+        # targeted re-capture after a change that only touches these frames (a..b inclusive, comma list of ranges);
+        # the layer signature is then updated so the front stage keeps every other frame
+        st_prep(A)
+        fr = []
+        for r in A.recapture.split(','):
+            a, b = (int(v) for v in r.split('-'))
+            fr += list(range(a, b + 1))
+        out = os.path.join(WORK, 'front')
+        for i in fr:
+            q = os.path.join(out, f'{i:05d}.png')
+            if os.path.exists(q):
+                os.remove(q)
+        capture(fr, out)
+        open(os.path.join(WORK, 'front.sig'), 'w').write(front_sig())
+        log(f'recaptured {len(fr)} frames'); return
     st = A.stage.split(',')
     for name, fn in (('shots', st_shots), ('track', st_track), ('join', st_join), ('prep', st_prep), ('audio', st_audio),
                      ('front', st_front), ('compose', st_compose), ('qa', st_qa)):

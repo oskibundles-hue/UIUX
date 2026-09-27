@@ -43,6 +43,14 @@ FF = os.environ.get('FFMPEG', P['ffmpeg'])
 EDL = json.load(open(P['edl']))
 NF = int(round(EDL['duration'] * FPS))
 SHOTS = EDL['shots']
+for _k, _sl in CFG.get('slips', {}).items():      # per-shot source slips over the EDL (config "slips")
+    if _k.startswith('_'):
+        continue
+    _s = SHOTS[int(_k)]
+    _s['edl_in'], _s['edl_speed'] = _s['in'], _s['speed']
+    _s['in'] = _sl.get('in', _s['in'])
+    _s['speed'] = _sl.get('speed', _s['speed'])
+    _s['out'] = round(_s['in'] + _s['dur'] * _s['speed'], 3)
 RENDER_VERSION = 2
 
 

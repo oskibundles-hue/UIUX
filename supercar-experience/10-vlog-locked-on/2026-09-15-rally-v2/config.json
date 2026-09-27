@@ -446,6 +446,23 @@
   },
   "51": {
    "look": "garage"
+  },
+  "3": {
+   "look": "garage"
+  },
+  "39": {
+   "look": "face"
+  },
+  "40": {
+   "look": "face"
+  }
+ },
+ "slips": {
+  "_about": "per-shot source slips over the EDL (applied by lib/plate.py when it loads the EDL): in/speed replace the EDL values, out = in + dur * speed",
+  "17": {
+   "in": 341.36,
+   "speed": 0.75,
+   "why": "0015 340.0-341.3: an arm and a ring cover the lens; the clean part of the take (341.36-343.16, all the mezzanine has) is played at 0.75x on the 59.94p source"
   }
  },
  "transitions": [
@@ -644,8 +661,8 @@
      "tag": "16:10 · CH 01 / 07",
      "title": "RALLY DAY",
      "y": 350,
-     "maxW": 730,
-     "maxS": 240
+     "maxW": 700,
+     "maxS": 215
     }
    },
    {
@@ -657,8 +674,8 @@
      "tag": "18:46 · CH 02 / 07",
      "title": "THE LINEUP",
      "y": 350,
-     "maxW": 730,
-     "maxS": 240
+     "maxW": 700,
+     "maxS": 215
     }
    },
    {
@@ -670,8 +687,8 @@
      "tag": "18:53 · CH 03 / 07",
      "title": "EGNYTE ARRIVES",
      "y": 350,
-     "maxW": 730,
-     "maxS": 240
+     "maxW": 700,
+     "maxS": 215
     }
    },
    {
@@ -683,8 +700,8 @@
      "tag": "19:13 · CH 04 / 07",
      "title": "ROLL OUT",
      "y": 350,
-     "maxW": 730,
-     "maxS": 240
+     "maxW": 700,
+     "maxS": 215
     }
    },
    {
@@ -696,8 +713,8 @@
      "tag": "20:12 · CH 05 / 07",
      "title": "RED ROCK",
      "y": 350,
-     "maxW": 730,
-     "maxS": 240
+     "maxW": 700,
+     "maxS": 215
     }
    },
    {
@@ -709,8 +726,8 @@
      "tag": "22:45 · CH 06 / 07",
      "title": "THE DRIVE BACK",
      "y": 350,
-     "maxW": 730,
-     "maxS": 240
+     "maxW": 700,
+     "maxS": 215
     }
    },
    {
@@ -722,8 +739,8 @@
      "tag": "23:33 · CH 07 / 07",
      "title": "THE VERDICT",
      "y": 350,
-     "maxW": 730,
-     "maxS": 240
+     "maxW": 700,
+     "maxS": 215
     }
    },
    {
@@ -1135,7 +1152,7 @@
    }
   ],
   "captions": {
-   "t0": 7.0,
+   "t0": 4.0,
    "t1": 170.02,
    "p": {
     "size": 68,
@@ -1181,7 +1198,38 @@
   "fix": {
    "Ignite": "Egnyte",
    "ignite": "Egnyte"
-  }
+  },
+  "extra": [
+   {
+    "src": "0034",
+    "in": 431.5,
+    "out": 433.35,
+    "t": 4.1,
+    "why": "cold-open guest line (same words as the CH7 piece)",
+    "words": [
+     [
+      4.27,
+      4.63,
+      "Wonderful"
+     ],
+     [
+      4.63,
+      4.99,
+      "time."
+     ],
+     [
+      5.59,
+      5.59,
+      "Good"
+     ],
+     [
+      5.59,
+      5.89,
+      "time."
+     ]
+    ]
+   }
+  ]
  },
  "tracks": {
   "_about": "lock-on targets: shot, output frame range f0-f1, anchor frame (sharp, mid-shot) and the box x,y,w,h on it (output px). Tracked with lib/track_mid.py both ways from the anchor.",
@@ -1491,11 +1539,11 @@
    },
    {
     "src": "0015",
-    "a": 340.0,
-    "b": 342.4,
+    "a": 340.8,
+    "b": 343.2,
     "t": 59.79,
     "lufs": -30,
-    "why": "guests signing in on clipboards"
+    "why": "guests signing in on clipboards (slipped with the picture, shot 17)"
    },
    {
     "src": "0013",

@@ -113,7 +113,8 @@
       const qs = E.outExpo(P(t, t0, th + 0.05));
       const qo = E.inCubic(P(t, p.exit, p.exit + 0.26));
       scrim.style.opacity = (E.outCubic(P(t, t0, t0 + 0.14)) * (1 - E.inCubic(P(t, p.exit + 0.08, p.exit + 0.3)))).toFixed(3);
-      holder.style.transform = `scale(${lerp(1.7, 1, qs).toFixed(5)}) translateY(${(-cap * 1.2 * qo).toFixed(2)}px)`;
+      holder.style.transform = `scale(${lerp(1.7, 1, qs).toFixed(5)}) translateY(${(-cap * 0.35 * qo).toFixed(2)}px)`;
+      holder.style.opacity = (1 - qo).toFixed(4);       // lifts a little and fades: never leaves the safe area
       w.w.style.opacity = cl(P(t, t0, t0 + 0.05)).toFixed(3);
       const hit = t >= th ? Math.exp(-(t - th) * 7) : 0;
       flash.style.opacity = (0.5 * hit).toFixed(3);

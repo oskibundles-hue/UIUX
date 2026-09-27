@@ -47,7 +47,9 @@
   // place wrapper w so the INK of its text starts at (x, y) (cap top-left) in the wrapper's parent
   function place(w, fam, size, text, x, y, ls) {
     const m = ink(fam, size, text, ls), hl = (size - (m.fA + m.fD)) / 2;
-    w.style.left = px(x + m.left); w.style.top = px(y - (hl + m.fA - m.aA));
+    // rally-v2 copy: an accented capital (HURACÁN) must not push its word down, so accented text sits on the cap height of H
+    const aA = /[\u00C0-\u017F]/.test(text) ? ink(fam, size, 'H', ls).aA : m.aA;
+    w.style.left = px(x + m.left); w.style.top = px(y - (hl + m.fA - aA));
     return m;
   }
   function el(tag, cls, parent, css, text) {
@@ -1217,7 +1219,9 @@
       const qo = E.inCubic(P(t, p.exit, p.exit + 0.3));
       scrim.style.opacity = (E.outCubic(P(t, t0, t0 + 0.2)) * (1 - E.inCubic(P(t, p.exit + 0.1, p.exit + 0.36)))).toFixed(3);
       const s = lerp(1.55, 1, qs);
-      holder.style.transform = `scale(${s.toFixed(5)}) translateY(${(-cap * 1.2 * qo).toFixed(2)}px)`;
+      // rally-v2 copy: the exit lifts 0.35 cap (not 1.2) and fades, so the title never leaves the safe area
+      holder.style.transform = `scale(${s.toFixed(5)}) translateY(${(-cap * 0.35 * qo).toFixed(2)}px)`;
+      holder.style.opacity = (1 - qo).toFixed(4);
       ti.w.style.opacity = cl(P(t, t0, t0 + 0.06)).toFixed(3);
       const hit = t >= th ? Math.exp(-(t - th) * 7) : 0;
       flash.style.opacity = (0.45 * hit).toFixed(3);
@@ -1466,7 +1470,7 @@
     } };
   };
 
-  // rally-v2 copy: the one change to the kit file -- more of the internal helpers are exported, so
+  // rally-v2 copy: changes to the kit file are marked 'rally-v2 copy' (place() for accented text, the G1 exit, and here).
   // lib/v2kit.js can build this vlog's own components in the same language (no kit behaviour changes)
   SEK.helpers = { ink, line, el, panel, panelAt, place, show, svgEl, svgRoot, glint, riseLine, phase, liveDot, liveDotAt,
     bracketPaths, bracketSet, bracketDraw, grow, lerpRect, padRect, pingSet, pingDraw, routeGeom, routeBuild, routeAt,
