@@ -82,3 +82,21 @@ behind-the-car type. Times are output seconds. `src` is the 0-based source frame
     RENTERS 25+ · AGES 21–24 WITH $299 UNDERAGE FEE (Bebas 44, y 1440), and VALID DRIVER'S LICENSE · INSURANCE
     (Bebas 44, y 1486). All ink stays above y 1536.
   - The last frame is a complete still; the sound fades out under it.
+
+## Placement versions (lib/formats.py)
+Same timeline, plate, matte, sound and graphics timing; each frame is a crop window of the 1080x1920 plate, then the
+vignette (0.36), the crash punch and the grain run on the cropped frame.
+- 4:5, 1080x1350: window y 228-1578 on every shot. The layers are the approved 9:16 front and mid, cropped with the
+  plate, so every position above moves up 228 px (the hook panel at y 52, the end-card logo at 54, the last
+  requirement line ending at 1308).
+- 1:1, 1080x1080: window y 226-1306 (the panels at y 54), and y 450-1530 on beat 4 (the speedmark brackets at
+  y 915-1024). Up to the end card the front layer is the 9:16 one. The end card (`front.html#fmt=1x1`, plate
+  coordinates; subtract 226 for the square):
+  - top block and the behind-car price as in 9:16 (logo 56, MCLAREN 750S SPIDER 158, 5 HOURS · LAS VEGAS 202, price
+    ink 264-479);
+  - right-hand column x 640-1026, beside the price: the 78/22 stripe at 264, TEXT OR DM TO BOOK (Bebas, fitted to the
+    column) at 286, (725) 425-3583 (Bebas 52) at 346, SUPERCAREXP.VIP (Bebas 52) at 398, @SUPERCAR_EXPERIENCE_
+    (fitted, 44 max) at 450, all with the top block's close dark halo;
+  - RENTERS 25+ · AGES 21–24 WITH $299 UNDERAGE FEE and VALID DRIVER'S LICENSE · INSURANCE (Bebas 42) at 950 and 996,
+    under the taillight bar, over a scrim from 884;
+  - the same entrances as 9:16 (the site line fades up between the phone and the handle).

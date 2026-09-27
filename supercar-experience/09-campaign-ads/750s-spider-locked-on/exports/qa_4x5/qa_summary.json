@@ -1,0 +1,20 @@
+{
+ "frames": 432,
+ "video_seconds": 18.017999999999997,
+ "audio_seconds": 18.026666666666667,
+ "loudness": {
+  "I": "-14.11",
+  "TP": "-2.65",
+  "LRA": "2.30"
+ },
+ "last_50ms_peak": 1.081941007896603e-07,
+ "streams": [
+  "Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1350, 7975 kb/s, 23.98 fps, 23.98 tbr, 24k tbn (default)",
+  "Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 196 kb/s (default)"
+ ],
+ "sizes_mb": {
+  "SCE_750S-Spider_Roof-Down_Locked-On_18s-4x5.mp4": 18.42,
+  "SCE_750S-Spider_Roof-Down_Locked-On_18s-4x5_master.mp4": 40.42
+ },
+ "safe_zone_violations": []
+}

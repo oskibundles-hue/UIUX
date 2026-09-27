@@ -126,6 +126,26 @@ Round 3 confirmed 20 of the round-2 items fixed at full resolution, with no regr
 | The hook's in-between frames were 17 % softer (a 12 Hz sharp/soft cadence) | A light unsharp mask on the in-between frames of the hero shot only; the gradient over f1-5 is now within 5 % frame to frame |
 | Nits | The badge truss averages a true box over one source frame (even cadence); the hook panel starts leaving 2 frames before its rows are gone; the requirements rows (no figures) whip with their panel; the end-card sky chroma is lifted to 0.8; the bridge plate's shadows are lifted a little more |
 
+## Placement versions: 4:5 and 1:1 feed cuts
+
+The same approved ad, cut for the feed placements. The edit, plate, grade, sky matte, graphics timing and sound
+are identical; each version is a crop window of the 1080x1920 plate per shot (`lib/formats.py`), re-composited so the
+vignette, crash punch and grain sit on the new frame. The 9:16 files are untouched.
+
+| Version | File | Window (plate rows) | Graphics |
+|---|---|---|---|
+| 4:5, 1080x1350 | `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-4x5.mp4` (8.1 Mb/s) | y 228-1578 on every shot | the approved 9:16 layers as they are. Every 9:16 line sits in the story safe zone (y 269-1536), which fits the window with ~41 px top and bottom, so the 4:5 is the approved composition, cropped |
+| 1:1, 1080x1080 | `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-1x1.mp4` (6.5 Mb/s) | y 226-1306; the badge shot (frames 69-110) y 450-1530 so the brackets on the speedmark stay in frame | the 9:16 layers up to the end card. The end card is laid out for the square (`front.html#fmt=1x1`): TEXT OR DM TO BOOK, the phone, the site and the handle stand in a right-hand column beside the price, and the two requirement lines sit under the taillight |
+
+Every line of copy, every figure and its qualifier, and the age line are the same as the approved 9:16; the 1:1 end
+card only puts the phone and the site on two lines. Stills, posters and contact sheets are in `exports/qa_4x5/`,
+`exports/qa_1x1/`, `exports/poster-4x5.jpg`, `poster-endcard-1x1.jpg` etc.
+
+```bash
+python3 build.py --format 4x5          # every stage cached; only the composite, encode and QA run
+python3 build.py --format 1x1          # also renders the square end card's front layer (.work/front_1x1/)
+```
+
 ## Change a figure
 
 Edit `config.json`, then run `python3 build.py`. Only the layers that changed re-render.
@@ -171,4 +191,5 @@ Stages, each cached in `.work/` (ignored by git):
 | `lib/plate_find.py`, `lib/data/plate_track.json` | the licence-plate box on the rear chase shot (f348-368) |
 | `audio/bed.py` (+ `bed.wav`, `bed_sync.json`) | the sound bed: the clip's music plus accents, mastered |
 | `lib/fx.py`, `kinetic.js`, `lock.js`, `kcapture.js`, `accum.py`, `track.py`, `audio/synth.py` | vendored unchanged from `../flash-special-showcase/` |
-| `exports/` | `poster.jpg` (frame 0, the complete hook), `poster-endcard.jpg`, `contact-sheet.jpg`, `qa/` |
+| `lib/formats.py` | the placement versions: the crop window of every shot for 4:5 and 1:1, safe boxes, rates |
+| `exports/` | `poster.jpg` (frame 0, the complete hook), `poster-endcard.jpg`, `contact-sheet.jpg`, `qa/`; the same with `-4x5` / `-1x1` and `qa_4x5/`, `qa_1x1/` for the placement versions |
