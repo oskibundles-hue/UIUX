@@ -1,4 +1,12 @@
 {
+  "permissions": {
+    "deny": [
+      "Bash(git push origin main)",
+      "Bash(git push origin main *)",
+      "Bash(git push -u origin main)",
+      "Bash(git push -u origin main *)"
+    ]
+  },
   "hooks": {
     "UserPromptSubmit": [
       {
@@ -7,6 +15,18 @@
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/brain/recall_hook.py\"",
             "timeout": 5
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Bash|mcp__(Higgsfield|Dropbox|Windsor_ai|vidIQ|Vertiso_Memory)__.*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/regret_gate.py\"",
+            "timeout": 10
           }
         ]
       }
