@@ -143,6 +143,18 @@ approved 9:16 layer stays cached, and `build.py` will not re-encode over the app
 `lib/formats.py` APPROVED) unless run with `--force`. Stills, posters and contact sheets are in `exports/qa_4x5/`,
 `exports/qa_1x1/`, `exports/poster-4x5.jpg`, `poster-endcard-1x1.jpg` etc.
 
+Placement review (four lenses on both versions: framing, legibility, claims and brand, technical and code; each
+lens's findings re-checked by a skeptic). No claims or legibility defect in either version: every string, figure and
+qualifier matches the 9:16, and no text is cut on a held frame. Found and fixed:
+
+| Finding | Fix |
+|---|---|
+| 1:1: the hero car drives at the lens and its front splitter left the square (hook frames 15-24; the front 3/4 pass, 238-245) | The picture window drops to plate y 320-1400 on those shots while the graphics keep theirs, and the square's hook panel is 364 px (the lockup moved up onto the offer row). The splitter now stays 40-65 px inside the frame |
+| Editing `front.html` changed the approved 9:16 layer's cache key: a plain build would have re-rendered it (Chromium's glyph raster is not bit-reproducible) and re-encoded over the approved files | `front.html` is back to the approved bytes; the square layout is `front_1x1.html`. The build refuses to re-encode over an approved render (SHA-256 in `lib/formats.py` APPROVED) without `--force` |
+| The compositing workers read the format from a global, so with the spawn start method (macOS) they would have composited 9:16 into the wrong folder | The format is passed to each worker |
+| The 1:1 used a fresh render of the whole front layer, so its graphics between the hook and the end card were not the approved raster (sub-pixel glyph shifts) | The 1:1 composites the approved 9:16 layer on every frame except its own hook and end card |
+| Not changed: the requirement rows whip out through the top edge for 2 blurred frames (10.68-10.72 s) in both crops | A skeptic judged it an ordinary exit (the panel leaves with them, no figures); kept as the approved motion |
+
 ```bash
 python3 build.py --format 4x5          # every stage cached; only the composite, encode and QA run
 python3 build.py --format 1x1          # also renders the square's hook and end card (front_1x1.html -> .work/front_1x1/)
