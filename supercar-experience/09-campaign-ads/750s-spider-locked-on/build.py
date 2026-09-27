@@ -238,6 +238,9 @@ AUDIT_FRAMES = [0, 24, 46, 60, 95, 105, 140, 150, 175, 186, 200, 215, 230, 244, 
 def st_qa(a):
     qa = os.path.join(EXP, 'qa')
     os.makedirs(qa, exist_ok=True)
+    for f in os.listdir(qa):                          # no stale stills from an earlier render
+        if f.endswith('.jpg'):
+            os.remove(os.path.join(qa, f))
     deliv = os.path.join(EXP, NAME + '.mp4')
     raw = subprocess.run([FF, '-v', 'error', '-i', deliv, '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'],
                          capture_output=True, check=True).stdout

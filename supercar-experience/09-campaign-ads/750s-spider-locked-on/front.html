@@ -296,7 +296,7 @@ window.renderAt = function (t) {
     const tw = g(6) - 0.17;
     figFade(['hTag', 'hHead', 'hOfferM', 'hLogo'], t, tw + 1 / FPS);
     wh('hLogoW', tw); wh('hOfferW', tw + 0.01); wh('hHeadW', tw + 0.02); wh('hTagW', tw + 0.03);
-    wh('hookPanel', tw + 0.03); wh('hookStripe', tw + 0.03);
+    wh('hookPanel', tw - 0.05); wh('hookStripe', tw - 0.05);   // already moving when the rows are gone
   }
 
   // ================= B/D. BRACKETS =================
@@ -338,9 +338,13 @@ window.renderAt = function (t) {
     $('lPanel').style.clipPath = `inset(0 ${(100 - 100 * rv).toFixed(3)}% 0 0)`;
     KT.drawStripe($('lStripe'), t, { start: s0, dur: 0.28 });
     flipX(G.brand, t, s0 + 0.03, 0.03, 0.17, -100);
-    KT.wipe($('lModelG'), t, { start: s0 + 0.06, dur: 0.26, dir: 'right', edge: $('lEdge'), ease: E.inOutCubic, pad: 4 });
     trackLeft(G.year, t, s0 + 0.12, 0.30, 0.6, 0.08, 30);
     figFade(['lBrand', 'lModelG', 'lYear'], t, tBx + 1 / FPS);
+    // final QC: 750S SPIDER arrives whole (a wipe typed the figure on glyph by glyph: '7', '750'); multiplied
+    // with the exit fade above
+    { const q = E.outCubic(P(t, s0 + 0.06, s0 + 0.06 + 3 / FPS));
+      $('lModelG').style.opacity = (+$('lModelG').style.opacity) * q;
+      $('lModelG').style.transform = `translateY(${(10 * (1 - q)).toFixed(2)}px)`; }
     glintShadow($('lModelW'), KT.glint(G.model, t, { start: g(8), dur: 0.39, base: '#FFFFFF', warm: '#FFF6D0',
                                                      hot: '#FFFFFF', width: 0.18 * G.model.W, angle: 108 }));
     KT.whip($('labW'), t, { start: tBx, dur: 0.12, dx: 0, dy: -280, ease: E.inCubic });
@@ -387,7 +391,6 @@ window.renderAt = function (t) {
     const rs = (gl, st) => KT.rise(gl, t, { start: st, stagger: 0.006, dur: 0.25, dy: 1.1, ease: E.outExpo });
     rs(G.need, tR + 0.05); rs(G.lic, tR + 0.12); rs(G.age, tR + 0.19);
     const wo = (id, d) => KT.whip($(id), t, { start: tRx + d, dur: 0.12, dx: 0, dy: -300, ease: E.inCubic });
-    figFade(['rNeed', 'rLic', 'rAge'], t, tRx + 1 / FPS);
     wo('rNeedW', 0); wo('rLicW', 0.005); wo('rAgeW', 0.01);
     wo('rPanel', 0.02); wo('rStripeCapW', 0.02);
   }

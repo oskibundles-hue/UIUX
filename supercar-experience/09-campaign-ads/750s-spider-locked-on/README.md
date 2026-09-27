@@ -90,18 +90,30 @@ through the crash; the P is whole; the black gap is clean). Round 2 found:
 
 | Finding | Fix |
 |---|---|
-| Blocking: the new end-card sky ND left a bright rim along the hill ridge and a lighter stripe of sky over the logo | The ND ramps in from above the frame (monotonic sky), fades out at the ridge line, and is gated by a grown matte, so the haze rim darkens with the sky; its chroma is lifted with it, so the held sky stays blue |
+| Blocking: the new end-card sky ND left a bright rim along the hill ridge and a lighter stripe of sky over the logo | The ND ramps in from above the frame (monotonic sky). The rim took one more round (below) |
 | The requirements panel said 25+ with no mention of the site's 21-24 allowance | It now reads YOU NEED / VALID DRIVER'S LICENSE / INSURANCE; the age appears once, in the site's words, on the end card |
 | At 1.3x the optical flow melted the car on the hook's approach shot | Beat 2 plays whole source frames at 1.0x (src 261-282) |
 | The badge shot's truss strobed (minterpolate blends fast bars, so every other in-between doubled) | Every badge frame averages a whole source frame of in-betweens: an even motion blur, the badge stays sharp |
 | The hook softened after frame 0 (bilinear push, 2-sample average) | Pushes use a Lanczos resample (identity at scale 1.0); slow shots take one in-between per frame |
-| The end-card comma briefly hid behind the buttress and read as a decimal; SPIDER and the price double-exposed on one frame | SPIDER sinks faster (gone by 13.88 s); the price rises after it, travels less, and fades in over its first frames |
+| The end-card comma briefly hid behind the buttress and read as a decimal; SPIDER and the price double-exposed on one frame | SPIDER sinks faster (gone by 13.88 s) and the price starts after it. The comma took one more round (below) |
 | The instrument cluster read 33-41 MPH next to a posted 25 | The cluster is defocused on the badge shot |
 | MCLAREN 750S (behind-car) under 3:1 | A stronger halo; 750S in white |
-| Exits left an empty panel for a frame | Every text row fades as its panel starts the whip |
+| Exits left an empty panel for a frame | Every text row fades as its panel starts the whip (the hook panel and the requirements rows were finished in the final round) |
 | FULL DAY · $1,799 wiped in glyph by glyph; the figure was white | The label wipes; the figure arrives whole, in gold |
 | The requirements panel entered while the offer's whip tail was still on screen | It enters one frame later (8.00 s), at a 28-sample shutter |
 | Nits | The drop's eased scale is applied before the pad is cropped (no mirrored edges); the zenith corner keys as sky at low res too; the vignette runs before the behind-car type; the darkest plates (bridge, hands) get a small shadow lift; the whipped stripes now draw on as intended (wrappers) |
+
+## Final QC (round 3: the round-2 fixes re-verified, plus a blocking-only whole-ad QC)
+
+Round 3 confirmed 20 of the round-2 items fixed at full resolution, with no regressions. It found:
+
+| Finding | Fix |
+|---|---|
+| Blocking: the ridge rim was still there. The bright horizon haze just under the sky matte's edge keys as "hill", so an ND that follows the matte, or fades out by height, leaves it bright | The end-card ND weight is max(band, haze key) x (1 - dark foreground). The haze (bright, not sky, above y ~800) takes the same ND as the sky, and the car and hills are held out. Measured on f340 / f431: rim minus sky median 1-2 levels, p90 13.5 (was 40-60) |
+| Blocking: on f336-337 the rising price read "$1.299", because the comma's tail passed behind the left buttress tip | The price fades in while rising only 14 px, so the tail (at most y 705 at rest) never goes below the buttress edge (~y 720) |
+| Should-fix: the badge label typed 750S on glyph by glyph ("7", "750") | 750S SPIDER arrives whole over 3 frames |
+| The hook's in-between frames were 17 % softer (a 12 Hz sharp/soft cadence) | A light unsharp mask on the in-between frames of the hero shot only; the gradient over f1-5 is now within 5 % frame to frame |
+| Nits | The badge truss averages a true box over one source frame (even cadence); the hook panel starts leaving 2 frames before its rows are gone; the requirements rows (no figures) whip with their panel; the end-card sky chroma is lifted to 0.8; the bridge plate's shadows are lifted a little more |
 
 ## Change a figure
 

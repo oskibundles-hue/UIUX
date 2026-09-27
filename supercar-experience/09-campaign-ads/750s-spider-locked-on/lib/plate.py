@@ -88,7 +88,9 @@ def sample(p, span, B):
         # midpoint in-betweens are double exposures; averaging over a whole source frame on EVERY output frame
         # gives the truss one even motion blur (no 12 Hz strobe) while the near-static badge stays sharp
         span = max(span, B['span_min'])
-    n = int(math.ceil(span * k))
+        n = int(math.ceil(span * k * 4))            # a true box: every frame carries the same share of in-betweens
+    else:
+        n = int(math.ceil(span * k))
     if n <= 1:
         return _at(p, B)
     acc = None
@@ -195,13 +197,13 @@ _yy = np.arange(fx.H, dtype=np.float32)[:, None, None]
 GRAD = (1 - 0.28 * (1 - _smooth(_yy, 150, 900))).astype(np.float32)
 # end-card ND: up to 45 % down behind the top block and the price, eased in over the end-card hit, so the gold
 # price reads by luminance, not hue. It ramps in from above the frame (the sky stays monotonic: no light stripe
-# over the logo) and fades out 690-790, above the car. Final QC: it is a PLAIN graduated ND, not gated by the
-# matte -- any matte gate left the bright horizon haze (keyed as "hill") undarkened as a jagged, torn-paper
-# band along the ridge; a plain grad darkens sky, haze and hilltops together, like a real grad filter, and
-# leaves a natural glow at the horizon. Chroma is lifted on the sky (grown matte), so it stays blue.
-ECARD_BAND = (_smooth(_yy, -200, 420) * (1 - _smooth(_yy, 690, 790))).astype(np.float32)
+# over the logo). Final QC: the bright horizon haze just under the sky matte's edge is keyed as "hill", so any
+# ND that followed the matte or faded out by y left it bright -- a white, torn-paper rim along the ridge. The
+# weight is now max(band, haze key) x (1 - dark foreground): the haze key (bright, not sky, above y 795-815)
+# takes the same ND as the sky; dark foreground (car, hills) is held out. Chroma is lifted on the same weight.
+ECARD_BAND = (_smooth(_yy, -200, 420) * (1 - _smooth(_yy, 760, 820))).astype(np.float32)
 SKY_CHROMA = 0.45
-ECARD_CHROMA = 0.5
+ECARD_CHROMA = 0.8
 CLUSTER = (270, 940, 740, 1095)   # badge shot: the instrument cluster (speed / limit readouts) is defocused
 SWEEP = (13.62, 14.05)          # light sweep across the car body, inside the tape stop and its freeze
 CAR_BELOW = _smooth(_yy, 780, 830).astype(np.float32)   # the sweep lights the car body only, never hills or sky
@@ -273,6 +275,10 @@ def base(i):
     if B.get('black'):
         return np.zeros((fx.H, fx.W, 3), np.float32), None
     img = sample(row['p'], row['span'], B)
+    if B['id'] == 1 and abs((row['p'] - B['fa']) * DENSE_K % DENSE_K) > 1e-3:
+        # final QC: on the 0.5x hero shot every other frame is a flow midpoint about 17 % softer than its
+        # neighbours; a light unsharp mask on those frames only evens the cadence (frame 0, the poster, is whole)
+        img = img + 0.30 * (img - fx.gauss(img, 2))
     if B['id'] == 11:
         img = blur_plate(img, row['p'], row['span'])
     if B['id'] == 4:
@@ -303,9 +309,13 @@ def base(i):
         t = row['t']
         ke = fx.smootherstep((t - (edl.T_END - 0.12)) / 0.37)
         if ke > 0:
-            img = img * (1 - 0.45 * ke * ECARD_BAND)
+            l0 = fx.luma(img)
+            dark = fx.gauss(((matte < 0.5) & (l0 < 0.35)).astype(np.float32)[..., None], 2)
+            haze = (1 - matte[..., None]) * _smooth(l0[..., None], 0.40, 0.55) * (1 - _smooth(_yy, 795, 815))
+            w = np.maximum(ECARD_BAND, haze) * (1 - dark)
+            img = img * (1 - 0.45 * ke * w)
             l = fx.luma(img)[..., None]
-            img = l + (img - l) * (1 + ECARD_CHROMA * ke * ECARD_BAND * mnd)
+            img = l + (img - l) * (1 + ECARD_CHROMA * ke * w)
         img = light_sweep(img, matte, t)
         # tape stop: the picture darkens and desaturates as the music winds down, recovering into the end card
         k = fx.smootherstep((t - edl.T_STOP0) / (edl.T_END - edl.T_STOP0)) * (1 - fx.smootherstep((t - edl.T_END) / 0.35))

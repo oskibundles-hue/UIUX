@@ -21,8 +21,8 @@ behind-the-car type. Times are output seconds. `src` is the 0-based source frame
    - the licence-plate blur (beat 11);
    - on the roof shot: the push, then the sky matte (`lib/sky.py`);
    - the day grade, then on the roof shot a sky chroma lift, then streaks;
-   - on the roof shot: the grad ND on the sky (0.28), the sky-only end-card ND (45 % behind the top block and
-     the price, from 13.84 s), and the light sweep across the car body (13.62-14.05 s);
+   - on the roof shot: the grad ND on the sky (0.28), the end-card ND (up to 45 % on the sky and the horizon
+     haze, the car and hills held out, from 13.84 s), and the light sweep across the car body (13.62-14.05 s);
    - the hook push;
    - whips, the drop impact (on a reflect-padded frame, its scale floor eased out), light leaks.
 2. MID (`mid.html`, roof shot only): MCLAREN 750S, the giant SPIDER and the end-card price. It is multiplied
@@ -51,7 +51,7 @@ behind-the-car type. Times are output seconds. `src` is the 0-based source frame
 | 13 | 9.346-9.808 | 224-234 | f99-109 roadside, the car enters past the rock | 1.0x | | requirements | |
 | 14 | 9.808-10.269 | 235-245 | f369-378 front 3/4, rocks | 0.95x (optical flow) | | requirements | |
 | 15 | 10.269-10.731 | 246-256 | f79-92 whip-pan pass (natural blur) | 1.3x (optical flow) | | requirements: the rows fade as the panel whips up 10.60 | |
-| 16 | 10.731-18.018 | 257-431 | f0-64 ROOF DOWN, locked-off rear (the roof stows) | 0.55x, then 0.5x after the crash, tape stop 13.500-13.962, frozen to 14.21, then eases in to 0.31x | whip left in; optical flow 4x; push 1.000 to 1.045 (outQuad, never stops); grad ND + sky chroma lift; crash punch on the composite at 12.115; light sweep 13.62-14.05; end-card sky ND from 13.84 | mid: MCLAREN 750S tracks in 11.14; SPIDER rises glyph by glyph from 11.192; crash pulse + glint 12.115; sinks 13.50-13.93; END CARD 13.962: price rises from behind the car, logo, MCLAREN 750S SPIDER, 5 HOURS · LAS VEGAS, TEXT OR DM TO BOOK, phone · site, handle, both requirement lines | whoosh 10.731, 11.242; crash impact 12.115; tape stop 13.500; swell; END impact 13.962 |
+| 16 | 10.731-18.018 | 257-431 | f0-64 ROOF DOWN, locked-off rear (the roof stows) | 0.55x, then 0.5x after the crash, tape stop 13.500-13.962, frozen to 14.21, then eases in to 0.31x | whip left in; optical flow 4x; push 1.000 to 1.045 (outQuad, never stops); grad ND + sky chroma lift; crash punch on the composite at 12.115; light sweep 13.62-14.05; end-card sky ND from 13.84 | mid: MCLAREN 750S tracks in 11.14; SPIDER rises glyph by glyph from 11.192; crash pulse + glint 12.115; sinks 13.50-13.88; END CARD 13.962: price fades up from behind the car, logo, MCLAREN 750S SPIDER, 5 HOURS · LAS VEGAS, TEXT OR DM TO BOOK, phone · site, handle, both requirement lines | whoosh 10.731, 11.242; crash impact 12.115; tape stop 13.500; swell; END impact 13.962 |
 
 ## Front-layer graphics (ink top-left; copy is templated from config.json)
 - Every whip exit fades all its text rows from 1 frame before to 2.5 frames into the whip, so a smear can
@@ -72,9 +72,11 @@ behind-the-car type. Times are output seconds. `src` is the 0-based source frame
 - **End card** (13.962 to the end):
   - The SCE lockup (360 px) is at y 282, then MCLAREN 750S SPIDER (Michroma 30, MCLAREN in gold) at y 384
     and 5 HOURS · LAS VEGAS (Bebas 64) at y 428.
-  - The price $1,299 (mid layer, Bebas 236 gold, baseline 676, a close dark halo) rises from behind the rear
-    deck as one word from TE+0.03 (outCubic over 0.42 s, 0.35 of its size, fading in over its first 0.14 s),
-    with glints at TE+0.9 and TE+2.6. SPIDER has sunk by 13.88 s. The top block carries dark halos.
+  - The price $1,299 (mid layer, Bebas 236 gold, baseline 676, a close dark halo) fades up as one word from
+    TE+0.03 (a 14 px rise, outCubic over 0.42 s, the fade over its first 0.14 s), so its comma never dips
+    behind the buttress; glints at TE+0.9 and TE+2.6. SPIDER has sunk by 13.88 s. The top block carries dark
+    halos. The sky behind the block is taken down by the end-card ND (the band plus a haze key, holding out
+    the car and hills).
   - The bottom stack runs over a scrim, under a 78/22 stripe at y 1224: TEXT OR DM TO BOOK (Bebas 80,
     y 1246), (725) 425-3583 · SUPERCAREXP.VIP (Bebas 60, y 1328), @SUPERCAR_EXPERIENCE_ (Bebas 60, y 1384),
     RENTERS 25+ · AGES 21–24 WITH $299 UNDERAGE FEE (Bebas 44, y 1440), and VALID DRIVER'S LICENSE · INSURANCE

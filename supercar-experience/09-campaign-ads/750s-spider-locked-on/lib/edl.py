@@ -80,7 +80,7 @@ BEATS = [
     dict(id=5, a=g(9) + 0.75 * BEAT, b=g(10), black=True, what='BLACK (drop gap, 2 frames)'),
     dict(id=6, a=g(10), b=g(12), fa=173, fb=203, keys=[(0, 1.9), (0.3, 0.8), (1.0, 0.8)],
          what='DROP: low wheel tracking along the white line, ramp 1.9x -> 0.8x'),
-    dict(id=7, a=g(12), b=g(14), fa=226, fb=250, speed=1.0, lift=0.85, streak=ST(0.6, thresh=0.93, point=0.25, point_radius=60),
+    dict(id=7, a=g(12), b=g(14), fa=226, fb=250, speed=1.0, lift=0.75, streak=ST(0.6, thresh=0.93, point=0.25, point_radius=60),
          what='under the bridge, sun flares on the wheel'),
     dict(id=8, a=g(14), b=g(15), fa=138, fb=157, speed=1.0, streak=ST(0.5, thresh=0.9, point=0.2, point_radius=60),
          what='headlight glide (tracked: headlight)'),
