@@ -1,17 +1,6 @@
 {
  "NF": 5230,
- "bad": [
-  {
-   "n": 4073,
-   "t": 135.902,
-   "k": 8,
-   "two": false,
-   "states": [
-    "{\"pages\":[\"MAKESUREEVERYBODY'SHAVINGFUN.\"],\"lab\":\"\",\"clk\":\"\"}",
-    "{\"pages\":[\"MAKESUREEVERYBODY'SHAVINGFUN.\"],\"lab\":\"\",\"clk\":\"23:00\"}"
-   ]
-  }
- ],
+ "bad": [],
  "swaps": [
   {
    "n": 127,

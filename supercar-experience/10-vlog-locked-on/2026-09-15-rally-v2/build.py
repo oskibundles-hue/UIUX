@@ -2,29 +2,30 @@
 """
 build.py -- ONE command for the Sep 15 rally vlog v2 (Egnyte rally day), rebuilt from the raw footage:
 picture edit + grade (lib/plate.py), sound (lib/music.py, lib/mix.py), tracking (lib/track_mid.py), the
-Locked-On motion layer (story.html + lib/sekit.js + lib/v2kit.js, captured by lib/kcapture.js), the
-composite, the exports and QA.
+Locked-On motion layer (story.html + lib/sekit.js + lib/v2kit.js, captured by lib/kcap2.js), the
+composite, the exports and QA. Every stage is cached, so a re-run only redoes what a change touches.
 
-    python3 build.py                        # everything
-    python3 build.py --stage join           # stages: shots, track, join, prep, audio, front, compose, qa (comma list)
+    python3 build.py --draft                # 540x960 review cut in minutes (gates first) -> exports/draft/
+    python3 build.py                        # everything, full quality (stops on a gate error unless --force)
+    python3 build.py --stage compose,qa     # stages: shots, track, join, prep, audio, gates, front, compose, qa
     python3 build.py --stills 0,776,4200    # composite single frames -> .work/stills/ (no mp4)
 
 Stages (all cached in .work/):
-  shots    lib/plate.py: every EDL shot -> .work/shots/NN.mov (graded, reframed, ramps)
+  shots    lib/plate.py: every EDL shot -> .work/shots/NN.mov (graded, reframed, ramps); per-shot signatures
   track    lib/track_mid.py on the rendered shots for every lock-on and licence plate in config.json `tracks`
-           -> lib/data/tracks.json (boxes in OUTPUT pixels by OUTPUT frame), QA sheets -> exports/qa/track_*.jpg
-  join     lib/plate.py: the shots in order with whips, sweeps, impacts, chapter punches and the plate blurs
-           -> .work/plate.mov (5230 frames, 29.97 fps)
-  prep     the layer scene (.work/scene.js), the camera clock of every frame (.work/clock.js), tracks.js,
-           and the SFX cue list (.work/sfx_cues.json), all from config.json + the EDL + captions.json
-  audio    lib/music.py (only when no audio/music.wav is supplied) + lib/mix.py -> .work/mix.wav and
-           .work/mix_nomusic.wav (-14 LUFS), .work/meter.json -> .work/layerdata.js
-  front    story.html captured frame by frame (RGBA PNG, sub-frame motion blur on fast moves, 3 Chromium processes)
-  compose  ffmpeg: plate + vignette + layer overlay -> x264 High two-pass 11 Mb/s + AAC 256k (+faststart) master;
-           the no-music master (same video stream, other mix); _DELIVERY copy only if the master is over
-           11.5 Mb/s; the 720x1280 phone preview (< 30 MiB)
-  qa       per-beat stills (first / mid / last), poster, contact sheet, lock-on stills, loudness, true peak,
-           tail silence, safe-zone ink audit -> exports/qa/
+           -> lib/data/tracks.json (boxes in OUTPUT pixels by OUTPUT frame); only tracks whose inputs changed
+  join     lib/plate.py: shots + transitions + punches + plate blurs -> .work/plate.mov; skipped when unchanged
+  prep     the layer scene (.work/scene.js, after the lock-on gate), camera clock, tracks.js, SFX cues
+  audio    lib/music.py (only when no audio/music.wav is supplied) + lib/mix.py -> .work/mix.wav, mix_nomusic.wav,
+           stems, meter; skipped when its inputs are unchanged; the dialog and nat buses are cached inside mix.py
+  gates    lib/gates.py + lib/swapcheck.js: swap check, black / constant / lens-blocked shots, caption sync,
+           loudness, quote-card speaker check -> exports/qa/gates.md (errors stop a full render)
+  front    story.html captured by lib/kcap2.js: only the frames whose layer state changed (hash of every component's
+           DOM at every motion-blur sample), identical frames once; order-independent pixels; NPROC processes
+  compose  plate + vignette + layer -> x264 CRF 17.3 (medium, VBV 16M/22M) master in 120-frame segments (only changed
+           segments are re-encoded, then joined by stream copy), the 720x1280 preview from the same pass (CRF 28.5,
+           VBV 2M), the NO MUSIC master = the same video + the no-music mix; _DELIVERY only if the master is > 11.5 Mb/s
+  qa       stills, sheets, loudness, true peak, durations, safe-zone audit, caption sync, swap check (one decode)
 """
 import argparse, hashlib, json, math, os, re, shutil, struct, subprocess, sys, time
 import numpy as np
@@ -537,10 +538,10 @@ GRAPH = ('[0:v]scale=in_color_matrix=bt709:in_range=tv,format=gbrp,vignette=angl
          'scale=out_color_matrix=bt709:out_range=tv,format=yuv420p[v]')
 # vignette eval=init: the vignette has no time-varying parameter, so its gain map is computed once instead of per frame
 # (identical pixels, checked by md5 of the composite)
-VENC = ['-c:v', 'libx264', '-preset', 'medium', '-crf', '17', '-maxrate', '16M', '-bufsize', '22M', '-profile:v', 'high',
+VENC = ['-c:v', 'libx264', '-preset', 'medium', '-crf', '17.3', '-maxrate', '16M', '-bufsize', '22M', '-profile:v', 'high',
         '-pix_fmt', 'yuv420p', '-x264-params', 'keyint=60:min-keyint=30', '-colorspace', 'bt709', '-color_primaries', 'bt709',
         '-color_trc', 'bt709', '-color_range', 'tv']
-PENC = ['-c:v', 'libx264', '-preset', 'medium', '-crf', '27', '-maxrate', '2M', '-bufsize', '3M', '-pix_fmt', 'yuv420p',
+PENC = ['-c:v', 'libx264', '-preset', 'medium', '-crf', '28.5', '-maxrate', '2M', '-bufsize', '3M', '-pix_fmt', 'yuv420p',
         '-x264-params', 'keyint=60:min-keyint=30', '-colorspace', 'bt709', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-color_range', 'tv']
 ENC_SIG = hashlib.sha1(json.dumps([SEG, GRAPH, VENC, PENC, 'v1']).encode()).hexdigest()[:12]
 

@@ -222,7 +222,7 @@ Music: original synth bed (lib/music.py), no music.wav supplied (105.1095 BPM, f
 | SE-LO_04_whoosh_left_to_right.wav | 87.72 | gold light sweep | -25.2 dB (-6.0) |
 | SE-LO_02_hit_drop.wav | 87.9 | chapter slam RED ROCK | -25.4 dB (-6.0) |
 | SE-LO_11_tick_lock.wav | 94.55 | clockStamp in | -20.5 dB (-0.9) |
-| SE-LO_05_whoosh_right_to_left.wav | 101.9 | testimonial card in | -30.8 dB (-6.0) |
+| SE-LO_05_whoosh_right_to_left.wav | 101.9 | quote card (Omarie's pick) in | -30.8 dB (-6.0) |
 | SE-LO_10_tick_acquire.wav | 106.35 | lock acquire ROMA | -22.8 dB (-6.0) |
 | SE-LO_11_tick_lock.wav | 106.61 | lock ROMA | -22.6 dB (-6.0) |
 | SE-LO_11_tick_lock.wav | 110.82 | v2place in | -27.2 dB (-6.0) |
