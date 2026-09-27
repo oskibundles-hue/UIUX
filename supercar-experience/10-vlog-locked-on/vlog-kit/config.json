@@ -1,0 +1,67 @@
+{
+  "_about": "Everything the kit shows. copy = every on-screen line (sources in README.md). plates = the footage. reel = the review reel: shots in reel FRAMES (30000/1001 fps) and components in reel SECONDS. mockups = one still per variation (a reel frame or an extra shot, with only that code rendered). Edit here and run ./render.sh.",
+  "fps": "30000/1001",
+  "tools": {
+    "ffmpeg": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/ffmpeg",
+    "rooftopRaw": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/raw/keep/DJI_0029.MP4",
+    "rallyCut": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/vlog/rally_ig.mp4"
+  },
+  "copy": {
+    "host": { "name": "OMARIE", "handle": "@NQ.YOUNG" },
+    "guest": "RALLY GUEST",
+    "banner": { "name": "SUPERCAR EXPERIENCE", "status": "RALLY DAY", "statusLong": "RALLY DAY · LAS VEGAS" },
+    "clock": { "start": "22:49:05", "place": "RED ROCK CASINO", "date": "SEP 15 2026", "jumpFrom": "20:24" },
+    "route": { "title": "THE ROUTE", "sub": "RED ROCK TO THE VENETIAN", "waypoints": ["215", "15 NORTH", "FLAMINGO", "LAS VEGAS BLVD", "VENETIAN", "LEVEL 9"] },
+    "chapters": {
+      "lineup": { "tag": "CH 04 · RED ROCK", "title": "THE LINEUP" },
+      "driveBack": { "tag": "CH 05", "title": "THE DRIVE BACK" },
+      "level9": { "tag": "CH 06", "title": "LEVEL 9" }
+    },
+    "cars": {
+      "urusGrey": { "make": "LAMBORGHINI", "placeholder": false },
+      "convertible": { "make": "[MAKE]", "placeholder": true },
+      "urusRed": { "make": "LAMBORGHINI", "placeholder": false },
+      "cullinan": { "kicker": "LEAD CAR", "make": "ROLLS-ROYCE CULLINAN", "quote": "I'LL BE LEADING EVERYBODY", "quoteBy": "OMARIE" }
+    },
+    "quote": "[GUEST QUOTE GOES HERE, VERBATIM, WORD FOR WORD FROM THE CLIP]",
+    "question": "HOW WAS IT?",
+    "answer": "[GUEST ANSWER, VERBATIM]",
+    "footer": "RALLY DAY · SEP 15 2026 · LAS VEGAS",
+    "index": { "title": "LOCKED-ON · VLOG KIT", "sub": "SAY THE CODES: E.G. \"USE A2, B1, H1\"" }
+  },
+  "plates": {
+    "rooftop": { "_about": "DJI_0029.MP4, the Red Rock Casino parking garage after dinner at Lotus of Siam (the guests lining up to drive back), 14.4 s, 22:49:05. Mezzanine 1080x1920 29.97 fps = every other source frame; stills are pulled from the 4K source at the same frame.", "clockStart": "22:49:05" },
+    "rally": { "_about": "Frames of the approved T7 reel cut (rally_ig.mp4). Only caption-free frames; a Ken Burns zoom anchored low keeps its burned-in SE bug (y 296-338) out of frame.", "frames": [3180, 3300] }
+  },
+  "reel": {
+    "_about": "Shots in reel frames [r0, r1). clip = rooftop mezzanine frames at 1x (or speed); still = one frame (rooftop:N = 4K still of clip frame N, rally:N = frame N of the rally cut) with a Ken Burns kb {s0,s1,ax,ay,dx0,dx1,dy0,dy1}.",
+    "shots": [
+      { "id": "host1", "r": [0, 64], "plate": { "kind": "clip", "f0": 0 } },
+      { "id": "whip1", "r": [64, 72], "fx": "whip", "dir": "left", "aTail": [64, 65, 66, 67], "bHead": [108, 109, 110, 111] },
+      { "id": "convoy", "r": [72, 171], "plate": { "kind": "clip", "f0": 112 } },
+      { "id": "lineup", "r": [171, 231], "plate": { "kind": "clip", "f0": 236 } },
+      { "id": "far", "r": [231, 281], "plate": { "kind": "clip", "f0": 296, "speed": 0.6 } },
+      { "id": "host2", "r": [281, 369], "plate": { "kind": "clip", "f0": 326 } },
+      { "id": "sweep1", "r": [369, 384], "fx": "sweep", "a": { "kind": "clip", "f0": 414 }, "b": "glass" },
+      { "id": "glass", "r": [384, 483], "plate": { "kind": "still", "src": "rally:3300", "span": [369, 483], "kb": { "s0": 1.30, "s1": 1.37, "ax": 540, "ay": 1520 } } },
+      { "id": "route1", "r": [483, 579], "plate": { "kind": "still", "src": "rally:3180", "span": [483, 594], "kb": { "s0": 1.31, "s1": 1.38, "ax": 520, "ay": 1480 } } },
+      { "id": "sweep2", "r": [579, 594], "fx": "sweep", "a": "route1", "b": "routeFull" },
+      { "id": "routeFull", "r": [594, 706], "plate": { "kind": "still", "src": "rooftop:315", "span": [579, 706], "kb": { "s0": 1.05, "s1": 1.12, "ax": 540, "ay": 1100 } } },
+      { "id": "quote", "r": [706, 826], "plate": { "kind": "still", "src": "rooftop:255", "kb": { "s0": 1.46, "s1": 1.54, "ax": 630, "ay": 1200, "dy0": -300, "dy1": -300 } } },
+      { "id": "split", "r": [826, 952], "plate": { "kind": "split", "seam": 960,
+          "top": { "kind": "still", "src": "rooftop:375", "kb": { "s0": 1.0, "s1": 1.05, "ax": 540, "ay": 850, "dy0": -330, "dy1": -330 } },
+          "bottom": { "kind": "still", "src": "rooftop:255", "kb": { "s0": 1.0, "s1": 1.05, "ax": 640, "ay": 1150, "dy0": 330, "dy1": 330 } } } },
+      { "id": "jump", "r": [952, 1042], "fx": "switch", "a": "split", "b": "post", "switchAt": 997 },
+      { "id": "post", "r": [1042, 1114], "plate": { "kind": "still", "src": "rooftop:375", "span": [997, 1114], "kb": { "s0": 1.5, "s1": 1.6, "ax": 240, "ay": 430, "dx0": 120, "dx1": 144, "dy0": 215, "dy1": 258 } } },
+      { "id": "index", "r": [1114, 1174], "plate": { "kind": "black" } }
+    ],
+    "audio": { "_about": "the clip's own sound, at low level, only where the rooftop clip plays at 1x; silence elsewhere", "gainDb": -9.0, "fadeMs": 60 }
+  },
+  "appendix": {
+    "_about": "extra mockup-only shots after the reel (not in the export)",
+    "shots": [
+      { "id": "mockA1", "len": 30, "plate": { "kind": "still", "src": "rooftop:120" } },
+      { "id": "mockH1", "len": 60, "plate": { "kind": "still", "src": "rooftop:375", "kb": { "s0": 1.0, "s1": 1.0, "ax": 540, "ay": 960 } } }
+    ]
+  }
+}
