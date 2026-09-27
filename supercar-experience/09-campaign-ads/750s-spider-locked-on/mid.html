@@ -1,0 +1,140 @@
+<!doctype html>
+<!--
+  mid.html -- the BEHIND-THE-CAR type layer of "ROOF DOWN" (roof shot only, 10.73 s -> end).
+  Transparent 1080x1920, window.renderAt(t) pure in t, captured by lib/kcapture.js like front.html.
+  build.py multiplies this layer by the per-frame sky matte (lib/sky.py, .work/matte/) before it goes over the
+  plate, so the car, the stowing roof and the far hills all stay IN FRONT of these words:
+    MCLAREN 750S (Michroma, gold) and the giant SPIDER (Bebas, white) rise from behind the rear deck as the
+    roof folds away; SPIDER takes the crash (12.115 s), sinks back behind the car in the tape stop; the price
+    rises from behind the car on the end-card hit (13.962 s) and stays, whole and clear of the car.
+  The layer pushes less than the plate (1.00 -> 1.02 against the plate's 1.045): it reads as farther away.
+-->
+<html><head><meta charset="utf-8"><title>ROOF DOWN mid layer</title>
+<style>
+@font-face{font-family:Bebas;src:url('../../07-fonts/BebasNeue-Regular.ttf')}
+@font-face{font-family:Michroma;src:url('../../07-fonts/Michroma-Regular.ttf')}
+html,body{margin:0;padding:0;background:transparent;width:1080px;height:1920px;overflow:hidden}
+.a{position:absolute;left:0;top:0}
+.beb{font-family:Bebas;letter-spacing:0;line-height:1;white-space:pre}
+.mic{font-family:Michroma;letter-spacing:.08em;line-height:1;white-space:pre}
+</style>
+<script src=".work/config.js"></script>
+<script src=".work/timeline.js"></script>
+<script src="lib/kinetic.js"></script>
+<script>
+const g = k => TL.g0 + k * TL.beat;
+window.KT_PLAN = { k: 8, shutter: 180, spans: [
+  { a: 11.10, b: 11.95, k: 20, shutter: 270 }, { a: 12.08, b: 12.40, k: 12, shutter: 180 },
+  { a: 13.48, b: 13.90, k: 20, shutter: 270 }, { a: 13.90, b: 14.50, k: 16, shutter: 180 } ] };
+</script>
+</head><body>
+<div id="stage" class="a" style="width:1080px;height:1920px;transform-origin:540px 1130px">
+  <div id="makeW" class="a"><div id="make" class="mic" style="font-size:40px;color:#FBD101"></div></div>
+  <div id="giantW" class="a"><div id="giant" class="beb" style="font-size:360px;color:#FFFFFF"></div></div>
+  <div id="priceW" class="a"><div id="price" class="beb" style="font-size:236px;color:#FBD101"></div></div>
+</div>
+<script>
+const C = window.CONFIG, FPS = TL.fps, E = KT.ease, P = KT.p, cl = KT.cl;
+const TE = TL.tEnd, TS = TL.tStop, TC = TL.tCrash;
+const $ = id => document.getElementById(id);
+const G = {};
+const cv = document.createElement('canvas').getContext('2d');
+function ink(fam, size, text) {
+  cv.font = `${size}px ${fam}`; cv.letterSpacing = fam === 'Michroma' ? (0.08 * size) + 'px' : '0px';
+  const m = cv.measureText(text);
+  return { aA: m.actualBoundingBoxAscent, fA: m.fontBoundingBoxAscent, fD: m.fontBoundingBoxDescent,
+           left: m.actualBoundingBoxLeft, w: m.actualBoundingBoxLeft + m.actualBoundingBoxRight };
+}
+function place(w, fam, size, text, x, y) {         // ink top-left at (x, y)
+  const m = ink(fam, size, text), hl = (size - (m.fA + m.fD)) / 2;
+  w.style.left = (x + m.left) + 'px'; w.style.top = (y - (hl + m.fA - m.aA)) + 'px';
+}
+function placeBase(w, fam, size, text, x, base) {  // ink left at x, baseline at `base`
+  const m = ink(fam, size, text), hl = (size - (m.fA + m.fD)) / 2;
+  w.style.left = (x + m.left) + 'px'; w.style.top = (base - hl - m.fA) + 'px';
+}
+const GIANT_BASE = 690, PRICE_BASE = 676;
+const HALO = 'drop-shadow(0 0 3px rgba(0,0,0,.6)) drop-shadow(0 0 22px rgba(0,0,0,.45))';
+
+(async () => {
+  await document.fonts.load('100px Bebas'); await document.fonts.load('40px Michroma'); await KT.ready();
+  const make = C.brand + ' ' + C.model.split(' ')[0];            // MCLAREN 750S
+  const gSize = Math.min(360, Math.floor(360 * 816 / ink('Bebas', 360, C.giant).w));
+  $('giant').style.fontSize = gSize + 'px'; G.gSize = gSize;
+  place($('makeW'), 'Michroma', 40, make, 72, 300);
+  placeBase($('giantW'), 'Bebas', gSize, C.giant, 72, GIANT_BASE);
+  placeBase($('priceW'), 'Bebas', 236, C.price, 72, PRICE_BASE);
+  $('make').textContent = make; $('giant').textContent = C.giant; $('price').textContent = C.price;
+  G.make = KT.measure(KT.split($('make'), { perspective: 0 }));
+  G.giant = KT.measure(KT.split($('giant'), { perspective: 0 }));
+  G.price = KT.measure(KT.split($('price'), { perspective: 0 }));
+  // review r2: a stronger close halo, and 750S in white (thin gold Michroma fell under 3:1 on the lifted sky)
+  $('makeW').style.filter = 'drop-shadow(0 0 3px rgba(0,0,0,.8)) drop-shadow(0 0 16px rgba(0,0,0,.65))';
+  G.make.forEach((s, i) => { if (i >= C.brand.length) s.style.color = '#FFFFFF'; });
+  window.renderAt(0);
+  window.__ktReady = true;
+})();
+
+function trackLeft(g, t, st, dur, from, to, size) {
+  const e = E.outExpo(P(t, st, st + dur)), extra = (from - to) * size * (1 - e);
+  g.forEach((s, i) => { s.style.opacity = cl(P(t, st, st + dur) * 2.2); s.style.transform = `translateX(${i * extra}px)`; });
+}
+
+window.renderAt = function (t) {
+  const i0 = TL.beats[16][0], on = t * FPS >= i0 - 0.5;
+  $('stage').style.display = on ? 'block' : 'none';
+  if (!on) return;
+  const u = cl((t * FPS - i0) / (TL.nf - 1 - i0));
+  $('stage').style.transform = `scale(${(1 + 0.02 * (1 - (1 - u) * (1 - u))).toFixed(5)})`;
+
+  // MCLAREN 750S: tracking collapse on beat 24, lifts away in the tape stop
+  trackLeft(G.make, t, g(24) - 0.05, 0.40, 0.7, 0.08, 40);
+  const mo = E.inCubic(P(t, TS, TS + 0.3));
+  $('makeW').style.transform = `translateY(${(-60 * mo).toFixed(2)}px)`;
+  $('makeW').style.opacity = 1 - mo;
+
+  // SPIDER: glyphs rise from behind the rear deck in a 16th-note cascade; the crash pulses and glints it;
+  // the tape stop sinks it back behind the car, last glyph first
+  const H = G.gSize * 0.72;
+  const pc = (() => { const q = (t - TC) / (6 / FPS); return q > 0 && q < 1 ? Math.sin(Math.PI * q) : 0; })();
+  $('giantW').style.transformOrigin = '50% 90%';
+  $('giantW').style.transform = pc > 0 ? `scale(${(1 + 0.035 * pc).toFixed(5)})` : 'none';
+  const n = G.giant.length;
+  G.giant.forEach((s, i) => {
+    const q = P(t, g(24) + i * 0.058, g(24) + i * 0.058 + 0.55), e = E.outExpo(q);
+    // review r2: the sink finishes by 13.88 s, before the price starts, so no frame double-exposes the two words
+    const k = E.inCubic(P(t, TS + (n - 1 - i) * 0.02, TS + (n - 1 - i) * 0.02 + 0.28));
+    s.style.opacity = q <= 0 || k >= 1 ? 0 : 1;
+    s.style.transform = `translateY(${((1 - e) * H * 1.35 + k * H * 1.6).toFixed(2)}px)`;
+  });
+  KT.glint(G.giant, t, { start: TC, dur: 0.5, base: '#FFFFFF', warm: '#FFF1B8', hot: '#FFFFFF', width: 0.16 * G.giant.W, angle: 108 });
+
+  // the price rises from behind the car on the end-card hit and stays; two glints keep the hold alive.
+  // review r1: it rises as one word, slower and shorter (outCubic over 0.5 s, 0.6 of its size) with a 180-degree
+  // shutter, so the vertical smear stays small and a 9 can never close into a 0 on the way up
+  // review r2 / final QC: it starts after SPIDER has gone and fades in while it rises only 14 px, so the comma's
+  // tail (y <= 705 at rest) never dips below the left buttress tip (matte edge ~y 720) and cannot read as a
+  // decimal point on any frame
+  G.price.forEach(s => {
+    const q = P(t, TE + 0.03, TE + 0.45), e = E.outCubic(q);
+    s.style.opacity = E.outCubic(P(t, TE + 0.03, TE + 0.17));
+    s.style.transform = `translateY(${((1 - e) * 14).toFixed(2)}px)`;
+  });
+  const gl = t < TE + 2 ? KT.glint(G.price, t, { start: TE + 0.9, dur: 0.5, base: '#FBD101', warm: '#FFE866', hot: '#FFFFFF', width: 0.2 * G.price.W, angle: 108 })
+                        : KT.glint(G.price, t, { start: TE + 2.6, dur: 0.5, base: '#FBD101', warm: '#FFE866', hot: '#FFFFFF', width: 0.2 * G.price.W, angle: 108 });
+  // review r1: a close dark halo under the gold (the matte keeps it off the car), plus the glint's gold bloom
+  $('priceW').style.filter = HALO + (gl > 0 ? ` drop-shadow(0 0 ${(18 * gl).toFixed(2)}px rgba(251,209,1,${(.4 * gl).toFixed(3)}))` : '');
+};
+
+window.inkAudit = function (t) {
+  window.renderAt(t);
+  const out = [];
+  for (const id of ['make', 'giant', 'price']) {
+    const el = $(id); const r = el.getBoundingClientRect(); let vis = $('stage').style.display !== 'none';
+    const gl = G[id].filter(s => +s.style.opacity > 0); if (!gl.length || +$(id + 'W').style.opacity === 0) vis = false;
+    if (vis) out.push({ id, x0: r.left, x1: r.right, y0: r.top, y1: r.bottom });
+  }
+  return out;
+};
+</script>
+</body></html>
