@@ -22,6 +22,9 @@
   const SEK = {};
   const E = KT.ease, P = KT.p, cl = KT.cl, lerp = KT.lerp;
   const FPS = 30000 / 1001;
+  // rally-v2 copy: the nominal frame a (sub-frame, motion-blur) sample belongs to. Discrete state (which caption page,
+  // which label text) is decided on this, so every sample of a frame agrees and a swap is a hard cut on a frame boundary.
+  const frameN = t => Math.round(t * FPS + 1e-9), frameT = t => frameN(t) / FPS;
   const GOLD = '#FBD101';
   const SAFE = { x0: 54, y0: 269, x1: 907, y1: 1536 };
   const BANNER = { y0: 269, y1: 1056 };
@@ -623,6 +626,11 @@
       svg.style.opacity = (parseFloat(svg.style.opacity || 1) * (1 - E.inCubic(P(t, p.exit + 0.1, p.exit + 0.26)))).toFixed(4);
       // label: wipes out with the old target, reappears on the new one (no type flying across the frame); while a
       // target is held it follows at p.follow of the target's motion so the type stays calm and readable
+      // rally-v2 copy: the label and its text swaps (make -> LOCK LOST -> next make) are decided and drawn on the frame
+      // time, so a swap never blends two texts inside one motion-blurred frame (the brackets keep their sub-frame blur)
+      const tR = t;
+      { const t = frameT(tR); let iq = 0; for (let k = 0; k < S.length; k++) if (t >= S[k].t) iq = k;
+      const i = iq, s = S[i];
       const snapT = k => S[k].mode === 'relock' ? S[k].t + (S[k].lost ?? 0.36) : S[k].t;
       const t0 = S[0].t;
       const tinOf = k => k === 0 ? t0 + 0.36 : snapT(k) + 0.16;
@@ -663,6 +671,7 @@
       [lu, lo].forEach(e => { e.setAttribute('d', d); e.setAttribute('stroke-dasharray', `${f2(len * qL)} ${f2(len + 20)}`); });
       dot.setAttribute('cx', f2(r.x)); dot.setAttribute('cy', f2(r.y)); dot.setAttribute('opacity', qL > 0.01 ? 1 : 0);
       sigSvg(svg, pp.br + pos.toFixed(3) + lostK.toFixed(3));
+      }
     } };
   };
 
@@ -836,7 +845,9 @@
       panelAt(pn, t, ts, p.exit ? cfg.t1 - 0.4 : null);
       const c = p.fixed != null ? p.fixed : (CTX.clip(t) ?? 0);
       const sec = s0 + c, [H, M, S] = hms(Math.floor(sec)), fr = sec - Math.floor(sec);
-      hm.g.forEach((g, i) => { g.textContent = (p2(H) + ':' + p2(M))[i] ?? g.textContent; });
+      // rally-v2 copy: HH:MM is a text swap: read on the frame time so a minute change never blends inside a frame
+      const secF = s0 + (p.fixed != null ? p.fixed : (CTX.clip(frameT(t)) ?? 0)), [HF, MF] = hms(Math.floor(secF));
+      hm.g.forEach((g, i) => { g.textContent = (p2(HF) + ':' + p2(MF))[i] ?? g.textContent; });
       const next = hms(Math.floor(sec) + 1)[2];
       // the true second is shown for the whole second; the digits roll to the next one over its last 0.16 s
       const q = p.fixed != null || CTX.clip(t) == null ? 0 : E.inOutCubic(P(fr, 0.84, 1.0));
@@ -1336,10 +1347,16 @@
       });
       pg.gold.style.top = px(p.yBottom - n * lh + 8 + 4);
     });
+    // rally-v2 copy: page i is on screen for whole frames [S_i, E_i); a page's pre-roll never overlaps the page before it
+    // (E_i <= S_i+1), so a page change is a hard switch on one frame boundary
+    pages.forEach((pg, i) => { pg.S = i === 0 && pg.a <= cfg.t0 + 0.01 ? -1e9 : Math.ceil((pg.a - 0.06) * FPS - 1e-6); });
+    // (a gap of 3 frames or less between two pages is closed, so captions never blink off for a frame between pages)
+    pages.forEach((pg, i) => { pg.E = Math.ceil(pg.end * FPS - 1e-6); if (i + 1 < pages.length) { const nS = pages[i + 1].S; pg.E = nS - pg.E <= 3 ? nS : Math.min(pg.E, nS); } });
     return { code: cfg.code, render(t) {
+      const n = frameN(t); t = frameT(t);                  // rally-v2 copy: captions render on the frame time (no sub-frame blend)
       const on = t >= cfg.t0 && t < cfg.t1; show(root, on); if (!on) return;
       pages.forEach((pg, i) => {
-        const vis = t >= pg.a - (i === 0 && pg.a <= cfg.t0 + 0.01 ? 1 : 0.06) && t < pg.end;
+        const vis = n >= pg.S && n < pg.E;
         show(pg.root, vis); if (!vis) return;
         const all = pg.lines.flat();
         const qi = i === 0 && pg.a <= cfg.t0 + 0.01 ? 1 : E.outExpo(P(t, pg.a - 0.06, pg.a + 0.14));

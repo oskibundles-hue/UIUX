@@ -413,8 +413,8 @@ def decode_frames(path, idx):
     return dict(zip(idx, arr))
 
 
-def contact_sheet(frames, path, cols=8, tw=216, labels=None):
-    th = int(tw * 16 / 9)
+def contact_sheet(frames, path, cols=8, tw=216, labels=None, th=None):
+    th = th or int(tw * 16 / 9)
     rows = math.ceil(len(frames) / cols)
     sheet = Image.new('RGB', (cols * tw, rows * (th + 16)), (16, 16, 16))
     d = ImageDraw.Draw(sheet)
@@ -658,6 +658,18 @@ def st_qa(A):
                 bad.append(dict(t=t, text=it['text'][:40], code=it['code'], box=[round(it['x0']), round(it['y0']), round(it['x1']), round(it['y1'])]))
     res['safe_zone'] = dict(checked_times=len(ts), outside=bad[:40], n_outside=len(bad))
     res['caption_sync'] = caption_sync()
+    # hard swaps: every frame's motion-blur samples agree on the caption page, the convoy label text and the clock's HH:MM,
+    # and never two caption pages at once (lib/swapcheck.js)
+    sc = os.path.join(QA, 'swapcheck.json')
+    sh([NODE, os.path.join(LIB, 'swapcheck.js'), os.path.join(ROOT, 'story.html'), sc])
+    r = json.load(open(sc))
+    res['hard_swaps'] = dict(caption_page_changes=[s['n'] for s in r['swaps']], flagged=r['bad'])
+    # the last frame of every caption page and the first frame of the next, from the delivered master (caption band)
+    cidx = sorted(set(sum([[s['n'] - 1, s['n']] for s in r['swaps']], [])))
+    cfr = decode_frames(master, cidx)
+    swn = {s['n'] for s in r['swaps']}
+    contact_sheet([(i, np.ascontiguousarray(cfr[i][900:1460])) for i in cidx], os.path.join(QA, 'caption-swaps-sheet.jpg'), cols=12, tw=270,
+                  labels={i: f'f{i}' + (' new page' if i in swn else '') for i in cidx}, th=140)
     # every shot's first / middle / last frame from the delivered file: sheet + luma (grade consistency)
     sidx, slab = [], {}
     for k, f0, f1 in PL.FR:

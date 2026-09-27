@@ -56,7 +56,8 @@ const CTX = {
   dur: SC.dur,
   box(name, t) { return trackBox(name, t * FPS); },
   // camera clock (seconds of the day) of the frame on screen: CLOCK[f] + the time since that frame at the shot's speed
-  clip(t) { const f = Math.floor(t * FPS + 1e-6), c = CLK[f]; if (c == null) return null; return c[0] + (t - f / FPS) * c[1]; },
+  // (a motion-blur sample belongs to its nominal frame, so every sample of a shot's first frame reads that shot's clock)
+  clip(t) { const f = Math.round(t * FPS + 1e-9), c = CLK[f]; if (c == null) return null; return c[0] + (t - f / FPS) * c[1]; },
   data(name) { return DATA[name]; },
 };
 

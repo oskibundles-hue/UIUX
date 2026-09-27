@@ -1,0 +1,505 @@
+{
+ "NF": 5230,
+ "bad": [
+  {
+   "n": 4073,
+   "t": 135.902,
+   "k": 8,
+   "two": false,
+   "states": [
+    "{\"pages\":[\"MAKESUREEVERYBODY'SHAVINGFUN.\"],\"lab\":\"\",\"clk\":\"\"}",
+    "{\"pages\":[\"MAKESUREEVERYBODY'SHAVINGFUN.\"],\"lab\":\"\",\"clk\":\"23:00\"}"
+   ]
+  }
+ ],
+ "swaps": [
+  {
+   "n": 127,
+   "t": 4.238,
+   "k": 1,
+   "pages": [
+    "WONDERFULTIME."
+   ]
+  },
+  {
+   "n": 166,
+   "t": 5.539,
+   "k": 1,
+   "pages": [
+    "GOODTIME."
+   ]
+  },
+  {
+   "n": 195,
+   "t": 6.506,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 211,
+   "t": 7.04,
+   "k": 14,
+   "pages": [
+    "WHAT'SGOINGONGUYS?"
+   ]
+  },
+  {
+   "n": 252,
+   "t": 8.408,
+   "k": 1,
+   "pages": [
+    "WE'REBACKATITAGAIN."
+   ]
+  },
+  {
+   "n": 300,
+   "t": 10.01,
+   "k": 10,
+   "pages": [
+    "SOTODAYWEHAVEARALLYTHISISALSOSOMETHINGEL"
+   ]
+  },
+  {
+   "n": 483,
+   "t": 16.116,
+   "k": 1,
+   "pages": [
+    "SUPERCAREXPERIENCE,OFFERIFYOUGUYSEVERWAN"
+   ]
+  },
+  {
+   "n": 589,
+   "t": 19.653,
+   "k": 1,
+   "pages": [
+    "BIGGROUPDRIVEALLTHESECARS,GOGETDINNER."
+   ]
+  },
+  {
+   "n": 724,
+   "t": 24.157,
+   "k": 1,
+   "pages": [
+    "SHOWUP,SHOWOUT."
+   ]
+  },
+  {
+   "n": 774,
+   "t": 25.826,
+   "k": 1,
+   "pages": [
+    "SEE,WEHAVEALLTHECARS."
+   ]
+  },
+  {
+   "n": 902,
+   "t": 30.097,
+   "k": 1,
+   "pages": [
+    "BLACKSERIES,URUSES,CORVETTE,HURACÁNEVOS,"
+   ]
+  },
+  {
+   "n": 1203,
+   "t": 40.14,
+   "k": 1,
+   "pages": [
+    "ROLLS-ROYCECULLINAN."
+   ]
+  },
+  {
+   "n": 1234,
+   "t": 41.174,
+   "k": 1,
+   "pages": [
+    "SORIGHTNOW,WE'REGETTINGREADYTOMEETTHECUS"
+   ]
+  },
+  {
+   "n": 1349,
+   "t": 45.012,
+   "k": 1,
+   "pages": [
+    "IFYOUEVERNEEDTOBOOKWITHUSFORALARGEEVENTL"
+   ]
+  },
+  {
+   "n": 1494,
+   "t": 49.85,
+   "k": 1,
+   "pages": [
+    "ASYOUCANSEEWE'REABLETODOIT."
+   ]
+  },
+  {
+   "n": 1550,
+   "t": 51.718,
+   "k": 1,
+   "pages": [
+    "LETUSKNOWWHATYOUNEEDANDWE'LLMAKEITHAPPEN"
+   ]
+  },
+  {
+   "n": 1625,
+   "t": 54.221,
+   "k": 12,
+   "pages": [
+    "HOWYOUGUYSDOING?"
+   ]
+  },
+  {
+   "n": 1671,
+   "t": 55.756,
+   "k": 1,
+   "pages": [
+    "GOOD."
+   ]
+  },
+  {
+   "n": 1715,
+   "t": 57.224,
+   "k": 1,
+   "pages": [
+    "JUSTSHOWINGTHECUSTOMERSHOWTHEVEHICLESARE"
+   ]
+  },
+  {
+   "n": 1796,
+   "t": 59.927,
+   "k": 1,
+   "pages": [
+    "TOBEDRIVENSAFELY."
+   ]
+  },
+  {
+   "n": 1851,
+   "t": 61.762,
+   "k": 1,
+   "pages": [
+    "THAT'SOURNUMBERONETHING."
+   ]
+  },
+  {
+   "n": 1910,
+   "t": 63.73,
+   "k": 14,
+   "pages": []
+  },
+  {
+   "n": 1925,
+   "t": 64.231,
+   "k": 1,
+   "pages": [
+    "ALRIGHT,SOFORYOUSPECIFICALLYYOU'LLGETTHE"
+   ]
+  },
+  {
+   "n": 2011,
+   "t": 67.1,
+   "k": 1,
+   "pages": [
+    "WHICHONE?"
+   ]
+  },
+  {
+   "n": 2030,
+   "t": 67.734,
+   "k": 1,
+   "pages": [
+    "THER8,AUDIR8."
+   ]
+  },
+  {
+   "n": 2078,
+   "t": 69.336,
+   "k": 10,
+   "pages": [
+    "OKAY."
+   ]
+  },
+  {
+   "n": 2087,
+   "t": 69.636,
+   "k": 1,
+   "pages": [
+    "YEAH,BECAUSEYOU'REPRETTYTALL."
+   ]
+  },
+  {
+   "n": 2136,
+   "t": 71.271,
+   "k": 1,
+   "pages": [
+    "EVERYONE'SGETTINGREADYTOGETOUTOFHERESOWE"
+   ]
+  },
+  {
+   "n": 2218,
+   "t": 74.007,
+   "k": 1,
+   "pages": [
+    "STARTTHISDRIVE."
+   ]
+  },
+  {
+   "n": 2249,
+   "t": 75.042,
+   "k": 10,
+   "pages": [
+    "IAMINTHEALLBLACKCULLINAN."
+   ]
+  },
+  {
+   "n": 2318,
+   "t": 77.344,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 2325,
+   "t": 77.578,
+   "k": 1,
+   "pages": [
+    "I'LLBELEADINGEVERYBODY."
+   ]
+  },
+  {
+   "n": 2378,
+   "t": 79.346,
+   "k": 8,
+   "pages": []
+  },
+  {
+   "n": 2484,
+   "t": 82.883,
+   "k": 1,
+   "pages": [
+    "WHEREAREYOUGUYSFROM?"
+   ]
+  },
+  {
+   "n": 2522,
+   "t": 84.151,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 2605,
+   "t": 86.92,
+   "k": 1,
+   "pages": [
+    "SANFRANCISCO."
+   ]
+  },
+  {
+   "n": 2624,
+   "t": 87.554,
+   "k": 12,
+   "pages": [
+    "SOASOFRIGHTNOW,I'MGOINGTOGODOWNTOLOTUSOF"
+   ]
+  },
+  {
+   "n": 2709,
+   "t": 90.39,
+   "k": 1,
+   "pages": [
+    "WELOSTSOMANYPEOPLE."
+   ]
+  },
+  {
+   "n": 2756,
+   "t": 91.959,
+   "k": 1,
+   "pages": [
+    "THAT'SJUSTPARTOFTHE,YOUKNOW,BEINGINARALL"
+   ]
+  },
+  {
+   "n": 2840,
+   "t": 94.761,
+   "k": 8,
+   "pages": []
+  },
+  {
+   "n": 3315,
+   "t": 110.611,
+   "k": 8,
+   "pages": [
+    "WEARECURRENTLYEATINGATYARDHOUSE."
+   ]
+  },
+  {
+   "n": 3378,
+   "t": 112.713,
+   "k": 1,
+   "pages": [
+    "WE'REJUSTOUTHEREGETTINGEVERYBODYTOGETHER"
+   ]
+  },
+  {
+   "n": 3442,
+   "t": 114.848,
+   "k": 1,
+   "pages": [
+    "THEMTHEEXPERIENCETHATTHEYWANT."
+   ]
+  },
+  {
+   "n": 3497,
+   "t": 116.683,
+   "k": 12,
+   "pages": [
+    "WE'REGONNAGOBACKTOTHEVENETIANRIGHTNOW."
+   ]
+  },
+  {
+   "n": 3567,
+   "t": 119.019,
+   "k": 1,
+   "pages": [
+    "SOIT'SBEENALONG,AFULLDAY,EVENTFULDAY,THE"
+   ]
+  },
+  {
+   "n": 3710,
+   "t": 123.79,
+   "k": 1,
+   "pages": [
+    "YOUAREIN,PLEASELOOKATWHATCARISINFRONTOFY"
+   ]
+  },
+  {
+   "n": 3824,
+   "t": 127.594,
+   "k": 1,
+   "pages": [
+    "FOLLOWTHATCAR."
+   ]
+  },
+  {
+   "n": 3859,
+   "t": 128.762,
+   "k": 1,
+   "pages": [
+    "WEAREGOINGTOTAKE215OUTOFHEREWHICHWILLLEA"
+   ]
+  },
+  {
+   "n": 3939,
+   "t": 131.431,
+   "k": 1,
+   "pages": [
+    "GUYSTOTHE15NORTH."
+   ]
+  },
+  {
+   "n": 3988,
+   "t": 133.066,
+   "k": 1,
+   "pages": [
+    "JUSTMAKESUREEVERYBODY'SSAFE."
+   ]
+  },
+  {
+   "n": 4023,
+   "t": 134.234,
+   "k": 1,
+   "pages": [
+    "MAKESUREEVERYBODY'SHAVINGFUN."
+   ]
+  },
+  {
+   "n": 4085,
+   "t": 136.303,
+   "k": 8,
+   "pages": []
+  },
+  {
+   "n": 4430,
+   "t": 147.814,
+   "k": 12,
+   "pages": [
+    "YOUGUYSHADAGREATTIMETHOUGH?"
+   ]
+  },
+  {
+   "n": 4483,
+   "t": 149.583,
+   "k": 10,
+   "pages": []
+  },
+  {
+   "n": 4575,
+   "t": 152.653,
+   "k": 1,
+   "pages": [
+    "YOUGUYSHADAGREATTIME?"
+   ]
+  },
+  {
+   "n": 4633,
+   "t": 154.588,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 4721,
+   "t": 157.524,
+   "k": 1,
+   "pages": [
+    "GUYSHADFUN."
+   ]
+  },
+  {
+   "n": 4760,
+   "t": 158.825,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 4842,
+   "t": 161.561,
+   "k": 1,
+   "pages": [
+    "MAN,TODAYWASAHELLOFADAY,I'MNOTGONNALIE."
+   ]
+  },
+  {
+   "n": 4919,
+   "t": 164.131,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 4925,
+   "t": 164.331,
+   "k": 1,
+   "pages": [
+    "BUTIFEELLIKETHEENDINGWASALOTBETTERTHANAN"
+   ]
+  },
+  {
+   "n": 4991,
+   "t": 166.533,
+   "k": 1,
+   "pages": [
+    "YEAH,MAKESUREYOUFOLLOWUSONINSTAGRAMATSUP"
+   ]
+  },
+  {
+   "n": 5080,
+   "t": 169.503,
+   "k": 1,
+   "pages": [
+    "EXPERIENCE."
+   ]
+  },
+  {
+   "n": 5096,
+   "t": 170.037,
+   "k": 32,
+   "pages": []
+  }
+ ]
+}

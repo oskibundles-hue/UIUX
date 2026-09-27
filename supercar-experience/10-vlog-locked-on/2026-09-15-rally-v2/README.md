@@ -17,7 +17,7 @@ components. **Status: not reviewed yet.**
 | `… - PREVIEW 720x1280.mp4` | phone preview, two-pass 1.15 Mb/s, AAC 160k (the mix 0.5 dB lower so AAC holds the true peak): **27.5 MiB** (< 30 MiB), -14.63 LUFS, -2.05 dBTP |
 | `… - music-stem.wav` | the music alone, exactly as it sits in the master (ducked, at the master's gain), 24-bit 48 kHz, 50 MB |
 | `poster.jpg`, `contact-sheet.jpg` | frame 0 (the complete hook: the story preview) and one frame every 2 s |
-| `qa/` | first / middle / last frame of every EDL beat (`beat_*`), in / middle / out of every graphic (`el_*`), `beats-sheet.jpg`, `elements-sheet.jpg`, `shots-sheet.jpg` (every shot's first / middle / last frame: the grade check), the tracker sheets `track_*.jpg`, and `qa_summary.json` |
+| `qa/` | first / middle / last frame of every EDL beat (`beat_*`), in / middle / out of every graphic (`el_*`), `beats-sheet.jpg`, `elements-sheet.jpg`, `shots-sheet.jpg` (every shot's first / middle / last frame: the grade check), the tracker sheets `track_*.jpg`, `caption-swaps-sheet.jpg` (the last frame of every caption page and the first of the next: one page per frame, 64 page changes), `swapcheck.json` and `qa_summary.json` |
 
 No `_DELIVERY` copy: the master is already 10.95 Mb/s, under the 11.5 Mb/s delivery rate.
 
@@ -180,12 +180,13 @@ the rendered shots) → `join` (transitions, plate blurs, punches → `.work/pla
 | `config.json` | paths, per-shot reframe / look / ramp, source slips, transitions, plate blurs, clocks, tracks, music slot, audio levels, every on-screen element |
 | `cue.md` | every element and transition with its in / out and how it was placed |
 | `story.html` | the layer page: `window.renderAt(t)`, a pure function of t |
-| `lib/sekit.js` | the vlog kit's component library, copied from `../vlog-kit/lib/sekit.js` (27 Sept, 03:27). Five changes, each marked `rally-v2 copy`: more internal helpers are exported (`SEK.helpers`); an accented capital (HURACÁN) sits on the H cap height instead of pushing its word down; the G1 slam exit lifts 0.35 cap and fades (it used to travel 1.2 caps up, out of the safe area); in the C1 hop, a LOCK LOST phase whose next car is not tracked yet (still out of frame) holds on the last car's rect instead of hiding the whole lock; the F1 quote card takes an optional small header tab (FAVOURITE OF THE FLEET) |
+| `lib/sekit.js` | the vlog kit's component library, copied from `../vlog-kit/lib/sekit.js` (27 Sept, 03:27). Six changes, each marked `rally-v2 copy`: more internal helpers are exported (`SEK.helpers`); an accented capital (HURACÁN) sits on the H cap height instead of pushing its word down; the G1 slam exit lifts 0.35 cap and fades (it used to travel 1.2 caps up, out of the safe area); in the C1 hop, a LOCK LOST phase whose next car is not tracked yet (still out of frame) holds on the last car's rect instead of hiding the whole lock; the F1 quote card takes an optional small header tab (FAVOURITE OF THE FLEET); hard swaps land on a frame boundary: a caption page is on screen for whole frames and the next page's pre-roll never overlaps it (the kit showed both pages for up to two frames at each page change), and a gap of 3 frames or less between two pages is closed (no one-frame blink), and captions, the convoy label's text swaps (make → LOCK LOST → make) and the clock's HH:MM are drawn on the frame time, so no motion-blurred frame mixes two texts. `story.html`: the camera clock of a motion-blur sample is read from its own frame, so the first frame of a new shot never mixes two clocks |
 | `lib/v2kit.js` | this vlog's own components (hook, CTA chip, SAFELY. slam, route card / route panel, place tag, quote wall, car lock, end card) |
 | `lib/plate.py` | the picture edit and grade |
 | `lib/music.py`, `lib/mix.py` | the placeholder music bed and the mix |
 | `lib/kinetic.js`, `lib/kcapture.js`, `lib/accum.py`, `lib/track.py`, `lib/track_mid.py`, `lib/trackqa.py`, `lib/fx.py`, `lib/synth.py` | copied unchanged from the kit / showcase / v1 |
 | `lib/srcsheet.py`, `lib/shotview.py`, `lib/gridview.py` | planning and QA sheets |
+| `lib/swapcheck.js` | QA (run by the qa stage): evaluates every frame at each of its motion-blur samples and fails a frame that shows two caption pages at once or whose samples disagree on the caption page, the convoy label text or the clock; result in `exports/qa/swapcheck.json` and `qa_summary.json` `hard_swaps` |
 | `lib/data/tracks.json` | every tracked box (output frames, output px) |
 | `build.py`, `render.sh` | the one-command build |
 
