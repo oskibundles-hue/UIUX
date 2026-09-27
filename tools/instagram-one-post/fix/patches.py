@@ -138,12 +138,13 @@ B_TOP = 836
 B_NUM_SIZE, B_NUM_TRACK = 90.0, 1.5  # cap ~62 px
 B_UNIT_SIZE = 66.0  # cap ~46 px, same as "KG"
 RED = np.array([226, 30, 36], np.float32)
+B_NUM_BOX = (676, 816, 490, 778)  # y0, y1, x0, x1 around the original "3500"
 
 
 class Callout:
     def __init__(self):
-        self.label_ref = None
-        self.cut = None
+        self.ref = None  # (digit mask, ring mask, full-opacity contrast) of "3500"
+        self.cut = False
         font_num = ImageFont.truetype(FONT, B_NUM_SIZE)
         font_unit = ImageFont.truetype(FONT, B_UNIT_SIZE)
         hb = font_num.getbbox("H")
@@ -161,25 +162,40 @@ class Callout:
         self.h, self.w = 110, 420
 
     @staticmethod
-    def rule_red(frame):
-        """Red saturation of the callout's red rule segment: tracks the callout's opacity."""
-        seg = frame[645:649, 492:620].astype(np.float32)
-        return float((seg[..., 0] - seg[..., 1]).mean())
+    def _number_gray(frame):
+        y0, y1, x0, x1 = B_NUM_BOX
+        return frame[y0:y1, x0:x1].astype(np.float32).mean(axis=2)
+
+    def learn(self, frame):
+        """Record where the "3500" digits are, from a frame where it is fully on screen."""
+        g = self._number_gray(frame)
+        digits = g > 235
+        ring = dilate(digits, 5).astype(bool) & ~dilate(digits, 2).astype(bool)
+        self.ref = (digits, ring, max(g[digits].mean() - g[ring].mean(), 1.0))
+
+    def opacity(self, frame):
+        """How strongly the original "3500" stands out from what is around it, 0..1.
+
+        Follows the callout's own fade and drops to 0 when it is gone. (The red rule is
+        no good for this: red floor tiles pass under it.)
+        """
+        digits, ring, full = self.ref
+        g = self._number_gray(frame)
+        return float(np.clip((g[digits].mean() - g[ring].mean()) / full, 0, 1))
 
     def apply(self, frame, idx):
         lo, hi = B_WIN
-        if not (lo <= idx <= hi) or idx < B_ON:
-            if lo <= idx < B_ON and idx >= frame_at(138.0) and self.label_ref is None:
-                self.label_ref = self.rule_red(frame)
+        if not (lo <= idx <= hi) or self.cut:
             return frame
-        if self.cut is not None:
+        if idx < B_ON:
+            if idx >= frame_at(138.0) and self.ref is None:
+                self.learn(frame)  # "3500" has landed and is at full opacity
             return frame
-        if self.label_ref is None:
-            self.label_ref = self.rule_red(frame)
-        # follow the original's fade; once it is gone, never draw again (next shot)
-        fade = float(np.clip(self.rule_red(frame) / max(self.label_ref, 1.0), 0, 1))
-        if fade < 0.12:
-            self.cut = idx
+        if self.ref is None:
+            self.learn(frame)
+        fade = self.opacity(frame)
+        if fade < 0.12:  # the callout is gone: never draw again (next shot)
+            self.cut = True
             return frame
         # 6-frame ease-out: fade in while sliding up 14 px
         t = min(1.0, max(0.0, (idx - B_ON) / 6.0))
@@ -216,7 +232,7 @@ C_TEXT = "3 ,500 KILOGRAMS."
 # The stray gap is one space plus tracking; moving ",500 KILOGRAMS." left by that closes it.
 C_SHIFT = round(ImageFont.truetype(FONT, C_SIZE).getlength(" ") + C_TRACK)
 C_BOX = (1380, 1500, 60, 700)
-C_UNDERLINE = (1466, 1482)  # rows of the red karaoke underline
+C_UNDERLINE = (1469, 1479)  # rows of the red karaoke underline (measured 1471-1477)
 
 
 class Caption:
@@ -225,9 +241,21 @@ class Caption:
         y0, y1, x0, x1 = C_BOX
         self.y = y - y0
         shape = (y1 - y0, x1 - x0)
-        # the two karaoke words that sit after the stray gap
-        self.words = [render_alpha([(c, x - x0) for c, x in chars[2:6]], C_SIZE, self.y, shape),   # ",500"
-                      render_alpha([(c, x - x0) for c, x in chars[7:]], C_SIZE, self.y, shape)]    # "KILOGRAMS."
+        # the two karaoke words after the stray gap: ",500" then "KILOGRAMS."
+        self.words = []
+        for part in (chars[2:6], chars[7:]):
+            a = render_alpha([(c, x - x0) for c, x in part], C_SIZE, self.y, shape)
+            ink = a > 0.05
+            ring = dilate(ink, 6).astype(bool) & ~dilate(ink, 3).astype(bool)
+            cols = np.where(ink.any(axis=0))[0]
+            underline = np.zeros(shape, bool)  # the red bar under the word when it is being spoken
+            underline[C_UNDERLINE[0] - y0:C_UNDERLINE[1] - y0 + 1, cols[0] - 5:cols[-1] + 7] = True
+            self.words.append({"ink": ink, "core": a > 0.6, "ring": ring, "underline": underline})
+        self.latched = []
+
+    @staticmethod
+    def contrast(g, word):
+        return g[word["core"]].mean() - g[word["ring"]].mean()
 
     def apply(self, frame, idx):
         lo, hi = C_WIN
@@ -236,19 +264,20 @@ class Caption:
         y0, y1, x0, x1 = C_BOX
         reg = frame[y0:y1, x0:x1].copy()
         g = reg.mean(axis=2)
-        shown = [a for a in self.words if np.median(g[a > 0.6]) > 200]
-        if not shown:  # ",500" not on screen: nothing to move
+        shown = [w for w in self.words if self.contrast(g, w) > 25]
+        if shown:
+            self.latched = shown
+        elif self.latched and min(self.contrast(g, w) for w in self.latched) > 6:
+            shown = self.latched  # fading out: keep moving the same words until they are gone
+        else:
+            self.latched = []
             return frame
-        ink = np.zeros(g.shape, bool)
-        for a in shown:
-            ink |= (a > 0.05) & (g > 150)
-        # the karaoke underline: saturated red, only on its own rows (the floor tiles are red too)
-        r, gr, b = (reg[..., i].astype(np.int16) for i in range(3))
-        red = (r > 170) & (gr < 60) & (b < 60) & (r - gr > 130)
-        rows = np.arange(reg.shape[0])[:, None] + y0
-        red &= (rows >= C_UNDERLINE[0]) & (rows <= C_UNDERLINE[1])
-        red &= np.arange(reg.shape[1])[None, :] > (C_X0 + 40 - x0)
-        text = dilate(ink | red, 2)
+        # the words' own shapes (not a brightness threshold, so faint frames move too),
+        # plus the underline under the word being spoken (the last one on screen)
+        text = shown[-1]["underline"].copy()
+        for w in shown:
+            text |= w["ink"]
+        text = dilate(text, 2)
         halo = dilate(text, 6)
         # erase only the old ink; the soft shadow around it moves with the matte below
         clean = inpaint(reg, text, 5)
