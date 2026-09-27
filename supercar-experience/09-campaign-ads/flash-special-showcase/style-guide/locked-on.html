@@ -172,6 +172,17 @@
   .lesson { font-family: var(--label); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); }
   .never { background: var(--panel); border: 1px solid var(--line); padding: 20px 22px; display: grid; gap: 10px; }
   .never ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; color: var(--muted); font-size: 15px; }
+  .funnel { display: grid; grid-template-columns: repeat(6, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .funnel > div { background: var(--ground); padding: 14px 14px 16px; display: grid; gap: 4px; align-content: start; position: relative; }
+  .funnel > div + div::before { content: "→"; position: absolute; left: -9px; top: 14px; font-family: var(--label); font-size: 11px; color: var(--gold); background: var(--ground); line-height: 1; padding: 2px 0; }
+  .funnel b { font-family: var(--display); font-weight: 400; font-size: 34px; line-height: 1; font-variant-numeric: tabular-nums; }
+  .funnel span { font-family: var(--label); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); line-height: 1.5; }
+  .funnel > div:last-child b { color: var(--gold); }
+  .made .rule { grid-template-columns: 64px minmax(0, 1.4fr) minmax(0, 1fr); }
+  .made .when { font-family: var(--label); font-size: 9px; letter-spacing: 1.5px; color: var(--faint); font-variant-numeric: tabular-nums; }
+  .caught-wrap { overflow-x: auto; }
+  .caught { min-width: 640px; }
+  .caught td:first-child { width: 34%; }
   .reel-row { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: clamp(20px, 4vw, 48px); align-items: start; }
   .reel-row video { width: 100%; aspect-ratio: 9 / 16; background: #000; border: 1px solid var(--line); display: block; }
   .fallback > div { background: var(--ground); padding: 22px; display: grid; gap: 10px; align-content: start; }
@@ -189,6 +200,9 @@
     .two, .fallback, .vrules { grid-template-columns: 1fr; }
     .vlog-top, .reel-row { grid-template-columns: 1fr; }
     .vlog-top .frame, .reel-row video { max-width: 340px; }
+    .funnel { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .funnel > div + div::before { display: none; }
+    .made .rule { grid-template-columns: 44px minmax(0, 1fr); }
   }
   @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
 </style>
@@ -218,7 +232,7 @@
       <div class="stripe" style="max-width:420px"></div>
       <p class="thesis">Every SE car ad locks onto the car's own badge, lands the price like a slot reel, puts the model name behind the car, and rides the clip's own music into a tape stop before the end card.</p>
       <p class="quote"><b>"That is amazing make that a standard."</b> Omarie, 26 Sept 2026, on the GT3 RS reference cut playing here.</p>
-      <p class="muted" style="font-size:15px">The standard now has a vlog version too, built on the Sep 15 Egnyte rally. <a href="#vlog">Go to Locked-On Vlog</a>.</p>
+      <p class="muted" style="font-size:15px">The standard now has a vlog version too, built on the Sep 15 Egnyte rally. <a href="#vlog">Go to Locked-On Vlog</a> or <a href="#made">see how it was made</a>.</p>
       <div class="specs">
         <div class="spec"><b>1080×1920</b><span>9:16 story</span></div>
         <div class="spec"><b>15–18 s</b><span>reference 18.0 s</span></div>
@@ -503,6 +517,110 @@
         <li>Fleet faults (door handles, misfires), police, weapons</li>
         <li>Figures without a source; the age line is the site's: 25+, ages 21–24 with the $299 underage fee</li>
       </ul>
+    </div>
+
+    <!-- HOW IT WAS MADE -->
+    <div class="sec-head made-head" id="made" style="margin-top:28px">
+      <div class="eyebrow">How it was made · 27 Sept 2026</div>
+      <h2>From 158 GB of raw footage to a 2:55 reel</h2>
+      <p class="quote"><b>"This is great… overall 99% great."</b> Omarie, on the rebuilt Sep 15 vlog.</p>
+      <p class="muted">The whole build, start to finish, in the order it happened. The numbers are the real ones from this job, so the next vlog can be planned against them.</p>
+    </div>
+    <div class="funnel" aria-label="What the footage became at each stage">
+      <div><b>158 GB</b><span>44 clips on Dropbox<br>33 camera · 11 phone</span></div>
+      <div><b>2.9 h</b><span>of footage<br>16:10 to 23:26</span></div>
+      <div><b>11,625</b><span>words transcribed<br>with word timings</span></div>
+      <div><b>30</b><span>spoken lines<br>chosen for the cut</span></div>
+      <div><b>10.3 GB</b><span>fetched as 46<br>byte ranges</span></div>
+      <div><b>239 MB</b><span>master · 5,230 frames<br>174.5 s at 29.97</span></div>
+    </div>
+
+    <div class="rules made">
+      <article class="rule">
+        <div class="num">1</div>
+        <div class="main"><h3>The ask</h3>
+          <p>"Remake the whole video from scratch using our raw footage… catch all key moments… <b>I still want the Supercar Experience banner on the side</b>." The moments Omarie named: the team dinner, asking the guests how they enjoyed it, and leading the cars on the freeway. Later: "The company name is Egnyte."</p>
+          <div class="when">01:45 · started</div></div>
+        <div class="breaks"><div class="k">Decided</div><p>Rebuild from the raw clips, not the old reel. Keep the approved v1 as the baseline to beat.</p></div>
+      </article>
+      <article class="rule">
+        <div class="num">2</div>
+        <div class="main"><h3>Survey every clip</h3>
+          <p>Each DJI file (up to 17 GB, 4K 10-bit HEVC) came down from Dropbox one at a time at about 95 MB/s. <b>Only the audio and one keyframe per second were kept</b>, plus the file's own index for later, then the original was deleted so the disk never held more than one.</p>
+          <div class="mod">raw/proc.py · 10,460 thumbnails</div><div class="when">01:50–03:12</div></div>
+        <div class="breaks"><div class="k">Numbers</div><p>44 clips, 158 GB read, about 1 h 20 min. Phone clips came from Mobile Uploads, including the convoy briefing and the dinner at Lotus of Siam.</p></div>
+      </article>
+      <article class="rule">
+        <div class="num">3</div>
+        <div class="main"><h3>Transcribe and lay it on the clock</h3>
+          <p>Whisper (small, English) ran on the audio as each clip landed. Every line was placed on the camera clock, which turns 44 files into <b>one log of the day</b> that can be searched like a script.</p>
+          <div class="mod">transcribe.py · day.py</div></div>
+        <div class="breaks"><div class="k">Numbers</div><p>2.9 hours of audio, 11,625 words, each with its own start and end time.</p></div>
+      </article>
+      <article class="rule">
+        <div class="num">4</div>
+        <div class="main"><h3>Find the moments</h3>
+          <p>Searched the log for dinner, guests, keys, the route, and checked each hit on a contact sheet. That found the guests' check-ins back at the Venetian, the guide's briefing on the Red Rock roof, "I'll be leading everybody", the tall guest's R8, and the group dinner filmed on the phone.</p></div>
+        <div class="breaks"><div class="k">Left out</div><p>A spoken password, a moment someone asked to have removed, speed talk, a firearm found in a car, double-yellow talk, fleet faults.</p></div>
+      </article>
+      <article class="rule">
+        <div class="num">5</div>
+        <div class="main"><h3>Write the cut</h3>
+          <p>The edit was written as code: seven chapters in the order of the day, <b>30 spoken lines</b> placed back to back with a breath between them, B-roll under the voice-overs. Captions were corrected by hand where the transcript misheard (Yard House, Cullinan, Huracán EVO, Egnyte).</p>
+          <div class="mod">edl.py · captions.json</div><div class="when">03:12–03:28</div></div>
+        <div class="breaks"><div class="k">Numbers</div><p>53 shots, 174.5 s, inside Instagram's 3-minute reel limit.</p></div>
+      </article>
+      <article class="rule">
+        <div class="num">6</div>
+        <div class="main"><h3>Fetch only what the cut uses</h3>
+          <p>The camera files decode at about 10 frames a second here, so re-downloading whole clips was out. From each clip's saved index, the build worked out the <b>exact byte range of every shot</b>, starting at the keyframe before it, and fetched just those into sparse files.</p>
+          <div class="mod">mp4index.py · fetch.py</div><div class="when">03:28–04:10</div></div>
+        <div class="breaks"><div class="k">Numbers</div><p>46 ranges, 10.3 GB instead of 158 GB, cut into 46 full-quality 10-bit clips (1.7 GB).</p></div>
+      </article>
+      <article class="rule">
+        <div class="num">7</div>
+        <div class="main"><h3>Design the vlog kit</h3>
+          <p>In parallel with steps 2 to 6: nine components, <b>22 variations</b>, each mocked over the real footage, plus a board and a reel tagged with the codes. Ten were picked for this vlog.</p>
+          <div class="mod">10-vlog-locked-on/vlog-kit/</div><div class="when">02:00–04:10</div></div>
+        <div class="breaks"><div class="k">Numbers</div><p>22 stills, one 39 s review reel.</p></div>
+      </article>
+      <article class="rule">
+        <div class="num">8</div>
+        <div class="main"><h3>Build it</h3>
+          <p>Picture edit and reframing from the camera's square frames, one night grade across every shot, car and face tracking for the lock-ons, and the graphics layer drawn <b>frame by frame</b> in a browser. An original track in F minor at 105 BPM was composed to the cut, with the drop on the convoy montage, and ducked under every spoken line.</p>
+          <div class="mod">10-vlog-locked-on/2026-09-15-rally-v2/</div><div class="when">03:35–06:21 · first full render</div></div>
+        <div class="breaks"><div class="k">Numbers</div><p>5,230 frames, 31 speech pieces with the music 11 dB under them, −14 LUFS.</p></div>
+      </article>
+      <article class="rule">
+        <div class="num">9</div>
+        <div class="main"><h3>Review and fix</h3>
+          <p>Every lock-on was checked at full size, then frames around each change. Four problems were caught and fixed, each with a full re-render (table below). A check that tests every frame for overlapping text is now part of the build.</p>
+          <div class="when">06:21–08:00</div></div>
+        <div class="breaks"><div class="k">Numbers</div><p>64 caption changes, 3 lock hand-offs and 5 clock cuts checked on the final master.</p></div>
+      </article>
+      <article class="rule">
+        <div class="num">10</div>
+        <div class="main"><h3>Deliver</h3>
+          <p>The master, a no-music master for a trending sound, and the music on its own went to Dropbox <code>Supercar Experience/05 Vlogs/</code>. The code and this page are in the repo.</p>
+          <div class="when">08:10–08:30</div></div>
+        <div class="breaks"><div class="k">Total</div><p>About 6 hours 45 minutes of wall-clock time from "save this" to delivery, with the kit and the survey running side by side.</p></div>
+      </article>
+    </div>
+
+    <div class="sec-head" style="margin-top:12px">
+      <h3>What the review caught</h3>
+    </div>
+    <div class="caught-wrap">
+      <table class="caught">
+        <thead><tr><th>Problem</th><th>How it was found</th><th>Fix</th></tr></thead>
+        <tbody>
+          <tr><td>Three car tags followed their cars off-frame on whip pans; the GT3 RS tag briefly pointed at the orange AMG</td><td>Full-size frames through the lineup</td><td>LOCK LOST as each car leaves, then re-lock. The Black Series got its own tag.</td></tr>
+          <tr><td>The Roma quote was labelled EGNYTE GUEST</td><td>The picture: Omarie, hand on chin through the pause, is the one answering</td><td>Relabelled as Omarie's pick, "Favourite of the fleet"</td></tr>
+          <tr><td>An arm covered the lens for 1.2 s in the sign-in shot</td><td>Shot-by-shot check of the first frames</td><td>Played the clean part of the take at 0.75×</td></tr>
+          <tr><td>Old and new caption lines overlapped for one or two frames at 93 page changes</td><td>Frame check at 59.9 s, then a scan of the whole piece</td><td>Pages switch on a frame boundary; the overlap check now runs on every build (0 left)</td></tr>
+          <tr><td>The client wasn't named</td><td>Omarie: "The company name is Egnyte"</td><td>× EGNYTE on the hook, EGNYTE ARRIVES, EGNYTE GUEST and EGNYTE ON THE DAY, as text only</td></tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
