@@ -44,6 +44,36 @@ def log(*a):
     print(*a, flush=True)
 
 
+# ------------------------------------------------------------------------------ bus cache (rally-v2 render loop)
+# The dialog and nat buses only change when their own inputs change, so a layer or SFX fix re-mixes without
+# re-decoding and re-filtering 46 pieces of camera audio. Arrays are stored as float64 .npy: bit-identical.
+import hashlib, time  # noqa: E402
+CACHE = os.path.join(WORK, 'cache')
+
+
+def _mezz_listing():
+    out = []
+    for d in (P['mezz'], os.path.join(WORK, 'mezz_extra')):
+        if os.path.isdir(d):
+            out += sorted(f'{fn}:{os.path.getsize(os.path.join(d, fn))}' for fn in os.listdir(d))
+    return out
+
+
+def cached_bus(name, parts, build):
+    key = hashlib.sha1((json.dumps(parts, sort_keys=True, default=str) + '|'.join(_mezz_listing())).encode()
+                       + open(__file__, 'rb').read()).hexdigest()[:16]
+    os.makedirs(CACHE, exist_ok=True)
+    npy, js = os.path.join(CACHE, f'{name}.npy'), os.path.join(CACHE, f'{name}.json')
+    if os.path.exists(npy) and os.path.exists(js):
+        meta = json.load(open(js))
+        if meta.get('key') == key:
+            return np.load(npy), meta['extra'], True
+    arr, extra = build()
+    np.save(npy + '.tmp.npy', arr); os.replace(npy + '.tmp.npy', npy)
+    json.dump(dict(key=key, extra=extra), open(js, 'w'))
+    return arr, extra, False
+
+
 # ------------------------------------------------------------------------------ loudness (BS.1770-4)
 def _kweight_gain(n):
     """|H(f)|^2 of the BS.1770 K-weighting (pre-filter shelf + RLB high-pass) at the rfft bins of length n."""
@@ -219,6 +249,10 @@ def nat_speech_spans():
 
 
 def build_nat(act, report):
+    return build_nat_raw(report) * (10 ** (A['natDuckDb'] * act / 20))[:, None]
+
+
+def build_nat_raw(report):
     bus = np.zeros((NS, 2))
     for e in A['nat']:
         x = mezz_audio(e['src'], e['a'], e['b'], 'highpass=f=40')
@@ -227,8 +261,7 @@ def build_nat(act, report):
         x = fades(x * 10 ** (g / 20), e.get('fin', 0.15), e.get('fout', 0.15))
         place(bus, x, e['t'])
         report['nat'].append(dict(src=e['src'], a=e['a'], b=e['b'], t=e['t'], lufs_in=round(L, 2), gain_db=round(g, 2)))
-    duck = 10 ** (A['natDuckDb'] * act / 20)
-    return bus * duck[:, None]
+    return bus
 
 
 def load_music(report):
@@ -340,7 +373,13 @@ def main():
     ap.add_argument('--dialog-only', action='store_true')
     a = ap.parse_args()
     rep = {'dialog': [], 'nat': [], 'sfx': []}
-    dialog, spans = build_dialog(rep)
+    T = {}; t0 = time.time()
+    def _dialog():
+        r = {'dialog': []}; d, sp = build_dialog(r)
+        return d, dict(spans=sp, dialog=r['dialog'])
+    dialog, ex, hit = cached_bus('dialog', [EDL['dialog'], A.get('extraDialog', []), A['trims'], A['dialogFilter'], A['dialogLufs'], A['edgeFade']], _dialog)
+    spans = [tuple(x) for x in ex['spans']]; spans = [list(x) for x in spans]; rep['dialog'] = ex['dialog']
+    T['dialog'] = f'{time.time() - t0:.1f}s' + (' (cached)' if hit else ''); t0 = time.time()
     dk = A['duck']
     nsp = nat_speech_spans()
     act, merged = activity(spans + nsp, pre=dk['attack'], post=dk['release'], bridge=dk['bridge'])
@@ -349,7 +388,13 @@ def main():
     if a.dialog_only:
         json.dump(rep, open(os.path.join(WORK, 'mix.json'), 'w'), indent=1)
         return
-    nat = build_nat(act, rep)
+    def _nat():
+        r = {'nat': []}; bus = build_nat_raw(r)
+        return bus, dict(nat=r['nat'])
+    nat_raw, ex, hit = cached_bus('nat', [A['nat'], A['natLufs']], _nat)
+    rep['nat'] = ex['nat']
+    nat = nat_raw * (10 ** (A['natDuckDb'] * act / 20))[:, None]
+    T['nat'] = f'{time.time() - t0:.1f}s' + (' (cached)' if hit else ''); t0 = time.time()
     music_raw = load_music(rep)
     Lm = lufs(music_raw)
     music_raw *= 10 ** ((CFG['music']['lufs'] - Lm) / 20)
@@ -357,9 +402,11 @@ def main():
     sfx = build_sfx(music_raw, act, rep)
     mc = CFG['master']
     on = CFG['music'].get('enabled', True) and os.environ.get('MUSIC', '1') not in ('0', 'false', 'off')
+    T['music+sfx'] = f'{time.time() - t0:.1f}s'; t0 = time.time()
     full, L1, tp1 = master(dialog + nat + (music if on else 0) + sfx, mc['lufs'], mc['ceiling'])
     g_full = master.gain
     nomus, L2, tp2 = master(dialog + nat + sfx, mc['lufs'], mc['ceiling'])
+    T['masters'] = f'{time.time() - t0:.1f}s'; t0 = time.time()
     write_wav24(a.out, full)
     write_wav24(a.out_nomusic, nomus)
     # the music stem exactly as it sits in the master (ducked, at the master's gain, before the limiter)
@@ -385,7 +432,8 @@ def main():
     rep['master'] = dict(lufs=round(L1, 2), true_peak_db=round(tp1, 2), nomusic_lufs=round(L2, 2), nomusic_true_peak_db=round(tp2, 2),
                          music_unducked_lufs=CFG['music']['lufs'], dialog_spans=len(merged), samples=NS, seconds=round(NS / SR, 4))
     json.dump(rep, open(os.path.join(WORK, 'mix.json'), 'w'), indent=1)
-    log(f'mix: {L1:.2f} LUFS TP {tp1:.2f} | no-music {L2:.2f} LUFS TP {tp2:.2f} | music: {rep["music"]["source"]}')
+    T['stems+report'] = f'{time.time() - t0:.1f}s'
+    log(f'mix: {L1:.2f} LUFS TP {tp1:.2f} | no-music {L2:.2f} LUFS TP {tp2:.2f} | music: {rep["music"]["source"]} | ' + ', '.join(f'{k} {v}' for k, v in T.items()))
 
 
 if __name__ == '__main__':

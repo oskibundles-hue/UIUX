@@ -2,7 +2,8 @@
  * For every output frame it evaluates the page at each motion-blur sample time exactly as kcapture.js does
  * (KT_PLAN spans, samples centred on the frame time) and reads the discrete text state of:
  *   H1 captions (which page(s) are on screen), C1 convoy label (which make / LOCK LOST is shown), D1 clock (HH:MM).
- * A frame fails if two caption pages are visible at once, or if its samples disagree on any of these states.
+ * A frame fails if two caption pages are visible at once, or if its samples show two different non-empty texts for
+ * any of these (an element fading in or out inside a frame is not a swap).
  * Usage: node lib/swapcheck.js story.html out.json [nframes]
  */
 const { chromium } = require('/opt/node22/lib/node_modules/playwright');
@@ -39,7 +40,9 @@ const path = require('path'); const fs = require('fs');
       const st = ts.map(ti => { window.renderAt(ti); return state(); });
       const key = s => JSON.stringify(s);
       const two = st.some(s => s.pages.length > 1);
-      const disagree = st.some(s => key(s) !== key(st[0]));
+      // a swap = two different non-empty texts among one frame's samples (an element fading in or out is not a swap)
+      const multi = f => new Set(st.map(s => JSON.stringify(s[f])).filter(v => v !== '""' && v !== '[]')).size > 1;
+      const disagree = multi('pages') || multi('lab') || multi('clk');
       window.renderAt(t); const s0 = state();
       if (prevPages !== null && JSON.stringify(s0.pages) !== prevPages) swaps.push({ n, t: +t.toFixed(3), k: ts.length, pages: s0.pages.map(x => x.slice(0, 40)) });
       prevPages = JSON.stringify(s0.pages);

@@ -795,7 +795,8 @@
     "fb": 0.0
    }
   ],
-  "shot": 11
+  "shot": 11,
+  "sig": "87cba657bb5b587e"
  },
  "lineup_corvette": {
   "video": "plate (shot 11, output frames)",
@@ -1714,7 +1715,8 @@
     "fb": 0.0
    }
   ],
-  "shot": 11
+  "shot": 11,
+  "sig": "44046887d977f5d8"
  },
  "lineup_huracan": {
   "video": "plate (shot 11, output frames)",
@@ -2259,7 +2261,8 @@
     "fb": 0.0
    }
   ],
-  "shot": 11
+  "shot": 11,
+  "sig": "6b7bee766a69ab9b"
  },
  "lineup_gt3rs": {
   "video": "plate (shot 11, output frames)",
@@ -2991,7 +2994,8 @@
     "fb": 0.0
    }
   ],
-  "shot": 11
+  "shot": 11,
+  "sig": "fcee15497226060e"
  },
  "lineup_cullinan": {
   "video": "plate (shot 11, output frames)",
@@ -3998,7 +4002,8 @@
     "fb": 0.0
    }
   ],
-  "shot": 11
+  "shot": 11,
+  "sig": "c4797f4893f5f3ad"
  },
  "plate_hook_urus": {
   "video": "plate (shot 0, output frames)",
@@ -4609,7 +4614,8 @@
     "fb": 0.0
    }
   ],
-  "shot": 0
+  "shot": 0,
+  "sig": "fa81651bd18e4adb"
  },
  "plate_hook_car": {
   "video": "plate (shot 0, output frames)",
@@ -5220,7 +5226,8 @@
     "fb": 0.0
    }
   ],
-  "shot": 0
+  "shot": 0,
+  "sig": "ad94f11d3737983d"
  },
  "urus_strip": {
   "video": "plate (shot 44, output frames)",
@@ -6062,7 +6069,8 @@
     "fb": 0.0
    }
   ],
-  "shot": 44
+  "shot": 44,
+  "sig": "0d85db39549b7b75"
  },
  "plate_strip_urus": {
   "video": "plate (shot 44, output frames)",
@@ -6904,7 +6912,8 @@
     "fb": 0.0
    }
   ],
-  "shot": 44
+  "shot": 44,
+  "sig": "597eb80a775ff0b5"
  },
  "plate_strip_car": {
   "video": "plate (shot 44, output frames)",
@@ -7746,7 +7755,8 @@
     "fb": 0.0
    }
   ],
-  "shot": 44
+  "shot": 44,
+  "sig": "9aa4bcf5a3e0f3ea"
  },
  "host_ch1": {
   "video": "plate (shot 5, output frames)",
@@ -9050,7 +9060,8 @@
     "fb": 0.0
    }
   ],
-  "shot": 5
+  "shot": 5,
+  "sig": "c70a914026bf3bd6"
  },
  "roma": {
   "video": "plate (shot 33, output frames)",
@@ -9749,7 +9760,8 @@
     "fb": 0.0
    }
   ],
-  "shot": 33
+  "shot": 33,
+  "sig": "a03eb9c3359ca641"
  },
  "plate_r8_roma": {
   "video": "plate (shot 33, output frames)",
@@ -10426,7 +10438,8 @@
     "fb": 0.0
    }
   ],
-  "shot": 33
+  "shot": 33,
+  "sig": "4ac99bee2bd0fadc"
  },
  "r8": {
   "video": "plate (shot 20, output frames)",
@@ -10993,7 +11006,8 @@
     "fb": 0.0
    }
   ],
-  "shot": 20
+  "shot": 20,
+  "sig": "df083fc4ab4f35ac"
  },
  "cullinan_lead": {
   "video": "plate (shot 23, output frames)",
@@ -11714,7 +11728,8 @@
     "fb": 0.0
    }
   ],
-  "shot": 23
+  "shot": 23,
+  "sig": "d65ec57003a57da1"
  },
  "plate_level9_urus": {
   "video": "plate (shot 46, output frames)",
@@ -12336,7 +12351,8 @@
     "fb": 0.0
    }
   ],
-  "shot": 46
+  "shot": 46,
+  "sig": "32e7c2e4c6b966fb"
  },
  "lineup_amg": {
   "video": "plate (shot 11, output frames)",
@@ -13024,6 +13040,7 @@
     "fb": 0.0
    }
   ],
-  "shot": 11
+  "shot": 11,
+  "sig": "787964c71d9eedee"
  }
 }
