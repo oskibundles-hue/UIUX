@@ -8,6 +8,33 @@ Look up facts about Omarie's setup, workstreams (Anti Stock, Formula Dynamics, S
 
 The notes are private. They live in the private repo `oskibundles-hue/nq-agent-channel`, folder `brain/`. If recall.py says no notes were found, ask Omarie to attach that repo to the session. Never copy note contents into this public repo.
 
+## No ultracode unless necessary
+
+Omarie, 2026-09-27: "no more ultracode unless necessary." Multi-agent workflows (ultracode, the Workflow tool, agent fan-outs) used most of a week's usage limit in a day. Work in the main session by default, even when ultracode is switched on. Only use a workflow when the job truly can't be done well without one, and say why before starting it.
+
+## Specialist agents (lead, specialists, reviewer)
+
+The main session is the **lead**. It talks to Omarie, plans, delivers and pushes. The specialists in
+`.claude/agents/` each do one job, look facts up in the second brain first, and hand back to the lead,
+never straight to Omarie.
+
+| agent | job | model |
+|---|---|---|
+| `researcher` | watch videos, research tools and trends; sourced reports (skill `watch`) | sonnet |
+| `anti-stock-editor` | personal-channel reels via `creator-kit/` (Anti Stock branch) | sonnet |
+| `fd-ads` | Formula Dynamics builds, in a worktree of the FD branch | opus, high effort |
+| `se-ads` | Supercar Experience builds, in a worktree of an SE branch | opus, high effort |
+| `reviewer` | read-only check before delivery: figures, brand, layout, frames, copy (skill `slopmonster`), loudness | opus |
+
+The usual run is **build → reviewer → lead delivers**: a chain of one agent at a time, not a fan-out. The
+builders work in worktrees of their workstream's branch, because this default branch doesn't carry
+`creator-kit/`, `formula-dynamics/` or `supercar-experience/`.
+
+The regret-list gate (`.claude/hooks/regret_gate.py`) is included but **not switched on** on this branch.
+It asks before paid renders, publishing, Dropbox moves or deletes, memory writes, force pushes and
+recursive deletes, and refuses pushes to `main`. Omarie turns it on by adding its `PreToolUse` hook to
+`.claude/settings.json`.
+
 ## Project Overview
 
 Antigravity Kit is an AI-powered design intelligence toolkit providing searchable databases of UI styles, color palettes, font pairings, chart types, and UX guidelines. It works as a skill/workflow for AI coding assistants (Claude Code, Windsurf, Cursor, etc.).

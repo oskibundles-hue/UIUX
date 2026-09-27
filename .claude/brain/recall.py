@@ -18,7 +18,7 @@ he him his she her they them us has have had get gets did done make makes go goe
 # words the owner uses -> words the notes use (add your own) (both directions are added at query time)
 SYN = {
     "delete": ["archive", "remove", "trash"], "dashboard": ["control", "room", "os"], "link": ["url", "artifact"],
-    "agent": ["model", "mesh", "subagent"], "model": ["mesh", "router", "lane", "class"], "cost": ["token", "usage", "spend"], "remember": ["memory", "note", "save"],
+    "agent": ["subagent", "specialist"], "model": ["mesh", "router", "lane", "class"], "cost": ["token", "usage", "spend"], "remember": ["memory", "note", "save"],
     "morning": ["report", "daily", "day"], "voice": ["speak", "speech", "jarvis"], "fast": ["speed", "latency", "second"],
     "script": ["tool", "gate", "py"], "horsepower": ["hp", "output"], "font": ["type", "typeface", "archivo"], "zone": ["timezone", "pacific", "pdt", "pst"], "time": ["pm", "am", "schedule", "nightly"], "check": ["verify", "gate", "confirm"],
 }
