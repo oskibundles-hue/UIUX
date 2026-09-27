@@ -6,7 +6,7 @@
 
 Main track: the T7 cut's own audio (his voice + the music), sample for sample, no EQ, no ducking, no edits.
 The only things done to it: one static gain to land the whole mix on -14.0 LUFS (it is -14.5 LUFS as
-delivered), a transparent true-peak limiter that only touches the few peaks above the ceiling, and a 40 ms
+delivered), a true-peak limiter at -1.75 dBTP that only shaves the loudest peaks (stats in the report), and a 40 ms
 fade on its very last samples (it ended on a non-zero sample, which would click) where the tail takes over.
 
 Accents (all synthesised here with lib/synth.py, so they are original and cleared):
@@ -22,7 +22,7 @@ Tail: the picture runs 1.6 s past the source audio (the Locked-On end card). The
 music's own natural decay (a wet-only reverb of its last 0.8 s, synthetic hall, no dry repeat) plus the end
 card impact's tail, fades to silence, and the last 50 ms (and more) are exact zeros.
 Loudness is measured with ffmpeg loudnorm (print) on the final buffer: -14.0 LUFS integrated, true peak
-<= -2.2 dBTP pre-AAC (so the AAC decode stays under -1.5 dBTP).
+<= -1.75 dBTP pre-AAC (the AAC decode stays under -1.5 dBTP; build.py measures it on the mp4).
 """
 import argparse, json, os, re, subprocess, sys
 import numpy as np
@@ -33,11 +33,13 @@ import synth as S  # noqa: E402
 SR = 48000
 FPS = 30000 / 1001
 FF = None
+CEIL = -1.75      # dBTP. The vlog master already peaks at -2.0 dBTP everywhere, so a lower ceiling would limit
+                  # constantly; the AAC 256k decode adds ~0.0 dB (measured on the r1-r3 exports), so -1.75 keeps the
+                  # delivered file under -1.5 dBTP while the limiter only shaves the loudest peaks.
 
 
 def limiter_gain(det, ceiling_db, look=0.0015, release=0.012, os_=4):
-    """Gain curve of synth.limiter (4x-oversampled true-peak brickwall) for a multi-column detector,
-    so the same gain can be applied to L/R while the detector also sees the mono fold-down."""
+    """Gain curve of synth.limiter (4x-oversampled true-peak brickwall), linked across the detector's columns."""
     c = S.db(ceiling_db)
     n = det.shape[0]
     X = np.fft.rfft(det, axis=0)
@@ -101,6 +103,7 @@ def main():
     ap.add_argument('--video', required=True); ap.add_argument('--ffmpeg', required=True)
     ap.add_argument('--times', required=True); ap.add_argument('--captions', required=True)
     ap.add_argument('--out', required=True); ap.add_argument('--report')
+    ap.add_argument('--dump-bus', help='also write the ducked accent bus (pre-gain) here, for level checks')
     A = ap.parse_args()
     FF = A.ffmpeg
     T = json.load(open(A.times))['TIMES']
@@ -155,6 +158,8 @@ def main():
         rep.append(dict(name=name, t=round(tm, 3), ref_db=round(ref, 1), accent_db=round(ref - 20.0, 1),
                         ducked=bool(sp[min(N - 1, s0)] > 0.5)))
     bus *= duck[:, None]
+    if A.dump_bus:
+        write_wav(A.dump_bus, bus, bits=32)
 
     # ---------------------------------------------------------------- tail (natural decay of the music)
     fade = S.n_of(0.04)
@@ -183,25 +188,31 @@ def main():
     tmp = os.path.join(os.path.dirname(os.path.abspath(A.out)), '_mix_meas.wav')
     i0, tp0 = loudness(FF, mix, tmp)
     out = mix
+    lim_g = np.ones(N)
     for _ in range(3):
         i1, _tp = loudness(FF, out, tmp)
         out = out * 10 ** ((-14.0 - i1) / 20)
-        # detector includes the -3 dB mono fold-down, ceiling -2.2 dBTP (AAC adds a few tenths)
-        ms = 0.7071 * (out[:, 0] + out[:, 1])
-        det = np.stack([out[:, 0], out[:, 1], ms], 1)
-        g = limiter_gain(det, -2.3)
+        # L/R true peak only. (The showcase also limited a 0.707*(L+R) mono fold-down; this vlog's own master already
+        # breaks that rule by ~3 dB on centred content, so enforcing it would squash the approved mix.)
+        g = limiter_gain(out, CEIL)
+        lim_g *= g
         out = out * g[:, None]
         out[tt >= t_end1] = 0
     i2, tp2 = loudness(FF, out, tmp)
     # the limiter pass leaves the mix a few hundredths under target: one last static trim if the peaks allow it
     trim = -14.0 - i2
-    if abs(trim) > 0.01 and tp2 + trim <= -2.2:
+    if abs(trim) > 0.01 and tp2 + trim <= CEIL:
         out = out * 10 ** (trim / 20)
         i2, tp2 = loudness(FF, out, tmp)
     os.remove(tmp)
     write_wav(A.out, out)
     zeros_ms = 1000 * (N - 1 - np.max(np.where(np.abs(out).max(1) > 0)[0])) / SR
-    info = dict(samples=N, seconds=round(N / SR, 4), source_seconds=round(n_src / SR, 4),
+    red = -20 * np.log10(np.maximum(lim_g, 1e-9))
+    info = dict(limiter=dict(max_reduction_db=round(float(red.max()), 2),
+                             pct_samples_over_0p1db=round(100 * float((red > 0.1).mean()), 3),
+                             pct_samples_over_0p5db=round(100 * float((red > 0.5).mean()), 3)),
+                static_gain_db=round(float(20 * np.log10(np.abs(out[:n_src - fade]).sum() / max(np.abs(mix[:n_src - fade] * lim_g[:n_src - fade, None]).sum(), 1e-9))), 3),
+                samples=N, seconds=round(N / SR, 4), source_seconds=round(n_src / SR, 4),
                 before=dict(I=i0, TP=tp0), after=dict(I=i2, TP=tp2), trailing_zeros_ms=round(zeros_ms, 1),
                 accents=rep, duck_db=duck_db)
     if A.report:

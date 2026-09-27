@@ -46,7 +46,7 @@ Other word onsets checked on the way: "15" f2105, "left" <= f2344, "on" f2352, "
 | D1 | Lock: OUR RIDE / ROLLS-ROYCE (Spirit of Ecstasy) | 105.000 acquire (brackets fly in from 1.7x over 7 frames) | brackets 105.23, leader 105.20-105.46, label 105.28-105.72 | 107.034 | 107.274 (the cut, f3215) | track `soe` f3119-3214 (conf 0.90-0.98, FB error <= 1.1 %). Readable 105.72-107.03 (1.31 s). It overlaps the end of B4 by ~1.3 s, in the lower half of the frame. No captions are on screen (the last caption word is at 104.3 s) |
 | D2 | Lock: LEAD CAR / LAMBORGHINI URUS | 107.374 (f3218) | brackets 107.60, leader 107.57-107.83, label 107.65-108.09 | 113.300 | 113.540 | brackets around the car's rear (tracked box x 372-692, y 912-1125, +44 px pad), label x ~198-640 above-left. Track `urus` f3215-3406 (conf 0.98-0.99, FB error <= 0.1 %). Readable 108.09-113.30 (5.2 s). Glint 108.35-108.81 |
 | B5 | CH 05 / 05 LEVEL NINE | 113.680 (f3407) | panel 113.900, title 114.25 | 115.750 | 116.050 | x 339-741 |
-| E | Locked-On end card | 127.127 (f3810) | opaque 127.245 (fully opaque from f3814), content 127.727 | none | 130.597 (end) | It wipes up from the bottom with a 90 px feathered edge on the first frame after his closing caption, and is fully opaque before the old card's first darkening (~f3815) and its logo (f3817). A gold light blooms down from the top edge as it lands (127.225-127.545). Content: logo wipe 127.19-127.43, stripe 127.25-127.47, tagline 127.27-127.67, CTA 127.33-127.66, phone 127.35-127.71, site 127.41-127.63, handle 127.45-127.67, locations 127.43-127.73, rule 127.49-127.71, credit 127.51-127.73. Readable from 127.727 to 130.597 (2.87 s). Slow push 1.000 -> 1.018, and glints on the phone (128.23-128.78) and the tagline (129.18-129.78) |
+| E | Locked-On end card | 127.127 (f3810) | opaque 127.245 (fully opaque from f3814), content 127.727 | none | 130.597 (end) | It wipes up from the bottom with a 90 px feathered edge on the first frame after his closing caption, and is fully opaque before the old card's first darkening (~f3815) and its logo (f3817). A gold light blooms down from the top edge as it lands (127.225-127.545). Content: logo wipe 127.19-127.43, stripe 127.25-127.47, tagline 127.27-127.67, CTA 127.33-127.66, phone 127.35-127.71, site 127.41-127.63, handle 127.45-127.67, locations 127.43-127.73, requirement line (RENTERS 25+ · AGES 21–24 WITH $299 UNDERAGE FEE, y 1290) 127.47-127.69, rule 127.49-127.71, credit 127.51-127.73. Readable from 127.727 to 130.597 (2.87 s). Slow push 1.000 -> 1.018, and glints on the phone (128.23-128.78) and the tagline (129.18-129.78) |
 
 Chapter card anatomy (B1-B5): black panel (opaque, so the pills cannot show through), 8 px gold 78 % / white
 22 % stripe on top, drawn left to right in 0.22 s (expo) with a light edge, the panel unrolls down from the
@@ -60,8 +60,8 @@ end-card wipe; 10 on the end-card build.
 
 ## Sound (lib/mix.py)
 
-The vlog's own audio is the main track, unchanged apart from one static gain, a transparent true-peak limiter and a
-40 ms fade on its last samples. Accents, each 20 dB under the programme around it, and a further 6 dB down while a
+The vlog's own audio is the main track, unedited apart from one static gain (+0.44 dB), an L/R true-peak limiter at
+-1.75 dBTP (it touches 0.06 % of the samples, by at most 0.2 dB) and a 40 ms fade on its last samples. Accents, each 20 dB under the programme around it, and a further 6 dB down while a
 word is highlighted in the captions:
 
 | Accent | Time (peak / hit) | Ducked under speech |

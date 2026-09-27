@@ -1,7 +1,7 @@
 {
  "file": "01 2026-09-15 the rally, dinner and the drive back (reel cut) SE LOCKED-ON - INSTAGRAM 1080x1920.mp4",
- "bytes": 183497201,
- "MB": 183.5,
+ "bytes": 183414737,
+ "MB": 183.41,
  "track_durations_s": [
   130.598,
   130.597
@@ -10,15 +10,15 @@
  "picture_s": 130.5971,
  "audio_decoded_s": 130.6027,
  "loudnorm": {
-  "I": -14.0,
-  "TP": -2.29,
-  "LRA": 8.3
+  "I": -14.01,
+  "TP": -1.66,
+  "LRA": 8.8
  },
- "trailing_silence_ms": 118.7,
+ "trailing_silence_ms": 121.0,
  "last_50ms_peak": 0.0,
  "stream_lines": [
-  "Duration: 00:02:10.60, start: 0.000000, bitrate: 11240 kb/s",
-  "Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920, 10986 kb/s, 29.97 fps, 29.97 tbr, 30k tbn (default)",
+  "Duration: 00:02:10.60, start: 0.000000, bitrate: 11235 kb/s",
+  "Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920, 10981 kb/s, 29.97 fps, 29.97 tbr, 30k tbn (default)",
   "Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 245 kb/s (default)"
  ],
  "coverage": {
@@ -127,7 +127,8 @@
    "ok": true
   },
   "end_card_first_opaque_frame": 3814,
-  "end_card_readable_s": 2.903,
+  "end_card_fully_built_s": 127.727,
+  "end_card_readable_s": 2.87,
   "route_ticks_on_word_frame": {
    "ticks": [
     {
@@ -166,6 +167,15 @@
      "ok": true
     }
    ],
+   "ok": true
+  },
+  "mp4_shows_layer_on_every_opaque_pixel": {
+   "frames_decoded": 3914,
+   "layer_frames_compared": 1280,
+   "worst_mean_abs_diff": 3.53,
+   "worst_frame": 2652,
+   "frames_over_10": [],
+   "n_bad": 0,
    "ok": true
   }
  }

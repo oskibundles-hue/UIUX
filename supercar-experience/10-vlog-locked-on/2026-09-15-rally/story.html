@@ -419,8 +419,10 @@ function buildEnd() {
   L.url = line(body, 'Bebas', 72, e.url, centreX('Bebas', 72, e.url, 540), 1044, 'white');
   L.handle = line(body, 'Bebas', 72, e.handle, centreX('Bebas', 72, e.handle, 540), 1122, 'white');
   L.loc = line(body, 'Michroma', 26, e.locations, centreX('Michroma', 26, e.locations, 540), 1232, 'white', { goldDots: true });
-  const rule = el('div', 'a', body, 'left:470px;top:1318px;width:140px;height:2px;background:rgba(255,255,255,.35);transform-origin:50% 50%');
-  L.credit = line(body, 'Michroma', 20, e.credit, centreX('Michroma', 20, e.credit, 540), 1356, 'white');
+  // the renter requirement, as supercarexp.vip words it (Omarie, 26 Sept): house requirements style, Bebas, white
+  L.req = line(body, 'Bebas', 44, e.requirement, centreX('Bebas', 44, e.requirement, 540), 1290, 'white', { goldDots: true });
+  const rule = el('div', 'a', body, 'left:470px;top:1374px;width:140px;height:2px;background:rgba(255,255,255,.35);transform-origin:50% 50%');
+  L.credit = line(body, 'Michroma', 20, e.credit, centreX('Michroma', 20, e.credit, 540), 1406, 'white');
   L.credit.t.style.opacity = 0.78;
   G.end = { root, panel, wipeStripe, body, logoW, logo, logoEdge, stripe, L, rule };
 }
@@ -449,6 +451,7 @@ function renderEnd(t) {
   const fu = (ln, st) => { const q = E.outCubic(P(t, st, st + 0.22)); ln.w.style.opacity = q.toFixed(4); ln.w.style.transform = `translateY(${(14 * (1 - q)).toFixed(3)}px)`; };
   fu(N.L.url, s0 + 0.22); fu(N.L.handle, s0 + 0.26);
   KT.track(N.L.loc.g, t, { start: s0 + 0.24, dur: 0.24, spread: 1.6, stagger: 0.004 });
+  fu(N.L.req, s0 + 0.28);
   const qr = E.outExpo(P(t, s0 + 0.30, s0 + 0.52)); N.rule.style.transform = `scaleX(${qr.toFixed(5)})`;
   fu(N.L.credit, s0 + 0.32);
   // hold: a slow push, a gold glint through the phone number and one through the tagline

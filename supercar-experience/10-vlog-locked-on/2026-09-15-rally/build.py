@@ -140,7 +140,7 @@ def st_audio(A):
     log('audio: mixing')
     sh([sys.executable, os.path.join(LIB, 'mix.py'), '--video', A.video, '--ffmpeg', A.ffmpeg,
         '--times', os.path.join(WORK, 'page.json'), '--captions', os.path.join(LIB, 'data', 'captions.json'),
-        '--out', out, '--report', os.path.join(WORK, 'mix.json')])
+        '--out', out, '--report', os.path.join(WORK, 'mix.json'), '--dump-bus', os.path.join(WORK, 'accents.wav')])
 
 
 # ------------------------------------------------------------------------------------ compose
@@ -249,18 +249,22 @@ def composite_check(mp4, ff):
         if i in want:
             im = np.asarray(Image.open(os.path.join(WORK, 'front', f'{i:05d}.png')))
             m = im[..., 3] == 255
+            # compare the interior of opaque areas only (2 px erosion): x264 legitimately softens thin edges
+            # (5 px brackets, glyph outlines); a lost or shifted layer frame differs by 30+ levels everywhere
+            for _ in range(2):
+                m = m & np.roll(m, 1, 0) & np.roll(m, -1, 0) & np.roll(m, 1, 1) & np.roll(m, -1, 1)
             if m.sum() > 2000:
                 f = np.frombuffer(b, np.uint8).reshape(H, W, 3)
                 d = float(np.abs(f[m].astype(np.int16) - im[..., :3][m].astype(np.int16)).mean())
                 n += 1
                 if d > worst[0]:
                     worst = (d, i)
-                if d > 6:
+                if d > 10:
                     bad.append((i, round(d, 1)))
         i += 1
     p.wait()
     return dict(frames_decoded=i, layer_frames_compared=n, worst_mean_abs_diff=round(worst[0], 2), worst_frame=worst[1],
-                frames_over_6=bad[:30], n_bad=len(bad), ok=(len(bad) == 0 and i == NF))
+                frames_over_10=bad[:30], n_bad=len(bad), ok=(len(bad) == 0 and i == NF))
 
 
 def coverage_checks(pg):
@@ -316,7 +320,9 @@ def coverage_checks(pg):
     e0 = fr(T['end'] + T['END_WIPE']) + 1           # first frame whose whole shutter is after the wipe landed
     cover('end_card_full_frame', list(range(e0, NF)), [0, 0, W - 1, H - 1], need=255)
     res['end_card_first_opaque_frame'] = e0
-    res['end_card_readable_s'] = round((NF - fr(T['end'] + 0.60)) / FPS, 3)
+    built = T['end'] + 0.60                           # the last end-card line (the credit) settles at t0 + 0.60 s
+    res['end_card_fully_built_s'] = round(built, 3)
+    res['end_card_readable_s'] = round(NF / FPS - built, 3)     # from fully built to the end of the last frame
     # route ticks: no gold in the tick box on the frame before the word, gold fill on the word frame
     ticks = []
     for k, rt in enumerate(AN['routeTicks']):

@@ -8,8 +8,11 @@ the music and the plate blurs are untouched. Only a motion-graphics layer goes o
 and 1.6 s of end card.
 
 **Export:** `exports/01 2026-09-15 the rally, dinner and the drive back (reel cut) SE LOCKED-ON - INSTAGRAM 1080x1920.mp4`.
-H.264 High, yuv420p (bt709), 1080x1920, 29.97 fps, two-pass 11 Mb/s, AAC 48 kHz stereo 256k, +faststart,
-3,914 frames = 130.597 s (the source is 128.995 s, and 48 frames of end card are added). The mp4 is git-ignored.
+H.264 High, yuv420p (bt709), 1080x1920, 29.97 fps, two-pass 11 Mb/s (10.98 Mb/s video), AAC-LC 48 kHz stereo
+256k (245 kb/s average), +faststart (moov before mdat), **183.4 MB**. It has 3,914 frames = 130.597 s: the source is
+128.995 s, and 48 frames of end card are added. Video and audio tracks run 130.598 / 130.597 s. Loudness on the mp4
+(ffmpeg loudnorm, print): **-14.01 LUFS integrated, -1.66 dBTP true peak, LRA 8.8**, and the last 121 ms decode to
+digital silence. The mp4 is git-ignored.
 Also in `exports/`: `poster.jpg` (frame 0: the complete hook), `contact-sheet.jpg` (one frame every 2 s), and
 `qa/` (a still at the entry, middle and exit of every element, the frame edges of every covering check,
 `element-sheet.jpg` and `qa_summary.json`).
@@ -50,16 +53,20 @@ All copy lives in `config.json` (`copy`).
 | SUPERCAREXP.VIP | the site, and the T7 card |
 | @SUPERCAR_EXPERIENCE_ | supercarexp.vip contact page, the T7 card |
 | LAS VEGAS · SCOTTSDALE · BOISE | supercarexp.vip ("Las Vegas · Scottsdale · Boise"), and the T7 card's locations |
+| RENTERS 25+ · AGES 21–24 WITH $299 UNDERAGE FEE | Omarie, 26 Sept: include the age requirement as the site words it. supercarexp.vip booking steps: "Renter Must Be 25+ (Ages 21–24 With $299 Underage Fee)", checked 26 Sept. Set in the house requirements style (Bebas 44, white, gold dot), between the locations and the credit |
 | FILMED BY @NQ.YOUNG | Omarie's handle, as on the approved follow card ("Omarie Young @nq.young") |
 
-There are no prices, specs, horsepower, years or offers anywhere. The age requirement is left off on purpose (see
-the open items).
+There are no prices, specs, horsepower, years or offers anywhere. The one figure on screen is the site's own underage
+fee, in the requirement line.
 
 ## Sound
 
-The vlog's own audio (his voice and the music) is the main track, sample for sample: no EQ, no ducking, no edits.
-It gets one static gain from -14.5 to -14.0 LUFS, a transparent true-peak limiter that only touches the few peaks
-above -2.3 dBTP, and a 40 ms fade on its last samples, where it ended on a non-zero sample. Accents
+The vlog's own audio (his voice and the music) is the main track, unedited: no EQ, no ducking, no cuts.
+It gets one static gain (+0.44 dB, -14.44 to -14.00 LUFS for the whole mix), an L/R true-peak limiter at
+-1.75 dBTP that touches 0.06 % of the samples by at most 0.2 dB, and a 40 ms fade on its last samples, where it
+ended on a non-zero sample. The showcase also limited a 0.707·(L+R) mono fold-down. This vlog's master already
+breaks that rule by about 3 dB on centred content, so enforcing it would have squashed the approved mix (a first
+try limited 15 % of the samples by more than 0.5 dB). It was dropped. Accents
 (`lib/mix.py`, synthesised with the showcase's `synth.py`, so they are original):
 
 - a soft whoosh on each chapter card (5)
@@ -68,7 +75,10 @@ above -2.3 dBTP, and a 40 ms fade on its last samples, where it ended on a non-z
 - an impact on the end card (1)
 
 Each accent's loudest 50 ms sits **20 dB under the programme around it**, and the whole accent bus is ducked
-**a further 6 dB while a word is being spoken**. The speech signal is the burned-in caption word highlight
+**a further 6 dB while a word is being spoken**. Measured on the accent bus (`.work/accents.wav`) against the
+programme: the 6 unducked accents (the whooshes for CH 02 and CH 05, and the four car-lock ticks) sit at -19.7 to
+-20.0 dB. The 8 accents under speech (the whooshes for CH 01, CH 03 and CH 04, and the five route ticks) sit at
+-25.9 to -26.1 dB. The end-card impact, which starts as his last words end, sits at -23.7 dB. The speech signal is the burned-in caption word highlight
 (`lib/data/captions.json`). The route ticks land on words by design, so they are always ducked.
 
 The tail: the picture runs 1.6 s past the source audio. The music's own decay carries on (a wet-only reverb of its
@@ -78,7 +88,7 @@ exact zeros. Measured on the delivered mp4 with `ffmpeg loudnorm` (print): see `
 ## How to rebuild
 
 ```bash
-./render.sh                        # = python3 build.py: everything, ~12 min on the 4-CPU box
+./render.sh                        # = python3 build.py: everything, ~13 min on the 4-CPU box
 python3 build.py --stage qa        # QA only, on the existing export
 python3 build.py --stills 0,142,2114,3810   # composite single frames -> .work/stills/ (no mp4)
 ```
@@ -89,8 +99,11 @@ Needs Python 3 with numpy and Pillow, Node 22 with Playwright at `/opt/node22/li
 
 Stages (cached in `.work/`): `prep` (config and tracks to JS, and the page's timing tables) -> `front` (story.html
 captured with sub-frame motion blur, only the ~1,400 frames where something is on screen, 3 Chromium processes,
-~2 min) -> `audio` (`lib/mix.py`, ~2 min) -> `compose` (ffmpeg: source + 48 black frames, overlay the PNG layer
-in RGB, bt709, x264 two-pass, ~8 min) -> `qa`.
+~2 min) -> `audio` (`lib/mix.py`, ~2.5 min) -> `compose` (ffmpeg: source + 48 black frames, overlay the PNG layer
+in RGB, bt709, x264 two-pass, ~6 min) -> `qa` (~2 min). Every layer PNG is kept RGBA. Chromium writes an opaque
+screenshot as RGB, and a sequence that switches pixel format makes ffmpeg re-initialise the overlay graph, which
+dropped the layer on 5 end-card frames in one build. `lib/accum.py` and `build.py` both normalise it now, and QA
+catches it.
 
 To change a line, edit `config.json` and rerun. To re-measure, the anchors are also in `config.json`
 (`anchors`). `lib/capscan.py` re-scans the captions, and `lib/track.py` re-tracks a car:
@@ -99,6 +112,25 @@ To change a line, edit `config.json` and rerun. To re-measure, the anchors are a
 python3 lib/track.py --video SRC --ffmpeg FF --name urus --f0 3215 --f1 3406 --box 372,912,320,213 --out lib/data/tracks.json
 python3 lib/track.py --video SRC --ffmpeg FF --name soe  --f0 3119 --f1 3214 --box 730,1222,175,178 --out lib/data/tracks.json
 ```
+
+## How it was verified (`exports/qa/qa_summary.json`, rebuilt on every run)
+
+- **Hook covers the old title:** the layer's alpha is 255 over the title box (+6 px) on every frame from f0 to f77.
+  The old title is visible f3-f77 (measured), and the exit starts on f78. The mp4 frames were also checked one by one
+  from f0 to f4 and from f76 to f90.
+- **CH 01 and CH 02 cover the pills:** alpha 255 over each pill box (x1.05 for its scale-in, +4 px) from one frame
+  before the pill appears to its last visible frame (f141-f205, f475-f538). The edge frames were checked on the mp4.
+- **Nothing on the SE bug** (any frame before the end card), **the follow card** (33.5-38.5 s) **or the captions**
+  (every frame within ±20 frames of a highlighted word): the layer's alpha there is 0.
+- **Route ticks on the word:** for each waypoint, the tick box has no gold on the frame before the word is
+  highlighted and a gold fill on the word frame (f2114, f2161, f2374, f2405, f2548).
+- **End card:** alpha 255 over the full frame from f3814 to the last frame. The old card's first darkening is at
+  ~f3815 and its logo at f3817. The card is fully built at 127.727 s and readable for 2.87 s.
+- **End to end:** the whole mp4 is decoded, and on every layer frame the opaque interior of the layer matches the
+  delivered pixels (worst mean difference 3.5 levels, from x264).
+- **Locks:** stills across both shots show the brackets on the Urus from acquire to exit with no drift (tracker
+  conf >= 0.98, forward/backward error <= 0.1 %) and on the Spirit of Ecstasy throughout (conf >= 0.90).
+- **Audio:** loudnorm print on the mp4, the decoded tail, the track durations, and the accent levels on the accent bus.
 
 ## Files
 
@@ -117,26 +149,23 @@ python3 lib/track.py --video SRC --ffmpeg FF --name soe  --f0 3119 --f1 3214 --b
 
 ## Open items
 
-1. **Age requirement, left off the end card.** It conflicts: supercarexp.vip says "Renter Must Be 25+ (Ages 21-24
-   With $299 Underage Fee)", the approved T7 card says "25+ Renter must be 25+", and today's ads say 21+. Decide
-   the line and add it to the card if it should be there.
-2. **Three route labels differ from the brief's wording,** because the brief also said to use the guide's own words.
+1. **Three route labels differ from the brief's wording,** because the brief also said to use the guide's own words.
    The brief's "OFF AT FLAMINGO" is now OFF ON FLAMINGO ("getting off on Flamingo"), "THE VENETIAN" is BACK TO
    VENETIAN ("to go back to Venetian"), and "LEVEL 9" is NINTH FLOOR ("up to the ninth floor"). "15 NORTH" is
    captioned "It's in a 15 north": he says I-15. Change `config.json` `copy.route.waypoints` if the brief's wording is preferred.
-3. **215.** The guide opens with "We are going to take 215 out of here" (67.6 s). It is not on the card, because the
+2. **215.** The guide opens with "We are going to take 215 out of here" (67.6 s). It is not on the card, because the
    brief listed five waypoints starting at 15 NORTH. Adding it is one line in `config.json`, but the card would need
    a sixth row.
-4. **Nobody has listened yet.** All audio checks were numeric (loudness, true peak, the accent levels against the
+3. **Nobody has listened yet.** All audio checks were numeric (loudness, true peak, the accent levels against the
    programme, the ducking, the silent tail). Listen on a phone speaker and on headphones, mainly for the ticks
    under the briefing and the end-card tail.
-5. **Chapters 01 and 02 hold for 2.2 s**, a little over the brief's 1.6-2.0 s, because the burned-in pills are
+4. **Chapters 01 and 02 hold for 2.2 s**, a little over the brief's 1.6-2.0 s, because the burned-in pills are
    on screen for 2.1 s and the cards have to cover them for the whole time. 03-05 hold for 1.7-1.9 s.
-6. **The route card starts at y 222 (11.6 %),** above the brief's "about 15 %". Five readable lines have to fit
+5. **The route card starts at y 222 (11.6 %),** above the brief's "about 15 %". Five readable lines have to fit
    above the guide's head, whose top is at y 520-580, and his raised hand reaches y ~480. At that size the card cannot
    sit lower without covering his head. It stays left of the SE bug and well clear of the captions.
-7. **The Rolls-Royce lock overlaps the end of CH 04** for about 1.3 s (105.0-106.3 s). The ornament shot is only
+6. **The Rolls-Royce lock overlaps the end of CH 04** for about 1.3 s (105.0-106.3 s). The ornament shot is only
    3.2 s long, and the label needs 1.2 s of clean read. The card is in the top band and the lock in the lower half.
-8. **The brief placed the SE bug at y 3-5 %.** It is at y 296-338 (15.4-17.6 %) on this cut. Everything is laid
+7. **The brief placed the SE bug at y 3-5 %.** It is at y 296-338 (15.4-17.6 %) on this cut. Everything is laid
    out against the measured position.
-9. **Music rights**: this is the vlog's own track, unchanged. It is cleared as far as the approved T7 cut is.
+8. **Music rights**: this is the vlog's own track, unchanged. It is cleared as far as the approved T7 cut is.
