@@ -110,5 +110,6 @@ cloud session can't reach the Mac directly.
   - the online-only disk check stops a survey that wouldn't fit;
   - the Sep 15 build renders with the new path handling.
 - **On Omarie's Mac (2026-09-27):** `setup-mac.sh` ran and `doctor.py` reported **READY**, which covers the tool
-  checks and the end-to-end run on the generated clip. Whether VideoToolbox was switched on is in that Mac's
-  `vlog.env` (`VLOG_HWACCEL`).
+  checks and the end-to-end run on the generated clip. VideoToolbox decoded the test clip frame-identical to the CPU
+  decoder, so `vlog.env` has `VLOG_HWACCEL="videotoolbox"` and `fetch` decodes the HEVC camera files on the Mac's
+  media engine.
