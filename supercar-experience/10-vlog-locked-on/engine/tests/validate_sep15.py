@@ -38,7 +38,8 @@ FLAGS = [  # clip, t0, t1, category, what
     ('0008', 217, 231, 'password', 'spoken password "two zero two four capital H..." ~3:37'),
     ('0022', 68, 95, 'cut_request', '"don\'t post that" / "take that out" 1:08-1:35'),
     ('0032', 1455, 1457, 'speed', '"I hit 114" ~24:15'),
-    ('0034', 638, 642, 'speed', '"going 100 and some" ~10:38'),
+    # word timing, identical in both transcriptions ("going" 641.85, "100" 641.97-642.3); the segment start (~638) is a smeared "Oh"
+    ('0034', 641.8, 642.4, 'speed', '"going 100 and some" ~10:42'),
     ('0034', 654, 681, 'weapons', 'gun talk 10:54-11:21'),
     ('P2236', 95, 113, 'unsafe_driving', 'double yellow / "go a little faster" 1:35-1:53'),
     ('0009', 136, 138, 'fleet_fault', '"the door handle just broke"'),

@@ -193,6 +193,27 @@ under load that is about 26 min of cutting with superfast, 21 with ultrafast, an
 The last run took 40 min. This stage is bound by HEVC decode, and the remaining levers are fewer frames (handles,
 audio-only VO) or free cores.
 
+### Real run on Dropbox (2026-09-27, Sep 15 day)
+
+46 clips (33 DJI, 13 iPhone), 169.3 GB, 92 links in 4 back-to-back calls. The render agent's SSIM/PSNR comparisons
+shared the 4 cores for the whole run.
+
+| step | before (Sep 15) | real run |
+|---|---|---|
+| survey: stream, audio, thumbnails, idx | 80 min, babysat | **12.1 min** streaming (+727 s), 0 failures, exactly 92 links used (NEED.json appeared twice while batches 2-4 were still being saved; no extra call) |
+| transcripts | ran alongside | done at **19.3 min** (+1155 s); whisper sat at 1 worker while thumbnails held the cores, then cleared 26 queued clips in 7 min |
+| index | 30-40 min by hand | **103 s** (voice embeddings 96 s) → 2,324 lines, 88 flags (13 block), 112 moments |
+| disk | 17 GB peak, originals on disk | 534 MB for the whole day, no original on disk |
+
+Streaming ran at 233-277 MB/s aggregate while 5 clips were live. Single streams ran at 21-95 MB/s; the slowest, 0015 at
+21 MB/s, took 343 s and was the tail. `tests/validate_sep15.py` on the real index: speakers 5/5, flags 13/13, no block
+flag on approved dialog. Moments: 22/31 of the approved dialog pieces in the top 3, 30/31 in the top 10. The 31st, the
+host's "you'll get the R8" (transcribed "RA"), is #13 in lineup, at score 3.7 against a nine-way tie at 3.8. It is
+still listed in moments.md and day.md.
+
+Next lever for this stage: give whisper priority over thumbnails, because thumbnails aren't needed until `index`, and a
+free core for ASR during streaming would take off most of the 7 min tail.
+
 ## Files
 
 ```
