@@ -38,6 +38,10 @@ FORMATS = {
 APPROVED = {
     '9x16': ('22ddf49232086eb8d3856fc05760032d2a9385df77acf0c19eb3ee885e2ca544',
              '73762b7c7c59961b0a524b9fe607d65dc2b185336753389145dd1e26f03ba545'),
+    '4x5': ('dfc2c1c183b0f9ec23bc4688ec5949e8f58e9e3d1e0a7120ce115c70dde610f1',
+            'a3138d13b69073a849319fce84255b9f6e81f9ebaf822c659aebd1953416addb'),
+    '1x1': ('b9dab85e7f77fd1e52a26901af2490290a590eddde705c9c4b1a971156603204',
+            'f7b2907b52e817e6744b85941ea2ff28d617e8192dbe150e2cb6a6d9fd6fa1a3'),
 }
 
 # ink must stay inside this box (output pixels) on every held frame; the 9:16 box is the SE story safe zone
