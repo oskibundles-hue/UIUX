@@ -7,7 +7,8 @@
   "edl": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/raw/edl.json",
   "captions": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/raw/captions.json",
   "sparse": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/raw/sparse",
-  "sfx": "../../10-motion-sfx/locked-on-sfx"
+  "sfx": "../../10-motion-sfx/locked-on-sfx",
+  "transcripts": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/raw/tr"
  },
  "name": "2026-09-15 rally day (Egnyte) - SE LOCKED-ON vlog v2",
  "forbidden": [
@@ -1389,7 +1390,7 @@
   }
  },
  "music": {
-  "_about": "THE MUSIC SLOT. Drop a licensed track at audio/music.wav (48 kHz stereo) and set bpm/downbeat0 (and offset = where in the file the timeline starts); the mixer uses it instead of the placeholder synth bed and stops it on its own with a tape stop at tapeStop, before the end card hit at 170.02 s. The placeholder bed (lib/music.py) is 105.11 BPM, first downbeat 1.0533 s, drop at 135.77 s, tape stop 168.878-169.449 s.",
+  "_about": "THE MUSIC. The bed is ORIGINAL (lib/music.py, synthesised here, cleared) unless a track is dropped at audio/music.wav. To switch music OFF: set music.enabled to false here, or run MUSIC=0 ./render.sh (the master is then dialog + nat + SFX). The no-music master is exported every time anyway. To use another track: put it at audio/music.wav (48 kHz stereo), set bpm / downbeat0 / offset (where in the file the timeline starts); the mixer ducks it under speech and tape-stops it at tapeStop before the end card hit (170.02 s). The placeholder bed: 105.11 BPM, first downbeat 1.0533 s, drop 135.77 s, tape stop 168.878-169.449 s.",
   "file": "audio/music.wav",
   "bpm": 105.11,
   "downbeat0": 1.0533,
@@ -1399,7 +1400,8 @@
    169.449
   ],
   "lufs": -20.0,
-  "duckDb": -11.0
+  "duckDb": -11.0,
+  "enabled": true
  },
  "audio": {
   "dialogFilter": "highpass=f=80:poles=2,afftdn=nr=8:nf=-45:tn=1,acompressor=threshold=-26dB:ratio=2:attack=12:release=180:makeup=1",
@@ -1480,22 +1482,6 @@
     "why": "the SE shop: logo wall"
    },
    {
-    "src": "0010",
-    "a": 34.0,
-    "b": 37.0,
-    "t": 19.3,
-    "lufs": -30,
-    "why": "the SE showroom with cars"
-   },
-   {
-    "src": "0004",
-    "a": 47.0,
-    "b": 50.58,
-    "t": 22.3,
-    "lufs": -30,
-    "why": "garage: green Huracan + purple Urus -> lock-on only if the m"
-   },
-   {
     "src": "0015",
     "a": 2.0,
     "b": 4.6,
@@ -1528,36 +1514,12 @@
     "why": "the white Audi R8 - lock-on AUDI R8"
    },
    {
-    "src": "0015",
-    "a": 163.0,
-    "b": 167.05,
-    "t": 74.79,
-    "lufs": -30,
-    "why": "the black Cullinan - LEAD CAR lock-on: ROLLS-ROYCE CULLINAN"
-   },
-   {
-    "src": "0025",
-    "a": 36.0,
-    "b": 40.2,
-    "t": 112.41,
-    "lufs": -30,
-    "why": "the team at the table"
-   },
-   {
     "src": "P2245",
     "a": 5.0,
     "b": 11.1,
     "t": 116.61,
     "lufs": -30,
     "why": "Red Rock rooftop: the lineup under the lights"
-   },
-   {
-    "src": "0005",
-    "a": 55.0,
-    "b": 58.91,
-    "t": 104.35,
-    "lufs": -28,
-    "why": "the Ferrari Roma pulling in - lock-on FERRARI ROMA"
    },
    {
     "src": "0016",
@@ -1603,6 +1565,12 @@
   "sfx": {
    "ratio": 0.45,
    "duckDb": -6.0
+  },
+  "duck": {
+   "_about": "music sidechain: every dialog piece plus every nat clip with transcribed speech; raised-cosine attack before the words and release after them; gaps under `bridge` s are held down (no pumping between sentences)",
+   "attack": 0.06,
+   "release": 0.4,
+   "bridge": 0.6
   }
  },
  "sfx": {

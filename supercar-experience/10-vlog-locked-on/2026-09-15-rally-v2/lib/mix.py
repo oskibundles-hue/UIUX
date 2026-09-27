@@ -203,6 +203,21 @@ def activity(spans, pre=0.12, post=0.35, bridge=0.6):
     return out, merged
 
 
+def nat_speech_spans():
+    """timeline spans of transcribed words inside each nat clip (someone talking in the nat -> the music ducks too)."""
+    out = []
+    for e in A['nat']:
+        p = os.path.join(P['transcripts'], f"{e['src']}.json")
+        if not os.path.exists(p):
+            continue
+        tr = json.load(open(p))
+        for sg in tr['segments']:
+            for w in sg['words']:
+                if w[0] < e['b'] and w[1] > e['a']:
+                    out.append([e['t'] + max(w[0], e['a']) - e['a'], e['t'] + min(w[1], e['b']) - e['a']])
+    return out
+
+
 def build_nat(act, report):
     bus = np.zeros((NS, 2))
     for e in A['nat']:
@@ -282,13 +297,15 @@ def build_sfx(music_raw, act, report):
 
 def master(x, target, ceiling):
     x = S.fft_filter(x, lo=30, slope=2)
+    gain = 1.0
     for it in range(4):
-        y = S.limiter(x, ceiling_db=ceiling)
+        y = S.limiter(x * gain, ceiling_db=ceiling)
         L = lufs(y)
         if abs(L - target) < 0.05:
             break
-        x = x * 10 ** ((target - L) / 20)
-    y = S.limiter(x, ceiling_db=ceiling)
+        gain *= 10 ** ((target - L) / 20)
+    master.gain = gain
+    y = S.limiter(x * gain, ceiling_db=ceiling)
     tail = int(0.06 * SR)
     y[-tail:] = 0
     fl = int(0.25 * SR)
@@ -324,7 +341,10 @@ def main():
     a = ap.parse_args()
     rep = {'dialog': [], 'nat': [], 'sfx': []}
     dialog, spans = build_dialog(rep)
-    act, merged = activity(spans)
+    dk = A['duck']
+    nsp = nat_speech_spans()
+    act, merged = activity(spans + nsp, pre=dk['attack'], post=dk['release'], bridge=dk['bridge'])
+    rep['nat_speech_spans'] = [[round(a, 3), round(b, 3)] for a, b in nsp]
     write_wav24(os.path.join(WORK, 'stem_dialog.wav'), dialog * 0.5)
     if a.dialog_only:
         json.dump(rep, open(os.path.join(WORK, 'mix.json'), 'w'), indent=1)
@@ -336,10 +356,27 @@ def main():
     music = music_raw * (10 ** (CFG['music']['duckDb'] * act / 20))[:, None]
     sfx = build_sfx(music_raw, act, rep)
     mc = CFG['master']
-    full, L1, tp1 = master(dialog + nat + music + sfx, mc['lufs'], mc['ceiling'])
+    on = CFG['music'].get('enabled', True) and os.environ.get('MUSIC', '1') not in ('0', 'false', 'off')
+    full, L1, tp1 = master(dialog + nat + (music if on else 0) + sfx, mc['lufs'], mc['ceiling'])
+    g_full = master.gain
     nomus, L2, tp2 = master(dialog + nat + sfx, mc['lufs'], mc['ceiling'])
     write_wav24(a.out, full)
     write_wav24(a.out_nomusic, nomus)
+    # the music stem exactly as it sits in the master (ducked, at the master's gain, before the limiter)
+    stem = S.fft_filter(music, lo=30, slope=2) * g_full
+    fl = int(0.25 * SR); stem[-int(0.06 * SR):] = 0
+    write_wav24(os.path.join(WORK, 'music_stem.wav'), stem)
+    rep['music_enabled'] = bool(on)
+    # verification: music level under every dialog piece vs the piece itself (RMS over the piece, dB)
+    chk = []
+    for d in rep['dialog']:
+        i0, i1 = int(d['t'] * SR), int((d['t'] + d['b'] - d['a']) * SR)
+        dm = 20 * math.log10(span_rms(dialog, i0, i1) + 1e-9)
+        mu = 20 * math.log10(span_rms(music, i0, i1) + 1e-9)
+        un = 20 * math.log10(span_rms(music_raw, i0, i1) + 1e-9)
+        chk.append(dict(i=d['i'], t=d['t'], dialog_db=round(dm, 1), music_db=round(mu, 1), music_unducked_db=round(un, 1),
+                        duck_db=round(mu - un, 1), dialog_over_music_db=round(dm - mu, 1)))
+    rep['duck_check'] = chk
     for nm, x in (('stem_nat', nat), ('stem_music', music), ('stem_sfx', sfx)):
         write_wav24(os.path.join(WORK, nm + '.wav'), x * 0.5)
     # meter data for the testimonial card

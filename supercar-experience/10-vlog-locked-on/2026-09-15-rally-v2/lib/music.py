@@ -40,6 +40,7 @@ STEP = BEAT / 4
 G0 = DROP - 59 * BAR                 # first downbeat (bar 0) = 1.0533 s
 TS0 = END - 0.5 * BAR                # tape stop 168.878 -> 169.449
 TS1 = END - 0.25 * BAR
+SWING = 0.11 * STEP                  # off-16ths land 11 % of a 16th late (~16 ms): a light shuffle
 GAP_OPEN = (7.0 - STEP, 7.0)         # 1/16 silence before CH1
 GAP_DROP = (DROP - 0.5 * BEAT, DROP) # 1/8-bar silence before the drop
 
@@ -95,7 +96,7 @@ def build(dur, seed=23):
     s_first = int(np.floor((0 - G0) / STEP))
     s_last = int(np.ceil((TS1 - G0) / STEP))
     for si in range(s_first, s_last):
-        t = G0 + si * STEP
+        t = G0 + si * STEP + (SWING if si % 2 else 0.0)       # a little swing on the off 16ths
         if t < -1e-9 or gapped(t):
             continue
         st = si % 16
@@ -197,6 +198,34 @@ def build(dur, seed=23):
             lvl = {'open': 0.16, 'lift': 0.16, 'drop': 0.22, 'verdict': 0.13, 'verse': 0.09}[sec]
             S.place(bus['music'], S.reverb(pl, ir_room, wet=0.25), t, lvl * (1.0 if k % 2 == 0 else 0.75))
 
+    # ---------------------------------------------------------------- lead motif (returns): a 2-bar hook in 8ths,
+    # C5 Ab4 G4 F4 | Ab4 F4 Eb4 C4, on a bright double pluck through a short room; answered an octave up in the drop
+    MOTIF = [72, None, 68, None, 67, 65, None, None, 68, None, 65, None, 63, None, 60, None]
+    def lead_where(t):
+        if t < 7.0: return 0.20
+        if 25.88 <= t < 41.1: return 0.11          # the lineup (under dialog, ducked)
+        if 78.84 <= t < 82.84: return 0.18         # roll out
+        if DROP <= t < 147.77: return 0.26         # the drop: the hook, answered an octave up on the second pass
+        if 161.52 <= t < TS0: return 0.14          # the last line
+        return 0.0
+    for barno in range(b0, b1, 2):
+        for k, m in enumerate(MOTIF):
+            if m is None:
+                continue
+            t = T(barno) + k * 2 * STEP
+            lvl = lead_where(t)
+            if t < 0 or lvl <= 0 or gapped(t):
+                continue
+            if DROP <= t < 147.77 and (barno // 2) % 2 == 1:
+                m += 12
+            f = midi(m)
+            v = S.pluck(rng, f, 0.55, bright=1.6) * 0.7 + S.pluck(rng, f * 1.004, 0.55, bright=1.2) * 0.5
+            v = S.fft_filter(v, lo=180, hi=7000, slope=2)
+            S.place(bus['music'], S.reverb(S.pan(v, 0.12 if k % 4 else -0.12), ir_room, wet=0.3), t, lvl)
+    # ---------------------------------------------------------------- risers into every chapter change (one bar, soft)
+    for tc in (25.88, 54.09, 78.84, 87.54, 116.61, 147.77):
+        rz = S.riser(rng, BAR)
+        S.place(bus['fx'], rz * np.linspace(0.3, 1, len(rz))[:, None], tc - BAR, 0.28)
     # ---------------------------------------------------------------- fx inside the music (musical ones only)
     S.place(bus['fx'], S.riser(rng, 7.0 - STEP - 5.9), 5.9, 0.9)                       # into CH1
     S.place(bus['fx'], S.riser(rng, GAP_DROP[0] - (DROP - 4 * BAR)), DROP - 4 * BAR, 0.75)  # into the drop
@@ -228,6 +257,10 @@ def build(dur, seed=23):
     cs = np.concatenate([[0.0], np.cumsum(np.concatenate([np.full(k, gdb[0]), gdb, np.full(k, gdb[-1])]))])
     gdb = (cs[k + k // 2:k + k // 2 + pad_n] - cs[k // 2:k // 2 + pad_n]) / k       # centred moving average
     mix *= (10 ** (gdb / 20))[:, None]
+    # tone for phones: nothing under 32 Hz, a soft roll-off over 12 kHz (no harsh hats)
+    mix = S.fft_filter(mix, lo=32, hi=12500, slope=2)
+    sub = S.fft_filter(mix, hi=70, slope=2)
+    mix = mix - 0.5 * sub                       # -6 dB under 70 Hz: phones cannot play it and it only eats headroom
     # hard gaps (tails included)
     for a, b in (GAP_OPEN, GAP_DROP):
         ia, ib = n_of(a), n_of(b)
