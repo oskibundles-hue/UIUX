@@ -135,15 +135,17 @@ vignette, crash punch and grain sit on the new frame. The 9:16 files are untouch
 | Version | File | Window (plate rows) | Graphics |
 |---|---|---|---|
 | 4:5, 1080x1350 | `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-4x5.mp4` (8.1 Mb/s) | y 228-1578 on every shot | the approved 9:16 layers as they are. Every 9:16 line sits in the story safe zone (y 269-1536), which fits the window with ~41 px top and bottom, so the 4:5 is the approved composition, cropped |
-| 1:1, 1080x1080 | `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-1x1.mp4` (6.5 Mb/s) | y 226-1306; the badge shot (frames 69-110) y 450-1530 so the brackets on the speedmark stay in frame | the 9:16 layers up to the end card. The end card is laid out for the square (`front.html#fmt=1x1`): TEXT OR DM TO BOOK, the phone, the site and the handle stand in a right-hand column beside the price, and the two requirement lines sit under the taillight |
+| 1:1, 1080x1080 | `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-1x1.mp4` (6.5 Mb/s) | graphics y 226-1306; the badge shot (frames 69-110) y 450-1530 so the brackets on the speedmark stay in frame. The picture drops to y 320-1400 on the hook shots (frames 0-68) and the front 3/4 pass (235-245), where the car drives at the lens, so its splitter stays in frame | the approved 9:16 layers, except two moments laid out for the square (`front_1x1.html`, used on frames 0-68 and 332-431 only): the hook panel is 364 px tall instead of 432 (the SE lockup moves up onto the 5 HOURS · $1,299 row), and on the end card TEXT OR DM TO BOOK, the phone, the site and the handle stand in a right-hand column beside the price, with the two requirement lines under the taillight |
 
 Every line of copy, every figure and its qualifier, and the age line are the same as the approved 9:16; the 1:1 end
-card only puts the phone and the site on two lines. Stills, posters and contact sheets are in `exports/qa_4x5/`,
+card only puts the phone and the site on two lines. `front.html` is byte-identical to the approved version, so the
+approved 9:16 layer stays cached, and `build.py` will not re-encode over the approved 9:16 files (their SHA-256 is in
+`lib/formats.py` APPROVED) unless run with `--force`. Stills, posters and contact sheets are in `exports/qa_4x5/`,
 `exports/qa_1x1/`, `exports/poster-4x5.jpg`, `poster-endcard-1x1.jpg` etc.
 
 ```bash
 python3 build.py --format 4x5          # every stage cached; only the composite, encode and QA run
-python3 build.py --format 1x1          # also renders the square end card's front layer (.work/front_1x1/)
+python3 build.py --format 1x1          # also renders the square's hook and end card (front_1x1.html -> .work/front_1x1/)
 ```
 
 ## Change a figure
@@ -182,6 +184,7 @@ Stages, each cached in `.work/` (ignored by git):
 | `config.json` | every figure and claim string, with sources |
 | `cue.md` | the build cue as built: beat table, layer stack, graphics positions |
 | `front.html` / `mid.html` | the front motion layer / the behind-the-car type layer (`window.renderAt(t)`) |
+| `front_1x1.html` | `front.html` with the 1:1 placement's hook panel and end card (the lines marked `SQ`) |
 | `build.py` | the one-command build |
 | `lib/edl.py` | the beat table on the music's 130 BPM grid (timing and plate FX, no copy) |
 | `lib/plate.py` | the plate: sampling, day grade, streaks, pushes, whips, impacts, leaks, plate blur, grad, light sweep |

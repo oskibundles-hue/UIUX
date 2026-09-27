@@ -23,11 +23,14 @@ Stages
 Placement versions (--format 4x5 | 1x1) reuse every cached stage. They crop the plate, sky matte and layers to a
 per-shot window (lib/formats.py), then vignette, crash punch and grain on the new frame, and encode
 exports/*-<fmt>.mp4 (+ _master) with the same bed. 4x5 uses the approved 9:16 layers as they are; 1x1 renders its
-own front layer (front.html#fmt=1x1, the square end card) into .work/front_1x1/. QA goes to exports/qa_<fmt>/.
+own front layer (front_1x1.html: the square's hook and end card) into .work/front_1x1/ for those frames only and
+composites the approved 9:16 layer everywhere else. QA goes to exports/qa_<fmt>/. The finish stage will not re-encode
+over an approved render (SHA-256 in lib/formats.py APPROVED) unless --force is given.
 
 Needs Python 3 + numpy + Pillow, ffmpeg with libx264, Node 22 + Playwright (/opt/node22/lib/node_modules).
 """
 import argparse
+import functools
 import hashlib
 import json
 import os
@@ -152,14 +155,12 @@ def layer_stage(a, page, sub, frames):
         open(sp, 'w').write(s)
 
 
-def front_dir(fmt=None):
-    lay = formats.FORMATS[fmt or FMT]['front']
-    return 'front' if lay == '9x16' else 'front_' + lay
-
-
 def st_front(a):
     lay = formats.FORMATS[FMT]['front']
-    layer_stage(a, 'front.html' if lay == '9x16' else 'front.html#fmt=' + lay, front_dir(), list(range(edl.NF)))
+    if lay == '9x16':
+        layer_stage(a, 'front.html', 'front', list(range(edl.NF)))
+    else:                                             # the format's own layout, only where it differs (formats.py)
+        layer_stage(a, f'front_{lay}.html', 'front_' + lay, [i for i in range(edl.NF) if formats.own_front(FMT, i)])
 
 
 def st_mid(a):
@@ -188,15 +189,16 @@ def over(base, layer_png, matte_png=None, rows=None):
     return base * (1 - al) + L[..., :3] * al
 
 
-def composite(i):
-    F = formats.FORMATS[FMT]
-    y0 = formats.y0(FMT, i)
-    rows = slice(y0, y0 + F['h'])
-    base = np.asarray(Image.open(os.path.join(WORK, 'plate', f'{i:05d}.png')).convert('RGB'), np.float32)[rows] / 255
+def composite(i, fmt=None):
+    fmt = fmt or FMT                                  # explicit in Pool workers (spawn start method on macOS)
+    F = formats.FORMATS[fmt]
+    gy, py = formats.y0(fmt, i), formats.plate_y0(fmt, i)
+    rows, prows = slice(gy, gy + F['h']), slice(py, py + F['h'])  # graphics / picture windows (lib/formats.py)
+    base = np.asarray(Image.open(os.path.join(WORK, 'plate', f'{i:05d}.png')).convert('RGB'), np.float32)[prows] / 255
     # the vignette goes on the picture only, so the brand gold (front and behind-car type) arrives exact
     base = fx.vignette(base, 0.36)
     if i >= ROOF0:
-        base = over(base, os.path.join(WORK, 'mid', f'{i:05d}.png'), os.path.join(WORK, 'matte', f'{i:05d}.png'), rows)
+        base = over(base, os.path.join(WORK, 'mid', f'{i:05d}.png'), os.path.join(WORK, 'matte', f'{i:05d}.png'), prows)
     k = i - edl.CRASH_F
     if 0 <= k < edl.CRASH_N:
         # the crash hit on plate + matted type together, so the type stays locked behind the car (review r1)
@@ -204,30 +206,53 @@ def composite(i):
         base = fx.transform(base, scale=1 + edl.CRASH_PUNCH * (1 - (1 - (1 - u) ** 3)))
         if k == 0:
             base = base * (1 + edl.CRASH_LIFT)
-    base = over(base, os.path.join(WORK, front_dir(), f'{i:05d}.png'), rows=rows)
+    base = over(base, os.path.join(WORK, formats.front_dir(fmt, i), f'{i:05d}.png'), rows=rows)
     base = fx.grain(base, i, amount=0.02)
     return fx.to_u8(base)
 
 
-def final_dir():
-    return os.path.join(WORK, 'final' if FMT == '9x16' else 'final_' + FMT)
+def final_dir(fmt=None):
+    fmt = fmt or FMT
+    return os.path.join(WORK, 'final' if fmt == '9x16' else 'final_' + fmt)
 
 
-def out_name():
-    return NAME if FMT == '9x16' else NAME.replace('-9x16', '-' + FMT)
+def out_name(fmt=None):
+    fmt = fmt or FMT
+    return NAME if fmt == '9x16' else NAME.replace('-9x16', '-' + fmt)
 
 
-def _comp_to(i):
-    im = composite(i)
-    Image.fromarray(im).save(os.path.join(final_dir(), f'{i:05d}.png'), compress_level=1)
+def _comp_to(i, fmt):
+    im = composite(i, fmt)
+    Image.fromarray(im).save(os.path.join(final_dir(fmt), f'{i:05d}.png'), compress_level=1)
     return i
 
 
+def sha256(path):
+    h = hashlib.sha256()
+    with open(path, 'rb') as f:
+        for b in iter(lambda: f.read(1 << 20), b''):
+            h.update(b)
+    return h.hexdigest()
+
+
+def approved_intact(fmt):
+    """True when exports/ holds this format's approved files, byte for byte (lib/formats.py APPROVED)"""
+    ap = formats.APPROVED.get(fmt)
+    if not ap:
+        return False
+    files = {out_name(fmt) + '.mp4': ap[0], out_name(fmt) + '_master.mp4': ap[1]}
+    return all(os.path.exists(os.path.join(EXP, f)) and sha256(os.path.join(EXP, f)) == h for f, h in files.items())
+
+
 def st_finish(a):
+    if approved_intact(FMT) and not a.force:
+        print(f'  {FMT}: exports/ holds the approved render (SHA-256 as in lib/formats.py APPROVED); not re-encoding it.'
+              ' Pass --force to rebuild (the result then needs approving again).')
+        return
     os.makedirs(EXP, exist_ok=True)
     os.makedirs(final_dir(), exist_ok=True)
     with Pool(a.workers) as pool:
-        for k, _ in enumerate(pool.imap(_comp_to, range(edl.NF), chunksize=4)):
+        for k, _ in enumerate(pool.imap(functools.partial(_comp_to, fmt=FMT), range(edl.NF), chunksize=4)):
             if k % 48 == 0:
                 print(f'  composite {k}/{edl.NF}', flush=True)
     bed = os.path.join(HERE, 'audio', 'bed.wav')
@@ -314,8 +339,8 @@ def st_qa(a):
     Z = formats.SAFE[FMT]
     viol = []
     for i in AUDIT_FRAMES:
-        y0 = formats.y0(FMT, i)
-        for layer in (front_dir(), 'mid'):
+        for layer in (formats.front_dir(FMT, i), 'mid'):
+            y0 = formats.plate_y0(FMT, i) if layer == 'mid' else formats.y0(FMT, i)
             p = os.path.join(WORK, layer, f'{i:05d}.png')
             if not os.path.exists(p):
                 continue
@@ -353,6 +378,7 @@ def main():
     ap.add_argument('--qa', action='store_true')
     ap.add_argument('--workers', type=int, default=4)
     ap.add_argument('--format', default='9x16', choices=sorted(formats.FORMATS))
+    ap.add_argument('--force', action='store_true', help='re-encode even over an approved render')
     ap.add_argument('--footage', default=os.environ.get('FOOTAGE', os.path.join(HERE, '.work', 'footage')))
     a = ap.parse_args()
     global FMT

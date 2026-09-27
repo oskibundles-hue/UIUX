@@ -1,6 +1,8 @@
 <!doctype html>
 <!--
-  front.html -- FRONT motion layer of "ROOF DOWN" (McLaren 750S Spider, LOCKED ON standard).
+  front_1x1.html -- FRONT motion layer of the 1:1 placement version of "ROOF DOWN" (lib/formats.py). It is
+  front.html (the approved 9:16 layer, which stays byte-identical so its render cache and the approved files hold)
+  with SQ = true: the lines marked SQ below are the only differences. Keep the two in step.
   Transparent 1080x1920. window.renderAt(t) is a pure function of t (seconds, 24000/1001 fps timeline);
   lib/kcapture.js captures it with sub-frame motion blur, build.py composites it over plate + mid.
 
@@ -10,8 +12,14 @@
     .work/tracks.js    window.TRACKS   <- lib/data/tracks.json (badge f204-225, headlight f136-157)
   Libraries: lib/kinetic.js (window.KT), lib/lock.js (window.TrackLock), from the approved GT3 RS showcase.
   Positions are INK top-left (place()). Copy is templated from CONFIG.
+
+  It still renders in plate coordinates and build.py crops it (graphics window y 226-1306). Two things change for
+  the square: the hook panel is shorter (the lockup moves up onto the offer row), and on the end card the call to
+  action, phone, site and handle stand in a right-hand column beside the price, with the two requirement lines under
+  the taillight. The build renders this page only for the hook and the end card and uses the approved 9:16 layer in
+  between.
 -->
-<html><head><meta charset="utf-8"><title>ROOF DOWN front layer</title>
+<html><head><meta charset="utf-8"><title>ROOF DOWN front layer, 1:1</title>
 <style>
 @font-face{font-family:Bebas;src:url('../../07-fonts/BebasNeue-Regular.ttf')}
 @font-face{font-family:Michroma;src:url('../../07-fonts/Michroma-Regular.ttf')}
@@ -106,6 +114,7 @@ window.KT_PLAN = { k: 10, shutter: 180, spans: [
     <div id="eStripe" class="a stripe" style="left:62px;top:1224px;width:520px;height:6px"></div>
     <div id="eCtaW" class="a"><div class="mask"><div id="eCta" class="beb white" style="font-size:80px"></div></div></div>
     <div id="eContactW" class="a"><div id="eContact" class="beb white" style="font-size:60px"></div></div>
+    <div id="eSiteW" class="a"><div id="eSite" class="beb white" style="font-size:52px"></div></div>
     <div id="eHandleW" class="a"><div id="eHandle" class="beb white" style="font-size:60px"></div></div>
     <div id="eReq1W" class="a"><div id="eReq1" class="beb white" style="font-size:44px"></div></div>
     <div id="eReq2W" class="a"><div id="eReq2" class="beb white" style="font-size:44px"></div></div>
@@ -114,6 +123,7 @@ window.KT_PLAN = { k: 10, shutter: 180, spans: [
 
 <script>
 const C = window.CONFIG, FPS = TL.fps, E = KT.ease, P = KT.p, cl = KT.cl, lerp = KT.lerp;
+const SQ = true;                                  // the 1:1 placement layout (hook panel and end card)
 const TE = TL.tEnd;                              // end-card hit: bar downbeat g(30) = 13.962 s
 const $ = id => document.getElementById(id);
 const fT = i => i / FPS;
@@ -184,7 +194,7 @@ const T = {
   oHours: hoursTxt, oCity: C.city, oDayL: 'FULL DAY ·',
   rNeed: 'YOU NEED', rLic: "VALID DRIVER'S LICENSE", rAge: 'INSURANCE',
   eModel: C.brand + ' ' + C.model, eOffer: hoursTxt + ' · ' + C.city,
-  eCta: C.cta, eContact: C.phone + ' · ' + C.url, eHandle: C.handle,
+  eCta: C.cta, eContact: SQ ? C.phone : C.phone + ' · ' + C.url, eSite: SQ ? C.url : '', eHandle: C.handle,
   eReq1: 'RENTERS ' + C.age + ' · ' + C.ageLine, eReq2: "VALID DRIVER'S LICENSE · INSURANCE",
 };
 
@@ -199,6 +209,15 @@ const T = {
   place($('hOfferW'), 'Bebas', 96, T.hOffer, 90, 528);
   G.tag = setLine('hTag', T.hTag, '#FFFFFF'); G.head = setLine('hHead', T.hHead); G.hoffer = setLine('hOffer', T.hOffer, '#FFFFFF');
   $('hLogoW').style.left = '90px'; $('hLogoW').style.top = '642px';
+  if (SQ) {
+    // 1:1: the lockup moves up onto the offer row, right-aligned in the panel (x <= 864), so the panel is 364 px tall
+    // instead of 432 and the hero car, which drives toward the lens, fits under it (lib/formats.py lowers the plate)
+    const oR = 90 + ink('Bebas', 96, T.hOffer).w, lw = Math.min(240, 864 - (oR + 48));
+    const capH = ink('Bebas', 96, 'H').aA, lh = lw * 215 / 1527;
+    $('hLogo').style.width = lw + 'px';
+    $('hLogoW').style.left = (864 - lw) + 'px'; $('hLogoW').style.top = (528 + capH / 2 - lh / 2).toFixed(2) + 'px';
+    $('hookPanel').style.height = '364px';
+  }
   $('hOfferM').style.transformOrigin = '0% 60%';
   KT.stripe($('hookStripe'));
   // B. badge label (coordinates relative to the label panel)
@@ -236,19 +255,40 @@ const T = {
   // G. end card: top block over the (graded-down) sky, bottom stack over the car's tail (scrim)
   place($('eModelW'), 'Michroma', 30, T.eModel, 62, 384);
   place($('eOfferW'), 'Bebas', 64, T.eOffer, 62, 428);
-  place($('eCtaW'), 'Bebas', 80, T.eCta, 62, 1246);
-  place($('eContactW'), 'Bebas', 60, T.eContact, 62, 1328);
-  place($('eHandleW'), 'Bebas', 60, T.eHandle, 62, 1384);
-  place($('eReq1W'), 'Bebas', 44, T.eReq1, 62, 1440);
-  place($('eReq2W'), 'Bebas', 44, T.eReq2, 62, 1486);
-  KT.stripe($('eStripe'));
   // review r1: the top block sits on the roof shot's sky; a close dark halo lifts it to >= 3:1 at phone size
   const halo = 'drop-shadow(0 0 2px rgba(0,0,0,.55)) drop-shadow(0 0 10px rgba(0,0,0,.45))';
+  if (!SQ) {
+    place($('eCtaW'), 'Bebas', 80, T.eCta, 62, 1246);
+    place($('eContactW'), 'Bebas', 60, T.eContact, 62, 1328);
+    place($('eHandleW'), 'Bebas', 60, T.eHandle, 62, 1384);
+    place($('eReq1W'), 'Bebas', 44, T.eReq1, 62, 1440);
+    place($('eReq2W'), 'Bebas', 44, T.eReq2, 62, 1486);
+  } else {
+    // 1:1 (plate y 226-1306 on screen): the right-hand column over the graded-down sky, from the price's ink top
+    // (y 490) to its comma (705), x 640-1026; the requirement lines under the taillight bar (y 1085-1120), over
+    // the grille and a scrim, the last one ending 54 px above the square's bottom edge
+    const RX = 640;
+    const cta = fit('Bebas', 60, T.eCta, 1026 - RX), hdl = fit('Bebas', 44, T.eHandle, 1026 - RX);
+    $('eCta').style.fontSize = cta + 'px'; $('eContact').style.fontSize = '52px'; $('eHandle').style.fontSize = hdl + 'px';
+    for (const id of ['eReq1', 'eReq2']) $(id).style.fontSize = '42px';
+    Object.assign($('eStripe').style, { left: RX + 'px', top: '490px', width: (1026 - RX) + 'px' });
+    place($('eCtaW'), 'Bebas', cta, T.eCta, RX, 512);
+    place($('eContactW'), 'Bebas', 52, T.eContact, RX, 572);
+    place($('eSiteW'), 'Bebas', 52, T.eSite, RX, 624);
+    place($('eHandleW'), 'Bebas', hdl, T.eHandle, RX, 676);
+    place($('eReq1W'), 'Bebas', 42, T.eReq1, 62, 1176);
+    place($('eReq2W'), 'Bebas', 42, T.eReq2, 62, 1222);
+    Object.assign($('botScrim').style, { top: '1110px', height: '810px',
+      background: 'linear-gradient(180deg,rgba(0,0,0,0) 0,rgba(0,0,0,.72) 64px,rgba(0,0,0,.82) 810px)' });
+    for (const id of ['eStripe', 'eCtaW', 'eContactW', 'eSiteW', 'eHandleW']) $(id).style.filter = halo;
+  }
+  KT.stripe($('eStripe'));
   for (const id of ['eLogoW', 'eModelW', 'eOfferW']) $(id).style.filter = halo;
   G.eModel = setLine('eModel', T.eModel);
   G.eModel.forEach((s, i) => { if (i < C.brand.length) s.style.color = '#FBD101'; });
   G.eOffer = setLine('eOffer', T.eOffer, '#FBD101');
   G.eCta = setLine('eCta', T.eCta); G.eContact = setLine('eContact', T.eContact, '#FBD101');
+  if (SQ) $('eSite').textContent = T.eSite;
   G.eHandle = setLine('eHandle', T.eHandle);
   G.eReq1 = setLine('eReq1', T.eReq1, '#FBD101'); G.eReq2 = setLine('eReq2', T.eReq2, '#FBD101');
   for (const id of ['eLogo', 'hLogo']) await new Promise(r => $(id).complete ? r() : ($(id).onload = r));
@@ -407,6 +447,7 @@ window.renderAt = function (t) {
     KT.drawStripe($('eStripe'), t, { start: TE + 0.26, dur: 0.3 });
     KT.rise(G.eCta, t, { start: TE + 0.32, stagger: 0.012, dur: 0.35, dy: 1.1, ease: E.outExpo });
     fadeUp('eContactW', t, TE + 0.43, TE + 0.67, 12);
+    if (SQ) fadeUp('eSiteW', t, TE + 0.465, TE + 0.695, 12);
     fadeUp('eHandleW', t, TE + 0.50, TE + 0.72, 12);
     fadeUp('eReq1W', t, TE + 0.57, TE + 0.77, 10);
     fadeUp('eReq2W', t, TE + 0.61, TE + 0.81, 10);
@@ -417,7 +458,7 @@ window.renderAt = function (t) {
 window.inkAudit = function (t) {
   window.renderAt(t);
   const ids = ['hTag', 'hHead', 'hOffer', 'hLogo', 'lBrand', 'lModel', 'lYear', 'oHours', 'oCity', 'oPrice', 'oDayL', 'oDayP',
-               'rNeed', 'rLic', 'rAge', 'eLogo', 'eModel', 'eOffer', 'eCta', 'eContact', 'eHandle', 'eReq1', 'eReq2'];
+               'rNeed', 'rLic', 'rAge', 'eLogo', 'eModel', 'eOffer', 'eCta', 'eContact', 'eSite', 'eHandle', 'eReq1', 'eReq2'];
   const out = [];
   for (const id of ids) {
     const el = $(id); let vis = true, n = el;
