@@ -109,5 +109,6 @@ cloud session can't reach the Mac directly.
   - a clip missing from the machine is reported by name;
   - the online-only disk check stops a survey that wouldn't fit;
   - the Sep 15 build renders with the new path handling.
-- **Not yet run on a Mac:** `setup-mac.sh` (Homebrew and Chromium install) and the VideoToolbox check. `doctor.py`
-  verifies both the first time the setup runs and says exactly what's missing if anything is.
+- **On Omarie's Mac (2026-09-27):** `setup-mac.sh` ran and `doctor.py` reported **READY**, which covers the tool
+  checks and the end-to-end run on the generated clip. Whether VideoToolbox was switched on is in that Mac's
+  `vlog.env` (`VLOG_HWACCEL`).
