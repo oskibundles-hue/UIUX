@@ -196,16 +196,20 @@
   // A1 bug: the approved top-right bug, refined. Black plate, stripe cap, white lockup with a periodic gold
   //     glint, a live dot and a status label. p: {x1, y, label, built, glintAt, glintEvery, morphOut}
   SEK.bannerBug = function (cfg) {
-    const p = Object.assign({ x1: 1040, y: 292, label: 'RALLY DAY', built: true, glintAt: 1.4, glintEvery: 5.5, morphOut: false, tile: 96 }, cfg.p);
+    const p = Object.assign({ x1: 1040, y: 292, label: 'RALLY DAY', built: true, glintAt: 1.4, glintEvery: 5.5, morphOut: false, tile: 96, cobill: null }, cfg.p);
     const root = el('div', 'a', stage);
     const lw = 244, lh = lw * 215 / 1527;
-    const w = lw + 40, h = 98, x = p.x1 - w, y = p.y;
+    const labW = ink('Michroma', 17, p.label).w, cobW = p.cobill ? ink('Michroma', 17, p.cobill).w : 0;
+    const w = Math.ceil(Math.max(lw + 40, p.cobill ? 42 + labW + 26 + cobW + 20 : 0)), h = 98, x = p.x1 - w, y = p.y;
     const pn = panel(root, x, y, w, h, { stripe: 5, fromRight: true, alpha: .9 });
     const logoW = el('div', 'a', pn.inner, `left:20px;top:19px;width:${lw}px;height:${lh.toFixed(2)}px`);
     const logo = el('img', '', logoW, `width:${lw}px;display:block`); logo.src = LOGO + 'sce-primary-horizontal--white.png';
     const gl = el('div', 'a', logoW, `width:${lw}px;height:${lh.toFixed(2)}px;-webkit-mask-image:url(${maskUrl('sce-primary-horizontal--white.png')});-webkit-mask-size:100% 100%;mask-image:url(${maskUrl('sce-primary-horizontal--white.png')});mask-size:100% 100%;opacity:0`);
     const dot = liveDot(pn.inner, 26, 75, 5);
     const lab = line(pn.inner, 'Michroma', 17, p.label, 42, 69, '#fff', { dots: GOLD });
+    // optional co-billing ("× EGNYTE"), right-aligned on the status row, the × in gold
+    const cob = p.cobill ? line(pn.inner, 'Michroma', 17, p.cobill, w - 20 - cobW, 69, '#fff', { dots: GOLD }) : null;
+    if (cob) cob.g.forEach(g => { if (g.dataset.ch === '×') g.style.color = GOLD; });
     const tile = el('div', 'a', root, `left:${p.x1 - p.tile}px;top:${y}px;width:${p.tile}px;height:${p.tile}px;background:rgba(0,0,0,.9);opacity:0`);
     return { code: cfg.code, render(t) {
       const on = t >= cfg.t0 && t < cfg.t1; show(root, on); if (!on) return;
@@ -224,6 +228,7 @@
       if (ts != null) {
         KT.wipe(logo, t, { start: ts + 0.12, dur: 0.3, dir: 'right', ease: E.inOutCubic, pad: 3 });
         KT.track(lab.g, t, { start: ts + 0.2, dur: 0.3, spread: 1.6 });
+        if (cob) KT.track(cob.g, t, { start: ts + 0.28, dur: 0.3, spread: 1.6 });
       } else { logo.style.clipPath = 'none'; logo.style.opacity = 1; }
       // idle life: gold glint through the lockup every glintEvery s, live dot pulse
       const ph = phase(t, cfg.t0 + p.glintAt, p.glintEvery);
@@ -242,7 +247,9 @@
   //     a live dot, SUPERCAR EXPERIENCE + the live status set vertically, and a progress rail that fills with
   //     the video. p: {w, y, h, name, label, enter: 'built'|'slide', progress: [t0, t1]}
   SEK.bannerTab = function (cfg) {
-    const p = Object.assign({ w: 88, y: 300, h: 600, name: 'SUPERCAR EXPERIENCE', label: 'RALLY DAY · LAS VEGAS', enter: 'slide', progress: null }, cfg.p);
+    const p = Object.assign({ w: 88, y: 300, h: 600, name: 'SUPERCAR EXPERIENCE', label: 'RALLY DAY · LAS VEGAS', enter: 'slide', progress: null, cobill: null }, cfg.p);
+    if (p.cobill) p.h = Math.max(p.h, Math.ceil(24 + 52 * 215 / 338 + 48 + ink('Michroma', 18, p.name + '  ' + p.cobill, 0.14).w + 30));
+    p.h = Math.min(p.h, BANNER.y1 - p.y);
     const x = 1080 - p.w;
     const root = el('div', 'a', stage);
     const body = el('div', 'a', root, `width:1080px;height:1920px`);
@@ -256,6 +263,7 @@
     // vertical text, reading top -> bottom (rotate 90deg), glyph tops toward the frame edge
     const vt = el('div', 'a', inner, `left:${p.w - 20}px;top:${24 + ih + 48}px;width:${p.h}px;height:${p.w}px;transform-origin:0 0;transform:rotate(90deg)`);
     const nm = line(vt, 'Michroma', 18, p.name, 0, 4, '#fff', { ls: 0.14 });
+    const cb = p.cobill ? line(vt, 'Michroma', 18, p.cobill, ink('Michroma', 18, p.name + '  ', 0.14).adv, 4, GOLD, { ls: 0.14 }) : null;
     const lb = line(vt, 'Michroma', 14, p.label, 0, 34, GOLD, { ls: 0.16, dots: '#fff' });
     // progress rail on the inner (left) edge
     const r0 = 24 + ih + 48, r1 = p.h - 18;
@@ -273,7 +281,8 @@
       body.style.transform = dx > 0.01 ? `translateX(${dx.toFixed(2)}px)` : 'none';
       const qs = slide ? E.outExpo(P(t, cfg.t0 + 0.08, cfg.t0 + 0.36)) : 1;
       stripe.style.transform = qs < 1 ? `scaleX(${qs.toFixed(5)})` : 'none';
-      if (slide) { KT.track(nm.g, t, { start: cfg.t0 + 0.18, dur: 0.34, spread: 1.5 }); KT.track(lb.g, t, { start: cfg.t0 + 0.26, dur: 0.34, spread: 1.5 }); }
+      if (slide) { KT.track(nm.g, t, { start: cfg.t0 + 0.18, dur: 0.34, spread: 1.5 }); KT.track(lb.g, t, { start: cfg.t0 + 0.26, dur: 0.34, spread: 1.5 });
+        if (cb) KT.track(cb.g, t, { start: cfg.t0 + 0.32, dur: 0.34, spread: 1.5 }); }
       liveDotAt(dot, t, cfg.t0 + 0.3, 1.2);
       const pr = p.progress ? P(t, p.progress[0], p.progress[1]) : P(t, cfg.t0, cfg.t1);
       const qa = slide ? E.outCubic(P(t, cfg.t0 + 0.2, cfg.t0 + 0.7)) : 1;
@@ -289,7 +298,7 @@
   //     left with the chapter tag + name), holds, and exhales back to the mark.
   //     p: {x1, y, size, chapters: [{t, tag, title, hold}], enter: 'built'|'slide'}
   SEK.bannerBreathe = function (cfg) {
-    const p = Object.assign({ x1: 1040, y: 292, size: 96, chapters: [], enter: 'built' }, cfg.p);
+    const p = Object.assign({ x1: 1040, y: 292, size: 96, chapters: [], enter: 'built', cobill: null }, cfg.p);
     const S = p.size;
     const root = el('div', 'a', stage);
     const body = el('div', 'a', root, 'width:1080px;height:1920px');
@@ -302,6 +311,13 @@
     const icon = el('img', '', iconW, `width:${iw}px;display:block`); icon.src = LOGO + 'sce-icon-mark-only--white.png';
     const igl = el('div', 'a', iconW, `width:${iw}px;height:${ih}px;-webkit-mask-image:url(${maskUrl('sce-icon-mark-only--white.png')});-webkit-mask-size:100% 100%;mask-image:url(${maskUrl('sce-icon-mark-only--white.png')});mask-size:100% 100%;opacity:0`);
     const ring = el('div', 'a', body, `left:${p.x1 - S}px;top:${p.y}px;width:${S}px;height:${S}px;border:2px solid ${GOLD};box-sizing:border-box;opacity:0`);
+    let cobEl = null;
+    if (p.cobill) {                                           // co-billing strip under the tile ("× EGNYTE")
+      const cw = Math.ceil(ink('Michroma', 14, p.cobill).w + 26);
+      cobEl = el('div', 'a', body, `left:${p.x1 - Math.max(S, cw)}px;top:${p.y + S}px;width:${Math.max(S, cw)}px;height:30px;background:rgba(0,0,0,.9);border-top:1px solid rgba(255,255,255,.18)`);
+      const cl2 = line(cobEl, 'Michroma', 14, p.cobill, Math.max(S, cw) - 13 - ink('Michroma', 14, p.cobill).w, 9, '#fff', {});
+      cl2.g.forEach(g => { if (g.dataset.ch === '×') g.style.color = GOLD; });
+    }
     const chs = p.chapters.map(c => {
       const tw = ink('Bebas', 54, c.title).w, gw = ink('Michroma', 16, c.tag).w;
       const tx = Math.max(tw, gw);
@@ -1199,17 +1215,21 @@
   // G1 slam: huge Bebas title slams down onto the frame (scale 1.5 -> 1 with a plate punch), the gold stripe
   //     wipes under it, the chapter tag tracks in above; exit lifts through the mask. p: {tag, title, y, maxW, maxS}
   SEK.chapterSlam = function (cfg) {
-    const p = Object.assign({ tag: 'CH 01', title: 'TITLE', y: 760, maxW: 800, maxS: 250, exit: cfg.t1 - 0.36, punch: true }, cfg.p);
+    // centred on the safe area (x 54-907 -> 480), not the frame, so the right-hand buttons never cover it
+    const p = Object.assign({ tag: 'CH 01', title: 'TITLE', y: 760, maxW: 800, maxS: 250, exit: cfg.t1 - 0.36, punch: true, cx: 480 }, cfg.p);
+    const CX = p.cx;
     const root = el('div', 'a', stage, 'width:1080px;height:1920px');
     const S = fitSize(p.title, p.maxW, p.maxS), cap = ink('Bebas', S, 'H').aA, tw = ink('Bebas', S, p.title).w;
     const scrim = el('div', 'a', root, `left:0;top:${p.y - 260}px;width:1080px;height:${cap + 520}px;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.42) 35%,rgba(0,0,0,.42) 65%,rgba(0,0,0,0) 100%)`);
-    const tl = line(root, 'Michroma', 24, p.tag, 540 - ink('Michroma', 24, p.tag, 0.3).w / 2, p.y - 58, GOLD, { ls: 0.3 });
-    const holder = el('div', 'a', root, `width:1080px;height:1920px;transform-origin:540px ${p.y + cap / 2}px`);
+    const tl = line(root, 'Michroma', 24, p.tag, CX - ink('Michroma', 24, p.tag, 0.3).w / 2, p.y - 58, GOLD, { ls: 0.3 });
+    const holder = el('div', 'a', root, `width:1080px;height:1920px;transform-origin:${CX}px ${p.y + cap / 2}px`);
     const mask = el('div', 'a', holder, `left:0;top:${p.y - 30}px;width:1080px;height:${cap + 60}px;overflow:hidden`);
-    const ti = line(mask, 'Bebas', S, p.title, 540 - tw / 2, 30, '#fff');
-    const stripe = el('div', 'a stripe', root, `left:${540 - tw / 2}px;top:${p.y + cap + 26}px;width:${tw}px;height:12px`);
-    const edge = el('div', 'a edge', root, `left:${540 - tw / 2}px;top:${p.y + cap + 16}px;height:32px;opacity:0`);
-    const flash = el('div', 'a', root, `left:${540 - tw / 2 - 40}px;top:${p.y - 40}px;width:${tw + 80}px;height:${cap + 80}px;background:radial-gradient(ellipse at center,rgba(255,246,200,.55) 0%,rgba(251,209,1,.18) 40%,rgba(251,209,1,0) 70%);opacity:0`);
+    const ti = line(mask, 'Bebas', S, p.title, CX - tw / 2, 30, '#fff');
+    const stripe = el('div', 'a stripe', root, `left:${CX - tw / 2}px;top:${p.y + cap + 26}px;width:${tw}px;height:12px`);
+    const edge = el('div', 'a edge', root, `left:${CX - tw / 2}px;top:${p.y + cap + 16}px;height:32px;opacity:0`);
+    const flash = el('div', 'a', root, `left:${CX - tw / 2 - 40}px;top:${p.y - 40}px;width:${tw + 80}px;height:${cap + 80}px;background:radial-gradient(ellipse at center,rgba(255,246,200,.55) 0%,rgba(251,209,1,.18) 40%,rgba(251,209,1,0) 70%);opacity:0`);
+    const cob = p.cobill ? line(root, 'Michroma', 20, p.cobill, CX - ink('Michroma', 20, p.cobill, 0.24).w / 2, p.y + cap + 62, '#fff', { ls: 0.24, dots: GOLD }) : null;
+    if (cob) cob.g.forEach(g => { if (g.dataset.ch === '×') g.style.color = GOLD; });
     return { code: cfg.code, render(t) {
       const on = t >= cfg.t0 && t < cfg.t1; show(root, on); if (!on) return;
       const t0 = cfg.t0, th = t0 + 0.16;           // impact time
@@ -1229,6 +1249,7 @@
       edge.style.transform = `translateX(${(tw * qst).toFixed(2)}px)`;
       KT.track(tl.g, t, { start: th + 0.02, dur: 0.36, spread: 2.2 });
       tl.w.style.opacity = (1 - qo).toFixed(3);
+      if (cob) { KT.track(cob.g, t, { start: th + 0.2, dur: 0.36, spread: 1.8 }); cob.w.style.opacity = (1 - qo).toFixed(3); }
       glint(ti, t, th + 0.55, 0.55, { w: 0.2, glow: 12 });
       if (p.punch && t >= th - 0.001) {                  // plate impact: zoom punch + a short decaying shake
         const k = (t - th) * FPS, amp = Math.exp(-k / 2.2);

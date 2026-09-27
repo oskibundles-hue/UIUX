@@ -1,0 +1,94 @@
+{
+ "audit": {
+  "frames_checked": 417,
+  "outside_safe": [],
+  "n_outside_safe": 0,
+  "transitional_outside_safe": [
+   {
+    "t": 2.6,
+    "text": "THE LINEUP",
+    "type": "chapterSlam",
+    "code": "G1",
+    "x0": 50.7,
+    "x1": 911.5,
+    "y0": 669.8,
+    "y1": 902.4
+   },
+   {
+    "t": 5.8,
+    "text": "SUPERCAR EXPERIENCE",
+    "type": "bannerTab",
+    "code": "A2",
+    "x0": 1066.9,
+    "x1": 1084.9,
+    "y0": 404.1,
+    "y1": 766.2
+   },
+   {
+    "t": 5.8,
+    "text": "\u00d7 EGNYTE",
+    "type": "bannerTab",
+    "code": "A2",
+    "x0": 1066.9,
+    "x1": 1084.9,
+    "y0": 777.5,
+    "y1": 921.7
+   },
+   {
+    "t": 12.8,
+    "text": "SUPERCAR EXPERIENCE",
+    "type": "bannerTab",
+    "code": "A2",
+    "x0": 1132.9,
+    "x1": 1150.9,
+    "y0": 404.1,
+    "y1": 766.2
+   },
+   {
+    "t": 12.8,
+    "text": "\u00d7 EGNYTE",
+    "type": "bannerTab",
+    "code": "A2",
+    "x0": 1132.9,
+    "x1": 1150.9,
+    "y0": 777.5,
+    "y1": 921.7
+   },
+   {
+    "t": 12.8,
+    "text": "RALLY DAY \u00b7 LAS VEGAS",
+    "type": "bannerTab",
+    "code": "A2",
+    "x0": 1104.9,
+    "x1": 1118.9,
+    "y0": 404.1,
+    "y1": 693.3
+   }
+  ],
+  "n_transitional": 6,
+  "captions_outside_band": [],
+  "annotations_skipped": [
+   "codeChip",
+   "indexCard"
+  ]
+ },
+ "master": {
+  "file": "vlog-kit-reel.mp4",
+  "MiB": 32.14,
+  "duration": "00:00:39.17",
+  "video": "h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920, 6822 kb/s, 29.97 fps, 29.97 tbr, 30k tbn (d",
+  "audio": "aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 56 kb/s (default)",
+  "loudness_I": "-21.66",
+  "true_peak": "-10.40"
+ },
+ "delivery": {
+  "file": "vlog-kit-reel_DELIVERY.mp4",
+  "MiB": 25.75,
+  "duration": "00:00:39.19",
+  "video": "h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920, 5471 kb/s, 29.97 fps, 29.97 tbr, 30k tbn (d",
+  "audio": "aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 38 kb/s (default)",
+  "loudness_I": "-21.69",
+  "true_peak": "-10.48"
+ },
+ "check_stills": 59
+}

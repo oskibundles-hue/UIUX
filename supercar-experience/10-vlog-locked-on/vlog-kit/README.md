@@ -23,7 +23,8 @@ Say the codes: "use A2, B1, H1".
 - **DJI_0029** (14.4 s, 4K HEVC 10-bit portrait, 59.94 fps). Camera clock: file `DJI_20260915224905_0029`,
   creation time 05:49:06Z = **22:49:05** local, Sep 15 2026. **This is the Red Rock Casino parking garage**, after dinner
   at Lotus of Siam (inside Red Rock), with the guests lining up to drive back to the Venetian (footage survey, 27 Sep).
-  The brief called it the Venetian rooftop; the survey corrected that, and nothing on screen says Venetian over it.
+  The brief called it the Venetian rooftop; the survey corrected that, so every place stamp over it reads RED ROCK CASINO
+  (VENETIAN appears only as a stop on the route line, which is where the drive back went).
   Converted to a 1080x1920 29.97 fps mezzanine (every other frame, Lanczos, CRF 12) in `.work/src/`. Stills of single
   frames are pulled from the 4K source, so Ken Burns pushes up to 2x stay sharp.
 - **The approved rally cut** (`rally_ig.mp4`): two caption-free frames, f3180 (the drive back, Rolls-Royce hood) and f3300
@@ -44,9 +45,9 @@ sub-frame motion blur on every fast move.
 
 | Code | Type | What | Params |
 |---|---|---|---|
-| **A1** | `bannerBug` | The approved top-right bug, refined: black plate with a stripe cap, the white lockup with a gold glint every 5.5 s, a live dot and RALLY DAY. Plate x 756-1040, y 292-390 | `x1, y, label, built, glintAt, glintEvery, morphOut` |
-| **A2** | `bannerTab` | A slim tab flush with the right edge, x 992-1080, y 300-900: stripe cap (horizontal), the SE mark, a pulsing live dot, SUPERCAR EXPERIENCE and RALLY DAY · LAS VEGAS set vertically, and a gold progress rail that fills with the video | `w, y, h, name, label, enter ('built'/'slide'), progress [t0, t1], exit` |
-| **A3** | `bannerBreathe` | Rests as a 96 px tile with the mark; at each chapter change it inhales left with the chapter tag and name (back-out ease, a ring ripple, the mark pulses), holds 1.9 s and exhales | `x1, y, size, chapters [{t, tag, title, hold}], enter, exit` |
+| **A1** | `bannerBug` | The approved top-right bug, refined: black plate with a stripe cap, the white lockup with a gold glint every 5.5 s, a live dot, RALLY DAY and the optional co-billing × EGNYTE on the same row. Plate y 292-390, right edge x 1040 | `x1, y, label, cobill, built, glintAt, glintEvery, morphOut` |
+| **A2** | `bannerTab` | A slim tab flush with the right edge, x 992-1080, from y 300 (it grows to fit, never past y 1056): stripe cap (horizontal), the SE mark, a pulsing live dot, SUPERCAR EXPERIENCE (+ × EGNYTE in gold) and RALLY DAY · LAS VEGAS set vertically, and a gold progress rail that fills with the video | `w, y, h, name, label, cobill, enter ('built'/'slide'), progress [t0, t1], exit` |
+| **A3** | `bannerBreathe` | Rests as a 96 px tile with the mark (and an optional × EGNYTE strip under it); at each chapter change it inhales left with the chapter tag and name (back-out ease, a ring ripple, the mark pulses), holds 1.9 s and exhales | `x1, y, size, cobill, chapters [{t, tag, title, hold}], enter, exit` |
 
 All three sit inside the banner zone (right edge, y 269-1056) and above the caption band, so they never meet the
 captions or the Reels buttons. They are solid black plates (0.9) with white/gold content and a soft shadow, so they read
@@ -58,7 +59,7 @@ on the blown concrete and on the night sky alike (the A1 mockup is on the bright
 |---|---|---|---|
 | **B1** | `personLock` | Corner brackets fly in from 1.8x and snap onto the face, a lock ping, a leader up into the name tag OMARIE / @NQ.YOUNG. The tag follows at 40 % of the face's motion so the type stays calm | `track, name, handle, acquire, exit, maxBottom (clears the captions), whip, follow` |
 | **B2** | `personReticle` | A HUD reticle: the ring draws on while it shrinks onto the face, four arc segments spin in and settle, a counter-rotating tick crown, crosshair gaps, LOCKED · HOST, and a compact tag on a 45-degree leader | `track, name, handle, acquire, exit, status, follow` |
-| **B3** | `guestLock` | Full-body brackets from an upper-body track, a scan line sweeps down the guest on lock, RALLY GUEST / LOCKED ON above the head | `track, name, kicker, acquire, exit, legs, head, follow` |
+| **B3** | `guestLock` | Full-body brackets from an upper-body track, a scan line sweeps down the guest on lock, EGNYTE GUEST / LOCKED ON above the head (the label is `name`, set from `config.json` `copy.guest`) | `track, name, kicker, acquire, exit, legs, head, follow` |
 
 ### C. Convoy lock-on
 
@@ -86,14 +87,14 @@ on the blown concrete and on the night sky alike (the A1 mockup is on the bright
 
 | Code | Type | What | Params |
 |---|---|---|---|
-| **F1** | `quoteCard` | Card in the lower middle: a hanging gold quote mark, RALLY GUEST with a live dot, a 14-bar live audio meter with peak caps, the quote revealed word by word (each word rises in and flashes gold) | `label, quote or words [{w, t}], wordGap, start, footer, meter, y, exit` |
-| **F2** | `quoteSplit` | Q&A split: host on the top half, guest on the bottom, a horizontal stripe seam; Q chip + HOW WAS IT? slams in on top, A chip + RALLY GUEST + meter + the answer word by word below | `q, host, handle, a, label, qt, at, wordGap, meter, seam, exit` |
+| **F1** | `quoteCard` | Card in the lower middle: a hanging gold quote mark, EGNYTE GUEST (`label`) with a live dot, a 14-bar live audio meter with peak caps, the quote revealed word by word (each word rises in and flashes gold) | `label, quote or words [{w, t}], wordGap, start, footer, meter, y, exit` |
+| **F2** | `quoteSplit` | Q&A split: host on the top half, guest on the bottom, a horizontal stripe seam; Q chip + HOW WAS IT? slams in on top, A chip + EGNYTE GUEST (`label`) + meter + the answer word by word below | `q, host, handle, a, label, qt, at, wordGap, meter, seam, exit` |
 
 ### G. Chapter slam
 
 | Code | Type | What | Params |
 |---|---|---|---|
-| **G1** | `chapterSlam` | A huge Bebas title slams down (1.55x → 1 with 270-degree motion blur), the plate takes a small zoom punch and a two-frame shake, the gold stripe wipes under it with a light edge, the tag tracks in, a glint | `tag, title, y, maxW, maxS, exit, punch` |
+| **G1** | `chapterSlam` | A huge Bebas title slams down (1.55x → 1 with 270-degree motion blur), the plate takes a small zoom punch and a two-frame shake, the gold stripe wipes under it with a light edge, the tag tracks in, a glint. Works as an opening hook too; an optional co-billing line (`cobill`, e.g. SUPERCAR EXPERIENCE × EGNYTE) tracks in under the stripe | `tag, title, y, maxW, maxS, cobill, exit, punch` |
 | **G2** | `chapterGlass` | For busy shots: the title sits on frosted glass (the compositor blurs and dims the plate inside the panel), the glass unrolls from its stripe cap, a sheen crosses it | `tag, title, x, y, w, maxS, exit` |
 
 ### H. Captions (y 58-72 %, centred on the safe area, x 480)
@@ -117,7 +118,7 @@ on the blown concrete and on the night sky alike (the A1 mockup is on the bright
 
 - **A2** as the persistent banner: it keeps the SE name on screen for the whole vlog in the one place nothing else
   uses (the right edge, above the buttons), it is the smallest footprint of the three, and its progress rail gives the
-  side banner a job. Keep **A1** if Omarie prefers the familiar bug; **A3** is the lighter chapter marker for vlogs
+  side banner a job. With × EGNYTE on for this client vlog (it costs nothing in layout: the tab just grows). Keep **A1** if Omarie prefers the familiar bug; **A3** is the lighter chapter marker for vlogs
   with many short chapters.
 - **B1** introduces the host with the follow-card details; **B3** is the same system for a guest. B2 is the showier
   option, better for a single hero moment than for every appearance.
@@ -137,7 +138,7 @@ on the blown concrete and on the night sky alike (the A1 mockup is on the bright
 | `[GUEST QUOTE GOES HERE, VERBATIM, WORD FOR WORD FROM THE CLIP]` | F1 | A real guest's words, verbatim, with word times from the clip (`words`) |
 | `[GUEST ANSWER, VERBATIM]` | F2 | Same |
 | `HOW WAS IT?` | F2 | The brief's example question; use what the host actually asks |
-| RALLY GUEST on the woman in the lineup | B3, F1, F2 | She is a stand-in from the lineup shot; confirm she is a guest (or use a confirmed guest) and that she is happy to be shown |
+| EGNYTE GUEST on the woman in the lineup | B3, F1, F2 | She is a stand-in from the lineup shot; confirm she is one of the Egnyte group (or use a confirmed guest) and that she is happy to be shown |
 | Meter levels | F1, F2 | Demo data: the band levels of the host's own speech in DJI_0029, 7.0-10.6 s (`lib/data/meter.json`). In a real cut, run `make_meter` on the guest's audio |
 | Captions | H1, H2 | From the auto transcript of DJI_0029 (whisper, word level, `lib/data/transcript_0029.json`). Check the words against the audio |
 | CAR 0N / 03 | C1 | 03 is the number of cars the brackets visit in that shot, not the rally's car count |
@@ -148,7 +149,9 @@ on the blown concrete and on the night sky alike (the A1 mockup is on the bright
 | Line | Source |
 |---|---|
 | OMARIE · @NQ.YOUNG | the approved follow card ("Omarie Young @nq.young") |
-| RALLY GUEST, LOCKED ON | the brief (guests are RALLY GUEST) |
+| EGNYTE GUEST, LOCKED ON | the rally was for Egnyte and the guests are the Egnyte group (coordinator, 27 Sep). The brief's RALLY GUEST is the fallback: set `copy.guest`. Text only, no Egnyte logo |
+| × EGNYTE (co-billing on A1, A2, A3) | same; optional (`copy.banner.cobill`, set it to null to drop it). Text only |
+| EGNYTE RALLY DAY · SEP 15 2026 · LAS VEGAS (F1 footer) | same, with the brief's date and city |
 | SUPERCAR EXPERIENCE lockup, mark | `02-logos/png/` |
 | RALLY DAY · LAS VEGAS | the brief |
 | 22:49:05 and the ticking seconds | DJI_0029's clock (22:49:05 local) plus the clip time of the frame on screen |
@@ -165,7 +168,7 @@ on the blown concrete and on the night sky alike (the A1 mockup is on the bright
 | Caption words | DJI_0029, what the host says (auto transcript) |
 | Reel code chip (top-left), LOCKED-ON · VLOG KIT index card | review annotations only, not part of the kit |
 
-No speeds, horsepower, prices or guest names anywhere.
+No speeds, horsepower, prices, guest names or client logos anywhere.
 
 ## Layout rules the kit enforces
 
@@ -221,7 +224,7 @@ track was checked on a contact sheet of boxes drawn on the frames.
 | 0.00-2.14 | DJI_0029 0.0-2.1 s, host | A1 · B1 · D1 · H1 |
 | 2.14-2.40 | whip into the cars | I3 |
 | 2.40-5.71 | DJI_0029 3.7-7.0 s, the lineup | G1 (THE LINEUP) → C1 CAR 01 LAMBORGHINI → CAR 02 [MAKE] |
-| 5.71-7.71 | cut, 7.9-9.8 s | I2 LOCK LOST → CAR 03 LAMBORGHINI, then B3 RALLY GUEST; A2 slides in |
+| 5.71-7.71 | cut, 7.9-9.8 s | I2 LOCK LOST → CAR 03 LAMBORGHINI, then B3 EGNYTE GUEST; A2 slides in |
 | 7.71-9.38 | 9.9-10.9 s at 0.6x | C2 lineup scan |
 | 9.38-12.31 | 10.9-13.8 s, host | B2 · H2 · A2 |
 | 12.31-12.81 | sweep to the Strip | I1 |
@@ -234,6 +237,26 @@ track was checked on a contact sheet of boxes drawn on the frames.
 | 31.76-34.77 | time card | D2 20:24 → 22:49 |
 | 34.77-37.17 | still, host and the Cullinan | D1 (hand-off) · C3 · A1 |
 | 37.17-39.17 | index card | all codes |
+
+## How it was checked (`exports/qa/qa_summary.json`, rebuilt by `--stage qa`)
+
+- **Safe zones:** the ink box of every visible text line, clipped by its masks, at every 0.1 s of the reel and at every
+  mockup time (417 times): **0 outside** x 54-907 / y 269-1536 (banner text allowed on the right edge, y 269-1056). Six
+  hits are transitional only: G1's first slam frames at 1.55x and A2 sliding in and out past the frame edge.
+- **Captions:** 0 caption boxes outside y 1114-1382.
+- **Frame 0** of the reel has A1, D1, H1 and the code chip fully built (checked on the decoded delivery file).
+- **Locks:** every track was drawn on its source frames and checked (`lib/trackqa.py`); stills at the entry, middle and
+  exit of every component are in `exports/qa/` (60 stills), and all of them were looked at: the brackets sit on the face,
+  the cars, the guest and the Cullinan.
+- **Export:** master H.264 High, yuv420p bt709, 1080x1920, 29.97 fps, 39.17 s, CRF 17, 32.1 MiB (git-ignored);
+  delivery two-pass 5.8 Mb/s, **25.8 MiB**, AAC 48 kHz, +faststart. Audio -21.7 LUFS, true peak -10.5 dBTP (the clip's
+  own sound, low), the last 50 ms silent.
+- Fixes made after looking at the renders: the caption gold box was under its plate; the D1 seconds showed the previous
+  second; tags followed faces 1:1 and blurred (now 40-50 %); the C1 counter changed beside the old make; the lock-lost
+  brackets sat off-frame in white (now gold, pulled into frame); the sweep band read as a blown beam (now a narrow core);
+  the G1 impact glow read as a halo (toned down); G1 was centred on the frame and crossed x 907 (now centred on the safe
+  area); the D2 reels showed a readable 22:47 on the way (faster reels now); the logo glints never showed because CSS
+  masks are blocked on file:// (the logos now go in as data URIs).
 
 ## Files
 

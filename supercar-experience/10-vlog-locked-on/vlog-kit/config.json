@@ -8,8 +8,8 @@
   },
   "copy": {
     "host": { "name": "OMARIE", "handle": "@NQ.YOUNG" },
-    "guest": "RALLY GUEST",
-    "banner": { "name": "SUPERCAR EXPERIENCE", "status": "RALLY DAY", "statusLong": "RALLY DAY · LAS VEGAS" },
+    "guest": "EGNYTE GUEST",
+    "banner": { "name": "SUPERCAR EXPERIENCE", "status": "RALLY DAY", "statusLong": "RALLY DAY · LAS VEGAS", "cobill": "× EGNYTE" },
     "clock": { "start": "22:49:05", "place": "RED ROCK CASINO", "date": "SEP 15 2026", "jumpFrom": "20:24" },
     "route": { "title": "THE ROUTE", "sub": "RED ROCK TO THE VENETIAN", "waypoints": ["215", "15 NORTH", "FLAMINGO", "LAS VEGAS BLVD", "VENETIAN", "LEVEL 9"] },
     "chapters": {
@@ -26,7 +26,7 @@
     "quote": "[GUEST QUOTE GOES HERE, VERBATIM, WORD FOR WORD FROM THE CLIP]",
     "question": "HOW WAS IT?",
     "answer": "[GUEST ANSWER, VERBATIM]",
-    "footer": "RALLY DAY · SEP 15 2026 · LAS VEGAS",
+    "footer": "EGNYTE RALLY DAY · SEP 15 2026 · LAS VEGAS",
     "index": { "title": "LOCKED-ON · VLOG KIT", "sub": "SAY THE CODES: E.G. \"USE A2, B1, H1\"" }
   },
   "plates": {

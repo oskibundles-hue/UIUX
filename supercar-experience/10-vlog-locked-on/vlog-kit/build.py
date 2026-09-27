@@ -106,7 +106,8 @@ def scene_components(S, reel_end):
     add = lambda code, typ, t0, t1, **p: comps.append({'code': code, 'type': typ, 't0': round(t0, 4), 't1': round(t1, 4), 'p': p})
     whip = {'t0': T0('whip1'), 't1': T1('whip1'), 'dir': 'left', 'dist': 0.9}
     # --- opener on the host (clip 0-2.1 s): A1 bug, D1 clock, B1 name lock, H1 captions
-    add('A1', 'bannerBug', 0, T0('lineup'), label=C['banner']['status'], built=True)
+    cob = C['banner'].get('cobill')
+    add('A1', 'bannerBug', 0, T0('lineup'), label=C['banner']['status'], built=True, cobill=cob)
     add('D1', 'clockStamp', 0, T0('whip1'), start=C['clock']['start'], place=C['clock']['place'], date=C['clock']['date'], built=True)
     add('B1', 'personLock', 0, (T0('whip1') + T1('whip1')) / 2, track='face1', name=host['name'], handle=host['handle'],
         acquire=0.25, exit=99, whip=whip, maxBottom=1282)
@@ -119,7 +120,7 @@ def scene_components(S, reel_end):
         {'track': 'conv', 't': 4.95, 'make': cars['convertible']['make'], 'placeholder': cars['convertible']['placeholder'], 'mode': 'hop'},
         {'track': 'urusR', 't': T0('lineup'), 'make': cars['urusRed']['make'], 'placeholder': cars['urusRed']['placeholder'], 'mode': 'relock', 'lost': 0.40}])
     add('B3', 'guestLock', 6.62, T1('lineup'), track='guest', name=C['guest'], kicker='LOCKED ON', acquire=6.62, exit=T1('lineup') - 0.32)
-    add('A2', 'bannerTab', T0('lineup'), T1('sweep1'), name=C['banner']['name'], label=C['banner']['statusLong'], enter='slide',
+    add('A2', 'bannerTab', T0('lineup'), T1('sweep1'), name=C['banner']['name'], label=C['banner']['statusLong'], enter='slide', cobill=cob,
         progress=[T0('lineup'), T0('sweep1')])
     add('C2', 'convoyScan', T0('far') + 0.03, T1('far'), targets=[{'track': f'far{k}'} for k in range(1, 6)], ts=T0('far') + 0.03,
         sweep=0.62, exit=T1('far') - 0.38, py=640)
@@ -131,7 +132,7 @@ def scene_components(S, reel_end):
     add('I1', 'sweep', T0('sweep1'), T1('sweep1'))
     add('I1', 'sweep', T0('sweep2'), T1('sweep2'))
     fs0 = T0('routeFull')
-    add('A3', 'bannerBreathe', T0('sweep1'), T0('jump'), enter='slide', chapters=[
+    add('A3', 'bannerBreathe', T0('sweep1'), T0('jump'), enter='slide', cobill=cob, chapters=[
         {'t': T0('glass') + 0.10, 'tag': ch['driveBack']['tag'], 'title': ch['driveBack']['title'], 'hold': 1.9},
         {'t': fs0 + 3.0, 'tag': ch['level9']['tag'], 'title': ch['level9']['title'], 'hold': 1.9}])
     add('G2', 'chapterGlass', T0('glass') + 0.05, T1('glass'), tag=ch['driveBack']['tag'], title=ch['driveBack']['title'], y=720)
@@ -159,7 +160,7 @@ def scene_components(S, reel_end):
             ['I1', 'GOLD LIGHT SWEEP'], ['I2', 'LOCK LOST / RE-ACQUIRE'], ['I3', 'WHIP-PAN HELPER']]
     add('IDX', 'indexCard', T0('index'), T1('index'), title=C['index']['title'], sub=C['index']['sub'], rows=rows)
     # --- appendix (mockup-only shots)
-    add('A1', 'bannerBug', T0('mockA1'), T1('mockA1'), label=C['banner']['status'], built=True)
+    add('A1', 'bannerBug', T0('mockA1'), T1('mockA1'), label=C['banner']['status'], built=True, cobill=cob)
     a0 = T0('mockH1') + 0.1
     add('H1', 'captionsBox', T0('mockH1'), T1('mockH1'), words=words_for([4], lambda c: a0 + (c - 12.32)), maxLines=2, yBottom=1370)
     # --- reel code chip (annotation, top band)

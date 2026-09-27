@@ -16,12 +16,12 @@ NOTE = ('codeChip', 'indexCard')
 
 def audit(scene, here, work):
     FPS = 30000 / 1001
-    ts = [round(i / 10, 3) for i in range(int(scene['reelEnd'] * 10))] + [m['t'] for m in scene['mocks']]
+    ts = [round(i / 10, 3) for i in range(int(scene['reelEnd'] * 10))] + [m['t'] for m in scene['mocks'] if 't' in m] + [st['t'] for m in scene['mocks'] for st in m.get('strip', [])]
     tf = os.path.join(work, 'audit_times.json'); json.dump(ts, open(tf, 'w'))
     out = os.path.join(work, 'audit.json')
     subprocess.run(['node', os.path.join(here, 'lib', 'audit.js'), os.path.join(here, 'kit.html'), tf, out], check=True)
     res = json.load(open(out))
-    bad, notes, caps = [], set(), []
+    bad, trans, notes, caps = [], [], set(), []
     for fr in res:
         for r in fr['ink']:
             if r['type'] in NOTE:
@@ -31,11 +31,15 @@ def audit(scene, here, work):
             if not ok and r['type'] in BANNER:
                 ok = r['y0'] >= SAFE['y0'] - e and r['y1'] <= 1056 + e and r['x0'] >= SAFE['x0'] - e and r['x1'] <= 1080
             if not ok:
-                bad.append({'t': fr['t'], **{k: (round(v, 1) if isinstance(v, float) else v) for k, v in r.items()}})
+                # a component sliding / scaling in or out (within 0.45 s of its own start or end) is transitional
+                edge = any(c['code'] == r['code'] and c['type'] == r['type'] and (abs(fr['t'] - c['t0']) < 0.45 or abs(fr['t'] - c['t1']) < 0.45)
+                           for c in scene['comps'])
+                (trans if edge else bad).append({'t': fr['t'], **{k: (round(v, 1) if isinstance(v, float) else v) for k, v in r.items()}})
             if r['type'] in ('captionsBox', 'captionsStrip'):
                 caps.append((fr['t'], r['y0'], r['y1']))
     capOut = [c for c in caps if c[1] < 1114 - 1 or c[2] > 1382 + 1]
     return {'frames_checked': len(res), 'outside_safe': bad[:60], 'n_outside_safe': len(bad),
+            'transitional_outside_safe': trans[:40], 'n_transitional': len(trans),
             'captions_outside_band': capOut[:20], 'annotations_skipped': sorted(notes)}
 
 
@@ -88,7 +92,8 @@ def run(scene, here, work, ff):
     os.makedirs(os.path.join(here, 'exports', 'qa'), exist_ok=True)
     json.dump(s, open(os.path.join(here, 'exports', 'qa', 'qa_summary.json'), 'w'), indent=1)
     a = s['audit']
-    print(f"qa: {a['frames_checked']} times audited, {a['n_outside_safe']} text boxes outside the safe area, "
+    print(f"qa: {a['frames_checked']} times audited, {a['n_outside_safe']} text boxes outside the safe area "
+          f"(+{a['n_transitional']} while a component slides or scales in/out), "
           f"{len(a['captions_outside_band'])} caption boxes outside y 1114-1382")
     for b in a['outside_safe'][:12]:
         print('   ', b)
