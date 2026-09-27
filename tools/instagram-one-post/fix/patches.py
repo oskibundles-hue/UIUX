@@ -265,14 +265,15 @@ class Caption:
         reg = frame[y0:y1, x0:x1].copy()
         g = reg.mean(axis=2)
         shown = [w for w in self.words if self.contrast(g, w) > 25]
-        if shown:
-            self.latched = shown
-        elif self.latched and min(self.contrast(g, w) for w in self.latched) > 6:
-            shown = self.latched  # fading out: keep moving the same words until they are gone
-        else:
+        if not shown:
+            # not on screen, or the last frame or two of the fade-out: under ~15% opacity the
+            # old position can't be seen, and moving or erasing it would disturb the floor
             self.latched = []
             return frame
-        # the words' own shapes (not a brightness threshold, so faint frames move too),
+        if all(any(w is seen for seen in self.latched) for w in shown):
+            shown = self.latched  # fading: keep moving every word that was on screen
+        self.latched = shown
+        # the words' own shapes (not a brightness threshold, so fading frames are covered),
         # plus the underline under the word being spoken (the last one on screen)
         text = shown[-1]["underline"].copy()
         for w in shown:
