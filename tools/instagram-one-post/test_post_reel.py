@@ -260,6 +260,13 @@ class PostReelTest(unittest.TestCase):
         self.assertIn("'account_username' is empty", out)
         self.assertEqual(self.fake.calls, [])
 
+    def test_link_refused_when_config_requires_the_corrected_file(self):
+        self.write_config(require_video_file=True)
+        code, out = self.run_tool("--publish")
+        self.assertEqual(code, 2, out)
+        self.assertIn("requires --video-file", out)
+        self.assertEqual(self.fake.calls, [])
+
     def test_missing_video_link(self):
         out = io.StringIO()
         argv = ["--config", self.config, "--state-dir", self.state, "--graph-base", self.fake.base]
@@ -272,7 +279,7 @@ class PostReelTest(unittest.TestCase):
         cfg_path = os.path.join(os.path.dirname(os.path.abspath(post_reel.__file__)), "post.json")
         cfg = post_reel.load_config(cfg_path)
         self.assertEqual(cfg["account_username"], "nq.young")
-        self.assertEqual(cfg["expected_size_bytes"], 299378366)
+        self.assertIs(cfg["require_video_file"], True)  # only the corrected render may go up
         self.assertNotIn("video_url", cfg)  # the link must stay out of this public repo
         self.assertLessEqual(len(cfg["caption"]), 2200)
         self.assertIn(cfg["duplicate_marker"], cfg["caption"])

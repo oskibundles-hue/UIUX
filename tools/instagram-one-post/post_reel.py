@@ -197,6 +197,9 @@ def run(args):
     token = os.environ.get("IG_ACCESS_TOKEN", "").strip()
     if not token:
         raise SetupError("IG_ACCESS_TOKEN is not set. Add it to the environment's variables.")
+    if cfg.get("require_video_file") and not args.video_file:
+        raise SetupError("post.json requires --video-file with the corrected render (fix/fix_reel.py); "
+                         "the Dropbox link is the old, unfixed version")
     api = Graph(args.graph_base or cfg.get("graph_host", "https://graph.instagram.com"),
                 cfg.get("api_version", "v23.0"), token)
     state_file = state_path(args.state_dir, cfg["title"])
