@@ -30,10 +30,12 @@ The usual run is **build → reviewer → lead delivers**: a chain of one agent 
 builders work in worktrees of their workstream's branch, because this default branch doesn't carry
 `creator-kit/`, `formula-dynamics/` or `supercar-experience/`.
 
-The regret-list gate (`.claude/hooks/regret_gate.py`) is included but **not switched on** on this branch.
-It asks before paid renders, publishing, Dropbox moves or deletes, memory writes, force pushes and
-recursive deletes, and refuses pushes to `main`. Omarie turns it on by adding its `PreToolUse` hook to
-`.claude/settings.json`.
+**The regret-list gate is on** (Omarie, 2026-09-27). `.claude/hooks/regret_gate.py` runs before every Bash
+and connector call (wired in `.claude/settings.json`). It **asks** before any paid Higgsfield call (quote the
+cost first), anything that publishes or changes a live account, Dropbox moves or deletes, Windsor.ai write
+actions, memory-store writes, force pushes, `git reset --hard`, `git clean -f` and recursive deletes outside
+`/tmp`. It **refuses** any push to `main`. An "ask" waits for Omarie's click, so an unattended routine that hits
+one stops there until he answers.
 
 ## Project Overview
 
