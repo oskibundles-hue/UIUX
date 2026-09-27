@@ -162,7 +162,7 @@ The first version took about 6 hours from brief to approval. About 2 h 45 min of
 reviewable cut takes minutes, and a fix only re-renders what it touches.**
 
 ```bash
-./render.sh --draft          # 1. review cut: gates, then a 540x960 draft -> exports/draft/  (1 min 48 s warm, 6 min 40 s the first time)
+./render.sh --draft          # 1. review cut: gates, then a 540x960 draft -> exports/draft/  (about 2 min warm, 7 min the first time)
                              #    read exports/qa/gates.md: errors, automatic fixes, warnings, human checks
                              # 2. fix config.json, run --draft again (only the changed frames are re-drawn)
 ./render.sh                  # 3. full quality -> exports/ (every stage cached; stops on a gate error unless --force)
@@ -209,7 +209,34 @@ Errors stop a full render. Automatic fixes, warnings and human checks are listed
 | **total** | **about 27 min** (a review fix cost 25-35 min) | **about 18 min** | **about 4.5 min** (about 2 min when the fix does not move a sound cue) | |
 
 The fix measured is the CH2 GT3 RS hop moved by 0.07 s (`.work/timings_demo_fix.json`); it ran at 6 min 16 s with the old
-serial mix (258 s), the audio row is the new mix code on the same input. The draft is 540x960 with no motion blur.
+serial mix (258 s), the audio row is the new mix code on the same input. The draft is 540x960 with no motion blur. Its times (1 min 48 s warm, 6 min 40 s the first time, including the one-off
+half-size plate) were measured while another CPU-heavy job shared the machine (load 8-12), so they are upper bounds.
+
+**Tried and not used for the full-size capture.** It stays at about 8 minutes because each Chromium screenshot has a fixed
+cost of about 40 ms (frame production), and throughput levels off at about 55 screenshots/s on 4 cores. The things tried:
+- **Raw RGBA from CDP:** not offered (PNG, JPEG and WebP only). `optimizeForSpeed` was already on.
+- **Dirty-rect clip:** about 10 % faster, but it changes up to 4 levels on 45 % of the motion-blurred frames, so it is off
+  (`--noclip`).
+- **Empty or duplicate frames:** there are almost none to skip. The SE banner's progress rail moves every frame, so only 16 of
+  5,230 frames repeat.
+- **4 processes instead of 3:** helps only a few percent.
+- **Piping frames straight to ffmpeg:** would lose the per-frame cache.
+
+The per-frame cache is where the time is saved.
+
+**Checked against the approved render** (`lib/cmpmaster.py --approved .work/approved`, every 10th frame, 523 frames):
+
+| | Approved (27 Sept 08:00, old path) | This render (new path) |
+|---|---|---|
+| master vs its own lossless composite | SSIM 0.99116, PSNR 47.52 dB, 10.95 Mb/s | SSIM 0.99181, PSNR 47.88 dB, 11.16 Mb/s |
+| preview vs its own composite (720x1280) | SSIM 0.97781, PSNR 40.36 dB, 27.5 MiB | SSIM 0.97822, PSNR 40.41 dB, 27.7 MiB |
+| mix.wav, mix_nomusic.wav | | bit-identical |
+| AAC tracks (master, no music, preview) | -14.11 / -1.82, -14.06 / -1.89, -14.63 / -2.05 (LUFS / dBTP) | bit-identical streams, same loudness |
+| layer frames | | 2,416 of 5,230 identical; the others differ at text edges (premultiplied PSNR 42.6 dB) |
+
+The cut, the grade, the graphics and the mix are unchanged. The layer differences come from the capture history described
+above. In the approved render some text was rasterised soft, for example the LEAD CAR / ROLLS-ROYCE CULLINAN label at 76 s.
+It is now drawn crisp every time. New master vs approved master directly: SSIM 0.99123, PSNR 43.3 dB.
 
 Needs Python 3 with numpy and Pillow, Node 22 with Playwright at `/opt/node22/lib/node_modules/playwright` (Chromium is
 preinstalled; never run `playwright install`), and the static ffmpeg (`config.json` `paths.ffmpeg`, or `FFMPEG=`). Inputs: the
