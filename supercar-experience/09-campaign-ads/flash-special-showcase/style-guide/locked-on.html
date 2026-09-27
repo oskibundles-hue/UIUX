@@ -138,7 +138,42 @@
   .check label span { color: var(--muted); display: block; font-size: 15px; }
   .check-foot { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin-top: 12px; }
 
-  .fallback { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .fallback { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+
+  /* ---------- vlog ---------- */
+  .vlog-top { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: clamp(24px, 5vw, 64px); align-items: start; }
+  .chapters { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line); }
+  .chapters li { border-bottom: 1px solid var(--line); }
+  .chapters button { width: 100%; display: grid; grid-template-columns: 58px 64px minmax(0, 1fr); gap: 14px; align-items: center; padding: 10px 0; background: none; border: 0; color: var(--text); font: inherit; text-align: left; cursor: pointer; }
+  .chapters button:hover .ch-name { color: var(--gold); }
+  .chapters img { width: 58px; aspect-ratio: 9 / 16; object-fit: cover; border: 1px solid var(--line); display: block; }
+  .ch-clock { font-family: var(--display); font-size: 30px; line-height: 1; color: var(--gold); font-variant-numeric: tabular-nums; }
+  .ch-name { font-family: var(--display); font-size: 24px; line-height: 1; display: block; }
+  .ch-d { font-size: 14px; color: var(--muted); line-height: 1.4; display: block; margin-top: 4px; }
+  .ch-t { font-family: var(--label); font-size: 9px; letter-spacing: 1.5px; color: var(--faint); font-variant-numeric: tabular-nums; }
+  .kitgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 18px 14px; }
+  .kit { display: grid; gap: 6px; align-content: start; }
+  .kit img { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border: 1px solid var(--line); display: block; }
+  .kit.used img { border-color: var(--gold); }
+  .kit .code { font-family: var(--display); font-size: 26px; line-height: 1; color: var(--muted); display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+  .kit.used .code { color: var(--gold); }
+  .kit .code small { font-family: var(--label); font-size: 8px; letter-spacing: 1.5px; color: var(--gold); border: 1px solid var(--gold); padding: 2px 5px; }
+  .kit .kn { font-family: var(--label); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--text); }
+  .kit p { font-size: 14px; color: var(--muted); line-height: 1.4; }
+  .groups { display: grid; gap: 34px; }
+  .group-h { display: flex; align-items: baseline; gap: 12px; margin-bottom: 14px; border-bottom: 1px solid var(--line); padding-bottom: 8px; }
+  .group-h b { font-family: var(--display); font-weight: 400; font-size: 34px; color: var(--gold); line-height: 1; }
+  .group-h span { font-family: var(--label); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+  .vrules { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .vrule { background: var(--ground); padding: 20px 22px; display: grid; gap: 8px; align-content: start; }
+  .vrule h3 { font-size: 26px; }
+  .vrule p { color: var(--muted); font-size: 15.5px; }
+  .vrule p b { color: var(--text); font-weight: 500; }
+  .lesson { font-family: var(--label); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); }
+  .never { background: var(--panel); border: 1px solid var(--line); padding: 20px 22px; display: grid; gap: 10px; }
+  .never ul { margin: 0; padding-left: 18px; display: grid; gap: 4px; color: var(--muted); font-size: 15px; }
+  .reel-row { display: grid; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); gap: clamp(20px, 4vw, 48px); align-items: start; }
+  .reel-row video { width: 100%; aspect-ratio: 9 / 16; background: #000; border: 1px solid var(--line); display: block; }
   .fallback > div { background: var(--ground); padding: 22px; display: grid; gap: 10px; align-content: start; }
   .fallback .big { font-family: var(--display); font-size: 40px; line-height: .9; }
   .fallback ul { margin: 0; padding-left: 18px; color: var(--muted); font-size: 15px; display: grid; gap: 4px; }
@@ -151,7 +186,9 @@
     .rule { grid-template-columns: 44px minmax(0, 1fr); }
     .rule .breaks { grid-column: 2; }
     .rule .num { font-size: 40px; }
-    .two, .fallback { grid-template-columns: 1fr; }
+    .two, .fallback, .vrules { grid-template-columns: 1fr; }
+    .vlog-top, .reel-row { grid-template-columns: 1fr; }
+    .vlog-top .frame, .reel-row video { max-width: 340px; }
   }
   @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
 </style>
@@ -181,6 +218,7 @@
       <div class="stripe" style="max-width:420px"></div>
       <p class="thesis">Every SE car ad locks onto the car's own badge, lands the price like a slot reel, puts the model name behind the car, and rides the clip's own music into a tape stop before the end card.</p>
       <p class="quote"><b>"That is amazing make that a standard."</b> Omarie, 26 Sept 2026, on the GT3 RS reference cut playing here.</p>
+      <p class="muted" style="font-size:15px">The standard now has a vlog version too, built on the Sep 15 Egnyte rally. <a href="#vlog">Go to Locked-On Vlog</a>.</p>
       <div class="specs">
         <div class="spec"><b>1080×1920</b><span>9:16 story</span></div>
         <div class="spec"><b>15–18 s</b><span>reference 18.0 s</span></div>
@@ -347,13 +385,18 @@
   <section class="sec" aria-labelledby="when">
     <div class="sec-head">
       <div class="eyebrow">Choosing the treatment</div>
-      <h2 id="when">Locked-On or Quick-Promo</h2>
+      <h2 id="when">Locked-On, Vlog or Quick-Promo</h2>
     </div>
     <div class="fallback">
       <div>
         <div class="big" style="color:var(--gold)">Locked-On</div>
         <p class="muted">The default for every SE car ad.</p>
         <ul><li>A few hours of build and four-lens review</li><li>Needs a badge shot of 1 s or longer; a locked-off shot for type behind the car</li><li>Reference: GT3 RS "LOCKED ON", 18 s</li></ul>
+      </div>
+      <div>
+        <div class="big">Locked-On Vlog</div>
+        <p class="muted">For a day-in-the-life reel cut from the raw footage.</p>
+        <ul><li>Survey, cut and render: most of a day</li><li>Needs the transcripts, the camera clock and one clear lead-car shot</li><li>Reference: Sep 15 Egnyte rally, 2:55</li></ul>
       </div>
       <div>
         <div class="big">Quick-Promo</div>
@@ -363,10 +406,96 @@
     </div>
   </section>
 
+  <!-- VLOG -->
+  <section class="sec" id="vlog" aria-labelledby="vlog-h">
+    <div class="stripe" style="max-width:420px"></div>
+    <div class="vlog-top">
+      <div>
+        <div class="frame" id="vframe">
+          <video id="vvid" src="media/vlog-preview.mp4" poster="media/vlog-poster.jpg" playsinline muted controls preload="metadata"></video>
+          <div class="zones" id="vzones" hidden>
+            <div class="zone z-top"><span>TOP 14%</span></div>
+            <div class="zone z-left"></div>
+            <div class="zone z-right"><span>RIGHT 16%</span></div>
+            <div class="zone z-bot"><span>BOTTOM 20%</span></div>
+          </div>
+        </div>
+        <div class="frame-bar">
+          <button class="btn" id="vzoneBtn" type="button" aria-pressed="false">Show safe zones</button>
+          <button class="btn" id="vsoundBtn" type="button" aria-pressed="false">Sound on</button>
+        </div>
+      </div>
+      <div class="hero-copy">
+        <div class="eyebrow">Locked-On Vlog · Sep 15 rally · Egnyte</div>
+        <h2 id="vlog-h">The standard, as a vlog</h2>
+        <p class="thesis">A whole day cut from the raw footage, in the order it happened, stamped with the camera's own clock. The Locked-On graphics follow the story: lock-ons on the cars people name, the route as the convoy drives it, and the guests' own words stacking up at the end.</p>
+        <div class="specs">
+          <div class="spec"><b>2:55</b><span>174.5 s · 9:16</span></div>
+          <div class="spec"><b>7</b><span>chapters</span></div>
+          <div class="spec"><b>44</b><span>clips surveyed</span></div>
+          <div class="spec"><b>31</b><span>spoken lines</span></div>
+          <div class="spec"><b>−11 dB</b><span>music under speech</span></div>
+        </div>
+        <p class="muted" style="font-size:15px">Camera clips 16:10 to 23:26 plus the phone clips from dinner and the convoy briefing. The preview here is reduced for the page; the master is 1080×1920.</p>
+      </div>
+    </div>
+
+    <div class="sec-head" style="margin-top:12px">
+      <div class="eyebrow">Chapter map · to scale</div>
+      <h3>Seven chapters on the camera clock</h3>
+      <p class="muted">Each chapter slam carries the time the clip was shot. Tap a chapter to jump the player there.</p>
+    </div>
+    <div class="timeline">
+      <div style="position:relative">
+        <div class="tl-bar" id="vtlbar"></div>
+        <div class="tl-scale" id="vtlscale"></div>
+        <div class="playhead" id="vplayhead" style="top:0;height:44px"></div>
+      </div>
+    </div>
+    <ol class="chapters" id="vchapters"></ol>
+
+    <div class="sec-head" style="margin-top:12px">
+      <div class="eyebrow">The vlog kit · 22 variations</div>
+      <h3>Say the codes</h3>
+      <p class="muted">Every component was mocked over the real footage in two or three versions. The ones with a gold frame are in the Sep 15 vlog. Source: <code>supercar-experience/10-vlog-locked-on/vlog-kit/</code>.</p>
+    </div>
+    <div class="reel-row">
+      <video id="kitreel" src="media/kit-reel.mp4" poster="media/kit/A2.jpg" playsinline muted controls preload="metadata"></video>
+      <div class="groups" id="kitgroups"></div>
+    </div>
+
+    <div class="sec-head" style="margin-top:12px">
+      <div class="eyebrow">Vlog rules</div>
+      <h3>What changes when it's a vlog</h3>
+      <p class="muted">The eight ad rules still hold. These are the extra ones, each learned on the Sep 15 build.</p>
+    </div>
+    <div class="vrules">
+      <div class="vrule"><h3>Survey every clip first</h3><p>Transcribe every camera and phone clip and log it on the camera clock before cutting anything. <b>The moments come from what people say</b>: the guide's briefing, "I'll be leading everybody", the guests' "wonderful time".</p><div class="lesson">Sep 15: 44 clips, 16:10 to 23:26</div></div>
+      <div class="vrule"><h3>Story in order, on the clock</h3><p>Chapters follow the day as it happened, and each slam carries the real clip time. <b>Cut on a pause, never mid-line</b>; a line may lead its picture by up to 0.3 s.</p><div class="lesson">18:46 · the lineup, 22:45 · the drive back</div></div>
+      <div class="vrule"><h3>The SE banner stays on the side</h3><p>The edge tab (A2) runs from the end of the hook to the end card, <b>inside the right edge between 14% and 55%</b> of the height, so it never meets the captions at 58–72%.</p><div class="lesson">Omarie: "I still want the Supercar Experience banner on the side"</div></div>
+      <div class="vrule"><h3>Lock only what you can name</h3><p>A make and model go on a car only when it is positively identified in the frame. <b>When a car leaves on a pan, release it with LOCK LOST (I2)</b> and re-acquire on the next one.</p><div class="lesson">First render: three tags drifted off-frame on whip pans</div></div>
+      <div class="vrule"><h3>Captions on every line</h3><p>Boxed captions (H1) with the spoken word in gold, sitting at 58–72%. <b>Hide them while a card, slam or quote wall already shows the same words.</b></p><div class="lesson">Muted autoplay is how most people first see a reel</div></div>
+      <div class="vrule"><h3>Know who is speaking</h3><p>Check the picture before labelling a quote. Guests are labelled by company only (EGNYTE GUEST, EGNYTE ON THE DAY), <b>never by name</b>, and a client appears as text, never as their logo.</p><div class="lesson">The Roma answer was Omarie, hand on chin, not a guest</div></div>
+      <div class="vrule"><h3>Music sits under the talk</h3><p>An original bed composed to the cut: F minor, 105 BPM, a drop on the convoy montage and a tape stop into the end card. <b>It ducks about 11 dB under every spoken line.</b> Deliver a no-music master and the stem; one setting turns it off.</p><div class="lesson">config.json music.enabled, or MUSIC=0 ./render.sh</div></div>
+      <div class="vrule"><h3>Fetch only the frames you use</h3><p>The DJI files are 4K 10-bit HEVC and decode at about 10 fps here. Survey from keyframes and audio, then <b>pull each chosen shot as a byte range</b> using the clip's saved index.</p><div class="lesson">About 10 GB fetched instead of 160 GB</div></div>
+    </div>
+    <div class="never">
+      <div class="eyebrow">Never on screen, even in a handle</div>
+      <ul>
+        <li>Passwords, card details or anything read off a screen</li>
+        <li>Speeds, "we hit 114", or driving talk that reads as unsafe (double yellows, "go a little faster")</li>
+        <li>Anything someone on camera asks to have taken out</li>
+        <li>Fleet faults (door handles, misfires), police, weapons</li>
+        <li>Figures without a source; the age line is the site's: 25+, ages 21–24 with the $299 underage fee</li>
+      </ul>
+    </div>
+  </section>
+
   <footer>
     <div class="stripe" style="max-width:220px"></div>
     <p>Source: <code>oskibundles-hue/UIUX</code> · branch <code>claude/supercar-rental-ad-graphics-o64vo3</code> · <code>supercar-experience/09-campaign-ads/flash-special-showcase/</code>. Recorded as <code>locked-on</code> at the top of <code>HOUSE-STYLE.md</code>.</p>
     <p>Delivered cut: Dropbox <code>Supercar Experience/04 Flash Special Stories (2026-09-26)/05 GT3 RS Showcase - LOCKED ON/</code>.</p>
+    <p>Vlog: <code>supercar-experience/10-vlog-locked-on/vlog-kit/</code> (the 22 variations) and <code>supercar-experience/10-vlog-locked-on/2026-09-15-rally-v2/</code> (the Sep 15 build). Delivered to Dropbox <code>Supercar Experience/05 Vlogs/</code>.</p>
   </footer>
 </div>
 
@@ -487,6 +616,131 @@
   add('path', { d: 'M' + P.map(function (p) { return X(p[0]) + ',' + Y(p[1]); }).join(' L'), fill: 'none', stroke: cGold, 'stroke-width': 2, 'stroke-linejoin': 'round' });
   P.forEach(function (p) { add('circle', { cx: X(p[0]), cy: Y(p[1]), r: 3, fill: cGold }); });
   add('text', { x: X(14.30) + 8, y: Y(-44.7) + 3, 'font-size': 8, fill: cText }, '−44.7 dB break');
+
+  // ---------- Vlog: chapter map ----------
+  var VTOTAL = 174.508;
+  var VCH = [
+    { a: 0.00, b: 7.05, n: 'Hook', clock: '', img: 'vlog-hook.jpg', d: 'THE RALLY panel built on frame 0, SUPERCAR EXPERIENCE × EGNYTE, then a cold open of the night drive, dinner and the lineup.' },
+    { a: 7.05, b: 26.08, n: 'Rally Day', clock: '16:10', img: 'vlog-ch1.jpg', d: 'Omarie in the Cullinan on the way to the shop, and what Supercar Experience offers: "drive all these cars, go get dinner, show up, show out."' },
+    { a: 26.08, b: 54.29, n: 'The Lineup', clock: '18:46', img: 'vlog-ch2.jpg', d: 'Every car named on level 9 with the convoy hop tagging each one, then the large-event line with TEXT OR DM TO BOOK.' },
+    { a: 54.29, b: 79.04, n: 'Egnyte Arrives', clock: '18:53', img: 'vlog-ch3.jpg', d: 'Guests arrive and sign in. "That’s our number one thing. Safely." The tall guest gets the R8, and the Cullinan takes the lead.' },
+    { a: 79.04, b: 87.74, n: 'Roll Out', clock: '19:13', img: 'vlog-ch4.jpg', d: 'Timelapse off the Cullinan hood and the route card to Red Rock, with guests from San Francisco riding along.' },
+    { a: 87.74, b: 116.81, n: 'Red Rock', clock: '20:12', img: 'vlog-ch5.jpg', d: 'Lost cars and the walk to Lotus of Siam, the whole group at dinner, Omarie’s pick (the Roma), and the team at Yard House.' },
+    { a: 116.81, b: 147.97, n: 'The Drive Back', clock: '22:45', img: 'vlog-ch6.jpg', d: 'The convoy briefing on the Red Rock roof, then the night drive with the route strip ticking from 215 to level 9.' },
+    { a: 147.97, b: 170.02, n: 'The Verdict', clock: '23:33', img: 'vlog-ch7.jpg', d: 'Egnyte on the day: wonderful, good time, awesome, amazing, good experience. "Man, today was a hell of a day."' },
+    { a: 170.02, b: 174.508, n: 'End card', clock: '', img: 'vlog-end.jpg', d: 'TEXT OR DM TO BOOK, (725) 425-3583, the site and handle, and RENTERS 25+ · AGES 21–24 WITH $299 UNDERAGE FEE.' }
+  ];
+  var vvid = document.getElementById('vvid');
+  function vseek(t) {
+    try { vvid.currentTime = t; var p = vvid.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {}
+    document.getElementById('vframe').scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  var vbar = document.getElementById('vtlbar');
+  VCH.forEach(function (c, i) {
+    var el = document.createElement('div');
+    var edge = (i === 0 || i === VCH.length - 1);
+    el.className = 'seg' + (edge ? ' gap' : ' hot');
+    el.style.width = ((c.b - c.a) / VTOTAL * 100) + '%';
+    el.textContent = edge ? '' : String(i);
+    el.title = c.n + (c.clock ? ' · ' + c.clock : '') + ' · ' + c.a.toFixed(1) + '–' + c.b.toFixed(1) + ' s';
+    el.addEventListener('click', function () { vseek(c.a + 0.2); });
+    vbar.appendChild(el);
+  });
+  var vscale = document.getElementById('vtlscale');
+  [0, 30, 60, 90, 120, 150, 174.5].forEach(function (t) {
+    var sp = document.createElement('span');
+    sp.style.left = (t / VTOTAL * 100) + '%';
+    sp.textContent = t === 174.5 ? '2:55' : (Math.floor(t / 60) + ':' + ('0' + (t % 60)).slice(-2));
+    vscale.appendChild(sp);
+  });
+  var vph = document.getElementById('vplayhead');
+  vvid.addEventListener('timeupdate', function () {
+    var d = vvid.duration || VTOTAL;
+    vph.style.left = Math.min(100, vvid.currentTime / d * 100) + '%';
+  });
+  var vlist = document.getElementById('vchapters');
+  VCH.forEach(function (c) {
+    var li = document.createElement('li');
+    var b = document.createElement('button');
+    b.type = 'button';
+    var m = Math.floor(c.a / 60), s = Math.floor(c.a % 60);
+    b.innerHTML = '<img src="media/' + c.img + '" alt="' + c.n + '" loading="lazy">' +
+      '<span class="ch-clock">' + (c.clock || '—') + '</span>' +
+      '<span><span class="ch-t">' + m + ':' + ('0' + s).slice(-2) + ' IN THE VLOG</span><span class="ch-name">' + c.n + '</span><span class="ch-d">' + c.d + '</span></span>';
+    b.addEventListener('click', function () { vseek(c.a + 0.2); });
+    li.appendChild(b); vlist.appendChild(li);
+  });
+  function toggleZones(btnId, zonesId) {
+    var btn = document.getElementById(btnId), z = document.getElementById(zonesId);
+    btn.addEventListener('click', function () {
+      z.hidden = !z.hidden;
+      btn.setAttribute('aria-pressed', String(!z.hidden));
+      btn.textContent = z.hidden ? 'Show safe zones' : 'Hide safe zones';
+    });
+  }
+  toggleZones('vzoneBtn', 'vzones');
+  var vsound = document.getElementById('vsoundBtn');
+  vsound.addEventListener('click', function () {
+    vvid.muted = !vvid.muted;
+    if (!vvid.muted) { var p = vvid.play(); if (p && p.catch) p.catch(function () {}); }
+  });
+  vvid.addEventListener('volumechange', function () {
+    vsound.setAttribute('aria-pressed', String(!vvid.muted));
+    vsound.textContent = vvid.muted ? 'Sound on' : 'Sound off';
+  });
+
+  // ---------- Vlog kit ----------
+  var KIT = [
+    { g: 'A', gn: 'SE banner', items: [
+      ['A1', 'Corner bug', 'The approved top-right bug, refined, with a gold glint and a live dot.'],
+      ['A2', 'Edge tab', 'A slim right-edge tab: SE mark, vertical label, gold progress rail. The stripe stays horizontal.', 1],
+      ['A3', 'Breathing banner', 'A small tile that opens out with the chapter name at each chapter change, then closes.'] ] },
+    { g: 'B', gn: 'People', items: [
+      ['B1', 'Name lock', 'Brackets on the host’s face with OMARIE / @NQ.YOUNG.', 1],
+      ['B2', 'Reticle', 'A circular lock ring round the face with a compact tag.'],
+      ['B3', 'Guest lock', 'Full-body brackets with a scan line and EGNYTE GUEST.'] ] },
+    { g: 'C', gn: 'Cars', items: [
+      ['C1', 'Convoy hop', 'Brackets jump car to car with a counter and the make, as the cars are named.', 1],
+      ['C2', 'Lineup scan', 'A beam numbers every car in the lineup.'],
+      ['C3', 'Lead-car lock', 'LEAD CAR · ROLLS-ROYCE CULLINAN with "I’ll be leading everybody".', 1] ] },
+    { g: 'D', gn: 'Clock', items: [
+      ['D1', 'Clock stamp', 'The camera’s own clock ticking, with the place and the date.', 1],
+      ['D2', 'Time jump', 'Slot-reel digits roll between two real clip times.'] ] },
+    { g: 'E', gn: 'Route', items: [
+      ['E1', 'Corner route', 'The guide’s route with the active stop pulsing. The vlog runs it as a strip across the top.', 1],
+      ['E2', 'Full-frame route', 'The same route across the frame, ending with LEVEL 9 blooming.'] ] },
+    { g: 'F', gn: 'Quotes', items: [
+      ['F1', 'Quote card', 'Words reveal one by one with a live audio meter. Used for Omarie’s pick of the fleet.', 1],
+      ['F2', 'Q&A split', 'Host question on top, guest answer below.'] ] },
+    { g: 'G', gn: 'Chapter titles', items: [
+      ['G1', 'Chapter slam', 'The title slams in with the gold stripe wipe and a small camera punch.', 1],
+      ['G2', 'Glass slam', 'The title on a frosted panel, for busy shots.'] ] },
+    { g: 'H', gn: 'Captions', items: [
+      ['H1', 'Boxed captions', 'The spoken word gets a gold box.', 1],
+      ['H2', 'Speaker strip', 'Words pop on one at a time with the speaker’s tab.'] ] },
+    { g: 'I', gn: 'Transitions', items: [
+      ['I1', 'Gold light sweep', 'A gold sweep across each chapter change.', 1],
+      ['I2', 'Lock lost', 'Brackets read LOCK LOST as a car leaves, then snap onto the next.', 1],
+      ['I3', 'Whip pan', 'A whip-pan transition from the existing helper.'] ] }
+  ];
+  var groups = document.getElementById('kitgroups');
+  KIT.forEach(function (grp) {
+    var wrap = document.createElement('div');
+    var h = document.createElement('div');
+    h.className = 'group-h';
+    h.innerHTML = '<b>' + grp.g + '</b><span>' + grp.gn + '</span>';
+    var grid = document.createElement('div');
+    grid.className = 'kitgrid';
+    grp.items.forEach(function (it) {
+      var c = document.createElement('div');
+      c.className = 'kit' + (it[3] ? ' used' : '');
+      c.innerHTML = '<img src="media/kit/' + it[0] + '.jpg" alt="' + it[0] + ' ' + it[1] + ' mockup" loading="lazy">' +
+        '<div class="code">' + it[0] + (it[3] ? '<small>IN THE VLOG</small>' : '') + '</div>' +
+        '<div class="kn">' + it[1] + '</div><p>' + it[2] + '</p>';
+      grid.appendChild(c);
+    });
+    wrap.appendChild(h); wrap.appendChild(grid); groups.appendChild(wrap);
+  });
 
   // Checklist, remembered per viewer only.
   var boxes = Array.prototype.slice.call(document.querySelectorAll('#checks input'));

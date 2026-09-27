@@ -108,7 +108,7 @@ def build_scene():
     comps = [dict(c) for c in L['comps']]
     cp = dict(L['captions'])
     comps.append(dict(code='H1', type='captionsBox', t0=cp['t0'], t1=cp['t1'], p=dict(cp['p'], words=caption_words())))
-    # testimonial card words (verbatim, timeline times from captions.json)
+    # quote card words (Omarie, verbatim, timeline times from captions.json)
     for c in comps:
         if c['type'] == 'quoteCard' and 'wordsFrom' in c['p']:
             a, b = c['p'].pop('wordsFrom')
@@ -212,7 +212,7 @@ def sfx_cues(scene):
         elif ty in ('v2cta', 'v2place', 'clockStamp'):
             cue('tickLock', t0 + 0.2, f'{ty} in', -2)
         elif ty == 'quoteCard':
-            cue('whooshRL', t0 + 0.1, 'testimonial card in', -6)
+            cue('whooshRL', t0 + 0.1, "quote card (Omarie's pick) in", -6)
         elif ty == 'v2end':
             cue('hitEnd', t0, 'end card', 0)
     for tr in C['transitions']:

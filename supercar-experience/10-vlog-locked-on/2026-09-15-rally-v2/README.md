@@ -37,8 +37,8 @@ No `_DELIVERY` copy: the master is already 10.95 Mb/s, under the 11.5 Mb/s deliv
 | C3 | **Lead-car lock** (kit C3, climbing lead chevrons): LEAD CAR · ROLLS-ROYCE CULLINAN | 74.9 – 77.0 | tracked |
 | E-CH4 | **Route card** under the CH4 slam: VENETIAN → BLUE DIAMOND → RED ROCK, a comet ticks each stop | 79.3 – 82.8 | panel x 54-907, y 800-1250 |
 | D1 | **Clock + place stamp** (kit D1): 21:39 → 21:40 with the camera's own seconds ticking, LOTUS OF SIAM · RED ROCK CASINO, SEP 15 2026 | 94.35 – 101.65 | top-left |
-| F1 | **Guest testimonial card** (kit F1): EGNYTE GUEST, the guest's words verbatim, word by word, with a live meter driven by the guest's own audio | 101.8 – 110.45 | top, y 340 (the speaker's face is lower in frame) |
-| ROMA | **Lock-on** THE EGNYTE GUEST'S PICK · FERRARI ROMA (on the red colour-shift coupe once the camera turns to the garage) | 106.35 – 108.25 | tracked, label below |
+| F1 | **Host's pick card** (kit F1 quote card): header tab FAVOURITE OF THE FLEET, label OMARIE · @NQ.YOUNG, Omarie's words verbatim, word by word, with a live meter driven by their own audio | 101.8 – 110.45 | top, y 340, header tab above its right end (Omarie's face is lower in frame) |
+| ROMA | **Lock-on** OMARIE'S PICK · FERRARI ROMA (on the red colour-shift coupe once the camera turns to the garage) | 106.35 – 108.25 | tracked, label below |
 | PLACE | **Place tag** TEAM DINNER · YARD HOUSE | 110.62 – 116.4 | top-left |
 | E1 | **Route line** (kit E1 language, laid out as a strip): 215 → 15 NORTH → FLAMINGO → LAS VEGAS BLVD → VENETIAN → LEVEL 9. 215 and 15 NORTH flash gold when the guide names them (129.74, 132.37); each stop ticks on its montage shot (135.77, 137.77, 139.77, 141.77, 144.27, 146.27), counter 00 → 06 / 06 | 129.45 – 147.72 | top band y 290-534 (the briefing's faces fill the upper left, so the kit's corner panel would cover them) |
 | D1 | **Rolling camera clock** 23:00:08 → 23:20:06, BACK TO THE VENETIAN (each montage shot shows its own real time) | 135.9 – 147.7 | bottom-left |
@@ -64,16 +64,16 @@ Every in / out time and how each anchor was found: `cue.md`. All copy lives in `
 | SAFELY. | Omarie's own word ("That's our number one thing. Safely."), on the word |
 | LOCKED ON · AUDI R8 | Omarie: "you'll get the R8… the R8, Audi R8"; the car on screen |
 | LEAD CAR · ROLLS-ROYCE CULLINAN | Omarie: "I am in the all black Cullinan. I'll be leading everybody." |
-| THE ROUTE · VENETIAN → BLUE DIAMOND → RED ROCK | the brief (CH4 route card) |
+| THE ROUTE · VENETIAN → BLUE DIAMOND → RED ROCK | the brief, and Omarie on camera: "straight up Blue Diamond into Red Rock Loop" (0015, about 6:43), named again in 0019 and 0022 (CH4 route card) |
 | 21:39:xx · LOTUS OF SIAM · RED ROCK CASINO · SEP 15 2026 | the iPhone clip's clock (P2139a, 21:39:36); Omarie: "I'm going to go down to Lotus of Siam"; the brief |
-| EGNYTE GUEST + the testimonial words | the guest's own words, verbatim from the audio in the cut (captions.json), word by word; "…" marks where the edit drops words ("maybe", and the rest of the last sentence). No guest names |
-| THE EGNYTE GUEST'S PICK · FERRARI ROMA | the guest: "Out of all those cars, I would say … the Roma" |
+| FAVOURITE OF THE FLEET · OMARIE · @NQ.YOUNG + the quote | Omarie's own words (0021, the selfie at the Red Rock table, answering a guest's question about their favourite car), verbatim from the audio in the cut (captions.json), word by word; "…" marks where the edit drops words ("maybe", and the rest of the last sentence). Handle: the approved follow card |
+| OMARIE'S PICK · FERRARI ROMA | Omarie: "Out of all those cars, I would say … the Roma" |
 | TEAM DINNER · YARD HOUSE | Omarie: "We are currently eating at Yard House."; the brief |
 | THE ROUTE · 215 → 15 NORTH → FLAMINGO → LAS VEGAS BLVD → VENETIAN → LEVEL 9 | the guide's briefing ("take 215 out of here… to the 15 North") and the brief; 215 and 15 NORTH flash when the guide says them |
 | 23:00:xx → 23:20:xx · BACK TO THE VENETIAN | the camera clock of each montage shot (0032, 23:00:03 + in-point); Omarie: "We're gonna go back to the Venetian" |
 | FOLLOW THAT CAR · LAMBORGHINI URUS | the guide: "look at what car is in front of you. Follow that car."; the purple Urus ahead |
 | EGNYTE ON THE DAY + WONDERFUL · GOOD TIME · AWESOME · AMAZING · GOOD EXPERIENCE | the guests' own words in CH7 (captions.json), each stacked as it is said; header wording: Omarie, 27 Sept |
-| Captions | captions.json (corrected word timings), active word in gold; hidden while the SAFELY. slam, the testimonial card or the quote wall already shows the same words. "Ignite" (a Whisper mishearing of Egnyte) would be corrected to "Egnyte"; none of the pieces in the cut contains it |
+| Captions | captions.json (corrected word timings), active word in gold; hidden while the SAFELY. slam, the host's pick card or the quote wall already shows the same words. "Ignite" (a Whisper mishearing of Egnyte) would be corrected to "Egnyte"; none of the pieces in the cut contains it |
 | End card: A RIDE OF A LIFETIME. · TEXT OR DM TO BOOK · (725) 425-3583 · SUPERCAREXP.VIP · @SUPERCAR_EXPERIENCE_ · LAS VEGAS · SCOTTSDALE · BOISE · RENTERS 25+ · AGES 21–24 WITH $299 UNDERAGE FEE · FILMED BY @NQ.YOUNG | the approved rally layer's end card (`../2026-09-15-rally/README.md` has every source) |
 
 No speeds, horsepower, prices (other than the site's underage fee on the end card), guest names or Formula Dynamics marks
@@ -113,7 +113,7 @@ the audio where a neighbouring word leaked in (pieces 1, 2, 17, 18: the tail of 
 **Nat.** Under the B-roll: the cold-open shots, the CH1 shop, the CH3 arrivals, the R8, the timelapse (0016 60–64 s, in the
 car), the dinner montage (each clip's own room sound, in sync with its picture) and the convoy montage (0032 5–18 s), levelled
 per clip and ducked 10 dB under speech. Five B-roll clips whose own audio has someone else talking over the dialog were left
-silent (0010 34 s, 0004 47 s, 0015 163 s, 0025 36 s, 0005 55 s: "apparently Roma pulling in" would talk over the guest).
+silent (0010 34 s, 0004 47 s, 0015 163 s, 0025 36 s, 0005 55 s: "apparently Roma pulling in" would talk over Omarie's Roma line).
 
 **Locked-On accents** (the SE-LO pack, `10-motion-sfx/locked-on-sfx/`): the open hit on frame 0, whooshes on every whip, the
 banner slide, the sweeps and the cards, a drop hit on each chapter slam and on SAFELY., acquire/lock ticks on every lock-on,
@@ -180,7 +180,7 @@ the rendered shots) → `join` (transitions, plate blurs, punches → `.work/pla
 | `config.json` | paths, per-shot reframe / look / ramp, source slips, transitions, plate blurs, clocks, tracks, music slot, audio levels, every on-screen element |
 | `cue.md` | every element and transition with its in / out and how it was placed |
 | `story.html` | the layer page: `window.renderAt(t)`, a pure function of t |
-| `lib/sekit.js` | the vlog kit's component library, copied from `../vlog-kit/lib/sekit.js` (27 Sept, 03:27). Four changes, each marked `rally-v2 copy`: more internal helpers are exported (`SEK.helpers`); an accented capital (HURACÁN) sits on the H cap height instead of pushing its word down; the G1 slam exit lifts 0.35 cap and fades (it used to travel 1.2 caps up, out of the safe area); in the C1 hop, a LOCK LOST phase whose next car is not tracked yet (still out of frame) holds on the last car's rect instead of hiding the whole lock |
+| `lib/sekit.js` | the vlog kit's component library, copied from `../vlog-kit/lib/sekit.js` (27 Sept, 03:27). Five changes, each marked `rally-v2 copy`: more internal helpers are exported (`SEK.helpers`); an accented capital (HURACÁN) sits on the H cap height instead of pushing its word down; the G1 slam exit lifts 0.35 cap and fades (it used to travel 1.2 caps up, out of the safe area); in the C1 hop, a LOCK LOST phase whose next car is not tracked yet (still out of frame) holds on the last car's rect instead of hiding the whole lock; the F1 quote card takes an optional small header tab (FAVOURITE OF THE FLEET) |
 | `lib/v2kit.js` | this vlog's own components (hook, CTA chip, SAFELY. slam, route card / route panel, place tag, quote wall, car lock, end card) |
 | `lib/plate.py` | the picture edit and grade |
 | `lib/music.py`, `lib/mix.py` | the placeholder music bed and the mix |
@@ -201,8 +201,10 @@ the rendered shots) → `join` (transitions, plate blurs, punches → `.work/pla
 4. **Four dialog edges** moved by 0.015–0.13 s where a neighbouring syllable leaked in (see Sound).
 5. **The Roma lock-on** comes when the camera turns to the garage (106.35 s), not on the word "Roma" (104.5 s): before that
    the shot is inside a car. The red coupe is the Roma; the black car in front of it is an R8.
-6. **Testimonial card:** "…" marks where the edit drops words ("I would say … the Roma": the guest said "maybe"; the last
-   sentence runs on past the cut). Card and lock say EGNYTE GUEST, per Omarie.
+6. **Host's pick card:** the CH5 Roma quote is Omarie (0021, pondering through the pause), not a guest, so the card is their
+   pick (FAVOURITE OF THE FLEET, OMARIE · @NQ.YOUNG) and the lock says OMARIE'S PICK (review, 27 Sept). "…" marks where
+   the edit drops words ("I would say … the Roma": Omarie said "maybe"; the last sentence runs on past the cut). The kit's
+   F1 card has no header slot; my copy of `lib/sekit.js` adds an optional one (marked `rally-v2 copy`).
 7. **Plate blurs** added (not in the brief; the approved v1 cut blurred plates).
 8. **Nat audio** of five B-roll clips muted because someone else talks over the dialog in them.
 9. **Accents** are 45 % of the unducked music, then a further 6 dB down under speech (so ticks never step on words).
@@ -221,13 +223,10 @@ the rendered shots) → `join` (transitions, plate blurs, punches → `.work/pla
 1. **Listen before posting.** All sound checks are numeric (loudness, true peak, the duck under every piece, stem balance,
    spectrum). Nobody has listened: mainly the music bed (a placeholder Omarie may replace), the far-mic briefing (lifted
    +16/+17 dB, so its room noise comes up too) and the piece edges listed above.
-2. **The testimonial speaker wears a Formula Dynamics shirt** (0021). The EDL and Omarie's note call the speaker a guest (EGNYTE
-   GUEST on the card). Worth a glance that the speaker is an Egnyte guest, not crew.
-3. **CORVETTE Z06, HURACÁN EVO** are read from the cars' fronts and Omarie's own naming ("Corvette, Huracán EVOs"); if
+2. **CORVETTE Z06, HURACÁN EVO** are read from the cars' fronts and Omarie's own naming ("Corvette, Huracán EVOs"); if
    either is a different trim, change `make` in `config.json` `C1.segs` (MAKE only, e.g. CHEVROLET CORVETTE, is the safe fallback).
-4. **The "Black Series" Omarie names first is not in frame** when they say it (30.1 s), so the hop starts on the Urus they
+3. **The "Black Series" Omarie names first is not in frame** when they say it (30.1 s), so the hop starts on the Urus they
    name next; the orange AMG GT Black Series gets its own lock when the walk reaches it (36.57 s, CAR 04 / 06). Its lock is
    0.6 s (it shares the frame with the GT3 RS, which takes the next 0.6 s on the word "GT3s").
-5. **BLUE DIAMOND** on the CH4 route card comes from the brief; nothing on camera names that road.
-6. **Music rights:** the bed is original (synthesised here). If Omarie picks a track, see Sound → Swap it.
+4. **Music rights:** the bed is original (synthesised here). If Omarie picks a track, see Sound → Swap it.
 

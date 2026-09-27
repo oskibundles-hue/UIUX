@@ -1130,6 +1130,14 @@
     const M = meter(pn.inner, W - 40 - 14 * 11 + 4, 26, 14, 7, 4, 34);
     const Q = quoteBuild(pn.inner, words, 54, 92, W - 110, 68, 74);
     const ft = line(pn.inner, 'Michroma', 14, p.footer, 54, H - 38, 'rgba(255,255,255,.62)', { ls: 0.14, dots: GOLD });
+    // rally-v2 copy: optional small header tab over the card's right end (clear of the big quote mark), styled like
+    // the quote wall's header
+    let hd = null, hdl = null;
+    if (p.header) {
+      const hW = Math.ceil(ink('Michroma', 17, p.header, 0.2).w + 56);
+      hd = panel(root, X + W - hW, p.y - 56 - 10, hW, 56, { stripe: 5 });
+      hdl = line(hd.inner, 'Michroma', 17, p.header, 28, 23, GOLD, { ls: 0.2 });
+    }
     const lastT = words[words.length - 1].t;
     return { code: cfg.code, render(t) {
       const on = t >= cfg.t0 && t < cfg.t1; show(root, on); if (!on) return;
@@ -1138,6 +1146,7 @@
       qm.w.style.opacity = (cl(qq) * (1 - qqo)).toFixed(3);
       qm.w.style.transform = `translateY(${(30 * (1 - qq)).toFixed(2)}px) scale(${(0.6 + 0.4 * qq).toFixed(4)})`;
       KT.track(lb.g, t, { start: cfg.t0 + 0.2, dur: 0.34, spread: 1.7 });
+      if (hd) { panelAt(hd, t, cfg.t0 + 0.08, p.exit, { din: 0.3 }); KT.track(hdl.g, t, { start: cfg.t0 + 0.26, dur: 0.34, spread: 1.8 }); }
       liveDotAt(dot, t, cfg.t0 + 0.3, 1.0);
       const speaking = t >= p.start - 0.1 && t < lastT + 0.5 ? 1 : 0.15;
       meterAt(M, t, CTX.data(p.meter), cfg.t0, E.outCubic(P(t, cfg.t0 + 0.3, cfg.t0 + 0.6)) * speaking * (1 - qqo));

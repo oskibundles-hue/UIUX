@@ -314,7 +314,7 @@ def master(x, target, ceiling):
 
 
 def meter_table(dialog, t0, t1, bands=14):
-    """14-band level envelope of the dialog bus (the guest speaking) for the testimonial card's meter."""
+    """14-band level envelope of the dialog bus (Omarie speaking) for the quote card's meter."""
     x = dialog[int(t0 * SR):int(t1 * SR)].mean(1)
     hop = SR / FPS; n = int(len(x) / hop) - 1
     edges = np.geomspace(120, 7000, bands + 1)
@@ -379,7 +379,7 @@ def main():
     rep['duck_check'] = chk
     for nm, x in (('stem_nat', nat), ('stem_music', music), ('stem_sfx', sfx)):
         write_wav24(os.path.join(WORK, nm + '.wav'), x * 0.5)
-    # meter data for the testimonial card
+    # meter data for the quote card (Omarie's pick)
     tc = CFG['layer']['testimonial']
     json.dump(meter_table(dialog, tc['t0'], tc['t1']), open(os.path.join(WORK, 'meter.json'), 'w'))
     rep['master'] = dict(lufs=round(L1, 2), true_peak_db=round(tp1, 2), nomusic_lufs=round(L2, 2), nomusic_true_peak_db=round(tp2, 2),

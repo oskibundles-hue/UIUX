@@ -976,7 +976,7 @@
     "t0": 101.8,
     "t1": 110.45,
     "p": {
-     "label": "EGNYTE GUEST",
+     "label": "OMARIE · @NQ.YOUNG",
      "wordsFrom": [
       101.7,
       110.5
@@ -994,7 +994,8 @@
      "meter": "meter",
      "y": 340,
      "placeholder": false,
-     "start": 101.82
+     "start": 101.82,
+     "header": "FAVOURITE OF THE FLEET"
     }
    },
    {
@@ -1004,7 +1005,7 @@
     "t1": 108.25,
     "p": {
      "track": "roma",
-     "kicker": "THE EGNYTE GUEST'S PICK",
+     "kicker": "OMARIE'S PICK",
      "name": "FERRARI ROMA",
      "acquire": 106.35,
      "exit": 107.92,
@@ -1187,7 +1188,7 @@
    [
     101.7,
     110.52,
-    "testimonial card shows the guest's words"
+    "host's pick card shows Omarie's words"
    ],
    [
     150.8,
