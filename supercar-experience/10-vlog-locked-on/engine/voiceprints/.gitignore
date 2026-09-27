@@ -1,0 +1,2 @@
+# a voiceprint is biometric data about a person: keep it out of git
+*.npy
