@@ -12,9 +12,9 @@ components. **Status: not reviewed yet.**
 
 | File | What |
 |---|---|
-| `… - 1080x1920.mp4` | **the master.** H.264 High, yuv420p bt709, 1080x1920, 29.97 fps, two-pass 10.95 Mb/s, AAC-LC 48 kHz stereo 256k, +faststart, **238.8 MB**. 5230 frames = 174.508 s; video / audio tracks 174.508 / 174.507 s. Loudness on the mp4 (ffmpeg loudnorm): **-14.11 LUFS integrated, -1.58 dBTP true peak**, LRA 3.0; the last 102 ms decode to digital silence |
-| `… - NO MUSIC - 1080x1920.mp4` | the same picture stream with dialog + nat + SFX only (for a trending sound in Instagram): 227.4 MiB, -14.06 LUFS, -1.88 dBTP |
-| `… - PREVIEW 720x1280.mp4` | phone preview, two-pass 1.15 Mb/s, AAC 160k (the mix 0.5 dB lower so AAC holds the true peak): **27.5 MiB** (< 30 MiB), -14.63 LUFS, -1.61 dBTP |
+| `… - 1080x1920.mp4` | **the master.** H.264 High, yuv420p bt709, 1080x1920, 29.97 fps, two-pass 10.95 Mb/s, AAC-LC 48 kHz stereo 256k, +faststart, **238.8 MB**. 5230 frames = 174.508 s; video / audio tracks 174.508 / 174.507 s. Loudness on the mp4 (ffmpeg loudnorm): **-14.11 LUFS integrated, -1.82 dBTP true peak**, LRA 3.0; the last 101 ms decode to digital silence |
+| `… - NO MUSIC - 1080x1920.mp4` | the same picture stream with dialog + nat + SFX only (for a trending sound in Instagram): 227.4 MiB, -14.06 LUFS, -1.89 dBTP |
+| `… - PREVIEW 720x1280.mp4` | phone preview, two-pass 1.15 Mb/s, AAC 160k (the mix 0.5 dB lower so AAC holds the true peak): **27.5 MiB** (< 30 MiB), -14.63 LUFS, -2.05 dBTP |
 | `… - music-stem.wav` | the music alone, exactly as it sits in the master (ducked, at the master's gain), 24-bit 48 kHz, 50 MB |
 | `poster.jpg`, `contact-sheet.jpg` | frame 0 (the complete hook: the story preview) and one frame every 2 s |
 | `qa/` | first / middle / last frame of every EDL beat (`beat_*`), in / middle / out of every graphic (`el_*`), `beats-sheet.jpg`, `elements-sheet.jpg`, `shots-sheet.jpg` (every shot's first / middle / last frame: the grade check), the tracker sheets `track_*.jpg`, and `qa_summary.json` |
@@ -122,7 +122,7 @@ music's unducked RMS over the accent's own energetic span and ducked a further 6
 `cue.md`).
 
 **Master:** sum → 30 Hz high-pass → 4x-oversampled true-peak limiter at -2.0 dBTP → gain iterated to -14.0 LUFS (BS.1770 in
-numpy), the last 60 ms exact zeros. On the delivered master: -14.11 LUFS integrated, -1.58 dBTP true peak, the last 102 ms exact zeros. Caption sync (`qa_summary.json` `caption_sync`): per caption piece the lag that best lines the caption word mask up with the speech-band energy of the dialog in the mix is +20 ms (median over 31 pieces, largest 160 ms, which is Whisper's own word-timing spread); the captions and the audio use the same source-to-timeline mapping, including the four trimmed edges.
+numpy), the last 60 ms exact zeros. On the delivered master: -14.11 LUFS integrated, -1.82 dBTP true peak, the last 101 ms exact zeros. Caption sync (`qa_summary.json` `caption_sync`): per caption piece the lag that best lines the caption word mask up with the speech-band energy of the dialog in the mix is +20 ms (median over 31 pieces, largest 160 ms, which is Whisper's own word-timing spread); the captions and the audio use the same source-to-timeline mapping, including the four trimmed edges.
 
 ## Picture
 

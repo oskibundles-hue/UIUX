@@ -23,7 +23,7 @@ Timeline: 5230 frames at 30000/1001 fps = 174.508 s. Frame n is shown at n x 100
 | 14 | 51.59 | 1546-1620 | 0013 | 73.09-75.56 (1x) | garage | c centre s 1.0-1.04 |  |
 | 15 | 54.09 | 1621-1713 | 0013 | 387.90-390.97 (1x) | garage | c centre s 1.0-1.04 | sweep 0.36 s |
 | 16 | 57.19 | 1714-1791 | 0015 | 2.00-4.57 (1x) | garage | c centre s 1.0-1.04 |  |
-| 17 | 59.79 | 1792-1863 | 0015 | 340.00-342.37 (1x) | garage | c centre s 1.0-1.04 |  |
+| 17 | 59.79 | 1792-1863 | 0015 | 341.36-343.14 (0.75x, slipped from the EDL 340.00 s at 1x (config `slips`)) | garage | c centre s 1.0-1.04 |  |
 | 18 | 62.19 | 1864-1923 | 0013 | 962.01-963.97 (1x) | garage | c centre s 1.0-1.04 |  |
 | 19 | 64.19 | 1924-2028 | 0013 | 757.11-760.58 (1x) | garage | c centre s 1.0-1.04 |  |
 | 20 | 67.69 | 2029-2088 | 0015 | 89.01-90.98 (1x) | garage | c centre s 1.0-1.04 |  |
@@ -80,14 +80,14 @@ Timeline: 5230 frames at 30000/1001 fps = 174.508 s. Frame n is shown at n x 100
 | I1 | sweep | 116.61 | 116.97 |   |
 | I1 | sweep | 147.77 | 148.13 |   |
 | B1 | personLock | 9.20 | 11.35 | OMARIE track host_ch1, acquire 9.2, exit 11.05 |
-| C1 | convoyHop | 30.90 | 40.80 | CAR LAMBORGHINI URUS @30.96 / CORVETTE Z06 @32.97 / LAMBORGHINI HURACÁN EVO @35.08 / PORSCHE 911 GT3 RS @36.73 / ROLLS-ROYCE CULLINAN @38.64 |
+| C1 | convoyHop | 30.90 | 40.80 | CAR LAMBORGHINI URUS @30.96 / CORVETTE Z06 @32.3 / LAMBORGHINI HURACÁN EVO @35.08 / MERCEDES-AMG GT BLACK SERIES @35.86 / PORSCHE 911 GT3 RS @37.18 / ROLLS-ROYCE CULLINAN @37.8 |
 | CTA | v2cta | 45.15 | 54.00 | TEXT OR DM TO BOOK  |
 | SLAM | v2slam | 63.54 | 64.62 | SAFELY.  |
 | R8 | v2lock | 67.80 | 69.50 | AUDI R8 track r8, acquire 67.85, exit 69.15 |
 | C3 | leadLock | 74.88 | 77.00 | ROLLS-ROYCE CULLINAN track cullinan_lead, acquire 74.9, exit 76.6 |
 | E-CH4 | v2routeCard | 79.30 | 82.80 | THE ROUTE VENETIAN → BLUE DIAMOND → RED ROCK | first 79.75 | steps 1@80.95, 2@82.05 |
 | D1-DINNER | clockStamp | 94.35 | 101.65 |   |
-| F1 | quoteCard | 101.80 | 110.45 | EGNYTE GUEST  |
+| F1 | quoteCard | 101.80 | 110.45 | OMARIE · @NQ.YOUNG  |
 | ROMA | v2lock | 106.30 | 108.25 | FERRARI ROMA track roma, acquire 106.35, exit 107.92 |
 | PLACE | v2place | 110.62 | 116.40 | YARD HOUSE  |
 | E1 | v2route | 129.45 | 147.72 | THE ROUTE 215 → 15 NORTH → FLAMINGO → LAS VEGAS BLVD → VENETIAN → LEVEL 9 | first 135.77 | steps 1@137.77, 2@139.77, 3@141.77, 4@144.27, 5@146.27 |
@@ -95,7 +95,7 @@ Timeline: 5230 frames at 30000/1001 fps = 174.508 s. Frame n is shown at n x 100
 | URUS | v2lock | 141.90 | 144.20 | LAMBORGHINI URUS track urus_strip, acquire 141.95, exit 143.9 |
 | WALL | v2wall | 150.55 | 161.50 | EGNYTE ON THE DAY WONDERFUL@150.84, GOOD TIME@152.16, AWESOME@156.07, AMAZING@156.85, GOOD EXPERIENCE@160.62 |
 | END | v2end | 170.02 | 174.52 |   |
-| H1 | captionsBox | 4.0 | 170.02 | every caption word; hidden: 63.6-64.2 (SAFELY. slam shows the word); 101.7-110.52 (testimonial card shows the guest's words); 150.8-152.5 (quote wall); 154.9-157.45 (quote wall); 160.5-161.45 (quote wall) |
+| H1 | captionsBox | 4.0 | 170.02 | every caption word; hidden: 63.6-64.2 (SAFELY. slam shows the word); 101.7-110.52 (host's pick card shows Omarie's words); 150.8-152.5 (quote wall); 154.9-157.45 (quote wall); 160.5-161.45 (quote wall) |
 
 ## Tracks (lib/track_mid.py from a sharp anchor frame, both ways; output frames, output px)
 
@@ -117,6 +117,7 @@ Timeline: 5230 frames at 30000/1001 fps = 174.508 s. Frame n is shown at n x 100
 | r8 | 20 | 2029-2078 | 2034 | [470, 985, 570, 380] | 0.82 / 0.91 |
 | cullinan_lead | 23 | 2243-2306 | 2262 | [20, 760, 620, 380] | 0.86 / 0.90 |
 | plate_level9_urus | 46 | 4386-4440 | 4395 | [428, 1030, 76, 44] | 0.97 / 0.99 |
+| lineup_amg | 11 | 1090-1150 | 1119 | [90, 828, 395, 140] | 0.39 / 0.85 |
 
 ## Licence-plate blurs
 
@@ -173,7 +174,7 @@ Music: original synth bed (lib/music.py), no music.wav supplied (105.1095 BPM, f
 | 0032 | 100.0-101.0 | 6.0 | -0.9 dB |
 | 0010 | 12.0-15.0 | 16.3 | -8.7 dB |
 | 0015 | 2.0-4.6 | 57.19 | -18.9 dB |
-| 0015 | 340.0-342.4 | 59.79 | -19.6 dB |
+| 0015 | 340.8-343.2 | 59.79 | -19.5 dB |
 | 0013 | 962.0-964.0 | 62.19 | -19.5 dB |
 | 0015 | 89.0-91.0 | 67.69 | -19.3 dB |
 | P2245 | 5.0-11.1 | 116.61 | -15.6 dB |
@@ -199,10 +200,11 @@ Music: original synth bed (lib/music.py), no music.wav supplied (105.1095 BPM, f
 | SE-LO_02_hit_drop.wav | 26.24 | chapter slam THE LINEUP | -26.6 dB (-6.0) |
 | SE-LO_10_tick_acquire.wav | 30.96 | convoy lock acquire | -20.3 dB (-6.0) |
 | SE-LO_11_tick_lock.wav | 31.22 | convoy lock | -24.5 dB (-6.0) |
-| SE-LO_11_tick_lock.wav | 33.27 | convoy hop 2 | -21.3 dB (-6.0) |
+| SE-LO_11_tick_lock.wav | 33.33 | convoy re-lock 2 | -25.3 dB (-6.0) |
 | SE-LO_11_tick_lock.wav | 35.38 | convoy hop 3 | -16.2 dB (-6.0) |
-| SE-LO_11_tick_lock.wav | 37.03 | convoy hop 4 | -22.6 dB (-6.0) |
-| SE-LO_11_tick_lock.wav | 38.94 | convoy hop 5 | -25.5 dB (-6.0) |
+| SE-LO_11_tick_lock.wav | 36.87 | convoy re-lock 4 | -17.4 dB (-6.0) |
+| SE-LO_11_tick_lock.wav | 37.48 | convoy hop 5 | -29.1 dB (-6.0) |
+| SE-LO_11_tick_lock.wav | 38.94 | convoy re-lock 6 | -25.5 dB (-6.0) |
 | SE-LO_11_tick_lock.wav | 45.35 | v2cta in | -27.2 dB (-6.0) |
 | SE-LO_04_whoosh_left_to_right.wav | 54.27 | gold light sweep | -23.5 dB (-6.0) |
 | SE-LO_02_hit_drop.wav | 54.45 | chapter slam EGNYTE ARRIVES | -19.4 dB (-6.0) |
