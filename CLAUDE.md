@@ -2,6 +2,12 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Second brain (Omarie's notes)
+
+Look up facts about Omarie's setup, workstreams (Anti Stock, Formula Dynamics, Supercar Experience), brand specs, formats and standing rules with `python3 .claude/brain/recall.py "<question>"` first (about 0.1 s, no model call). Open notes or files by hand only if it doesn't answer. A hook also runs the lookup on every prompt and adds the matching note when there's a clear match.
+
+The notes are private. They live in the private repo `oskibundles-hue/nq-agent-channel`, folder `brain/`. If recall.py says no notes were found, ask Omarie to attach that repo to the session. Never copy note contents into this public repo.
+
 ## Project Overview
 
 Antigravity Kit is an AI-powered design intelligence toolkit providing searchable databases of UI styles, color palettes, font pairings, chart types, and UX guidelines. It works as a skill/workflow for AI coding assistants (Claude Code, Windsurf, Cursor, etc.).
