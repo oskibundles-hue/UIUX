@@ -193,12 +193,13 @@ _yy = np.arange(fx.H, dtype=np.float32)[:, None, None]
 # graduated ND on the sky, lighter since review r1 (0.40 -> 0.28): with the sky chroma lift below it keeps the
 # roof shot's sky blue instead of slate, so the finale sits in the same world as the cobalt desert day before it
 GRAD = (1 - 0.28 * (1 - _smooth(_yy, 150, 900))).astype(np.float32)
-# end-card ND on the sky: up to 45 % down behind the top block and the price, eased in over the end-card hit, so
-# the gold price reads by luminance, not hue. Review r2: it ramps in from above the frame (the sky stays
-# monotonic: no light stripe over the logo) and fades out 760-820 at the ridge line; it is gated by a GROWN
-# matte (mnd below), so the thin haze rim the type matte calls "hill" is darkened with the sky, not left as a
-# bright outline along the ridge. Chroma is lifted with it, so the held sky stays blue, not slate.
-ECARD_BAND = (_smooth(_yy, -200, 420) * (1 - _smooth(_yy, 760, 820))).astype(np.float32)
+# end-card ND: up to 45 % down behind the top block and the price, eased in over the end-card hit, so the gold
+# price reads by luminance, not hue. It ramps in from above the frame (the sky stays monotonic: no light stripe
+# over the logo) and fades out 690-790, above the car. Final QC: it is a PLAIN graduated ND, not gated by the
+# matte -- any matte gate left the bright horizon haze (keyed as "hill") undarkened as a jagged, torn-paper
+# band along the ridge; a plain grad darkens sky, haze and hilltops together, like a real grad filter, and
+# leaves a natural glow at the horizon. Chroma is lifted on the sky (grown matte), so it stays blue.
+ECARD_BAND = (_smooth(_yy, -200, 420) * (1 - _smooth(_yy, 690, 790))).astype(np.float32)
 SKY_CHROMA = 0.45
 ECARD_CHROMA = 0.5
 CLUSTER = (270, 940, 740, 1095)   # badge shot: the instrument cluster (speed / limit readouts) is defocused
@@ -302,7 +303,7 @@ def base(i):
         t = row['t']
         ke = fx.smootherstep((t - (edl.T_END - 0.12)) / 0.37)
         if ke > 0:
-            img = img * (1 - 0.45 * ke * ECARD_BAND * mnd)
+            img = img * (1 - 0.45 * ke * ECARD_BAND)
             l = fx.luma(img)[..., None]
             img = l + (img - l) * (1 + ECARD_CHROMA * ke * ECARD_BAND * mnd)
         img = light_sweep(img, matte, t)
