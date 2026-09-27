@@ -1,8 +1,16 @@
 # "ROOF DOWN": McLaren 750S Spider, LOCKED ON, 18 s 9:16 story
 
-**Status: DRAFT for Omarie's review. It is not approved and has not been posted anywhere.** It is built to
+**Status: APPROVED for ads (27 Sept 2026) by the requester (Oski), after signing off on every open question
+below. It has not been posted anywhere yet;** each post or ad placement still needs its own go. It is built to
 THE STANDARD for SE ads (`locked-on`, `../HOUSE-STYLE.md` on the SE branch). It started from the approved GT3
 RS showcase's settings and library (`../flash-special-showcase/`, whose `lib/` modules are vendored here).
+
+The approved render (the mp4s are not in git; `python3 build.py` rebuilds them from the source clip):
+
+| File | SHA-256 |
+|---|---|
+| `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-9x16.mp4` (delivery: 11.5 Mb/s, 25.9 MB) | `22ddf49232086eb8d3856fc05760032d2a9385df77acf0c19eb3ee885e2ca544` |
+| `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-9x16_master.mp4` (master: CRF 16, 57.1 MB) | `73762b7c7c59961b0a524b9fe607d65dc2b185336753389145dd1e26f03ba545` |
 
 ![poster](exports/poster.jpg) ![end card](exports/poster-endcard.jpg)
 
@@ -43,26 +51,29 @@ These were the open decisions in the brief. Each default follows the newest appr
 | Offer | the site's standing rates: 5 hours $1,299, full day $1,799 | the 26 Sept flash offers are expired and must not be reposted; a new promo needs Omarie's figures |
 | City and phone | Las Vegas; the text line (725) 425-3583, TEXT OR DM TO BOOK | the approved LV showcase uses this exact line after fix r2. The 5-hour rate exists only on the LV listing |
 | Age line | 25+ with the site's $299 underage-fee wording | Omarie's 26 Sept decision on the rally vlog (newer than the 21+ on the older ads) |
-| Music | the clip's own music | house rule 7 and Omarie ("Keep music as well"). **Its rights are not verified: confirm before any paid use** |
+| Music | the clip's own music | house rule 7 and Omarie ("Keep music as well"). The track is not identified; the requester signed off on its use in ads on 27 Sept 2026 (question 2 below) |
 | Grade | one day grade across all shots | the standard says "one night grade"; this clip is sunlit desert, and a night look would read fake and break the sky key. The point of the rule (one cohesive look) is kept |
-| Delivery | the files are sent to the requester only | nothing is posted and nothing is uploaded to Dropbox without a per-action go |
+| Delivery | the files are sent to the requester only | nothing is posted and nothing is uploaded to Dropbox without a per-action go (approval for ads does not change this) |
 
-**Questions for Omarie before this runs:**
+**Questions that were open before this ran** (all signed off by the requester on 27 Sept 2026, with the ad
+kept exactly as built):
 1. The footage is Arizona desert (saguaros at 0-1.0 s including the poster frame, 1.5-2.9 s, 7.0-7.5 s and
    8.4-9.8 s), and the ad says LAS VEGAS.
    The site's own Las Vegas listing uses this reel, so the ad makes no false claim. A local viewer may still
    notice. Is that OK? If not, those shots can be swapped for saguaro-free takes from the same clip.
+   **Answer: OK as built.**
 2. Is the clip's music cleared for paid use? It came with SE's footage, but the track is not identified.
-3. Should INSURANCE read FULL COVERAGE INSURANCE, to match the listing's wording?
+   **Answer: signed off for ads.**
+3. Should INSURANCE read FULL COVERAGE INSURANCE, to match the listing's wording? **Answer: INSURANCE stays.**
 
 ## Sound
 
 The bed is the clip's own music from orig 0.000, with no edit and no time-stretch. The picture is cut to its
-130 BPM grid, and the accents sit at 45 % under it (`audio/bed.py`, `audio/bed_sync.json`). **Nobody has
-listened to it yet; all audio checks were numeric** (loudness, peaks, band energy, the tape-stop pocket).
-Before posting, Omarie should listen on a phone speaker and on headphones, mainly to the drop at 4.73 s, the
-tape stop at 13.50 s and the end-card hit at 13.96 s. The master bed is -14.0 LUFS / -2.6 dBTP; the delivered
-AAC measures -14.1 LUFS / -2.7 dBTP (`exports/qa/qa_summary.json`).
+130 BPM grid, and the accents sit at 45 % under it (`audio/bed.py`, `audio/bed_sync.json`). The build's own
+audio checks were all numeric (loudness, peaks, band energy, the tape-stop pocket). The listening check
+(phone speaker and headphones, mainly the drop at 4.73 s, the tape stop at 13.50 s and the end-card hit at
+13.96 s) was left to the requester, who signed the ad off on 27 Sept 2026. The master bed is -14.0 LUFS /
+-2.6 dBTP; the delivered AAC measures -14.1 LUFS / -2.7 dBTP (`exports/qa/qa_summary.json`).
 
 ## Review round 1 (four lenses: claims, brand, legibility, craft; each finding re-checked by a skeptic)
 
