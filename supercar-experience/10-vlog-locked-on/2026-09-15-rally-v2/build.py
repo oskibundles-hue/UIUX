@@ -1048,6 +1048,14 @@ def st_qa(A):
             p = os.path.join(EXP, fn)
             others[fn] = dict(MiB=round(os.path.getsize(p) / 2 ** 20, 2), track_durations_s=mp4_track_durations(p), audio=aq[fn].result())
     res['other_exports'] = others
+    # loudness gate on the delivered files (the AAC encode can add true peak on top of the mix's -2.0 dBTP ceiling)
+    import gates as G
+    lg = G.loud_gate(os.path.basename(master), res['audio'].get('I'), res['audio'].get('TP'))
+    for fn, o in others.items():
+        lg += G.loud_gate(fn, o['audio'].get('I'), o['audio'].get('TP'), target=-14.0 if 'PREVIEW' not in fn else -14.5, tol=0.5 if 'PREVIEW' not in fn else 0.6)
+    res['loudness_gate'] = lg
+    for g in lg:
+        log(f"  qa {g['level']}: {g['what']}")
     probe = subprocess.run([FF, '-hide_banner', '-i', master], capture_output=True, text=True).stderr
     res['stream_lines'] = [l.strip() for l in probe.splitlines() if 'Stream #' in l or 'Duration' in l]
     # safe-zone ink audit: every 0.5 s

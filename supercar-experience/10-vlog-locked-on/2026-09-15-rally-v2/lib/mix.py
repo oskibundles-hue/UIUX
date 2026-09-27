@@ -331,19 +331,37 @@ def build_sfx(music_raw, act, report):
 def master(x, target, ceiling):
     x = S.fft_filter(x, lo=30, slope=2)
     gain = 1.0
+    done = False
     for it in range(4):
         y = S.limiter(x * gain, ceiling_db=ceiling)
         L = lufs(y)
         if abs(L - target) < 0.05:
+            done = True
             break
         gain *= 10 ** ((target - L) / 20)
     master.gain = gain
-    y = S.limiter(x * gain, ceiling_db=ceiling)
+    if not done:            # (on a break, y is already the limiter output at this exact gain: same numbers, one pass fewer)
+        y = S.limiter(x * gain, ceiling_db=ceiling)
     tail = int(0.06 * SR)
     y[-tail:] = 0
     fl = int(0.25 * SR)
     y[-tail - fl:-tail] *= (np.cos(np.linspace(0, np.pi / 2, fl)) ** 2)[:, None]
     return y, lufs(y), true_peak_db(y)
+
+
+def _master_job(args):
+    x, target, ceiling = args
+    y, L, tp = master(x, target, ceiling)
+    return y, L, tp, master.gain
+
+
+def masters_parallel(xs, target, ceiling):
+    import multiprocessing as mp
+    try:
+        with mp.get_context('fork').Pool(len(xs)) as pool:
+            return pool.map(_master_job, [(x, target, ceiling) for x in xs])
+    except (OSError, ValueError):
+        return [_master_job((x, target, ceiling)) for x in xs]
 
 
 def meter_table(dialog, t0, t1, bands=14):
@@ -403,9 +421,9 @@ def main():
     mc = CFG['master']
     on = CFG['music'].get('enabled', True) and os.environ.get('MUSIC', '1') not in ('0', 'false', 'off')
     T['music+sfx'] = f'{time.time() - t0:.1f}s'; t0 = time.time()
-    full, L1, tp1 = master(dialog + nat + (music if on else 0) + sfx, mc['lufs'], mc['ceiling'])
-    g_full = master.gain
-    nomus, L2, tp2 = master(dialog + nat + sfx, mc['lufs'], mc['ceiling'])
+    # the two masters are independent: computed in two processes at once (same code, same numbers, half the wait)
+    (full, L1, tp1, g_full), (nomus, L2, tp2, _) = masters_parallel([dialog + nat + (music if on else 0) + sfx, dialog + nat + sfx],
+                                                                      mc['lufs'], mc['ceiling'])
     T['masters'] = f'{time.time() - t0:.1f}s'; t0 = time.time()
     write_wav24(a.out, full)
     write_wav24(a.out_nomusic, nomus)
