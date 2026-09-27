@@ -2,12 +2,15 @@
 """vlog.py - the ingest and planning half of the SE vlog pipeline (everything before the render).
 
   links      DAY --clips FILE     register the day's clips, write DAY/links/request.json (2 links/clip, <=25/call)
-  ingest     DAY                  survey every clip from its links: moov, audio, thumbnails, transcripts
+             DAY --local FOLDER   ... or register the videos in a folder on this machine (local mode)
+  ingest     DAY [--local]        survey every clip from its links: moov, audio, thumbnails, transcripts
+                                  (--local: serve the files from this machine instead of Dropbox links)
   transcribe DAY                  (re)transcribe audio that has no transcript yet (ingest already does this)
   status     DAY                  one line per clip
   index      DAY [--out DIR]      day.md, speaker labels, moments.json/.md, flags.json, quality notes
   plan       DAY --edl edl.json   byte spans for every shot (+handles) -> fetchplan.json + links request
   fetch      DAY --out MEZZ       range-fetch the spans (links in DAY/fetch/links/) and cut mezzanines, all cores busy
+                                  (--local: from this machine; VLOG_HWACCEL=videotoolbox decodes on the Mac's media engine)
 
 See README.md for the runbook.
 """
@@ -55,7 +58,13 @@ def load_clip_list(path):
 
 def cmd_links(a):
     from lib.ingest import plan_links
-    entries = load_clip_list(a.clips)
+    entries = load_clip_list(a.clips) if a.clips else []
+    if a.local:
+        from lib.localsrc import scan_folder
+        for folder in a.local:
+            entries += scan_folder(folder, recursive=a.recursive)
+    if not entries:
+        sys.exit('no clips: give --clips FILE and/or --local FOLDER')
     reg, obj = plan_links(a.day, entries, clips_per_call=a.clips_per_call, big_first=a.big_first)
     n = sum(len(b['entries']) for b in obj['batches'])
     print(f'{len(reg)} clips registered in {a.day}/clips.json; {n} links in {len(obj["batches"])} call(s) '
@@ -64,12 +73,51 @@ def cmd_links(a):
         print(f'  call {b["batch"]}: {len(b["entries"])} entries')
 
 
+def _local(a, links_dir):
+    """Start local mode (or None): serves this machine's files as links written into links_dir."""
+    if not (a.local or a.local_root):
+        return None
+    from lib.localsrc import LocalLinks, dropbox_roots
+    roots = a.local_root or dropbox_roots()
+    loc = LocalLinks(links_dir, roots)
+    print(f'local mode: serving files from {roots or "their own absolute paths"}', flush=True)
+    return loc
+
+
 def cmd_ingest(a):
     from lib.ingest import Ingest
+    day = Day(a.day)
+    only = None
+    if a.edl:
+        e = read_json(a.edl)
+        only = {x['src'] for k in ('shots', 'dialog', 'audio_extra') for x in e.get(k, [])} & set(day.clips)
+        print(f'--edl: surveying the {len(only)} clip(s) the cut uses', flush=True)
+    loc = _local(a, day.p('links'))
+    if loc:
+        from lib.localsrc import disk_guard
+        todo = [c['path'] for cid, c in day.clips.items()
+                if not day.state(cid).get('surveyed') and (only is None or cid in only)]
+        ok, msg = disk_guard([loc.resolve(p) for p in todo], a.reserve_gb + 18)
+        if msg:
+            print('local mode: ' + msg, flush=True)
+        if not ok:
+            loc.stop()
+            sys.exit(2)
+        n, missing = loc.write([p for p in todo for _ in range(2)])
+        print(f'local mode: {n} links for {len(todo) - len(missing)} clip(s)', flush=True)
+        if missing:
+            print(f'local mode: not found on this machine ({len(missing)}): ' + '; '.join(missing[:5]) +
+                  (' ...' if len(missing) > 5 else '') + '  (--local-root <your Dropbox folder>?)', flush=True)
+        loc.watch()
     ing = Ingest(a.day, streams=a.streams, kf_step=a.kf_step, kf_workers=a.kf_workers, asr_max=a.asr_workers,
-                 asr=not a.no_asr, tail_mb=a.tail_mb, wait_links=a.wait_links, clips_per_call=a.clips_per_call,
-                 reserve_gb=a.reserve_gb, big_first=a.big_first)
-    sys.exit(ing.run())
+                 asr=not a.no_asr, tail_mb=a.tail_mb, wait_links=a.wait_links if not loc else min(a.wait_links, 60),
+                 clips_per_call=a.clips_per_call, reserve_gb=a.reserve_gb, big_first=a.big_first, only=only)
+    try:
+        rc = ing.run()
+    finally:
+        if loc:
+            loc.stop()
+    sys.exit(rc)
 
 
 def cmd_transcribe(a):
@@ -122,8 +170,26 @@ def cmd_plan(a):
 
 def cmd_fetch(a):
     from lib.fetch import run_fetch
-    sys.exit(run_fetch(a.day, a.plan, a.links, out=a.out, workers=a.workers, crf=a.crf, preset=a.preset,
-                       streams=a.streams))
+    wdir = os.path.dirname(os.path.abspath(a.plan)) if a.plan else Day(a.day).p('fetch')
+    loc = _local(a, os.path.join(wdir, 'links'))
+    if loc:
+        from lib.localsrc import request_paths, disk_guard
+        paths = request_paths(os.path.join(wdir, 'request.json'))
+        ok, msg = disk_guard([loc.resolve(p) for p in paths])
+        if msg:
+            print('local mode: ' + msg, flush=True)
+        if not ok:
+            loc.stop()
+            sys.exit(2)
+        n, missing = loc.write(paths)
+        print(f'local mode: {n} span link(s)' + (f'; not found on this machine: {missing}' if missing else ''), flush=True)
+    try:
+        rc = run_fetch(a.day, a.plan, a.links, out=a.out, workers=a.workers, crf=a.crf, preset=a.preset,
+                       streams=a.streams)
+    finally:
+        if loc:
+            loc.stop()
+    sys.exit(rc)
 
 
 def main():
@@ -131,7 +197,10 @@ def main():
     sub = ap.add_subparsers(dest='cmd', required=True)
     p = sub.add_parser('links', help='register clips and write the Dropbox link request')
     p.add_argument('day')
-    p.add_argument('--clips', required=True, help='clip list: text (path[TAB size] per line) or list_folder JSON')
+    p.add_argument('--clips', help='clip list: text (path[TAB size] per line) or list_folder JSON')
+    p.add_argument('--local', action='append', default=[], metavar='FOLDER',
+                   help='register the videos in this local folder (repeatable; local mode)')
+    p.add_argument('--recursive', action='store_true', help='with --local: include subfolders')
     p.add_argument('--clips-per-call', type=int, default=12)
     p.add_argument('--big-first', type=int, default=2, help='largest clips started first, then smallest first')
     p.set_defaults(fn=cmd_links)
@@ -148,6 +217,10 @@ def main():
     p.add_argument('--clips-per-call', type=int, default=12)
     p.add_argument('--reserve-gb', type=float, default=2.0, help='free disk to keep')
     p.add_argument('--big-first', type=int, default=2, help='largest clips started first, then smallest first')
+    p.add_argument('--edl', help='survey only the clips this edl.json uses (e.g. to rebuild a finished vlog elsewhere)')
+    p.add_argument('--local', action='store_true', help='read the files on this machine (Dropbox desktop folder)')
+    p.add_argument('--local-root', action='append', default=[], metavar='DIR',
+                   help='folder that Dropbox paths are found under (default: the Dropbox desktop folder)')
     p.set_defaults(fn=cmd_ingest)
 
     p = sub.add_parser('transcribe', help='transcribe audio without a transcript')
@@ -188,6 +261,9 @@ def main():
     p.add_argument('--streams', type=int, default=6)
     p.add_argument('--crf', type=float, default=13)
     p.add_argument('--preset', default='superfast', help='x264 preset (superfast: 4.7 fps/core, beats the Sep 15 mezz)')
+    p.add_argument('--local', action='store_true', help='read the files on this machine (Dropbox desktop folder)')
+    p.add_argument('--local-root', action='append', default=[], metavar='DIR',
+                   help='folder that Dropbox paths are found under (default: the Dropbox desktop folder)')
     p.set_defaults(fn=cmd_fetch)
 
     a = ap.parse_args()

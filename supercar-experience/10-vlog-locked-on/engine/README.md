@@ -16,6 +16,22 @@ The measured numbers and the projection are under "Timings". Python 3 with numpy
 all already installed. It uses `curl` and the ffmpeg from `imageio_ffmpeg` (or `$VLOG_FFMPEG`). The speaker model
 (26 MB ONNX) downloads from the Hugging Face hub on first use.
 
+## Local mode (footage already on this machine)
+
+Use it for footage on the Mac's Dropbox folder, a camera card or an offload drive. `links DAY --local FOLDER`
+registers the videos in a folder. `ingest --local` and `fetch --local` then serve those files on 127.0.0.1 through
+the same single-use-link code path as Dropbox (`lib/localsrc.py`, `lib/rangeserver.py`), so nothing has to be
+requested and nothing expires. NEED.json is answered automatically.
+
+Clips registered with Dropbox paths (`--clips`) are looked up under `--local-root DIR`, or under the Dropbox desktop
+folder by default, matching upper/lower case like Dropbox does. `ingest --edl edl.json` surveys only the clips a cut
+uses.
+
+Online-only Dropbox files are downloaded in full by the Dropbox app when read. Local mode totals them first and stops
+if they would not fit on the disk. `VLOG_HWACCEL=videotoolbox` makes fetch decode the HEVC sources on the Mac's media
+engine. `doctor.py` turns it on only after checking that the frames match the CPU decode. Mac setup:
+`../MAC-SETUP.md`.
+
 ## Runbook
 
 `DAY` is a working directory for one shoot day, for example `$S/days/2026-10-02`. Keep it outside the repo, because it

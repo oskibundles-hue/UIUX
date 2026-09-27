@@ -1,0 +1,7 @@
+#!/usr/bin/env bash
+# vlog: run engine/vlog.py with this machine's settings (vlog.env, written by setup-mac.sh / doctor.py).
+#   ./vlog links DAY --local "~/Library/CloudStorage/Dropbox/NQ Studio/raw footage/2026-10-02"
+#   ./vlog ingest DAY --local
+HERE="$(cd "$(dirname "$0")" && pwd)"
+if [ -f "$HERE/vlog.env" ]; then . "$HERE/vlog.env"; fi
+exec "${VLOG_PY:-python3}" "$HERE/engine/vlog.py" "$@"

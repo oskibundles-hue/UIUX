@@ -54,8 +54,10 @@ class Clip:
 
 class Ingest:
     def __init__(self, day_root, streams=5, kf_step=2.0, kf_workers=2, asr_max=4, asr=True, tail_mb=16,
-                 spill_under=2 << 30, wait_links=900, clips_per_call=12, reserve_gb=2.0, cores=None, big_first=2):
+                 spill_under=2 << 30, wait_links=900, clips_per_call=12, reserve_gb=2.0, cores=None, big_first=2,
+                 only=None):
         self.day = Day(day_root)
+        self.only = set(only) if only else None   # survey just these clip ids (e.g. the clips a cut uses)
         set_log(self.day.p('logs', 'ingest.log'))
         self.streams = streams
         self.kf_step = kf_step
@@ -94,6 +96,8 @@ class Ingest:
             self.day.register(entries)
         reg = self.day.clips
         for cid, rec in reg.items():
+            if self.only is not None and cid not in self.only:
+                continue
             c = Clip(cid, rec)
             st = self.day.state(cid)
             c.attempts = st.get('attempts', 0)
@@ -118,6 +122,8 @@ class Ingest:
             entries = self.pool.entries()
             reg = self.day.register(entries)
             for cid, rec in reg.items():
+                if self.only is not None and cid not in self.only:
+                    continue
                 if cid not in self.clips:
                     self.clips[cid] = Clip(cid, rec)
                     self.stream_bytes_total += rec.get('size') or 0

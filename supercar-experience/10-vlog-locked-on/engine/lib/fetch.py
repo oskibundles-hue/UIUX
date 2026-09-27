@@ -225,12 +225,19 @@ def is_vfr(movie):
     return len(d) > 10 and (d.max() - d.min()) > 0.05 * np.median(d)
 
 
+def hwaccel():
+    """VLOG_HWACCEL=videotoolbox (the Mac setup sets it only after doctor.py found hardware decode bit-identical to
+    software decode on this machine) decodes the HEVC sources on the media engine instead of a CPU core."""
+    hw = os.environ.get('VLOG_HWACCEL', '').strip()
+    return ['-hwaccel', hw] if hw else []
+
+
 def cut_range(sparse_path, job, meta, movie, out_dir, crf, preset):
     out = os.path.join(out_dir, job['out'])
     tmp = os.path.join(out_dir, '.' + job['out'] + '.part.mov')
     vf = video_filters(meta, movie, '30000/1001' if is_vfr(movie) else None)
     a, b = job['t0'], job['t1']
-    cmd = [FF, '-hide_banner', '-loglevel', 'error', '-y', '-threads', '1', '-ss', str(a), '-i', sparse_path,
+    cmd = [FF, '-hide_banner', '-loglevel', 'error', '-y', '-threads', '1'] + hwaccel() + ['-ss', str(a), '-i', sparse_path,
            '-t', str(round(b - a, 3)), '-map', '0:v:0', '-map', '0:a:0?', '-filter_threads', '1', '-vf', ','.join(vf),
            '-c:v', 'libx264', '-threads', '1', '-preset', preset, '-crf', str(crf), '-profile:v', 'high10',
            '-c:a', 'pcm_s24le', '-ar', '48000', '-ac', '2',
