@@ -544,28 +544,28 @@ def join():
         enc.stdin.write(np.ascontiguousarray(img).tobytes())
         written += 1
 
+    KW = 3                         # frames kept back at the end of every shot (a whip into the next one replaces them)
     for k, f0, f1 in FR:
         s = SHOTS[k]
         n_main = f1 - f0
         if s['src'] == 'card':
             # the previous shot runs on under the card's wipe (its post-roll), then black
-            for q, img in enumerate(post_prev[:n_main]):
-                pending.append((f0 + q, img))
             for i, img in pending:
                 emit(img, i)
             pending = []
+            run = post_prev[:n_main]
+            for q, img in enumerate(run):
+                emit(img, f0 + q)
             blank = np.zeros((H, W, 3), np.uint8)
-            for i in range(f0 + len(post_prev[:n_main]), f1):
+            for i in range(f0 + len(run), f1):
                 emit(blank, i)
             continue
         path = render_shot(k)
         n_post = post_frames(k)
-        frames = list(read_all(path, n_main + n_post)) if (n_post or k in trans) else None
-        it = iter(frames) if frames is not None else read_all(path, n_main)
+        it = read_all(path, n_main + n_post)
         tr = trans.get(k)
-        cur = []
-        for j in range(n_main):
-            img = next(it)
+
+        def treat(img, j):
             i = f0 + j
             if tr and tr['type'] == 'sweep':
                 t = i / FPS
@@ -573,23 +573,27 @@ def join():
                     m = sweep_mask(t, tr)
                     img = (img.astype(np.float32) * m + post_prev[j].astype(np.float32) * (1 - m) + 0.5).astype(np.uint8)
             if tr and tr['type'] == 'impact' and j < 14:
-                f = fx.impact(fx.to_f(img), j, strength=tr.get('strength', 0.5), seed=k)
-                img = fx.to_u8(f)
-            cur.append((i, img))
-        new_post = [img for img in (frames[n_main:] if frames is not None else [])]
-        # whip into this shot: replace the last K of the previous and the first K of this one
+                img = fx.to_u8(fx.impact(fx.to_f(img), j, strength=tr.get('strength', 0.5), seed=k))
+            return img
+        head = [(f0 + j, treat(next(it), j)) for j in range(min(KW, n_main))]
+        # whip into this shot: replace the last KW frames of the previous shot and the first KW of this one
         if tr and tr['type'] == 'whip':
-            K = tr.get('k', 3)
-            a_tail = [fx.to_f(img) for _, img in pending[-K:]]
-            b_head = [fx.to_f(img) for _, img in cur[:K]]
+            a_tail = [fx.to_f(img) for _, img in pending[-KW:]]
+            b_head = [fx.to_f(img) for _, img in head[:KW]]
             wf = fx.whip(a_tail, b_head, direction=tr['dir'], dist=tr.get('dist', 0.9), blur=1.0, bright=0.12)
-            for q in range(K):
-                pending[-K + q] = (pending[-K + q][0], fx.to_u8(wf[q]))
-                cur[q] = (cur[q][0], fx.to_u8(wf[K + q]))
+            for q in range(KW):
+                pending[-KW + q] = (pending[-KW + q][0], fx.to_u8(wf[q]))
+                head[q] = (head[q][0], fx.to_u8(wf[KW + q]))
         for i, img in pending:
             emit(img, i)
-        pending = cur
-        post_prev = new_post
+        buf = list(head)
+        for j in range(len(head), n_main):
+            buf.append((f0 + j, treat(next(it), j)))
+            if len(buf) > KW:
+                i, img = buf.pop(0)
+                emit(img, i)
+        pending = buf
+        post_prev = [next(it) for _ in range(n_post)]
         if k % 6 == 0:
             log(f'  join: shot {k} at frame {written} ({time.time() - t_start:.0f}s)')
     for i, img in pending:

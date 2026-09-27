@@ -180,7 +180,8 @@
   SEK.v2route = function (cfg) {
     const p = Object.assign({ x: 54, y: 300, title: 'THE ROUTE', waypoints: [], steps: [], called: [], exit: cfg.t1 - 0.4 }, cfg.p);
     const root = el('div', 'a', stageEl());
-    const W = 452, Hh = 470;
+    const strip = p.layout === 'strip';
+    const W = strip ? (p.w || 853) : 452, Hh = strip ? 244 : 470;
     const pn = panel(root, p.x, p.y, W, Hh, { stripe: 6, alpha: .88 });
     const hd = line(pn.inner, 'Michroma', 17, p.title, 28, 26, GOLD);
     const n = p.waypoints.length;
@@ -188,11 +189,28 @@
     const cstrip = el('div', '', cnt, 'display:flex;flex-direction:column');
     const p2 = v => String(v).padStart(2, '0');
     for (let k = 0; k <= n; k++) el('div', 'mic', cstrip, 'font-size:17px;height:22px;line-height:22px;color:#fff;letter-spacing:.08em;text-align:right', `${p2(k)} / ${p2(n)}`);
-    const X1 = 44, X2 = 88, Y = [96, 158, 220, 282, 344, 406];
-    const pts = [[X1, Y[0]], [X1, Y[1]], [X1, Y[1] + 14], [X2, Y[1] + 58], [X2, Y[2]], [X2, Y[3]], [X2, Y[3] + 14], [X1, Y[3] + 58], [X1, Y[4]], [X1, Y[5]]];
-    const nodeIdx = [0, 1, 4, 5, 8, 9];
     const svg = svgRoot(pn.inner); svg.setAttribute('width', W); svg.setAttribute('height', Hh); svg.setAttribute('viewBox', `0 0 ${W} ${Hh}`);
-    const RB = H_.routeBuild(pn.inner, svg, { pts, nodes: p.waypoints.map((w, k) => ({ i: nodeIdx[k], label: w })) }, { sw: 6, nr: 11, ls: 40, lx: 30, dur: 0.5 });
+    let RB;
+    if (strip) {
+      // horizontal schematic: the line runs left -> right with two 45-degree jogs, labels alternate below it
+      const x0 = 62, x1 = W - 62, dx = (x1 - x0) / (n - 1), YA = 96, YB = 124, LS = 34;
+      const ys = [YA, YA, YB, YB, YA, YA];
+      const pts = [], nodeIdx = [];
+      for (let k = 0; k < n; k++) {
+        const x = x0 + k * dx, y = ys[k % ys.length];
+        if (k > 0 && y !== ys[(k - 1) % ys.length]) { const py = ys[(k - 1) % ys.length]; pts.push([x - dx + 18, py]); pts.push([x - dx + 18 + Math.abs(y - py), y]); }
+        nodeIdx.push(pts.length); pts.push([x, y]);
+      }
+      const capL = ink('Bebas', LS, 'H').aA;
+      RB = H_.routeBuild(pn.inner, svg, { pts, nodes: p.waypoints.map((w, k) => ({ i: nodeIdx[k], label: w,
+        lx: -Math.min(ink('Bebas', LS, w).w / 2, k === 0 ? 0 : 1e9) - (k === n - 1 ? Math.max(0, ink('Bebas', LS, w).w / 2 - 20) : 0),
+        ly: (k % 2 ? 76 : 40) + (YB - ys[k % ys.length]) + capL / 2 })) }, { sw: 6, nr: 11, ls: LS, lx: 0, dur: 0.5 });
+    } else {
+      const X1 = 44, X2 = 88, Y = [96, 158, 220, 282, 344, 406];
+      const pts = [[X1, Y[0]], [X1, Y[1]], [X1, Y[1] + 14], [X2, Y[1] + 58], [X2, Y[2]], [X2, Y[3]], [X2, Y[3] + 14], [X1, Y[3] + 58], [X1, Y[4]], [X1, Y[5]]];
+      const nodeIdx = [0, 1, 4, 5, 8, 9];
+      RB = H_.routeBuild(pn.inner, svg, { pts, nodes: p.waypoints.map((w, k) => ({ i: nodeIdx[k], label: w })) }, { sw: 6, nr: 11, ls: 40, lx: 30, dur: 0.5 });
+    }
     return { code: cfg.code, render(t) {
       const on = t >= cfg.t0 && t < p.exit + 0.4; show(root, on); if (!on) return;
       panelAt(pn, t, cfg.t0, p.exit);
@@ -248,17 +266,27 @@
   // ---------------------------------------------------------------- quote wall
   // p: {header, x, y, items: [{w, t}], size, gap}
   SEK.v2wall = function (cfg) {
-    const p = Object.assign({ header: 'EGNYTE ON THE DAY', x: 54, y: 300, items: [], size: 104, gap: 16, exit: cfg.t1 - 0.4 }, cfg.p);
+    const p = Object.assign({ header: 'EGNYTE ON THE DAY', x: 54, y: 300, w: 853, items: [], size: 104, gap: 16, flow: false, exit: cfg.t1 - 0.4 }, cfg.p);
     const root = el('div', 'a', stageEl());
     const cap = ink('Bebas', p.size, 'H').aA, rowH = cap + 44;
     const hW = Math.ceil(ink('Michroma', 19, p.header, 0.2).w + 60);
     const head = panel(root, p.x, p.y, hW, 62, { stripe: 6 });
     const hl = line(head.inner, 'Michroma', 19, p.header, 30, 26, GOLD, { ls: 0.2 });
+    // chips flow left to right and wrap inside p.w (the wall stays in the top band, clear of faces)
+    let cx0 = 0, cy0 = 0;
+    const pos = p.items.map(it => {
+      const W = Math.ceil(ink('Bebas', p.size, it.w).w + 58 + 56);
+      if (p.flow && cx0 > 0 && cx0 + W > p.w) { cx0 = 0; cy0 += rowH + p.gap; }
+      const q = p.flow ? { x: p.x + cx0, y: p.y + 62 + p.gap + cy0, W } : null;
+      cx0 += W + p.gap;
+      return q;
+    });
     const rows = p.items.map((it, k) => {
-      const y = p.y + 62 + p.gap + k * (rowH + p.gap);
+      const y = p.flow ? pos[k].y : p.y + 62 + p.gap + k * (rowH + p.gap);
       const idx = String(k + 1).padStart(2, '0');
       const tw = ink('Bebas', p.size, it.w).w, W = Math.ceil(tw + 58 + 56);
-      const wrap = el('div', 'a', root, `left:${p.x}px;top:${y}px;width:${W}px;height:${rowH}px;transform-origin:0 50%`);
+      const x = p.flow ? pos[k].x : p.x;
+      const wrap = el('div', 'a', root, `left:${x}px;top:${y}px;width:${W}px;height:${rowH}px;transform-origin:0 50%`);
       const bg = el('div', 'a', wrap, `width:${W}px;height:${rowH}px;background:rgba(0,0,0,.88);box-shadow:0 10px 30px rgba(0,0,0,.3)`);
       const bar = el('div', 'a', wrap, `left:0;top:0;width:6px;height:${rowH}px;background:${GOLD}`);
       const ix = line(wrap, 'Michroma', 16, idx, 22, (rowH - ink('Michroma', 16, 'H').aA) / 2, GOLD, { split: false });

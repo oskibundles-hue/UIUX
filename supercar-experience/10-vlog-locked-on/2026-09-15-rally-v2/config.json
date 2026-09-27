@@ -114,6 +114,22 @@
     -0.008
    ],
    "gmin": 0.7
+  },
+  "garage": {
+   "mid": 0.22,
+   "contrast": 0.42,
+   "sat": 0.86,
+   "warm_sat": 1.06,
+   "shadow_tint": [
+    -0.008,
+    0.002,
+    0.011
+   ],
+   "hi_tint": [
+    0.01,
+    0.004,
+    -0.01
+   ]
   }
  },
  "shotDefaults": {
@@ -139,7 +155,7 @@
    "s1": 1.03
   },
   "10": {
-   "look": "night",
+   "look": "garage",
    "c0": [
     930,
     960
@@ -150,66 +166,66 @@
    ]
   },
   "11": {
-   "look": "night",
+   "look": "garage",
    "keys": [
     [
      0,
      1000,
-     960,
-     1.0
+     1063,
+     1.12
     ],
     [
      0.6,
      1150,
-     960,
-     1.0
+     1063,
+     1.12
     ],
     [
      3.0,
      1150,
-     960,
-     1.0
+     1063,
+     1.12
     ],
     [
      4.8,
      1000,
-     960,
-     1.0
+     1063,
+     1.12
     ],
     [
      5.6,
      850,
-     960,
-     1.0
+     1063,
+     1.12
     ],
     [
      6.8,
      1100,
-     960,
-     1.0
+     1063,
+     1.12
     ],
     [
      8.2,
      1000,
-     960,
-     1.0
+     1063,
+     1.12
     ],
     [
      9.2,
      950,
-     960,
-     1.0
+     1063,
+     1.12
     ],
     [
      10.6,
      850,
-     960,
-     1.0
+     1063,
+     1.12
     ]
    ]
   },
   "24": {
-   "look": "night"
+   "look": "garage"
   },
   "32": {
    "look": "interior"
@@ -224,7 +240,211 @@
    "look": "face"
   },
   "41": {
-   "look": "night"
+   "look": "night",
+   "ramp": [
+    [
+     0,
+     0.6
+    ],
+    [
+     0.55,
+     0.8
+    ],
+    [
+     1,
+     1.7
+    ]
+   ]
+  },
+  "2": {
+   "look": "garage",
+   "ramp": [
+    [
+     0,
+     1.8
+    ],
+    [
+     0.45,
+     0.6
+    ],
+    [
+     1,
+     0.7
+    ]
+   ]
+  },
+  "9": {
+   "look": "garage"
+  },
+  "12": {
+   "look": "garage"
+  },
+  "13": {
+   "look": "garage"
+  },
+  "14": {
+   "look": "garage"
+  },
+  "15": {
+   "look": "garage"
+  },
+  "16": {
+   "look": "garage"
+  },
+  "17": {
+   "look": "garage"
+  },
+  "18": {
+   "look": "garage"
+  },
+  "19": {
+   "look": "garage"
+  },
+  "20": {
+   "look": "garage"
+  },
+  "21": {
+   "look": "garage"
+  },
+  "22": {
+   "look": "garage"
+  },
+  "23": {
+   "look": "garage"
+  },
+  "4": {
+   "ramp": [
+    [
+     0,
+     0.5
+    ],
+    [
+     0.55,
+     0.5
+    ],
+    [
+     1,
+     2.2
+    ]
+   ]
+  },
+  "42": {
+   "ramp": [
+    [
+     0,
+     1.6
+    ],
+    [
+     0.25,
+     0.7
+    ],
+    [
+     0.75,
+     0.7
+    ],
+    [
+     1,
+     1.6
+    ]
+   ]
+  },
+  "43": {
+   "ramp": [
+    [
+     0,
+     1.6
+    ],
+    [
+     0.25,
+     0.7
+    ],
+    [
+     0.75,
+     0.7
+    ],
+    [
+     1,
+     1.6
+    ]
+   ]
+  },
+  "45": {
+   "ramp": [
+    [
+     0,
+     1.6
+    ],
+    [
+     0.25,
+     0.7
+    ],
+    [
+     0.75,
+     0.7
+    ],
+    [
+     1,
+     1.6
+    ]
+   ]
+  },
+  "46": {
+   "ramp": [
+    [
+     0,
+     1.5
+    ],
+    [
+     0.3,
+     0.7
+    ],
+    [
+     1,
+     0.7
+    ]
+   ]
+  },
+  "7": {
+   "look": "interior"
+  },
+  "8": {
+   "look": "interior"
+  },
+  "1": {
+   "look": "interior"
+  },
+  "29": {
+   "look": "interior"
+  },
+  "30": {
+   "look": "interior"
+  },
+  "31": {
+   "look": "interior"
+  },
+  "35": {
+   "look": "interior"
+  },
+  "36": {
+   "look": "interior"
+  },
+  "33": {
+   "look": "garage"
+  },
+  "47": {
+   "look": "garage"
+  },
+  "48": {
+   "look": "garage"
+  },
+  "49": {
+   "look": "garage"
+  },
+  "50": {
+   "look": "garage"
+  },
+  "51": {
+   "look": "garage"
   }
  },
  "transitions": [
@@ -568,14 +788,14 @@
    {
     "code": "B1",
     "type": "personLock",
-    "t0": 9.3,
-    "t1": 12.9,
+    "t0": 9.2,
+    "t1": 11.35,
     "p": {
      "track": "host_ch1",
      "name": "OMARIE",
      "handle": "@NQ.YOUNG",
-     "acquire": 9.3,
-     "exit": 12.55,
+     "acquire": 9.2,
+     "exit": 11.05,
      "maxBottom": 1100
     }
    },
@@ -642,7 +862,7 @@
     "t1": 64.62,
     "p": {
      "word": "SAFELY.",
-     "y": 760,
+     "y": 340,
      "maxS": 330,
      "maxW": 780,
      "exit": 64.3
@@ -652,29 +872,30 @@
     "code": "R8",
     "type": "v2lock",
     "t0": 67.8,
-    "t1": 69.66,
+    "t1": 69.5,
     "p": {
      "track": "r8",
      "kicker": "LOCKED ON",
      "name": "AUDI R8",
-     "acquire": 67.82,
-     "exit": 69.3,
+     "acquire": 67.85,
+     "exit": 69.15,
      "side": "above"
     }
    },
    {
     "code": "C3",
     "type": "leadLock",
-    "t0": 74.9,
-    "t1": 78.8,
+    "t0": 74.88,
+    "t1": 77.0,
     "p": {
      "track": "cullinan_lead",
      "kicker": "LEAD CAR",
      "name": "ROLLS-ROYCE CULLINAN",
      "quote": "",
-     "acquire": 74.95,
-     "exit": 78.45,
-     "side": "below"
+     "acquire": 74.9,
+     "exit": 76.6,
+     "side": "above",
+     "follow": 0.4
     }
    },
    {
@@ -743,7 +964,7 @@
      ],
      "footer": "RALLY DAY · SEP 15 2026 · RED ROCK CASINO",
      "meter": "meter",
-     "y": 980,
+     "y": 340,
      "placeholder": false,
      "start": 101.82
     }
@@ -751,15 +972,15 @@
    {
     "code": "ROMA",
     "type": "v2lock",
-    "t0": 104.5,
-    "t1": 108.2,
+    "t0": 106.3,
+    "t1": 108.25,
     "p": {
      "track": "roma",
      "kicker": "THE EGNYTE GUEST'S PICK",
      "name": "FERRARI ROMA",
-     "acquire": 104.55,
-     "exit": 107.85,
-     "side": "above"
+     "acquire": 106.35,
+     "exit": 107.92,
+     "side": "below"
     }
    },
    {
@@ -781,7 +1002,7 @@
     "t1": 147.72,
     "p": {
      "x": 54,
-     "y": 300,
+     "y": 290,
      "title": "THE ROUTE",
      "waypoints": [
       "215",
@@ -825,7 +1046,9 @@
        "k": 5
       }
      ],
-     "exit": 147.3
+     "exit": 147.3,
+     "layout": "strip",
+     "w": 853
     }
    },
    {
@@ -865,7 +1088,7 @@
      "header": "EGNYTE ON THE DAY",
      "x": 54,
      "y": 300,
-     "size": 100,
+     "size": 84,
      "items": [
       {
        "w": "WONDERFUL",
@@ -888,7 +1111,9 @@
        "t": 160.62
       }
      ],
-     "exit": 161.1
+     "exit": 161.1,
+     "flow": true,
+     "w": 853
     }
    },
    {
@@ -965,10 +1190,10 @@
    "f1": 985,
    "anchor": 935,
    "box": [
-    90,
-    870,
-    570,
-    270
+    36,
+    744,
+    638,
+    302
    ]
   },
   "lineup_corvette": {
@@ -977,10 +1202,10 @@
    "f1": 1056,
    "anchor": 1013,
    "box": [
-    410,
-    970,
-    370,
-    240
+    394,
+    856,
+    414,
+    269
    ]
   },
   "lineup_huracan": {
@@ -989,10 +1214,10 @@
    "f1": 1094,
    "anchor": 1067,
    "box": [
-    290,
-    1000,
-    470,
-    260
+    260,
+    889,
+    526,
+    291
    ]
   },
   "lineup_gt3rs": {
@@ -1001,10 +1226,10 @@
    "f1": 1150,
    "anchor": 1109,
    "box": [
-    530,
-    960,
-    390,
-    280
+    529,
+    845,
+    437,
+    314
    ]
   },
   "lineup_cullinan": {
@@ -1013,10 +1238,10 @@
    "f1": 1230,
    "anchor": 1178,
    "box": [
-    380,
-    860,
-    600,
-    350
+    361,
+    733,
+    672,
+    392
    ]
   },
   "plate_hook_urus": {
@@ -1042,6 +1267,123 @@
     1066,
     80,
     52
+   ],
+   "scalePen": 0.3
+  },
+  "urus_strip": {
+   "shot": 44,
+   "f0": 4249,
+   "f1": 4323,
+   "anchor": 4290,
+   "box": [
+    10,
+    905,
+    480,
+    340
+   ],
+   "scalePen": 0.3
+  },
+  "plate_strip_urus": {
+   "shot": 44,
+   "f0": 4249,
+   "f1": 4323,
+   "anchor": 4290,
+   "box": [
+    212,
+    1062,
+    100,
+    66
+   ],
+   "scalePen": 0.3
+  },
+  "plate_strip_car": {
+   "shot": 44,
+   "f0": 4249,
+   "f1": 4323,
+   "anchor": 4290,
+   "box": [
+    866,
+    1106,
+    62,
+    46
+   ],
+   "scalePen": 0.3
+  },
+  "host_ch1": {
+   "shot": 5,
+   "f0": 274,
+   "f1": 390,
+   "anchor": 330,
+   "box": [
+    335,
+    700,
+    360,
+    480
+   ],
+   "scalePen": 0.15
+  },
+  "roma": {
+   "shot": 33,
+   "f0": 3183,
+   "f1": 3244,
+   "anchor": 3200,
+   "box": [
+    424,
+    1040,
+    246,
+    110
+   ],
+   "scalePen": 0.2
+  },
+  "plate_r8_roma": {
+   "shot": 33,
+   "f0": 3185,
+   "f1": 3244,
+   "anchor": 3200,
+   "box": [
+    674,
+    1194,
+    68,
+    48
+   ],
+   "scalePen": 0.3
+  },
+  "r8": {
+   "shot": 20,
+   "f0": 2029,
+   "f1": 2078,
+   "anchor": 2034,
+   "box": [
+    470,
+    985,
+    570,
+    380
+   ],
+   "scalePen": 0.2
+  },
+  "cullinan_lead": {
+   "shot": 23,
+   "f0": 2243,
+   "f1": 2306,
+   "anchor": 2262,
+   "box": [
+    20,
+    760,
+    620,
+    380
+   ],
+   "scalePen": 0.25
+  },
+  "plate_level9_urus": {
+   "shot": 46,
+   "f0": 4386,
+   "f1": 4440,
+   "anchor": 4395,
+   "box": [
+    428,
+    1030,
+    76,
+    44
    ],
    "scalePen": 0.3
   }
@@ -1301,6 +1643,27 @@
    "track": "plate_hook_car",
    "pad": 10,
    "radius": 10
+  },
+  {
+   "track": "plate_strip_urus",
+   "pad": 12,
+   "radius": 12
+  },
+  {
+   "track": "plate_strip_car",
+   "pad": 10,
+   "radius": 10
+  },
+  {
+   "track": "plate_r8_roma",
+   "pad": 12,
+   "radius": 12
+  },
+  {
+   "track": "plate_level9_urus",
+   "pad": 12,
+   "radius": 11,
+   "f1": 4433
   }
  ]
 }

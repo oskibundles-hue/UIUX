@@ -170,7 +170,7 @@ def build_dialog(report):
         m = x.mean(1)
         L = lufs(np.stack([m, m], 1))                  # loudness of the piece as placed (centred mono, L = R = m)
         tgt = A['dialogLufs'] + tr.get('gainDb', 0.0) + d.get('gainDb', 0.0)
-        g = float(np.clip(tgt - L, -12, 14))
+        g = float(np.clip(tgt - L, -12, 18))
         m = fades(m * 10 ** (g / 20), tr.get('fin', A['edgeFade']), tr.get('fout', A['edgeFade']))
         st = np.stack([m, m], 1)
         place(bus, st, t)

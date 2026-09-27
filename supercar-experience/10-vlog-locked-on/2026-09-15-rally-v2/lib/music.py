@@ -199,7 +199,7 @@ def build(dur, seed=23):
 
     # ---------------------------------------------------------------- fx inside the music (musical ones only)
     S.place(bus['fx'], S.riser(rng, 7.0 - STEP - 5.9), 5.9, 0.9)                       # into CH1
-    S.place(bus['fx'], S.riser(rng, GAP_DROP[0] - (DROP - 4 * BAR)), DROP - 4 * BAR, 1.6)  # into the drop
+    S.place(bus['fx'], S.riser(rng, GAP_DROP[0] - (DROP - 4 * BAR)), DROP - 4 * BAR, 0.75)  # into the drop
     S.place(bus['fx'], S.braam(rng, midi(41), 2.2), DROP, 0.42)
     S.place(bus['fx'], S.impact(rng, ir_hall, size=0.9), DROP, 1.3); ev['hits'].append(DROP)
     for tc in (25.88, 54.09, 78.84, 87.54, 116.61, 147.77):                               # chapter swells
@@ -219,6 +219,15 @@ def build(dur, seed=23):
     stems['music'] *= duck[:, None]
     stems['bass'] *= (0.4 + 0.6 * duck)[:, None]
     mix = sum(stems.values())
+    # section levels (dB), 0.4 s crossfades: the drop is the loudest part of the bed, the verdict the quietest
+    SEC = [(0, 1.0), (7.0, 0.0), (78.84, 0.5), (87.54, -0.5), (94.25, 2.5), (101.75, -0.5), (116.61, -1.0), (DROP, 3.5), (147.77, 2.0), (161.52, 1.5), (TS0, 1.0)]
+    gdb = np.zeros(pad_n)
+    for (a, v), nxt in zip(SEC, SEC[1:] + [(pad_n / SR + 1, SEC[-1][1])]):
+        gdb[n_of(a):n_of(nxt[0])] = v
+    k = n_of(0.4)
+    cs = np.concatenate([[0.0], np.cumsum(np.concatenate([np.full(k, gdb[0]), gdb, np.full(k, gdb[-1])]))])
+    gdb = (cs[k + k // 2:k + k // 2 + pad_n] - cs[k // 2:k // 2 + pad_n]) / k       # centred moving average
+    mix *= (10 ** (gdb / 20))[:, None]
     # hard gaps (tails included)
     for a, b in (GAP_OPEN, GAP_DROP):
         ia, ib = n_of(a), n_of(b)
