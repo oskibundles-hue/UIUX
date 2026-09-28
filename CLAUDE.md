@@ -12,6 +12,31 @@ The notes are private. They live in the private repo `oskibundles-hue/nq-agent-c
 
 Omarie, 2026-09-27: "no more ultracode unless necessary." Multi-agent workflows (ultracode, the Workflow tool, agent fan-outs) used most of a week's usage limit in a day. Work in the main session by default, even when ultracode is switched on. Only use a workflow when the job truly can't be done well without one, and say why before starting it.
 
+## The standard for every job, and which style to use (every session, every branch)
+
+Omarie, 2026-09-28: "My locked on artifact is my standard for any work I work on", and "make sure every
+session/branch/everything knows and implements it no matter what when creating any work but ask beforehand what
+style should be used."
+
+1. **Ask which style first.** Before building any new piece of work (an ad, a vlog, a reel, a poster, a page), ask
+   Omarie which style to use, as a click (AskUserQuestion) with your recommendation first. Offer the approved styles:
+   **Locked-On**, the standard (https://claude.ai/artifact/WCe1qHhTrMDw7bkDaskeQm); **Quick-Promo** when a promo has to go out in under
+   about 30 minutes; and the workstream's own approved formats where they fit (Fast Cut and Reel Cut for Anti Stock,
+   the Sep 15 rally v2 build for Supercar Experience vlogs). Also offer the proposed looks on the same page
+   (**Now Boarding**, **Paste-Up**), marked as proposed. For a page people use to find things (an index, a
+   directory, a deliverables list, a to-do board), offer the **iPhone index layout** first: Apple's system font, iOS
+   colours, a tab bar and one search across everything. Omarie picked it on 2026-09-28 ("save this apple layout it
+   looks so nice"). It lives in `design-systems/iphone-index/`, with `qa.js` to run before publishing. Skip the
+   question only when he has already named the style for this piece.
+2. **Then build that style all the way**: its techniques, process and quality bar, in the workstream's own brand. The
+   page's gold on black is Supercar Experience's; Formula Dynamics keeps FD red and Bebas Neue, Anti Stock keeps its
+   own look, and two brands never share a video.
+3. **Specialist agents never ask Omarie themselves.** The lead asks, then names the style in the brief. An agent
+   whose brief names no style stops and asks the lead.
+
+The rules and the feedback log are in `supercar-experience/09-campaign-ads/HOUSE-STYLE.md` on the SE branch
+(`claude/supercar-rental-ad-graphics-o64vo3`).
+
 ## Specialist agents (lead, specialists, reviewer)
 
 The main session is the **lead**. It talks to Omarie, plans, delivers and pushes. The specialists in
