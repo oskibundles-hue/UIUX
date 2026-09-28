@@ -73,6 +73,12 @@ The usual run is **build → reviewer → lead delivers**: a chain of one agent 
 builders work in worktrees of their workstream's branch, because this default branch doesn't carry
 `creator-kit/`, `formula-dynamics/` or `supercar-experience/`.
 
+**Claude Code enforces the chain** (Omarie, 2026-09-28). `.claude/settings.json` sets
+`CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` and `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` to 1: one subagent runs at a time,
+and subagents can't start their own. Claude 5 models delegate more readily, and every agent costs a full conversation's
+worth of tokens. A second spawn while one is running comes back as `Concurrent subagent limit reached`: wait for the
+first to finish. Sessions with ultracode on are never refused.
+
 **The regret-list gate is on** (Omarie, 2026-09-27). `.claude/hooks/regret_gate.py` runs before every Bash
 and connector call (wired in `.claude/settings.json`). It **asks** before any paid Higgsfield call (quote the
 cost first), anything that publishes or changes a live account, Dropbox moves or deletes, Windsor.ai write
