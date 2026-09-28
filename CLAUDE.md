@@ -37,6 +37,24 @@ style should be used."
 The rules and the feedback log are in `supercar-experience/09-campaign-ads/HOUSE-STYLE.md` on the SE branch
 (`claude/supercar-rental-ad-graphics-o64vo3`).
 
+## Delivering finished videos: Dropbox, through Video Drop when needed
+
+Omarie, 2026-09-28: "keep that as a rule for the future for when we come into this problem and keep it all in that
+artifact." Finished videos go into his Dropbox (the notes' `deliver-to-dropbox` has the folders and naming). The
+Dropbox connector can't upload a video, and chat attachments stop at 30 MiB. So when a session can't put the file
+in Dropbox itself, deliver it through the **Video Drop** page: https://claude.ai/artifact/5pW7z8z8fqRa35vMjNUYYP
+
+- Each video is a card. Omarie taps **Save video**; the page rejoins the parts and opens his phone's share sheet,
+  and he picks **Dropbox** and the folder named on the card.
+- Use this one page for every delivery. Never make a second one.
+- The steps are in the notes:
+  1. Split the master into 19 MiB parts.
+  2. Upload them as the page's assets in one call.
+  3. Add a card and republish.
+  4. Test that the rejoined file's SHA-256 matches the master.
+  5. Once he has saved it, confirm the file in Dropbox at the exact size.
+- The page holds 1 GiB. Clear older cards only once they're confirmed in Dropbox, and ask him first.
+
 ## Specialist agents (lead, specialists, reviewer)
 
 The main session is the **lead**. It talks to Omarie, plans, delivers and pushes. The specialists in
