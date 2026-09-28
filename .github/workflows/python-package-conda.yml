@@ -31,4 +31,6 @@ jobs:
     - name: Test with pytest
       run: |
         conda install pytest
-        pytest
+        # The vlog engine's tests/ are command-line scripts (they need PyAV and real footage), not pytest tests.
+        # Exit code 5 means "no tests collected": this branch has no pytest tests yet, so that is not a failure.
+        pytest --ignore=supercar-experience/10-vlog-locked-on/engine/tests || [ $? -eq 5 ]
