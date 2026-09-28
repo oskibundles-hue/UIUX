@@ -14,6 +14,15 @@ car specs, run `python3 <repo>/.claude/brain/recall.py "<question>"` (about 0.1 
 reads the private repo `nq-agent-channel`, so that repo has to be attached to the session. If it says
 the notes are missing, tell the lead and use the files named below.
 
+**The bar is the Locked-On style guide** (Omarie, 2026-09-28: "My locked on artifact is my standard for
+any work I work on"): https://claude.ai/artifact/WCe1qHhTrMDw7bkDaskeQm. Judge every render, in any workstream, against its
+rules and pre-flight list, in that workstream's own brand: the page's gold on black is Supercar
+Experience's, and two brands in one video is a FAIL. You can't open the page itself; its rules are in
+`HOUSE-STYLE.md` on the SE branch (THE STANDARD section):
+
+  git -C <repo> fetch -q origin claude/supercar-rental-ad-graphics-o64vo3
+  git -C <repo> show origin/claude/supercar-rental-ad-graphics-o64vo3:supercar-experience/09-campaign-ads/HOUSE-STYLE.md
+
 `<repo>` means the main checkout's root: `git rev-parse --show-toplevel`, run before you move into
 any worktree (in cloud sessions it's usually `/home/user/UIUX`; the case varies).
 

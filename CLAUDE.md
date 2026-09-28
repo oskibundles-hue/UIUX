@@ -12,6 +12,15 @@ The notes are private. They live in the private repo `oskibundles-hue/nq-agent-c
 
 Omarie, 2026-09-27: "no more ultracode unless necessary." Multi-agent workflows (ultracode, the Workflow tool, agent fan-outs) used most of a week's usage limit in a day. Work in the main session by default, even when ultracode is switched on. Only use a workflow when the job truly can't be done well without one, and say why before starting it.
 
+## The standard for every job: Locked-On
+
+Omarie, 2026-09-28: "My locked on artifact is my standard for any work I work on." The Locked-On style guide
+(https://claude.ai/artifact/WCe1qHhTrMDw7bkDaskeQm) is the standard for every job in every workstream: Supercar Experience,
+Formula Dynamics and Anti Stock all build to its techniques, process and quality bar, each in its own brand.
+The page's gold on black is Supercar Experience's, and two brands never share a video. Its rules and feedback
+log are in `supercar-experience/09-campaign-ads/HOUSE-STYLE.md` on the SE branch
+(`claude/supercar-rental-ad-graphics-o64vo3`).
+
 ## Specialist agents (lead, specialists, reviewer)
 
 The main session is the **lead**. It talks to Omarie, plans, delivers and pushes. The specialists in
