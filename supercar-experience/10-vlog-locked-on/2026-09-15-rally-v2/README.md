@@ -6,70 +6,75 @@ Porsche video but in vlog format… I still want the Supercarexperience banner o
 rally was for **Egnyte**: the name appears as text only (no Egnyte marks anywhere). This folder renders the approved edit
 decisions (the EDL, 174.5 s) at the `locked-on` standard (`../../09-campaign-ads/HOUSE-STYLE.md`): a new picture edit and grade
 from the camera files, a new sound mix, and a Locked-On layer built from the vlog kit (`../vlog-kit/`) plus this vlog's own
-components. **Status: v2.4 rendered (28 Sept, 17:16); waiting for a reviewer pass.**
+components. **Status: v2.4 rendered 28 Sept and passed the reviewer pass the same day. The master is the one to deliver.**
 
 ## v2.4 (28 Sept): the v2.3 fixes made at the source, plus the graphics fixes
 
-v2.3 was a patch on the v2 masters (scratch scripts). v2.4 makes the same fixes inside the build, so a re-render keeps
-them, and adds the graphics fixes a patch could not make. Numbers marked *sim* come from the build's own code on the
-raw clip 0013 audio (0-85 s) before the footage was fetched again; the render re-measured them (`exports/qa/audio_v24.json`,
-quoted as *render*).
+v2.3 was a patch on the v2 masters, made with scratch scripts. v2.4 makes the same fixes inside the build, so a
+re-render keeps them, and adds the graphics fixes a patch could not make. Numbers marked *sim* come from the build's
+own code on the raw clip 0013 audio (0-85 s), before the footage was fetched again. Numbers marked *render* are the
+render's own (`exports/qa/audio_v24.json`). Numbers marked *review* were measured on the delivered master by the
+reviewer.
 
-1. **Car alarm (clip 0013, source 0-19 s: dialog pieces 3 and 4, the cold-open nat).** Removed in the audio stage,
-   before the pieces are levelled (config `audio.dealarm`, `lib/dealarm_dfn.py` in the DeepFilterNet3 venv): the voice
-   is separated with DeepFilterNet3, the alarm bands (2.85-3.75 kHz, 6.0-7.25 kHz, -45 dB) are cut from the non-voice
-   rest only, the voice is tone-matched to the same clip's clean pieces 5-8, and any alarm tone left in it is clamped
-   to 4 dB over the neighbouring bands (then the "s" range the clamp took is given back). *Sim:* the alarm band in the
-   span 40.0 → 15.7 dB (second band 16.4 → 14.1); the 95th-percentile tone over the neighbours in the voice 15.6 / 11.0 →
-   6.7 / 6.6 dB, the same as the clean pieces' own voice (5.6 / 7.1). Levelled after the clean-up, the voice-only
-   loudness of pieces 3 / 4 is -17.08 / -17.49 LUFS against -16.88 / -18.54 / -18.39 for pieces 5-7 (mean -17.94):
-   +0.86 / +0.45 dB (v2: -1.86 / -6.53 dB, the lineup levelled with the alarm counted as voice). The -0.6 dB on pieces
-   3 and 4 (`audio.trims`; *render*: -1.1 / -0.6 dB) is there because, once the alarm is gone, they are nearly all voice while 5-8 carry garage
-   ambience inside their -16 LUFS. *Render:* voice-only loudness of pieces 3 / 4 -17.60 / -17.77 LUFS against pieces 5-8
-   -19.04 / -18.41 / -18.23 / -18.04 (mean -18.43): +0.83 / +0.66 dB; the alarm band in the span 40.0 → 15.6 dB (second
-   band 16.4 → 10.6); the 95th-percentile alarm tone in the voice 15.4 / 11.0 → 6.7 / 6.6 dB (clean pieces 6.0 / 7.0).
-   Every accent from 25.4 to 41.6 s keeps its level in the alarm bands: in the master its gain there is within -0.67 dB of
-   its broadband gain (a notch would cost 10+ dB), and in the SFX stem it is exactly its scheduled gain. The Locked-On accents are mixed after the dialog, so the notch never reaches the
-   lock ticks (30.96-38.94) or the 26.06 sweep whoosh; `lib/audiocheck.py` checks it on the render (each accent's gain in
-   the alarm bands against 1-2 kHz, within 1 dB).
-2. **"Black" was clipped.** Piece 4 started at source 5.40; "Black" starts at 5.26 (voice envelope). It now starts at
-   5.20 (`data/edl.json`), so its audio runs from 29.86 s; the picture cut stays at 30.06 (a 0.2 s J-cut; from 30.06 the
-   picture and the sound are the same source time again).
-2b. **"Cullinan" finishes (Omarie, 28 Sept: "let it finish").** Piece 4 used to end at source 16.45, on "Culli-" (the word
-   runs to 16.95 on the DeepFilterNet voice). It now ends at 16.98, and 0.53 s of the silent gap between "GT3s" and
-   "Rolls-Royce" (voice silent 14.12-15.41) is closed up (`data/edl.json` dialog 4 `drop`, 14.465-14.995, 40 ms
-   equal-power crossfade in `lib/mix.py`), so the piece still ends at 41.11 and nothing after it moves. Piece 5 had no
-   room: its "So" starts 0.085 s after its in-point, and its picture is in sync. Omarie is behind the camera in the
-   lineup walk (cars only), so "Rolls-Royce Cullinan" sitting 0.53 s earlier against the picture does not show; it now
-   lands nearer the Cullinan's own lock (38.64). *Sim:* Whisper on the placed pieces reads "…GT3s, Rolls-Royce Cullinan"
-   to 41.08, then "So right now" from 41.12; the ambience across the splice stays level (-27 to -34 dB, no dip or click).
+1. **Car alarm (clip 0013, source 0-19 s: dialog pieces 3 and 4 and the cold-open nat).** It is removed in the audio
+   stage, before the pieces are levelled (config `audio.dealarm`, `lib/dealarm_dfn.py` in the DeepFilterNet3 venv).
+   DeepFilterNet3 separates the voice. The alarm bands (2.85-3.75 kHz and 6.0-7.25 kHz, -45 dB) are cut from the
+   non-voice rest only. The voice is tone-matched to the same clip's clean pieces 5-8, and any alarm tone left in it is
+   clamped to 4 dB over the neighbouring bands, after which the "s" range the clamp took is given back.
+   - *Sim:* the alarm band in the span went from 40.0 to 15.7 dB (second band 16.4 to 14.1). The 95th-percentile tone in
+     the voice went from 15.6 / 11.0 to 6.7 / 6.6 dB, the same as the clean pieces' own voice (5.6 / 7.1).
+   - *Render:* voice-only loudness on the dialog stem is -17.60 / -17.77 LUFS for pieces 3 / 4 against a mean of
+     -18.43 for pieces 5-8 (-19.04 / -18.41 / -18.23 / -18.04), so +0.83 / +0.66 dB. The trims in `audio.trims` are
+     -1.1 dB on piece 3 and -0.6 dB on piece 4. They are there because once the alarm is gone those pieces are nearly
+     all voice, while 5-8 carry garage ambience inside their -16 LUFS. The alarm band went from 40.0 to 15.6 dB (second
+     band 16.4 to 10.6), and the alarm tone in the voice from 15.4 / 11.0 to 6.7 / 6.6 dB (clean pieces 6.0 / 7.0).
+   - *Review:* on the delivered master, pieces 3 / 4 sit +0.26 / +0.27 dB from the mean of pieces 5-8 (v2: -1.86 /
+     -6.53 dB, when the lineup was levelled with the alarm counted as voice. v2.3: +1.84 / +1.36 dB).
+   - The Locked-On accents are mixed after the dialog, so the notch never reaches them. On the master every lineup
+     accent (the 26.06 whoosh, the 26.24 hit and the ticks at 30.96-38.94) holds its level in both alarm bands to within
+     0.3 dB of the pre-master mix (*review*). `lib/audiocheck.py` runs the same check on every render. Its log passes the
+     37.48 tick at +1.21 / +1.87 dB (louder, so harmless), and its list skipped the 26.24 hit, which the review covered.
+2. **"Black" was clipped.** Piece 4 started at source 5.40, and "Black" starts at 5.26 (voice envelope). It now starts
+   at 5.20 (`data/edl.json`), so its audio runs from 29.86 s. The picture cut stays at 30.06, a 0.2 s J-cut. From 30.06
+   the picture and the sound are at the same source time again.
+2b. **"Cullinan" finishes (Omarie, 28 Sept: "let it finish").** Piece 4 used to end at source 16.45, on "Culli-". The
+   word runs to 16.95 on the DeepFilterNet voice. Piece 4 now ends at 16.98, and 0.53 s of the silent gap between
+   "GT3s" and "Rolls-Royce" (voice silent 14.12-15.41) is closed up (`data/edl.json` dialog 4 `drop`, 14.465-14.995,
+   with a 40 ms equal-power crossfade in `lib/mix.py`). The piece still ends at 41.11 and nothing after it moves.
+   Piece 5 had no room: its "So" starts 0.085 s after its in-point, and its picture is in sync. Omarie is behind the
+   camera in the lineup walk (cars only), so "Rolls-Royce Cullinan" sitting 0.53 s earlier against the picture does not
+   show. It now lands nearer the Cullinan's own lock (38.64). *Review:* no voice and no transient at the splice, the
+   ambience steps under 1 dB, and "Cullinan" decays to -45 dB by 41.10.
 3. **Flash frame at 54.087 s (frame 1621).** The CH3 shot starts at 54.09 s, which rounds to frame 1621 (54.0874 s),
-   just before the sweep's t0 (54.09); `lib/plate.py` masked only frames at or after t0, so that one frame showed the new
-   shot in full before the sweep. Every frame of the new shot before the sweep ends is now masked (0 before t0, so the old
-   shot keeps playing). Only the 54.09 sweep was affected (the other five start on or after their t0).
-4. **Captions.** Piece 4 reads "Black Series, Mansory Uruses, Corvette, Huracán EVOs, GT3s, Rolls-Royce Cullinan"
-   (Omarie's words; "Mansory" was missing). Pieces 1, 3 and 4 are retimed from real word timings (on the v2.4 mezzanines, whose audio lines up with the raw
-   camera audio to the sample; the v2 mezzanines' audio sat 25 ms later, which v2.3 fitted as its 24.685 offset) (DeepFilterNet voice +
-   faster-whisper small.en word timestamps + the speech envelope): piece 1's "if you guys ever want to go" lit up
-   0.5-1.37 s early, piece 3's "See," 0.9 s early. The gold highlight box now sits above the words with a black copy of
-   the words clipped to it (`lib/sekit.js`), so while the box glides to the next word no frame hides part of a word
-   (v2: the new word turned black at once, black on the black plate until the box arrived, e.g. "USE." at 111.97 s).
-5. **Convoy lock-on (C1):** LAMBORGHINI URUS → **LAMBORGHINI MANSORY URUS** (Omarie, 28 Sept; `brand-tokens.json`
-   `mansory-urus`). The label spans x 86-761 in its box (safe area 54-907; ink audit over 30.9-40.8 s: nothing outside).
-   **CORVETTE Z06** stays: Omarie confirmed it on 28 Sept.
+   just before the sweep's t0 (54.09). `lib/plate.py` masked only frames at or after t0, so that one frame showed the
+   new shot in full before the sweep. Now every frame of the new shot before the sweep ends is masked (0 before t0, so
+   the old shot keeps playing). Only the 54.09 sweep was affected. The other five start on or after their t0.
+4. **Captions.** Piece 4 reads "Black Series, Mansory Uruses, Corvette, Huracán EVOs, GT3s, Rolls-Royce Cullinan", in
+   Omarie's words ("Mansory" was missing). Pieces 1, 3 and 4 are retimed from real word timings, taken from the
+   DeepFilterNet voice, faster-whisper small.en word timestamps and the speech envelope. They were measured on the v2.4
+   mezzanines, whose audio lines up with the raw camera audio to the sample. The v2 mezzanines' audio sat 25 ms later,
+   which is where v2.3's 24.685 s offset came from. Piece 1's "if you guys ever want to go" used to light up
+   0.5-1.37 s early, and piece 3's "See," 0.9 s early. The gold highlight box now sits above the words, with a black
+   copy of the words clipped to it (`lib/sekit.js`). While the box glides to the next word, no frame hides part of a
+   word. In v2 the new word turned black at once and stayed black on the black plate until the box arrived (e.g. "USE."
+   at 111.97 s).
+5. **Convoy lock-on (C1):** LAMBORGHINI URUS → **LAMBORGHINI MANSORY URUS** (Omarie, 28 Sept, matching
+   `brand-tokens.json` `mansory-urus`). The panel spans x 86-725 and the text x 117-627 (safe area 54-907). The ink audit
+   over 30.9-40.8 s finds nothing outside it. **CORVETTE Z06** stays: Omarie confirmed it on 28 Sept.
 6. **Spelling:** the pick card's header tab is **FAVORITE OF THE FLEET** (US, like Omarie's "favorite").
-7. **Quote wall "Wonderful".** Checked: the chip (150.84) is on the word it shows. There are two: a quieter "I had a
-   wonderful time" at 149.38-150.55 (the one a Whisper pass over the whole stretch puts at about 149.6-150.5) and the
-   louder "Wonderful time." at 150.92-151.62 that the captions, the chip and the cold open (0034 431.5) all use. The chip
-   lands 2 frames before that word's voiced onset. Not moved (see Open items).
+7. **Quote wall "Wonderful".** Checked, and the chip (150.84) is on the word it shows. There are two takes. A quieter
+   "I had a wonderful time" runs 149.38-150.55, and a Whisper pass over the whole stretch puts it at about 149.6-150.5.
+   The louder "Wonderful time." at 150.92-151.62 is the one the captions, the chip and the cold open (0034 431.5) all
+   use. The chip lands 2 frames before that word's voiced onset. Not moved (see Open items).
 8. **Output: the master only.** `… vlog v2.4 - 1080x1920.mp4`. The NO MUSIC master is still built (config `exports`)
-   but not delivered; the 720x1280 preview and the music-stem copy are off.
+   but not delivered. The 720x1280 preview and the music-stem copy are off.
 
-Also in v2.4: the build cache lives where `config.json` `paths.work` says (`.work` is a link to it); the lock-on tracks
-key on the shot's content, not on the mezzanine file, so fresh mezzanines do not re-run the reviewed tracks
-(`lib/data/tracks.json` signatures moved to the new key, boxes unchanged); the cold open's music duck under "GT3s"
-comes from `audio.natSpeech` (the v2 transcripts are gone); `lib/fetchneeds.py` writes what the render reads for the
-engine's `plan`.
+Also in v2.4:
+- The build cache lives where `config.json` `paths.work` says, and `.work` is a link to it.
+- The lock-on tracks key on the shot's content, not on the mezzanine file, so fresh mezzanines do not re-run the
+  reviewed tracks. The `lib/data/tracks.json` signatures moved to the new key, and the boxes are unchanged.
+- The cold open's music duck under "GT3s" comes from `audio.natSpeech`, because the v2 transcripts are gone.
+- `lib/fetchneeds.py` writes what the render reads, for the engine's `plan`.
 
 **Exports** (`exports/`, git-ignored; `2026-09-15 rally day (Egnyte) - SE LOCKED-ON vlog v2.4 …`). The table below is
 the v2 render's except the first row (v2.4). **v2.4 master:** `… vlog v2.4 - 1080x1920.mp4`, 242.28 MB (231.06 MiB),
