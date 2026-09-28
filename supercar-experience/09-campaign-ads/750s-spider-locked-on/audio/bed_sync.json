@@ -1,0 +1,46 @@
+{
+ "source": "SCE_McLaren-750S_no-branding.mov audio (the clip's own music), orig 0.000 -> 18.018 s, no edit, no time-stretch",
+ "grid": {
+  "bpm": 130.0,
+  "g0": 0.1154,
+  "drop": 4.7308,
+  "crash": 12.1154,
+  "tapestop": 13.5,
+  "endcard": 13.9616
+ },
+ "accents_gain_db": {
+  "impact_open": -22.7,
+  "whoosh_2.735": -9.23,
+  "whoosh_4.500": -4.85,
+  "whoosh_5.654": -4.26,
+  "whoosh_7.842": -9.29,
+  "whoosh_8.423": -6.88,
+  "whoosh_10.731": -7.47,
+  "whoosh_11.242": -7.54,
+  "tick_2.860": -4.47,
+  "tick_3.070": -11.21,
+  "tick_6.580": -1.68,
+  "tick_6.790": -10.85,
+  "tick_5.192": -0.86,
+  "tick_5.308": -3.06,
+  "tick_5.423": -4.62,
+  "tick_5.654": -3.4,
+  "riser": -4.17,
+  "impact_drop": -17.04,
+  "impact_crash": -12.79,
+  "tapestop": 1.91,
+  "swell": -5.96,
+  "impact_end": -13.44
+ },
+ "accent_ratio": 0.45,
+ "master": {
+  "gain_db": -1.43,
+  "I": "-14.03",
+  "TP": "-2.64",
+  "LRA": "2.40",
+  "mono_fold_minus3dB_tp_dbfs": -2.0,
+  "last_50ms_peak": 0.0
+ },
+ "samples": 864864,
+ "seconds": 18.018
+}

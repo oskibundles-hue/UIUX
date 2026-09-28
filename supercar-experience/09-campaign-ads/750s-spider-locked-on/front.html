@@ -1,0 +1,431 @@
+<!doctype html>
+<!--
+  front.html -- FRONT motion layer of "ROOF DOWN" (McLaren 750S Spider, LOCKED ON standard).
+  Transparent 1080x1920. window.renderAt(t) is a pure function of t (seconds, 24000/1001 fps timeline);
+  lib/kcapture.js captures it with sub-frame motion blur, build.py composites it over plate + mid.
+
+  Loads (written by build.py, run `python3 build.py --stage prep` once before opening):
+    .work/config.js    window.CONFIG   <- config.json (the only place figures and claims live)
+    .work/timeline.js  window.TL       <- lib/edl.py (source frame shown at every output frame, key times)
+    .work/tracks.js    window.TRACKS   <- lib/data/tracks.json (badge f204-225, headlight f136-157)
+  Libraries: lib/kinetic.js (window.KT), lib/lock.js (window.TrackLock), from the approved GT3 RS showcase.
+  Positions are INK top-left (place()). Copy is templated from CONFIG.
+-->
+<html><head><meta charset="utf-8"><title>ROOF DOWN front layer</title>
+<style>
+@font-face{font-family:Bebas;src:url('../../07-fonts/BebasNeue-Regular.ttf')}
+@font-face{font-family:Michroma;src:url('../../07-fonts/Michroma-Regular.ttf')}
+:root{--gold:#FBD101;--white:#FFFFFF;--black:#000000}
+html,body{margin:0;padding:0;background:transparent;width:1080px;height:1920px;overflow:hidden}
+*{box-sizing:border-box}
+.a{position:absolute;left:0;top:0}
+.beb{font-family:Bebas;letter-spacing:0;line-height:1;white-space:pre}
+.mic{font-family:Michroma;letter-spacing:.08em;line-height:1;white-space:pre}
+.gold{color:var(--gold)}.white{color:var(--white)}
+.mask{overflow:hidden;padding:0 30px 0 0}
+.edge{width:4px;margin-left:-2px;background:#fff;box-shadow:0 0 30px 10px rgba(255,255,255,.45),0 0 8px 2px rgba(255,255,255,.8);border-radius:2px}
+.stripe{height:8px}
+.panel{background:rgba(0,0,0,.86)}
+</style>
+<script src=".work/config.js"></script>
+<script src=".work/timeline.js"></script>
+<script src=".work/tracks.js"></script>
+<script src="lib/kinetic.js"></script>
+<script src="lib/lock.js"></script>
+<script>
+// 28 samples over a 270-degree shutter where motion is fast: hook whip-out, bracket fly-in, badge whip-out,
+// the reels, the offer / requirements whip-outs, and the end card's arrivals
+const g = k => TL.g0 + k * TL.beat;
+window.KT_PLAN = { k: 10, shutter: 180, spans: [
+  { a: 2.68, b: 2.90, k: 28, shutter: 270 }, { a: 2.86, b: 3.20, k: 28, shutter: 270 },
+  { a: 4.46, b: 4.63, k: 28, shutter: 270 }, { a: 4.72, b: 5.72, k: 28, shutter: 270 },
+  { a: 6.55, b: 7.06, k: 20, shutter: 270 }, { a: 7.80, b: 8.14, k: 28, shutter: 270 },
+  { a: 10.56, b: 10.74, k: 28, shutter: 270 }, { a: 13.85, b: 14.75, k: 20, shutter: 270 } ] };
+</script>
+</head><body>
+<div id="stage" class="a" style="width:1080px;height:1920px">
+
+  <!-- A. HOOK PANEL (complete on frame 0) -->
+  <div id="hook" class="a">
+    <div id="hookPanel" class="a panel" style="left:54px;top:280px;width:846px;height:432px"></div>
+    <div id="hookStripe" class="a stripe" style="left:54px;top:280px;width:846px"></div>
+    <div id="hTagW" class="a"><div id="hTag" class="mic gold" style="font-size:34px"></div></div>
+    <div id="hHeadW" class="a"><div id="hHead" class="beb white" style="font-size:176px"></div></div>
+    <div id="hOfferW" class="a"><div id="hOfferM" class="mask"><div id="hOffer" class="beb gold" style="font-size:96px"></div></div></div>
+    <div id="hLogoW" class="a"><img id="hLogo" src="../../02-logos/png/sce-primary-horizontal--white.png" style="width:240px;display:block"></div>
+  </div>
+
+  <!-- B + D. TRACKED BRACKETS (badge callout, headlight flash) -->
+  <svg id="brk" class="a" width="1080" height="1920" viewBox="0 0 1080 1920" style="overflow:visible">
+    <g fill="none" stroke="rgba(0,0,0,.45)" stroke-width="8" stroke-linecap="square"><path id="pBu"/><path id="pTu"/><path id="pLu" stroke-width="5"/></g>
+    <g fill="none" stroke="#FBD101" stroke-width="4" stroke-linecap="square"><path id="pBo"/><path id="pTo"/><path id="pLo" stroke-width="2"/></g>
+  </svg>
+
+  <!-- B. BADGE LABEL -->
+  <div id="labW" class="a">
+    <div id="lab" class="a" style="width:640px;height:240px">
+      <div id="lPanel" class="a panel" style="width:640px;height:240px"></div>
+      <div id="lStripe" class="a" style="width:640px;height:6px"></div>
+      <div id="lBrandW" class="a"><div id="lBrand" class="mic gold" style="font-size:34px"></div></div>
+      <div id="lModelW" class="a"><div id="lModelG"><div id="lModel" class="beb white" style="font-size:118px"></div></div>
+        <div id="lEdge" class="a edge" style="height:104px;opacity:0"></div></div>
+      <div id="lYearW" class="a"><div id="lYear" class="mic white" style="font-size:30px"></div></div>
+    </div>
+  </div>
+
+  <!-- C. OFFER PANEL -->
+  <div id="offer" class="a" style="width:1080px;height:1920px">
+    <div id="oPanel" class="a" style="left:54px;top:280px;width:846px;height:540px;background:rgba(0,0,0,.88)"></div>
+    <div id="oStripeCap" class="a stripe" style="left:54px;top:280px;width:846px"></div>
+    <div id="oHoursW" class="a"><div id="oHours" class="beb white" style="font-size:120px"></div></div>
+    <div id="oCityW" class="a"><div id="oCity" class="mic gold" style="font-size:30px"></div>
+      <div id="oCEdge" class="a edge" style="height:44px;opacity:0"></div></div>
+    <div id="oPriceW" class="a"><div id="oPriceG"><div id="oPrice" class="beb gold" style="font-size:330px"></div></div></div>
+    <div id="oStripeW" class="a"><div id="oStripe" class="a stripe" style="left:90px;top:728px;width:722px"></div></div>
+    <div id="oDayW" class="a"><div id="oDayL" class="beb white" style="font-size:60px"></div>
+      <div id="oEdge" class="a edge" style="height:60px;opacity:0"></div></div>
+    <div id="oDayPW" class="a"><div id="oDayP" class="beb gold" style="font-size:60px"></div></div>
+  </div>
+
+  <!-- E. REQUIREMENTS -->
+  <div id="req" class="a">
+    <div id="rPanel" class="a panel" style="left:54px;top:280px;width:846px;height:292px"></div>
+    <div id="rStripeCapW" class="a"><div id="rStripeCap" class="a stripe" style="left:54px;top:280px;width:846px"></div></div>
+    <div id="rNeedW" class="a"><div class="mask"><div id="rNeed" class="mic gold" style="font-size:30px"></div></div></div>
+    <div id="rLicW" class="a"><div class="mask"><div id="rLic" class="beb white" style="font-size:84px"></div></div></div>
+    <div id="rAgeW" class="a"><div class="mask"><div id="rAge" class="beb white" style="font-size:84px"></div></div></div>
+  </div>
+
+  <!-- G. END CARD (front; the giant price behind the car is mid.html) -->
+  <div id="botScrim" class="a" style="top:1050px;width:1080px;height:870px;background:linear-gradient(180deg,rgba(0,0,0,0) 0,rgba(0,0,0,.74) 180px,rgba(0,0,0,.82) 870px)"></div>
+  <div id="end" class="a">
+    <div id="eLogoW" class="a" style="left:62px;top:282px"><img id="eLogo" src="../../02-logos/png/sce-primary-horizontal--white.png" style="width:360px;display:block">
+      <div id="eEdge" class="a edge" style="height:64px;top:-6px;opacity:0"></div></div>
+    <div id="eModelW" class="a"><div id="eModel" class="mic white" style="font-size:30px"></div></div>
+    <div id="eOfferW" class="a"><div class="mask"><div id="eOffer" class="beb white" style="font-size:64px"></div></div></div>
+    <div id="eStripe" class="a stripe" style="left:62px;top:1224px;width:520px;height:6px"></div>
+    <div id="eCtaW" class="a"><div class="mask"><div id="eCta" class="beb white" style="font-size:80px"></div></div></div>
+    <div id="eContactW" class="a"><div id="eContact" class="beb white" style="font-size:60px"></div></div>
+    <div id="eHandleW" class="a"><div id="eHandle" class="beb white" style="font-size:60px"></div></div>
+    <div id="eReq1W" class="a"><div id="eReq1" class="beb white" style="font-size:44px"></div></div>
+    <div id="eReq2W" class="a"><div id="eReq2" class="beb white" style="font-size:44px"></div></div>
+  </div>
+</div>
+
+<script>
+const C = window.CONFIG, FPS = TL.fps, E = KT.ease, P = KT.p, cl = KT.cl, lerp = KT.lerp;
+const TE = TL.tEnd;                              // end-card hit: bar downbeat g(30) = 13.962 s
+const $ = id => document.getElementById(id);
+const fT = i => i / FPS;
+const G = {};
+
+// ---------------------------------------------------------------- ink placement (build time)
+const cv = document.createElement('canvas').getContext('2d');
+function ink(fam, size, text) {
+  cv.font = `${size}px ${fam}`; cv.letterSpacing = fam === 'Michroma' ? (0.08 * size) + 'px' : '0px';
+  const m = cv.measureText(text);
+  return { aA: m.actualBoundingBoxAscent, aD: m.actualBoundingBoxDescent, fA: m.fontBoundingBoxAscent,
+           fD: m.fontBoundingBoxDescent, left: m.actualBoundingBoxLeft, w: m.actualBoundingBoxLeft + m.actualBoundingBoxRight };
+}
+function place(w, fam, size, text, x, y) {
+  const m = ink(fam, size, text), hl = (size - (m.fA + m.fD)) / 2;
+  w.style.left = (x + m.left) + 'px'; w.style.top = (y - (hl + m.fA - m.aA)) + 'px';
+}
+function fit(fam, size, text, maxW) {             // largest size <= size whose ink is <= maxW wide
+  const w = ink(fam, size, text).w; return w <= maxW ? size : Math.floor(size * maxW / w);
+}
+function setLine(id, text, dotColor) {            // split into glyphs; '·' in dotColor
+  const el = $(id); el.textContent = text;
+  const g = KT.measure(KT.split(el, { perspective: 0 }));
+  if (dotColor) g.forEach(s => { if (s.dataset.ch === '·') s.style.color = dotColor; });
+  return g;
+}
+
+// ---------------------------------------------------------------- source position of the plate
+function srcPos(t, id) {
+  const [i0, i1] = TL.beats[id], x = t * FPS, a = i0, b = i1 - 1;
+  if (x <= a) return TL.p[a] + (x - a) * (TL.p[a + 1] - TL.p[a]);
+  if (x >= b) return TL.p[b] + (x - b) * (TL.p[b] - TL.p[b - 1]);
+  const i = Math.floor(x); return lerp(TL.p[i], TL.p[i + 1], x - i);
+}
+
+// ---------------------------------------------------------------- brackets
+const SAFE_R = 907;
+function bracketRect(b, padK = 0.12) {
+  const pad = padK * Math.min(b.w, b.h) + 10;
+  let x0 = b.x - pad, y0 = b.y - pad, x1 = Math.min(b.x + b.w + pad, SAFE_R), y1 = b.y + b.h + pad;
+  return { x: x0, y: y0, w: x1 - x0, h: y1 - y0 };
+}
+function drawBrackets(r, op, leader) {
+  const svg = $('brk');
+  if (!r || op <= 0) { svg.style.display = 'none'; svg.style.setProperty('--d', '0'); return; }
+  svg.style.display = 'block'; svg.style.opacity = op;
+  const L = Math.min(34, r.w / 2, r.h / 2), T = Math.min(14, r.w / 4, r.h / 4);
+  const x0 = r.x, y0 = r.y, x1 = r.x + r.w, y1 = r.y + r.h, mx = (x0 + x1) / 2, my = (y0 + y1) / 2;
+  const f = v => v.toFixed(2);
+  const br = `M${f(x0)},${f(y0 + L)}V${f(y0)}H${f(x0 + L)}M${f(x1 - L)},${f(y0)}H${f(x1)}V${f(y0 + L)}` +
+             `M${f(x1)},${f(y1 - L)}V${f(y1)}H${f(x1 - L)}M${f(x0 + L)},${f(y1)}H${f(x0)}V${f(y1 - L)}`;
+  const tk = T > 1 ? `M${f(mx)},${f(y0)}v${T}M${f(mx)},${f(y1)}v${-T}M${f(x0)},${f(my)}h${T}M${f(x1)},${f(my)}h${-T}` : '';
+  let ld = '';
+  if (leader && leader.k > 0) { const yTop = lerp(y0, leader.y, E.inOutCubic(cl(leader.k))); ld = `M${f(x0)},${f(y0)}V${f(yTop)}`; }
+  $('pBu').setAttribute('d', br); $('pBo').setAttribute('d', br);
+  $('pTu').setAttribute('d', tk); $('pTo').setAttribute('d', tk);
+  $('pLu').setAttribute('d', ld); $('pLo').setAttribute('d', ld);
+  svg.style.setProperty('--d', `"${br}|${ld}"`);    // lets KT.signature see the SVG move
+}
+const lerpR = (a, b, k) => ({ x: lerp(a.x, b.x, k), y: lerp(a.y, b.y, k), w: lerp(a.w, b.w, k), h: lerp(a.h, b.h, k) });
+const shrink = (r, k) => ({ x: r.x + r.w / 2 * k, y: r.y + r.h / 2 * k, w: r.w * (1 - k), h: r.h * (1 - k) });
+
+// ---------------------------------------------------------------- copy
+const hoursTxt = C.hours + ' HOURS';
+const T = {
+  hTag: C.brand + ' · ' + C.city, hHead: C.model, hOffer: hoursTxt + ' · ' + C.price,
+  lBrand: C.brand, lModel: C.model, lYear: C.year + ' · ' + C.cls,
+  oHours: hoursTxt, oCity: C.city, oDayL: 'FULL DAY ·',
+  rNeed: 'YOU NEED', rLic: "VALID DRIVER'S LICENSE", rAge: 'INSURANCE',
+  eModel: C.brand + ' ' + C.model, eOffer: hoursTxt + ' · ' + C.city,
+  eCta: C.cta, eContact: C.phone + ' · ' + C.url, eHandle: C.handle,
+  eReq1: 'RENTERS ' + C.age + ' · ' + C.ageLine, eReq2: "VALID DRIVER'S LICENSE · INSURANCE",
+};
+
+// ---------------------------------------------------------------- build
+(async () => {
+  await document.fonts.load('100px Bebas'); await document.fonts.load('40px Michroma'); await KT.ready();
+  // A. hook: tag / head (fitted to the panel) / offer / lockup
+  const headSize = fit('Bebas', 176, T.hHead, 776);
+  $('hHead').style.fontSize = headSize + 'px';
+  place($('hTagW'), 'Michroma', 34, T.hTag, 90, 318);
+  place($('hHeadW'), 'Bebas', headSize, T.hHead, 90, 372);
+  place($('hOfferW'), 'Bebas', 96, T.hOffer, 90, 528);
+  G.tag = setLine('hTag', T.hTag, '#FFFFFF'); G.head = setLine('hHead', T.hHead); G.hoffer = setLine('hOffer', T.hOffer, '#FFFFFF');
+  $('hLogoW').style.left = '90px'; $('hLogoW').style.top = '642px';
+  $('hOfferM').style.transformOrigin = '0% 60%';
+  KT.stripe($('hookStripe'));
+  // B. badge label (coordinates relative to the label panel)
+  const lSize = fit('Bebas', 118, T.lModel, 588);
+  $('lModel').style.fontSize = lSize + 'px';
+  place($('lBrandW'), 'Michroma', 34, T.lBrand, 26, 24);
+  place($('lModelW'), 'Bebas', lSize, T.lModel, 26, 76);
+  place($('lYearW'), 'Michroma', 30, T.lYear, 26, 196);
+  G.brand = setLine('lBrand', T.lBrand); G.model = setLine('lModel', T.lModel); G.year = setLine('lYear', T.lYear, '#FBD101');
+  G.brand.forEach(s => { s.style.transformOrigin = '50% 100%'; });
+  KT.stripe($('lStripe'));
+  // C. offer
+  place($('oHoursW'), 'Bebas', 120, T.oHours, 90, 305);
+  { const m = ink('Michroma', 30, T.oCity); place($('oCityW'), 'Michroma', 30, T.oCity, 866 - m.w, 348); }
+  place($('oPriceW'), 'Bebas', 330, C.price, 90, 430);
+  // review r2: only the label wipes; the figure arrives whole (a wipe showed partial figures like $1,7)
+  place($('oDayW'), 'Bebas', 60, T.oDayL, 90, 752);
+  { const m = ink('Bebas', 60, T.oDayL + ' '); place($('oDayPW'), 'Bebas', 60, C.dayPrice, 90 + m.w + 14, 752); }
+  G.hours = setLine('oHours', T.oHours); $('oCity').textContent = T.oCity;
+  G.day = setLine('oDayL', T.oDayL, '#FBD101'); $('oDayP').textContent = C.dayPrice;
+  G.slot = KT.slot($('oPrice'), C.price, { seed: 7, ghosts: 16 });
+  const pg = G.slot.all.map(n => (n.firstChild && n.firstChild.firstChild && n.firstChild.firstChild.dataset &&
+                                   n.firstChild.firstChild.dataset.true) ? n.firstChild.firstChild : n);
+  pg.host = $('oPrice'); G.price = KT.measure(pg);
+  // reels land on the beat and its 16ths: 5.192 / 5.308 / 5.423 and the next beat 5.654
+  G.lands = [g(11), g(11) + TL.beat / 4, g(11) + TL.beat / 2, g(12)].slice(0, G.slot.reels.length);
+  KT.stripe($('oStripeCap')); KT.stripe($('oStripe'));
+  // E. requirements
+  place($('rNeedW'), 'Michroma', 30, T.rNeed, 90, 314);
+  place($('rLicW'), 'Bebas', 84, T.rLic, 90, 360);
+  place($('rAgeW'), 'Bebas', 84, T.rAge, 90, 458);
+  G.need = setLine('rNeed', T.rNeed); G.lic = setLine('rLic', T.rLic);
+  G.age = setLine('rAge', T.rAge, '#FBD101');
+  KT.stripe($('rStripeCap'));
+  // G. end card: top block over the (graded-down) sky, bottom stack over the car's tail (scrim)
+  place($('eModelW'), 'Michroma', 30, T.eModel, 62, 384);
+  place($('eOfferW'), 'Bebas', 64, T.eOffer, 62, 428);
+  place($('eCtaW'), 'Bebas', 80, T.eCta, 62, 1246);
+  place($('eContactW'), 'Bebas', 60, T.eContact, 62, 1328);
+  place($('eHandleW'), 'Bebas', 60, T.eHandle, 62, 1384);
+  place($('eReq1W'), 'Bebas', 44, T.eReq1, 62, 1440);
+  place($('eReq2W'), 'Bebas', 44, T.eReq2, 62, 1486);
+  KT.stripe($('eStripe'));
+  // review r1: the top block sits on the roof shot's sky; a close dark halo lifts it to >= 3:1 at phone size
+  const halo = 'drop-shadow(0 0 2px rgba(0,0,0,.55)) drop-shadow(0 0 10px rgba(0,0,0,.45))';
+  for (const id of ['eLogoW', 'eModelW', 'eOfferW']) $(id).style.filter = halo;
+  G.eModel = setLine('eModel', T.eModel);
+  G.eModel.forEach((s, i) => { if (i < C.brand.length) s.style.color = '#FBD101'; });
+  G.eOffer = setLine('eOffer', T.eOffer, '#FBD101');
+  G.eCta = setLine('eCta', T.eCta); G.eContact = setLine('eContact', T.eContact, '#FBD101');
+  G.eHandle = setLine('eHandle', T.eHandle);
+  G.eReq1 = setLine('eReq1', T.eReq1, '#FBD101'); G.eReq2 = setLine('eReq2', T.eReq2, '#FBD101');
+  for (const id of ['eLogo', 'hLogo']) await new Promise(r => $(id).complete ? r() : ($(id).onload = r));
+  window.renderAt(0);
+  window.__ktReady = true;
+})();
+
+// ---------------------------------------------------------------- helpers
+const show = (id, on) => { $(id).style.display = on ? 'block' : 'none'; };
+function flipX(g, t, st, sg, dur, from) {
+  g.forEach((s, i) => { const q = P(t, st + i * sg, st + i * sg + dur), e = E.outBack(q, 1.25);
+    s.style.opacity = q <= 0 ? 0 : Math.min(1, q * 3.5);
+    s.style.transform = `perspective(700px) rotateX(${(1 - e) * from}deg)`; });
+}
+function trackLeft(g, t, st, dur, from, to, size) {
+  const e = E.outExpo(P(t, st, st + dur)), extra = (from - to) * size * (1 - e);
+  g.forEach((s, i) => { s.style.opacity = cl(P(t, st, st + dur) * 2.2); s.style.transform = `translateX(${i * extra}px)`; });
+}
+// review r1/r2: the text rows fade out as their panel starts its whip exit (from 1 frame before the whip to
+// 2.5 frames into it), so a vertical smear can never turn a true figure into a readable wrong one ($1,299 read
+// as $1,200 mid-whip) and no panel ever sits empty
+function figFade(ids, t, t0) {
+  const o = 1 - E.inCubic(P(t, t0 - 2 / FPS, t0 + 0.02));
+  for (const id of ids) $(id).style.opacity = o;
+}
+const pulse = (t, tl) => { const q = (t - tl) / (4 / FPS); return q > 0 && q < 1 ? Math.sin(Math.PI * q) : 0; };
+const glintShadow = (el, s) => { el.style.filter = s > 0 ? `drop-shadow(0 0 ${(6 * s).toFixed(2)}px rgba(255,255,255,.35))` : 'none'; };
+const fadeUp = (id, t, a, b, dy) => { const q = E.outCubic(P(t, a, b)); $(id).style.opacity = q;
+  $(id).style.transform = `translateY(${(dy * (1 - q)).toFixed(3)}px)`; };
+
+// ---------------------------------------------------------------- renderAt
+window.renderAt = function (t) {
+  // ================= A. HOOK 0 - 2.885 (complete on frame 0) =================
+  const hookOn = t < g(6) + 0.01;
+  show('hook', hookOn);
+  if (hookOn) {
+    // the offer re-hits on beat 1 (0.577): a 4-frame 1.06 pulse and a gold glint through the letters
+    const pe = pulse(t, g(1));
+    $('hOfferM').style.transform = pe > 0 ? `scale(${(1 + 0.06 * pe).toFixed(5)})` : 'none';
+    glintShadow($('hOfferW'), KT.glint(G.hoffer, t, { start: g(1), dur: 0.36, base: '#FBD101', warm: '#FFE866',
+                                                      hot: '#FFFFFF', width: 0.2 * G.hoffer.W, angle: 108 }));
+    glintShadow($('hHeadW'), KT.glint(G.head, t, { start: g(2), dur: 0.45, base: '#FFFFFF', warm: '#FFF6D0',
+                                                   hot: '#FFFFFF', width: 0.18 * G.head.W, angle: 108 }));
+    const wh = (id, st) => KT.whip($(id), t, { start: st, dur: 0.16, dx: 0, dy: -300, ease: E.inCubic });
+    const tw = g(6) - 0.17;
+    figFade(['hTag', 'hHead', 'hOfferM', 'hLogo'], t, tw + 1 / FPS);
+    wh('hLogoW', tw); wh('hOfferW', tw + 0.01); wh('hHeadW', tw + 0.02); wh('hTagW', tw + 0.03);
+    wh('hookPanel', tw - 0.05); wh('hookStripe', tw - 0.05);   // already moving when the rows are gone
+  }
+
+  // ================= B/D. BRACKETS =================
+  const [iB0, iB1] = TL.beats[4], [iH0, iH1] = TL.beats[8];
+  // review r1: the callout exits before the black gap (the whip ends 4.609, before frame 111's shutter opens)
+  const tB0 = fT(iB0) - 0.5 / FPS, tBx = fT(iB1) - 0.5 / FPS - 0.12;
+  const tH0 = fT(iH0) - 0.5 / FPS, tH1 = fT(iH1) - 0.5 / FPS;
+  let rect = null, op = 0, leader = null, lab = null;
+  if (t >= tB0 && t < tBx + 0.12 && t < fT(iB1) - 0.5 / FPS) {
+    const p = srcPos(Math.max(t, tB0), 4), box = TrackLock.at(TRACKS.badge, p / FPS), tgt = bracketRect(box, 0.12);
+    const off = { x: -260, y: 2000, w: 420, h: 420 };                   // fly in from off-frame, bottom left
+    const a = E.outExpo(cl((t - tB0) / (5 / FPS)));
+    rect = lerpR(off, tgt, a); op = 1;
+    const kc = E.inCubic(P(t, tBx, tBx + 0.12));
+    rect = shrink(rect, kc); op = 1 - kc * 0.7;
+    lab = TrackLock.follow(TRACKS.badge, p / FPS, { x: 54, y: 930 }, { x: .25, y: .25 }, 8);
+    lab = { x: lab.x, y: lab.y, w: 640, h: 240 };
+    const j = (t - tB0) * FPS;
+    leader = { k: P(t, tBx, tBx + 0.12) > 0 ? 0 : (j - 3) / 4, y: lab.y + 240 };
+  }
+  if (t >= tH0 && t < tH1) {
+    const p = srcPos(t, 8), box = TrackLock.at(TRACKS.headlight, p / FPS), tgt = bracketRect(box, 0.08);
+    { const y0 = Math.max(tgt.y, 836); tgt.h -= y0 - tgt.y; tgt.y = y0; }
+    const j = (t - tH0) * FPS, a = E.outExpo(cl(j / 5));
+    const src = { x: tgt.x - tgt.w * 0.35, y: tgt.y - tgt.h * 0.35, w: tgt.w * 1.7, h: tgt.h * 1.7 };
+    rect = lerpR(src, tgt, a); op = cl(a * 3);
+    const kc = E.inCubic(P(t, tH1 - 2 / FPS, tH1));
+    rect = shrink(rect, kc); op *= 1 - kc * 0.6;
+  }
+  drawBrackets(rect, op, leader);
+
+  // ================= B. BADGE LABEL =================
+  const labOn = !!lab && t >= tB0 + 0.08 && t < tBx + 0.13 && t < fT(iB1) - 0.5 / FPS;
+  show('labW', labOn);
+  if (labOn) {
+    const L = $('lab'); L.style.left = lab.x + 'px'; L.style.top = lab.y + 'px';
+    const s0 = tB0 + 0.10;
+    const rv = E.outExpo(P(t, s0, s0 + 0.28));
+    $('lPanel').style.clipPath = `inset(0 ${(100 - 100 * rv).toFixed(3)}% 0 0)`;
+    KT.drawStripe($('lStripe'), t, { start: s0, dur: 0.28 });
+    flipX(G.brand, t, s0 + 0.03, 0.03, 0.17, -100);
+    trackLeft(G.year, t, s0 + 0.12, 0.30, 0.6, 0.08, 30);
+    figFade(['lBrand', 'lModelG', 'lYear'], t, tBx + 1 / FPS);
+    // final QC: 750S SPIDER arrives whole (a wipe typed the figure on glyph by glyph: '7', '750'); multiplied
+    // with the exit fade above
+    { const q = E.outCubic(P(t, s0 + 0.06, s0 + 0.06 + 3 / FPS));
+      $('lModelG').style.opacity = (+$('lModelG').style.opacity) * q;
+      $('lModelG').style.transform = `translateY(${(10 * (1 - q)).toFixed(2)}px)`; }
+    glintShadow($('lModelW'), KT.glint(G.model, t, { start: g(8), dur: 0.39, base: '#FFFFFF', warm: '#FFF6D0',
+                                                     hot: '#FFFFFF', width: 0.18 * G.model.W, angle: 108 }));
+    KT.whip($('labW'), t, { start: tBx, dur: 0.12, dx: 0, dy: -280, ease: E.inCubic });
+  }
+
+  // ================= C. OFFER 4.731 - 7.962 =================
+  const tO = fT(TL.beats[6][0]) - 0.5 / FPS, tOx = g(17) - 0.13;
+  const offerOn = t >= tO && t < g(17);
+  show('offer', offerOn);
+  if (offerOn) {
+    const k = (t - tO) * FPS, s = 1 + 0.08 * (1 - E.outExpo(cl(k / 5)));
+    const fi = Math.round(t * FPS), sh = TL.shake[fi] || [0, 0];
+    const o = $('offer'); o.style.transformOrigin = '477px 550px';
+    o.style.transform = `translate(${sh[0]}px,${sh[1]}px) scale(${s.toFixed(5)})`;
+    KT.track(G.hours, t, { start: tO + 0.01, dur: 0.29, spread: 2.2 });
+    KT.wipe($('oCity'), t, { start: tO + 0.12, dur: 0.3, dir: 'right', edge: $('oCEdge'), ease: E.inOutCubic, pad: 4 });
+    const R = KT.slotAt(G.slot, t, { lands: G.lands });
+    R.forEach((r, i) => { const w = G.slot.reels[i].win; w.style.transformOrigin = '50% 62%';
+      w.style.transform = `scale(${(1 + 0.04 * pulse(t, G.lands[i])).toFixed(5)})`; });
+    KT.drawStripe($('oStripe'), t, { start: g(12), dur: 0.27 });
+    KT.wipe($('oDayL'), t, { start: g(12) + 0.12, dur: 0.30, dir: 'right', edge: $('oEdge'), ease: E.inOutCubic, pad: 4 });
+
+    const gs = KT.glint(G.price, t, { start: g(14), dur: 0.46, base: '#FBD101', warm: '#FFE866', hot: '#FFFFFF',
+                                      width: 0.18 * G.price.W, angle: 108 });
+    $('oPriceG').style.filter = gs > 0 ? `drop-shadow(0 0 ${(22 * gs).toFixed(2)}px rgba(251,209,1,${(.45 * gs).toFixed(3)}))` : 'none';
+    // exit: every row whips up, top first
+    const wo = (id, d) => KT.whip($(id), t, { start: tOx + d, dur: 0.12, dx: 0, dy: -320, ease: E.inCubic });
+    figFade(['oHours', 'oCity', 'oPriceG', 'oDayL', 'oDayP'], t, tOx + 1 / FPS);
+    // the day price arrives whole once its label has wiped in (on the inner element: KT.whip owns the wrapper)
+    $('oDayP').style.opacity = (+$('oDayP').style.opacity) * E.outCubic(P(t, g(12) + 0.40, g(12) + 0.40 + 3 / FPS));
+    wo('oHoursW', 0); wo('oCityW', 0); wo('oPanel', 0.02); wo('oStripeCap', 0.02); wo('oPriceW', 0.01);
+    wo('oStripeW', 0.02); wo('oDayW', 0.02); wo('oDayPW', 0.02);   // wrappers: KT.whip owns transform/opacity
+  }
+
+  // ================= E. REQUIREMENTS 8.423 - 10.73 =================
+  // 8.00 s: one frame after the offer's whip has fully left, so no frame carries both panels (review r2)
+  const tR = fT(TL.beats[11][0]) + 0.5 / FPS, tRx = g(23) - 0.13;
+  const reqOn = t >= tR && t < g(23);
+  show('req', reqOn);
+  if (reqOn) {
+    const rv = E.outExpo(P(t, tR, tR + 0.25));
+    $('rPanel').style.clipPath = `inset(0 ${(100 - 100 * rv).toFixed(3)}% 0 0)`;
+    KT.drawStripe($('rStripeCap'), t, { start: tR, dur: 0.3 });
+    const rs = (gl, st) => KT.rise(gl, t, { start: st, stagger: 0.006, dur: 0.25, dy: 1.1, ease: E.outExpo });
+    rs(G.need, tR + 0.05); rs(G.lic, tR + 0.12); rs(G.age, tR + 0.19);
+    const wo = (id, d) => KT.whip($(id), t, { start: tRx + d, dur: 0.12, dx: 0, dy: -300, ease: E.inCubic });
+    wo('rNeedW', 0); wo('rLicW', 0.005); wo('rAgeW', 0.01);
+    wo('rPanel', 0.02); wo('rStripeCapW', 0.02);
+  }
+
+  // ================= G. END CARD TE - 18.018 (TE = 13.962) =================
+  $('botScrim').style.display = t >= TE - 0.12 ? 'block' : 'none';
+  $('botScrim').style.opacity = E.outCubic(P(t, TE - 0.12, TE + 0.25));
+  const endOn = t >= TE;
+  show('end', endOn);
+  if (endOn) {
+    KT.wipe($('eLogo'), t, { start: TE + 0.214, dur: 0.257, dir: 'right', edge: $('eEdge'), ease: E.inOutCubic, pad: 2 });
+    trackLeft(G.eModel, t, TE + 0.14, 0.30, 0.6, 0.08, 30);
+    KT.rise(G.eOffer, t, { start: TE + 0.07, stagger: 0.012, dur: 0.35, dy: 1.1, ease: E.outExpo });
+    KT.drawStripe($('eStripe'), t, { start: TE + 0.26, dur: 0.3 });
+    KT.rise(G.eCta, t, { start: TE + 0.32, stagger: 0.012, dur: 0.35, dy: 1.1, ease: E.outExpo });
+    fadeUp('eContactW', t, TE + 0.43, TE + 0.67, 12);
+    fadeUp('eHandleW', t, TE + 0.50, TE + 0.72, 12);
+    fadeUp('eReq1W', t, TE + 0.57, TE + 0.77, 10);
+    fadeUp('eReq2W', t, TE + 0.61, TE + 0.81, 10);
+  }
+};
+
+// QA helper: ink rects of every visible text line at time t (build.py checks x <= 907, 269 <= y <= 1536)
+window.inkAudit = function (t) {
+  window.renderAt(t);
+  const ids = ['hTag', 'hHead', 'hOffer', 'hLogo', 'lBrand', 'lModel', 'lYear', 'oHours', 'oCity', 'oPrice', 'oDayL', 'oDayP',
+               'rNeed', 'rLic', 'rAge', 'eLogo', 'eModel', 'eOffer', 'eCta', 'eContact', 'eHandle', 'eReq1', 'eReq2'];
+  const out = [];
+  for (const id of ids) {
+    const el = $(id); let vis = true, n = el;
+    while (n && n !== document.body) { const cs = getComputedStyle(n); if (cs.display === 'none' || +cs.opacity === 0) { vis = false; break; } n = n.parentElement; }
+    if (!vis) continue;
+    const r = el.getBoundingClientRect(); out.push({ id, x0: r.left, x1: r.right, y0: r.top, y1: r.bottom });
+  }
+  return out;
+};
+</script>
+</body></html>

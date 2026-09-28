@@ -11,7 +11,8 @@ covers which look to reach for.
 
 **Made the standard by Omarie on 2026-09-26:** "That is amazing make that a standard."
 Every SE car ad starts from this treatment unless the job says otherwise. Style guide page: https://claude.ai/artifact/WCe1qHhTrMDw7bkDaskeQm (source in `flash-special-showcase/style-guide/`). Reference build:
-`flash-special-showcase/` ("LOCKED ON", GT3 RS, 18 s 9:16). Read its README before you start.
+`flash-special-showcase/` ("LOCKED ON", GT3 RS, 18 s 9:16). Read its README before you start. Second approved
+build: `750s-spider-locked-on/` ("ROOF DOWN", 750S Spider, 18 s, in 9:16, 4:5 and 1:1), the reference for feed cuts.
 
 What makes an ad `locked-on`, in order of appearance:
 
@@ -28,8 +29,9 @@ What makes an ad `locked-on`, in order of appearance:
    **locked-off shot**: tracing one car takes about 20 min, and a moving shot needs frame-by-frame roto,
    so don't promise it.
 5. **Edit energy.** Whip transitions, eased speed ramps, a short freeze with a light sweep across the
-   car, and one night grade across all shots (`lib/fx.py`, `lib/edl.py`). Keep the FX tasteful; the reviewers
-   flagged anything that read as a glitch (blown wheels, halos).
+   car, and one night grade across all shots (`lib/fx.py`, `lib/edl.py`). On sunlit footage keep one day grade
+   instead: a night look reads fake there (ROOF DOWN, desert daylight, was approved that way). Keep the FX
+   tasteful; the reviewers flagged anything that read as a glitch (blown wheels, halos).
 6. **End card.** Car name, offer lines, the price whole and clear of the car, TEXT OR DM TO BOOK,
    the phone for the ad's city, the site and @SUPERCAR_EXPERIENCE_, plus the requirements line.
 7. **Sound.** The clip's own music, continuous and never chopped at cuts, extended by whole bars if
@@ -39,6 +41,20 @@ What makes an ad `locked-on`, in order of appearance:
 8. **Process.** Every figure is sourced, copy passes SlopMonster 5/5, then review under four lenses
    (claims, brand, legibility, craft) until nothing is blocking. Deliver a two-pass ~11.5 Mb/s copy for the
    phone and Dropbox; the master stays in the repo.
+
+**Feed cuts: 4:5 and 1:1.** Approved by Omarie on 2026-09-27 on ROOF DOWN ("approve video"). Get the 9:16
+approved first, then cut the feed sizes from the same build: `python3 build.py --format 4x5` or `--format 1x1`
+(`750s-spider-locked-on/`, windows in `lib/formats.py`). The edit, plate, sky matte, graphics timing, copy and
+sound stay those of the 9:16.
+- **4:5** (1080×1350) is a straight crop of the 9:16 (plate y 228–1578). Every 9:16 line sits in the story safe
+  zone (y 269–1536), which fits, so nothing is moved or redrawn.
+- **1:1** (1080×1080) gets its own hook panel and end card (`front_1x1.html`); every other frame reuses the
+  approved 9:16 graphics. Keep the car whole: where it drives at the lens, drop the picture lower than the
+  graphics (ROOF DOWN's hook and front 3/4 pass), and move the window on a tracked lock-on so the brackets stay
+  in frame.
+- Once a size is approved, pin its SHA-256 in `lib/formats.py` `APPROVED`: the build then refuses to re-encode
+  over it without `--force`. Don't edit the approved 9:16 front page for a feed cut. Changing it re-renders
+  that layer, and Chromium's text raster isn't bit-for-bit repeatable.
 
 **Use `quick-promo` instead** only when the ad has to go out in under ~30 minutes. `locked-on`
 takes a few hours of build and review.
@@ -234,6 +250,8 @@ Keeping them separate is deliberate: a test on one axis stays interpretable.
 | 2026-09-27 | Sep 15 rally vlog rebuilt from raw footage (v2) | "This is the standard for making vlogs" — the v2 build, the vlog kit and the process on the style guide page are now THE vlog standard (section near the top) |
 | 2026-09-27 | Sep 15 rally vlog rebuilt from raw footage (`10-vlog-locked-on/2026-09-15-rally-v2/`, kit in `vlog-kit/`) | "This is great, a few minor changes but this is overall 99% great" — the rebuilt vlog and the vlog kit are the bar for SE vlogs; "how it was made" added to the style guide page. Minor changes pending |
 | 2026-09-27 | Sep 15 rally vlog with the Locked-On layer (`10-vlog-locked-on/2026-09-15-rally/`) | "That was great save this" — saved to Dropbox `/Supercar Experience/05 Vlogs/`. Next ask: rebuild the vlog from the raw footage with vlog-specific Locked-On variations, keeping the SE banner on the side, and catch the key moments (team dinner, guests on how they enjoyed it, leading the convoy on the freeway) |
+| 2026-09-27 | McLaren 750S Spider "ROOF DOWN" (`750s-spider-locked-on/`, the second `locked-on` build: SPIDER rises out of the sky behind the car as the roof stows, then the price rises from behind it) | Approved for ads, with every open question signed off (the clip's own music among them) and the defaults kept: one day grade on the sunlit desert footage, the text line on Las Vegas footage. Not posted |
+| 2026-09-27 | ROOF DOWN 4:5 and 1:1 feed cuts | "approve video". The feed-cut recipe is under THE STANDARD. Not posted |
 
 Add a row when the shop reacts to something. This file is the reason a future ad
 does not have to re-litigate a settled look.
