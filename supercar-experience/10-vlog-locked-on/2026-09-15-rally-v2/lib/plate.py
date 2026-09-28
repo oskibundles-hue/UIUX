@@ -405,6 +405,14 @@ def shot_sig(k):
     return hashlib.sha1(blob.encode()).hexdigest()[:16]
 
 
+def shot_content_sig(k):
+    """what shot k's pixels are made of, without the mezzanine file itself: a re-fetched mezzanine of the same source
+    range gives the same picture. The lock-on tracks key on this (build.py st_track), so fresh mezzanines (v2.4, rebuilt
+    by the engine after the v2 caches were gone) do not re-run the reviewed tracks; the shots themselves still re-render."""
+    blob = json.dumps([SHOTS[k], scfg(k), post_frames(k), CFG['looks'], CFG['timelapseShutter'], RENDER_VERSION], sort_keys=True)
+    return hashlib.sha1(blob.encode()).hexdigest()[:16]
+
+
 def render_shot(k, force=False):
     s = SHOTS[k]
     d = os.path.join(WORK, 'shots'); os.makedirs(d, exist_ok=True)
@@ -578,7 +586,10 @@ def join():
             i = f0 + j
             if tr and tr['type'] == 'sweep':
                 t = i / FPS
-                if tr['t0'] <= t < tr['t0'] + tr['dur'] and j < len(post_prev):
+                # v2.4: every frame of the new shot BEFORE the sweep ends is masked, including one that starts before the
+                # sweep's t0 (the mask is 0 there, so the old shot still shows). v2 tested t0 <= t, so the CH3 shot, whose
+                # first frame 1621 (54.087 s) rounds to just before the 54.09 sweep, flashed in full for one frame.
+                if t < tr['t0'] + tr['dur'] and j < len(post_prev):
                     m = sweep_mask(t, tr)
                     img = (img.astype(np.float32) * m + post_prev[j].astype(np.float32) * (1 - m) + 0.5).astype(np.uint8)
             if tr and tr['type'] == 'impact' and j < 14:

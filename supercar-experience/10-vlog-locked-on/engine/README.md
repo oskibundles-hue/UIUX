@@ -106,6 +106,31 @@ PCM 24-bit. There is also `<src>_timelapse.mov`. Options: `--handles 0.8` (secon
 screen into `<src>_<t0>-<t1>.wav`. That cuts 20% of the 4K decode on Sep 15, but only use it once the render reads
 dialog from those `.wav` files, because the v2 render reads it from the `.mov` files.
 
+### 6. Rebuilding a cut with little disk (no index on this machine)
+
+When a finished cut has to be rendered again on a machine that never ingested the day (the Sep 15 rally v2.4 rebuild, in a
+cloud session with about 5 GB free), two additions keep it small:
+
+```bash
+python3 $E/vlog.py tails DAY --clips raw.json --clips phone.json --edl cut.json   # register; DAY/links/request.json
+#   call download_link once (one link per DJI clip, two per phone clip), save the answer in DAY/links/
+python3 $E/vlog.py tails DAY --run                    # each clip's moov (tail, or head for a fast-start file) -> DAY/idx/
+python3 $E/vlog.py plan  DAY --edl cut.json --audio-only-vo --waves-gb 1.4
+#   call download_link for the wave-1 batches in DAY/fetch/request.json, save the answers in DAY/fetch/links/
+python3 $E/vlog.py fetch DAY --out MEZZ --budget-gb 2.0 --reserve-gb 0.6   # background; answer NEED.json per wave
+```
+
+- **tails** reads only the end of each clip (and the first 8 MB of a phone clip). A DJI file keeps its moov at the end, so
+  the head is written as a 16-byte `mdat` header from byte 0 to the moov; ffmpeg reads the sparse file (head + moov +
+  fetched spans) exactly like the original. Tested: cuts from such a sparse file are bit-identical to cuts from the full
+  original (`tests/`-style run on a moov-at-end .mp4 and .mov).
+- **plan --waves-gb** groups the spans in waves by the bytes they leave on disk. With `--audio-only-vo` an audio-only span
+  downloads its whole byte range but writes only its audio samples.
+- **fetch --budget-gb** starts a download only when the disk can hold it next to the mezzanines still to be written (at
+  0.16 MB per source frame) and under the budget, asks for the next wave through `links/NEED.json` (`{"entries": [...],
+  "wave": n}`, one call) when that wave fits, so no link waits long enough to expire, and punches out each span's bytes
+  (`fallocate --punch-hole`) as soon as every cut that reads it is done. The parent answers NEED.json as it does for ingest.
+
 ## How ingest works
 
 Each clip uses two single-use links:
@@ -247,7 +272,8 @@ lib/moments.py     moment categories and scoring
 lib/quality.py     picture notes
 lib/sheets.py      contact sheets and moment strips
 lib/dayindex.py    index: day.md, speakers.json, moments.*, flags.json, quality.json
-lib/fetch.py       plan + fetch + cut (range, keyframe timelapse, audio-only)
+lib/fetch.py       plan + fetch + cut (range, keyframe timelapse, audio-only; waves and a disk budget)
+lib/tails.py       moov-only survey (one tail link per clip, a head link for phone clips)
 tests/             rangeserver.py, test_stream.py, test_ingest.py, test_fetch.py, validate_sep15.py
 ```
 

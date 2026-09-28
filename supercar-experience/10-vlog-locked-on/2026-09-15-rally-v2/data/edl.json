@@ -610,9 +610,9 @@
   {
    "beat": 3,
    "src": "0013",
-   "in": 5.4,
+   "in": 5.2,
    "out": 16.45,
-   "t": 30.06,
+   "t": 29.86,
    "trim_pauses": 0.45
   },
   {
@@ -885,7 +885,7 @@
    "ch": "CH2",
    "t0": 25.88,
    "t1": 41.11,
-   "note": "\"See, we have all the cars. Black Series, Uruses, Corvette, Huracan Evos, GT3s, Rolls-Royce Cullinan\" - CONVOY LOCK-ON hops car to car"
+   "note": "\"See, we have all the cars. Black Series, Mansory Uruses, Corvette, Huracan Evos, GT3s, Rolls-Royce Cullinan\" - CONVOY LOCK-ON hops car to car"
   },
   {
    "i": 4,

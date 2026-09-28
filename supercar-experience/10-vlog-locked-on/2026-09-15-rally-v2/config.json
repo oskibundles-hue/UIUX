@@ -1,16 +1,26 @@
 {
- "_about": "Rally vlog v2 (Sep 15 2026, rebuilt from the raw footage). Everything that is not in the EDL lives here: paths, the per-shot reframe / look / ramp, transitions, the music slot, the clocks and every on-screen line. Edit, then run ./render.sh. Sources for every line: README.md.",
+ "_about": "Rally vlog v2.4 (Sep 15 2026, rebuilt from the raw footage). Everything that is not in the EDL lives here: paths, the per-shot reframe / look / ramp, transitions, the music slot, the clocks and every on-screen line. Edit, then run ./render.sh. Sources for every line: README.md.",
  "paths": {
-  "scratch": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad",
-  "ffmpeg": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/ffmpeg",
-  "mezz": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/mezz",
+  "_about": "v2.4 (28 Sept): this session's scratch. work = the build cache (.work in the build folder is a link to it, made by lib/cfg.py); mezz = the engine's fetch output; transcripts = the nat spans' word timings (lib/nattr.py). Override per machine in config.local.json",
+  "scratch": "/tmp/claude-0/-home-user-UIUX/5cb46d1c-39c8-543a-af9a-1db960b92019/scratchpad/rally24",
+  "work": "/tmp/claude-0/-home-user-UIUX/5cb46d1c-39c8-543a-af9a-1db960b92019/scratchpad/rally24/work",
+  "ffmpeg": "/usr/local/bin/ffmpeg",
+  "mezz": "/tmp/claude-0/-home-user-UIUX/5cb46d1c-39c8-543a-af9a-1db960b92019/scratchpad/rally24/mezz",
   "edl": "data/edl.json",
   "captions": "data/captions.json",
-  "sparse": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/raw/sparse",
+  "sparse": "/tmp/claude-0/-home-user-UIUX/5cb46d1c-39c8-543a-af9a-1db960b92019/scratchpad/rally24/day/fetch/sparse",
   "sfx": "../../10-motion-sfx/locked-on-sfx",
-  "transcripts": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/raw/tr"
+  "transcripts": "/tmp/claude-0/-home-user-UIUX/5cb46d1c-39c8-543a-af9a-1db960b92019/scratchpad/rally24/tr",
+  "dfnPython": "/tmp/claude-0/-home-user-UIUX/5cb46d1c-39c8-543a-af9a-1db960b92019/scratchpad/dfvenv/bin/python"
  },
- "name": "2026-09-15 rally day (Egnyte) - SE LOCKED-ON vlog v2",
+ "name": "2026-09-15 rally day (Egnyte) - SE LOCKED-ON vlog v2.4",
+ "title": "Rally day (Egnyte) - Supercar Experience vlog v2.4",
+ "exports": {
+  "_about": "v2.4: one video per vlog, the master. The NO MUSIC master stays a build output (for a trending sound) but is not delivered; the 720x1280 preview and the music-stem copy are off (the stem stays in .work/music_stem.wav)",
+  "noMusic": true,
+  "preview": false,
+  "musicStem": false
+ },
  "forbidden": [
   {
    "src": "0008",
@@ -830,7 +840,7 @@
       {
        "track": "lineup_urus",
        "t": 30.96,
-       "make": "LAMBORGHINI URUS",
+       "make": "LAMBORGHINI MANSORY URUS",
        "mode": "acquire"
       },
       {
@@ -995,7 +1005,7 @@
      "y": 340,
      "placeholder": false,
      "start": 101.82,
-     "header": "FAVOURITE OF THE FLEET"
+     "header": "FAVORITE OF THE FLEET"
     }
    },
    {
@@ -1475,6 +1485,24 @@
   "enabled": true
  },
  "audio": {
+  "dealarm": {
+   "_about": "v2.4: the car alarm in clip 0013 (source 0-19 s: dialog pieces 3 and 4, the cold-open nat 13-14) is removed from the camera audio BEFORE the dialog chain, so each piece is levelled on its voice. lib/dealarm_dfn.py in the DeepFilterNet3 venv (paths.dfnPython): voice = DeepFilterNet3, the alarm bands cut from the rest only, the voice tone-matched to the same clip's clean pieces (refs) and any alarm tone left in it clamped to clampDb over the neighbouring bands. Cached in .work/dealarm/; the Locked-On accents are mixed after dialog, so the notch never touches them",
+   "spans": [
+    {
+     "src": "0013",
+     "a": 0.0,
+     "b": 19.0,
+     "why": "car alarm in the garage while Omarie names the lineup",
+     "refs": [[26.6, 30.4], [58.6, 65.1], [73.1, 75.6], [387.9, 391.0]]
+    }
+   ],
+   "bands": [[2850, 3750], [6000, 7250]],
+   "depthDb": -45,
+   "clamps": [[[2850, 3750], [2300, 2800], [3800, 4300]], [[6000, 7250], [5400, 5950], [7300, 7900]]],
+   "clampDb": 4.0,
+   "liftDb": 1.5,
+   "tone": true
+  },
   "dialogFilter": "highpass=f=80:poles=2,afftdn=nr=8:nf=-45:tn=1,acompressor=threshold=-26dB:ratio=2:attack=12:release=180:makeup=1",
   "dialogLufs": -16.0,
   "edgeFade": 0.012,
@@ -1498,6 +1526,14 @@
    "18": {
     "in": -0.05,
     "out": -0.12
+   },
+   "3": {
+    "gainDb": -0.6,
+    "_why": "v2.4: after the alarm is removed pieces 3 and 4 are nearly all voice, while pieces 5-8 carry garage ambience inside their -16 LUFS; -0.6 dB puts their voice-only loudness within 1 dB of pieces 5-8 (lib/audiocheck.py)"
+   },
+   "4": {
+    "gainDb": -0.6,
+    "_why": "as piece 3"
    }
   },
   "extraDialog": [
@@ -1507,6 +1543,15 @@
     "out": 433.35,
     "t": 4.1,
     "why": "cold open: the guest's sync line on its own shot (the EDL put it at 0.0 s, 4 s before its picture)"
+   }
+  ],
+  "natSpeech": [
+   {
+    "src": "0013",
+    "a": 12.865,
+    "b": 14.005,
+    "w": "GT3s",
+    "why": "the one nat clip with speech (the cold open's GT3s, 3.0-4.0 s): the music ducks under it. Written down in v2.4 because the v2 transcripts are gone; clip time from the voice envelope"
    }
   ],
   "natLufs": -24.0,

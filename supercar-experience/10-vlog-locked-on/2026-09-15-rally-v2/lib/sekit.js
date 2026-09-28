@@ -1339,12 +1339,18 @@
         const y = p.yBottom - (n - li) * lh + 8, W = pg.widths[li], x = p.cx - W / 2;
         el('div', 'a', pg.root, `left:${x - padX}px;top:${y}px;width:${W + 2 * padX}px;height:${cap + 2 * padY}px;background:rgba(0,0,0,.86)`);
       });
-      pg.gold = el('div', 'a', pg.root, `height:${cap + 2 * padY - 8}px;background:${GOLD}`);
+      // rally-v2 copy (v2.4): the words, then the gold box ABOVE them, then a black copy of the words clipped to the
+      // box. While the box glides from one word to the next, the part of a word under the box is black on gold and
+      // the rest white on the plate, so no frame hides part of a word (the kit turned the new word black at once,
+      // black on the black plate until the box arrived: 'USE.' at 111.97 s in v2)
       pg.lines.forEach((ln, li) => {
         const y = p.yBottom - (n - li) * lh + 8, W = pg.widths[li], x = p.cx - W / 2;
         let cx = x;
         ln.forEach(w => { w.x = cx; w.y = y; w.el = line(pg.root, 'Bebas', p.size, w.w, cx, y + padY, '#fff', { split: false }); cx += w.W + sp; });
       });
+      pg.gold = el('div', 'a', pg.root, `height:${cap + 2 * padY - 8}px;background:${GOLD}`);
+      pg.ink = el('div', 'a', pg.root, 'left:0;top:0;width:1080px;height:1920px');
+      pg.lines.flat().forEach(w => { line(pg.ink, 'Bebas', p.size, w.w, w.x, w.y + padY, '#000', { split: false }); });
       pg.gold.style.top = px(p.yBottom - n * lh + 8 + 4);
     });
     // rally-v2 copy: page i is on screen for whole frames [S_i, E_i); a page's pre-roll never overlaps the page before it
@@ -1362,8 +1368,8 @@
         const qi = i === 0 && pg.a <= cfg.t0 + 0.01 ? 1 : E.outExpo(P(t, pg.a - 0.06, pg.a + 0.14));
         pg.root.style.transform = `translateY(${(14 * (1 - qi)).toFixed(2)}px)`; pg.root.style.opacity = cl(qi * 1.4).toFixed(3);
         let k = -1; all.forEach((w, j) => { if (t >= w.a) k = j; });
-        all.forEach((w, j) => { w.el.t.style.color = j === k ? '#000' : j < k ? '#fff' : 'rgba(255,255,255,.5)'; });
-        if (k < 0) { pg.gold.style.opacity = 0; return; }
+        all.forEach((w, j) => { w.el.t.style.color = j <= k ? '#fff' : 'rgba(255,255,255,.5)'; });
+        if (k < 0) { pg.gold.style.opacity = 0; show(pg.ink, false); return; }
         const w = all[k], pw = k > 0 ? all[k - 1] : w;
         const q = E.outCubic(P(t, w.a, w.a + 0.09)), sameRow = pw.y === w.y;
         const gx = sameRow ? lerp(pw.x, w.x, q) : w.x, gw = sameRow ? lerp(pw.W, w.W, q) : w.W;
@@ -1371,6 +1377,11 @@
         pg.gold.style.left = px(gx - 8); pg.gold.style.width = px(gw + 16); pg.gold.style.top = px(w.y + 4);
         const pop = 1 + 0.06 * Math.exp(-(t - w.a) * 16);
         pg.gold.style.transform = `scale(${pop.toFixed(4)})`;
+        // the black copy shows exactly inside the (scaled) gold box
+        const bw = (gw + 16) * pop, bh = (cap + 2 * padY - 8) * pop;
+        const bx = gx - 8 + (gw + 16 - bw) / 2, by = w.y + 4 + (cap + 2 * padY - 8 - bh) / 2;
+        show(pg.ink, true);
+        pg.ink.style.clipPath = `inset(${by.toFixed(2)}px ${(1080 - bx - bw).toFixed(2)}px ${(1920 - by - bh).toFixed(2)}px ${bx.toFixed(2)}px)`;
       });
     } };
   };

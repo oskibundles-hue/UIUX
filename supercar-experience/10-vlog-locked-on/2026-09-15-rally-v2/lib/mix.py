@@ -15,6 +15,10 @@ Buses (48 kHz stereo float):
   sfx     the Locked-On pack (10-motion-sfx/locked-on-sfx), cue list from build.py (.work/sfx_cues.json). Each
           accent is set to `sfx.ratio` (45 %) of the UNDUCKED music RMS over the accent's own energetic span,
           then ducked a further `sfx.duckDb` under dialog, so ticks stay audible without stepping on words.
+  dealarm (v2.4, config `audio.dealarm`) BEFORE the dialog chain: a clip span with a car alarm is cleaned once from
+          its camera audio (lib/dealarm_dfn.py in the DeepFilterNet3 venv: voice separated, the alarm bands cut from the
+          rest only, the voice tone-matched to the clip's clean pieces, alarm tone left in the voice clamped) into
+          .work/dealarm/<src>_<a>-<b>.wav, which every dialog / nat read inside that span uses instead of the mezzanine.
 Master: sum -> 30 Hz high-pass -> 4x true-peak limiter at `master.ceiling` -> gain iterated (numpy BS.1770) to
 `master.lufs`, re-limited; the last 60 ms are exact zeros. The no-music master is the same without the music bus.
 Every level is reported in .work/mix.json.
@@ -52,8 +56,14 @@ import hashlib, time  # noqa: E402
 CACHE = os.path.join(WORK, 'cache')
 
 
+DEALARM = os.path.join(WORK, 'dealarm')
+
+
 def _mezz_listing():
     out = []
+    for fn in sorted(os.listdir(DEALARM)) if os.path.isdir(DEALARM) else []:
+        if fn.endswith('.key'):
+            out.append(fn + ':' + open(os.path.join(DEALARM, fn)).read().strip())
     for d in (P['mezz'], os.path.join(WORK, 'mezz_extra')):
         if os.path.isdir(d):
             out += sorted(f'{fn}:{os.path.getsize(os.path.join(d, fn))}' for fn in os.listdir(d))
@@ -126,12 +136,12 @@ def true_peak_db(x):
 def mezz_audio(src, a, b, af=None):
     """source seconds [a, b] of clip src from the mezzanine (or .work/mezz_extra), float64 stereo."""
     cands = []
-    for d in (P['mezz'], os.path.join(WORK, 'mezz_extra')):
+    for d in (DEALARM, P['mezz'], os.path.join(WORK, 'mezz_extra')):     # a cleaned span (v2.4 dealarm) first
         if not os.path.isdir(d):
             continue
-        for fn in os.listdir(d):
+        for fn in sorted(os.listdir(d)):
             m = re.match(r'^(\w+?)_(?:audio_)?([\d.]+)-([\d.]+)\.(mov|wav)$', fn)
-            if m and m.group(1) == src and float(m.group(2)) - 0.03 <= a and b <= float(m.group(3)) + 0.03:
+            if m and m.group(1) == src and float(m.group(2)) - 0.03 <= a and b <= float(m.group(3)) + 0.03 and not fn.startswith('.'):
                 cands.append((os.path.join(d, fn), float(m.group(2))))
     if not cands:
         raise SystemExit(f'no audio for {src} {a}-{b}')
@@ -185,6 +195,78 @@ def place(bus, x, t):
         bus[s:e] += x[:e - s]
 
 
+# ------------------------------------------------------------------------------ dealarm (v2.4)
+def _mezz_of(src, a, b):
+    """(path, t0, t1) of the mezzanine (not a cleaned span) holding src [a, b]."""
+    for d in (P['mezz'], os.path.join(WORK, 'mezz_extra')):
+        if not os.path.isdir(d):
+            continue
+        for fn in sorted(os.listdir(d)):
+            m = re.match(r'^(\w+?)_(?:audio_)?([\d.]+)-([\d.]+)\.(mov|wav)$', fn)
+            if m and m.group(1) == src and float(m.group(2)) - 0.03 <= a and b <= float(m.group(3)) + 0.03 and not fn.startswith('.'):
+                return os.path.join(d, fn), float(m.group(2)), float(m.group(3))
+    return None
+
+
+def prepare_dealarm():
+    """config audio.dealarm: each span -> .work/dealarm/<src>_<a>-<b>.wav, cleaned in the DeepFilterNet3 venv
+    (lib/dealarm_dfn.py), rebuilt only when its inputs change (.key). The span is clipped to the mezzanine that holds it."""
+    cfg = A.get('dealarm')
+    if not cfg or not cfg.get('spans'):
+        return []
+    os.makedirs(DEALARM, exist_ok=True)
+    py = P.get('dfnPython')
+    code = open(os.path.join(HERE, 'dealarm_dfn.py'), 'rb').read()
+    glob_p = {k: v for k, v in cfg.items() if k not in ('spans',) and not k.startswith('_')}
+    made = []
+    for sp in cfg['spans']:
+        src = sp['src']
+        # the mezzanine holding the start of the span; the span ends where that mezzanine ends
+        hit = None
+        for d in (P['mezz'], os.path.join(WORK, 'mezz_extra')):
+            for fn in sorted(os.listdir(d)) if os.path.isdir(d) else []:
+                m = re.match(r'^(\w+?)_(?:audio_)?([\d.]+)-([\d.]+)\.(mov|wav)$', fn)
+                if m and m.group(1) == src and float(m.group(2)) <= sp['a'] + 0.03 < float(m.group(3)) and not fn.startswith('.'):
+                    hit = (os.path.join(d, fn), float(m.group(2)), float(m.group(3)))
+        if not hit:
+            raise SystemExit(f'dealarm: no mezzanine for {src} at {sp["a"]}')
+        a = max(sp['a'], hit[1]); b = min(sp['b'], hit[2] - 0.05)
+        name = f'{src}_{a:g}-{b:g}.wav'
+        out = os.path.join(DEALARM, name)
+        refs = [_mezz_of(src, r0 - 0.4, r1) for r0, r1 in sp.get('refs', [])]
+        if any(r is None for r in refs):
+            raise SystemExit(f'dealarm: a reference piece of {src} has no mezzanine: {sp.get("refs")}')
+        speech = []
+        for i, d in enumerate(EDL['dialog'] + A.get('extraDialog', [])):
+            tr = A['trims'].get(str(i), {}) if i < len(EDL['dialog']) else {}
+            da, db = d['in'] + tr.get('in', 0.0), d['out'] + tr.get('out', 0.0)
+            if d['src'] == src and da >= a - 0.03 and db <= b + 0.03:
+                speech.append([round(da - a, 4), round(db - a, 4)])
+        key = hashlib.sha1(json.dumps([sp, glob_p, a, b, speech, [os.path.basename(hit[0]), os.path.getsize(hit[0])],
+                                       [(os.path.basename(r[0]), os.path.getsize(r[0])) for r in refs]], sort_keys=True).encode() + code).hexdigest()[:16]
+        kp = os.path.join(DEALARM, name[:-4] + '.key')
+        if os.path.exists(out) and os.path.exists(kp) and open(kp).read().strip() == key:
+            made.append(dict(file=name, key=key, cached=True)); continue
+        if not py or not os.path.exists(py):
+            raise SystemExit('dealarm: needs the DeepFilterNet3 venv (config paths.dfnPython); see README "Sound"')
+        for q in os.listdir(DEALARM):                       # an older cleaned file of this clip would be picked first
+            if q.startswith(src + '_'):
+                os.remove(os.path.join(DEALARM, q))
+        t0 = time.time()
+        tmp = os.path.join(WORK, 'dealarm_in'); os.makedirs(tmp, exist_ok=True)
+        write_wav24(os.path.join(tmp, 'span.wav'), mezz_audio(src, a, b))
+        rp = []
+        for j, ((r0, r1), r) in enumerate(zip(sp['refs'], refs)):
+            q = os.path.join(tmp, f'ref{j}.wav'); write_wav24(q, mezz_audio(src, r0 - 0.4, r1)); rp.append(q)
+        job = dict(glob_p, **{'in': os.path.join(tmp, 'span.wav'), 'refs': rp, 'speech': speech, 'out': out})
+        jp = os.path.join(tmp, 'job.json'); json.dump(job, open(jp, 'w'), indent=1)
+        subprocess.run([py, os.path.join(HERE, 'dealarm_dfn.py'), 'clean', jp], check=True, stdout=subprocess.DEVNULL)
+        open(kp, 'w').write(key)
+        made.append(dict(file=name, key=key, cached=False, s=round(time.time() - t0, 1)))
+        log(f'dealarm: {name} cleaned in {time.time() - t0:.0f}s (report {name}.json)')
+    return made
+
+
 # ------------------------------------------------------------------------------ buses
 DIALOG_AF = A['dialogFilter']
 
@@ -235,8 +317,14 @@ def activity(spans, pre=0.12, post=0.35, bridge=0.6):
 
 
 def nat_speech_spans():
-    """timeline spans of transcribed words inside each nat clip (someone talking in the nat -> the music ducks too)."""
+    """timeline spans of transcribed words inside each nat clip (someone talking in the nat -> the music ducks too).
+    Words come from the clip transcripts (paths.transcripts/<src>.json) and from config `audio.natSpeech` (clip-time
+    spans written down once, so the duck does not depend on a transcript being on this machine)."""
     out = []
+    for w in A.get('natSpeech', []):
+        for e in A['nat']:
+            if e['src'] == w['src'] and w['a'] < e['b'] and w['b'] > e['a']:
+                out.append([e['t'] + max(w['a'], e['a']) - e['a'], e['t'] + min(w['b'], e['b']) - e['a']])
     for e in A['nat']:
         p = os.path.join(P['transcripts'], f"{e['src']}.json")
         if not os.path.exists(p):
@@ -393,6 +481,12 @@ def main():
     a = ap.parse_args()
     rep = {'dialog': [], 'nat': [], 'sfx': []}
     T = {}; t0 = time.time()
+    rep['dealarm'] = prepare_dealarm()
+    for d in rep['dealarm']:
+        jr = os.path.join(DEALARM, d['file'] + '.json')
+        if os.path.exists(jr):
+            d['report'] = json.load(open(jr))
+    T['dealarm'] = f'{time.time() - t0:.1f}s'; t0 = time.time()
     def _dialog():
         r = {'dialog': []}; d, sp = build_dialog(r)
         return d, dict(spans=sp, dialog=r['dialog'])

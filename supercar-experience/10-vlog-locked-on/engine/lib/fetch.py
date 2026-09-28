@@ -6,7 +6,11 @@ plan  every source range the EDL touches (shots, dialog, audio_extra) + handles,
       "keyframes": the timelapse) become a span whose download keeps only sync samples.
       -> DAY/fetch/fetchplan.json + DAY/fetch/request.json (one link per span, <=25 per call)
 fetch spans download in parallel (one Range request per single-use link) into sparse files that hold the
-      saved head + moov, so ffmpeg can seek them like the original. A clip's cuts start as soon as its
+      saved head + moov, so ffmpeg can seek them like the original. With a disk budget (plan --waves-gb, fetch
+      --budget-gb) the spans come in waves: a download starts only when the disk can hold it next to the
+      mezzanines still to be written, the next wave's links are asked for through links/NEED.json when the disk
+      can take that wave, and a span's bytes are freed (hole punched) as soon as every cut that reads it is done.
+      An audio-only span (plan --audio-only-vo) keeps only its audio samples on disk. A clip's cuts start as soon as its
       spans are in, longest first, one ffmpeg per core (-threads 1 decode, x264 threads=1): 4 cuts on
       4 cores beats 1 cut on 4 threads because HEVC 4K 10-bit decode does not scale well within one file.
 Mezzanines (same as the approved v2): <src>_<t0>-<t1>.mov, display-rotated, long side 1920, native frame
@@ -46,7 +50,42 @@ def movie_of(day, cid):
     return mp4.parse_moov(open(p, 'rb').read())
 
 
-def make_plan(day_root, edl_path, out=None, handles=0.8, merge_gap=2.0, preroll=2.0, audio_only_vo=False):
+def _sample_ranges(track, lo, hi):
+    """merged byte ranges of the track's samples that lie inside [lo, hi)."""
+    if track is None or not track.n:
+        return []
+    o = track.offsets.astype(np.int64); e = o + track.sizes.astype(np.int64)
+    m = (o >= lo) & (e <= hi)
+    return mp4.merge_ranges([[int(a), int(b)] for a, b in zip(o[m], e[m])])
+
+
+def span_disk(movie, sp):
+    """bytes a span leaves on disk: the whole range, only the audio samples (audio-only), or only the kept sync samples."""
+    if sp['kind'] == 'audio':
+        return int(sum(b - a for a, b in _sample_ranges(movie.audio, sp['lo'], sp['hi'])))
+    if sp['kind'] == 'keyframes':
+        v = movie.video
+        return int(sum(int(v.sizes[i]) for i in sp['samples']))
+    return sp['hi'] - sp['lo']
+
+
+def assign_waves(spans, cap):
+    """first-fit decreasing on disk bytes: wave numbers from 1, each wave's disk bytes <= cap (a bigger span gets its own)."""
+    waves = []
+    for s in sorted(spans, key=lambda s: -s['disk']):
+        for w in waves:
+            if w['disk'] + s['disk'] <= cap:
+                w['disk'] += s['disk']; w['spans'].append(s); break
+        else:
+            waves.append({'disk': s['disk'], 'spans': [s]})
+    for k, w in enumerate(waves):
+        for s in w['spans']:
+            s['wave'] = k + 1
+    return [{'wave': k + 1, 'disk': w['disk'], 'download': sum(s['hi'] - s['lo'] for s in w['spans']), 'links': len(w['spans'])}
+            for k, w in enumerate(waves)]
+
+
+def make_plan(day_root, edl_path, out=None, handles=0.8, merge_gap=2.0, preroll=2.0, audio_only_vo=False, waves_gb=None):
     """audio_only_vo: dialog / audio_extra ranges that no shot shows on screen become audio-only jobs
     (<src>_<t0>-<t1>.wav, no 4K decode at all). Saves ~20% of the cut time on Sep 15; off by default because the
     v2 render reads dialog from the .mov mezzanines."""
@@ -98,7 +137,7 @@ def make_plan(day_root, edl_path, out=None, handles=0.8, merge_gap=2.0, preroll=
             a, b = max(0.0, a), min(dur, b)
             lo, hi = mp4.span(mv, a, b)
             name = f'{src}_{tstr(a)}-{tstr(b)}.wav'
-            spans.append({'lo': lo, 'hi': hi, 'kind': 'range', 'jobs': [name]})
+            spans.append({'lo': lo, 'hi': hi, 'kind': 'audio', 'jobs': [name]})
             plan['jobs'].append({'src': src, 't0': round(a, 3), 't1': round(b, 3), 'kind': 'audio', 'out': name})
         # neighbouring spans share one link when the gap is small (one Range request per link)
         spans.sort(key=lambda s: s['lo'])
@@ -107,6 +146,8 @@ def make_plan(day_root, edl_path, out=None, handles=0.8, merge_gap=2.0, preroll=
             if joined and s['lo'] - joined[-1]['hi'] <= JOIN_BYTES:
                 joined[-1]['hi'] = max(joined[-1]['hi'], s['hi'])
                 joined[-1]['jobs'] += s['jobs']
+                if joined[-1]['kind'] != s['kind']:
+                    joined[-1]['kind'] = 'range'         # a picture range and an audio-only range share one link
             else:
                 joined.append(s)
         for a, b in tl.get(src, []):
@@ -120,6 +161,7 @@ def make_plan(day_root, edl_path, out=None, handles=0.8, merge_gap=2.0, preroll=
         for s in joined:
             s['src'] = src
             s['path'] = path
+            s['disk'] = span_disk(mv, s)
             plan['spans'].append(s)
             total += s['hi'] - s['lo']
         plan['clips'][src] = {'size': size, 'path': path, 'duration': round(dur, 3)}
@@ -134,14 +176,38 @@ def make_plan(day_root, edl_path, out=None, handles=0.8, merge_gap=2.0, preroll=
         j['frames'] = int(len(j.get('samples', [])) if j['kind'] == 'keyframes' else
                           0 if j['kind'] == 'audio' else (j['t1'] - j['t0'] + 1.0) * fps[j['src']])
     plan['bytes'] = total
-    write_json(os.path.join(out, 'fetchplan.json'), plan)
-    batches = request_batches([(s['path'], 1) for s in plan['spans']], per_call=MAX_PER_CALL)
-    # request order must equal span order: request_batches groups equal paths only when adjacent, which is fine
-    write_request(out, batches, note='One link per span, in this order. Save each raw answer as fetch/links/<n>.json.')
-    os.makedirs(os.path.join(out, 'links'), exist_ok=True)
+    plan['disk_bytes'] = sum(s['disk'] for s in plan['spans'])
     nfr = sum(j['frames'] for j in plan['jobs'])
-    log(f"plan: {len(plan['clips'])} clips, {len(plan['jobs'])} cuts, {len(plan['spans'])} spans = {len(plan['spans'])} links "
-        f"in {len(batches)} call(s), {total / 1e9:.2f} GB to fetch, ~{nfr} source frames to decode -> {out}")
+    if waves_gb:
+        plan['waves'] = assign_waves(plan['spans'], int(waves_gb * 1e9))
+        plan['spans'].sort(key=lambda s: (s['wave'], -(s['hi'] - s['lo'])))
+        for i, s in enumerate(plan['spans']):
+            s['i'] = i
+        write_json(os.path.join(out, 'fetchplan.json'), plan)
+        calls = []
+        for w in plan['waves']:
+            b = request_batches([(s['path'], 1) for s in plan['spans'] if s['wave'] == w['wave']], per_call=MAX_PER_CALL)
+            w['calls'] = len(b)
+            calls += [{'batch': len(calls) + k + 1, 'wave': w['wave'], 'entries': e} for k, e in enumerate(b)]
+        obj = {'tool': 'Dropbox download_link', 'expiration_in_sec': 900,
+               'note': 'Waves: call download_link for the wave-1 batches now and save each raw answer as fetch/links/<n>.json. '
+                       'Later waves are asked for through fetch/links/NEED.json when the disk can hold them (fetch --budget-gb).',
+               'waves': plan['waves'], 'batches': [c for c in calls if c['wave'] == 1], 'all_batches': calls}
+        write_json(os.path.join(out, 'request.json'), obj)
+        write_json(os.path.join(out, 'fetchplan.json'), plan)
+        log(f"plan: {len(plan['clips'])} clips, {len(plan['jobs'])} cuts, {len(plan['spans'])} spans = {len(plan['spans'])} links in "
+            f"{len(plan['waves'])} wave(s) / {len(calls)} call(s), {total / 1e9:.2f} GB to download, {plan['disk_bytes'] / 1e9:.2f} GB "
+            f"on disk at most {max(w['disk'] for w in plan['waves']) / 1e9:.2f} GB per wave, ~{nfr} source frames to decode -> {out}")
+        for w in plan['waves']:
+            log(f"  wave {w['wave']}: {w['links']} links in {w['calls']} call(s), download {w['download'] / 1e9:.2f} GB, disk {w['disk'] / 1e9:.2f} GB")
+    else:
+        write_json(os.path.join(out, 'fetchplan.json'), plan)
+        batches = request_batches([(s['path'], 1) for s in plan['spans']], per_call=MAX_PER_CALL)
+        # request order must equal span order: request_batches groups equal paths only when adjacent, which is fine
+        write_request(out, batches, note='One link per span, in this order. Save each raw answer as fetch/links/<n>.json.')
+        log(f"plan: {len(plan['clips'])} clips, {len(plan['jobs'])} cuts, {len(plan['spans'])} spans = {len(plan['spans'])} links "
+            f"in {len(batches)} call(s), {total / 1e9:.2f} GB to fetch, ~{nfr} source frames to decode -> {out}")
+    os.makedirs(os.path.join(out, 'links'), exist_ok=True)
     return plan
 
 
@@ -167,7 +233,7 @@ def init_sparse(day, src, size, sparse_dir):
     return p
 
 
-def fetch_span(url, span, sparse_path, movie):
+def fetch_span(url, span, sparse_path, movie, progress=None):
     lo, hi = span['lo'], span['hi']
     fd = os.open(sparse_path, os.O_RDWR)
     try:
@@ -177,11 +243,16 @@ def fetch_span(url, span, sparse_path, movie):
             def sink(mv):
                 os.pwrite(fd, mv, pos[0])
                 pos[0] += len(mv)
+                if progress is not None:
+                    progress[span['i']] = pos[0] - lo
             got, secs = stream.http_stream(url, sink, expect_size=hi - lo, rng=(lo, hi))
-        else:  # keyframes: keep only the sync samples inside the range
+        else:  # keyframes: only the sync samples inside the range; audio: only the audio samples
             v = movie.video
-            keep = mp4.merge_ranges([[int(v.offsets[i]), int(v.offsets[i] + v.sizes[i])] for i in span['samples']])
-            state = {'pos': lo, 'k': 0}
+            if span['kind'] == 'audio':
+                keep = _sample_ranges(movie.audio, lo, hi)
+            else:
+                keep = mp4.merge_ranges([[int(v.offsets[i]), int(v.offsets[i] + v.sizes[i])] for i in span['samples']])
+            state = {'pos': lo, 'k': 0, 'w': 0}
 
             def sink(mv):
                 a = state['pos']
@@ -194,12 +265,15 @@ def fetch_span(url, span, sparse_path, movie):
                     x, y = max(a, keep[j][0]), min(b, keep[j][1])
                     if y > x:
                         os.pwrite(fd, mv[x - a:y - a], x)
+                        state['w'] += y - x
                     if keep[j][1] <= b:
                         j += 1
                     else:
                         break
                 state['k'] = j
                 state['pos'] = b
+                if progress is not None:
+                    progress[span['i']] = state['w']
             got, secs = stream.http_stream(url, sink, expect_size=hi - lo, rng=(lo, hi))
     finally:
         os.close(fd)
@@ -297,7 +371,25 @@ def _cut_worker(args):
     return time.time() - t
 
 
-def run_fetch(day_root, plan_path, links, out, workers=4, crf=13, preset='superfast', streams=6):
+def punch(path, lo, hi):
+    """free the bytes [lo, hi) of a sparse file (the file keeps its size; reads there return zeros)."""
+    r = subprocess.run(['fallocate', '--punch-hole', '--offset', str(lo), '--length', str(hi - lo), path], capture_output=True, text=True)
+    return r.returncode == 0
+
+
+def est_mezz_bytes(job):
+    """a mezzanine's size, for the disk budget: x264 High 10 CRF 13 at 1920 on the long side, measured about 0.1 MB per
+    source frame on Sep 15 (2 GB for the cut); 0.16 MB is used to stay on the safe side. PCM 24-bit stereo for audio."""
+    if job['kind'] == 'audio':
+        return int((job['t1'] - job['t0']) * 48000 * 6) + (1 << 16)
+    return int(job['frames'] * 160e3) + int((job['t1'] - job['t0'] + 1) * 48000 * 6)
+
+
+def run_fetch(day_root, plan_path, links, out, workers=4, crf=13, preset='superfast', streams=6, budget_gb=None,
+              reserve_gb=0.6, wait_links=1800):
+    """fetch + cut. budget_gb=None: every span as soon as its link is there (the original behaviour). budget_gb=X: the
+    spans held on disk at once are kept under X GB and under what the disk can take (free space - reserve_gb - the
+    mezzanines still to be written); the next wave's links are requested through links/NEED.json when it fits."""
     import multiprocessing as mp
     day = Day(day_root)
     wdir = os.path.dirname(os.path.abspath(plan_path)) if plan_path else day.p('fetch')
@@ -314,9 +406,9 @@ def run_fetch(day_root, plan_path, links, out, workers=4, crf=13, preset='superf
         shutil.copy(links, os.path.join(ldir, os.path.basename(links)))
     pool = LinkPool(ldir)
     pool.scan()
-    need = sum(s['hi'] - s['lo'] for s in plan['spans'])
-    if free_disk(wdir) < need + (2 << 30):
-        log(f'warning: {free_disk(wdir) / 1e9:.1f} GB free for {need / 1e9:.1f} GB of spans')
+    need_all = sum(s.get('disk', s['hi'] - s['lo']) for s in plan['spans'])
+    if not budget_gb and free_disk(wdir) < need_all + (2 << 30):
+        log(f'warning: {free_disk(wdir) / 1e9:.1f} GB free for {need_all / 1e9:.1f} GB of spans (use --budget-gb)')
     movies, metas, sparse = {}, {}, {}
     for src, c in plan['clips'].items():
         movies[src] = movie_of(day, src)
@@ -325,40 +417,100 @@ def run_fetch(day_root, plan_path, links, out, workers=4, crf=13, preset='superf
     done_spans = set(read_json(os.path.join(wdir, 'spans_done.json'), []) or [])
     jobs = {j['out']: j for j in plan['jobs']}
     job_spans = {name: [s['i'] for s in plan['spans'] if name in s['jobs']] for name in jobs}
+    span_by_i = {s['i']: s for s in plan['spans']}
     finished = {n for n in jobs if os.path.exists(os.path.join(out, n))}
+    punched = set()
+    disk = lambda s: s.get('disk', s['hi'] - s['lo'])  # noqa: E731
     t0 = time.time()
     lock = threading.Lock()
     fetched_bytes = [0]
+    progress = {}
     errors = []
 
-    def get(s):
-        if s['i'] in done_spans:
-            return s['i'], 0, 0
-        link = pool.take(s['path'], f"span{s['i']}")
-        if not link:
-            raise RuntimeError(f"no fresh link for span {s['i']} ({s['path']})")
-        got, secs = fetch_span(link['url'], s, sparse[s['src']], movies[s['src']])
+    def get(s, link):
+        got, secs = fetch_span(link['url'], s, sparse[s['src']], movies[s['src']], progress)
         with lock:
             fetched_bytes[0] += got
         return s['i'], got, secs
     fex = cf.ThreadPoolExecutor(streams)
     cex = cf.ProcessPoolExecutor(workers, mp_context=mp.get_context('spawn'))
-    ffuts = {fex.submit(get, s): s for s in plan['spans']}
-    cfuts = {}
-    started = set()
-    cut_s = {}
-    while ffuts or cfuts:
+    pending = sorted([s for s in plan['spans'] if s['i'] not in done_spans and not all(n in finished for n in s['jobs'])],
+                     key=lambda s: (s.get('wave', 1), -(s['hi'] - s['lo'])))
+    ffuts, cfuts, started, cut_s = {}, {}, set(), {}
+    need_path = os.path.join(ldir, 'NEED.json')
+    need_since = None
+    last_links = time.time()
+    last_scan = 0.0
+    retries = {}
+
+    def room():
+        """bytes a new download may still take: free space minus the reserve, the unwritten rest of the running
+        downloads and the mezzanines not written yet."""
+        inflight = sum(max(0, disk(s) - progress.get(s['i'], 0)) for s in ffuts.values())
+        mezz = sum(est_mezz_bytes(jobs[n]) for n in jobs if n not in finished)
+        r = free_disk(wdir) - int(reserve_gb * 1e9) - inflight - mezz
+        if budget_gb:
+            held = sum(disk(span_by_i[i]) for i in done_spans if i not in punched) + sum(disk(s) for s in ffuts.values())
+            r = min(r, int(budget_gb * 1e9) - held)
+        return r
+
+    while pending or ffuts or cfuts:
+        now = time.time()
+        if now - last_scan > 2:
+            last_scan = now
+            if pool.scan():
+                last_links = now
+                if os.path.exists(need_path):
+                    os.remove(need_path)
+                need_since = None
+                log(f'links: {len(pool.links)} known')
+        # ---- downloads: in wave order, when there is a link and room on the disk
+        for s in list(pending):
+            if len(ffuts) >= streams:
+                break
+            if not pool.fresh(s['path']):
+                continue
+            if budget_gb is not None and disk(s) > room() and (ffuts or cfuts or done_spans - punched):
+                continue                                   # wait for cuts to free space (never deadlock on an empty pipe)
+            link = pool.take(s['path'], f"span{s['i']}")
+            pending.remove(s)
+            ffuts[fex.submit(get, s, link)] = s
+        # ---- links for the next wave: asked for when the disk can hold that wave (so they cannot expire waiting)
+        if pending and not os.path.exists(need_path):
+            w = pending[0].get('wave', 1)
+            wave = [s for s in pending if s.get('wave', 1) == w]
+            have = {}
+            for s in wave:
+                have[s['path']] = have.get(s['path'], 0)
+            want = []
+            for s in wave:
+                k = s['path']
+                if len(pool.fresh(k)) > have[k]:
+                    have[k] += 1
+                else:
+                    want.append(k)
+            fits = budget_gb is None or sum(disk(s) for s in wave) <= room() or not (ffuts or cfuts)
+            if want and fits and not ffuts:
+                write_json(need_path, {'entries': want[:MAX_PER_CALL], 'wave': w, 'expiration_in_sec': 900,
+                                       'note': f'fetch: links for wave {w} ({len(want)} span(s); '
+                                               f'{sum(disk(s) for s in wave) / 1e9:.2f} GB on disk). Save the raw answer as links/<n>.json.'})
+                need_since = now
+                log(f'NEED.json: wave {w}, {min(len(want), MAX_PER_CALL)} link(s) (of {len(want)})')
+        # ---- finished downloads
         for f in [f for f in ffuts if f.done()]:
             s = ffuts.pop(f)
             try:
                 i, got, secs = f.result()
                 done_spans.add(i)
                 write_json(os.path.join(wdir, 'spans_done.json'), sorted(done_spans))
-                if got:
-                    log(f"span {i} {s['src']} {got / 1e6:.0f} MB in {secs:.1f}s ({got / max(secs, 1e-3) / 1e6:.0f} MB/s)")
+                log(f"span {i} {s['src']} (wave {s.get('wave', 1)}) {got / 1e6:.0f} MB in {secs:.1f}s ({got / max(secs, 1e-3) / 1e6:.0f} MB/s)")
             except Exception as e:
+                retries[s['i']] = retries.get(s['i'], 0) + 1
                 errors.append(f"span {s['i']} {s['src']}: {e}")
-                log(f"span {s['i']} {s['src']} FAILED: {e}")
+                log(f"span {s['i']} {s['src']} FAILED ({retries[s['i']]}): {e}")
+                if retries[s['i']] < 3:
+                    pending.insert(0, s)                   # a fresh link is asked for through NEED.json
+        # ---- cuts, longest first, once all their spans are in
         ready = [n for n in jobs if n not in finished and n not in started and all(i in done_spans for i in job_spans[n])]
         ready.sort(key=lambda n: -jobs[n]['frames'])
         for n in ready:
@@ -377,21 +529,31 @@ def run_fetch(day_root, plan_path, links, out, workers=4, crf=13, preset='superf
             except Exception as e:
                 errors.append(f'cut {n}: {e}')
                 log(f'cut {n} FAILED: {str(e)[:300]}')
-        if not cfuts and not ffuts:
-            break
-        blocked = [n for n in jobs if n not in finished and n not in started]
-        if not ffuts and not cfuts and blocked:
-            break
+                finished.add(n)                            # not retried here; reported as missing below
+                open(os.path.join(wdir, 'cut_failed.txt'), 'a').write(n + '\n')
+            # a span whose every cut is done is freed
+            for i in job_spans[n]:
+                sp = span_by_i[i]
+                if i not in punched and all(m in finished for m in sp['jobs']):
+                    if punch(sparse[sp['src']], sp['lo'], sp['hi']):
+                        punched.add(i)
+        if pending and not ffuts and not cfuts and not any(pool.fresh(s['path']) for s in pending):
+            if now - last_links > wait_links:
+                log(f'no links for {wait_links} s: stopping with {len(pending)} span(s) not fetched')
+                break
         time.sleep(0.2)
     fex.shutdown()
     cex.shutdown()
-    missing = [n for n in jobs if n not in finished]
+    if os.path.exists(need_path) and not pending:
+        os.remove(need_path)
+    failed = set(open(os.path.join(wdir, 'cut_failed.txt')).read().split()) if os.path.exists(os.path.join(wdir, 'cut_failed.txt')) else set()
+    missing = [n for n in jobs if not os.path.exists(os.path.join(out, n))]
     el = time.time() - t0
-    log(f'fetch+cut done in {el:.0f}s: {len(finished)}/{len(jobs)} mezzanines in {out}, fetched {fetched_bytes[0] / 1e9:.2f} GB'
+    log(f'fetch+cut done in {el:.0f}s: {len(jobs) - len(missing)}/{len(jobs)} mezzanines in {out}, fetched {fetched_bytes[0] / 1e9:.2f} GB'
         + (f'; missing: {missing}' if missing else ''))
     if not missing:
         import shutil
         shutil.rmtree(sparse_dir, ignore_errors=True)
     write_json(os.path.join(wdir, 'fetch_report.json'), {'wall_s': round(el, 1), 'cuts': cut_s, 'errors': errors,
-                                                         'missing': missing})
+                                                         'missing': missing, 'failed_cuts': sorted(failed)})
     return 0 if not missing else 1

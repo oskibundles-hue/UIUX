@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-build.py -- ONE command for the Sep 15 rally vlog v2 (Egnyte rally day), rebuilt from the raw footage:
+build.py -- ONE command for the Sep 15 rally vlog v2.4 (Egnyte rally day), rebuilt from the raw footage:
 picture edit + grade (lib/plate.py), sound (lib/music.py, lib/mix.py), tracking (lib/track_mid.py), the
 Locked-On motion layer (story.html + lib/sekit.js + lib/v2kit.js, captured by lib/kcap2.js), the
 composite, the exports and QA. Every stage is cached, so a re-run only redoes what a change touches.
@@ -23,8 +23,10 @@ Stages (all cached in .work/):
   front    story.html captured by lib/kcap2.js: only the frames whose layer state changed (hash of every component's
            DOM at every motion-blur sample), identical frames once; order-independent pixels; NPROC processes
   compose  plate + vignette + layer -> x264 CRF 17.3 (medium, VBV 16M/22M) master in 120-frame segments (only changed
-           segments are re-encoded, then joined by stream copy), the 720x1280 preview from the same pass (CRF 28.5,
-           VBV 2M), the NO MUSIC master = the same video + the no-music mix; _DELIVERY only if the master is > 11.5 Mb/s
+           segments are re-encoded, then joined by stream copy); config `exports` adds the NO MUSIC master (the same
+           video + the no-music mix; a build output, not delivered), and optionally the 720x1280 preview from the same
+           pass (CRF 28.5, VBV 2M) and the music stem; _DELIVERY only if the master is > 11.5 Mb/s. v2.4 delivers the
+           master only (one video per vlog)
   qa       stills, sheets, loudness, true peak, durations, safe-zone audit, caption sync, swap check (one decode)
 """
 import argparse, hashlib, json, math, os, re, shutil, struct, subprocess, sys, time
@@ -47,6 +49,8 @@ W, H = 1080, 1920
 NF = int(round(EDL['duration'] * FPS))
 DUR = NF / FPS
 NAME = C['name']
+TITLE = C.get('title', NAME)
+EXPORTS = dict(dict(noMusic=True, preview=True, musicStem=True), **{k: v for k, v in C.get('exports', {}).items() if not k.startswith('_')})
 NODE = shutil.which('node') or '/opt/node22/bin/node'
 TIMES = {}
 
@@ -294,7 +298,7 @@ def audio_sig():
     blob = json.dumps([C['audio'], C['music'], C['master'], C['sfx'], C['layer'].get('testimonial'), EDL['dialog'], EDL.get('audio_extra'),
                        os.environ.get('MUSIC', '1'), DUR], sort_keys=True)
     cues = os.path.join(WORK, 'sfx_cues.json')
-    return _hash(os.path.join(LIB, 'mix.py'), os.path.join(LIB, 'synth.py'), os.path.join(LIB, 'music.py'), cues,
+    return _hash(os.path.join(LIB, 'mix.py'), os.path.join(LIB, 'synth.py'), os.path.join(LIB, 'music.py'), os.path.join(LIB, 'dealarm_dfn.py'), cues,
                  extra=blob + _files_sig([slot, C['paths']['mezz'], os.path.join(WORK, 'mezz_extra'), C['paths']['transcripts'],
                                           os.path.join(ROOT, C['paths']['sfx'])]))
 
@@ -330,7 +334,7 @@ def st_track(A):
     for name, t in C['tracks'].items():
         if name.startswith('_') or (only and name not in only):
             continue
-        sig = hashlib.sha1(json.dumps([t, _shot_sig(t['shot']), PL.FR[t['shot']][1], code], sort_keys=True).encode()).hexdigest()[:16]
+        sig = hashlib.sha1(json.dumps([t, PL.shot_content_sig(t['shot']), PL.FR[t['shot']][1], code], sort_keys=True).encode()).hexdigest()[:16]
         db = json.load(open(out)) if os.path.exists(out) else {}
         if not only and db.get(name, {}).get('sig') == sig and os.path.exists(os.path.join(QA, f'track_{name}.jpg')):
             continue                                   # this track's inputs are unchanged
@@ -544,7 +548,7 @@ VENC = ['-c:v', 'libx264', '-preset', 'medium', '-crf', '17.3', '-maxrate', '16M
         '-color_trc', 'bt709', '-color_range', 'tv']
 PENC = ['-c:v', 'libx264', '-preset', 'medium', '-crf', '28.5', '-maxrate', '2M', '-bufsize', '3M', '-pix_fmt', 'yuv420p',
         '-x264-params', 'keyint=60:min-keyint=30', '-colorspace', 'bt709', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-color_range', 'tv']
-ENC_SIG = hashlib.sha1(json.dumps([SEG, GRAPH, VENC, PENC, 'v1']).encode()).hexdigest()[:12]
+ENC_SIG = hashlib.sha1(json.dumps([SEG, GRAPH, VENC, PENC if EXPORTS['preview'] else None, 'v1']).encode()).hexdigest()[:12]
 
 
 def build_sequence(front=None):
@@ -639,19 +643,20 @@ def segment_hashes(layer_idx, plate_frames, keys):
 
 
 def encode_run(s, e, seq, segdir, first_seg):
-    """encode frames [s, e) (a run of whole segments) in one ffmpeg: master + preview segments of SEG frames each."""
+    """encode frames [s, e) (a run of whole segments) in one ffmpeg: master (+ preview) segments of SEG frames each."""
     n = e - s
     cuts = ','.join(str(x) for x in range(SEG, n, SEG))
     seek = max(0.0, (s - 0.5) / FPS)
     fk = f'expr:eq(mod(n,{SEG}),0)'
-    graph = GRAPH + f';[v]split=2[vm][vp0];[vp0]scale=720:1280:flags=lanczos[vp]'
+    pv = EXPORTS['preview']
+    graph = GRAPH + (f';[v]split=2[vm][vp0];[vp0]scale=720:1280:flags=lanczos[vp]' if pv else ';[v]null[vm]')
     segargs = lambda pre: ['-flags', '+global_header', '-f', 'segment', '-segment_format', 'mp4', '-segment_start_number', str(first_seg),
                            *(['-segment_frames', cuts] if cuts else ['-segment_time', '100000']), '-reset_timestamps', '1',
                            os.path.join(segdir, pre + '_%03d.mp4')]
     sh([FF, '-v', 'error', '-y', '-ss', f'{seek:.6f}', '-i', os.path.join(WORK, 'plate.mov'), '-framerate', '30000/1001', '-start_number', str(s),
         '-i', os.path.join(seq, '%05d.png'), '-filter_complex_threads', '4', '-filter_complex', graph,
         '-map', '[vm]', '-frames:v', str(n), *VENC, '-force_key_frames', fk, '-an', *segargs('m'),
-        '-map', '[vp]', '-frames:v', str(n), *PENC, '-force_key_frames', fk, '-an', *segargs('p')])
+        *(['-map', '[vp]', '-frames:v', str(n), *PENC, '-force_key_frames', fk, '-an', *segargs('p')] if pv else [])])
 
 
 def aac(src, dst, br, af=None):
@@ -687,7 +692,7 @@ def st_compose(A):
     sp = os.path.join(segdir, 'index.json')
     old = json.load(open(sp)) if os.path.exists(sp) else {}
     stale = [i for i, (s, e, h) in enumerate(segs) if old.get(str(i)) != h or not os.path.exists(os.path.join(segdir, f'm_{i:03d}.mp4'))
-             or not os.path.exists(os.path.join(segdir, f'p_{i:03d}.mp4'))]
+             or (EXPORTS['preview'] and not os.path.exists(os.path.join(segdir, f'p_{i:03d}.mp4')))]
     for i in stale:
         old.pop(str(i), None)
     json.dump(old, open(sp, 'w'))
@@ -710,13 +715,18 @@ def st_compose(A):
     mparts = [os.path.join(segdir, f'm_{i:03d}.mp4') for i in range(len(segs))]
     pparts = [os.path.join(segdir, f'p_{i:03d}.mp4') for i in range(len(segs))]
     a_m = aac(os.path.join(WORK, 'mix.wav'), os.path.join(WORK, 'aac_master.m4a'), '256k')
-    a_n = aac(os.path.join(WORK, 'mix_nomusic.wav'), os.path.join(WORK, 'aac_nomusic.m4a'), '256k')
-    # the preview's audio: the same mix 0.5 dB lower, so the 160k AAC still holds -1.5 dBTP
-    a_p = aac(os.path.join(WORK, 'mix.wav'), os.path.join(WORK, 'aac_preview.m4a'), '160k', af='volume=-0.5dB')
-    title = 'Rally day (Egnyte) - Supercar Experience vlog v2'
+    title = TITLE
     concat_mux(mparts, a_m, master, title)
-    concat_mux(mparts, a_n, nomus, title + ' (no music)')
-    concat_mux(pparts, a_p, prev, title + ' (preview)')
+    for f in (nomus, prev):                             # an export switched off in config `exports` is not left behind
+        if os.path.exists(f):
+            os.remove(f)
+    if EXPORTS['noMusic']:
+        a_n = aac(os.path.join(WORK, 'mix_nomusic.wav'), os.path.join(WORK, 'aac_nomusic.m4a'), '256k')
+        concat_mux(mparts, a_n, nomus, title + ' (no music)')
+    if EXPORTS['preview']:
+        # the preview's audio: the same mix 0.5 dB lower, so the 160k AAC still holds -1.5 dBTP
+        a_p = aac(os.path.join(WORK, 'mix.wav'), os.path.join(WORK, 'aac_preview.m4a'), '160k', af='volume=-0.5dB')
+        concat_mux(pparts, a_p, prev, title + ' (preview)')
     mbps = os.path.getsize(master) * 8 / DUR / 1e6
     deliv = os.path.join(EXP, f'{NAME} - 1080x1920_DELIVERY.mp4')
     if mbps > 11.5:
@@ -727,7 +737,7 @@ def st_compose(A):
             '-c:a', 'copy', '-movflags', '+faststart', deliv])
     elif os.path.exists(deliv):
         os.remove(deliv)
-    pmib = os.path.getsize(prev) / 2 ** 20
+    pmib = os.path.getsize(prev) / 2 ** 20 if EXPORTS['preview'] else 0
     if pmib >= 29.5:                                   # safety net: the preview must stay under 30 MiB
         log(f'compose: preview {pmib:.1f} MiB >= 29.5 -> two-pass 1.1 Mb/s from the master')
         plog = os.path.join(WORK, 'x264pass')
@@ -735,9 +745,13 @@ def st_compose(A):
               '-pix_fmt', 'yuv420p', '-passlogfile', plog + 'p']
         sh([FF, '-v', 'error', '-y', '-i', master] + pv + ['-pass', '1', '-an', '-f', 'null', '-'])
         sh([FF, '-v', 'error', '-y', '-i', master, '-i', a_p] + pv + ['-pass', '2', '-map', '0:v', '-map', '1:a', '-c:a', 'copy', '-movflags', '+faststart', prev])
-    shutil.copyfile(os.path.join(WORK, 'music_stem.wav'), os.path.join(EXP, f'{NAME} - music-stem.wav'))
+    stem = os.path.join(EXP, f'{NAME} - music-stem.wav')
+    if EXPORTS['musicStem']:
+        shutil.copyfile(os.path.join(WORK, 'music_stem.wav'), stem)
+    elif os.path.exists(stem):
+        os.remove(stem)
     log(f'compose: {len(stale)} of {len(segs)} segments encoded ({t_enc:.0f}s), muxed, {time.time() - t0:.0f}s in all '
-        f'({mbps:.2f} Mb/s master, preview {os.path.getsize(prev) / 2 ** 20:.1f} MiB)')
+        f'({mbps:.2f} Mb/s master' + (f', preview {pmib:.1f} MiB)' if EXPORTS['preview'] else ')'))
     TIMES['compose'] = dict(segments_encoded=len(stale), segments=len(segs), encode_s=round(t_enc, 1), total_s=round(time.time() - t0, 1))
 
 
@@ -899,7 +913,7 @@ def write_cue():
     import plate as PL
     L = []
     w = L.append
-    w('# Cue sheet: rally vlog v2 (generated by `build.py --stage qa`; edit config.json, not this file)\n')
+    w('# Cue sheet: rally vlog v2.4 (generated by `build.py --stage qa`; edit config.json, not this file)\n')
     w(f'Timeline: {NF} frames at 30000/1001 fps = {DUR:.3f} s. Frame n is shown at n x 1001/30000 s.\n')
     w('## Picture: shots, reframe, look, transitions\n')
     w('| # | t (s) | frames | clip | source in-out | look | reframe | into it |')
@@ -1086,6 +1100,16 @@ def st_qa(A):
             vals.append(LUM[i])
         lum[f'{k:02d} {PL.SHOTS[k]["src"]} {PL.scfg(k)["look"] if PL.SHOTS[k]["src"] != "card" else "card"}'] = vals
     res['shot_luma_mean_median_crushed_clipped'] = lum
+    # v2.4 sound checks (lib/audiocheck.py): voice level of the cleaned lineup pieces, the accents in the alarm bands,
+    # the alarm residue in the dialog stem -> exports/qa/audio_v24.json
+    if C['audio'].get('dealarm'):
+        try:
+            import audiocheck
+            ac = audiocheck.main()
+            res['audio_v24'] = dict(voice_level_pass=ac['voice_level'].get('pass_'), accents_pass=ac['accents'].get('pass_'))
+        except Exception as e:                      # reported, not fatal: the render itself is done
+            log(f'qa: audiocheck failed: {e}')
+            res['audio_v24'] = dict(error=str(e)[:300])
     json.dump(res, open(os.path.join(QA, 'qa_summary.json'), 'w'), indent=1)
     log(f"qa: {res['MB']} MB {res['mbps']} Mb/s, durations {res['track_durations_s']}, audio {res['audio']}, safe-zone outside {len(bad)}")
 

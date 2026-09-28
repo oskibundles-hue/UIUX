@@ -8,7 +8,10 @@
   transcribe DAY                  (re)transcribe audio that has no transcript yet (ingest already does this)
   status     DAY                  one line per clip
   index      DAY [--out DIR]      day.md, speaker labels, moments.json/.md, flags.json, quality notes
+  tails      DAY --clips LIST --edl EDL   (no ingest on this machine) register the clips, request one link per clip
+             DAY --run            ... fetch each clip's moov from its tail (+ head for phone clips) -> idx/ for plan / fetch
   plan       DAY --edl edl.json   byte spans for every shot (+handles) -> fetchplan.json + links request
+                                  (--waves-gb X: spans grouped in waves that fit the disk; later waves via NEED.json)
   fetch      DAY --out MEZZ       range-fetch the spans (links in DAY/fetch/links/) and cut mezzanines, all cores busy
                                   (--local: from this machine; VLOG_HWACCEL=videotoolbox decodes on the Mac's media engine)
 
@@ -163,9 +166,18 @@ def cmd_index(a):
     build_index(a.day, out=a.out or a.day, host_ref=a.host_ref, voiceprint=a.voiceprint, sheets_on=not a.no_sheets)
 
 
+def cmd_tails(a):
+    from lib import tails
+    if a.run:
+        sys.exit(tails.run(a.day, tail_mb=a.tail_mb, head_mb=a.head_mb, wait=a.wait_links))
+    if not a.clips or not a.edl:
+        sys.exit('tails: give --clips LIST (repeatable) and --edl EDL, or --run')
+    tails.request(a.day, a.clips, a.edl, load_clip_list)
+
+
 def cmd_plan(a):
     from lib.fetch import make_plan
-    make_plan(a.day, a.edl, out=a.out, handles=a.handles, merge_gap=a.merge_gap, audio_only_vo=a.audio_only_vo)
+    make_plan(a.day, a.edl, out=a.out, handles=a.handles, merge_gap=a.merge_gap, audio_only_vo=a.audio_only_vo, waves_gb=a.waves_gb)
 
 
 def cmd_fetch(a):
@@ -185,7 +197,7 @@ def cmd_fetch(a):
         print(f'local mode: {n} span link(s)' + (f'; not found on this machine: {missing}' if missing else ''), flush=True)
     try:
         rc = run_fetch(a.day, a.plan, a.links, out=a.out, workers=a.workers, crf=a.crf, preset=a.preset,
-                       streams=a.streams)
+                       streams=a.streams, budget_gb=a.budget_gb, reserve_gb=a.reserve_gb, wait_links=a.wait_links)
     finally:
         if loc:
             loc.stop()
@@ -242,6 +254,16 @@ def main():
     p.add_argument('--no-sheets', action='store_true')
     p.set_defaults(fn=cmd_index)
 
+    p = sub.add_parser('tails', help='moov-only survey: one link per clip (two for phone clips), for plan / fetch')
+    p.add_argument('day')
+    p.add_argument('--clips', action='append', default=[], help='Dropbox list_folder answer or path list (repeatable)')
+    p.add_argument('--edl', help='the cut: only the clips it uses get links')
+    p.add_argument('--run', action='store_true', help='fetch the tails with the links saved in DAY/links/')
+    p.add_argument('--tail-mb', type=int, default=24)
+    p.add_argument('--head-mb', type=int, default=8)
+    p.add_argument('--wait-links', type=int, default=600)
+    p.set_defaults(fn=cmd_tails)
+
     p = sub.add_parser('plan', help='edl.json -> fetchplan.json + links request')
     p.add_argument('day')
     p.add_argument('--edl', required=True)
@@ -250,6 +272,7 @@ def main():
     p.add_argument('--merge-gap', type=float, default=2.0)
     p.add_argument('--audio-only-vo', action='store_true',
                    help='VO / nat ranges not on screen -> <src>_<t0>-<t1>.wav, no video decode (~20%% faster cuts)')
+    p.add_argument('--waves-gb', type=float, help='group the spans in waves of at most this many GB on disk')
     p.set_defaults(fn=cmd_plan)
 
     p = sub.add_parser('fetch', help='range-fetch planned spans and cut mezzanines')
@@ -261,6 +284,9 @@ def main():
     p.add_argument('--streams', type=int, default=6)
     p.add_argument('--crf', type=float, default=13)
     p.add_argument('--preset', default='superfast', help='x264 preset (superfast: 4.7 fps/core, beats the Sep 15 mezz)')
+    p.add_argument('--budget-gb', type=float, help='keep at most this many GB of spans on disk (waves; frees each span once cut)')
+    p.add_argument('--reserve-gb', type=float, default=0.6, help='free disk always left (with --budget-gb)')
+    p.add_argument('--wait-links', type=int, default=1800, help='give up after this many seconds without new links')
     p.add_argument('--local', action='store_true', help='read the files on this machine (Dropbox desktop folder)')
     p.add_argument('--local-root', action='append', default=[], metavar='DIR',
                    help='folder that Dropbox paths are found under (default: the Dropbox desktop folder)')
