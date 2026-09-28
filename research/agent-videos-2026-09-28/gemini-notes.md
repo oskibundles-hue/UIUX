@@ -3,9 +3,11 @@
 Four videos, watched with the `watch` skill's Gemini engine (agentic video processing — Google
 watches the video directly; this container's IP is blocked from touching YouTube itself, so this
 was the only route). Free-tier limits (~5 req/min, 20 req/day per model) and 503 "high demand"
-errors meant only one of the four videos got a full answer this session; the other three are
-documented as failures below rather than guessed at. Raw Gemini output (or raw failure log) for
-each video is saved under `raw/<video-id>.md`.
+errors blocked a first pass on 3 of the 4 videos. A follow-up pass got **all four** videos
+answered: `gemini-flash-lite-latest` came back online, and for the two longest/most-overloaded
+videos, splitting the ask into short 4–5 minute clips (`--start`/`--end`, aligned to the video's
+own chapters) got through where one big agentic request kept 503'ing. Raw Gemini output for each
+video is saved under `raw/<video-id>.md`.
 
 ---
 
@@ -13,16 +15,61 @@ each video is saved under `raw/<video-id>.md`.
 
 - **URL:** https://www.youtube.com/watch?v=HDmBwU5uvEE
 - **Channel (confirmed via oEmbed):** Ben AI
-- **Length:** not obtained
-- **Model that answered:** none — every model in the fallback order failed
+- **Length:** 13:15 (per Gemini)
+- **Model that answered:** `gemini-flash-lite-latest` (agentic, one pass, 7,294 tokens)
 
-**Gaps:** Gemini never watched this video. `gemini-3-flash-preview` first refused with "Agentic
-video processing is not enabled for this model" (HTTP 400), then on retry hit its 20/day quota
-(HTTP 429). `gemini-3.6-flash` and `gemini-3.7-flash` also hit their 20/day quota after repeated
-503 retries. `gemini-flash-lite-latest` returned HTTP 503 "high demand" on every single attempt
-(6+ tries across this session) and never once succeeded. None of the 7 rules, their explanations,
-before/after prompt examples, cited Anthropic pages, or shown tools/links could be captured. Full
-attempt log in `raw/HDmBwU5uvEE.md`.
+### The 7 rules
+
+1. **Give Claude 5 models the entire job instead of prompting it step-by-step** [SEEN @0:34–0:37] —
+   modern models do best given the complete task spec upfront and left to run; describe the task,
+   guardrails and exit criteria at a high level rather than "do 1, then 2, then 3." No before/after
+   example shown for this one. Cited: Anthropic prompting guides for Opus 5 / Haiku 5
+   [SEEN @0:39–0:50]; Boris Cherny's Y Combinator talk [SEEN @1:02–1:11]; a free resource link in
+   the description [SEEN @2:40].
+2. **Use an "Interview Me" skill before sending the model off end-to-end** [SEEN @3:02–3:10] —
+   Anthropic internally uses a skill that asks clarifying questions up front to surface unknowns
+   and build a complete brief. He shows the resulting brief for a personal analytics dashboard
+   [SEEN @3:55–4:22] rather than a before/after pair. Cited: an Anthropic article on how the team
+   uses Claude 5 [SEEN @3:20–3:30]; Andrej Karpathy and voice transcription via Whisperflow or
+   Claude's built-in voice tool [SEEN @4:55–5:10]; his own "Prompt Master skill" [SEEN @5:20–5:30];
+   his AI Accelerator / AI Operator program and free resources [SEEN @5:32–6:05].
+3. **Prompt why it needs to do the job, not just what** [SEEN @6:05–6:21] — models make better
+   micro-decisions on under-specified tasks when they understand the bigger picture. Template shown
+   [SEEN @6:50–7:05]: *"I'm working on [larger task] for [specific person/audience]. They need
+   [what the output enables], and with that in mind, [request]."* His own example [SEEN @7:15–7:30]:
+   *"I'm working on a video for my YouTube channel on how to prompt Claude models and how it's
+   changed. The video is for non-technical professionals and business owners that are using Claude
+   to automate their work. They need practical tips, examples and frameworks on how to improve
+   their prompting, not just theory."*
+4. **Define what done looks like** [SEEN @7:57–8:03] — Claude 5 models tend to over-run rather than
+   under-run, so exit criteria and output style keep them from burning extra tokens. His example
+   criteria [SEEN @8:33–8:45]: *"a pre-outline for this video, that means 8 to 15 practical tips on
+   how to prompt cloud models together with a specific example for each and the source you found
+   this tip for, again the source you found for this tip should be backed up by [Anthropic]."*
+   Cited: a Boris (Cherny) talk at Y Combinator [SEEN @8:15–8:21].
+5. **Swap hard rules for reasons** [SEEN @9:17–9:22] — models respond better to an instruction plus
+   its reason than to a "never do X" constraint. Before [SEEN @9:55–10:04]: *"Never give a point
+   that is not backed up by Anthropic."* After: *"Make sure that the points that are mentioned are
+   backed up by Anthropic's own team so we actually have proof for the claims we're making and the
+   reason behind it."* Cited: Anthropic's context-engineering research/article and a keynote on
+   prompting [SEEN @9:25–9:35]; Anthropic's "Rule Rewriter skill" for updating `CLAUDE.md`/skill
+   files [SEEN @10:10–10:27].
+6. **Avoid telling it to double-check itself** [SEEN @10:27–10:40] — explicit verification asks,
+   sub-agent double-checks, or all-caps emphasis add cost without improving results, since Claude 5
+   models already self-correct; also avoid "think step by step" / "explain your reasoning." No
+   before/after example shown for this one.
+7. **Fix Claude's voice once** [SEEN @11:38–11:46] — to stop Opus 5 from being jargon-heavy or
+   verbose, set one global instruction (in `CLAUDE.md`, Claude Desktop instructions, or project
+   settings). Example shown [SEEN @12:15–12:22]: *"keep responses focused, brief and concise, avoid
+   jargon and being overly verbose."* Cited/quoted [SEEN @12:45–13:00]: an Anthropic article's line
+   — *"think of Claude as a brilliant but new employee who lacks context on your norms and
+   workflows"* — and the "golden rule": show your prompt to a colleague with minimal context and
+   see if they'd be confused; Claude will be too.
+
+**Gaps:** speech-to-text in the transcript is imperfect — "Fable 5" appears to be Gemini
+mis-hearing "Claude 5" / "Opus 5" in a couple of spots, and "entropic" in rule 4's quote is almost
+certainly "Anthropic" mis-transcribed. Take those two words as probable ASR errors, not intentional
+phrasing by the creator.
 
 ---
 
@@ -30,8 +77,7 @@ attempt log in `raw/HDmBwU5uvEE.md`.
 
 - **URL:** https://www.youtube.com/watch?v=YAsxyoTWFDA
 - **Channel (confirmed via oEmbed):** The Coding Sloth
-- **Length:** 22:31 (per Gemini; not independently re-verified against a chapter list — this
-  video has none)
+- **Length:** 22:31 (per Gemini; this video has no chapters, so not independently cross-checked)
 - **Model that answered:** `gemini-3-flash-preview` (agentic; 126,953 tokens)
 
 ### Full tier list of Claude Code features
@@ -122,57 +168,279 @@ attempt log in `raw/HDmBwU5uvEE.md`.
 - For UI/frontend, use screenshot testing and browser testing, because Claude is "literally blind"
   to what it makes [SEEN @09:40–09:44].
 
-**Gaps:** the video has no chapter list to check the timestamps against (per the task brief), so
-these mm:ss marks are Gemini's own placement and weren't cross-checked against a second source.
-Nothing in the answer flagged as unseen/unheard — Gemini didn't note any gaps of its own for this
-video.
+**Gaps:** the video has no chapter list to check the timestamps against, so these mm:ss marks are
+Gemini's own placement and weren't cross-checked against a second source. Nothing flagged as
+unseen/unheard by Gemini for this video.
 
 ---
 
 ## 3. Systems Made Better — "I Made Claude My Personal Assistant (Full Build)"
 
 - **URL:** https://www.youtube.com/watch?v=3ZT0upsICHk
-- **Channel (confirmed via oEmbed):** Systems Made Better
-- **Length:** not obtained
-- **Model that answered:** none — every model in the fallback order failed
+- **Channel (confirmed via oEmbed):** Systems Made Better (channel handle @BetterCreating, creator
+  goes by "Simon" — confirmed via the video's own YouTube description, fetched with Jina's reader
+  as a metadata cross-check per SOURCE.md's fallback route)
+- **Length:** 27:09 (confirmed via chapter-list source and consistent with the last clip's range)
+- **Model that answered:** `gemini-flash-lite-latest`, in **7 short clips** aligned to the video's
+  own chapters (one full-video agentic attempt kept 503'ing; splitting into ~4–5 minute
+  `--start`/`--end` clips got through every time). Total ~154,000 tokens across all 7 clips.
 
-**Gaps:** Gemini never watched this video. All four models returned HTTP 503 "high demand" on
-their first attempts; by the time a retry reached `gemini-3-flash-preview`, that model had already
-spent its 20/day quota on video 1's attempts (HTTP 429). None of the assistant's on-screen
-instruction text, the Notion database fields, the scheduled task's cadence/prompt, the ASD-STE100
-discussion, the context map, or the finished daily brief could be captured. Full attempt log in
-`raw/3ZT0upsICHk.md`.
+### What the daily brief looks like (built up across the video)
+
+- Early mockup version [SEEN @0:07–0:13, @1:23–1:40]: greeting banner ("Good morning, Simon."),
+  stat counts (5 TO ACT ON, 3 MEETINGS, 19 TEAM ITEMS, 8 ISSUES), sections "Needs attention today,"
+  "Today's schedule," "Your action items," "Relevant in Slack," "Issues to raise," "The Team,"
+  "Overdue backlog," and "Personal/finance / System updates."
+- Design brainstorm on-screen questions [SEEN @5:25]: "What's in the morning briefing?" (daily
+  overview, calendar & meetings, email/transcript triage, tasks & deadlines, news & industry
+  topics, weather & commute, yesterday's design, suggested focus for today, open questions);
+  "Where do you read it?" (phone-first / desktop-first / both); "How long should reading it take?"
+  (30 seconds / 2–3 min / 10 min / deep); "Information density" (very sparse / balanced / dense).
+  Wireframe template shown [SEEN @5:50] with a date header ("Wednesday, 17 Sep"), section headings,
+  terse one-clause-per-line body copy, a colour swatch palette, and modular blocks.
+- Finished brief actually delivered [SEEN @23:35–23:56]: header "Friday, 18 Sep 2026," notes it's a
+  delivery day with a hard deadline at 17:45; stat counters "Ready for review" (1), "P1 task" (1),
+  "Needs review" (3); **"The 20% — Focus Today"** with 3 items (send finalised contracts by 17:45,
+  film Module 3 for the Accelerator cohort — 60 min, sign off Claude's Community Digest — 15 min);
+  an hourly **Schedule** with named blocks and a clash warning at 17:00 plus a 20-minute daily reset
+  at 18:00; **Tasks & Deadlines** split into "Your tasks" (2 open), "Your VA's tasks" (3), and
+  "Automated — ready for Simon [to approve]"; **Email waiting on you** (a glance inbox, an invoice
+  from "Lisa," a GoCardless Direct Debit notice).
+
+### Apps connected, and how
+
+- Navigates Claude Desktop's **Customize → Connectors** tab [SEEN @3:13–3:32] and connects
+  **Google Drive**, **Google Calendar**, **Notion**, mentions **Microsoft 365** as an alternative,
+  and a custom MCP ("Agentic Business Guide MCP").
+- Configures per-connector tool permissions (Always allow / Needs approval / Never) [SEEN
+  @3:52–4:03].
+- Confirms the essential set for the PA: **Google Calendar, Notion, Slack, and local folders in
+  Claude** [SEEN @4:19–4:26].
+
+### Install & folder setup
+
+- Chapter title on screen: `#02 INSTALL CLAUDE & PICK YOUR FOLDER` [SEEN @1:44].
+- On-screen note: *"Cowork is the system that runs on your computer..."* [SEEN @1:53].
+- Local folder structure shown in Finder/Dropbox: `ABOUT ME`, `KNOWLEDGE`, `RESOURCES`,
+  `WORK AREAS`, `Claude-outputs` [SEEN @2:00].
+- Right-clicks a folder in Finder → "Make available offline" to sync it [SEEN @2:11]; picks the
+  working directory (`CoWork`) from Claude's project dropdown [SEEN @2:38].
+
+### Notion database fields
+
+- Task database columns [SEEN @6:16]: task name/description, Person (e.g. Simon, Jakub Skupień),
+  Priority (High/Medium), Status (Not started / In progress), Deadline.
+
+### The PA instructions (quoted as shown on screen)
+
+First draft brief [SEEN @8:18–9:23]:
+> "I would like to create a scheduled task that is a personal assistant that runs a daily briefing
+> on my current circumstance. We're going to do this only inside my Demo PA folder."
+>
+> "Create two things: 1. A first draft of a scheduled task which asks you, on a Monday morning at
+> 8 am., to deliver a briefing of the day and the week. Every other working day, it delivers a
+> daily brief. It should deliver it as an HTML report using the above design system. 2. The report
+> should be delivered both in the chat of the scheduled task, but also as an artefact in a briefs
+> folder inside the demo PA. 3. Create a memory file and project file for how the demo PA should
+> work that exists in that folder, so that you have a clear set of instructions on how to operate."
+>
+> "Want my personal assistant to be able to brief me on: the work I have coming up for the day, my
+> clear, important priorities, what's happening for my schedule. It will need to read my Gmail, my
+> Google Calendar, and a specific Notion task database that it will read from to inform its
+> decisions. Please draft the scheduled task and set up the folder."
+
+Refined system prompt [SEEN @13:58–14:52] — **note:** Gemini's own OCR/transcription of this
+on-screen block has visible garbling (repeated fragments, a broken sentence around "20%, Schedule,
+Tasks... Status: Not Done/Does with a Deadline"), so read the specifics as best-effort, not a
+guaranteed exact transcript:
+> "You are 'Simon's' personal assistant, running his scheduled morning briefing at 06:00 (London).
+> Read and follow the runbook at CLAUDE.md in the connected 'Demo PA' folder exactly, top to
+> bottom, before doing anything else. It tells you how to operate in full."
+>
+> "CONTEXT (best effort): Simon's Co-work folder lives in Dropbox at
+> /Users/simon/Library/CloudStorage/Dropbox/CloudStorage/Co-Work/. Read [it] over the remote
+> devices bridge if his desktop app is connected. If NOT connected, read the SAME FILES through the
+> local access files... READ CLAUDE.md and 'ABOUT-ME' at that root, and the last 7 DAYS of
+> WORK-AREAS/ADMIN-PA/captain's-log."
+>
+> "GATHER: 1. Today's Google Calendar events (times > 06:00). 2. Team action items – Notion 'Task
+> List' ('Outstanding' view) and Gmail ('Simon's inbox' label plus main inbox), Status: Not Done,
+> ordered by Priority (High > Medium > Low). 3. Simon's overdue backlog from his main personal
+> Notion Tasks database ('BC Tasks Database'): Status: Not Done, with a Deadline on or before
+> today, ordered by Priority. Remove Person ID to names: flag anyone unresponsive or badly backed
+> up."
+>
+> "RENDER a single self-contained branded HTML page (Better Creating design pack: BC Orange
+> #FF5D26 used sparingly, Funnel sans, warm brown/beige neutrals, crisp Swiss/Apple design —
+> Helvetica, orange reserved for hard blockers only). Blocks: Top line, The 20% Schedule, Tasks (3
+> groups: ready for Claude AI to approve, with the VA, Simon's own), Waiting on, and on Mondays the
+> Week ahead."
+>
+> "DELIVER two ways EVERY RUN: (1) ALWAYS send the finished briefing as an .html file... readable
+> on ANY device — including on mobile straight from push notifications; and (2) if the desktop is
+> connected, ALSO update the cached daily briefing on device. If the folder is reachable, also save
+> a dated copy to the briefing-delivery project outputs. Finish with a one line chat summary of the
+> single most important thing for Simon today."
+
+### Scheduled task — cadence and prompt
+
+- **Cadence** [SEEN @17:08–17:10]: weekdays at 08:00.
+- **Prompt** [SEEN @17:08–17:10]:
+  > "Read Simon's morning briefing (Demo PA persistent assistant). Read and follow the outlook at
+  > CLAUDE.md in the connected 'Demo PA' folder exactly, top to bottom, before doing any tasks. It
+  > tells you how to operate in full.
+  >
+  > STEPS: 1. Read the three ABOUT-ME identity files, .system/Project.md, and .system/Memory.md.
+  > 2. Find today's date in Europe/London; [e.g.] it's Monday — produce the weekly + daily brief.
+  > 3. Gather (READ-ONLY) today's Google Calendar, the Notion Task Operations Database (Demo), and
+  > Gmail. 4. Build one self-contained HTML brief structured per templates/html.tmpl (Apple Swiss
+  > design template)."
+
+### ASD-STE100 — exactly what he says and shows
+
+- He explains ASD-STE100 stands for **Simplified Technical English** — a system meant to make the
+  AI "speak to you in a far more focused and clear way" [SEEN @20:11–20:25].
+- The on-screen rewrite-prompt he uses [SEEN @20:11–20:20]:
+  > "You are a Simplified Technical English (ASD-STE100) [rewriter]. REWRITE. Read the text I give
+  > you [and] follow the STE rules below. Do not add [new] technical meaning.
+  >
+  > VOCABULARY — Use the simplest common word for each idea. Give each word one meaning only. Do
+  > not use a word as more than one part of speech. Choose one technical name for each thing and
+  > one technical verb for each action; use them every time — never a synonym for something already
+  > named. No jargon, no idioms, no slang, no figures of speech.
+  >
+  > SENTENCES — Instructions (procedures): maximum 20 words per sentence. Descriptions: maximum 25
+  > words per sentence. One instruction per sentence — two actions get two sentences. Use the
+  > imperative for instructions ('Remove the bolt.'). Use active voice; no passive, no future, no
+  > perfect tenses. Keep small words (a, an, the) that make meaning clear.
+  >
+  > STRUCTURE — Write procedures as a numbered vertical list, one step per number. Max 6 sentences
+  > per paragraph. Put the instruction first, then the condition or reason. Use a vertical list for
+  > more than one condition or item.
+  >
+  > WARNINGS AND CAUTIONS — Start with a clear direct command; state the condition after. Put the
+  > warning before the step it applies to.
+  >
+  > OUTPUT — Return the rewritten text. Then, under a heading 'Check These Words,' list any words
+  > you used that might be unapproved per the STE dictionary, so a human can verify. If confident
+  > all words are fine, write 'None flagged.'"
+
+### The context map
+
+- On-screen title [SEEN @26:25]: "Agentic Context Map & Write Rules." It's a Notion page acting as
+  a master directory for where information belongs across the workspace's databases, with sections
+  for Work & time, Clients & delivery, Direction & measurement, Content & channels, and Knowledge &
+  documentation.
+- Purpose [SEEN @26:45]: built so an AI agent can read it and know where to put or find specific
+  content across Claude/Notion, following consistent routing rules.
+
+### How the demo runs, and how the video ends
+
+- Opens the "Captain's Log" folder so the system understands how to work with him [SEEN
+  @21:21–21:31]; reviews the Notion "Task Executor – Demo PA" task and its rule (only touch tasks
+  assigned to "Claude [AI]" with status "To Do [AI]") [SEEN @21:32–22:02]; clicks **Run now** to
+  manually trigger the scheduled task [SEEN @22:28–22:43]; ties it into a broader "Agentic Business
+  OS" Notion system [SEEN @22:44–23:17]; dictates a new note with WhisperFlow and watches it flow
+  into both the Notion task list and the Captain's Log file [SEEN @23:57–24:37]; lets the Task
+  Executor run automatically, moving completed items to "Needs Review" [SEEN @24:38–25:42].
+- The video ends [SEEN @26:51–27:08]: he returns to full screen, remarks that the whole setup took
+  about an hour while filming, then shows a closing screen recording of the scheduled-tasks list.
+
+**Gaps:** the "refined system prompt" block (13:58–14:52) has visible OCR noise in Gemini's
+transcription — a few fragments repeat or don't parse cleanly (IDs like "0000000bc571" and
+"collection:00940003bc" look like blurred/illegible on-screen text rather than real values). Treat
+that quote as the best available reading, not a guaranteed verbatim transcript. Everything else in
+this section came through clean across all 7 clips.
 
 ---
 
 ## 4. Teku AI — "The LATEST Hermes Agent Update is INSANE!"
 
 - **URL:** https://www.youtube.com/watch?v=dCZK-VssIWw
-- **Channel:** Teku AI (per the task brief — YouTube's oEmbed returned "Unauthorized" for this
-  video, as expected)
-- **Length:** not obtained
-- **Model that answered:** none — every model in the fallback order failed
+- **Channel:** Teku AI (YouTube's oEmbed returned "Unauthorized" for this video, as expected per
+  the task brief; confirmed instead via the video's own description, fetched with Jina's reader)
+- **Length:** ~7:30 (the video actually ends around 7:27 with the outro — noticeably shorter than
+  the chapter list's final marker of 7:28 would suggest; see Gaps)
+- **Model that answered:** `gemini-flash-lite-latest`, in **3 short clips** (0:00–4:00, 4:00–8:30,
+  7:00–13:07) — the full-video agentic attempt 503'd repeatedly; clips got through immediately.
 
-**Gaps:** Gemini never watched this video. One `gemini-3-flash-preview` attempt timed out in-flight
-after 200s without an error (possibly still processing when the client gave up); its retry and
-every attempt on the other three models returned HTTP 503 "high demand." This video was not tried
-against a fifth round, so no 429 quota errors were seen for it specifically — the models were
-simply unavailable at every attempt. None of the four features (Bot Screen, Simple layout mode,
-Connectors menu, One-click local models, "Hey Hermes" wake word) could be assessed — no test
-results, hardware/plan, picked model, breakage, prices, or verdict. Full attempt log in
-`raw/dCZK-VssIWw.md`.
+### Bot Screen [SEEN @0:20]
+
+- Test: worked well once he copied the pull request link and gave it to Hermes, which then built a
+  skill specific to the bot screen; some initial confusion before that.
+- Hardware/plan: not shown or said.
+- Disappointment: initial hiccups (resolved).
+- Prices: none mentioned.
+- Verdict: found it "very useful and cool for watching agents work live."
+
+### Simple layout mode [SEEN @2:54]
+
+- Test: showed switching between advanced mode and the new simple mode in the desktop app's layout
+  editor.
+- Hardware/plan: not shown or said.
+- Disappointment: none mentioned.
+- Prices: none mentioned.
+- Verdict: liked the cleaner interface "without developer instrumentation."
+
+### Connectors menu [SEEN @4:00]
+
+- His own words [SEEN @4:06]: "this is more like a change that I notice while, you know,
+  navigating and using the desktop app." [SEEN @4:42]: "I knew the MCP menu was here, but I quite
+  don't remember all of these options."
+- Test/hardware/model/disappointment/prices: not shown or said beyond the above.
+
+### One-click local models [SEEN @4:54]
+
+- Test: tried the one-click local model setup.
+- Disappointment [SEEN @5:36]: "None of them is suitable for my machine, in your case this could be
+  different."
+- Verdict [SEEN @4:57]: "If you run local models, you're gonna like this one. I don't, at least not
+  for now."
+- Which model the setup picked: not established in this segment; prices not mentioned.
+
+### "Hey Hermes" wake word [chapter marker @7:28; actual demo content ~6:23–6:53]
+
+- Test: asked it "Can you please search the release date of the new Avengers movie Avengers:
+  Doomsday?" [SEEN @6:23]; got back "Avengers: Doomsday in theaters December 18, 2026, US wide
+  release in 4000+ theaters" [SEEN @6:36].
+- Model picked: **Hermes-3-Llama-3.1-8B** [SEEN @6:43].
+- Disappointment [SEEN @6:53]: "currently we don't have a mobile app for Hermes because this kind
+  of feature is much more often used on the phone than on the computer, at least in my case,
+  right?"
+- Verdict [SEEN @6:46]: "you can pretty much use Hermes as you would with Siri, except that Hermes
+  can do a lot more than Siri can."
+- Prices: none mentioned for this feature specifically (a Hermes Plus discount link appears in the
+  video's description, not shown as an on-screen price in the video itself).
+
+### Overall verdict and ending
+
+- At [SEEN @7:00] he sums up his experience with the update as disappointing overall ("at least in
+  my case, right?"), while inviting viewers to share their own results in the comments.
+- Outro [SEEN @7:08–7:27]: asks for likes/subscribes/comments with suggestions for future videos,
+  says goodbye, then a "TEKU AI" logo/website outro screen plays to the end.
+
+**Gaps:** the chapter list places "Hey Hermes" at 7:28, but Gemini's own timestamps put that demo
+content around 6:23–6:53 and have the video's outro finishing by 7:27 — i.e., the video appears to
+be about a minute shorter than the declared chapter marker implies, or the marker itself is
+slightly off. No hardware, plan, or price was shown or said for the Bot Screen, Connectors menu, or
+wake-word test beyond what's quoted above.
 
 ---
 
 ## Session-level notes for the lead
 
-- Only **1 of 4** videos got a real answer: video 2 (The Coding Sloth), on `gemini-3-flash-preview`.
-- By the end of this session, `gemini-3-flash-preview`, `gemini-3.6-flash`, and `gemini-3.7-flash`
-  had all hit their 20-requests-per-day Free Tier cap (per SOURCE.md, that resets ~07:00 UTC).
-  `gemini-flash-lite-latest` never hit a quota wall but returned HTTP 503 "high demand" on every
-  single attempt all session — Google's backend for that model was persistently overloaded during
-  this run, independent of quota.
-- Retrying videos 1, 3, and 4 after 07:00 UTC (when the daily caps reset) is the most likely way to
-  get them answered — start with `gemini-flash-lite-latest` or `gemini-3-flash-preview` first,
-  since those showed the least resistance in this session (`gemini-3-flash-preview` was the one
-  that actually worked).
+- **All 4 videos are now fully answered.** The retry pass succeeded where the first pass didn't
+  because (a) `gemini-flash-lite-latest`'s overload cleared, and (b) splitting the two
+  longest/most-congested videos (video 3 at 27 minutes, video 4 which kept 503'ing even as a single
+  short clip) into 4–5 minute clips aligned to their own chapters got requests through reliably,
+  even while a single full-video agentic request to the same model kept failing with 503.
+- **If this pattern shows up again:** don't burn a model's daily quota retrying a full-video
+  agentic request into a wall of 503s — switch to `--start`/`--end` clips on the same model first;
+  it worked far more often here than waiting and retrying the whole video.
+- Video 2 (The Coding Sloth) still stands as answered by `gemini-3-flash-preview` in one agentic
+  pass from the first session; that model's daily quota was fully spent on repeat attempts against
+  video 1 in the first pass and had not recovered by the time of this retry.
+- Two OCR/transcription caveats worth flagging to whoever drafts the report: video 1's rule 4 quote
+  contains the word "entropic," almost certainly a mis-hearing of "Anthropic"; video 3's refined
+  system-prompt quote (13:58–14:52) has some garbled fragments from on-screen OCR — treat both as
+  best-effort, not verbatim.
