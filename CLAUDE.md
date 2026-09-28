@@ -23,8 +23,11 @@ style should be used."
    **Locked-On**, the standard (https://claude.ai/artifact/WCe1qHhTrMDw7bkDaskeQm); **Quick-Promo** when a promo has to go out in under
    about 30 minutes; and the workstream's own approved formats where they fit (Fast Cut and Reel Cut for Anti Stock,
    the Sep 15 rally v2 build for Supercar Experience vlogs). Also offer the proposed looks on the same page
-   (**Now Boarding**, **Paste-Up**), marked as proposed. Skip the question only when he has already named the style
-   for this piece.
+   (**Now Boarding**, **Paste-Up**), marked as proposed. For a page people use to find things (an index, a
+   directory, a deliverables list, a to-do board), offer the **iPhone index layout** first: Apple's system font, iOS
+   colours, a tab bar and one search across everything. Omarie picked it on 2026-09-28 ("save this apple layout it
+   looks so nice"). It lives in `design-systems/iphone-index/`, with `qa.js` to run before publishing. Skip the
+   question only when he has already named the style for this piece.
 2. **Then build that style all the way**: its techniques, process and quality bar, in the workstream's own brand. The
    page's gold on black is Supercar Experience's; Formula Dynamics keeps FD red and Bebas Neue, Anti Stock keeps its
    own look, and two brands never share a video.
