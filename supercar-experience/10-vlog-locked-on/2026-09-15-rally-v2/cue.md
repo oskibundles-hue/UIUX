@@ -140,7 +140,7 @@ Music: original synth bed (lib/music.py), no music.wav supplied (105.1095 BPM, f
 | 1 | 0001 | 83.2-89.885 | 13.7 | -23.61 LUFS | +7.6 dB | -11.0 dB, 14.8 dB |
 | 2 | 0001 | 92.125-97.35 | 20.655 | -26.77 LUFS | +10.8 dB | -11.0 dB, 14.1 dB |
 | 3 | 0013 | 0.0-4.0 (alarm removed first, v2.4) | 25.88 | -20.57 LUFS (sim) | +4.0 dB (sim; -0.6 dB trim) | -11.0 dB, 12.8 dB |
-| 4 | 0013 | 5.2-16.45 (alarm removed first, v2.4) | 29.86 | -21.65 LUFS (sim) | +5.1 dB (sim; -0.6 dB trim) | -11.0 dB, 11.8 dB |
+| 4 | 0013 | 5.2-16.98, 14.465-14.995 closed up (alarm removed first, v2.4) | 29.86-41.11 | -21.5 LUFS (sim) | +4.9 dB (sim; -0.6 dB trim) | -11.0 dB, 11.8 dB |
 | 5 | 0013 | 26.6-30.4 | 41.11 | -21.99 LUFS | +6.0 dB | -11.0 dB, 13.6 dB |
 | 6 | 0013 | 58.6-65.1 | 44.91 | -21.91 LUFS | +5.9 dB | -11.0 dB, 14.1 dB |
 | 7 | 0013 | 73.1-75.6 | 51.59 | -21.53 LUFS | +5.5 dB | -11.0 dB, 13.9 dB |

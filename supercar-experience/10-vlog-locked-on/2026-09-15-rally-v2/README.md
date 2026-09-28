@@ -31,6 +31,14 @@ raw clip 0013 audio (0-85 s) before the footage was fetched again; the render re
 2. **"Black" was clipped.** Piece 4 started at source 5.40; "Black" starts at 5.26 (voice envelope). It now starts at
    5.20 (`data/edl.json`), so its audio runs from 29.86 s; the picture cut stays at 30.06 (a 0.2 s J-cut; from 30.06 the
    picture and the sound are the same source time again).
+2b. **"Cullinan" finishes (Omarie, 28 Sept: "let it finish").** Piece 4 used to end at source 16.45, on "Culli-" (the word
+   runs to 16.95 on the DeepFilterNet voice). It now ends at 16.98, and 0.53 s of the silent gap between "GT3s" and
+   "Rolls-Royce" (voice silent 14.12-15.41) is closed up (`data/edl.json` dialog 4 `drop`, 14.465-14.995, 40 ms
+   equal-power crossfade in `lib/mix.py`), so the piece still ends at 41.11 and nothing after it moves. Piece 5 had no
+   room: its "So" starts 0.085 s after its in-point, and its picture is in sync. Omarie is behind the camera in the
+   lineup walk (cars only), so "Rolls-Royce Cullinan" sitting 0.53 s earlier against the picture does not show; it now
+   lands nearer the Cullinan's own lock (38.64). *Sim:* Whisper on the placed pieces reads "…GT3s, Rolls-Royce Cullinan"
+   to 41.08, then "So right now" from 41.12; the ambience across the splice stays level (-27 to -34 dB, no dip or click).
 3. **Flash frame at 54.087 s (frame 1621).** The CH3 shot starts at 54.09 s, which rounds to frame 1621 (54.0874 s),
    just before the sweep's t0 (54.09); `lib/plate.py` masked only frames at or after t0, so that one frame showed the new
    shot in full before the sweep. Every frame of the new shot before the sweep ends is now masked (0 before t0, so the old
@@ -167,7 +175,8 @@ with `torch`, `deepfilternet`, `huggingface_hub`, `safetensors`, `scipy` and `py
 
 **Dialog.** 31 pieces from the mezzanine audio (the 30 EDL pieces + the cold-open guest line): ffmpeg `highpass=80 Hz`,
 `afftdn` (8 dB, noise tracking), a slow 2:1 compressor, centred mono, each levelled to -16 LUFS (BS.1770, gains -12…+18 dB;
-the two far-mic briefing pieces needed +16/+17 dB; v2.4: pieces 3 and 4 -0.6 dB, see v2.4 item 1), 12 ms edge fades. Four EDL edges were moved a few frames to the gap in
+the two far-mic briefing pieces needed +16/+17 dB; v2.4: pieces 3 and 4 -0.6 dB, see v2.4 item 1), 12 ms edge fades. A
+piece can close up a silent source range inside itself (`drop`, 40 ms crossfade; v2.4 piece 4, item 2b). Four EDL edges were moved a few frames to the gap in
 the audio where a neighbouring word leaked in (pieces 1, 2, 17, 18: the tail of "where", "…know", the onsets of "With" and
 "the cars"; `config.json` `audio.trims`).
 
@@ -396,9 +405,7 @@ composites single frames into `.work/stills/`.
    name next; the orange AMG GT Black Series gets its own lock when the walk reaches it (36.57 s, CAR 04 / 06). Its lock is
    0.6 s (it shares the frame with the GT3 RS, which takes the next 0.6 s on the word "GT3s").
 4. **Music rights:** the bed is original (synthesised here). If Omarie picks a track, see Sound → Swap it.
-5. **"Cullinan" is cut short (since v2).** Piece 4 ends at source 16.45 and piece 5 starts on the next frame (41.11 s), but
-   Omarie's "Cullinan" runs to about 16.8 (voice envelope), so the word ends on "Culli-". Letting it finish means moving
-   everything after 41.11 by about 0.4 s (or overlapping piece 5's "So right now"). Not changed in v2.4.
-6. **WONDERFUL chip:** it stays on the louder "Wonderful time." (150.92 s), the line the captions and the cold open use.
-   The quieter "I had a wonderful time" just before it (149.4-150.5 s) could carry it instead (about 0.8 s earlier).
+5. **Listen:** the 0.2 s J-cut at 29.86-30.06 ("Black" over the end of the previous shot) and the closed-up gap before
+   "Rolls-Royce" (39.1 s); the reviewer listens on the render. (WONDERFUL stays on the louder "Wonderful time.":
+   Omarie, 28 Sept.)
 

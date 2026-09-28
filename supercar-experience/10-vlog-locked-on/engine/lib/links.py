@@ -105,7 +105,8 @@ class LinkPool:
                 path = r.get('path_display') or r.get('path') or r.get('name')
                 self.links[k] = {
                     'key': k, 'url': r['download_url'], 'path': path, 'name': r.get('name') or os.path.basename(path or ''),
-                    'size': r.get('size'), 'issued': st.st_mtime,
+                    'size': r.get('size') or (r.get('file') or {}).get('size') if isinstance(r.get('file'), dict) or 'size' in r else None,
+                    'issued': st.st_mtime,
                     'expires': st.st_mtime + int(r.get('expiration_in_sec') or 600) - self.ttl_margin,
                     'file': b, 'i': i}
                 new += 1

@@ -39,8 +39,9 @@ def load_clip_list(path):
             o = stack.pop()
             if isinstance(o, dict):
                 p = o.get('path_display') or o.get('path') or o.get('path_lower')
-                if p and (o.get('.tag', 'file') == 'file') and ('size' in o or '.' in os.path.basename(p)):
-                    out.append({'path': p, 'name': o.get('name') or os.path.basename(p), 'size': o.get('size')})
+                size = o.get('size') or (o.get('file') or {}).get('size') if isinstance(o.get('file'), dict) or 'size' in o else None
+                if p and (o.get('.tag', o.get('object_type', 'file')) == 'file') and (size or '.' in os.path.basename(p)):
+                    out.append({'path': p, 'name': o.get('name') or os.path.basename(p), 'size': size})
                 else:
                     stack.extend(o.values())
             elif isinstance(o, list):

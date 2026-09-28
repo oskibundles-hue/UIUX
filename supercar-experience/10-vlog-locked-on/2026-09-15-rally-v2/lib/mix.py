@@ -227,7 +227,9 @@ def prepare_dealarm():
             for fn in sorted(os.listdir(d)) if os.path.isdir(d) else []:
                 m = re.match(r'^(\w+?)_(?:audio_)?([\d.]+)-([\d.]+)\.(mov|wav)$', fn)
                 if m and m.group(1) == src and float(m.group(2)) <= sp['a'] + 0.03 < float(m.group(3)) and not fn.startswith('.'):
-                    hit = (os.path.join(d, fn), float(m.group(2)), float(m.group(3)))
+                    c = (os.path.join(d, fn), float(m.group(2)), float(m.group(3)))
+                    if hit is None or min(c[2], sp['b']) > min(hit[2], sp['b']):     # the one covering most of the span
+                        hit = c
         if not hit:
             raise SystemExit(f'dealarm: no mezzanine for {src} at {sp["a"]}')
         a = max(sp['a'], hit[1]); b = min(sp['b'], hit[2] - 0.05)
@@ -271,6 +273,19 @@ def prepare_dealarm():
 DIALOG_AF = A['dialogFilter']
 
 
+def drop_ranges(x, a, drops, fade=0.04):
+    """close up source ranges [da, db] inside a piece that starts at source a (EDL dialog `drop`, v2.4): the samples
+    are removed and the two sides joined with an equal-power crossfade of `fade` s centred on the cut."""
+    h = int(round(fade * SR / 2))
+    for da, db in sorted(drops, reverse=True):
+        i0, i1 = int(round((da - a) * SR)), int(round((db - a) * SR))
+        assert h <= i0 and i1 + h <= len(x) and i1 > i0, (da, db)
+        u = np.linspace(0, np.pi / 2, 2 * h)[:, None]
+        xf = x[i0 - h:i0 + h] * np.cos(u) + x[i1 - h:i1 + h] * np.sin(u)
+        x = np.concatenate([x[:i0 - h], xf, x[i1 + h:]])
+    return x
+
+
 def build_dialog(report):
     bus = np.zeros((NS, 2))
     spans = []
@@ -280,6 +295,8 @@ def build_dialog(report):
         b = d['out'] + tr.get('out', 0.0)
         t = d['t'] + tr.get('in', 0.0) + d.get('shift', 0.0)
         x = mezz_audio(d['src'], a, b, DIALOG_AF)
+        if d.get('drop'):
+            x = drop_ranges(x, a, d['drop'])
         m = x.mean(1)
         L = lufs(np.stack([m, m], 1))                  # loudness of the piece as placed (centred mono, L = R = m)
         tgt = A['dialogLufs'] + tr.get('gainDb', 0.0) + d.get('gainDb', 0.0)
@@ -287,8 +304,10 @@ def build_dialog(report):
         m = fades(m * 10 ** (g / 20), tr.get('fin', A['edgeFade']), tr.get('fout', A['edgeFade']))
         st = np.stack([m, m], 1)
         place(bus, st, t)
-        spans.append([t, t + (b - a)])
-        report['dialog'].append(dict(i=i, src=d['src'], a=round(a, 3), b=round(b, 3), t=round(t, 3), lufs_in=round(L, 2), gain_db=round(g, 2)))
+        dur = len(m) / SR                               # b - a, less any dropped range
+        spans.append([t, t + dur])
+        report['dialog'].append(dict(i=i, src=d['src'], a=round(a, 3), b=round(b, 3), t=round(t, 3), dur=round(dur, 4), lufs_in=round(L, 2), gain_db=round(g, 2),
+                                     **({'drop': d['drop']} if d.get('drop') else {})))
     return bus, spans
 
 
@@ -530,7 +549,7 @@ def main():
     # verification: music level under every dialog piece vs the piece itself (RMS over the piece, dB)
     chk = []
     for d in rep['dialog']:
-        i0, i1 = int(d['t'] * SR), int((d['t'] + d['b'] - d['a']) * SR)
+        i0, i1 = int(d['t'] * SR), int((d['t'] + d.get('dur', d['b'] - d['a'])) * SR)
         dm = 20 * math.log10(span_rms(dialog, i0, i1) + 1e-9)
         mu = 20 * math.log10(span_rms(music, i0, i1) + 1e-9)
         un = 20 * math.log10(span_rms(music_raw, i0, i1) + 1e-9)

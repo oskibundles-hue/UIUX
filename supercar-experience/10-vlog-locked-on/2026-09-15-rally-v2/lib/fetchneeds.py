@@ -40,6 +40,8 @@ def needs():
         extra.append(dict(src=d['src'], **{'in': d['in'], 'out': d['out']}, t=d['t'], kind='dialog', why='extraDialog'))
     for e in A['nat']:
         extra.append(dict(src=e['src'], **{'in': e['a'], 'out': e['b']}, t=e['t'], kind='nat', why='nat'))
+    for sp in (A.get('dealarm') or {}).get('spans', []):             # the whole cleaned span comes from one mezzanine
+        extra.append(dict(src=sp['src'], **{'in': sp['a'], 'out': sp['b']}, t=None, kind='dealarm', why='dealarm span'))
     # the dealarm reference pieces (audio.dealarm refs, read with 0.4 s pre-roll) are dialog pieces with their own sync
     # shot, whose mezzanine starts 0.85 s early (0.05 + the 0.8 s handle), so they need no range of their own
     return dict(fps=PL.EDL['fps'], duration=PL.EDL['duration'], shots=shots, dialog=dialog, audio_extra=extra,

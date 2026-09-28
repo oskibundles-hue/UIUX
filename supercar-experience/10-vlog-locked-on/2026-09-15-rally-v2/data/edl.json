@@ -611,8 +611,15 @@
    "beat": 3,
    "src": "0013",
    "in": 5.2,
-   "out": 16.45,
+   "out": 16.98,
    "t": 29.86,
+   "drop": [
+    [
+     14.465,
+     14.995
+    ]
+   ],
+   "drop_why": "v2.4: the piece runs on to 16.98 so Omarie's \"Cullinan\" finishes (the voice fades out by 16.98); 0.53 s of the silent gap between \"GT3s\" and \"Rolls-Royce\" (voice silent 14.12-15.41) is closed up, so the piece still ends at 41.11 and nothing after it moves. Omarie is behind the camera here (cars only), so the 0.53 s the last two words move against the picture does not show",
    "trim_pauses": 0.45
   },
   {

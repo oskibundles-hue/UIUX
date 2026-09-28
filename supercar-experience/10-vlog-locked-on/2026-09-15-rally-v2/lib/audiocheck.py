@@ -62,7 +62,7 @@ def main(tol=1.0):
             inside = d['a'] >= sp['a'] - 0.03 and d['b'] <= sp['b'] + 0.03
             is_ref = any(abs(d['a'] - r0) < 0.3 and abs(d['b'] - r1) < 0.3 for r0, r1 in sp.get('refs', []))
             if inside or is_ref:
-                pieces.append(dict(i=d['i'], t0=d['t'], t1=round(d['t'] + d['b'] - d['a'], 3), cleaned=inside))
+                pieces.append(dict(i=d['i'], t0=d['t'], t1=round(d['t'] + d.get('dur', d['b'] - d['a']), 3), cleaned=inside))
                 if inside:
                     cleaned.append(d['i'])
     if pieces and P.get('dfnPython') and os.path.exists(P['dfnPython']):
