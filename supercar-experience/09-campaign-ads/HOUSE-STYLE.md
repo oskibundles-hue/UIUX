@@ -10,6 +10,10 @@ covers which look to reach for.
 ## THE STANDARD: `locked-on` (Supercar Experience ads)
 
 **Made the standard by Omarie on 2026-09-26:** "That is amazing make that a standard."
+**Made the standard for all his work on 2026-09-28:** "My locked on artifact is my standard for any work I work on."
+The style guide page below is the standard for every job, in every workstream (Supercar Experience, Formula
+Dynamics, Anti Stock): its techniques, process and quality bar apply to all of them. Each keeps its own brand
+(the page's gold on black is SE's), and two brands never share a video.
 Every SE car ad starts from this treatment unless the job says otherwise. Style guide page: https://claude.ai/artifact/WCe1qHhTrMDw7bkDaskeQm (source in `flash-special-showcase/style-guide/`). Reference build:
 `flash-special-showcase/` ("LOCKED ON", GT3 RS, 18 s 9:16). Read its README before you start. Second approved
 build: `750s-spider-locked-on/` ("ROOF DOWN", 750S Spider, 18 s, in 9:16, 4:5 and 1:1), the reference for feed cuts.
@@ -252,6 +256,7 @@ Keeping them separate is deliberate: a test on one axis stays interpretable.
 | 2026-09-27 | Sep 15 rally vlog with the Locked-On layer (`10-vlog-locked-on/2026-09-15-rally/`) | "That was great save this" — saved to Dropbox `/Supercar Experience/05 Vlogs/`. Next ask: rebuild the vlog from the raw footage with vlog-specific Locked-On variations, keeping the SE banner on the side, and catch the key moments (team dinner, guests on how they enjoyed it, leading the convoy on the freeway) |
 | 2026-09-27 | McLaren 750S Spider "ROOF DOWN" (`750s-spider-locked-on/`, the second `locked-on` build: SPIDER rises out of the sky behind the car as the roof stows, then the price rises from behind it) | Approved for ads, with every open question signed off (the clip's own music among them) and the defaults kept: one day grade on the sunlit desert footage, the text line on Las Vegas footage. Not posted |
 | 2026-09-27 | ROOF DOWN 4:5 and 1:1 feed cuts | "approve video". The feed-cut recipe is under THE STANDARD. Not posted |
+| 2026-09-28 | Locked-On style guide page | "My locked on artifact is my standard for any work I work on" — the page is the standard for every job in every workstream, each in its own brand. The page now has the feed cuts and the day-grade rule from ROOF DOWN (version 5) |
 
 Add a row when the shop reacts to something. This file is the reason a future ad
 does not have to re-litigate a settled look.
