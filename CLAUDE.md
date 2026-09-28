@@ -97,6 +97,28 @@ Never push directly to `main`. Always:
 3. Push branch: `git push -u origin <branch>`
 4. Create PR: `gh pr create`
 
+## The standard for every job, and which style to use (every session, every branch)
+
+Omarie, 2026-09-28: "My locked on artifact is my standard for any work I work on", and "make sure every
+session/branch/everything knows and implements it no matter what when creating any work but ask beforehand what
+style should be used."
+
+1. **Ask which style first.** Before building any new piece of work (an ad, a vlog, a reel, a poster, a page), ask
+   Omarie which style to use, as a click (AskUserQuestion) with your recommendation first. Offer the approved styles:
+   **Locked-On**, the standard (https://claude.ai/artifact/WCe1qHhTrMDw7bkDaskeQm); **Quick-Promo** when a promo has to go out in under
+   about 30 minutes; and the workstream's own approved formats where they fit (Fast Cut and Reel Cut for Anti Stock,
+   the Sep 15 rally v2 build for Supercar Experience vlogs). Also offer the proposed looks on the same page
+   (**Now Boarding**, **Paste-Up**), marked as proposed. Skip the question only when he has already named the style
+   for this piece.
+2. **Then build that style all the way**: its techniques, process and quality bar, in the workstream's own brand. The
+   page's gold on black is Supercar Experience's; Formula Dynamics keeps FD red and Bebas Neue, Anti Stock keeps its
+   own look, and two brands never share a video.
+3. **Specialist agents never ask Omarie themselves.** The lead asks, then names the style in the brief. An agent
+   whose brief names no style stops and asks the lead.
+
+The rules and the feedback log are in `supercar-experience/09-campaign-ads/HOUSE-STYLE.md` on the SE branch
+(`claude/supercar-rental-ad-graphics-o64vo3`).
+
 ## Working Style
 
 Standing instructions from the shop, not preferences.
