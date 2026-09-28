@@ -1,0 +1,230 @@
+<!doctype html>
+<!--
+  front_paste-up.html -- FRONT layer of the PASTE-UP look: the ROOF DOWN edit dressed as a cut-paper collage.
+  Same contract as front.html (transparent 1080x1920, window.renderAt(t) pure in t), same copy (config.json),
+  tracks and beat grid.
+
+  The idea: a paste-up is how layouts were made before screens -- type set on paper, cut out, pasted on the board.
+  Every line of copy is a strip of torn paper (white, black or gold) held down with gold tape, and a gold marker
+  draws on the footage. Everything moves ON TWOS (12 drawings a second) and boils, like hand-made animation.
+    hook (frame 0 complete)  MCLAREN · LAS VEGAS / 750S SPIDER / the gold sticker 5 HOURS $1,299 / the SE logo,
+                             re-slapped on beats 1 and 2, a marker arrow drawn at the car
+    badge (beat 4)           a marker loop drawn round the speedmark (tracked) and an arrow to a paper tag:
+                             MCLAREN / 750S SPIDER / 2026 · EXOTIC, highlighted on the glint beat
+    offer (beats 6-10)       the price on a gold halftone patch, slapped down on the drop (whole), 5 HOURS and
+                             LAS VEGAS strips on the reel beats, FULL DAY · $1,799; a marker loop on the headlight
+    requirements (11-15)     a ruled card: YOU NEED / VALID DRIVER'S LICENSE / INSURANCE, ticked and highlighted
+    end card (13.962)        logo, model and offer strips, TEXT OR DM TO BOOK, the phone with a marker arrow, site
+                             and handle, the age and requirement note (the price patch is mid_paste-up.html)
+  Figures always arrive and leave whole: a patch or strip carries the whole figure and moves as one piece.
+-->
+<html><head><meta charset="utf-8"><title>PASTE-UP front layer</title>
+<style>
+@font-face{font-family:Bebas;src:url('../../07-fonts/BebasNeue-Regular.ttf')}
+@font-face{font-family:Michroma;src:url('../../07-fonts/Michroma-Regular.ttf')}
+html,body{margin:0;padding:0;background:transparent;width:1080px;height:1920px;overflow:hidden}
+.a{position:absolute;left:0;top:0}
+</style>
+<script src=".work/config.js"></script>
+<script src=".work/timeline.js"></script>
+<script src=".work/tracks.js"></script>
+<script src="lib/kinetic.js"></script>
+<script src="lib/lock.js"></script>
+<script src="lib/paper.js"></script>
+<script>
+// drawings are held for two frames, so one sample per frame is exact (KT.signature confirms it per frame)
+window.KT_PLAN = { k: 3, shutter: 180, spans: [] };
+</script>
+</head><body>
+<div id="stage" class="a" style="width:1080px;height:1920px"></div>
+<script>
+const C = window.CONFIG, FPS = TL.fps, E = KT.ease, P = KT.p, cl = KT.cl, lerp = KT.lerp;
+Paper.fps(FPS);
+const g = k => TL.g0 + k * TL.beat;
+const TE = TL.tEnd, S = 2 / FPS;
+const $ = id => document.getElementById(id);
+const fT = i => i / FPS;
+const X = {};                                     // pieces and marks
+const cv = document.createElement('canvas').getContext('2d');
+function tw(font, size, text, ls = 0) { cv.font = `${size}px ${font}`; cv.letterSpacing = (ls * size) + 'px'; return cv.measureText(text).width; }
+const BEB = (size, color) => ({ font: 'Bebas', size, color });
+const MIC = (size, color) => ({ font: 'Michroma', size, color, ls: '.08em' });
+const stage = () => $('stage');
+// a strip sized to its text: kind white / black / gold; text colour follows the paper
+function strip(name, text, o) {
+  const ink = o.kind === 'black' ? '#FFFFFF' : '#000000';
+  const w = o.w || Math.ceil(tw(o.font || 'Bebas', o.size, text.replace(/<[^>]+>/g, ''), o.font === 'Michroma' ? 0.08 : 0) + 2 * (o.pad || 28));
+  const pc = Paper.piece(o.parent || stage(), { x: o.x, y: o.y, w, h: o.h, rot: o.rot, kind: o.kind, seed: o.seed, sides: o.sides ?? 'tb' });
+  Paper.text(pc, text, { ...(o.font === 'Michroma' ? MIC(o.size, ink) : BEB(o.size, ink)), dy: o.dy || 0 });
+  X[name] = pc; return pc;
+}
+function srcPos(t, id) {
+  const [i0, i1] = TL.beats[id], x = t * FPS, a = i0, b = i1 - 1;
+  if (x <= a) return TL.p[a] + (x - a) * (TL.p[a + 1] - TL.p[a]);
+  if (x >= b) return TL.p[b] + (x - b) * (TL.p[b] - TL.p[b - 1]);
+  const i = Math.floor(x); return lerp(TL.p[i], TL.p[i + 1], x - i);
+}
+function highlighter(pc, x, y, w, h) {             // a gold highlighter swipe inside a paper face, under its text
+  const d = document.createElement('div');
+  d.style.cssText = `position:absolute;left:${x}px;top:${y}px;width:${w}px;height:${h}px;background:rgba(251,209,1,.86);` +
+    `border-radius:10px 16px 12px 18px;transform-origin:0 50%;transform:scaleX(0);clip-path:${Paper.torn(w, h, 77, { amp: 2.5, sides: 'lr' })}`;
+  pc.face.insertBefore(d, pc.face.firstChild); return d;
+}
+const swipe = (d, t, t0) => { const s = Math.round((Paper.qt(t) - t0) / S); d.style.transform = `scaleX(${s < 0 ? 0 : [0.42, 0.8, 1][Math.min(s, 2)]})`; };
+
+// ---------------------------------------------------------------- beat times
+const [iB0, iB1] = TL.beats[4], [iH0, iH1] = TL.beats[8];
+const tB0 = fT(iB0) - 0.5 / FPS, tBend = fT(iB1) - 0.5 / FPS, tB1 = tBend - 2 * S - 0.01;
+const tO = fT(TL.beats[6][0]) - 0.5 / FPS, tO1 = g(17) - 2 * S - 0.01;
+const tR = fT(TL.beats[11][0]) + 0.5 / FPS, tR1 = g(23) - 2 * S - 0.01;
+const tH0 = fT(iH0) - 0.5 / FPS, tH1 = fT(iH1) - 0.5 / FPS;
+const HOOK1 = 2.56;
+
+(async () => {
+  await document.fonts.load('100px Bebas'); await document.fonts.load('40px Michroma'); await KT.ready();
+  const hours = C.hours + ' HOURS', dot = '<span style="color:#FBD101"> · </span>';
+
+  // A. HOOK (complete on frame 0)
+  { const hs = Math.min(186, Math.floor(186 * 760 / tw('Bebas', 186, C.model)));
+    strip('hHead', C.model, { x: 58, y: 370, h: 204, rot: 1.3, kind: 'black', size: hs, seed: 21, pad: 30 });
+    strip('hTag', C.brand + ' · ' + C.city, { x: 72, y: 302, h: 66, rot: -2.6, kind: 'white', size: 30, font: 'Michroma', seed: 22, pad: 26 });
+    const lg = Paper.piece(stage(), { x: 74, y: 600, w: 300, h: 92, rot: -1.8, kind: 'black', seed: 23 });
+    const im = document.createElement('img'); im.id = 'hLogo'; im.src = '../../02-logos/png/sce-primary-horizontal--white.png';
+    im.style.cssText = 'position:absolute;left:25px;top:22px;width:250px;display:block'; lg.face.appendChild(im); X.hLogo = lg;
+    const st = Paper.piece(stage(), { x: 612, y: 586, w: 276, h: 276, rot: -9, kind: 'gold', seed: 24, shape: 'disc' });
+    Paper.text(st, hours, { ...BEB(60, '#000'), dy: -50 }); Paper.text(st, C.price, { ...BEB(112, '#000'), dy: 22 });
+    X.hSticker = st;
+    Paper.tape(X.hHead.w, 120, 4, 136, -26, 31); Paper.tape(X.hHead.w, X.hHead.o.w - 40, 8, 124, 27, 32);
+    Paper.tape(st.w, 140, 12, 116, 8, 33);
+    // the marker arrow from the sticker down to the car (drawn on beat 2)
+    X.hArrow = Paper.mark(stage(), Paper.shapes.arrow(648, 872, 548, 972, -0.18, 30), { t0: g(2), draw: 0.33, t1: HOOK1, seed: 34, width: 10 });
+  }
+
+  // B. BADGE: marker loop on the speedmark, arrow to a paper tag
+  { const tag = Paper.piece(stage(), { x: 0, y: 0, w: 540, h: 238, rot: -3, kind: 'white', seed: 41, sides: 'tblr' });
+    const ms = Math.min(126, Math.floor(126 * 470 / tw('Bebas', 126, C.model)));
+    X.tagHl = highlighter(tag, 34, 96, 472, 72);
+    Paper.text(tag, C.brand, { ...MIC(26, '#000'), dy: -76 });
+    Paper.text(tag, C.model, { ...BEB(ms, '#000'), dy: 4 });
+    Paper.text(tag, C.year + ' · ' + C.cls, { ...MIC(24, '#000'), dy: 80 });
+    Paper.tape(tag.w, 270, 6, 150, -5, 42);
+    X.tag = tag;
+    X.bLoop = Paper.mark(stage(), Paper.shapes.loop(118, 88, 1.35), { t0: tB0 + 0.04, draw: 0.33, t1: tB1, seed: 43, width: 10 });
+    X.bArrow = Paper.mark(stage(), Paper.shapes.arrow(-70, -96, -190, -214, 0.1, 30), { t0: tB0 + 0.34, draw: 0.25, t1: tB1, seed: 44, width: 9 });
+  }
+
+  // C. OFFER: the price patch slapped down on the drop (whole), the strips on the reel beats
+  { const ps = Math.min(252, Math.floor(252 * 700 / tw('Bebas', 252, C.price)));
+    const pt = Paper.piece(stage(), { x: 84, y: 470, w: 760, h: 256, rot: -2.2, kind: 'gold', seed: 51 });
+    Paper.text(pt, C.price, { ...BEB(ps, '#000'), dy: 6 }); X.oPrice = pt;
+    Paper.tape(pt.w, 70, 8, 140, -20, 52); Paper.tape(pt.w, 690, 250, 140, -14, 53);
+    strip('oHours', hours, { x: 70, y: 318, h: 140, rot: 2.5, kind: 'black', size: 122, seed: 54, pad: 30 });
+    strip('oCity', C.city, { x: 520, y: 358, h: 72, rot: -4, kind: 'white', size: 34, font: 'Michroma', seed: 55, pad: 26 });
+    strip('oDay', 'FULL DAY · ' + C.dayPrice, { x: 86, y: 752, h: 96, rot: 1.8, kind: 'white', size: 74, seed: 56, pad: 26 });
+    X.hLoop = Paper.mark(stage(), Paper.shapes.loop(96, 124, 1.3, -1.9), { t0: tH0, draw: 0.25, t1: tH1 - 2 * S, seed: 57, width: 10 });
+  }
+
+  // E. REQUIREMENTS: a ruled card, ticked and highlighted
+  { const cd = Paper.piece(stage(), { x: 70, y: 296, w: 776, h: 340, rot: -1.6, kind: 'white', seed: 61, sides: 'tblr' });
+    const rule = document.createElement('div');
+    rule.style.cssText = 'position:absolute;left:0;top:0;width:776px;height:340px;background:repeating-linear-gradient(180deg,transparent 0 118px,rgba(0,0,0,.12) 118px 120px,transparent 120px 206px),linear-gradient(90deg,transparent 0 82px,rgba(251,209,1,.9) 82px 85px,transparent 85px)';
+    cd.face.insertBefore(rule, cd.face.firstChild);
+    X.hl1 = highlighter(cd, 104, 122, 600, 78); X.hl2 = highlighter(cd, 104, 216, 300, 78);
+    const t1 = Paper.text(cd, 'YOU NEED', { ...MIC(28, '#000'), dy: -120 }); t1.style.justifyContent = 'flex-start'; t1.style.paddingLeft = '110px';
+    const t2 = Paper.text(cd, "VALID DRIVER'S LICENSE", { ...BEB(80, '#000'), dy: -10 }); t2.style.justifyContent = 'flex-start'; t2.style.paddingLeft = '110px';
+    const t3 = Paper.text(cd, 'INSURANCE', { ...BEB(80, '#000'), dy: 84 }); t3.style.justifyContent = 'flex-start'; t3.style.paddingLeft = '110px';
+    Paper.tape(cd.w, 104, 10, 150, -22, 62); Paper.tape(cd.w, 716, 12, 150, 20, 63);
+    X.card = cd;
+    X.tick1 = Paper.mark(cd.w, Paper.shapes.tick(46).map(P => P.map(p => [p[0] + 48, p[1] + 165])), { t0: tR + 0.25, draw: 0.17, t1: tR1, seed: 64, width: 10, color: '#000' });
+    X.tick2 = Paper.mark(cd.w, Paper.shapes.tick(46).map(P => P.map(p => [p[0] + 48, p[1] + 259])), { t0: tR + 0.5, draw: 0.17, t1: tR1, seed: 65, width: 10, color: '#000' });
+  }
+
+  // G. END CARD (front; the price patch behind the car is mid_paste-up.html)
+  { const end = document.createElement('div'); end.id = 'end'; end.className = 'a'; end.style.cssText = 'width:1080px;height:1920px';
+    stage().appendChild(end);
+    const sc = document.createElement('div'); sc.id = 'botScrim'; sc.className = 'a';
+    sc.style.cssText = 'top:1040px;width:1080px;height:880px;background:linear-gradient(180deg,rgba(0,0,0,0) 0,rgba(0,0,0,.66) 190px,rgba(0,0,0,.8) 880px)';
+    end.appendChild(sc);
+    const lg = Paper.piece(end, { x: 62, y: 284, w: 360, h: 96, rot: -1.8, kind: 'black', seed: 71 });
+    const im = document.createElement('img'); im.id = 'eLogo'; im.src = '../../02-logos/png/sce-primary-horizontal--white.png';
+    im.style.cssText = 'position:absolute;left:24px;top:20px;width:312px;display:block'; lg.face.appendChild(im); X.eLogo = lg;
+    strip('eModel', C.brand + ' ' + C.model, { parent: end, x: 70, y: 394, h: 60, rot: 1.2, kind: 'white', size: 26, font: 'Michroma', seed: 72, pad: 26 });
+    strip('eOffer', hours + dot + C.city, { parent: end, x: 470, y: 298, h: 72, rot: 3.5, kind: 'black', size: 52, seed: 73, pad: 26 });
+    strip('eCta', C.cta, { parent: end, x: 70, y: 1136, h: 124, rot: -2, kind: 'black', size: 104, seed: 74, pad: 30 });
+    Paper.tape(X.eCta.w, 100, 8, 120, -24, 75); Paper.tape(X.eCta.w, X.eCta.o.w - 40, 116, 120, -18, 76);
+    strip('ePhone', C.phone, { parent: end, x: 96, y: 1264, h: 108, rot: 1.6, kind: 'white', size: 96, seed: 77, pad: 28 });
+    strip('eWeb', C.url + ' · ' + C.handle, { parent: end, x: 70, y: 1380, h: 62, rot: -1, kind: 'white', size: 46, seed: 78, pad: 24 });
+    const nt = Paper.piece(end, { x: 76, y: 1448, w: Math.ceil(tw('Bebas', 30, 'RENTERS ' + C.age + ' · ' + C.ageLine)) + 48, h: 80, rot: 0.8, kind: 'white', seed: 79 });
+    const n1 = Paper.text(nt, 'RENTERS ' + C.age + ' · ' + C.ageLine, { ...BEB(30, '#000'), dy: -17 });
+    const n2 = Paper.text(nt, "VALID DRIVER'S LICENSE · INSURANCE", { ...BEB(30, '#000'), dy: 17 });
+    for (const n of [n1, n2]) { n.style.justifyContent = 'flex-start'; n.style.paddingLeft = '24px'; }
+    X.eNote = nt;
+    X.eArrow = Paper.mark(end, Paper.shapes.arrow(880, 1440, 734, 1330, 0.16, 30), { t0: TE + 0.58, draw: 0.3, seed: 80, width: 10 });
+  }
+  for (const id of ['hLogo', 'eLogo']) await new Promise(r => $(id).complete ? r() : ($(id).onload = r));
+  window.renderAt(0);
+  window.__ktReady = true;
+})();
+
+// ---------------------------------------------------------------- renderAt
+window.renderAt = function (t) {
+  // A. HOOK: already down on frame 0; the sticker is slapped again on beat 1, the head on beat 2; ripped off 2.56+
+  Paper.pose(X.hTag, t, { t1: HOOK1 + S, dx: -900, dy: -260, spin: -18 });
+  Paper.pose(X.hHead, t, { t1: HOOK1 + S, dx: 1000, dy: -300, spin: 14, hits: [g(2)], hitPop: 0.5 });
+  Paper.pose(X.hLogo, t, { t1: HOOK1 + 2 * S, dx: -900, dy: 200, spin: -12 });
+  Paper.pose(X.hSticker, t, { t1: HOOK1, dx: 700, dy: -600, spin: 30, hits: [g(1), g(3)] });
+  Paper.markAt(X.hArrow, t);
+
+  // B. BADGE
+  const bOn = t >= tB0 && t < tBend;
+  if (bOn) {
+    const q = Paper.qt(t), p = srcPos(Math.max(q, tB0), 4), box = TrackLock.at(TRACKS.badge, p / FPS);
+    const cx = box.x + box.w / 2, cy = box.y + box.h / 2;
+    const lab = TrackLock.follow(TRACKS.badge, p / FPS, { x: 60, y: 936 }, { x: .25, y: .25 }, 8);
+    X.tag.w.style.left = lab.x.toFixed(1) + 'px'; X.tag.w.style.top = lab.y.toFixed(1) + 'px';
+    Paper.pose(X.tag, t, { t0: tB0 + 0.1, t1: tB1, dx: -900, dy: 120, spin: -16 });
+    swipe(X.tagHl, t, g(8));
+    Paper.markAt(X.bLoop, t, { x: cx, y: cy, rot: -8 }); Paper.markAt(X.bArrow, t, { x: cx, y: cy, rot: 0 });
+  } else { X.tag.w.style.display = 'none'; Paper.markAt(X.bLoop, -1); Paper.markAt(X.bArrow, -1); }
+
+  // C. OFFER: the patch lands on the drop hit with the approved shake; every reel beat slaps it again
+  const oOn = t >= tO && t < g(17);
+  const hitsO = [g(11), g(11) + TL.beat / 2, g(12), g(14)];
+  if (oOn) {
+    Paper.pose(X.oPrice, t, { t0: tO, t1: tO1, dx: 900, dy: -500, spin: 18, hits: hitsO, pop: 0.35, hitPop: 0.4 });   // the widest piece: a smaller slam keeps it inside x 54..907
+    const sh = TL.shake[Math.round(t * FPS)] || [0, 0];
+    if (sh[0] || sh[1]) X.oPrice.w.style.transform += ` translate(${sh[0]}px,${sh[1]}px)`;
+    Paper.pose(X.oHours, t, { t0: g(11) - 0.01, t1: tO1, dx: -900, dy: -300, spin: -14 });
+    Paper.pose(X.oCity, t, { t0: g(11) + TL.beat / 2 - 0.01, t1: tO1, dx: 700, dy: -500, spin: 20, pop: 0.5 });
+    Paper.pose(X.oDay, t, { t0: g(12) + 0.08, t1: tO1, dx: -900, dy: 300, spin: -12, pop: 0.5 });
+  } else for (const n of ['oPrice', 'oHours', 'oCity', 'oDay']) X[n].w.style.display = 'none';
+  const hOn = t >= tH0 && t < tH1;
+  if (hOn) { const p = srcPos(Paper.qt(t), 8), box = TrackLock.at(TRACKS.headlight, p / FPS);
+    Paper.markAt(X.hLoop, t, { x: box.x + box.w / 2, y: Math.max(box.y + box.h * 0.55, 866), rot: 12 }); }
+  else Paper.markAt(X.hLoop, -1);
+
+  // E. REQUIREMENTS
+  const rOn = t >= tR && t < g(23);
+  if (rOn) {
+    Paper.pose(X.card, t, { t0: tR, t1: tR1, dx: 1000, dy: -200, spin: 16 });
+    swipe(X.hl1, t, tR + 0.33); swipe(X.hl2, t, tR + 0.58);
+    Paper.markAt(X.tick1, t); Paper.markAt(X.tick2, t);
+  } else { X.card.w.style.display = 'none'; Paper.markAt(X.tick1, -1); Paper.markAt(X.tick2, -1); }
+
+  // G. END CARD
+  const endOn = t >= TE - 0.12;
+  $('end').style.display = endOn ? 'block' : 'none';
+  if (endOn) {
+    $('botScrim').style.opacity = E.outCubic(P(Paper.qt(t), TE - 0.12, TE + 0.25)).toFixed(4);
+    Paper.pose(X.eLogo, t, { t0: TE + 0.10 });
+    Paper.pose(X.eModel, t, { t0: TE + 0.18 });
+    Paper.pose(X.eOffer, t, { t0: TE + 0.26 });
+    Paper.pose(X.eCta, t, { t0: TE + 0.34, hits: [TE + 2.4] });
+    Paper.pose(X.ePhone, t, { t0: TE + 0.46, hits: [TE + 3.2] });
+    Paper.markAt(X.eArrow, t);
+    Paper.pose(X.eWeb, t, { t0: TE + 0.66 });
+    Paper.pose(X.eNote, t, { t0: TE + 0.76 });
+  }
+};
+</script>
+</body></html>

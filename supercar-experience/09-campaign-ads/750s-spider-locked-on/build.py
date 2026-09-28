@@ -29,6 +29,11 @@ own front layer (front_1x1.html: the square's hook and end card) into .work/fron
 composites the approved 9:16 layer everywhere else. QA goes to exports/qa_<fmt>/. The finish stage will not re-encode
 over an approved render (SHA-256 in lib/formats.py APPROVED) unless --force is given.
 
+Looks (--look NAME): the same edit, plate, sky matte, tracks, timing, copy and sound under a completely different
+graphics package: front_<look>.html and mid_<look>.html (+ lib/<look>.js) render into .work/front_<look>/ and
+.work/mid_<look>/, composite into .work/final_<look>/ and encode exports/SCE_750S-Spider_Roof-Down_<Name>_18s-9x16.mp4,
+QA in exports/qa_<look>/. 9:16 only. The default look, locked-on, is the approved ad and its caches are untouched.
+
 Needs Python 3 + numpy + Pillow, ffmpeg with libx264, Node 22 + Playwright (/opt/node22/lib/node_modules).
 """
 import argparse
@@ -56,6 +61,22 @@ WORK = os.path.join(HERE, '.work')
 EXP = os.path.join(HERE, 'exports')
 NAME = 'SCE_750S-Spider_Roof-Down_Locked-On_18s-9x16'
 FMT = '9x16'                                          # set by --format (module level so the Pool workers see it)
+LOOK = 'locked-on'                                    # set by --look (passed to Pool workers explicitly, like the format)
+# graphics packages over the same edit: name (in the file name), pages, extra libraries in their cache signature
+LOOKS = {
+    'locked-on': dict(name='Locked-On', front='front.html', mid='mid.html', libs=[]),
+    'now-boarding': dict(name='Now-Boarding', front='front_now-boarding.html', mid='mid_now-boarding.html',
+                         libs=['lib/flap.js']),
+    'paste-up': dict(name='Paste-Up', front='front_paste-up.html', mid='mid_paste-up.html', libs=['lib/paper.js']),
+}
+
+
+def lsub(look=None):
+    """'' for the approved look, '_<look>' for the others (cache, final and QA folder suffix)"""
+    look = look or LOOK
+    return '' if look == 'locked-on' else '_' + look
+
+
 CLIP = 'SCE_McLaren-750S_no-branding.mov'
 FPS_STR = '24000/1001'
 FF = os.environ.get('FFMPEG', shutil.which('ffmpeg') or 'ffmpeg')
@@ -141,10 +162,11 @@ def capture(page, outdir, frames, jobs=3):
         list(ex.map(one, chunks))
 
 
-def layer_stage(a, page, sub, frames):
+def layer_stage(a, page, sub, frames, extra=()):
     out = os.path.join(WORK, sub)
-    libs = [os.path.join(HERE, p) for p in (page.split('#')[0], 'lib/kinetic.js', 'lib/lock.js', 'lib/kcapture.js',
-                                           'lib/accum.py', '.work/config.js', '.work/timeline.js', '.work/tracks.js')]
+    base = (page.split('#')[0], 'lib/kinetic.js', 'lib/lock.js', 'lib/kcapture.js', 'lib/accum.py', '.work/config.js',
+            '.work/timeline.js', '.work/tracks.js')
+    libs = [os.path.join(HERE, p) for p in (*base, *extra)]
     s = sig_of(libs, page.split('#', 1)[1] if '#' in page else '')
     sp = os.path.join(WORK, sub + '.sig')
     if a.frames:
@@ -158,6 +180,10 @@ def layer_stage(a, page, sub, frames):
 
 
 def st_front(a):
+    if LOOK != 'locked-on':
+        L = LOOKS[LOOK]
+        layer_stage(a, L['front'], 'front' + lsub(), list(range(edl.NF)), L['libs'])
+        return
     lay = formats.FORMATS[FMT]['front']
     if lay == '9x16':
         layer_stage(a, 'front.html', 'front', list(range(edl.NF)))
@@ -166,7 +192,8 @@ def st_front(a):
 
 
 def st_mid(a):
-    layer_stage(a, 'mid.html', 'mid', list(range(ROOF0, edl.NF)))
+    L = LOOKS[LOOK]
+    layer_stage(a, L['mid'], 'mid' + lsub(), list(range(ROOF0, edl.NF)), L['libs'])
 
 
 def st_audio(a):
@@ -191,8 +218,8 @@ def over(base, layer_png, matte_png=None, rows=None):
     return base * (1 - al) + L[..., :3] * al
 
 
-def composite(i, fmt=None):
-    fmt = fmt or FMT                                  # explicit in Pool workers (spawn start method on macOS)
+def composite(i, fmt=None, look=None):
+    fmt, look = fmt or FMT, look or LOOK              # explicit in Pool workers (spawn start method on macOS)
     F = formats.FORMATS[fmt]
     gy, py = formats.y0(fmt, i), formats.plate_y0(fmt, i)
     rows, prows = slice(gy, gy + F['h']), slice(py, py + F['h'])  # graphics / picture windows (lib/formats.py)
@@ -200,7 +227,8 @@ def composite(i, fmt=None):
     # the vignette goes on the picture only, so the brand gold (front and behind-car type) arrives exact
     base = fx.vignette(base, 0.36)
     if i >= ROOF0:
-        base = over(base, os.path.join(WORK, 'mid', f'{i:05d}.png'), os.path.join(WORK, 'matte', f'{i:05d}.png'), prows)
+        base = over(base, os.path.join(WORK, 'mid' + lsub(look), f'{i:05d}.png'), os.path.join(WORK, 'matte', f'{i:05d}.png'),
+                    prows)
     k = i - edl.CRASH_F
     if 0 <= k < edl.CRASH_N:
         # the crash hit on plate + matted type together, so the type stays locked behind the car (review r1)
@@ -208,24 +236,32 @@ def composite(i, fmt=None):
         base = fx.transform(base, scale=1 + edl.CRASH_PUNCH * (1 - (1 - (1 - u) ** 3)))
         if k == 0:
             base = base * (1 + edl.CRASH_LIFT)
-    base = over(base, os.path.join(WORK, formats.front_dir(fmt, i), f'{i:05d}.png'), rows=rows)
+    fdir = formats.front_dir(fmt, i) if look == 'locked-on' else 'front' + lsub(look)
+    base = over(base, os.path.join(WORK, fdir, f'{i:05d}.png'), rows=rows)
     base = fx.grain(base, i, amount=0.02)
     return fx.to_u8(base)
 
 
-def final_dir(fmt=None):
+def final_dir(fmt=None, look=None):
     fmt = fmt or FMT
-    return os.path.join(WORK, 'final' if fmt == '9x16' else 'final_' + fmt)
+    return os.path.join(WORK, ('final' if fmt == '9x16' else 'final_' + fmt) + lsub(look))
 
 
-def out_name(fmt=None):
-    fmt = fmt or FMT
-    return NAME if fmt == '9x16' else NAME.replace('-9x16', '-' + fmt)
+def exp_dir(look=None):
+    """exports/ holds the approved look; proposed looks go to exports/proposed/ so nothing that picks up every mp4
+    in exports/ can take an unapproved one"""
+    return EXP if (look or LOOK) == 'locked-on' else os.path.join(EXP, 'proposed')
 
 
-def _comp_to(i, fmt):
-    im = composite(i, fmt)
-    Image.fromarray(im).save(os.path.join(final_dir(fmt), f'{i:05d}.png'), compress_level=1)
+def out_name(fmt=None, look=None):
+    fmt, look = fmt or FMT, look or LOOK
+    n = NAME.replace('Locked-On', LOOKS[look]['name'])
+    return n if fmt == '9x16' else n.replace('-9x16', '-' + fmt)
+
+
+def _comp_to(i, fmt, look):
+    im = composite(i, fmt, look)
+    Image.fromarray(im).save(os.path.join(final_dir(fmt, look), f'{i:05d}.png'), compress_level=1)
     return i
 
 
@@ -247,14 +283,14 @@ def approved_intact(fmt):
 
 
 def st_finish(a):
-    if approved_intact(FMT) and not a.force:
+    if LOOK == 'locked-on' and approved_intact(FMT) and not a.force:
         print(f'  {FMT}: exports/ holds the approved render (SHA-256 as in lib/formats.py APPROVED); not re-encoding it.'
               ' Pass --force to rebuild (the result then needs approving again).')
         return
-    os.makedirs(EXP, exist_ok=True)
+    os.makedirs(exp_dir(), exist_ok=True)
     os.makedirs(final_dir(), exist_ok=True)
     with Pool(a.workers) as pool:
-        for k, _ in enumerate(pool.imap(functools.partial(_comp_to, fmt=FMT), range(edl.NF), chunksize=4)):
+        for k, _ in enumerate(pool.imap(functools.partial(_comp_to, fmt=FMT, look=LOOK), range(edl.NF), chunksize=4)):
             if k % 48 == 0:
                 print(f'  composite {k}/{edl.NF}', flush=True)
     bed = os.path.join(HERE, 'audio', 'bed.wav')
@@ -262,8 +298,8 @@ def st_finish(a):
     vf = 'scale=out_color_matrix=bt709:out_range=tv:flags=lanczos+accurate_rnd+full_chroma_int,format=yuv420p'
     tags = ['-colorspace', 'bt709', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-color_range', 'tv']
     aud = ['-c:a', 'aac', '-b:a', '192k', '-ar', '48000']
-    deliv = os.path.join(EXP, out_name() + '.mp4')
-    plog = os.path.join(WORK, 'x264pass' if FMT == '9x16' else 'x264pass_' + FMT)
+    deliv = os.path.join(exp_dir(), out_name() + '.mp4')
+    plog = os.path.join(WORK, ('x264pass' if FMT == '9x16' else 'x264pass_' + FMT) + lsub())
     b, mx, buf = formats.FORMATS[FMT]['rate']
     common = ['-framerate', FPS_STR, '-i', seq, '-vf', vf, '-c:v', 'libx264', '-preset', 'slow', '-b:v', f'{b}k',
               '-maxrate', f'{mx}k', '-bufsize', f'{buf}k', '-profile:v', 'high', '-level', '4.2', '-g', '24', '-bf', '2',
@@ -284,17 +320,20 @@ QA_FRAMES = [0, 5, 7, 12, 24, 25, 46, 47, 66, 67, 68, 69, 76, 90, 108, 109, 110,
 
 
 AUDIT_FRAMES = [0, 24, 46, 60, 95, 105, 140, 150, 175, 186, 200, 215, 230, 244, 300, 318, 345, 360, 400, 431]
+# PASTE-UP pieces are slapped again on beat hits (one drawing, two frames), and a hit is a held piece, so those
+# frames are audited too (the review of 28 Sept found paper 7-9 px past x 54 on them that the list above missed)
+LOOK_AUDIT = {'paste-up': [124, 125, 130, 131, 136, 137, 138, 139, 158, 159, 290, 291]}
 
 
 def st_qa(a):
     F = formats.FORMATS[FMT]
-    sfx = '' if FMT == '9x16' else '-' + FMT
-    qa = os.path.join(EXP, 'qa' if FMT == '9x16' else 'qa_' + FMT)
+    sfx = ('' if FMT == '9x16' else '-' + FMT) + lsub().replace('_', '-')
+    qa = os.path.join(exp_dir(), ('qa' if FMT == '9x16' else 'qa_' + FMT) + lsub())
     os.makedirs(qa, exist_ok=True)
     for f in os.listdir(qa):                          # no stale stills from an earlier render
         if f.endswith('.jpg'):
             os.remove(os.path.join(qa, f))
-    deliv = os.path.join(EXP, out_name() + '.mp4')
+    deliv = os.path.join(exp_dir(), out_name() + '.mp4')
     raw = subprocess.run([FF, '-v', 'error', '-i', deliv, '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'],
                          capture_output=True, check=True).stdout
     frames = np.frombuffer(raw, np.uint8).reshape(-1, F['h'], F['w'], 3)
@@ -302,8 +341,8 @@ def st_qa(a):
     for i in QA_FRAMES:
         if i < n:
             Image.fromarray(frames[i]).save(os.path.join(qa, f'f{i:03d}_{i / edl.FPS:06.3f}s.jpg'), quality=90)
-    Image.fromarray(frames[0]).save(os.path.join(EXP, f'poster{sfx}.jpg'), quality=92)
-    Image.fromarray(frames[n - 1]).save(os.path.join(EXP, f'poster-endcard{sfx}.jpg'), quality=92)
+    Image.fromarray(frames[0]).save(os.path.join(exp_dir(), f'poster{sfx}.jpg'), quality=92)
+    Image.fromarray(frames[n - 1]).save(os.path.join(exp_dir(), f'poster-endcard{sfx}.jpg'), quality=92)
     # contact sheet: every 6th frame
     cols, w, h = 12, 180, 180 * F['h'] // F['w']
     sel = list(range(0, n, 6))
@@ -314,7 +353,7 @@ def st_qa(a):
         sheet.paste(Image.fromarray(frames[i]).resize((w, h)), (x, y))
         d.rectangle([x, y, x + 64, y + 14], fill='black')
         d.text((x + 2, y + 2), f'{i} {i / edl.FPS:.2f}s', fill=(251, 209, 1))
-    sheet.save(os.path.join(EXP, f'contact-sheet{sfx}.jpg'), quality=86)
+    sheet.save(os.path.join(exp_dir(), f'contact-sheet{sfx}.jpg'), quality=86)
     # loudness + probe + tail silence
     r = subprocess.run([FF, '-hide_banner', '-nostats', '-i', deliv, '-af', 'loudnorm=I=-14:TP=-1.5:LRA=20:print_format=json',
                         '-f', 'null', '-'], capture_output=True, text=True)
@@ -327,7 +366,7 @@ def st_qa(a):
                    loudness=dict(I=loud['input_i'], TP=loud['input_tp'], LRA=loud['input_lra']),
                    last_50ms_peak=float(np.abs(A[-2400:]).max()),
                    streams=[l.strip() for l in pr.splitlines() if 'Stream #' in l],
-                   sizes_mb={f: round(os.path.getsize(os.path.join(EXP, f)) / 1e6, 2) for f in os.listdir(EXP)
+                   sizes_mb={f: round(os.path.getsize(os.path.join(exp_dir(), f)) / 1e6, 2) for f in os.listdir(exp_dir())
                              if f.endswith('.mp4') and f.startswith(out_name())})
     # safe-zone ink audit, on pixels: the bright opaque ink (white / gold) of the front and mid layers at every
     # held frame (whip exits and fly-ins are in motion by design and are skipped) must stay inside the format's
@@ -335,16 +374,16 @@ def st_qa(a):
     # pixels after the crop. Mid-layer ink is counted only where the sky matte shows it.
     Z = formats.SAFE[FMT]
     viol = []
-    for i in AUDIT_FRAMES:
-        for layer in (formats.front_dir(FMT, i), 'mid'):
-            y0 = formats.plate_y0(FMT, i) if layer == 'mid' else formats.y0(FMT, i)
+    for i in AUDIT_FRAMES + LOOK_AUDIT.get(LOOK, []):
+        for layer in (formats.front_dir(FMT, i) if LOOK == 'locked-on' else 'front' + lsub(), 'mid' + lsub()):
+            y0 = formats.plate_y0(FMT, i) if layer.startswith('mid') else formats.y0(FMT, i)
             p = os.path.join(WORK, layer, f'{i:05d}.png')
             if not os.path.exists(p):
                 continue
             L = np.asarray(Image.open(p).convert('RGBA'), np.float32) / 255
             al = L[..., 3]
             mp = os.path.join(WORK, 'matte', f'{i:05d}.png')
-            if layer == 'mid' and os.path.exists(mp):
+            if layer.startswith('mid') and os.path.exists(mp):
                 al = al * np.asarray(Image.open(mp), np.float32) / 255
             L, al = L[y0:y0 + F['h']], al[y0:y0 + F['h']]
             ys, xs = np.nonzero((al > 0.5) & (L[..., :3].max(-1) > 0.55))
@@ -358,7 +397,7 @@ def st_qa(a):
 def st_stills(a):
     """--frames: composite just those frames (plate / mid / front must exist) -> .work/stills/"""
     os.makedirs(os.path.join(WORK, 'stills'), exist_ok=True)
-    sfx = '' if FMT == '9x16' else '_' + FMT
+    sfx = ('' if FMT == '9x16' else '_' + FMT) + lsub()
     for i in map(int, a.frames.split(',')):
         Image.fromarray(composite(i)).save(os.path.join(WORK, 'stills', f'f{i:03d}{sfx}.jpg'), quality=92)
     print('  stills ->', os.path.relpath(os.path.join(WORK, 'stills'), HERE))
@@ -375,11 +414,14 @@ def main():
     ap.add_argument('--qa', action='store_true')
     ap.add_argument('--workers', type=int, default=4)
     ap.add_argument('--format', default='9x16', choices=sorted(formats.FORMATS))
+    ap.add_argument('--look', default='locked-on', choices=sorted(LOOKS), help='graphics package (see LOOKS)')
     ap.add_argument('--force', action='store_true', help='re-encode even over an approved render')
     ap.add_argument('--footage', default=os.environ.get('FOOTAGE', os.path.join(HERE, '.work', 'footage')))
     a = ap.parse_args()
-    global FMT
-    FMT = a.format
+    global FMT, LOOK
+    FMT, LOOK = a.format, a.look
+    if LOOK != 'locked-on' and FMT != '9x16':
+        ap.error('--look renders the 9:16 only')
     os.makedirs(WORK, exist_ok=True)
     if a.qa:
         names = ['qa']

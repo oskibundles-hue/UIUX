@@ -14,6 +14,13 @@ covers which look to reach for.
 The style guide page below is the standard for every job, in every workstream (Supercar Experience, Formula
 Dynamics, Anti Stock): its techniques, process and quality bar apply to all of them. Each keeps its own brand
 (the page's gold on black is SE's), and two brands never share a video.
+**Ask which style first, then build it all the way (2026-09-28):** "make sure every session/branch/everything knows
+and implements it no matter what when creating any work but ask beforehand what style should be used." Before any new
+piece of work, ask Omarie which style to use, as a click with a recommendation: the approved styles (Locked-On;
+Quick-Promo for a promo needed in under ~30 minutes; the workstream formats such as the SE vlog standard below) and,
+marked as proposed, the looks on the same page (Now Boarding, Paste-Up; `750s-spider-locked-on/ --look`). Skip the
+question only when he has named the style for this piece. Specialist agents never ask him; the lead names the style
+in the brief.
 Every SE car ad starts from this treatment unless the job says otherwise. Style guide page: https://claude.ai/artifact/WCe1qHhTrMDw7bkDaskeQm (source in `flash-special-showcase/style-guide/`). Reference build:
 `flash-special-showcase/` ("LOCKED ON", GT3 RS, 18 s 9:16). Read its README before you start. Second approved
 build: `750s-spider-locked-on/` ("ROOF DOWN", 750S Spider, 18 s, in 9:16, 4:5 and 1:1), the reference for feed cuts.
@@ -258,6 +265,8 @@ Keeping them separate is deliberate: a test on one axis stays interpretable.
 | 2026-09-27 | McLaren 750S Spider "ROOF DOWN" (`750s-spider-locked-on/`, the second `locked-on` build: SPIDER rises out of the sky behind the car as the roof stows, then the price rises from behind it) | Approved for ads, with every open question signed off (the clip's own music among them) and the defaults kept: one day grade on the sunlit desert footage, the text line on Las Vegas footage. Not posted |
 | 2026-09-27 | ROOF DOWN 4:5 and 1:1 feed cuts | "approve video". The feed-cut recipe is under THE STANDARD. Not posted |
 | 2026-09-28 | ROOF DOWN deliveries | "I just need Instagram ready reels for these edits I don't need 2 videos per video" — one Instagram-ready file per edit from now on (rule 8 and the vlog rules); the build no longer writes a master |
+| 2026-09-28 | Every session and branch | "make sure every session/branch/everything knows and implements it no matter what when creating any work but ask beforehand what style should be used" — ask which style first (a click), then build it fully (THE STANDARD) |
+| 2026-09-28 | Now Boarding and Paste-Up looks on ROOF DOWN | Two more graphics packages asked for ("impress me... give them unique names and store them in the same artifact"); proposed, not approved; on the style guide page |
 | 2026-09-28 | Locked-On style guide page | "My locked on artifact is my standard for any work I work on" — the page is the standard for every job in every workstream, each in its own brand. The page now has the feed cuts and the day-grade rule from ROOF DOWN (version 5) |
 
 Add a row when the shop reacts to something. This file is the reason a future ad

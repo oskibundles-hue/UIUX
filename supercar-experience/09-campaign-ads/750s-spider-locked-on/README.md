@@ -174,6 +174,52 @@ python3 build.py --format 4x5          # every stage cached; only the composite,
 python3 build.py --format 1x1          # also renders the square's hook and end card (front_1x1.html -> .work/front_1x1/)
 ```
 
+## Looks: two more graphics packages on the same edit (proposed 28 Sept 2026, not approved)
+
+Omarie, 28 Sept 2026: "create 2 more variations of the locked on artifact dynamic motion graphics we've created with
+completely different graphics... give them unique names and store them in the same artifact". Both looks are built on
+the approved ROOF DOWN edit. They share its plate, grade, sky matte, tracks, beat grid, copy (`config.json`) and sound,
+so all three looks compare shot for shot. Only the graphics change.
+
+They are **proposals**. Nothing here is approved or posted. They render into their own caches and into
+`exports/proposed/`, so the approved Locked-On files in `exports/` stay as they were, and anything that collects every
+mp4 in `exports/` can't pick up an unapproved one.
+
+| Look | Idea | Motion | Files |
+|---|---|---|---|
+| **NOW BOARDING** | The rental as a departure. Every line of copy sits on a split-flap board under a gold header bar. A gold pin on the badge is tethered to a flap tag, a giant board rises behind the deck for SPIDER, and the FARE board carries the end-card price. | Real flap mechanics: each tile has four halves and flips in 1.8 frames with a bounce, sampled up to 20 times for motion blur. Words cascade. A row that holds a figure (a price, the phone, 750S, the year) flips as one, so no partial number ever shows. A newly revealed half stays in shadow until its partner lands. | `front_now-boarding.html`, `mid_now-boarding.html`, `lib/flap.js` |
+| **PASTE-UP** | A cut-paper collage. The type sits on torn paper strips held down with gold tape, the price on a gold halftone patch. A gold marker loops the badge and the headlight, and SPIDER arrives as six cut-out letters behind the car. | Stepped at 12 drawings a second with a boil, the opposite of Locked-On's sub-frame blur. Pieces slap on over three drawings and rip off in two. A figure always sits on one piece and moves whole. | `front_paste-up.html`, `mid_paste-up.html`, `lib/paper.js` |
+
+```bash
+python3 build.py --look now-boarding --stage front,mid,finish,qa   # -> exports/proposed/SCE_750S-Spider_Roof-Down_Now-Boarding_18s-9x16.mp4
+python3 build.py --look paste-up --stage front,mid,finish,qa       # -> exports/proposed/SCE_750S-Spider_Roof-Down_Paste-Up_18s-9x16.mp4
+python3 build.py --look paste-up --frames 0,140,431               # stills of one look -> .work/stills/*_paste-up.jpg
+```
+
+QA stills go to `exports/proposed/qa_now-boarding/` and `exports/proposed/qa_paste-up/`. Both looks are 9:16 only for
+now. The 4:5 and 1:1 follow once Omarie picks a look.
+
+| File (28 Sept 2026, in `exports/proposed/`, not in git) | Frames | Loudness | Safe zone | SHA-256 |
+|---|---|---|---|---|
+| `SCE_750S-Spider_Roof-Down_Now-Boarding_18s-9x16.mp4` (25.9 MB) | 432, 18.02 s | −14.11 LUFS, TP −2.65 dBTP | 0 violations | `0a7f25fc397405b14a61d3266b8b08c77fd6d39a46b0abe8d40eccb9ea97d3d8` |
+| `SCE_750S-Spider_Roof-Down_Paste-Up_18s-9x16.mp4` (25.8 MB) | 432, 18.02 s | −14.11 LUFS, TP −2.65 dBTP | 0 violations, slap frames included | `3104c8dd66c5dbb3b189306023b467c427a0db973457d116a655a51634375e27` |
+
+**Review, 28 Sept.** The reviewer agent checked both looks frame by frame. It passed PASTE-UP and failed NOW BOARDING,
+and every finding was fixed before the files above were made:
+
+- NOW BOARDING built "750S" and the year one tile at a time, so partial figures ("7?UY", "750", "202") showed on the
+  tag and at the hook exit. Those rows now flip whole, in and out, the same as the prices.
+- The end-card model row touched the FARE bar by 1 to 4 px. The row moved up 10 px and the board down 6 px.
+- The pin sat on top of the speedmark. It now sits on the badge's top edge, and the board labels went from 15 to 18 px.
+- On PASTE-UP, gold paper crossed x 54 by 7 to 9 px on beat slaps, and the R crossed x 907 on the crash. The price patch
+  is narrower with a smaller slam (`Paper.pose(..., { pop, hitPop })`, both 1 by default, so other pieces are unchanged),
+  and the SPIDER letters sit 4 px closer together. The QA audit now also checks the slap frames (`LOOK_AUDIT`).
+
+Earlier, the first renders had failed the safe-zone audit. The NOW BOARDING sky boards reached x 52 once the end-card
+push scaled them, so they were narrowed to x 76..884. The PASTE-UP tape ends were moved inward. Fly-in and rip-off
+drawings still cross the line for a single drawing, and the audit skips them because they are in motion, the same rule
+as for Locked-On.
+
 ## Change a figure
 
 Edit `config.json`, then run `python3 build.py`. Only the layers that changed re-render.

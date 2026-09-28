@@ -196,6 +196,16 @@
   .feed .fmt, .feed-h .fmt { font-family: var(--display); font-size: 34px; line-height: 1; color: var(--gold); font-variant-numeric: tabular-nums; }
   .feed-h .px { font-family: var(--label); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); font-variant-numeric: tabular-nums; line-height: 1.5; }
 
+  /* ---------- looks ---------- */
+  .looknav { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .looknav a { background: var(--ground); padding: 18px 20px; display: grid; gap: 6px; text-decoration: none; color: var(--text); }
+  .looknav a:hover .ln { color: var(--gold); }
+  .looknav .ln { font-family: var(--display); font-size: 34px; line-height: .95; }
+  .looknav .lk { font-family: var(--label); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); }
+  .looknav p { font-size: 14.5px; color: var(--muted); line-height: 1.4; }
+  .look .beats { margin-top: 4px; }
+  .tagline { font-family: var(--label); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--faint); }
+
   footer { display: grid; gap: 8px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); padding-top: 22px; }
 
   @media (max-width: 820px) {
@@ -211,6 +221,7 @@
     .funnel > div + div::before { display: none; }
     .made .rule { grid-template-columns: 44px minmax(0, 1fr); }
     .feeds { gap: 10px; }
+    .looknav { grid-template-columns: 1fr; }
     .feed-h .fmt { font-size: 26px; }
   }
   @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
@@ -219,7 +230,7 @@
 <div class="wrap">
 
   <!-- HERO -->
-  <header class="hero">
+  <header class="hero" id="top-lockedon">
     <div>
       <div class="frame" id="frame">
         <video id="vid" src="media/locked-on-preview.mp4" poster="media/poster.jpg" playsinline muted loop autoplay controls preload="metadata"></video>
@@ -242,7 +253,7 @@
       <p class="thesis">Every SE car ad locks onto the car's own badge, lands the price like a slot reel, puts the model name behind the car, and rides the clip's own music into a tape stop before the end card.</p>
       <p class="quote"><b>"That is amazing make that a standard."</b> Omarie, 26 Sept 2026, on the GT3 RS reference cut playing here.</p>
       <p class="quote"><b>"My locked on artifact is my standard for any work I work on."</b> Omarie, 28 Sept 2026.</p>
-      <p class="muted" style="font-size:15px">Every job builds to these techniques, this process and this bar: Supercar Experience, Formula Dynamics and Anti Stock alike. Each keeps its own brand. The gold on black here is Supercar Experience's, and two brands never share a video. Vlogs follow the Sep 15 Egnyte rally and feed sizes follow ROOF DOWN. <a href="#feeds">Go to Feed cuts</a>, <a href="#vlog">Locked-On Vlog</a> or <a href="#made">how it was made</a>.</p>
+      <p class="muted" style="font-size:15px">Every job builds to these techniques, this process and this bar: Supercar Experience, Formula Dynamics and Anti Stock alike. Each keeps its own brand. The gold on black here is Supercar Experience's, and two brands never share a video. Vlogs follow the Sep 15 Egnyte rally and feed sizes follow ROOF DOWN. <a href="#feeds">Go to Feed cuts</a>, <a href="#looks">two more looks</a>, <a href="#vlog">Locked-On Vlog</a> or <a href="#made">how it was made</a>.</p>
       <div class="specs">
         <div class="spec"><b>1080×1920</b><span>9:16 story</span></div>
         <div class="spec"><b>15–18 s</b><span>reference 18.0 s</span></div>
@@ -454,6 +465,76 @@
       <div class="vrule"><h3>1:1 gets its own hook and end card</h3><p>The hook panel is 364 px instead of 432, with the SE lockup on the offer row. On the end card, TEXT OR DM TO BOOK, the phone, the site and the handle stand in a column beside the price. <b>Every other frame reuses the approved 9:16 graphics.</b></p><div class="lesson">front_1x1.html · build.py --format 1x1</div></div>
       <div class="vrule"><h3>Keep the car whole</h3><p>Where the car drives at the lens, <b>the picture drops lower than the graphics</b> so the splitter stays in the square (the hook and the front 3/4 pass). On a tracked lock-on the window moves so the brackets stay in frame.</p><div class="lesson">Review caught the splitter leaving the square</div></div>
       <div class="vrule"><h3>Lock the approved files</h3><p>Each approved render is pinned by SHA-256, and the build won't re-encode over it without <code>--force</code>. <b>Never edit the approved 9:16 front page for a feed cut</b>: it re-renders that layer, and the browser's text raster isn't bit-for-bit repeatable.</p><div class="lesson">lib/formats.py APPROVED</div></div>
+    </div>
+  </section>
+
+  <!-- LOOKS -->
+  <section class="sec" id="looks" aria-labelledby="looks-h">
+    <div class="sec-head">
+      <div class="eyebrow">Two more looks · proposed 28 Sept 2026 · not approved yet</div>
+      <h2 id="looks-h">One edit, three looks</h2>
+      <p class="muted">Both new looks run on the approved ROOF DOWN cut, with the same shots, beats, copy and sound as Locked-On. Only the graphics change, so the three compare shot for shot. Neither is a standard until Omarie picks one.</p>
+    </div>
+    <div class="looknav">
+      <a href="#top-lockedon"><span class="lk">Look 1 · approved</span><span class="ln">Locked-On</span><p>A heads-up display: tracked brackets, kinetic type with true motion blur, a slot-reel price.</p></a>
+      <a href="#now-boarding"><span class="lk">Look 2 · proposed</span><span class="ln">Now Boarding</span><p>A split-flap departure board: every line clatters through letters and lands.</p></a>
+      <a href="#paste-up"><span class="lk">Look 3 · proposed</span><span class="ln">Paste-Up</span><p>A cut-paper collage: torn strips, gold tape and marker, animated on twos.</p></a>
+    </div>
+  </section>
+
+  <section class="sec look" id="now-boarding" aria-labelledby="nb-h">
+    <div class="vlog-top">
+      <div>
+        <div class="frame"><video id="nbVid" src="media/looks/now-boarding.mp4" poster="media/looks/now-boarding.jpg" playsinline muted loop controls preload="metadata"></video></div>
+        <div class="frame-bar"><button class="btn" id="nbSound" type="button" aria-pressed="false">Sound on</button></div>
+      </div>
+      <div class="hero-copy">
+        <div class="eyebrow">Look 2 · split-flap · proposed</div>
+        <h2 id="nb-h">Now Boarding</h2>
+        <p class="thesis">Renting the car is a departure. Every line of copy lives on a flap board under a gold header bar, and it arrives the way a real board updates: the characters clatter through letters and land.</p>
+        <div class="specs">
+          <div class="spec"><b>1.8</b><span>frames per flip</span></div>
+          <div class="spec"><b>12–20</b><span>blur samples a frame</span></div>
+          <div class="spec"><b>16</b><span>safe reel letters</span></div>
+          <div class="spec"><b>3</b><span>boards</span></div>
+        </div>
+        <p class="tagline">Departures · Fares · Check-in · 18.0 s · the same bed as Locked-On</p>
+      </div>
+    </div>
+    <div class="beats" id="nbBeats"></div>
+    <div class="vrules">
+      <div class="vrule"><h3>Every line is a board</h3><p>Copy sits on black flap tiles under a gold header bar: <b>DEPARTURES</b> for the hook, <b>FARES</b> for the offer, <b>CHECK-IN</b> for the requirements. Bebas on the tiles, Michroma on the headers.</p><div class="lesson">front_now-boarding.html</div></div>
+      <div class="vrule"><h3>Real flip mechanics</h3><p>Each character is four half-tiles. The top flap falls, the bottom flap lands and <b>bounces once</b>, in 1.8 frames, captured with real motion blur. Words cascade left to right. Any row with a figure in it (a price, the phone, 750S, the year) flips as one, so a number is never half built.</p><div class="lesson">lib/flap.js</div></div>
+      <div class="vrule"><h3>No wrong figure, ever</h3><p>The price cycles only through letters that can't read as digits, and lands on the reel beats. <b>A newly revealed half stays in shadow until its partner lands.</b></p><div class="lesson">Caught on a test frame: an unshaded flip read as $1,200</div></div>
+      <div class="vrule"><h3>Pins, not brackets</h3><p>Tracked moments get a gold pin with rings. On the speedmark the pin is <b>tethered to a flap tag</b> that follows it; behind the car a giant board rises from the deck for SPIDER, then for the fare.</p><div class="lesson">For offers, launches and anything with a time or a place</div></div>
+    </div>
+  </section>
+
+  <section class="sec look" id="paste-up" aria-labelledby="pu-h">
+    <div class="vlog-top">
+      <div>
+        <div class="frame"><video id="puVid" src="media/looks/paste-up.mp4" poster="media/looks/paste-up.jpg" playsinline muted loop controls preload="metadata"></video></div>
+        <div class="frame-bar"><button class="btn" id="puSound" type="button" aria-pressed="false">Sound on</button></div>
+      </div>
+      <div class="hero-copy">
+        <div class="eyebrow">Look 3 · cut paper · proposed</div>
+        <h2 id="pu-h">Paste-Up</h2>
+        <p class="thesis">Before screens, a layout was type on paper, cut out and pasted on the board. Here every line is a torn strip held down with gold tape, and a gold marker draws on the footage.</p>
+        <div class="specs">
+          <div class="spec"><b>12</b><span>drawings a second</span></div>
+          <div class="spec"><b>3</b><span>drawings to slap on</span></div>
+          <div class="spec"><b>2</b><span>drawings to rip off</span></div>
+          <div class="spec"><b>3</b><span>papers: black, white, gold</span></div>
+        </div>
+        <p class="tagline">Torn strips · gold tape · halftone · marker · 18.0 s · the same bed as Locked-On</p>
+      </div>
+    </div>
+    <div class="beats" id="puBeats"></div>
+    <div class="vrules">
+      <div class="vrule"><h3>Paper, tape, marker</h3><p>White, black and gold paper with torn edges and grain, <b>gold tape</b>, a halftone on the gold paper, and a marker: gold on the footage, black on white paper, with gold highlighter under the words.</p><div class="lesson">lib/paper.js</div></div>
+      <div class="vrule"><h3>On twos, with a boil</h3><p>The graphics hold every drawing for two frames and <b>sit a hair off each time</b>, while the footage stays smooth at 23.976 fps. The opposite of Locked-On's sub-frame blur.</p><div class="lesson">One capture per frame: nothing moves inside a frame</div></div>
+      <div class="vrule"><h3>Figures move as one piece</h3><p>A price is always on a single patch or strip, so it <b>lands and leaves whole</b>. Each beat hit slaps the patch again instead of spinning digits.</p><div class="lesson">front_paste-up.html</div></div>
+      <div class="vrule"><h3>The marker points at the car</h3><p>A loop is drawn round the speedmark and the headlight, <b>tracked to the footage</b>, with an arrow to the paper tag; the end card's arrow points at the phone.</p><div class="lesson">For personal, playful, social-first posts</div></div>
     </div>
   </section>
 
@@ -913,6 +994,35 @@
     });
     wrap.appendChild(h); wrap.appendChild(grid); groups.appendChild(wrap);
   });
+
+  // ---------- Looks: players and beat strips ----------
+  function lookPlayer(vidId, soundId, beatsId, prefix, data) {
+    var v = document.getElementById(vidId), sb = document.getElementById(soundId), host = document.getElementById(beatsId);
+    function seekTo(t) { try { v.currentTime = t; var p = v.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {}
+      v.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+    data.forEach(function (b) {
+      var el = document.createElement('button'); el.type = 'button'; el.className = 'beat';
+      el.innerHTML = '<img src="media/looks/' + prefix + '-' + b.t.toFixed(2) + '.jpg" alt="' + b.n + ' at ' + b.t.toFixed(2) + ' s" loading="lazy">' +
+        '<span class="t">' + b.t.toFixed(2) + ' S</span><span class="n">' + b.n + '</span><span class="d">' + b.d + '</span>';
+      el.addEventListener('click', function () { seekTo(b.t); }); host.appendChild(el);
+    });
+    sb.addEventListener('click', function () { v.muted = !v.muted; if (!v.muted) { var p = v.play(); if (p && p.catch) p.catch(function () {}); } });
+    v.addEventListener('volumechange', function () { sb.setAttribute('aria-pressed', String(!v.muted)); sb.textContent = v.muted ? 'Sound on' : 'Sound off'; });
+  }
+  lookPlayer('nbVid', 'nbSound', 'nbBeats', 'nb', [
+    { t: 0.00, n: 'Departures', d: 'The board is complete on frame 0: MCLAREN, 750S SPIDER, 5 HOURS, $1,299, NOW BOARDING.' },
+    { t: 4.17, n: 'Pin and tag', d: 'A gold pin tracked to the speedmark, tethered to a flap tag with the model and year.' },
+    { t: 5.84, n: 'Fares', d: 'The price cycles through letters and lands on the reel beats; FULL DAY $1,799 follows.' },
+    { t: 8.97, n: 'Check-in', d: "VALID DRIVER'S LICENSE and INSURANCE clatter onto the CHECK-IN board." },
+    { t: 12.51, n: 'Behind the car', d: 'A giant board rises from behind the deck and SPIDER clatters in as the roof folds.' },
+    { t: 17.98, n: 'End card', d: 'The FARE board behind the car, NOW BOARDING, TEXT OR DM TO BOOK and the phone in tiles.' } ]);
+  lookPlayer('puVid', 'puSound', 'puBeats', 'pu', [
+    { t: 0.00, n: 'Pasted up', d: 'Strips, tape, a gold sticker with 5 HOURS $1,299 and the logo, all down on frame 0.' },
+    { t: 4.17, n: 'Marker loop', d: 'A gold loop drawn round the speedmark, tracked, with an arrow to a paper tag.' },
+    { t: 5.84, n: 'The patch', d: 'The price on a gold halftone patch, slapped down whole on the drop.' },
+    { t: 8.97, n: 'Ruled card', d: 'YOU NEED, ticked in marker and highlighted in gold.' },
+    { t: 12.51, n: 'Cut-outs', d: 'Six cut-out letters rise from behind the deck, one drawing after another.' },
+    { t: 17.98, n: 'End card', d: 'The price patch behind the car, and a marker arrow pointing at the phone.' } ]);
 
   // Checklist, remembered per viewer only.
   var boxes = Array.prototype.slice.call(document.querySelectorAll('#checks input'));
