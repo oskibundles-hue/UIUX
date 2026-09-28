@@ -43,8 +43,9 @@ What makes an ad `locked-on`, in order of appearance:
    music drops into its own tape stop before the end-card hit. -14 LUFS, true peak <= -1.5 dBTP,
    last 50 ms silent (`audio/bed_music.py`).
 8. **Process.** Every figure is sourced, copy passes SlopMonster 5/5, then review under four lenses
-   (claims, brand, legibility, craft) until nothing is blocking. Deliver a two-pass ~11.5 Mb/s copy for the
-   phone and Dropbox; the master stays in the repo.
+   (claims, brand, legibility, craft) until nothing is blocking. Deliver **one Instagram-ready file per edit**
+   (9:16 two-pass ~11.5 Mb/s, H.264 High, AAC 48 kHz, fast start) and nothing else: Omarie, 28 Sept 2026, "I just
+   need Instagram ready reels for these edits, I don't need 2 videos per video". No separate master.
 
 **Feed cuts: 4:5 and 1:1.** Approved by Omarie on 2026-09-27 on ROOF DOWN ("approve video"). Get the 9:16
 approved first, then cut the feed sizes from the same build: `python3 build.py --format 4x5` or `--format 1x1`
@@ -76,8 +77,8 @@ order and stamp each chapter with the camera clock; keep the SE banner on the si
 right edge between 14% and 55%); tag a car only when it is positively identified in frame and release
 the tag with LOCK LOST when the car leaves on a pan; caption every line (H1); check who is speaking
 before labelling a quote; label guests by company only (EGNYTE GUEST), never by name, and show a client
-as text, never their logo; duck the music about 11 dB under all speech and always deliver a no-music
-master and the music stem. Never use passwords, speed talk, unsafe-driving talk, fleet faults, weapons
+as text, never their logo; duck the music about 11 dB under all speech. Deliver one Instagram-ready video per
+vlog (28 Sept 2026: no second video); the no-music version and the music stem stay in the build unless he asks. Never use passwords, speed talk, unsafe-driving talk, fleet faults, weapons
 or anything someone asks to have taken out. The style guide page has a Vlog section.
 
 **How a vlog is made now (the fast path, 2026-09-27).** Omarie asked for the 6 h 45 min Sep 15 process to be "extremely
@@ -256,6 +257,7 @@ Keeping them separate is deliberate: a test on one axis stays interpretable.
 | 2026-09-27 | Sep 15 rally vlog with the Locked-On layer (`10-vlog-locked-on/2026-09-15-rally/`) | "That was great save this" — saved to Dropbox `/Supercar Experience/05 Vlogs/`. Next ask: rebuild the vlog from the raw footage with vlog-specific Locked-On variations, keeping the SE banner on the side, and catch the key moments (team dinner, guests on how they enjoyed it, leading the convoy on the freeway) |
 | 2026-09-27 | McLaren 750S Spider "ROOF DOWN" (`750s-spider-locked-on/`, the second `locked-on` build: SPIDER rises out of the sky behind the car as the roof stows, then the price rises from behind it) | Approved for ads, with every open question signed off (the clip's own music among them) and the defaults kept: one day grade on the sunlit desert footage, the text line on Las Vegas footage. Not posted |
 | 2026-09-27 | ROOF DOWN 4:5 and 1:1 feed cuts | "approve video". The feed-cut recipe is under THE STANDARD. Not posted |
+| 2026-09-28 | ROOF DOWN deliveries | "I just need Instagram ready reels for these edits I don't need 2 videos per video" — one Instagram-ready file per edit from now on (rule 8 and the vlog rules); the build no longer writes a master |
 | 2026-09-28 | Locked-On style guide page | "My locked on artifact is my standard for any work I work on" — the page is the standard for every job in every workstream, each in its own brand. The page now has the feed cuts and the day-grade rule from ROOF DOWN (version 5) |
 
 Add a row when the shop reacts to something. This file is the reason a future ad

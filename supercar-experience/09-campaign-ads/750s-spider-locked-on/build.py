@@ -16,13 +16,15 @@ Stages
   front   front.html via lib/kcapture.js (sub-frame motion blur) -> .work/front/*.png
   mid     mid.html (behind-the-car type) -> .work/mid/*.png, roof shot only
   audio   audio/bed.py -> audio/bed.wav (the clip's own music + accents, -14 LUFS)
-  finish  plate, vignette, mid x sky matte, the crash punch, front, grain -> x264: exports/*_master.mp4 (CRF 16) and the
-          two-pass ~11.5 Mb/s delivery copy exports/*.mp4, both with the bed muxed as-is
+  finish  plate, vignette, mid x sky matte, the crash punch, front, grain -> x264: one Instagram-ready file per edit,
+          exports/*.mp4 (two-pass ~11.5 Mb/s, H.264 High 4.2, AAC 48 kHz, fast start), with the bed muxed as-is.
+          Omarie, 28 Sept 2026: "I just need Instagram ready reels... I don't need 2 videos per video", so no
+          separate master is written
   qa      stills at the check frames, contact sheet, loudness, probe, safe-zone ink audit -> exports/qa/
 
 Placement versions (--format 4x5 | 1x1) reuse every cached stage. They crop the plate, sky matte and layers to a
 per-shot window (lib/formats.py), then vignette, crash punch and grain on the new frame, and encode
-exports/*-<fmt>.mp4 (+ _master) with the same bed. 4x5 uses the approved 9:16 layers as they are; 1x1 renders its
+exports/*-<fmt>.mp4 with the same bed. 4x5 uses the approved 9:16 layers as they are; 1x1 renders its
 own front layer (front_1x1.html: the square's hook and end card) into .work/front_1x1/ for those frames only and
 composites the approved 9:16 layer everywhere else. QA goes to exports/qa_<fmt>/. The finish stage will not re-encode
 over an approved render (SHA-256 in lib/formats.py APPROVED) unless --force is given.
@@ -240,8 +242,8 @@ def approved_intact(fmt):
     ap = formats.APPROVED.get(fmt)
     if not ap:
         return False
-    files = {out_name(fmt) + '.mp4': ap[0], out_name(fmt) + '_master.mp4': ap[1]}
-    return all(os.path.exists(os.path.join(EXP, f)) and sha256(os.path.join(EXP, f)) == h for f, h in files.items())
+    f = os.path.join(EXP, out_name(fmt) + '.mp4')        # the Instagram-ready file (ap[1], the retired master, is kept
+    return os.path.exists(f) and sha256(f) == ap[0]      # in APPROVED as a record only)
 
 
 def st_finish(a):
@@ -260,10 +262,6 @@ def st_finish(a):
     vf = 'scale=out_color_matrix=bt709:out_range=tv:flags=lanczos+accurate_rnd+full_chroma_int,format=yuv420p'
     tags = ['-colorspace', 'bt709', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-color_range', 'tv']
     aud = ['-c:a', 'aac', '-b:a', '192k', '-ar', '48000']
-    master = os.path.join(EXP, out_name() + '_master.mp4')
-    run([FF, '-y', '-v', 'error', '-framerate', FPS_STR, '-i', seq, '-i', bed, '-map', '0:v', '-map', '1:a', '-vf', vf,
-         '-c:v', 'libx264', '-preset', 'slow', '-crf', '16', '-profile:v', 'high', '-level', '4.2', '-g', '24', '-bf', '2',
-         *tags, *aud, '-shortest', '-movflags', '+faststart', master])
     deliv = os.path.join(EXP, out_name() + '.mp4')
     plog = os.path.join(WORK, 'x264pass' if FMT == '9x16' else 'x264pass_' + FMT)
     b, mx, buf = formats.FORMATS[FMT]['rate']
@@ -273,8 +271,7 @@ def st_finish(a):
     run([FF, '-y', '-v', 'error', *common, '-pass', '1', '-passlogfile', plog, '-an', '-f', 'mp4', os.devnull])
     run([FF, '-y', '-v', 'error', *common[:4], '-i', bed, '-map', '0:v', '-map', '1:a', *common[4:], '-pass', '2',
          '-passlogfile', plog, *aud, '-shortest', '-movflags', '+faststart', deliv])
-    for f in (master, deliv):
-        print(f'  wrote {os.path.relpath(f, HERE)}  {os.path.getsize(f) / 1e6:.1f} MB')
+    print(f'  wrote {os.path.relpath(deliv, HERE)}  {os.path.getsize(deliv) / 1e6:.1f} MB')
 
 
 # ------------------------------------------------------------------------------------------ qa

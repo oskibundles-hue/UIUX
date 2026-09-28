@@ -6,12 +6,15 @@ been posted anywhere yet;** each post or ad placement still needs its own go. It
 THE STANDARD for SE ads (`locked-on`, `../HOUSE-STYLE.md` on the SE branch). It started from the approved GT3
 RS showcase's settings and library (`../flash-special-showcase/`, whose `lib/` modules are vendored here).
 
-The approved render (the mp4s are not in git; `python3 build.py` rebuilds them from the source clip):
+The approved render (the mp4s are not in git; `python3 build.py` rebuilds them from the source clip). Each edit is
+delivered as **one Instagram-ready file** (H.264 High 4.2, BT.709, AAC 48 kHz, fast start). Omarie, 28 Sept 2026:
+"I just need Instagram ready reels for these edits, I don't need 2 videos per video", so the build no longer
+writes a master; the master rows below are kept as a record:
 
 | File | SHA-256 |
 |---|---|
 | `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-9x16.mp4` (delivery: 11.5 Mb/s, 25.9 MB) | `22ddf49232086eb8d3856fc05760032d2a9385df77acf0c19eb3ee885e2ca544` |
-| `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-9x16_master.mp4` (master: CRF 16, 57.1 MB) | `73762b7c7c59961b0a524b9fe607d65dc2b185336753389145dd1e26f03ba545` |
+| `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-9x16_master.mp4` (retired master, CRF 16, 57.1 MB: no longer written or delivered) | `73762b7c7c59961b0a524b9fe607d65dc2b185336753389145dd1e26f03ba545` |
 
 ![poster](exports/poster.jpg) ![end card](exports/poster-endcard.jpg)
 
@@ -135,9 +138,9 @@ Round 3 confirmed 20 of the round-2 items fixed at full resolution, with no regr
 | File | SHA-256 |
 |---|---|
 | `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-4x5.mp4` (delivery: 8.1 Mb/s, 18.4 MB) | `dfc2c1c183b0f9ec23bc4688ec5949e8f58e9e3d1e0a7120ce115c70dde610f1` |
-| `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-4x5_master.mp4` (master: CRF 16, 40.4 MB) | `a3138d13b69073a849319fce84255b9f6e81f9ebaf822c659aebd1953416addb` |
+| `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-4x5_master.mp4` (retired master, CRF 16, 40.4 MB: no longer written or delivered) | `a3138d13b69073a849319fce84255b9f6e81f9ebaf822c659aebd1953416addb` |
 | `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-1x1.mp4` (delivery: 6.5 Mb/s, 14.9 MB) | `b9dab85e7f77fd1e52a26901af2490290a590eddde705c9c4b1a971156603204` |
-| `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-1x1_master.mp4` (master: CRF 16, 32.8 MB) | `f7b2907b52e817e6744b85941ea2ff28d617e8192dbe150e2cb6a6d9fd6fa1a3` |
+| `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-1x1_master.mp4` (retired master, CRF 16, 32.8 MB: no longer written or delivered) | `f7b2907b52e817e6744b85941ea2ff28d617e8192dbe150e2cb6a6d9fd6fa1a3` |
 
 The same approved ad, cut for the feed placements. The edit, plate, grade, sky matte, graphics timing and sound
 are identical; each version is a crop window of the 1080x1920 plate per shot (`lib/formats.py`), re-composited so the
@@ -197,7 +200,7 @@ Stages, each cached in `.work/` (ignored by git):
 5. `front`: `front.html`.
 6. `mid`: `mid.html`.
 7. `audio`: `audio/bed.py`.
-8. `finish`: composite, then the master and delivery encodes.
+8. `finish`: composite, then one encode: the Instagram-ready file (no separate master since 28 Sept).
 9. `qa`.
 
 ## Files

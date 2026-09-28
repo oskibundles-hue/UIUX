@@ -330,7 +330,7 @@
       <article class="rule">
         <div class="num">8</div>
         <div class="main"><h3>Process</h3>
-          <p>Every figure comes from a named source. Copy scores 5/5 in SlopMonster. Four reviewers (claims, brand, legibility, craft) check the render, and it gets fixed until <b>nothing is blocking</b>. Deliver a two-pass 11.5 Mb/s copy; the master stays in the repo.</p>
+          <p>Every figure comes from a named source. Copy scores 5/5 in SlopMonster. Four reviewers (claims, brand, legibility, craft) check the render, and it gets fixed until <b>nothing is blocking</b>. Deliver <b>one Instagram-ready file per edit</b> and nothing else: no second master.</p>
           <div class="mod">build.py · deslop.py</div></div>
         <div class="breaks"><div class="k">Breaks when</div><p>A price, spec or promo goes on screen without a source. That's a hold, not a guess.</p></div>
       </article>
@@ -543,7 +543,7 @@
       <div class="vrule"><h3>Lock only what you can name</h3><p>A make and model go on a car only when it is positively identified in the frame. <b>When a car leaves on a pan, release it with LOCK LOST (I2)</b> and re-acquire on the next one.</p><div class="lesson">First render: three tags drifted off-frame on whip pans</div></div>
       <div class="vrule"><h3>Captions on every line</h3><p>Boxed captions (H1) with the spoken word in gold, sitting at 58–72%. <b>Hide them while a card, slam or quote wall already shows the same words.</b></p><div class="lesson">Muted autoplay is how most people first see a reel</div></div>
       <div class="vrule"><h3>Know who is speaking</h3><p>Check the picture before labelling a quote. Guests are labelled by company only (EGNYTE GUEST, EGNYTE ON THE DAY), <b>never by name</b>, and a client appears as text, never as their logo.</p><div class="lesson">The Roma answer was Omarie, hand on chin, not a guest</div></div>
-      <div class="vrule"><h3>Music sits under the talk</h3><p>An original bed composed to the cut: F minor, 105 BPM, a drop on the convoy montage and a tape stop into the end card. <b>It ducks about 11 dB under every spoken line.</b> Deliver a no-music master and the stem; one setting turns it off.</p><div class="lesson">config.json music.enabled, or MUSIC=0 ./render.sh</div></div>
+      <div class="vrule"><h3>Music sits under the talk</h3><p>An original bed composed to the cut: F minor, 105 BPM, a drop on the convoy montage and a tape stop into the end card. <b>It ducks about 11 dB under every spoken line.</b> Deliver one Instagram-ready video; the no-music version and the stem stay in the build unless asked for.</p><div class="lesson">config.json music.enabled, or MUSIC=0 ./render.sh</div></div>
       <div class="vrule"><h3>Fetch only the frames you use</h3><p>The DJI files are 4K 10-bit HEVC and decode at about 10 fps here. Survey from keyframes and audio, then <b>pull each chosen shot as a byte range</b> using the clip's saved index.</p><div class="lesson">About 10 GB fetched instead of 160 GB</div></div>
     </div>
     <div class="never">
