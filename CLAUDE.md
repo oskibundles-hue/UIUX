@@ -109,9 +109,31 @@ There are **three separate workstreams**. Establish which one you are in before 
 |---|---|---|---|
 | Anti Stock | Omarie's own channel, @nq.young | `creator-kit/` | `claude/instagram-growth-video-editing-rswexx` |
 | Formula Dynamics | client, luxury car shop | `formula-dynamics/` | `claude/formula-dynamics-assets-bnlnkm` |
-| Supercar Experience | client, fleet rentals | see its own index | `claude/skills-download-ai3m6a` |
+| Supercar Experience | client, fleet rentals | `supercar-experience/` | `claude/supercar-rental-ad-graphics-o64vo3` (earlier work on `claude/skills-download-ai3m6a`) |
 
 **One index for everything delivered:** https://claude.ai/code/artifact/c2501ca3-40ac-4b1d-833e-1b7c98f9abad — 79 files across Anti Stock and Formula Dynamics, with save paths. Supercar Experience is deliberately indexed separately at https://claude.ai/code/artifact/9bca62e7-2acb-437d-af68-da260daf2fdb so the two clients cannot drift. Do not start a third index.
+
+## The standard for every job, and which style to use (every session, every branch)
+
+Omarie, 2026-09-28: "My locked on artifact is my standard for any work I work on", and "make sure every
+session/branch/everything knows and implements it no matter what when creating any work but ask beforehand what
+style should be used."
+
+1. **Ask which style first.** Before building any new piece of work (an ad, a vlog, a reel, a poster, a page), ask
+   Omarie which style to use, as a click (AskUserQuestion) with your recommendation first. Offer the approved styles:
+   **Locked-On**, the standard (https://claude.ai/artifact/WCe1qHhTrMDw7bkDaskeQm); **Quick-Promo** when a promo has to go out in under
+   about 30 minutes; and the workstream's own approved formats where they fit (Fast Cut and Reel Cut for Anti Stock,
+   the Sep 15 rally v2 build for Supercar Experience vlogs). Also offer the proposed looks on the same page
+   (**Now Boarding**, **Paste-Up**), marked as proposed. Skip the question only when he has already named the style
+   for this piece.
+2. **Then build that style all the way**: its techniques, process and quality bar, in the workstream's own brand. The
+   page's gold on black is Supercar Experience's; Formula Dynamics keeps FD red and Bebas Neue, Anti Stock keeps its
+   own look, and two brands never share a video.
+3. **Specialist agents never ask Omarie themselves.** The lead asks, then names the style in the brief. An agent
+   whose brief names no style stops and asks the lead.
+
+The rules and the feedback log are in `supercar-experience/09-campaign-ads/HOUSE-STYLE.md` on the SE branch
+(`claude/supercar-rental-ad-graphics-o64vo3`).
 
 ## Anti Stock — the personal channel
 
