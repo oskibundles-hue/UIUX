@@ -2,6 +2,66 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## Second brain (Omarie's notes)
+
+Look up facts about Omarie's setup, workstreams (Anti Stock, Formula Dynamics, Supercar Experience), brand specs, formats and standing rules with `python3 .claude/brain/recall.py "<question>"` first (about 0.1 s, no model call). Open notes or files by hand only if it doesn't answer. A hook also runs the lookup on every prompt and adds the matching note when there's a clear match.
+
+The notes are private. They live in the private repo `oskibundles-hue/nq-agent-channel`, folder `brain/`. If recall.py says no notes were found, ask Omarie to attach that repo to the session. Never copy note contents into this public repo.
+
+## No ultracode unless necessary
+
+Omarie, 2026-09-27: "no more ultracode unless necessary." Multi-agent workflows (ultracode, the Workflow tool, agent fan-outs) used most of a week's usage limit in a day. Work in the main session by default, even when ultracode is switched on. Only use a workflow when the job truly can't be done well without one, and say why before starting it.
+
+## The standard for every job, and which style to use (every session, every branch)
+
+Omarie, 2026-09-28: "My locked on artifact is my standard for any work I work on", and "make sure every
+session/branch/everything knows and implements it no matter what when creating any work but ask beforehand what
+style should be used."
+
+1. **Ask which style first.** Before building any new piece of work (an ad, a vlog, a reel, a poster, a page), ask
+   Omarie which style to use, as a click (AskUserQuestion) with your recommendation first. Offer the approved styles:
+   **Locked-On**, the standard (https://claude.ai/artifact/WCe1qHhTrMDw7bkDaskeQm); **Quick-Promo** when a promo has to go out in under
+   about 30 minutes; and the workstream's own approved formats where they fit (Fast Cut and Reel Cut for Anti Stock,
+   the Sep 15 rally v2 build for Supercar Experience vlogs). Also offer the proposed looks on the same page
+   (**Now Boarding**, **Paste-Up**), marked as proposed. For a page people use to find things (an index, a
+   directory, a deliverables list, a to-do board), offer the **iPhone index layout** first: Apple's system font, iOS
+   colours, a tab bar and one search across everything. Omarie picked it on 2026-09-28 ("save this apple layout it
+   looks so nice"). It lives in `design-systems/iphone-index/`, with `qa.js` to run before publishing. Skip the
+   question only when he has already named the style for this piece.
+2. **Then build that style all the way**: its techniques, process and quality bar, in the workstream's own brand. The
+   page's gold on black is Supercar Experience's; Formula Dynamics keeps FD red and Bebas Neue, Anti Stock keeps its
+   own look, and two brands never share a video.
+3. **Specialist agents never ask Omarie themselves.** The lead asks, then names the style in the brief. An agent
+   whose brief names no style stops and asks the lead.
+
+The rules and the feedback log are in `supercar-experience/09-campaign-ads/HOUSE-STYLE.md` on the SE branch
+(`claude/supercar-rental-ad-graphics-o64vo3`).
+
+## Specialist agents (lead, specialists, reviewer)
+
+The main session is the **lead**. It talks to Omarie, plans, delivers and pushes. The specialists in
+`.claude/agents/` each do one job, look facts up in the second brain first, and hand back to the lead,
+never straight to Omarie.
+
+| agent | job | model |
+|---|---|---|
+| `researcher` | watch videos, research tools and trends; sourced reports (skill `watch`) | sonnet |
+| `anti-stock-editor` | personal-channel reels via `creator-kit/` (Anti Stock branch) | sonnet |
+| `fd-ads` | Formula Dynamics builds, in a worktree of the FD branch | opus, high effort |
+| `se-ads` | Supercar Experience builds, in a worktree of an SE branch | opus, high effort |
+| `reviewer` | read-only check before delivery: figures, brand, layout, frames, copy (skill `slopmonster`), loudness | opus |
+
+The usual run is **build → reviewer → lead delivers**: a chain of one agent at a time, not a fan-out. The
+builders work in worktrees of their workstream's branch, because this default branch doesn't carry
+`creator-kit/`, `formula-dynamics/` or `supercar-experience/`.
+
+**The regret-list gate is on** (Omarie, 2026-09-27). `.claude/hooks/regret_gate.py` runs before every Bash
+and connector call (wired in `.claude/settings.json`). It **asks** before any paid Higgsfield call (quote the
+cost first), anything that publishes or changes a live account, Dropbox moves or deletes, Windsor.ai write
+actions, memory-store writes, force pushes, `git reset --hard`, `git clean -f` and recursive deletes outside
+`/tmp`. It **refuses** any push to `main`. An "ask" waits for Omarie's click, so an unattended routine that hits
+one stops there until he answers.
+
 ## Project Overview
 
 Antigravity Kit is an AI-powered design intelligence toolkit providing searchable databases of UI styles, color palettes, font pairings, chart types, and UX guidelines. It works as a skill/workflow for AI coding assistants (Claude Code, Windsurf, Cursor, etc.).

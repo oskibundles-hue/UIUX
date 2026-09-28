@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claude — Motion Showreel 2026</title>
+<style>
+  @font-face {
+    font-family: 'Archivo';
+    font-style: normal;
+    font-weight: 100 900;
+    font-stretch: 62% 125%;
+    src: url(fonts/archivo-latin-wdth-normal.woff2) format('woff2-variations');
+  }
+  @font-face {
+    font-family: 'Archivo';
+    font-style: italic;
+    font-weight: 100 900;
+    font-stretch: 62% 125%;
+    src: url(fonts/archivo-latin-wdth-italic.woff2) format('woff2-variations');
+  }
+  @font-face {
+    font-family: 'Instrument Serif';
+    font-style: normal;
+    font-weight: 400;
+    src: url(fonts/instrument-serif-latin-400-normal.woff2) format('woff2');
+  }
+  @font-face {
+    font-family: 'Instrument Serif';
+    font-style: italic;
+    font-weight: 400;
+    src: url(fonts/instrument-serif-latin-400-italic.woff2) format('woff2');
+  }
+  @font-face {
+    font-family: 'JetBrains Mono';
+    font-style: normal;
+    font-weight: 100 800;
+    src: url(fonts/jetbrains-mono-latin-wght-normal.woff2) format('woff2-variations');
+  }
+  html, body { margin: 0; background: #000; overflow: hidden; }
+  body { -webkit-font-smoothing: antialiased; text-rendering: geometricPrecision; }
+  #viewport { position: absolute; }
+  #viewport * { box-sizing: border-box; }
+  #player-ui {
+    position: fixed; inset: 0; display: none; place-items: center; z-index: 1000;
+    background: rgba(11, 11, 15, .55); color: #F3F0EA; cursor: pointer;
+    font: 600 16px 'JetBrains Mono', monospace; letter-spacing: .12em; text-transform: uppercase;
+  }
+  #player-ui.show { display: grid; }
+</style>
+<script src="src/scenes/manifest.js"></script>
+<script src="src/engine.js"></script>
+</head>
+<body>
+<div id="player-ui">▶ Play reel (sound on)</div>
+<script>
+  // Interactive playback (?play). Capture tools use ?render and drive R.render() directly.
+  (function () {
+    if (R.isRender) return;
+    const play = R.params.has('play');
+    const ui = document.getElementById('player-ui');
+    const audio = new Audio('dist/soundtrack.wav');
+    audio.preload = 'auto';
+    let raf = 0, clockStart = 0, useAudio = false;
+    function tick(now) {
+      let t = useAudio && !audio.paused ? audio.currentTime : (now - clockStart) / 1000;
+      if (t >= R.DUR) {
+        R.render(R.DUR - 1 / R.FPS);
+        ui.textContent = '↻ Replay';
+        ui.classList.add('show');
+        return;
+      }
+      R.render(t);
+      raf = requestAnimationFrame(tick);
+    }
+    function start() {
+      ui.classList.remove('show');
+      cancelAnimationFrame(raf);
+      audio.currentTime = 0;
+      useAudio = false;
+      audio.play().then(() => { useAudio = true; }).catch(() => {});
+      clockStart = performance.now();
+      raf = requestAnimationFrame(tick);
+    }
+    R.ready.then(() => {
+      if (!play) return;
+      ui.classList.add('show');
+      ui.addEventListener('click', start);
+      window.addEventListener('keydown', (e) => { if (e.code === 'Space') { e.preventDefault(); start(); } });
+    });
+  })();
+</script>
+</body>
+</html>
