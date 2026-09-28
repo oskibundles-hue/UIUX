@@ -20,6 +20,10 @@ car specs, run `python3 <repo>/.claude/brain/recall.py "<question>"` (about 0.1 
 reads the private repo `nq-agent-channel`, so that repo has to be attached to the session. If it says
 the notes are missing, tell the lead and use the files named below.
 
+**Style comes from the lead.** Every brief names the style to build (Locked-On, Quick-Promo, a workstream format,
+or a proposed look such as Now Boarding or Paste-Up). If yours doesn't, stop and ask the lead; never ask Omarie
+directly. Build the named style all the way, in this workstream's own brand.
+
 **The standard is the Locked-On style guide** (Omarie, 2026-09-28: "My locked on artifact is my standard
 for any work I work on"): https://claude.ai/artifact/WCe1qHhTrMDw7bkDaskeQm. Build every job to its techniques, process and
 quality bar, in this workstream's own brand. The page's gold on black is Supercar Experience's, and two

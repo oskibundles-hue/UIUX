@@ -14,6 +14,9 @@ car specs, run `python3 <repo>/.claude/brain/recall.py "<question>"` (about 0.1 
 reads the private repo `nq-agent-channel`, so that repo has to be attached to the session. If it says
 the notes are missing, tell the lead and use the files named below.
 
+**Check the style named in the brief.** The render must be the style the lead named (Locked-On, Quick-Promo, a
+workstream format, or a proposed look). A render in a different style, or a brief that names none, is a FAIL.
+
 **The bar is the Locked-On style guide** (Omarie, 2026-09-28: "My locked on artifact is my standard for
 any work I work on"): https://claude.ai/artifact/WCe1qHhTrMDw7bkDaskeQm. Judge every render, in any workstream, against its
 rules and pre-flight list, in that workstream's own brand: the page's gold on black is Supercar
