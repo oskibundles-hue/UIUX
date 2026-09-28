@@ -1,9 +1,9 @@
 {
- "file": "2026-09-15 rally day (Egnyte) - SE LOCKED-ON vlog v2.4 - 1080x1920.mp4",
- "bytes": 242281986,
- "MB": 242.28,
- "MiB": 231.06,
- "mbps": 11.107,
+ "file": "2026-09-15 rally day (Egnyte) - SE LOCKED-ON vlog v2.5 - 1080x1920.mp4",
+ "bytes": 242258150,
+ "MB": 242.26,
+ "MiB": 231.04,
+ "mbps": 11.106,
  "frames": 5230,
  "picture_s": 174.5077,
  "track_durations_s": [
@@ -19,8 +19,23 @@
   "audio_s": 174.528
  },
  "other_exports": {
-  "2026-09-15 rally day (Egnyte) - SE LOCKED-ON vlog v2.4 - NO MUSIC - 1080x1920.mp4": {
-   "MiB": 230.75,
+  "2026-09-15 rally day (Egnyte) - SE LOCKED-ON vlog v2.4 - 1080x1920.mp4": {
+   "MiB": 231.06,
+   "track_durations_s": [
+    174.508,
+    174.507
+   ],
+   "audio": {
+    "I": -14.11,
+    "TP": -1.75,
+    "LRA": 3.1,
+    "trailing_silence_ms": 102.5,
+    "last_50ms_peak": 0.0,
+    "audio_s": 174.528
+   }
+  },
+  "2026-09-15 rally day (Egnyte) - SE LOCKED-ON vlog v2.5 - NO MUSIC - 1080x1920.mp4": {
+   "MiB": 230.73,
    "track_durations_s": [
     174.508,
     174.507
@@ -37,8 +52,8 @@
  },
  "loudness_gate": [],
  "stream_lines": [
-  "Duration: 00:02:54.51, start: 0.000000, bitrate: 11106 kb/s",
-  "Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920, 10839 kb/s, 29.97 fps, 29.97 tbr, 30k tbn (default)",
+  "Duration: 00:02:54.51, start: 0.000000, bitrate: 11105 kb/s",
+  "Stream #0:0[0x1](und): Video: h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920, 10838 kb/s, 29.97 fps, 29.97 tbr, 30k tbn (default)",
   "Stream #0:1[0x2](und): Audio: aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 258 kb/s (default)"
  ],
  "safe_zone": {
@@ -505,7 +520,7 @@
    ],
    [
     0.304,
-    0.351,
+    0.35,
     0.244,
     0.004
    ],

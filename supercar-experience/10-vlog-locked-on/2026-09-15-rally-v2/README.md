@@ -1,4 +1,4 @@
-# Rally vlog v2.4, Sep 15 (Egnyte rally day): rebuilt from the raw footage, Locked-On for vlogs (9:16)
+# Rally vlog v2.5, Sep 15 (Egnyte rally day): rebuilt from the raw footage, Locked-On for vlogs (9:16)
 
 **What it is.** Omarie Young's ask: "remake the whole video from scratch using our raw footage… make the video and the
 dynamic motion graphics like you did here and the overlays… catching all key moments… show me your skills like you did the
@@ -6,7 +6,20 @@ Porsche video but in vlog format… I still want the Supercarexperience banner o
 rally was for **Egnyte**: the name appears as text only (no Egnyte marks anywhere). This folder renders the approved edit
 decisions (the EDL, 174.5 s) at the `locked-on` standard (`../../09-campaign-ads/HOUSE-STYLE.md`): a new picture edit and grade
 from the camera files, a new sound mix, and a Locked-On layer built from the vlog kit (`../vlog-kit/`) plus this vlog's own
-components. **Status: v2.4 rendered 28 Sept and passed the reviewer pass the same day. The master is the one to deliver.**
+components. **Status: v2.5 rendered 28 Sept (a caption fix on the reviewed v2.4). The v2.5 master is the one to deliver.**
+
+## v2.5 (28 Sept): one caption word
+
+Omarie confirmed that he says "we at Supercar Experience offer". The caption in piece 1 read "we, as". It now reads "we at",
+without the comma. The word timings did not change. "at" takes the slot "as" had (15.455 to 16.015 s).
+
+Only the layer and the video encode were redone. The footage, the picture and the sound are untouched. The master reuses
+the v2.4 master's own encoded segments, copied as they were, and re-encodes only segments 2 and 3 (frames 240 to 479), the
+two that hold the changed caption page (frames 301 to 478, 10.04 to 15.95 s). Against the v2.4 master, frames 240 to 479
+differ and every other frame is identical, decoded and as packets. The audio stream is bit-identical.
+
+The v2.5 master is `… vlog v2.5 - 1080x1920.mp4`: 242,258,150 bytes, 5230 frames, 174.508 s, -14.11 LUFS, -1.75 dBTP.
+The gates pass with 0 errors. The swap check finds 0 bad frames.
 
 ## v2.4 (28 Sept): the v2.3 fixes made at the source, plus the graphics fixes
 
@@ -76,7 +89,7 @@ Also in v2.4:
 - The cold open's music duck under "GT3s" comes from `audio.natSpeech`, because the v2 transcripts are gone.
 - `lib/fetchneeds.py` writes what the render reads, for the engine's `plan`.
 
-**Exports** (`exports/`, git-ignored; `2026-09-15 rally day (Egnyte) - SE LOCKED-ON vlog v2.4 …`). The table below is
+**Exports** (`exports/`, git-ignored; `2026-09-15 rally day (Egnyte) - SE LOCKED-ON vlog v2.5 …`, see v2.5 above). The table below is
 the v2 render's except the first row (v2.4). **v2.4 master:** `… vlog v2.4 - 1080x1920.mp4`, 242.28 MB (231.06 MiB),
 11.107 Mb/s, 5230 frames = 174.508 s (video / audio tracks 174.508 / 174.507 s), **-14.11 LUFS integrated, -1.75 dBTP true
 peak**, LRA 3.1, the last 102 ms digital silence; gates 0 errors / 0 warnings; swap check 0 bad frames (66 caption page

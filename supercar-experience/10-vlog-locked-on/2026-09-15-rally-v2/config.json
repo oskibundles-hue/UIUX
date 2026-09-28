@@ -1,5 +1,5 @@
 {
- "_about": "Rally vlog v2.4 (Sep 15 2026, rebuilt from the raw footage). Everything that is not in the EDL lives here: paths, the per-shot reframe / look / ramp, transitions, the music slot, the clocks and every on-screen line. Edit, then run ./render.sh. Sources for every line: README.md.",
+ "_about": "Rally vlog v2.5 (Sep 15 2026, rebuilt from the raw footage). Everything that is not in the EDL lives here: paths, the per-shot reframe / look / ramp, transitions, the music slot, the clocks and every on-screen line. Edit, then run ./render.sh. Sources for every line: README.md.",
  "paths": {
   "_about": "v2.4 (28 Sept): this session's scratch. work = the build cache (.work in the build folder is a link to it, made by lib/cfg.py); mezz = the engine's fetch output; transcripts = the nat spans' word timings (lib/nattr.py). Override per machine in config.local.json",
   "scratch": "/tmp/claude-0/-home-user-UIUX/5cb46d1c-39c8-543a-af9a-1db960b92019/scratchpad/rally24",
@@ -13,8 +13,8 @@
   "transcripts": "/tmp/claude-0/-home-user-UIUX/5cb46d1c-39c8-543a-af9a-1db960b92019/scratchpad/rally24/tr",
   "dfnPython": "/tmp/claude-0/-home-user-UIUX/5cb46d1c-39c8-543a-af9a-1db960b92019/scratchpad/dfvenv/bin/python"
  },
- "name": "2026-09-15 rally day (Egnyte) - SE LOCKED-ON vlog v2.4",
- "title": "Rally day (Egnyte) - Supercar Experience vlog v2.4",
+ "name": "2026-09-15 rally day (Egnyte) - SE LOCKED-ON vlog v2.5",
+ "title": "Rally day (Egnyte) - Supercar Experience vlog v2.5",
  "exports": {
   "_about": "v2.4: one video per vlog, the master. The NO MUSIC master stays a build output (for a trending sound) but is not delivered; the 720x1280 preview and the music-stem copy are off (the stem stays in .work/music_stem.wav)",
   "noMusic": true,
