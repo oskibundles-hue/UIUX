@@ -37,6 +37,12 @@ from .links import LinkPool, MAX_PER_CALL, request_batches, write_request
 JOIN_BYTES = 48 << 20
 
 
+def snap(x, d):
+    """x rounded to 0.01 s, down (d < 0) or up (d > 0)."""
+    import math
+    return (math.floor if d < 0 else math.ceil)(round(x * 100, 6)) / 100
+
+
 def tstr(x):
     """Seconds as the Sep 15 mezzanine names spell them: 0, 1.2, 606.0, 98.15."""
     x = round(float(x), 2)
@@ -125,7 +131,8 @@ def make_plan(day_root, edl_path, out=None, handles=0.8, merge_gap=2.0, preroll=
         size = meta.get('size') or (clips.get(src) or {}).get('size')
         path = meta.get('path') or (clips.get(src) or {}).get('path') or legacy.get(src)
         dur = mv.video.duration()
-        merged = mp4.merge_ranges(sorted([max(0, a), min(dur, b)] for a, b in ranges.get(src, [])), gap=merge_gap)
+        # ranges snapped outwards to 0.01 s, so the mezzanine's name (tstr, 2 decimals) is exactly where its cut starts
+        merged = mp4.merge_ranges(sorted([snap(max(0, a), -1), snap(min(dur, b), 1)] for a, b in ranges.get(src, [])), gap=merge_gap)
         spans = []
         for a, b in merged:
             lo, hi = mp4.span(mv, a, b)
@@ -134,7 +141,7 @@ def make_plan(day_root, edl_path, out=None, handles=0.8, merge_gap=2.0, preroll=
             plan['jobs'].append({'src': src, 't0': round(a, 3), 't1': round(b, 3), 'kind': 'range',
                                  'out': f'{src}_{tstr(a)}-{tstr(b)}.mov'})
         for a, b in audio_jobs.get(src, []):
-            a, b = max(0.0, a), min(dur, b)
+            a, b = snap(max(0.0, a), -1), snap(min(dur, b), 1)
             lo, hi = mp4.span(mv, a, b)
             name = f'{src}_{tstr(a)}-{tstr(b)}.wav'
             spans.append({'lo': lo, 'hi': hi, 'kind': 'audio', 'jobs': [name]})
@@ -535,7 +542,19 @@ def run_fetch(day_root, plan_path, links, out, workers=4, crf=13, preset='superf
             for i in job_spans[n]:
                 sp = span_by_i[i]
                 if i not in punched and all(m in finished for m in sp['jobs']):
-                    if punch(sparse[sp['src']], sp['lo'], sp['hi']):
+                    # spans of one clip can overlap (a keyframe timelapse spans minutes): keep what another needs
+                    keep = sorted([o['lo'], o['hi']] for o in plan['spans'] if o['src'] == sp['src'] and o['i'] != i
+                                  and o['i'] not in punched and not all(m in finished for m in o['jobs']))
+                    free, pos = [], sp['lo']
+                    for a, b in mp4.merge_ranges(keep):
+                        if b <= pos or a >= sp['hi']:
+                            continue
+                        if a > pos:
+                            free.append((pos, a))
+                        pos = max(pos, b)
+                    if pos < sp['hi']:
+                        free.append((pos, sp['hi']))
+                    if all(punch(sparse[sp['src']], a, b) for a, b in free):
                         punched.add(i)
         if pending and not ffuts and not cfuts and not any(pool.fresh(s['path']) for s in pending):
             if now - last_links > wait_links:

@@ -109,7 +109,11 @@ def mezz_info():
     cache = os.path.join(WORK, 'mezz_info.json')
     info = json.load(open(cache)) if os.path.exists(cache) else {}
     dirs = [P['mezz'], os.path.join(WORK, 'mezz_extra')]
-    changed = False
+    # v2.4: entries whose file is gone (renamed, re-fetched, deleted) are dropped
+    stale = [k for k, v in info.items() if not os.path.exists(v['path'])]
+    for k in stale:
+        del info[k]
+    changed = bool(stale)
     for d in dirs:
         if not os.path.isdir(d):
             continue

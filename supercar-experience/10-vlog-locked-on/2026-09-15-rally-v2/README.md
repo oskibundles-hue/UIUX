@@ -44,7 +44,8 @@ raw clip 0013 audio (0-85 s) before the footage was fetched again; the render re
    shot in full before the sweep. Every frame of the new shot before the sweep ends is now masked (0 before t0, so the old
    shot keeps playing). Only the 54.09 sweep was affected (the other five start on or after their t0).
 4. **Captions.** Piece 4 reads "Black Series, Mansory Uruses, Corvette, Huracán EVOs, GT3s, Rolls-Royce Cullinan"
-   (Omarie's words; "Mansory" was missing). Pieces 1, 3 and 4 are retimed from real word timings (DeepFilterNet voice +
+   (Omarie's words; "Mansory" was missing). Pieces 1, 3 and 4 are retimed from real word timings (on the v2.4 mezzanines, whose audio lines up with the raw
+   camera audio to the sample; the v2 mezzanines' audio sat 25 ms later, which v2.3 fitted as its 24.685 offset) (DeepFilterNet voice +
    faster-whisper small.en word timestamps + the speech envelope): piece 1's "if you guys ever want to go" lit up
    0.5-1.37 s early, piece 3's "See," 0.9 s early. The gold highlight box now sits above the words with a black copy of
    the words clipped to it (`lib/sekit.js`), so while the box glides to the next word no frame hides part of a word
