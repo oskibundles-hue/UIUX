@@ -6,14 +6,14 @@ Porsche video but in vlog format… I still want the Supercarexperience banner o
 rally was for **Egnyte**: the name appears as text only (no Egnyte marks anywhere). This folder renders the approved edit
 decisions (the EDL, 174.5 s) at the `locked-on` standard (`../../09-campaign-ads/HOUSE-STYLE.md`): a new picture edit and grade
 from the camera files, a new sound mix, and a Locked-On layer built from the vlog kit (`../vlog-kit/`) plus this vlog's own
-components. **Status: v2.4 code, data and config done (28 Sept); the v2.4 render needs the footage fetched again (see
-"Render on a machine with little disk"), then a reviewer pass.**
+components. **Status: v2.4 rendered (28 Sept, 17:16); waiting for a reviewer pass.**
 
 ## v2.4 (28 Sept): the v2.3 fixes made at the source, plus the graphics fixes
 
 v2.3 was a patch on the v2 masters (scratch scripts). v2.4 makes the same fixes inside the build, so a re-render keeps
 them, and adds the graphics fixes a patch could not make. Numbers marked *sim* come from the build's own code on the
-raw clip 0013 audio (0-85 s) before the footage was fetched again; the render re-measures them (`exports/qa/audio_v24.json`).
+raw clip 0013 audio (0-85 s) before the footage was fetched again; the render re-measured them (`exports/qa/audio_v24.json`,
+quoted as *render*).
 
 1. **Car alarm (clip 0013, source 0-19 s: dialog pieces 3 and 4, the cold-open nat).** Removed in the audio stage,
    before the pieces are levelled (config `audio.dealarm`, `lib/dealarm_dfn.py` in the DeepFilterNet3 venv): the voice
@@ -24,8 +24,12 @@ raw clip 0013 audio (0-85 s) before the footage was fetched again; the render re
    6.7 / 6.6 dB, the same as the clean pieces' own voice (5.6 / 7.1). Levelled after the clean-up, the voice-only
    loudness of pieces 3 / 4 is -17.08 / -17.49 LUFS against -16.88 / -18.54 / -18.39 for pieces 5-7 (mean -17.94):
    +0.86 / +0.45 dB (v2: -1.86 / -6.53 dB, the lineup levelled with the alarm counted as voice). The -0.6 dB on pieces
-   3 and 4 (`audio.trims`) is there because, once the alarm is gone, they are nearly all voice while 5-8 carry garage
-   ambience inside their -16 LUFS. The Locked-On accents are mixed after the dialog, so the notch never reaches the
+   3 and 4 (`audio.trims`; *render*: -1.1 / -0.6 dB) is there because, once the alarm is gone, they are nearly all voice while 5-8 carry garage
+   ambience inside their -16 LUFS. *Render:* voice-only loudness of pieces 3 / 4 -17.60 / -17.77 LUFS against pieces 5-8
+   -19.04 / -18.41 / -18.23 / -18.04 (mean -18.43): +0.83 / +0.66 dB; the alarm band in the span 40.0 → 15.6 dB (second
+   band 16.4 → 10.6); the 95th-percentile alarm tone in the voice 15.4 / 11.0 → 6.7 / 6.6 dB (clean pieces 6.0 / 7.0).
+   Every accent from 25.4 to 41.6 s keeps its level in the alarm bands: in the master its gain there is within -0.67 dB of
+   its broadband gain (a notch would cost 10+ dB), and in the SFX stem it is exactly its scheduled gain. The Locked-On accents are mixed after the dialog, so the notch never reaches the
    lock ticks (30.96-38.94) or the 26.06 sweep whoosh; `lib/audiocheck.py` checks it on the render (each accent's gain in
    the alarm bands against 1-2 kHz, within 1 dB).
 2. **"Black" was clipped.** Piece 4 started at source 5.40; "Black" starts at 5.26 (voice envelope). It now starts at
@@ -68,7 +72,11 @@ comes from `audio.natSpeech` (the v2 transcripts are gone); `lib/fetchneeds.py` 
 engine's `plan`.
 
 **Exports** (`exports/`, git-ignored; `2026-09-15 rally day (Egnyte) - SE LOCKED-ON vlog v2.4 …`). The table below is
-the v2 render's; the v2.4 numbers go in after the v2.4 render:
+the v2 render's except the first row (v2.4). **v2.4 master:** `… vlog v2.4 - 1080x1920.mp4`, 242.28 MB (231.06 MiB),
+11.107 Mb/s, 5230 frames = 174.508 s (video / audio tracks 174.508 / 174.507 s), **-14.11 LUFS integrated, -1.75 dBTP true
+peak**, LRA 3.1, the last 102 ms digital silence; gates 0 errors / 0 warnings; swap check 0 bad frames (66 caption page
+changes); safe-zone audit: the same 3 slam-entry frames as v2 (SAFELY. 64.02 / 64.52, THE VERDICT 148.02); caption sync
+median +20 ms, largest 160 ms (piece 2, as in v2). The NO MUSIC master (241.96 MB) is built, not delivered.
 
 | File | What |
 |---|---|

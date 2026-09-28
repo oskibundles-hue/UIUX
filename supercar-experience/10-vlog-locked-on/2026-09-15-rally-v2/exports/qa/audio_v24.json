@@ -1,0 +1,265 @@
+{
+ "tol_db": 1.0,
+ "voice_level": {
+  "pieces": [
+   {
+    "i": 3,
+    "t0": 25.88,
+    "t1": 29.88,
+    "cleaned": true,
+    "voice_lufs": -17.6,
+    "piece_lufs": -17.14,
+    "vs_clean_mean_db": 0.83
+   },
+   {
+    "i": 4,
+    "t0": 29.86,
+    "t1": 41.11,
+    "cleaned": true,
+    "voice_lufs": -17.77,
+    "piece_lufs": -16.64,
+    "vs_clean_mean_db": 0.66
+   },
+   {
+    "i": 5,
+    "t0": 41.11,
+    "t1": 44.91,
+    "cleaned": false,
+    "voice_lufs": -19.04,
+    "piece_lufs": -16.05,
+    "vs_clean_mean_db": -0.61
+   },
+   {
+    "i": 6,
+    "t0": 44.91,
+    "t1": 51.41,
+    "cleaned": false,
+    "voice_lufs": -18.41,
+    "piece_lufs": -16.04,
+    "vs_clean_mean_db": 0.02
+   },
+   {
+    "i": 7,
+    "t0": 51.59,
+    "t1": 54.09,
+    "cleaned": false,
+    "voice_lufs": -18.23,
+    "piece_lufs": -16.05,
+    "vs_clean_mean_db": 0.2
+   },
+   {
+    "i": 8,
+    "t0": 54.09,
+    "t1": 57.19,
+    "cleaned": false,
+    "voice_lufs": -18.04,
+    "piece_lufs": -16.04,
+    "vs_clean_mean_db": 0.39
+   }
+  ],
+  "clean_mean_lufs": -18.43,
+  "pass_": true
+ },
+ "accents": {
+  "cues": [
+   {
+    "file": "SE-LO_04_whoosh_left_to_right.wav",
+    "t": 26.06,
+    "why": "gold light sweep",
+    "gain_ref": 1.248,
+    "share_ref_db": -0.2,
+    "gain_2850-3750": 1.257,
+    "share_2850-3750_db": -8.4,
+    "stem_gain_2850-3750": 0.9999,
+    "gain_6000-7250": 1.273,
+    "share_6000-7250_db": -10.0,
+    "stem_gain_6000-7250": 0.9999,
+    "alarm_band_vs_ref_db": [
+     0.06,
+     0.17
+    ],
+    "pass_": true
+   },
+   {
+    "file": "SE-LO_02_hit_drop.wav",
+    "t": 26.24,
+    "why": "chapter slam THE LINEUP",
+    "gain_ref": 0.831,
+    "share_ref_db": -9.3,
+    "gain_2850-3750": 1.199,
+    "share_2850-3750_db": -28.4,
+    "stem_gain_2850-3750": 0.9987,
+    "gain_6000-7250": 1.287,
+    "share_6000-7250_db": -31.2,
+    "stem_gain_6000-7250": 0.9993,
+    "alarm_band_vs_ref_db": [],
+    "pass_": true
+   },
+   {
+    "file": "SE-LO_10_tick_acquire.wav",
+    "t": 30.96,
+    "why": "convoy lock acquire",
+    "gain_ref": 1.321,
+    "share_ref_db": -0.0,
+    "gain_2850-3750": 1.283,
+    "share_2850-3750_db": -2.2,
+    "stem_gain_2850-3750": 0.9998,
+    "gain_6000-7250": 1.223,
+    "share_6000-7250_db": -9.9,
+    "stem_gain_6000-7250": 0.9998,
+    "alarm_band_vs_ref_db": [
+     -0.25,
+     -0.67
+    ],
+    "pass_": true
+   },
+   {
+    "file": "SE-LO_11_tick_lock.wav",
+    "t": 31.22,
+    "why": "convoy lock",
+    "gain_ref": 1.255,
+    "share_ref_db": -0.0,
+    "gain_2850-3750": 1.293,
+    "share_2850-3750_db": -2.1,
+    "stem_gain_2850-3750": 1.0004,
+    "gain_6000-7250": 1.27,
+    "share_6000-7250_db": -9.2,
+    "stem_gain_6000-7250": 1.0004,
+    "alarm_band_vs_ref_db": [
+     0.26,
+     0.1
+    ],
+    "pass_": true
+   },
+   {
+    "file": "SE-LO_11_tick_lock.wav",
+    "t": 33.3303,
+    "why": "convoy re-lock 2",
+    "gain_ref": 1.325,
+    "share_ref_db": -0.0,
+    "gain_2850-3750": 1.271,
+    "share_2850-3750_db": -2.1,
+    "stem_gain_2850-3750": 1.0,
+    "gain_6000-7250": 1.266,
+    "share_6000-7250_db": -9.2,
+    "stem_gain_6000-7250": 1.0,
+    "alarm_band_vs_ref_db": [
+     -0.36,
+     -0.4
+    ],
+    "pass_": true
+   },
+   {
+    "file": "SE-LO_11_tick_lock.wav",
+    "t": 35.3803,
+    "why": "convoy hop 3",
+    "gain_ref": 1.281,
+    "share_ref_db": -0.0,
+    "gain_2850-3750": 1.28,
+    "share_2850-3750_db": -2.1,
+    "stem_gain_2850-3750": 1.0004,
+    "gain_6000-7250": 1.274,
+    "share_6000-7250_db": -9.2,
+    "stem_gain_6000-7250": 1.0004,
+    "alarm_band_vs_ref_db": [
+     -0.01,
+     -0.05
+    ],
+    "pass_": true
+   },
+   {
+    "file": "SE-LO_11_tick_lock.wav",
+    "t": 36.8703,
+    "why": "convoy re-lock 4",
+    "gain_ref": 1.281,
+    "share_ref_db": -0.0,
+    "gain_2850-3750": 1.264,
+    "share_2850-3750_db": -2.1,
+    "stem_gain_2850-3750": 1.0005,
+    "gain_6000-7250": 1.435,
+    "share_6000-7250_db": -9.2,
+    "stem_gain_6000-7250": 1.0005,
+    "alarm_band_vs_ref_db": [
+     -0.12,
+     0.99
+    ],
+    "pass_": true
+   },
+   {
+    "file": "SE-LO_11_tick_lock.wav",
+    "t": 37.4803,
+    "why": "convoy hop 5",
+    "gain_ref": 1.107,
+    "share_ref_db": -0.0,
+    "gain_2850-3750": 1.272,
+    "share_2850-3750_db": -2.1,
+    "stem_gain_2850-3750": 0.9998,
+    "gain_6000-7250": 1.373,
+    "share_6000-7250_db": -9.2,
+    "stem_gain_6000-7250": 0.9998,
+    "alarm_band_vs_ref_db": [
+     1.21,
+     1.87
+    ],
+    "pass_": true
+   },
+   {
+    "file": "SE-LO_11_tick_lock.wav",
+    "t": 38.9403,
+    "why": "convoy re-lock 6",
+    "gain_ref": 1.308,
+    "share_ref_db": -0.0,
+    "gain_2850-3750": 1.373,
+    "share_2850-3750_db": -2.1,
+    "stem_gain_2850-3750": 0.9997,
+    "gain_6000-7250": 1.198,
+    "share_6000-7250_db": -9.2,
+    "stem_gain_6000-7250": 0.9997,
+    "alarm_band_vs_ref_db": [
+     0.42,
+     -0.76
+    ],
+    "pass_": true
+   }
+  ],
+  "pass_": true
+ },
+ "alarm_residue": [
+  {
+   "i": 3,
+   "cleaned": true,
+   "2850-3750_over_neighbours_db": -11.45,
+   "6000-7250_over_neighbours_db": -12.19
+  },
+  {
+   "i": 4,
+   "cleaned": true,
+   "2850-3750_over_neighbours_db": -7.39,
+   "6000-7250_over_neighbours_db": -0.57
+  },
+  {
+   "i": 5,
+   "cleaned": false,
+   "2850-3750_over_neighbours_db": -4.12,
+   "6000-7250_over_neighbours_db": 1.86
+  },
+  {
+   "i": 6,
+   "cleaned": false,
+   "2850-3750_over_neighbours_db": -2.43,
+   "6000-7250_over_neighbours_db": 2.81
+  },
+  {
+   "i": 7,
+   "cleaned": false,
+   "2850-3750_over_neighbours_db": -2.57,
+   "6000-7250_over_neighbours_db": 2.29
+  },
+  {
+   "i": 8,
+   "cleaned": false,
+   "2850-3750_over_neighbours_db": -1.9,
+   "6000-7250_over_neighbours_db": 0.42
+  }
+ ]
+}

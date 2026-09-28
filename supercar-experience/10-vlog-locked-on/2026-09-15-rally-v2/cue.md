@@ -130,8 +130,6 @@ Timeline: 5230 frames at 30000/1001 fps = 174.508 s. Frame n is shown at n x 100
 
 ## Sound
 
-v2.4 (hand-edited until the v2.4 render regenerates this file): pieces 3 and 4 come from the cleaned 0013 span (`audio.dealarm`); their numbers marked *sim* were measured with the build's own chain on the raw clip audio before the footage was fetched again.
-
 Music: original synth bed (lib/music.py), no music.wav supplied (105.1095 BPM, first downbeat 1.05333 s), enabled: True. Master -14.02 LUFS, true peak -2.0 dBTP (numpy BS.1770 on the wav; the mp4 is measured in exports/qa/qa_summary.json).
 
 | dialog piece | clip | source | at | loudness in | gain | music under it (duck, dialog over music) |
@@ -139,8 +137,8 @@ Music: original synth bed (lib/music.py), no music.wav supplied (105.1095 BPM, f
 | 0 | 0001 | 2.0-8.7 | 7.0 | -23.81 LUFS | +7.8 dB | -11.0 dB, 13.7 dB |
 | 1 | 0001 | 83.2-89.885 | 13.7 | -23.61 LUFS | +7.6 dB | -11.0 dB, 14.8 dB |
 | 2 | 0001 | 92.125-97.35 | 20.655 | -26.77 LUFS | +10.8 dB | -11.0 dB, 14.1 dB |
-| 3 | 0013 | 0.0-4.0 (alarm removed first, v2.4) | 25.88 | -20.57 LUFS (sim) | +4.0 dB (sim; -0.6 dB trim) | -11.0 dB, 12.8 dB |
-| 4 | 0013 | 5.2-16.98, 14.465-14.995 closed up (alarm removed first, v2.4) | 29.86-41.11 | -21.5 LUFS (sim) | +4.9 dB (sim; -0.6 dB trim) | -11.0 dB, 11.8 dB |
+| 3 | 0013 | 0.0-4.0 | 25.88 | -20.56 LUFS | +3.5 dB | -11.0 dB, 13.0 dB |
+| 4 | 0013 | 5.2-16.98 | 29.86 | -21.63 LUFS | +5.0 dB | -11.0 dB, 13.6 dB |
 | 5 | 0013 | 26.6-30.4 | 41.11 | -21.99 LUFS | +6.0 dB | -11.0 dB, 13.6 dB |
 | 6 | 0013 | 58.6-65.1 | 44.91 | -21.91 LUFS | +5.9 dB | -11.0 dB, 14.1 dB |
 | 7 | 0013 | 73.1-75.6 | 51.59 | -21.53 LUFS | +5.5 dB | -11.0 dB, 13.9 dB |
@@ -172,7 +170,7 @@ Music: original synth bed (lib/music.py), no music.wav supplied (105.1095 BPM, f
 |---|---|---|---|
 | 0032 | 820.0-821.8 | 0.0 | -11.9 dB |
 | P2140c | 1.0-2.2 | 1.8 | +1.6 dB |
-| 0013 | 13.0-14.0 | 3.0 | -17.2 dB |
+| 0013 | 13.0-14.0 | 3.0 | -13.7 dB |
 | 0032 | 100.0-101.0 | 6.0 | -0.9 dB |
 | 0010 | 12.0-15.0 | 16.3 | -8.7 dB |
 | 0015 | 2.0-4.6 | 57.19 | -18.9 dB |

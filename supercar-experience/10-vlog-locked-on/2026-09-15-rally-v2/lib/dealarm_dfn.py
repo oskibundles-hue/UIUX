@@ -48,7 +48,7 @@ def read_wav(p):
 def write_wav24(p, x):
     x = np.clip(np.asarray(x, np.float64), -1, 1 - 2 ** -23)
     i = np.round(x * (2 ** 23 - 1)).astype('<i4')
-    b = i.view(np.uint8).reshape(-1, 4)[:, :3].tobytes()
+    b = np.ascontiguousarray(i).view(np.uint8).reshape(-1, 4)[:, :3].tobytes()
     tmp = p + '.part.wav'
     with wave.open(tmp, 'wb') as w:
         w.setnchannels(x.shape[1]); w.setsampwidth(3); w.setframerate(SR); w.writeframes(b)

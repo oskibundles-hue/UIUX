@@ -1528,8 +1528,8 @@
     "out": -0.12
    },
    "3": {
-    "gainDb": -0.6,
-    "_why": "v2.4: after the alarm is removed pieces 3 and 4 are nearly all voice, while pieces 5-8 carry garage ambience inside their -16 LUFS; -0.6 dB puts their voice-only loudness within 1 dB of pieces 5-8 (lib/audiocheck.py)"
+    "gainDb": -1.1,
+    "_why": "v2.4: after the alarm is removed pieces 3 and 4 are nearly all voice, while pieces 5-8 carry garage ambience inside their -16 LUFS; -1.1 dB (piece 3) and -0.6 dB (piece 4) put their voice-only loudness within 1 dB of pieces 5-8 (lib/audiocheck.py on the v2.4 render: +1.33 / +0.66 dB at -0.6 / -0.6)"
    },
    "4": {
     "gainDb": -0.6,

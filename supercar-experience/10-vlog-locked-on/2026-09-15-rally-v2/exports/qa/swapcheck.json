@@ -7,7 +7,7 @@
    "t": 4.238,
    "k": 1,
    "pages": [
-    "WONDERFULTIME."
+    "WONDERFULTIME.WONDERFULTIME."
    ]
   },
   {
@@ -15,7 +15,7 @@
    "t": 5.539,
    "k": 1,
    "pages": [
-    "GOODTIME."
+    "GOODTIME.GOODTIME."
    ]
   },
   {
@@ -29,7 +29,7 @@
    "t": 7.04,
    "k": 14,
    "pages": [
-    "WHAT'SGOINGONGUYS?"
+    "WHAT'SGOINGONGUYS?WHAT'SGOINGONGUYS?"
    ]
   },
   {
@@ -37,7 +37,7 @@
    "t": 8.408,
    "k": 1,
    "pages": [
-    "WE'REBACKATITAGAIN."
+    "WE'REBACKATITAGAIN.WE'REBACKATITAGAIN."
    ]
   },
   {
@@ -49,19 +49,19 @@
    ]
   },
   {
-   "n": 483,
-   "t": 16.116,
+   "n": 479,
+   "t": 15.983,
    "k": 1,
    "pages": [
     "SUPERCAREXPERIENCE,OFFERIFYOUGUYSEVERWAN"
    ]
   },
   {
-   "n": 589,
-   "t": 19.653,
+   "n": 587,
+   "t": 19.586,
    "k": 1,
    "pages": [
-    "BIGGROUPDRIVEALLTHESECARS,GOGETDINNER."
+    "BIGGROUPDRIVEALLTHESECARS,GOGETDINNER.BI"
    ]
   },
   {
@@ -69,31 +69,43 @@
    "t": 24.157,
    "k": 1,
    "pages": [
-    "SHOWUP,SHOWOUT."
+    "SHOWUP,SHOWOUT.SHOWUP,SHOWOUT."
    ]
   },
   {
-   "n": 774,
-   "t": 25.826,
+   "n": 792,
+   "t": 26.426,
+   "k": 14,
+   "pages": []
+  },
+  {
+   "n": 800,
+   "t": 26.693,
    "k": 1,
    "pages": [
-    "SEE,WEHAVEALLTHECARS."
+    "SEE,WEHAVEALLTHECARS.SEE,WEHAVEALLTHECAR"
    ]
   },
   {
-   "n": 902,
-   "t": 30.097,
+   "n": 895,
+   "t": 29.863,
    "k": 1,
    "pages": [
-    "BLACKSERIES,URUSES,CORVETTE,HURACÁNEVOS,"
+    "BLACKSERIES,MANSORYURUSES,CORVETTE,HURAC"
    ]
   },
   {
-   "n": 1203,
-   "t": 40.14,
+   "n": 1177,
+   "t": 39.273,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 1184,
+   "t": 39.506,
    "k": 1,
    "pages": [
-    "ROLLS-ROYCECULLINAN."
+    "ROLLS-ROYCECULLINAN.ROLLS-ROYCECULLINAN."
    ]
   },
   {
@@ -117,7 +129,7 @@
    "t": 49.85,
    "k": 1,
    "pages": [
-    "ASYOUCANSEEWE'REABLETODOIT."
+    "ASYOUCANSEEWE'REABLETODOIT.ASYOUCANSEEWE"
    ]
   },
   {
@@ -133,7 +145,7 @@
    "t": 54.221,
    "k": 12,
    "pages": [
-    "HOWYOUGUYSDOING?"
+    "HOWYOUGUYSDOING?HOWYOUGUYSDOING?"
    ]
   },
   {
@@ -141,7 +153,7 @@
    "t": 55.756,
    "k": 1,
    "pages": [
-    "GOOD."
+    "GOOD.GOOD."
    ]
   },
   {
@@ -157,7 +169,7 @@
    "t": 59.927,
    "k": 1,
    "pages": [
-    "TOBEDRIVENSAFELY."
+    "TOBEDRIVENSAFELY.TOBEDRIVENSAFELY."
    ]
   },
   {
@@ -165,7 +177,7 @@
    "t": 61.762,
    "k": 1,
    "pages": [
-    "THAT'SOURNUMBERONETHING."
+    "THAT'SOURNUMBERONETHING.THAT'SOURNUMBERO"
    ]
   },
   {
@@ -187,7 +199,7 @@
    "t": 67.1,
    "k": 1,
    "pages": [
-    "WHICHONE?"
+    "WHICHONE?WHICHONE?"
    ]
   },
   {
@@ -195,7 +207,7 @@
    "t": 67.734,
    "k": 1,
    "pages": [
-    "THER8,AUDIR8."
+    "THER8,AUDIR8.THER8,AUDIR8."
    ]
   },
   {
@@ -203,7 +215,7 @@
    "t": 69.336,
    "k": 10,
    "pages": [
-    "OKAY."
+    "OKAY.OKAY."
    ]
   },
   {
@@ -211,7 +223,7 @@
    "t": 69.636,
    "k": 1,
    "pages": [
-    "YEAH,BECAUSEYOU'REPRETTYTALL."
+    "YEAH,BECAUSEYOU'REPRETTYTALL.YEAH,BECAUS"
    ]
   },
   {
@@ -227,7 +239,7 @@
    "t": 74.007,
    "k": 1,
    "pages": [
-    "STARTTHISDRIVE."
+    "STARTTHISDRIVE.STARTTHISDRIVE."
    ]
   },
   {
@@ -235,7 +247,7 @@
    "t": 75.042,
    "k": 10,
    "pages": [
-    "IAMINTHEALLBLACKCULLINAN."
+    "IAMINTHEALLBLACKCULLINAN.IAMINTHEALLBLAC"
    ]
   },
   {
@@ -249,7 +261,7 @@
    "t": 77.578,
    "k": 1,
    "pages": [
-    "I'LLBELEADINGEVERYBODY."
+    "I'LLBELEADINGEVERYBODY.I'LLBELEADINGEVER"
    ]
   },
   {
@@ -263,7 +275,7 @@
    "t": 82.883,
    "k": 1,
    "pages": [
-    "WHEREAREYOUGUYSFROM?"
+    "WHEREAREYOUGUYSFROM?WHEREAREYOUGUYSFROM?"
    ]
   },
   {
@@ -277,7 +289,7 @@
    "t": 86.92,
    "k": 1,
    "pages": [
-    "SANFRANCISCO."
+    "SANFRANCISCO.SANFRANCISCO."
    ]
   },
   {
@@ -293,7 +305,7 @@
    "t": 90.39,
    "k": 1,
    "pages": [
-    "WELOSTSOMANYPEOPLE."
+    "WELOSTSOMANYPEOPLE.WELOSTSOMANYPEOPLE."
    ]
   },
   {
@@ -315,7 +327,7 @@
    "t": 110.611,
    "k": 8,
    "pages": [
-    "WEARECURRENTLYEATINGATYARDHOUSE."
+    "WEARECURRENTLYEATINGATYARDHOUSE.WEARECUR"
    ]
   },
   {
@@ -331,7 +343,7 @@
    "t": 114.848,
    "k": 1,
    "pages": [
-    "THEMTHEEXPERIENCETHATTHEYWANT."
+    "THEMTHEEXPERIENCETHATTHEYWANT.THEMTHEEXP"
    ]
   },
   {
@@ -339,7 +351,7 @@
    "t": 116.683,
    "k": 12,
    "pages": [
-    "WE'REGONNAGOBACKTOTHEVENETIANRIGHTNOW."
+    "WE'REGONNAGOBACKTOTHEVENETIANRIGHTNOW.WE"
    ]
   },
   {
@@ -363,7 +375,7 @@
    "t": 127.594,
    "k": 1,
    "pages": [
-    "FOLLOWTHATCAR."
+    "FOLLOWTHATCAR.FOLLOWTHATCAR."
    ]
   },
   {
@@ -379,7 +391,7 @@
    "t": 131.431,
    "k": 1,
    "pages": [
-    "GUYSTOTHE15NORTH."
+    "GUYSTOTHE15NORTH.GUYSTOTHE15NORTH."
    ]
   },
   {
@@ -387,7 +399,7 @@
    "t": 133.066,
    "k": 1,
    "pages": [
-    "JUSTMAKESUREEVERYBODY'SSAFE."
+    "JUSTMAKESUREEVERYBODY'SSAFE.JUSTMAKESURE"
    ]
   },
   {
@@ -395,7 +407,7 @@
    "t": 134.234,
    "k": 1,
    "pages": [
-    "MAKESUREEVERYBODY'SHAVINGFUN."
+    "MAKESUREEVERYBODY'SHAVINGFUN.MAKESUREEVE"
    ]
   },
   {
@@ -409,7 +421,7 @@
    "t": 147.814,
    "k": 12,
    "pages": [
-    "YOUGUYSHADAGREATTIMETHOUGH?"
+    "YOUGUYSHADAGREATTIMETHOUGH?YOUGUYSHADAGR"
    ]
   },
   {
@@ -423,7 +435,7 @@
    "t": 152.653,
    "k": 1,
    "pages": [
-    "YOUGUYSHADAGREATTIME?"
+    "YOUGUYSHADAGREATTIME?YOUGUYSHADAGREATTIM"
    ]
   },
   {
@@ -437,7 +449,7 @@
    "t": 157.524,
    "k": 1,
    "pages": [
-    "GUYSHADFUN."
+    "GUYSHADFUN.GUYSHADFUN."
    ]
   },
   {
@@ -451,7 +463,7 @@
    "t": 161.561,
    "k": 1,
    "pages": [
-    "MAN,TODAYWASAHELLOFADAY,I'MNOTGONNALIE."
+    "MAN,TODAYWASAHELLOFADAY,I'MNOTGONNALIE.M"
    ]
   },
   {
@@ -481,7 +493,7 @@
    "t": 169.503,
    "k": 1,
    "pages": [
-    "EXPERIENCE."
+    "EXPERIENCE.EXPERIENCE."
    ]
   },
   {

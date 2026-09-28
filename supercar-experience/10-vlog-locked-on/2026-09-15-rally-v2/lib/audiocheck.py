@@ -6,9 +6,11 @@ stage). Writes exports/qa/audio_v24.json.
      that had the alarm, against the same clip's clean pieces. Pass: each cleaned piece within `tol` dB of the mean of
      the clean ones (the lineup was 1-6 dB low in v2 because it was levelled with the alarm counted as voice).
   2. accents: every Locked-On accent inside the cleaned stretch (the lock ticks, the sweep whoosh) keeps its full
-     energy in the alarm bands. The accent's own sound (pack file x its mix gain) is projected out of the master in the
-     alarm bands and in a reference band (1-2 kHz); pass when the two gains agree within 1 dB (a notch on the accents
-     would pull the alarm-band gain down; v2.2 lost 10+ dB there).
+     energy in the alarm bands. The accent's own sound (pack file x its mix gain) is projected out of the master in each
+     alarm band and broadband (150 Hz-16 kHz); pass when no alarm band's gain is more than 1 dB under the broadband gain
+     (a notch on the accents would pull it 10+ dB down, as in v2.2). Bands holding less than -20 dB of the accent's
+     energy are not judged (the chapter-slam hit has almost none there). The SFX stem is also checked: every accent in it
+     at exactly its scheduled gain (k = 1) in the alarm bands.
   3. alarm residue: in the dialog stem, the alarm bands' level against their neighbouring bands over each cleaned
      piece, next to the same measure on the clean pieces.
 """
@@ -30,7 +32,7 @@ FF = os.environ.get('FFMPEG', P['ffmpeg'])
 WORK = os.path.join(ROOT, '.work')
 QA = os.path.join(ROOT, 'exports', 'qa')
 SR = 48000
-REF_BAND = (1000, 2000)
+REF_BAND = (150, 16000)
 
 
 def read(p):
@@ -82,6 +84,7 @@ def main(tol=1.0):
         out['voice_level'] = dict(skipped='no dealarm spans or no DeepFilterNet venv (paths.dfnPython)')
     # ---------------------------------------------------------------- 2. accents in the alarm bands
     master = read(os.path.join(WORK, 'mix.wav'))
+    sfx_stem = read(os.path.join(WORK, 'stem_sfx.wav')) * 2.0          # the stems are written at half level
     t_lo = min((p['t0'] for p in pieces if p['cleaned']), default=None)
     t_hi = max((p['t1'] for p in pieces if p['cleaned']), default=None)
     acc = []
@@ -97,15 +100,20 @@ def main(tol=1.0):
             t = c['t'] - c.get('align', 0.0) * len(y) / SR
             i0 = int(round(t * SR)); n = min(len(y), len(master) - i0)
             g = 10 ** (gains.get((c['file'], round(c['t'], 3)), 0.0) / 20)
-            y = y[:n] * g; mseg = master[i0:i0 + n]
+            y = y[:n] * g; mseg = master[i0:i0 + n]; sseg = sfx_stem[i0:i0 + n]
             row = dict(file=c['file'], t=c['t'], why=c.get('why', ''))
+            tot = float((y ** 2).sum())
             for nm, (lo, hi) in [('ref', REF_BAND)] + [(f'{lo}-{hi}', (lo, hi)) for lo, hi in cfg.get('bands', [])]:
                 yb, mb = bandpass(y, lo, hi), bandpass(mseg, lo, hi)
-                k = float((yb * mb).sum() / max((yb * yb).sum(), 1e-20))
-                row[f'gain_{nm}'] = round(k, 3)
+                e = max(float((yb * yb).sum()), 1e-20)
+                row[f'gain_{nm}'] = round(float((yb * mb).sum() / e), 3)
+                row[f'share_{nm}_db'] = round(10 * np.log10(e / max(tot, 1e-20)), 1)
+                if nm != 'ref':
+                    row[f'stem_gain_{nm}'] = round(float((yb * bandpass(sseg, lo, hi)).sum() / e), 4)
+            judged = [(lo, hi) for lo, hi in cfg.get('bands', []) if row[f'share_{lo}-{hi}_db'] >= -20]
             row['alarm_band_vs_ref_db'] = [round(20 * np.log10(max(row[f'gain_{lo}-{hi}'], 1e-6) / max(row['gain_ref'], 1e-6)), 2)
-                                           for lo, hi in cfg.get('bands', [])]
-            row['pass_'] = all(abs(v) <= 1.0 for v in row['alarm_band_vs_ref_db'])
+                                           for lo, hi in judged]
+            row['pass_'] = all(v >= -1.0 for v in row['alarm_band_vs_ref_db']) and all(abs(row[f'stem_gain_{lo}-{hi}'] - 1) < 0.01 for lo, hi in judged)
             acc.append(row)
     out['accents'] = dict(cues=acc, pass_=all(r['pass_'] for r in acc) if acc else None)
     # ---------------------------------------------------------------- 3. alarm residue in the dialog stem
