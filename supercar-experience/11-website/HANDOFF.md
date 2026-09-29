@@ -6,6 +6,7 @@ Pick up here in Claude Code. Branch: `claude/se-website-render` (never push to m
 **Behind the Wheel**: Omarie's Supercar Experience vlog series comes first (the behind-the-scenes of getting the car to the customer), with SE's Las Vegas rentals, ads and the rally underneath.
 - Live: https://supercar-experience-garage.onrender.com (Render static site, auto-deploys on push to this branch; config in `/render.yaml`, `rootDir: supercar-experience/11-website`). Render serves byte ranges, which the episode player needs for seeking.
 - `/v2/` redirects to the main page and keeps `#watch-<episode>` links working (it was the preview).
+- `/next/` (29 Sept) is a PREVIEW, not live: chapters on every episode (read off the burned-in chapter labels), "Rent the …" links on chapters named after a fleet car, and a "Where the cars go" section with route maps for Scottsdale and rally day. It also changes the Scottsdale episode text to "back to Vegas on a plane that night" (the audio says he went straight to the airport). To make it live: copy `next/index.html` to `index.html` with `../media/` → `media/` and `"../ep/"` → `"ep/"`, drop the noindex line, rerun `make_episode_pages.py --pages`, and turn `next/` into a redirect like `v2/`.
 - Earlier versions are in git history: gold (78d4417 and before), orange rental-first (3e84fd5).
 
 ## Look (29 Sept 2026, Omarie's picks)
