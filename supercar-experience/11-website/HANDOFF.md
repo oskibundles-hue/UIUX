@@ -11,6 +11,7 @@ Pick up here in Claude Code. Branch: `claude/se-website-render` (never push to m
 ## Look (29 Sept 2026, Omarie's picks)
 - Style: **Locked-On** (his standard). Colours: supercarexp.vip's **orange #FF4F16, black and white** ("def not this yellow theme").
 - Type: Hanken Grotesk + JetBrains Mono for labels.
+- Data saver: on Save-Data or a 2G/3G connection nothing autoplays (still frames; a loop still plays on hover or tap), and phones get 2 moving tiles in the hero wall instead of 4.
 - Motion: a moving wall of episode footage (tiles recycled as they leave the top), kinetic headlines (blur + orange glint), lock-on brackets, slot-reel numbers, scroll progress bar, film grain, a scroll-driven sideways timeline. `prefers-reduced-motion` settles everything to stills.
 
 ## Episodes (`EP[]` in index.html)
@@ -28,10 +29,13 @@ The current approved versions from `NQ Studio/04 Exports/00 POSTING PLAN.md` (28
 1. Full episode: `ffmpeg -i SRC -vf scale=720:1280:flags=lanczos -c:v libx264 -preset slow -crf 24 -maxrate 3000k -bufsize 6000k -profile:v high -level 4.0 -pix_fmt yuv420p -g 60 -c:a aac -b:a 128k -ac 2 -ar 48000 -movflags +faststart <k>.mp4` (keep each file under 100 MB for GitHub).
 2. Loop: 8 s, `-an -vf scale=360:640,fps=30 -crf 29` → `<k>-loop.mp4`. Cover: one frame `scale=540:-2 -q:v 4` → `<k>.jpg`. Scrub sprite: `-vf fps=1/5,scale=96:170,tile=6x7 -frames:v 1 -q:v 6` → `<k>-thumbs.jpg` (the player expects 96x170 tiles, 6 across, one every 5 s, 42 max = 3:30).
 3. Add a row to `EP[]` (k, d, t, s, len, sec, where, mo = [seconds, moment title, moment line]).
+4. Run `python3 ../website-tools/make_episode_pages.py` (needs Google Chrome). It writes `ep/<k>/index.html` and `media/share/<k>.jpg` for every episode and redraws `media/share/series.jpg` with the new count. Update "Six episodes" in the page's og/twitter description by hand.
 Pick loops and covers from a contact sheet; skip frames with speed readouts or spec cards.
 
 ## Files
 - `index.html` — one self-contained page (HTML + CSS + JS, no build). All media paths go through `const M="media/"`.
+- `ep/<k>/` — one small page per episode, so a shared link previews with that episode's own picture and title (Open Graph + X cards + VideoObject data). It sends the visitor straight on to `/#watch-<k>`. The player's Share / Copy link button gives this link.
+- `media/share/` — the 1200x630 preview pictures (one per episode + `series.jpg` for the main page), drawn from `../website-tools/share-card.html`.
 - `media/ep/` — the 6 episodes (720p web copies, 37–57 MB), loops, covers, scrub sprites.
 - `media/` — 9 car ads (720p Scottsdale cuts) with posters; `v_*.mp4` are the old 12-second vlog previews, no longer used.
 - `media/stills/` — one clean driving frame per car; `media/brand/` — SE logo PNGs.
@@ -47,6 +51,7 @@ Hero (footage wall, latest episode card) · episode title strip · Episodes rail
 - `[hidden]{display:none!important}` must stay in the CSS — without it a closed overlay blocks every tap (the 28 Sept bug).
 
 ## Open next steps
+- Some cars from the full rental list are missing (Omarie, 29 Sept: "we'll worry about that later").
 - Add Sep 24 and the Seattle McLaren trip episodes once approved.
 - Vegas cuts of the car ads (fixes the 4 hours / 21+ text in the bay and ads row).
 - "Type behind the car" (the one Locked-On effect not on the site): needs a matte and a clean frame per car.
