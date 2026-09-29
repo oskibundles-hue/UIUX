@@ -23,6 +23,9 @@ sys.path.insert(0, LIB)
 FPS = 30000 / 1001
 CFG = json.load(open(os.path.join(HERE, 'config.json')))
 FF = os.environ.get('FFMPEG', CFG['tools']['ffmpeg'])
+# this machine's copies of the sources (the paths in config.json are the cloud container's)
+for _k, _e in (('rooftopRaw', 'ROOFTOP_RAW'), ('rallyCut', 'RALLY_CUT')):
+    CFG['tools'][_k] = os.environ.get(_e, CFG['tools'][_k])
 NODE = shutil.which('node') or '/opt/node22/bin/node'
 rt = lambda r: r / FPS
 

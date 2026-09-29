@@ -1487,6 +1487,9 @@
     } };
   };
 
-  SEK.helpers = { ink, line, el, panel, panelAt };
+  SEK.helpers = { ink, line, el, panel, panelAt,
+    // set 2 (lib/sekit2.js) builds on these; exposing them changes nothing the 22 variations render
+    svgEl, svgRoot, bracketSet, bracketDraw, pingSet, pingDraw, nameTag, nameTagAt, glint, riseLine, show, grow, padRect,
+    lerpRect, sigSvg, fitSize, liveDot, liveDotAt, maskUrl, place };
   window.SEK = SEK;
 })();

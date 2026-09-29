@@ -2,14 +2,14 @@
 //   node lib/mockcap.js kit.html <outDir> <mocks.json>
 // mocks.json: [{name, t, only: [codes]}]. Each still uses the page's motion-blur plan (window.KT_PLAN) at its
 // time, so a mid-transition mockup is blurred like the reel frame. Writes <name>.png (+ fx_<name>.json).
-const { chromium } = require('/opt/node22/lib/node_modules/playwright');
+const { chromium } = require(process.env.PW_MODULE || '/opt/node22/lib/node_modules/playwright');
 const { spawn } = require('child_process');
 const path = require('path'); const fs = require('fs');
 const [page, outDir, list] = process.argv.slice(2);
 fs.mkdirSync(outDir, { recursive: true });
 (async () => {
   const acc = spawn('python3', [path.join(__dirname, 'accum.py'), outDir], { stdio: ['pipe', 'inherit', 'inherit'] });
-  const b = await chromium.launch({ args: ['--disable-gpu-vsync', '--disable-lcd-text'] });
+  const b = await chromium.launch({ args: ['--disable-gpu-vsync', '--disable-lcd-text'], ...(process.env.PW_EXEC ? { executablePath: process.env.PW_EXEC } : {}) });
   const pg = await b.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: 1 });
   pg.on('pageerror', e => { console.error('pageerror', e.message); process.exit(2); });
   await pg.goto('file://' + path.resolve(page) + '#chip=0');

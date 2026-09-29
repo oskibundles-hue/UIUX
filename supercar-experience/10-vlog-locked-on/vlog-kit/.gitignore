@@ -1,5 +1,6 @@
 # work folders and frame sequences (rebuilt by build.py)
 .work/
+.work2/
 __pycache__/
 lib/__pycache__/
 lib/cache/

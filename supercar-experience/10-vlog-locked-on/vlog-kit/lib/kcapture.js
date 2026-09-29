@@ -25,7 +25,7 @@
  * shutter open / middle / close are captured once. Screenshots go through CDP captureScreenshot with
  * optimizeForSpeed (~40 ms at 1080x1920) instead of page.screenshot (~85 ms).
  */
-const { chromium } = require('/opt/node22/lib/node_modules/playwright');
+const { chromium } = require(process.env.PW_MODULE || '/opt/node22/lib/node_modules/playwright');
 const { spawn } = require('child_process');
 const path = require('path'); const fs = require('fs');
 
@@ -37,7 +37,7 @@ fs.mkdirSync(outDir, { recursive: true });
 
 (async () => {
   const workers = Array.from({ length: NW }, () => spawn('python3', [path.join(__dirname, 'accum.py'), outDir], { stdio: ['pipe', 'inherit', 'inherit'] }));
-  const b = await chromium.launch({ args: ['--disable-gpu-vsync', '--disable-lcd-text'] });
+  const b = await chromium.launch({ args: ['--disable-gpu-vsync', '--disable-lcd-text'], ...(process.env.PW_EXEC ? { executablePath: process.env.PW_EXEC } : {}) });
   const pg = await b.newPage({ viewport: { width: 1080, height: 1920 }, deviceScaleFactor: +opt('scale', 1) });
   const url = page.startsWith('file:') || page.startsWith('http') ? page : 'file://' + path.resolve(page.split('#')[0]) + (page.includes('#') ? '#' + page.split('#')[1] : '');
   pg.on('pageerror', e => { console.error('pageerror', e.message); process.exit(2); });

@@ -14,12 +14,12 @@ BANNER = ('bannerBug', 'bannerTab', 'bannerBreathe')
 NOTE = ('codeChip', 'indexCard')
 
 
-def audit(scene, here, work):
+def audit(scene, here, work, page='kit.html', loose=()):
     FPS = 30000 / 1001
     ts = [round(i / 10, 3) for i in range(int(scene['reelEnd'] * 10))] + [m['t'] for m in scene['mocks'] if 't' in m] + [st['t'] for m in scene['mocks'] for st in m.get('strip', [])]
     tf = os.path.join(work, 'audit_times.json'); json.dump(ts, open(tf, 'w'))
     out = os.path.join(work, 'audit.json')
-    subprocess.run(['node', os.path.join(here, 'lib', 'audit.js'), os.path.join(here, 'kit.html'), tf, out], check=True)
+    subprocess.run(['node', os.path.join(here, 'lib', 'audit.js'), os.path.join(here, page), tf, out], check=True)
     res = json.load(open(out))
     bad, trans, notes, caps = [], [], set(), []
     for fr in res:
@@ -32,7 +32,7 @@ def audit(scene, here, work):
                 ok = r['y0'] >= SAFE['y0'] - e and r['y1'] <= 1056 + e and r['x0'] >= SAFE['x0'] - e and r['x1'] <= 1080
             if not ok:
                 # a component sliding / scaling in or out (within 0.45 s of its own start or end) is transitional
-                edge = any(c['code'] == r['code'] and c['type'] == r['type'] and (abs(fr['t'] - c['t0']) < 0.45 or abs(fr['t'] - c['t1']) < 0.45)
+                edge = r['type'] in loose or any(c['code'] == r['code'] and c['type'] == r['type'] and (abs(fr['t'] - c['t0']) < 0.45 or abs(fr['t'] - c['t1']) < 0.45)
                            for c in scene['comps'])
                 (trans if edge else bad).append({'t': fr['t'], **{k: (round(v, 1) if isinstance(v, float) else v) for k, v in r.items()}})
             if r['type'] in ('captionsBox', 'captionsStrip'):
@@ -54,12 +54,12 @@ def probe(ff, path):
             'audio': (re.search(r'Audio: ([^\n]+)', err) or [None, None])[1], 'loudness_I': j['input_i'], 'true_peak': j['input_tp']}
 
 
-def stills(scene, here, ff):
-    qd = os.path.join(here, 'exports', 'qa'); os.makedirs(qd, exist_ok=True)
+def stills(scene, here, ff, src=None, qd=None):
+    qd = qd or os.path.join(here, 'exports', 'qa'); os.makedirs(qd, exist_ok=True)
     for f in os.listdir(qd):
         if f.endswith('.jpg'):
             os.remove(os.path.join(qd, f))
-    src = os.path.join(here, 'exports', 'vlog-kit-reel.mp4')
+    src = src or os.path.join(here, 'exports', 'vlog-kit-reel.mp4')
     FPS = 30000 / 1001
     pts = []
     for c in scene['comps']:

@@ -18,6 +18,9 @@ posted.
 
 Say the codes: "use A2, B1, H1".
 
+**Set 2 (29 Sept 2026): seven more variations** with depth, windows and light: G3, B4, C4, C5, I4, I5, I6. See
+[`README2.md`](README2.md). Set 2 has its own page and build (`kit2.html`, `build2.py`); nothing below changed.
+
 ## Footage
 
 - **DJI_0029** (14.4 s, 4K HEVC 10-bit portrait, 59.94 fps). Camera clock: file `DJI_20260915224905_0029`,
