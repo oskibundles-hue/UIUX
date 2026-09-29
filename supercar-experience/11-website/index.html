@@ -430,6 +430,9 @@ h1,h2,h3{font-family:var(--f);font-weight:800;text-transform:uppercase;letter-sp
 .cm img,.cm video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;transition:transform .9s var(--ease),opacity .4s}
 .cm video{opacity:0}
 .car.live .cm video{opacity:1}
+.cm .clip.ph .bg{filter:blur(22px) brightness(.5) saturate(1.15);transform:scale(1.3)}
+.cm .clip.ph .fg{object-fit:contain;object-position:50% 58%}
+.car:hover .cm .clip.ph .bg{transform:scale(1.34)}
 .car:hover .cm img,.car.live .cm video{transform:scale(1.04)}
 .cm .clip::after{content:"";position:absolute;inset:0;background:linear-gradient(to bottom,rgba(0,0,0,.42),transparent 34%,transparent 70%,rgba(0,0,0,.35));pointer-events:none}
 .cchips{position:absolute;left:10px;top:10px;right:10px;display:flex;gap:6px;flex-wrap:wrap;z-index:2}
@@ -468,6 +471,9 @@ h1,h2,h3{font-family:var(--f);font-weight:800;text-transform:uppercase;letter-sp
 @keyframes bayin{from{opacity:0;transform:translateY(30px) scale(.98)}}
 .bay-vid{position:relative;background:#000;aspect-ratio:9/16;max-height:calc(100vh - 64px)}
 .bay-vid video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.bay-vid{overflow:hidden}
+.bay-vid .bay-bg{position:absolute;inset:-40px;background-size:cover;background-position:center;filter:blur(28px) brightness(.5)}
+.bay-vid #bay-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
 .bay-vid .lk{inset:14px}
 .bay-vid .lk.on i{transition-delay:.15s}
 .bay-vid .hud{position:absolute;top:26px;left:30px;right:30px;z-index:4;display:flex;justify-content:space-between;align-items:center}
@@ -786,12 +792,13 @@ footer nav a:hover{color:#fff}
       <div>
         <div class="eyebrow rv">[ Rentals <b>·</b> Las Vegas ]</div>
         <h2 class="h-lg kin">Want the <span class="o">keys?</span></h2>
-        <p class="lede rv">Hourly and daily rentals out of Las Vegas. Tap a car to watch it and see the rates, or price a drive below and text to book.</p>
+        <p class="lede rv">Hourly and daily rentals out of Las Vegas. Tap a car for its video or photo and the rates, or price a drive below and text to book.</p>
       </div>
       <div class="filters rv" role="group" aria-label="Filter the cars">
         <button class="pill" type="button" data-g="all" aria-pressed="true">All</button>
         <button class="pill" type="button" data-g="Exotic" aria-pressed="false">Exotic</button>
         <button class="pill" type="button" data-g="SUV" aria-pressed="false">Super SUV</button>
+        <button class="pill" type="button" data-g="Luxury" aria-pressed="false">Luxury</button>
         <select class="pill" id="g-sort" aria-label="Sort by price"><option value="hi">Price: high to low</option><option value="lo">Price: low to high</option></select>
       </div>
     </div>
@@ -872,6 +879,7 @@ footer nav a:hover{color:#fff}
   <div class="bay-in" id="bay-in">
     <button class="x" id="bay-x" type="button" aria-label="Close"><svg class="i" viewBox="0 0 16 16"><path d="M3.5 3.5l9 9M12.5 3.5l-9 9"/></svg></button>
     <div class="bay-vid">
+      <div class="bay-bg" id="bay-bg" hidden></div><img id="bay-photo" alt="" hidden>
       <video id="bay-video" playsinline loop muted autoplay></video>
       <div class="lk" id="bay-lk"><i></i><i></i><i></i><i></i></div>
       <div class="hud"><span class="tag" id="bay-tag">Locked on</span><button type="button" id="snd">Sound off</button></div>
@@ -905,9 +913,10 @@ const EP=[
 ];
 EP.forEach((e,i)=>e.n=i+1);
 const LATEST=EP[EP.length-1];
-/* Rates: Las Vegas listings on supercarexp.vip/cars, day and 5-hour; the first 7 checked 28 Sept 2026, the EVO Spyder,
-   Cullinan and McLaren GT added and checked 29 Sept. Those three have no ads yet: their clips come from the episodes
-   (s0/s1/rate = the loop the card plays on hover). */
+/* Rates: every Las Vegas listing on supercarexp.vip/cars (27 cars, the rally listing left out), day and 5-hour,
+   checked 28-29 Sept 2026. The first 7 have our approved ads. The rest use supercarexp.vip's own photo (photo:),
+   and its own video where that video shows the same car (Mansory Urus, 911 Pure 800). No vlog footage here, by
+   Omarie's rule (29 Sept). s0/s1/rate = the loop a card plays on hover; d2full = no half-price 2nd day. */
 const cars=[
  {id:"gt3",yr:2025,make:"Porsche",name:"911 GT3 RS",type:"Exotic",day:1799,five:1299,vids:[["Experience ad","gt3"],["Locked-On showcase","gt3_locked"]],flash:"5 hours · $1,200 flash special"},
  {id:"750s",yr:2026,make:"McLaren",name:"750S Spider",type:"Exotic",day:1799,five:1299,vids:[["Experience ad","750s"]]},
@@ -916,11 +925,29 @@ const cars=[
  {id:"amg",yr:2021,make:"Mercedes-AMG",name:"GT Black Series",type:"Exotic",day:1099,five:799,vids:[["Experience ad","amg"]],flash:"5 hours · $800 flash special"},
  {id:"tempesta",yr:2025,make:"Ferrari",name:"Tempesta",type:"Exotic",day:999,five:699,vids:[["Experience ad","tempesta"]]},
  {id:"urus",yr:2021,make:"Lamborghini",name:"Novitec Urus",type:"SUV",day:949,five:699,vids:[["Experience ad","urus"]]},
- {id:"evo",yr:2021,make:"Lamborghini",name:"Huracán EVO Spyder",type:"Exotic",day:1299,five:949,vids:[["From Pickup day","evo"]],s0:0,s1:2.65,rate:1},
- {id:"cullinan",yr:2024,make:"Rolls-Royce",name:"Cullinan",type:"SUV",day:1199,five:899,vids:[["From The shoot and the V12","cullinan"]],s0:0,s1:3.9,rate:1},
- {id:"mclarengt",yr:2021,make:"McLaren",name:"GT",type:"Exotic",day:899,five:649,vids:[["From The flat tyre","mclarengt"]],s0:0,s1:1.45,rate:.6}
+ {id:"evo",yr:2021,make:"Lamborghini",name:"Huracán EVO Spyder",type:"Exotic",day:1299,five:949,photo:"cars/evo.jpg",vids:[["Photo","photo:cars/evo.jpg"]]},
+ {id:"evo20",yr:2020,make:"Lamborghini",name:"Huracán EVO Spyder",type:"Exotic",day:1299,five:949,photo:"cars/evo20.jpg",vids:[["Photo","photo:cars/evo20.jpg"]]},
+ {id:"mansory",yr:2025,make:"Lamborghini",name:"Mansory Urus Wide Body",type:"SUV",day:1299,five:899,photo:"cars/mansory.jpg",vids:[["Video","mansory"],["Photo","photo:cars/mansory.jpg"]],s0:1,s1:3,rate:.7},
+ {id:"cullinan",yr:2024,make:"Rolls-Royce",name:"Cullinan",type:"SUV",day:1199,five:899,photo:"cars/cullinan.jpg",vids:[["Photo","photo:cars/cullinan.jpg"]]},
+ {id:"cullinanbb",yr:2024,make:"Rolls-Royce",name:"Cullinan Black Badge",type:"SUV",day:1199,five:899,photo:"cars/cullinanbb.jpg",vids:[["Photo","photo:cars/cullinanbb.jpg"]]},
+ {id:"lt600",yr:2018,make:"McLaren",name:"600LT",type:"Exotic",day:1199,five:899,photo:"cars/lt600.jpg",vids:[["Photo","photo:cars/lt600.jpg"]]},
+ {id:"mclarengt",yr:2021,make:"McLaren",name:"GT",type:"Exotic",day:899,five:649,photo:"cars/mclarengt.jpg",vids:[["Photo","photo:cars/mclarengt.jpg"]]},
+ {id:"p911",yr:2024,make:"Porsche",name:"911 Pure 800",type:"Exotic",day:849,five:599,photo:"cars/p911.jpg",vids:[["Video","p911"],["Photo","photo:cars/p911.jpg"]],s0:8,s1:10,rate:.7},
+ {id:"urus22",yr:2022,make:"Lamborghini",name:"Urus",type:"SUV",day:849,five:599,photo:"cars/urus22.jpg",vids:[["Photo","photo:cars/urus22.jpg"]]},
+ {id:"g63",yr:2023,make:"Mercedes",name:"G63 4x4 Squared",type:"SUV",day:799,five:599,photo:"cars/g63.jpg",vids:[["Photo","photo:cars/g63.jpg"]]},
+ {id:"r8s",yr:2020,make:"Audi",name:"R8 Spyder",type:"Exotic",day:799,five:549,photo:"cars/r8s.jpg",vids:[["Photo","photo:cars/r8s.jpg"]]},
+ {id:"r8",yr:2021,make:"Audi",name:"R8",type:"Exotic",day:799,five:null,photo:"cars/r8.jpg",vids:[["Photo","photo:cars/r8.jpg"]]},
+ {id:"escalade",yr:2026,make:"Cadillac",name:"Escalade",type:"SUV",day:649,five:449,deal:"Rent 2 days, get the 3rd day free",d2full:true,photo:"cars/escalade.jpg",vids:[["Photo","photo:cars/escalade.jpg"]]},
+ {id:"gls600",yr:2024,make:"Mercedes",name:"GLS600 Maybach",type:"SUV",day:649,five:449,photo:"cars/gls600.jpg",vids:[["Photo","photo:cars/gls600.jpg"]]},
+ {id:"s680",yr:2024,make:"Mercedes",name:"S680 Maybach",type:"Luxury",day:649,five:449,photo:"cars/s680.jpg",vids:[["Photo","photo:cars/s680.jpg"]]},
+ {id:"brabus",yr:2025,make:"Brabus",name:"G63 G-Wagon",type:"SUV",day:599,five:399,photo:"cars/brabus.jpg",vids:[["Photo","photo:cars/brabus.jpg"]]},
+ {id:"corvette",yr:2023,make:"Chevrolet",name:"Corvette",type:"Exotic",day:599,five:449,photo:"cars/corvette.jpg",vids:[["Photo","photo:cars/corvette.jpg"]]},
+ {id:"s580",yr:2024,make:"Mercedes",name:"S580 Maybach",type:"Luxury",day:449,five:349,photo:"cars/s580.jpg",vids:[["Photo","photo:cars/s580.jpg"]]},
+ {id:"c8",yr:2021,make:"Chevrolet",name:"C8",type:"Exotic",day:299,five:null,photo:"cars/c8.jpg",vids:[["Photo","photo:cars/c8.jpg"]]},
+ {id:"amggt43",yr:2021,make:"Mercedes",name:"AMG GT 43",type:"Luxury",day:279,five:null,photo:"cars/amggt43.jpg",vids:[["Photo","photo:cars/amggt43.jpg"]]}
 ];
-const CARS_STILL=cars.map(c=>c.id);
+const CARS_STILL=cars.filter(c=>!c.photo).map(c=>c.id);
+const twoDays=c=>c.d2full?c.day*2:c.day*1.5;
 const DEAL="50% off 2nd day or 3rd day free";
 /* The car ads are the Scottsdale cuts (4 HOURS and 21+ on screen, a gold RESERVE button from 10.9 s):
    card hover previews loop only the clean driving shot 9.25–10.8 s at 0.55x. */
@@ -1213,17 +1240,19 @@ function renderGarage(){
   if(!list.length){g.innerHTML='<div class="empty">No cars in this class yet.</div>';return}
   list.forEach((c,n)=>{
     const el=document.createElement("article");el.className="car rv";el.style.transitionDelay=(n%4)*60+"ms";
-    el.innerHTML=`<div class="cm"><div class="clip"><img src="${M}stills/${c.id}.jpg" alt="" loading="lazy"><video muted playsinline preload="none" src="${M}${c.vids[0][1]}.mp4#t=${c.s0??S0}"></video></div>
+    const vk=c.vids.find(v=>!v[1].startsWith("photo:"));
+    const pic=c.photo?`<img class="bg" src="${M}${c.photo}" alt="" loading="lazy"><img class="fg" src="${M}${c.photo}" alt="" loading="lazy">`:`<img src="${M}stills/${c.id}.jpg" alt="" loading="lazy">`;
+    el.innerHTML=`<div class="cm"><div class="clip${c.photo?" ph":""}">${pic}${vk?`<video muted playsinline preload="none" src="${M}${vk[1]}.mp4#t=${c.s0??S0}"></video>`:""}</div>
       <div class="lk"><i></i><i></i><i></i><i></i></div>
       <div class="cchips"><span class="chip-p"><span data-reel="${money(c.day)}">${money(c.day)}</span><small>/day</small></span>${c.five?`<span class="chip-p">${money(c.five)}<small>/5 hrs</small></span>`:""}</div>
       <span class="tag dim cls">${c.type==="SUV"?"Super SUV":c.type}</span></div>
       <div class="cbx"><div><div class="yr">${c.yr} · ${c.make}</div><h3>${c.name}</h3></div><span class="bk" aria-hidden="true">Book${ARW}</span></div>
-      <div class="cf"><span class="deal">${DEAL}</span><label class="cmp"><input type="checkbox" ${picked.has(c.id)?"checked":""}> Compare</label></div>
+      <div class="cf"><span class="deal">${c.deal||DEAL}</span><label class="cmp"><input type="checkbox" ${picked.has(c.id)?"checked":""}> Compare</label></div>
       <button class="open" type="button" aria-label="Open ${c.yr} ${c.make} ${c.name}: ${money(c.day)} a day${c.five?", "+money(c.five)+" for 5 hours":""}"></button>`;
     const v=el.querySelector("video"),s0=c.s0??S0,s1=c.s1??S1,rt=c.rate??RATE;
-    v.addEventListener("timeupdate",()=>{if(v.currentTime>=s1||v.currentTime<s0-.2)v.currentTime=s0});
-    el.addEventListener("mouseenter",()=>{if(matchMedia("(hover:hover)").matches&&!RM){el.classList.add("live");if(v.currentTime<s0)v.currentTime=s0;v.playbackRate=rt;v.play().catch(()=>{})}});
-    el.addEventListener("mouseleave",()=>{el.classList.remove("live");v.pause()});
+    if(v)v.addEventListener("timeupdate",()=>{if(v.currentTime>=s1||v.currentTime<s0-.2)v.currentTime=s0});
+    el.addEventListener("mouseenter",()=>{if(matchMedia("(hover:hover)").matches&&!RM){el.classList.add("live");if(!v)return;if(v.currentTime<s0)v.currentTime=s0;v.playbackRate=rt;v.play().catch(()=>{})}});
+    el.addEventListener("mouseleave",()=>{el.classList.remove("live");if(v)v.pause()});
     el.querySelector(".open").addEventListener("click",()=>openBay(c.id));
     el.querySelector("input").addEventListener("change",e=>{
       if(e.target.checked){if(picked.size>=2){e.target.checked=false;return}picked.add(c.id)}else picked.delete(c.id);tray()});
@@ -1254,7 +1283,7 @@ function openBay(id,id2){
       const fm=v=>typeof v==="number"&&low?money(v):v;return`<tr><td>${l}</td><td class="${wa?"win":""}">${fm(va)}</td><td class="${wb?"win":""}">${fm(vb)}</td></tr>`};
     body.innerHTML=`<div class="eyebrow">[ Head to head ]</div><h2 id="bay-title">${a.name}<br><span style="color:var(--orange)">vs</span> ${b.name}</h2>
       <table class="cmp-t"><tr><th></th><th>${a.name}</th><th>${b.name}</th></tr>
-      ${row("Year",c=>c.yr)}${row("Class",c=>c.type==="SUV"?"Super SUV":c.type)}${row("Per day",c=>c.day,1)}${row("5 hours",c=>c.five||"—",1)}${row("2 days",c=>c.day*1.5,1)}${row("3 days",c=>c.day*2,1)}${row("Videos on file",c=>c.vids.length)}</table>
+      ${row("Year",c=>c.yr)}${row("Class",c=>c.type==="SUV"?"Super SUV":c.type)}${row("Per day",c=>c.day,1)}${row("5 hours",c=>c.five||"—",1)}${row("2 days",c=>twoDays(c),1)}${row("3 days",c=>c.day*2,1)}${row("Videos on file",c=>c.vids.filter(v=>!v[1].startsWith("photo:")).length)}</table>
       <p class="note" style="margin:0">Multi-day uses the advertised 2nd day half off or 3rd day free. Lower price in orange. Estimates before tax and deposit.</p>
       <div class="bay-actions"><a class="btn" href="#book" id="bay-book">Text to book${ARW}</a></div>`;
   }else{
@@ -1262,12 +1291,12 @@ function openBay(id,id2){
     $("#vtabs").innerHTML=c.vids.map((v,i)=>`<button type="button" aria-pressed="${i===0}" data-v="${v[1]}">${v[0]}</button>`).join("");
     body.innerHTML=`<div><div class="eyebrow">[ ${c.yr} · ${c.make} · ${c.type==="SUV"?"Super SUV":c.type} ]</div><h2 id="bay-title" class="kin" style="margin-top:14px">${c.name}</h2></div>
       <div class="rates"><div><b id="r-day"></b><small>Per day</small></div><div><b id="r-five"></b><small>5 hours</small></div><div><b id="r-two"></b><small>2 days</small></div></div>
-      <span class="deal" style="justify-self:start">${DEAL}</span>
+      <span class="deal" style="justify-self:start">${c.deal||DEAL}</span>
       ${c.flash?`<div class="flash"><div class="eyebrow"><b>●</b> Flash special on file</div><strong>${c.flash}</strong><div class="note">Flash specials drop without notice. Follow along to catch the next one.</div></div>`:""}
       <div class="bay-actions"><button class="btn" type="button" id="bay-build">Price a drive${ARW}</button><a class="btn ghost" href="#book" id="bay-book">Text to book${ARW}</a></div>
       <p class="note" style="margin:0">Rates before tax and deposit. Text to confirm availability and today's price.</p>`;
     splitKin($("#bay-title"));void $("#bay-title").offsetWidth;$("#bay-title").classList.add("in");
-    reel($("#r-day"),money(c.day),.2);reel($("#r-five"),c.five?money(c.five):"—",.3);reel($("#r-two"),money(c.day*1.5),.4);
+    reel($("#r-day"),money(c.day),.2);reel($("#r-five"),c.five?money(c.five):"—",.3);reel($("#r-two"),money(twoDays(c)),.4);
     $("#bay-build").onclick=()=>{closeBay();$("#b-car").value=c.id;calc();$("#build").scrollIntoView({behavior:RM?"auto":"smooth"})};
   }
   $("#bay-book").addEventListener("click",()=>closeBay(true));
@@ -1276,7 +1305,10 @@ function openBay(id,id2){
   $("#bay-lk").classList.remove("on");$("#bay-tag").textContent="Acquiring";
   setTimeout(()=>{$("#bay-lk").classList.add("on");$("#bay-tag").textContent="Locked on"},RM?0:380);
 }
-function setVid(k){const v=$("#bay-video");v.src=M+k+".mp4";v.poster=M+(CARS_STILL.includes(k)?"stills/":"")+k+".jpg";v.play().catch(()=>{})}
+function setVid(k){const v=$("#bay-video"),ph=$("#bay-photo"),bg=$("#bay-bg"),isPh=k.startsWith("photo:");
+  ph.hidden=bg.hidden=!isPh;v.hidden=isPh;$("#snd").hidden=isPh;
+  if(isPh){v.pause();v.removeAttribute("src");v.load();ph.src=M+k.slice(6);bg.style.backgroundImage=`url(${M}${k.slice(6)})`;return}
+  v.src=M+k+".mp4";v.poster=M+(CARS_STILL.includes(k)?"stills/":"")+k+".jpg";v.play().catch(()=>{})}
 function closeBay(keepScroll){const v=$("#bay-video");v.pause();v.removeAttribute("src");v.load();$("#bay").hidden=true;document.body.style.overflow="";if(!keepScroll&&lastFocus)lastFocus.focus({preventScroll:true})}
 $("#bay-x").onclick=()=>closeBay();
 $("#bay").addEventListener("click",e=>{if(e.target.id==="bay")closeBay()});
@@ -1305,7 +1337,7 @@ function calc(){
   if(dur==="five"&&!c.five){dur=1;$$("#b-dur button").forEach(x=>x.setAttribute("aria-pressed",x.dataset.d==="1"))}
   if(dur==="five"){t=c.five;lines.push(["5-hour rate",money(c.five)])}
   else if(dur===1){lines.push(["Day 1",money(c.day)]);t=c.day}
-  else if(dur===2){lines.push(["Day 1",money(c.day)],["Day 2 · 50% off",money(c.day*.5)]);t=c.day*1.5}
+  else if(dur===2){lines.push(["Day 1",money(c.day)],c.d2full?["Day 2",money(c.day)]:["Day 2 · 50% off",money(c.day*.5)]);t=twoDays(c)}
   else{lines.push(["Day 1",money(c.day)],["Day 2",money(c.day)],["Day 3 · free",money(0)]);t=c.day*2}
   if(u){lines.push(["Under-25 fee",money(299)]);t+=299}
   lines.push(["Estimate",money(t)]);

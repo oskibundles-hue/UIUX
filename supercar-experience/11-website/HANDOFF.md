@@ -46,14 +46,14 @@ Hero (footage wall, latest episode card) · episode title strip · Episodes rail
 
 ## Rules (from SE standards)
 - Text line (725) 425-3583. 25+ to drive, $299 underage fee. Egnyte as text only, never a logo. Instagram @supercar_experience_ (checked on supercarexp.vip, 29 Sept). Full episodes play on the site, never linked out to Instagram (Omarie, 29 Sept: they aren't on his Instagram).
-- Rates are the Las Vegas listings on supercarexp.vip/cars (day and 5-hour; 7 cars re-checked 28 Sept, Huracán EVO Spyder, Cullinan and McLaren GT added 29 Sept). Don't invent specs (hp, 0–60) — research first.
+- Rates are the Las Vegas listings on supercarexp.vip/cars (day and 5-hour). Since 29 Sept the site lists every Las Vegas car there (27; the rally listing is left out), checked that day. The Escalade has its own deal (rent 2 days, get the 3rd free, so no half-price 2nd day: `d2full`); the R8, C8 and AMG GT 43 have no 5-hour rate. Don't invent specs (hp, 0–60) — research first.
 - Rally facts follow supercarexp.vip/rally (Omarie's call, 28 Sept): 3 days, Apr 9–11 2027, 2 hotel nights, $1,599 per car, Las Vegas → San Diego → Santa Barbara. Its /cars page still lists the rally at $2,999, its home page says Apr 9–12, and the approved rally ads say Apr 9–12 with Las Vegas / Scottsdale / Boise; those conflicts are for the client to settle.
 - **The car ads are Scottsdale cuts**: their graphics say 4 HOURS and 21+ (the site says 5 hours and 25+), and a gold RESERVE button fades in at 10.9 s. Car-card hovers play only the clean shot, 9.25–10.8 s, at 0.55x (`S0`, `S1`, `RATE`). The car bay and the ads row still play the full ads.
 - `[hidden]{display:none!important}` must stay in the CSS — without it a closed overlay blocks every tap (the 28 Sept bug).
 
 ## Open next steps
 - Ferrari Roma (a chapter in 27th birthday) isn't on supercarexp.vip in any location (checked 29 Sept), so it has no card or rent link yet. The EVO Spyder is listed twice (2020 and 2021, same rates); the site shows the 2021.
-- The EVO Spyder, Cullinan and McLaren GT have no ads: their card clips are cut from the episodes (`media/evo.mp4`, `cullinan.mp4` is a slow zoom on a still because every Cullinan shot has captions, `mclarengt.mp4`).
+- **No vlog footage in the rentals** (Omarie, 29 Sept: nothing of him or anyone from the vlogs). Cars without our ads use supercarexp.vip's own photo (`media/cars/<id>.jpg`, shown over a blurred copy of itself) and its video only where the video shows that same car: the Mansory Urus and 911 Pure 800 (`media/mansory.mp4`, `media/p911.mp4`). Their EVO Spyder, Urus and McLaren videos show a different car, and one "brand" video is shared by 12 listings, so those aren't used.
 - Some cars from the full rental list are missing (Omarie, 29 Sept: "we'll worry about that later").
 - Add Sep 24 and the Seattle McLaren trip episodes once approved.
 - Vegas cuts of the car ads (fixes the 4 hours / 21+ text in the bay and ads row).
