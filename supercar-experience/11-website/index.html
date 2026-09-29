@@ -162,6 +162,50 @@ h1,h2,h3{font-family:var(--f);font-weight:800;text-transform:uppercase;letter-sp
 .sheet a{display:flex;justify-content:space-between;align-items:center;padding:16px 0;border-bottom:1px solid var(--d-line);font:800 1.5rem/1 var(--f);text-transform:uppercase;letter-spacing:-.02em;text-decoration:none}
 .sheet a span{font:600 12px/1 var(--mono);color:var(--orange)}
 
+/* ---------- on the road: route maps drawn from the stops in the episodes ---------- */
+.routes{background:var(--ink);overflow:hidden}
+.rt-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,520px),1fr));gap:clamp(18px,2.4vw,32px)}
+.rt{position:relative;border:1px solid var(--d-line);border-radius:18px;background:linear-gradient(180deg,rgba(255,255,255,.03),transparent 40%),var(--panel);overflow:hidden;display:grid}
+.rt-top{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:20px 22px 0}
+.rt-top h3{margin:8px 0 0;font:900 clamp(1.5rem,2.4vw,2rem)/1 var(--f);text-transform:uppercase;letter-spacing:-.01em}
+.rt-top .tag{flex:none}
+.rt-map{position:relative;margin:8px 10px 0;aspect-ratio:4/3;max-width:100%}
+.rt-map svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.rt-map .grid line{stroke:rgba(255,255,255,.05);stroke-width:1}
+.rt-map .road{fill:none;stroke:var(--orange);stroke-width:3;stroke-linecap:round;stroke-linejoin:round;filter:drop-shadow(0 0 6px rgba(255,79,22,.55))}
+.rt-map .road.back{stroke:#fff;stroke-width:2;stroke-dasharray:2 7;filter:none;opacity:.8}
+.rt-map .road.fly{stroke:#fff;stroke-width:1.6;stroke-dasharray:1 6;filter:none;opacity:.75}
+.rt-map .ghost{fill:none;stroke:rgba(255,255,255,.08);stroke-width:9;stroke-linecap:round;stroke-linejoin:round}
+.rt-map .draw{stroke-dasharray:var(--len);stroke-dashoffset:var(--len);transition:stroke-dashoffset 2.4s var(--ease)}
+.rt.in .rt-map .draw{stroke-dashoffset:0}
+.rt-map .draw.back,.rt-map .draw.fly{stroke-dasharray:none;stroke-dashoffset:0;opacity:0;transition:opacity .8s 2s}
+.rt.in .rt-map .draw.back,.rt.in .rt-map .draw.fly{opacity:.8}
+.rt-map .stop{cursor:pointer;opacity:0;transition:opacity .4s}
+.rt.in .rt-map .stop{opacity:1;transition-delay:calc(.5s + var(--d)*.35s)}
+.rt-map .stop circle.o{fill:var(--ink);stroke:var(--orange);stroke-width:2.5}
+.rt-map .stop circle.h{fill:transparent}
+.rt-map .stop text{font:700 11px var(--mono);letter-spacing:.1em;text-transform:uppercase;fill:#fff;paint-order:stroke;stroke:var(--ink);stroke-width:4px}
+.rt-map .stop text.s{font-size:9.5px;fill:var(--orange);letter-spacing:.08em}
+.rt-map .stop .br{fill:none;stroke:var(--orange);stroke-width:2;opacity:0;transform-box:fill-box;transform-origin:center;transform:scale(1.8);transition:opacity .2s,transform .35s var(--ease)}
+.rt-map .stop:hover .br,.rt-map .stop:focus-visible .br,.rt-map .stop.on .br{opacity:1;transform:none}
+.rt-map .stop:focus{outline:none}
+.rt-map .lbl{font:600 9.5px var(--mono);letter-spacing:.12em;text-transform:uppercase;fill:var(--d-mute)}
+.rt-map .car{fill:#fff;filter:drop-shadow(0 0 8px var(--orange))}
+.rt-map .car-r{fill:none;stroke:var(--orange);stroke-width:1.5;opacity:.7}
+.rt-map .north text{font:700 10px var(--mono);fill:var(--d-mute)}
+.rt-map .north path{fill:none;stroke:var(--d-mute);stroke-width:1.5}
+.rt-legs{list-style:none;margin:0;padding:6px 12px 16px;display:grid;gap:2px}
+.rt-legs button{display:grid;grid-template-columns:52px minmax(0,1fr) auto;gap:12px;align-items:center;width:100%;padding:10px;border:0;border-radius:10px;background:transparent;color:#fff;text-align:left;cursor:pointer;transition:background .2s}
+.rt-legs button:hover,.rt-legs button.on{background:rgba(255,255,255,.06)}
+.rt-legs .tm{font:700 11px/1 var(--mono);color:var(--orange);font-variant-numeric:tabular-nums}
+.rt-legs b{font:800 .98rem/1.15 var(--f);text-transform:uppercase}
+.rt-legs small{display:block;margin-top:3px;font:500 12.5px/1.35 var(--f);color:var(--d-mute);text-transform:none}
+.rt-legs .pl{font:600 10px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--d-mute);text-align:right}
+.rt-key{display:flex;flex-wrap:wrap;gap:6px 16px;padding:0 22px 18px;font:600 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--d-mute)}
+.rt-key i{display:inline-block;width:22px;height:0;border-top:3px solid var(--orange);vertical-align:middle;margin-right:7px}
+.rt-key i.d{border-top:2px dotted #fff}
+@media (prefers-reduced-motion:reduce){.rt-map .draw{transition:none;stroke-dashoffset:0}.rt-map .stop{opacity:1;transition:none}}
+
 /* ---------- hero: a moving wall of episode footage ---------- */
 .hero{position:relative;overflow:hidden;background:var(--ink);min-height:min(94vh,980px);display:flex;align-items:center;padding:clamp(56px,8vw,96px) 0}
 .wall{position:absolute;top:-30%;bottom:-30%;left:-6%;right:-6%;display:flex;gap:14px;transform:rotate(-7deg);opacity:.72;z-index:0}
@@ -311,6 +355,28 @@ h1,h2,h3{font-family:var(--f);font-weight:800;text-transform:uppercase;letter-sp
 .q .qp i{display:block;height:100%;background:var(--orange)}
 .q .len{font:600 11px/1 var(--mono);color:var(--d-mute)}
 .copied{font:600 12px/1 var(--mono);color:var(--orange);min-height:1em}
+/* chapters: gaps in the seek bar, the name in the scrub preview and the HUD, a list beside the player */
+.scrub .cht{position:absolute;inset:0;pointer-events:none}
+.scrub .cht i{position:absolute;top:-1px;bottom:-1px;width:3px;margin-left:-1.5px;background:var(--carbon)}
+.tip .chn{font:700 11px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;background:var(--orange);color:var(--ink);padding:4px 6px;border-radius:4px;white-space:nowrap}
+.tip .chn:empty{display:none}
+.chaps{border-top:1px solid var(--d-line)}
+.chaps h4{margin:18px 0 8px;font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--d-mute)}
+.chl{display:grid;gap:2px}
+.chr{display:grid;gap:6px}
+.ch{position:relative;display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:4px 12px;align-items:center;width:100%;padding:9px 10px;margin:0 -10px;border:0;border-radius:10px;background:transparent;color:#fff;text-align:left;cursor:pointer;transition:background .2s}
+.ch:hover{background:rgba(255,255,255,.06)}
+.ch .n{font:700 11px/1 var(--mono);letter-spacing:.08em;color:var(--d-mute)}
+.ch b{font:800 1rem/1.1 var(--f);text-transform:uppercase;min-width:0}
+.ch .t{font:600 11px/1 var(--mono);color:var(--d-mute);font-variant-numeric:tabular-nums}
+.ch .p{grid-column:2/-1;height:2px;border-radius:2px;background:rgba(255,255,255,.1);overflow:hidden;display:none}
+.ch .p i{display:block;height:100%;width:0;background:var(--orange)}
+.ch[aria-current="true"] .n{color:var(--orange)}
+.ch[aria-current="true"] .p{display:block}
+.ch[aria-current="true"]::before{content:"";position:absolute;left:-2px;top:10px;bottom:10px;width:3px;border-radius:2px;background:var(--orange)}
+.rent{justify-self:start;margin:-2px 0 6px 32px;display:inline-flex;align-items:center;gap:8px;font:700 10.5px/1 var(--mono);letter-spacing:.1em;text-transform:uppercase;color:var(--orange);border:1px solid rgba(255,79,22,.45);background:rgba(255,79,22,.08);padding:7px 10px;border-radius:999px;cursor:pointer;transition:background .2s,color .2s}
+.rent:hover{background:var(--orange);color:var(--ink)}
+.rent svg{width:12px;height:12px}
 
 /* ---------- behind the scenes: scroll-driven timeline ---------- */
 .bts{position:relative;background:var(--ink)}
@@ -563,14 +629,14 @@ footer nav a:hover{color:#fff}
 <header class="nav">
   <div class="wrap">
     <a class="logo" href="#top" aria-label="Supercar Experience, back to top"><img src="media/brand/sce-primary-horizontal--white.png" alt="Supercar Experience" width="185" height="26"></a>
-    <nav class="links" aria-label="Sections"><a href="#episodes">Episodes</a><a href="#watch">Watch</a><a href="#bts">Behind the scenes</a><a href="#ads">The ads</a><a href="#fleet">Rent the cars</a><a href="#rally">Rally</a></nav>
+    <nav class="links" aria-label="Sections"><a href="#episodes">Episodes</a><a href="#watch">Watch</a><a href="#bts">Behind the scenes</a><a href="#routes">Routes</a><a href="#ads">The ads</a><a href="#fleet">Rent the cars</a><a href="#rally">Rally</a></nav>
     <div class="nav-r">
       <a class="btn play" href="#watch" data-ep="latest"><span class="t">Watch the latest</span><span class="t2">Watch</span><span class="ar" aria-hidden="true"><svg class="i" viewBox="0 0 16 16" style="fill:currentColor;stroke:none"><path d="M5 3.2v9.6L13 8z"/></svg></span></a>
       <button class="menu-b" id="menu-b" type="button" aria-expanded="false" aria-controls="sheet" aria-label="Menu"><span></span></button>
     </div>
   </div>
   <div class="wrap sheet" id="sheet" hidden>
-    <a href="#episodes">Episodes <span>01</span></a><a href="#watch">Watch <span>02</span></a><a href="#bts">Behind the scenes <span>03</span></a><a href="#ads">The ads <span>04</span></a><a href="#fleet">Rent the cars <span>05</span></a><a href="#rally">Rally <span>06</span></a><a href="#book">Book <span>07</span></a>
+    <a href="#episodes">Episodes <span>01</span></a><a href="#watch">Watch <span>02</span></a><a href="#bts">Behind the scenes <span>03</span></a><a href="#routes">Routes <span>04</span></a><a href="#ads">The ads <span>05</span></a><a href="#fleet">Rent the cars <span>06</span></a><a href="#rally">Rally <span>07</span></a><a href="#book">Book <span>08</span></a>
   </div>
 </header>
 
@@ -627,7 +693,7 @@ footer nav a:hover{color:#fff}
         <div class="lk on" id="pl-lk"><i></i><i></i><i></i><i></i></div>
         <div class="clip">
           <video id="pv" playsinline preload="metadata"></video>
-          <div class="phud"><span class="rec" id="pv-rec">EP</span><span class="tag dim">Full episode</span></div>
+          <div class="phud"><span class="rec" id="pv-rec">EP</span><span class="tag dim" id="pv-ch">Full episode</span></div>
           <button class="big" type="button" id="pv-big" aria-label="Play"><svg viewBox="0 0 16 16"><path d="M4 2.5v11L13.5 8z"/></svg></button>
           <div class="upnext" id="upnext" hidden>
             <div class="in">
@@ -639,9 +705,9 @@ footer nav a:hover{color:#fff}
           </div>
           <div class="ctrl">
             <div class="scrub" id="scrub" role="slider" tabindex="0" aria-label="Seek" aria-valuemin="0" aria-valuemax="0" aria-valuenow="0" aria-valuetext="0:00">
-              <div class="tr"><div class="buf" id="buf"></div><div class="prg" id="prg"></div></div>
+              <div class="tr"><div class="buf" id="buf"></div><div class="prg" id="prg"></div><div class="cht" id="cht"></div></div>
               <div class="knob" id="knob"></div>
-              <div class="tip" id="tip"><div class="tim" id="tim"></div><span id="tipt">0:00</span></div>
+              <div class="tip" id="tip"><div class="tim" id="tim"></div><span class="chn" id="tipc"></span><span id="tipt">0:00</span></div>
             </div>
             <div class="crow">
               <button class="cb" type="button" id="pv-pp" aria-label="Play"><svg class="f" viewBox="0 0 16 16" id="pp-ico"><path d="M4 2.5v11L13.5 8z"/></svg></button>
@@ -668,6 +734,7 @@ footer nav a:hover{color:#fff}
         <button class="btn ghost" type="button" id="th-share">Copy link<span class="ar" aria-hidden="true"><svg class="i" viewBox="0 0 16 16"><path d="M6.5 9.5l3-3M7 4.5l1.3-1.3a2.5 2.5 0 0 1 3.5 3.5L10.5 8M9 11.5l-1.3 1.3a2.5 2.5 0 0 1-3.5-3.5L5.5 8"/></svg></span></button>
       </div>
       <div class="copied" id="th-copied" aria-live="polite"></div>
+      <div class="chaps" id="chaps"><h4>Chapters</h4><div class="chl" id="chl"></div></div>
       <div class="queue"><h4>All episodes</h4><div id="queue"></div></div>
     </div>
   </div>
@@ -684,6 +751,19 @@ footer nav a:hover{color:#fff}
     </div>
     <div class="bts-track" id="bts-track"></div>
     <div class="bts-bar"><div class="bts-line"><i id="bts-prog"></i></div><div class="bts-dots" id="bts-dots"></div></div>
+  </div>
+</section>
+
+<section class="s routes" id="routes" aria-label="Where the cars go">
+  <div class="wrap">
+    <div class="head">
+      <div>
+        <div class="eyebrow rv">[ On the road <b>·</b> two runs from the series ]</div>
+        <h2 class="h-lg kin">Where the <span class="o">cars go.</span></h2>
+        <p class="lede rv">Drawn from the stops in the episodes. Tap a stop to watch that part.</p>
+      </div>
+    </div>
+    <div class="rt-grid" id="rt-grid"></div>
   </div>
 </section>
 
@@ -782,7 +862,7 @@ footer nav a:hover{color:#fff}
 </section>
 </main>
 
-<footer><div class="wrap"><img src="media/brand/sce-primary-horizontal--white.png" alt="Supercar Experience" width="156" height="22" loading="lazy"><nav aria-label="Footer"><a href="#episodes">Episodes</a><a href="#watch">Watch</a><a href="#bts">Behind the scenes</a><a href="#fleet">Rent the cars</a><a href="#rally">Rally</a></nav><span>Filmed and cut by Omarie Young · <a href="https://www.instagram.com/nq.young/" target="_blank" rel="noopener">@nq.young</a></span></div></footer>
+<footer><div class="wrap"><img src="media/brand/sce-primary-horizontal--white.png" alt="Supercar Experience" width="156" height="22" loading="lazy"><nav aria-label="Footer"><a href="#episodes">Episodes</a><a href="#watch">Watch</a><a href="#bts">Behind the scenes</a><a href="#routes">Routes</a><a href="#fleet">Rent the cars</a><a href="#rally">Rally</a></nav><span>Filmed and cut by Omarie Young · <a href="https://www.instagram.com/nq.young/" target="_blank" rel="noopener">@nq.young</a></span></div></footer>
 
 <a class="side off" id="side" href="#book">Text to book<svg class="i" viewBox="0 0 16 16" aria-hidden="true"><path d="M4 12 12 4M5.5 4H12v6.5"/></svg></a>
 
@@ -812,14 +892,16 @@ const pad=(n,l=2)=>String(n).padStart(l,"0");
 const fmt=t=>{t=Math.max(0,Math.floor(t||0));return Math.floor(t/60)+":"+pad(t%60)};
 const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v):d}catch(e){return d}},set(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}};
 
-/* ---------- the series: current approved versions (posting plan, 28 Sept). Web copies are 720p. ---------- */
+/* ---------- the series: current approved versions (posting plan, 28 Sept). Web copies are 720p.
+   ch = the chapters burned into each episode (name + start second, read off the video 29 Sept);
+   a third value is a car id in cars[] and shows a rent link for that chapter. ---------- */
 const EP=[
- {k:"scottsdale",d:"Sep 7",t:"Scottsdale and back",s:"The run from Las Vegas to the AZ shop in Scottsdale, and the drive home after dark.",len:"2:48",sec:168,where:"Las Vegas → Scottsdale",mo:[3,"The run to Scottsdale","Cars move between Las Vegas and the AZ shop. Someone has to drive them there."]},
- {k:"hybrid",d:"Sep 11",t:"The shoot and the V12",s:"A V12 in the shop, then a Rolls-Royce Cullinan delivered to a shoot, with a walk-through at the door.",len:"2:02",sec:122,where:"Las Vegas",mo:[66,"The hand-over","A Cullinan delivered to a shoot, and a walk-through at the door before the keys change hands."]},
- {k:"bday",d:"Sep 12",t:"27th birthday",s:"Birthday on the job: a Huracán STO delivered to a customer, a check that everything's right, then the Black Series picked up and driven home.",len:"2:29",sec:150,where:"Las Vegas",mo:[55,"Arriving at the customer","The car arrives, gets checked over together, and the next one is picked up."]},
- {k:"pickup",d:"Sep 13",t:"Pickup day",s:"Travel day to collect the cars, with a dinner stop on the way.",len:"2:50",sec:170,where:"On the road",mo:[24,"Pickup day","A travel day just to collect the cars."]},
- {k:"flat",d:"Sep 13",t:"The flat tyre",s:"Picks up where pickup day ends: a flat at a gas stop, sorted at night, and rolling out again.",len:"2:50",sec:170,where:"On the road",mo:[65,"The flat tyre","A flat at a gas stop, sorted in the dark, and the car back on the road."]},
- {k:"rally",d:"Sep 15",t:"Rally day with Egnyte",s:"Convoy briefing, the run out, dinner and the drive back to Vegas.",len:"2:55",sec:175,where:"Las Vegas",mo:[134,"Rally day","Convoy briefing, the run out, and the whole group back to Vegas at night."]}
+ {k:"scottsdale",d:"Sep 7",t:"Scottsdale and back",s:"The run from Las Vegas to the AZ shop in Scottsdale, and back to Vegas on a plane that night.",len:"2:48",sec:168,where:"Las Vegas → Scottsdale",mo:[3,"The run to Scottsdale","Cars move between Las Vegas and the AZ shop. Someone has to drive them there."],ch:[[0,"The trip"],[27.5,"In the car"],[51.5,"On the road"],[89,"The AZ shop"],[99,"Washed and ready"],[125,"At the shop"],[149.5,"Back in Vegas"]]},
+ {k:"hybrid",d:"Sep 11",t:"The shoot and the V12",s:"A V12 in the shop, then a Rolls-Royce Cullinan delivered to a shoot, with a walk-through at the door.",len:"2:02",sec:122,where:"Las Vegas",mo:[66,"The hand-over","A Cullinan delivered to a shoot, and a walk-through at the door before the keys change hands."],ch:[[0,"The shoot"],[6.5,"V12 Vantage"],[32.5,"Cullinan"]]},
+ {k:"bday",d:"Sep 12",t:"27th birthday",s:"Birthday on the job: a Huracán STO delivered to a customer, a check that everything's right, then the Black Series picked up and driven home.",len:"2:29",sec:150,where:"Las Vegas",mo:[55,"Arriving at the customer","The car arrives, gets checked over together, and the next one is picked up."],ch:[[0,"The birthday"],[32.5,"Black Series","amg"],[121,"Huracán STO","sto"],[127.5,"Ferrari Roma"]]},
+ {k:"pickup",d:"Sep 13",t:"Pickup day",s:"Travel day to collect the cars, with a dinner stop on the way.",len:"2:50",sec:170,where:"On the road",mo:[24,"Pickup day","A travel day just to collect the cars."],ch:[[0,"The trip"],[22,"Huracán EVO Spyder"]]},
+ {k:"flat",d:"Sep 13",t:"The flat tyre",s:"Picks up where pickup day ends: a flat at a gas stop, sorted at night, and rolling out again.",len:"2:50",sec:170,where:"On the road",mo:[65,"The flat tyre","A flat at a gas stop, sorted in the dark, and the car back on the road."],ch:[[0,"Huracán EVO Spyder"],[45,"McLaren GT"]]},
+ {k:"rally",d:"Sep 15",t:"Rally day with Egnyte",s:"Convoy briefing, the run out, dinner and the drive back to Vegas.",len:"2:55",sec:175,where:"Las Vegas",mo:[134,"Rally day","Convoy briefing, the run out, and the whole group back to Vegas at night."],ch:[[0,"Rally day"],[26,"The lineup"],[54.5,"Egnyte arrives"],[79,"Roll out"],[88,"Red Rock"],[117,"The drive back"],[148,"The verdict"]]}
 ];
 EP.forEach((e,i)=>e.n=i+1);
 const LATEST=EP[EP.length-1];
@@ -985,7 +1067,8 @@ function openEp(k,o={}){
     $("#th-eyebrow").innerHTML=`[ Episode ${pad(e.n)} of ${pad(EP.length)} <b>·</b> ${e.d}, 2026 ]`;
     rekin($("#th-title"),e.t.replace(/(\S+)$/,'<span class="o">$1</span>'));
     $("#th-desc").textContent=e.s;
-    $("#th-chips").innerHTML=`<span><b>${e.len}</b> runtime</span><span>${e.where}</span><span>Full episode</span>`;
+    $("#th-chips").innerHTML=`<span><b>${e.len}</b> runtime</span><span>${e.where}</span><span>${e.ch?e.ch.length+" chapters":"Full episode"}</span>`;
+    renderChapters(e);
     const at=prog()[e.k]||0;
     const start=o.t!=null?o.t:(at>5&&at<e.sec-8?at:0);
     $("#th-resume").textContent=o.t==null&&start>0?`Resuming from ${fmt(start)}`:"";
@@ -1002,8 +1085,29 @@ function updTime(){const d=pv.duration||cur?.sec||0,t=pv.currentTime||0,pc=d?t/d
   const s=$("#scrub");s.setAttribute("aria-valuemax",Math.floor(d));s.setAttribute("aria-valuenow",Math.floor(t));s.setAttribute("aria-valuetext",`${fmt(t)} of ${fmt(d)}`);
   if(pv.buffered.length){$("#buf").style.width=(pv.buffered.end(pv.buffered.length-1)/d*100)+"%"}
 }
+/* chapters */
+let lastCh=-1;
+const chAt=(e,t)=>{let i=0;(e.ch||[]).forEach((c,j)=>{if(t>=c[0]-.05)i=j});return i};
+function renderChapters(e){
+  const ch=e.ch||[];
+  $("#chaps").hidden=!ch.length;
+  $("#cht").innerHTML=ch.slice(1).map(c=>`<i style="left:${(c[0]/e.sec*100).toFixed(2)}%"></i>`).join("");
+  $("#chl").innerHTML=ch.map((c,j)=>{const car=c[2]&&cars.find(x=>x.id===c[2]);
+    return`<div class="chr"><button class="ch" type="button" data-t="${c[0]}" aria-label="Chapter ${j+1}, ${c[1]}, at ${fmt(c[0])}"><span class="n">${pad(j+1)}</span><b>${c[1]}</b><span class="t">${fmt(c[0])}</span><span class="p"><i></i></span></button>`+
+      (car?`<button class="rent" type="button" data-car="${car.id}">Rent the ${car.name} · ${money(car.day)}/day<svg class="i" viewBox="0 0 16 16"><path d="M4 12 12 4M5.5 4H12v6.5"/></svg></button>`:"")+`</div>`}).join("");
+  $$("#chl .ch").forEach(b=>b.onclick=()=>{pv.currentTime=+b.dataset.t;updTime();updCh();if(pv.paused)pv.play().catch(()=>{})});
+  $$("#chl .rent").forEach(b=>b.onclick=()=>openBay(b.dataset.car));
+  lastCh=-1;updCh();
+}
+function updCh(){
+  if(!cur||!cur.ch)return;
+  const t=pv.currentTime||0,i=chAt(cur,t),c=cur.ch;
+  if(i!==lastCh){lastCh=i;$$("#chl .ch").forEach((b,j)=>b.setAttribute("aria-current",j===i));$("#pv-ch").textContent=`CH ${pad(i+1)} · ${c[i][1]}`}
+  const a=c[i][0],b=c[i+1]?c[i+1][0]:(pv.duration||cur.sec),bar=$$("#chl .ch .p i")[i];
+  if(bar)bar.style.width=Math.max(0,Math.min(100,(t-a)/(b-a)*100))+"%";
+}
 function saveProg(force){if(!cur)return;const now=Date.now();if(!force&&now-saveT<4000)return;saveT=now;const p=prog();p[cur.k]=pv.ended?cur.sec:pv.currentTime;store.set("sev-prog",p)}
-pv.addEventListener("timeupdate",()=>{updTime();saveProg()});
+pv.addEventListener("timeupdate",()=>{updTime();updCh();saveProg()});
 pv.addEventListener("progress",updTime);
 pv.addEventListener("play",()=>{$$(".reel-c video").forEach(v=>{if(!v.muted){v.pause();v.closest(".reel-c").classList.remove("playing")}});player.classList.add("playing");$("#pp-ico").innerHTML='<path d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/>';$("#pv-pp").setAttribute("aria-label","Pause");$("#pv-big").setAttribute("aria-label","Pause");$("#th-play").firstChild.textContent="Pause";bump();amb()});
 pv.addEventListener("pause",()=>{player.classList.remove("playing","idle");$("#pp-ico").innerHTML='<path d="M4 2.5v11L13.5 8z"/>';$("#pv-pp").setAttribute("aria-label","Play");$("#pv-big").setAttribute("aria-label","Play");$("#th-play").firstChild.textContent="Play episode";saveProg(true);renderRail();renderQueue()});
@@ -1023,7 +1127,7 @@ player.addEventListener("pointermove",bump);player.addEventListener("focusin",bu
 /* scrub bar with a thumbnail preview (one frame every 5 s, 6 across) */
 (function(){const s=$("#scrub"),tip=$("#tip");let drag=false;
   const at=x=>{const r=s.getBoundingClientRect();return Math.min(1,Math.max(0,(x-r.left)/r.width))};
-  const show=p=>{const d=pv.duration||cur?.sec||0,t=p*d,i=Math.min(41,Math.floor(t/5));tip.style.left=(p*100)+"%";$("#tipt").textContent=fmt(t);$("#tim").style.backgroundPosition=`-${(i%6)*96}px -${Math.floor(i/6)*170}px`};
+  const show=p=>{const d=pv.duration||cur?.sec||0,t=p*d,i=Math.min(41,Math.floor(t/5));tip.style.left=(p*100)+"%";$("#tipt").textContent=fmt(t);$("#tipc").textContent=cur&&cur.ch?cur.ch[chAt(cur,t)][1]:"";$("#tim").style.backgroundPosition=`-${(i%6)*96}px -${Math.floor(i/6)*170}px`};
   s.addEventListener("pointermove",e=>{show(at(e.clientX));if(drag){pv.currentTime=at(e.clientX)*(pv.duration||0);updTime()}});
   s.addEventListener("pointerdown",e=>{if(!cur)openEp(LATEST.k);drag=true;s.classList.add("dragging");s.setPointerCapture(e.pointerId);show(at(e.clientX));pv.currentTime=at(e.clientX)*(pv.duration||0);updTime()});
   s.addEventListener("pointerup",e=>{drag=false;s.classList.remove("dragging")});
@@ -1223,10 +1327,75 @@ const mb=$("#menu-b"),sh=$("#sheet");
 mb.onclick=()=>{const o=mb.getAttribute("aria-expanded")==="true";mb.setAttribute("aria-expanded",!o);sh.hidden=o};
 sh.addEventListener("click",e=>{if(e.target.closest("a")){mb.setAttribute("aria-expanded","false");sh.hidden=true}});
 const secIO=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting)$$(".links a").forEach(a=>a.setAttribute("aria-current",a.getAttribute("href")==="#"+e.target.id))}),{rootMargin:"-45% 0px -50% 0px"});
-["episodes","watch","bts","ads","fleet","rally"].forEach(id=>secIO.observe(document.getElementById(id)));
+["episodes","watch","bts","routes","ads","fleet","rally"].forEach(id=>secIO.observe(document.getElementById(id)));
 const vis={top:true,book:false,watch:false,build:false};
 const sideIO=new IntersectionObserver(es=>{es.forEach(e=>vis[e.target.id]=e.isIntersecting);$("#side").classList.toggle("off",vis.top||vis.book||vis.watch||vis.build)},{threshold:.1});
 ["top","book","watch","build"].forEach(id=>sideIO.observe(document.getElementById(id)));
+
+/* ---------- on the road: two runs drawn from the stops in the episodes (a sketch, not a navigation map) ---------- */
+const ROUTES=[
+ {k:"scottsdale",name:"Las Vegas → Scottsdale",key:[["","The drive out"],["d","Flight home"]],
+  legs:[{kind:"road",pts:[[36.17,-115.14],[36.01,-114.74],[35.19,-114.05],[34.55,-113.45],[33.97,-112.73],[33.62,-112.25],[33.49,-111.93]]},
+        {kind:"fly",pts:[[33.43,-112.01],[34.2,-114.1],[35.4,-115.05],[36.08,-115.15]]}],
+  stops:[{at:[36.17,-115.14],name:"Las Vegas",side:"l"},{at:[35.19,-114.05],name:"On the road",side:"r"},{at:[33.49,-111.93],name:"AZ shop",sub:"Scottsdale",side:"l"}],
+  legsList:[[0,"The trip","Las Vegas",0,"Leaving for the AZ shop"],[27.5,"In the car","Las Vegas",0,"Phone on CarPlay, e-brake on"],[51.5,"On the road","On the road",1,"2 h 37 min to go on the nav"],
+    [89,"The AZ shop","Scottsdale",2,"The cars are parked at the other location"],[99,"Washed and ready","Scottsdale",2,"The GT3 RS and STO get washed"],[125,"At the shop","Scottsdale",2,"Keys sorted, then straight to the airport"],[149.5,"Back in Vegas","Las Vegas",0,"Home on the plane"]]},
+ {k:"rally",name:"Venetian → Red Rock",key:[["","The run out"],["d","215 → 15 North → Flamingo → the Strip"]],
+  legs:[{kind:"road",pts:[[36.121,-115.17],[36.07,-115.18],[36.04,-115.215],[36.04,-115.3],[36.09,-115.345],[36.157,-115.334]]},
+        {kind:"back",pts:[[36.157,-115.334],[36.11,-115.3],[36.06,-115.27],[36.03,-115.21],[36.027,-115.176],[36.07,-115.182],[36.115,-115.186],[36.121,-115.17]]}],
+  stops:[{at:[36.121,-115.17],name:"The Venetian",side:"t"},{at:[36.04,-115.3],name:"Blue Diamond",side:"b"},{at:[36.157,-115.334],name:"Red Rock",sub:"Dinner",side:"t"}],
+  labels:[[[36.075,-115.285],"215"],[[36.07,-115.182],"15 N"],[[36.112,-115.186],"Flamingo","l"]],
+  legsList:[[0,"Rally day","The Venetian",0,"Rally day with Egnyte, Sep 15"],[26,"The lineup","The Venetian",0,"Every car lined up in the garage"],[54.5,"Egnyte arrives","The Venetian",0,"The safety talk, then everyone gets a car"],
+    [79,"Roll out","Blue Diamond",1,"The convoy heads out: Venetian, Blue Diamond, Red Rock"],[88,"Red Rock","Red Rock",2,"Dinner at Lotus of Siam, Red Rock Casino"],[117,"The drive back","215 → the Strip",0,"Follow the car in front, back to the Venetian"],[148,"The verdict","The Venetian",0,"What the group thought"]]}
+];
+(function(){
+  const NS="http://www.w3.org/2000/svg",W=400,H=300,P=46;
+  const el=(n,a={},p)=>{const e=document.createElementNS(NS,n);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+  function smooth(q){if(q.length<3)return`M${q[0][0]},${q[0][1]}`+q.slice(1).map(p=>`L${p[0]},${p[1]}`).join("");
+    let d=`M${q[0][0].toFixed(1)},${q[0][1].toFixed(1)}`;
+    for(let i=0;i<q.length-1;i++){const p0=q[i-1]||q[i],p1=q[i],p2=q[i+1],p3=q[i+2]||p2;
+      d+=`C${(p1[0]+(p2[0]-p0[0])/6).toFixed(1)},${(p1[1]+(p2[1]-p0[1])/6).toFixed(1)} ${(p2[0]-(p3[0]-p1[0])/6).toFixed(1)},${(p2[1]-(p3[1]-p1[1])/6).toFixed(1)} ${p2[0].toFixed(1)},${p2[1].toFixed(1)}`}
+    return d}
+  const grid=$("#rt-grid");
+  ROUTES.forEach(r=>{
+    const e=EP.find(x=>x.k===r.k);if(!e)return;
+    const all=[...r.legs.flatMap(l=>l.pts),...r.stops.map(s=>s.at)],lat0=all.reduce((a,p)=>a+p[0],0)/all.length,cx=Math.cos(lat0*Math.PI/180);
+    const xy=all.map(p=>[p[1]*cx,-p[0]]),x0=Math.min(...xy.map(p=>p[0])),x1=Math.max(...xy.map(p=>p[0])),y0=Math.min(...xy.map(p=>p[1])),y1=Math.max(...xy.map(p=>p[1]));
+    const s=Math.min((W-2*P)/(x1-x0),(H-2*P)/(y1-y0)),ox=(W-(x1-x0)*s)/2,oy=(H-(y1-y0)*s)/2;
+    const pr=p=>[ox+(p[1]*cx-x0)*s,oy+(-p[0]-y0)*s];
+    const card=document.createElement("article");card.className="rt";
+    card.innerHTML=`<div class="rt-top"><div><div class="eyebrow">EP ${pad(e.n)} <b>·</b> ${e.d}</div><h3>${r.name}</h3></div><button class="tag" type="button" data-play>${PLAY}Watch</button></div>
+      <div class="rt-map"></div><div class="rt-key">${r.key.map(k=>`<span><i class="${k[0]}"></i>${k[1]}</span>`).join("")}</div><ul class="rt-legs"></ul>`;
+    const svg=el("svg",{viewBox:`0 0 ${W} ${H}`,role:"img","aria-label":`Route map: ${r.name}`},card.querySelector(".rt-map"));
+    const g=el("g",{class:"grid"},svg);for(let x=20;x<W;x+=40)el("line",{x1:x,y1:0,x2:x,y2:H},g);for(let y=10;y<H;y+=40)el("line",{x1:0,y1:y,x2:W,y2:y},g);
+    const nr=el("g",{class:"north",transform:`translate(${W-22},26)`},svg);el("path",{d:"M0,8 L0,-8 M-4,-3 L0,-8 L4,-3"},nr);el("text",{x:-4,y:22},nr).textContent="N";
+    const paths=r.legs.map(l=>{const d=smooth(l.pts.map(pr));el("path",{d,class:"ghost"},svg);const p=el("path",{d,class:"road draw "+(l.kind==="road"?"":l.kind)},svg);return p});
+    (r.labels||[]).forEach(([at,txt,side])=>{const q=pr(at),l=side==="l";el("text",{x:q[0]+(l?-8:8),y:q[1]+3,"text-anchor":l?"end":"start",class:"lbl"},svg).textContent=txt});
+    const car=el("g",{},svg);el("circle",{r:9,class:"car-r"},car);el("circle",{r:4,class:"car"},car);car.style.display="none";
+    const marks=r.stops.map((st,i)=>{const q=pr(st.at);const m=el("g",{class:"stop",tabindex:0,role:"button",transform:`translate(${q[0].toFixed(1)},${q[1].toFixed(1)})`},svg);m.style.setProperty("--d",i);
+      el("circle",{r:16,class:"h"},m);el("circle",{r:6,class:"o"},m);el("rect",{x:-13,y:-13,width:26,height:26,rx:2,class:"br","stroke-dasharray":"7 12 14 12 14 12 14 12 7"},m);
+      const tx=st.side==="l"?-14:st.side==="r"?14:0,ty=st.side==="t"?-16:st.side==="b"?24:4,an=st.side==="l"?"end":st.side==="r"?"start":"middle";
+      el("text",{x:tx,y:ty,"text-anchor":an},m).textContent=st.name;if(st.sub)el("text",{x:tx,y:ty+(st.side==="t"?-12:12),"text-anchor":an,class:"s"},m).textContent=st.sub;
+      const first=r.legsList.find(l=>l[3]===i);m.setAttribute("aria-label",`${st.name}: watch from ${fmt(first?first[0]:0)}`);
+      const go=()=>openEp(r.k,{t:first?first[0]:0,play:true,scroll:true});m.addEventListener("click",go);m.addEventListener("keydown",ev=>{if(ev.key==="Enter"||ev.key===" "){ev.preventDefault();go()}});
+      return m});
+    const ul=card.querySelector(".rt-legs");
+    ul.innerHTML=r.legsList.map(l=>`<li><button type="button" data-t="${l[0]}" data-s="${l[3]}"><span class="tm">${fmt(l[0])}</span><span><b>${l[1]}</b><small>${l[4]}</small></span><span class="pl">${l[2]}</span></button></li>`).join("");
+    $$("button",ul).forEach(b=>{b.onclick=()=>openEp(r.k,{t:+b.dataset.t,play:true,scroll:true});
+      b.onmouseenter=b.onfocus=()=>{marks.forEach((m,i)=>m.classList.toggle("on",i===+b.dataset.s))};b.onmouseleave=b.onblur=()=>marks.forEach(m=>m.classList.remove("on"))});
+    card.querySelector("[data-play]").onclick=()=>openEp(r.k,{play:true,scroll:true});
+    grid.appendChild(card);
+    paths.forEach(p=>p.style.setProperty("--len",Math.ceil(p.getTotalLength())));
+    /* the car runs the loop while the card is on screen */
+    const lens=paths.map(p=>p.getTotalLength()),tot=lens.reduce((a,b)=>a+b,0);let raf=0,t0=0;
+    function tick(ts){if(!t0)t0=ts;let d=((ts-t0)/9000%1)*tot,i=0;while(i<paths.length-1&&d>lens[i]){d-=lens[i];i++}
+      const pt=paths[i].getPointAtLength(Math.min(d,lens[i]));car.setAttribute("transform",`translate(${pt.x.toFixed(1)},${pt.y.toFixed(1)})`);raf=requestAnimationFrame(tick)}
+    let vis=false;
+    new IntersectionObserver(es=>es.forEach(en=>{vis=en.isIntersecting;if(vis){card.classList.add("in");if(!RM&&!raf)setTimeout(()=>{if(vis&&!raf){car.style.display="";t0=0;raf=requestAnimationFrame(tick)}},2400)}
+      else if(raf){cancelAnimationFrame(raf);raf=0}}),{threshold:.25}).observe(card);
+    if(RM)card.classList.add("in");
+  });
+})();
 
 /* ---------- start ---------- */
 renderRail();renderGarage();calc();watch();

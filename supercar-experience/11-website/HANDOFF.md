@@ -6,7 +6,7 @@ Pick up here in Claude Code. Branch: `claude/se-website-render` (never push to m
 **Behind the Wheel**: Omarie's Supercar Experience vlog series comes first (the behind-the-scenes of getting the car to the customer), with SE's Las Vegas rentals, ads and the rally underneath.
 - Live: https://supercar-experience-garage.onrender.com (Render static site, auto-deploys on push to this branch; config in `/render.yaml`, `rootDir: supercar-experience/11-website`). Render serves byte ranges, which the episode player needs for seeking.
 - `/v2/` redirects to the main page and keeps `#watch-<episode>` links working (it was the preview).
-- `/next/` (29 Sept) is a PREVIEW, not live: chapters on every episode (read off the burned-in chapter labels), "Rent the …" links on chapters named after a fleet car, and a "Where the cars go" section with route maps for Scottsdale and rally day. It also changes the Scottsdale episode text to "back to Vegas on a plane that night" (the audio says he went straight to the airport). To make it live: copy `next/index.html` to `index.html` with `../media/` → `media/` and `"../ep/"` → `"ep/"`, drop the noindex line, rerun `make_episode_pages.py --pages`, and turn `next/` into a redirect like `v2/`.
+- `/next/` redirects to the main page too (it was the 29 Sept preview of chapters, car links and route maps).
 - Earlier versions are in git history: gold (78d4417 and before), orange rental-first (3e84fd5).
 
 ## Look (29 Sept 2026, Omarie's picks)
@@ -29,7 +29,7 @@ The current approved versions from `NQ Studio/04 Exports/00 POSTING PLAN.md` (28
 **Adding an episode** (e.g. Sep 24, the Seattle McLaren trip, once approved), all into `media/ep/`:
 1. Full episode: `ffmpeg -i SRC -vf scale=720:1280:flags=lanczos -c:v libx264 -preset slow -crf 24 -maxrate 3000k -bufsize 6000k -profile:v high -level 4.0 -pix_fmt yuv420p -g 60 -c:a aac -b:a 128k -ac 2 -ar 48000 -movflags +faststart <k>.mp4` (keep each file under 100 MB for GitHub).
 2. Loop: 8 s, `-an -vf scale=360:640,fps=30 -crf 29` → `<k>-loop.mp4`. Cover: one frame `scale=540:-2 -q:v 4` → `<k>.jpg`. Scrub sprite: `-vf fps=1/5,scale=96:170,tile=6x7 -frames:v 1 -q:v 6` → `<k>-thumbs.jpg` (the player expects 96x170 tiles, 6 across, one every 5 s, 42 max = 3:30).
-3. Add a row to `EP[]` (k, d, t, s, len, sec, where, mo = [seconds, moment title, moment line]).
+3. Add a row to `EP[]` (k, d, t, s, len, sec, where, mo = [seconds, moment title, moment line], ch = the chapters burned into the episode as [start second, name, optional car id from `cars[]`]). A car id turns on a "Rent the …" link for that chapter. If the episode has a route worth drawing, add it to `ROUTES` (stops only from what the episode shows or says).
 4. Run `python3 ../website-tools/make_episode_pages.py` (needs Google Chrome). It writes `ep/<k>/index.html` and `media/share/<k>.jpg` for every episode and redraws `media/share/series.jpg` with the new count. Update "Six episodes" in the page's og/twitter description by hand.
 Pick loops and covers from a contact sheet; skip frames with speed readouts or spec cards.
 
@@ -42,7 +42,7 @@ Pick loops and covers from a contact sheet; skip frames with speed readouts or s
 - `media/stills/` — one clean driving frame per car; `media/brand/` — SE logo PNGs.
 
 ## Sections (in page order)
-Hero (footage wall, latest episode card) · episode title strip · Episodes rail (resume bars) · Theatre (full-episode player, queue) · What it takes (scroll timeline, one moment per episode, opens the episode at that second) · The ads · Rentals (cars, compare, trip builder) · Rally (Apr 9–11, 2027) · Booking band (725) 425-3583.
+Hero (footage wall, latest episode card) · episode title strip · Episodes rail (resume bars) · Theatre (full-episode player, chapters, queue) · What it takes (scroll timeline, one moment per episode, opens the episode at that second) · Where the cars go (route maps for the Scottsdale run and rally day; each stop plays that part) · The ads · Rentals (cars, compare, trip builder) · Rally (Apr 9–11, 2027) · Booking band (725) 425-3583.
 
 ## Rules (from SE standards)
 - Text line (725) 425-3583. 25+ to drive, $299 underage fee. Egnyte as text only, never a logo. Instagram @supercar_experience_ (checked on supercarexp.vip, 29 Sept). Full episodes play on the site, never linked out to Instagram (Omarie, 29 Sept: they aren't on his Instagram).
@@ -52,6 +52,7 @@ Hero (footage wall, latest episode card) · episode title strip · Episodes rail
 - `[hidden]{display:none!important}` must stay in the CSS — without it a closed overlay blocks every tap (the 28 Sept bug).
 
 ## Open next steps
+- Cars named in episode chapters but not in `cars[]`: Rolls-Royce Cullinan, Ferrari Roma, Huracán EVO Spyder, McLaren GT. Add them (with Las Vegas rates from supercarexp.vip) and give their chapters the car id.
 - Some cars from the full rental list are missing (Omarie, 29 Sept: "we'll worry about that later").
 - Add Sep 24 and the Seattle McLaren trip episodes once approved.
 - Vegas cuts of the car ads (fixes the 4 hours / 21+ text in the bay and ads row).
