@@ -12,11 +12,12 @@ A static site for Supercar Experience (Las Vegas fleet rentals) plus Omarie's SE
 - `media/` — 9 ads (720p, from Dropbox `Supercar Experience/EXPVIP scottsdale ads` + `04 Flash Special Stories`) and 7 vlog previews `v_*.mp4` (12 s, 540p, from `05 Vlogs` v2.3 and the SE story reels in `NQ Studio/04 Exports`), each with a `.jpg` poster.
 
 ## Sections (in page order)
-Hero canvas road + reticle · promo ribbon · Garage (cards from `cars[]`, hover preview, tap opens `#bay` video drawer, compare 2) · Build a drive (price dial, 50% off 2nd day / 3rd day free, $299 under-25) · On air (ad reels) · Vlogs (player + preview grid from `EP[]`) · Rally countdown (Apr 9–12, 2027) · Booking plate (725) 425-3583.
+Hero canvas road + reticle · promo ribbon · Garage (cards from `cars[]`, hover preview, tap opens `#bay` video drawer, compare 2) · Build a drive (price dial, 50% off 2nd day / 3rd day free, $299 under-25) · On air (ad reels) · Vlogs (player + preview grid from `EP[]`) · Rally countdown (Apr 9–11, 2027) · Booking plate (725) 425-3583.
 
 ## Rules (from SE standards)
 - Text line (725) 425-3583. 25+ to drive, $299 underage fee. Egnyte as text only, never a logo.
-- Rates are from supercarexp.vip/cars (checked 28 Sept). Don't invent specs (hp, 0–60) — research first.
+- Rates are the Las Vegas listings on supercarexp.vip/cars (day and 5-hour, all 7 cars re-checked 28 Sept). Don't invent specs (hp, 0–60) — research first.
+- Rally facts follow supercarexp.vip/rally (Omarie's call, 28 Sept): 3 days, Apr 9–11 2027, 2 hotel nights, $1,599 per car, Las Vegas → San Diego → Santa Barbara. Its /cars page still lists the rally at $2,999, and the approved rally ads say Apr 9–12 with Las Vegas / Scottsdale / Boise; those conflicts are for the client to settle.
 - The car ads are Scottsdale cuts; Vegas versions and ads for the other ~28 cars still to make.
 - `[hidden]{display:none!important}` must stay in the CSS — without it the closed car bay blocks every tap (the 28 Sept bug).
 
