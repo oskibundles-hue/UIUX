@@ -4,8 +4,11 @@
 motion graphic", in the **Locked-On** style, picking three of the proposed groups: *depth titles*, *through-shot
 transitions* and *car trace*, on the same Sep 15 clip as the first 22 (DJI_0029, Red Rock Casino garage, 22:49). Set 2 adds
 what set 1 could not do: graphics **behind** people and cars, **windows** cut through the picture, **light on the car
-itself**, a lock that **turns with the car**, and true **slow motion** from the camera's 59.94 fps. **Status: not
-reviewed yet.** Nothing here has been posted.
+itself**, a lock that **turns with the car**, and true **slow motion** from the camera's 59.94 fps. **Status: reviewed.** Nothing here has been posted.
+
+**Reviewed 29 Sept 2026: B4 (name behind) and C4 (car trace) are kept.** Omarie: *"the name behind and the car trace
+were the only things i like from that"*. G3, C5, I4, I5 and I6 were not picked; their code stays here for reference but they
+are not part of the kit's offer.
 
 Set 1 is untouched: the 22 variations, `kit.html`, `build.py` and `README.md` render exactly as before. Set 2 has its own
 page (`kit2.html`), components (`lib/sekit2.js`), compositor (`lib/compose2.py`), build (`build2.py`), config
