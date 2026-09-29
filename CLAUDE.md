@@ -86,6 +86,31 @@ actions, memory-store writes, force pushes, `git reset --hard`, `git clean -f` a
 `/tmp`. It **refuses** any push to `main`. An "ask" waits for Omarie's click, so an unattended routine that hits
 one stops there until he answers.
 
+## Prompting Claude 5 models (sourced, not Omarie's own rule)
+
+From research, 2026-09-28 — Ben AI, "Anthropic Just Revealed 7 New Rules for Prompting Claude 5
+Models" (full notes on the `claude/deep-research-report-5oh5nm-gemini-notes` branch, under
+`research/agent-videos-2026-09-28/gemini-notes.md`, video 1). Applies to how the lead briefs
+specialist agents and how any agent prompts a Claude 5 model directly. This is adopted guidance,
+not a standing instruction from Omarie — update or drop it if it doesn't hold up.
+
+1. **Give the whole job, not steps.** State the task, guardrails and exit criteria up front rather
+   than spelling out step 1/2/3 for anything past a trivial task.
+2. **Say why, not just what.** A brief that names who the output is for and why it matters gets
+   better judgment calls on the details it doesn't spell out.
+3. **Define what done looks like.** State the exit criteria and output shape explicitly — Claude 5
+   models tend to over-run rather than under-run without one.
+4. **Reasons beat hard rules.** "Never do X" lands worse than "do Y, because Z." Prefer the second
+   form when writing standing rules, including in this file.
+5. **Don't ask it to double-check itself.** Skip "verify your work," "think step by step," or a
+   built-in review pass — Claude 5 models already self-correct on their own. Ask a human or the
+   `reviewer` agent for a second look instead, not the same model again.
+6. **Fix tone once, not every time.** If a specialist's output keeps needing the same tone or
+   format correction, put it in that agent's `.md` file once instead of repeating it in every brief.
+
+Left out: the source's "Interview Me" skill (Anthropic uses one internally to ask clarifying
+questions before a big task) — worth building only if we make a matching step for large briefs.
+
 ## Project Overview
 
 Antigravity Kit is an AI-powered design intelligence toolkit providing searchable databases of UI styles, color palettes, font pairings, chart types, and UX guidelines. It works as a skill/workflow for AI coding assistants (Claude Code, Windsurf, Cursor, etc.).
