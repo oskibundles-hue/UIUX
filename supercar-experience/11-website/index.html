@@ -786,7 +786,7 @@ footer nav a:hover{color:#fff}
       <div>
         <div class="eyebrow rv">[ Rentals <b>·</b> Las Vegas ]</div>
         <h2 class="h-lg kin">Want the <span class="o">keys?</span></h2>
-        <p class="lede rv">Hourly and daily rentals out of Las Vegas. Tap a car to watch its ad and see the rates, or price a drive below and text to book.</p>
+        <p class="lede rv">Hourly and daily rentals out of Las Vegas. Tap a car to watch it and see the rates, or price a drive below and text to book.</p>
       </div>
       <div class="filters rv" role="group" aria-label="Filter the cars">
         <button class="pill" type="button" data-g="all" aria-pressed="true">All</button>
@@ -897,15 +897,17 @@ const store={get(k,d){try{const v=localStorage.getItem(k);return v?JSON.parse(v)
    a third value is a car id in cars[] and shows a rent link for that chapter. ---------- */
 const EP=[
  {k:"scottsdale",d:"Sep 7",t:"Scottsdale and back",s:"The run from Las Vegas to the AZ shop in Scottsdale, and back to Vegas on a plane that night.",len:"2:48",sec:168,where:"Las Vegas → Scottsdale",mo:[3,"The run to Scottsdale","Cars move between Las Vegas and the AZ shop. Someone has to drive them there."],ch:[[0,"The trip"],[27.5,"In the car"],[51.5,"On the road"],[89,"The AZ shop"],[99,"Washed and ready"],[125,"At the shop"],[149.5,"Back in Vegas"]]},
- {k:"hybrid",d:"Sep 11",t:"The shoot and the V12",s:"A V12 in the shop, then a Rolls-Royce Cullinan delivered to a shoot, with a walk-through at the door.",len:"2:02",sec:122,where:"Las Vegas",mo:[66,"The hand-over","A Cullinan delivered to a shoot, and a walk-through at the door before the keys change hands."],ch:[[0,"The shoot"],[6.5,"V12 Vantage"],[32.5,"Cullinan"]]},
+ {k:"hybrid",d:"Sep 11",t:"The shoot and the V12",s:"A V12 in the shop, then a Rolls-Royce Cullinan delivered to a shoot, with a walk-through at the door.",len:"2:02",sec:122,where:"Las Vegas",mo:[66,"The hand-over","A Cullinan delivered to a shoot, and a walk-through at the door before the keys change hands."],ch:[[0,"The shoot"],[6.5,"V12 Vantage"],[32.5,"Cullinan","cullinan"]]},
  {k:"bday",d:"Sep 12",t:"27th birthday",s:"Birthday on the job: a Huracán STO delivered to a customer, a check that everything's right, then the Black Series picked up and driven home.",len:"2:29",sec:150,where:"Las Vegas",mo:[55,"Arriving at the customer","The car arrives, gets checked over together, and the next one is picked up."],ch:[[0,"The birthday"],[32.5,"Black Series","amg"],[121,"Huracán STO","sto"],[127.5,"Ferrari Roma"]]},
- {k:"pickup",d:"Sep 13",t:"Pickup day",s:"Travel day to collect the cars, with a dinner stop on the way.",len:"2:50",sec:170,where:"On the road",mo:[24,"Pickup day","A travel day just to collect the cars."],ch:[[0,"The trip"],[22,"Huracán EVO Spyder"]]},
- {k:"flat",d:"Sep 13",t:"The flat tyre",s:"Picks up where pickup day ends: a flat at a gas stop, sorted at night, and rolling out again.",len:"2:50",sec:170,where:"On the road",mo:[65,"The flat tyre","A flat at a gas stop, sorted in the dark, and the car back on the road."],ch:[[0,"Huracán EVO Spyder"],[45,"McLaren GT"]]},
+ {k:"pickup",d:"Sep 13",t:"Pickup day",s:"Travel day to collect the cars, with a dinner stop on the way.",len:"2:50",sec:170,where:"On the road",mo:[24,"Pickup day","A travel day just to collect the cars."],ch:[[0,"The trip"],[22,"Huracán EVO Spyder","evo"]]},
+ {k:"flat",d:"Sep 13",t:"The flat tyre",s:"Picks up where pickup day ends: a flat at a gas stop, sorted at night, and rolling out again.",len:"2:50",sec:170,where:"On the road",mo:[65,"The flat tyre","A flat at a gas stop, sorted in the dark, and the car back on the road."],ch:[[0,"Huracán EVO Spyder","evo"],[45,"McLaren GT","mclarengt"]]},
  {k:"rally",d:"Sep 15",t:"Rally day with Egnyte",s:"Convoy briefing, the run out, dinner and the drive back to Vegas.",len:"2:55",sec:175,where:"Las Vegas",mo:[134,"Rally day","Convoy briefing, the run out, and the whole group back to Vegas at night."],ch:[[0,"Rally day"],[26,"The lineup"],[54.5,"Egnyte arrives"],[79,"Roll out"],[88,"Red Rock"],[117,"The drive back"],[148,"The verdict"]]}
 ];
 EP.forEach((e,i)=>e.n=i+1);
 const LATEST=EP[EP.length-1];
-/* Rates: Las Vegas listings on supercarexp.vip/cars, day and 5-hour, all 7 checked 28 Sept 2026. */
+/* Rates: Las Vegas listings on supercarexp.vip/cars, day and 5-hour; the first 7 checked 28 Sept 2026, the EVO Spyder,
+   Cullinan and McLaren GT added and checked 29 Sept. Those three have no ads yet: their clips come from the episodes
+   (s0/s1/rate = the loop the card plays on hover). */
 const cars=[
  {id:"gt3",yr:2025,make:"Porsche",name:"911 GT3 RS",type:"Exotic",day:1799,five:1299,vids:[["Experience ad","gt3"],["Locked-On showcase","gt3_locked"]],flash:"5 hours · $1,200 flash special"},
  {id:"750s",yr:2026,make:"McLaren",name:"750S Spider",type:"Exotic",day:1799,five:1299,vids:[["Experience ad","750s"]]},
@@ -913,7 +915,10 @@ const cars=[
  {id:"f8",yr:2022,make:"Ferrari",name:"F8 Tributo",type:"Exotic",day:1599,five:1099,vids:[["Experience ad","f8"]]},
  {id:"amg",yr:2021,make:"Mercedes-AMG",name:"GT Black Series",type:"Exotic",day:1099,five:799,vids:[["Experience ad","amg"]],flash:"5 hours · $800 flash special"},
  {id:"tempesta",yr:2025,make:"Ferrari",name:"Tempesta",type:"Exotic",day:999,five:699,vids:[["Experience ad","tempesta"]]},
- {id:"urus",yr:2021,make:"Lamborghini",name:"Novitec Urus",type:"SUV",day:949,five:699,vids:[["Experience ad","urus"]]}
+ {id:"urus",yr:2021,make:"Lamborghini",name:"Novitec Urus",type:"SUV",day:949,five:699,vids:[["Experience ad","urus"]]},
+ {id:"evo",yr:2021,make:"Lamborghini",name:"Huracán EVO Spyder",type:"Exotic",day:1299,five:949,vids:[["From Pickup day","evo"]],s0:0,s1:2.65,rate:1},
+ {id:"cullinan",yr:2024,make:"Rolls-Royce",name:"Cullinan",type:"SUV",day:1199,five:899,vids:[["From The shoot and the V12","cullinan"]],s0:0,s1:3.9,rate:1},
+ {id:"mclarengt",yr:2021,make:"McLaren",name:"GT",type:"Exotic",day:899,five:649,vids:[["From The flat tyre","mclarengt"]],s0:0,s1:1.45,rate:.6}
 ];
 const CARS_STILL=cars.map(c=>c.id);
 const DEAL="50% off 2nd day or 3rd day free";
@@ -1094,7 +1099,7 @@ function renderChapters(e){
   $("#cht").innerHTML=ch.slice(1).map(c=>`<i style="left:${(c[0]/e.sec*100).toFixed(2)}%"></i>`).join("");
   $("#chl").innerHTML=ch.map((c,j)=>{const car=c[2]&&cars.find(x=>x.id===c[2]);
     return`<div class="chr"><button class="ch" type="button" data-t="${c[0]}" aria-label="Chapter ${j+1}, ${c[1]}, at ${fmt(c[0])}"><span class="n">${pad(j+1)}</span><b>${c[1]}</b><span class="t">${fmt(c[0])}</span><span class="p"><i></i></span></button>`+
-      (car?`<button class="rent" type="button" data-car="${car.id}">Rent the ${car.name} · ${money(car.day)}/day<svg class="i" viewBox="0 0 16 16"><path d="M4 12 12 4M5.5 4H12v6.5"/></svg></button>`:"")+`</div>`}).join("");
+      (car?`<button class="rent" type="button" data-car="${car.id}">Rent the ${car.make} ${car.name} · ${money(car.day)}/day<svg class="i" viewBox="0 0 16 16"><path d="M4 12 12 4M5.5 4H12v6.5"/></svg></button>`:"")+`</div>`}).join("");
   $$("#chl .ch").forEach(b=>b.onclick=()=>{pv.currentTime=+b.dataset.t;updTime();updCh();if(pv.paused)pv.play().catch(()=>{})});
   $$("#chl .rent").forEach(b=>b.onclick=()=>openBay(b.dataset.car));
   lastCh=-1;updCh();
@@ -1208,16 +1213,16 @@ function renderGarage(){
   if(!list.length){g.innerHTML='<div class="empty">No cars in this class yet.</div>';return}
   list.forEach((c,n)=>{
     const el=document.createElement("article");el.className="car rv";el.style.transitionDelay=(n%4)*60+"ms";
-    el.innerHTML=`<div class="cm"><div class="clip"><img src="${M}stills/${c.id}.jpg" alt="" loading="lazy"><video muted playsinline preload="none" src="${M}${c.vids[0][1]}.mp4#t=${S0}"></video></div>
+    el.innerHTML=`<div class="cm"><div class="clip"><img src="${M}stills/${c.id}.jpg" alt="" loading="lazy"><video muted playsinline preload="none" src="${M}${c.vids[0][1]}.mp4#t=${c.s0??S0}"></video></div>
       <div class="lk"><i></i><i></i><i></i><i></i></div>
       <div class="cchips"><span class="chip-p"><span data-reel="${money(c.day)}">${money(c.day)}</span><small>/day</small></span>${c.five?`<span class="chip-p">${money(c.five)}<small>/5 hrs</small></span>`:""}</div>
       <span class="tag dim cls">${c.type==="SUV"?"Super SUV":c.type}</span></div>
       <div class="cbx"><div><div class="yr">${c.yr} · ${c.make}</div><h3>${c.name}</h3></div><span class="bk" aria-hidden="true">Book${ARW}</span></div>
       <div class="cf"><span class="deal">${DEAL}</span><label class="cmp"><input type="checkbox" ${picked.has(c.id)?"checked":""}> Compare</label></div>
       <button class="open" type="button" aria-label="Open ${c.yr} ${c.make} ${c.name}: ${money(c.day)} a day${c.five?", "+money(c.five)+" for 5 hours":""}"></button>`;
-    const v=el.querySelector("video");
-    v.addEventListener("timeupdate",()=>{if(v.currentTime>=S1||v.currentTime<S0-.2)v.currentTime=S0});
-    el.addEventListener("mouseenter",()=>{if(matchMedia("(hover:hover)").matches&&!RM){el.classList.add("live");if(v.currentTime<S0)v.currentTime=S0;v.playbackRate=RATE;v.play().catch(()=>{})}});
+    const v=el.querySelector("video"),s0=c.s0??S0,s1=c.s1??S1,rt=c.rate??RATE;
+    v.addEventListener("timeupdate",()=>{if(v.currentTime>=s1||v.currentTime<s0-.2)v.currentTime=s0});
+    el.addEventListener("mouseenter",()=>{if(matchMedia("(hover:hover)").matches&&!RM){el.classList.add("live");if(v.currentTime<s0)v.currentTime=s0;v.playbackRate=rt;v.play().catch(()=>{})}});
     el.addEventListener("mouseleave",()=>{el.classList.remove("live");v.pause()});
     el.querySelector(".open").addEventListener("click",()=>openBay(c.id));
     el.querySelector("input").addEventListener("change",e=>{
@@ -1249,7 +1254,7 @@ function openBay(id,id2){
       const fm=v=>typeof v==="number"&&low?money(v):v;return`<tr><td>${l}</td><td class="${wa?"win":""}">${fm(va)}</td><td class="${wb?"win":""}">${fm(vb)}</td></tr>`};
     body.innerHTML=`<div class="eyebrow">[ Head to head ]</div><h2 id="bay-title">${a.name}<br><span style="color:var(--orange)">vs</span> ${b.name}</h2>
       <table class="cmp-t"><tr><th></th><th>${a.name}</th><th>${b.name}</th></tr>
-      ${row("Year",c=>c.yr)}${row("Class",c=>c.type==="SUV"?"Super SUV":c.type)}${row("Per day",c=>c.day,1)}${row("5 hours",c=>c.five||"—",1)}${row("2 days",c=>c.day*1.5,1)}${row("3 days",c=>c.day*2,1)}${row("Ads on file",c=>c.vids.length)}</table>
+      ${row("Year",c=>c.yr)}${row("Class",c=>c.type==="SUV"?"Super SUV":c.type)}${row("Per day",c=>c.day,1)}${row("5 hours",c=>c.five||"—",1)}${row("2 days",c=>c.day*1.5,1)}${row("3 days",c=>c.day*2,1)}${row("Videos on file",c=>c.vids.length)}</table>
       <p class="note" style="margin:0">Multi-day uses the advertised 2nd day half off or 3rd day free. Lower price in orange. Estimates before tax and deposit.</p>
       <div class="bay-actions"><a class="btn" href="#book" id="bay-book">Text to book${ARW}</a></div>`;
   }else{
