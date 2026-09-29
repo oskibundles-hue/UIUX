@@ -757,7 +757,7 @@ const HERO=["gt3","750s","sto","f8","amg","tempesta","urus"],S0=9.25,S1=10.8,RAT
 let hi=0,cur=0,hPaused=RM,hTimer=null,switching=false;
 const hvs=$$(".hv"),vf=$("#vf");
 $("#hv-dots").innerHTML=HERO.map((id,i)=>{const c=cars.find(x=>x.id===id);return`<button type="button" aria-label="${c.make} ${c.name}" data-i="${i}"></button>`}).join("");
-function inWin(v){const t=v.currentTime;return t>=S0-.05&&t<=S1+.25}
+function inWin(v){const t=v.currentTime;return t>=S0-.05&&t<=S1+.08}
 function prep(v,id){v.classList.remove("ok");if(v.dataset.id===id){try{v.currentTime=S0}catch(e){}return}
   v.dataset.id=id;v.poster=M+"stills/"+id+".jpg";v.src=M+id+".mp4#t="+S0;
   v.addEventListener("loadedmetadata",()=>{v.currentTime=S0;v.defaultPlaybackRate=v.playbackRate=RATE},{once:true});v.load()}
@@ -780,7 +780,7 @@ function heroSet(i,cut){
     $("#hc-open").onclick=()=>openBay(c.id);
     switching=false;setTimeout(()=>prep(hvs[1-cur],HERO[(hi+1)%HERO.length]),500);
   };
-  switching=true;
+  switching=true;ov.pause(); /* freeze the outgoing shot on the cut, before the ad's button can fade in */
   $("#vf-lk").classList.remove("on");vf.classList.remove("locked");$("#lk-state").textContent="Acquiring";
   if(cut&&!RM){vf.classList.remove("whip");void vf.offsetWidth;vf.classList.add("whip");setTimeout(swap,300)}else swap();
   clearTimeout(hTimer);hTimer=setTimeout(()=>{$("#vf-lk").classList.add("on");vf.classList.add("locked");$("#lk-state").textContent="Locked on"},cut&&!RM?700:250);
