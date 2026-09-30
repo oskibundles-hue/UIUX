@@ -58,9 +58,11 @@ in Dropbox itself, deliver it through the **Video Drop** page: https://claude.ai
 ## The NQ OS team (the main team in every session)
 
 Omarie, 2026-09-30: "I want my nq os team to be the main team that also runs with my second brain." The
-agents in `.claude/agents/` are the NQ OS agentmesh v1.2 classes, the same team his Mac runs. Each job
-goes to a class, and the class decides the model and effort. The policy and the reasons are in
-`.claude/agentmesh/MESH.md`; the Mac's `~/.nqos/os/agentmesh/` is the source of truth.
+agents in `.claude/agents/` are the NQ OS agentmesh classes, the same team his Mac runs. Each job goes
+to a class, and the class decides the model and effort. On 2026-09-30 he had the cloud cells tuned for
+speed ("assign each of my agents a sonnet to opus model ... for max efficiency"): Sonnet runs the lanes
+that follow a plan, Opus keeps the judgment calls. The policy and the reasons are in
+`.claude/agentmesh/MESH.md` (cloud v1.3); the Mac's `~/.nqos/os/agentmesh/` is still on v1.2.
 
 The main session is the **lead**. It talks to Omarie, plans, briefs one agent at a time, delivers and
 pushes. Every agent looks facts up in the second brain first and hands back to the lead, never
@@ -68,13 +70,13 @@ straight to Omarie.
 
 | agent | class | model/effort | job |
 |---|---|---|---|
-| `nq-run` | run | opus/low | run a script or read a file; report the lines word for word |
-| `nq-label` | label | opus/low | tags, captions, sorting, contact-sheet calls; never a verdict |
-| `nq-build` | build | opus/medium | build the piece or write the step and run it, including sourced research reports |
+| `nq-run` | run | sonnet/low | run a script or read a file; report the lines word for word |
+| `nq-label` | label | sonnet/low | tags, captions, sorting, contact-sheet calls; never a verdict |
+| `nq-build` | build | sonnet/medium | build the piece or write the step and run it, including sourced research reports |
 | `nq-fix` | fix | opus/medium | debug a failing chain and patch the source |
 | `nq-check` | check | opus/medium | read-only quality pass before delivery: style, brand, layout, frames, copy, loudness |
 | `nq-story` | story | opus/high | the big creative call: options with a recommendation, for the lead to put to Omarie |
-| `nq-facts` | facts (floor) | opus/xhigh | every figure and claim in the delivered file traced to a named source |
+| `nq-facts` | facts (floor) | opus/high | every figure and claim in the delivered file traced to a named source |
 | `nq-second` | second (floor) | sonnet/high | independent voter on a different model; may only add a block |
 
 The `plate` class is switched off, so it has no agent.
