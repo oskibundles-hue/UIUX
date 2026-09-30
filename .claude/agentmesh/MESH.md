@@ -1,0 +1,75 @@
+# agentmesh v1.2 in cloud sessions
+
+Omarie's NQ OS team is the main team in every session (Omarie, 2026-09-30: "I want my nq os team to be
+the main team that also runs with my second brain"). Each job goes to a **class**, and the class
+decides the model and effort, so nobody picks a model per agent by feel. The source of truth is the
+Mac's `~/.nqos/os/agentmesh/` (`MESH.md`, `router_block.js`), where v1.2 was applied on 2026-09-27.
+This file is the cloud copy of the policy. Change the classes on the Mac first, then here.
+
+## The table
+
+| class | agent | model/effort | floor | what it is | examples |
+|---|---|---|:--:|---|---|
+| `run` | `nq-run` | opus/low | | run a script, read a file, report lines word for word | run a checker and return its result lines; confirm a file exists and parses |
+| `label` | `nq-label` | opus/low | | tags, captions, sorting, contact-sheet calls — never a verdict | tag 40 files by topic; accept/reject thumbnails from one contact sheet |
+| `build` | `nq-build` | opus/medium | | write or patch a step and run it | build an ad from a cue; write a converter and run it; a sourced research report |
+| `fix` | `nq-fix` | opus/medium | | debug a failing chain | a script exits 1; an output is the wrong length; an off-by-one |
+| `check` | `nq-check` | opus/medium | | is this good enough to show the owner | the quality and copy pass on a finished piece; which variant is strongest |
+| `story` | `nq-story` | opus/high | | the big creative call | the angle, the hook, the concept, one piece or two |
+| `plate` | — | opus/high | **yes** | visual truth check on the delivered file | switched off; no cloud agent until plate work comes back |
+| `facts` | `nq-facts` | opus/xhigh | **yes** | numbers, specs, names, "we did X" | a spec with no source becomes BLOCKED, not guessed |
+| `second` | `nq-second` | sonnet/high | **yes** | independent voter | its own look at the same delivered file; may only **add** a block |
+
+v1.2 (2026-09-26): Opus 5.5 everywhere except `second`, which must be a different model from the floor
+it votes with. Fable is retired. `facts` runs at xhigh: on the 2026-09-26 bench, high, xhigh and max
+gave the same answers and max thought 12x longer.
+
+`build` applies a planned change; `fix` diagnoses a failure. The workstream knowledge (branches,
+pipelines, brand rules) lives in `.claude/playbooks/`, and the brief names the playbook, so the same
+`nq-build` builds a Formula Dynamics ad, a Supercar Experience vlog or an Anti Stock reel.
+
+## The two rules that matter
+
+**1. A floor is a procedure with an evidence contract, not a model.**
+A gate once passed a file twice because it checked a record *about* the file, never the file itself.
+A better model on the same input passes the same way. So `facts` and `second`:
+
+- never receive a detector, gate or other agent's verdict in their brief;
+- must name the exact file they examined and return per-claim evidence (the claim, where it appears,
+  its source);
+- a result without those fields is **BLOCKED regardless of which model produced it**;
+- run as a panel of two on different models: **either voter may block, only both together may clear**;
+- an empty or missing result is a block, never a smaller panel.
+
+**2. Mechanical failures never escalate.**
+`run`, `build` and `fix` retry **once on the same class**, then report. A broken flag or a recurring
+off-by-one is a source patch, not a reasoning problem; a bigger model fails at it identically and burns
+the top lane doing so.
+
+## The usual chain
+
+One agent at a time (`.claude/settings.json` caps it). The lead briefs each one with the class, the
+playbook and, for creative work, the style Omarie picked.
+
+    nq-story (only if the direction isn't settled) → Omarie picks
+    nq-build → nq-check → [nq-facts → nq-second, when the piece carries figures or claims] → lead delivers
+
+A failure in `nq-build` goes to `nq-fix`, then back to `nq-build` or on to `nq-check`.
+
+## Where the tokens go (measured on the original NQ OS)
+
+A 20-agent probe cost ~1.1M tokens for twenty three-question agents: **about 55k per agent, nearly
+the same on Haiku and Opus**, because almost all of it is fixed context loaded at agent start.
+
+**So the lever is fewer agents, not cheaper agents.** Three cheap agents cost more than one strong
+agent doing all three jobs. The worst week on record came from two long-*resumed* agents (400–565k
+context per call), about 90% of a week's usage. Hence: one call, one job, fresh context; merge small
+jobs before handing them out; a floor agent is always fresh. Small jobs the lead can do in a few
+commands stay with the lead.
+
+## Workflows
+
+The Mac runs multi-agent jobs through `router_block.js` (`go()`, `goLabel()`, `panel()`, `done()`),
+stamped into each Workflow script by `mesh_new.py`. Those files aren't in this repo yet. Cloud sessions
+run the classes as the agents above, one at a time, and use a Workflow only when a job can't be done
+well without one (CLAUDE.md, "No ultracode unless necessary").

@@ -31,7 +31,7 @@ style should be used."
 2. **Then build that style all the way**: its techniques, process and quality bar, in the workstream's own brand. The
    page's gold on black is Supercar Experience's; Formula Dynamics keeps FD red and Bebas Neue, Anti Stock keeps its
    own look, and two brands never share a video.
-3. **Specialist agents never ask Omarie themselves.** The lead asks, then names the style in the brief. An agent
+3. **Agents never ask Omarie themselves.** The lead asks, then names the style in the brief. An agent
    whose brief names no style stops and asks the lead.
 
 The rules and the feedback log are in `supercar-experience/09-campaign-ads/HOUSE-STYLE.md` on the SE branch
@@ -55,23 +55,47 @@ in Dropbox itself, deliver it through the **Video Drop** page: https://claude.ai
   5. Once he has saved it, confirm the file in Dropbox at the exact size.
 - The page holds 1 GiB. Clear older cards only once they're confirmed in Dropbox, and ask him first.
 
-## Specialist agents (lead, specialists, reviewer)
+## The NQ OS team (the main team in every session)
 
-The main session is the **lead**. It talks to Omarie, plans, delivers and pushes. The specialists in
-`.claude/agents/` each do one job, look facts up in the second brain first, and hand back to the lead,
-never straight to Omarie.
+Omarie, 2026-09-30: "I want my nq os team to be the main team that also runs with my second brain." The
+agents in `.claude/agents/` are the NQ OS agentmesh v1.2 classes, the same team his Mac runs. Each job
+goes to a class, and the class decides the model and effort. The policy and the reasons are in
+`.claude/agentmesh/MESH.md`; the Mac's `~/.nqos/os/agentmesh/` is the source of truth.
 
-| agent | job | model |
-|---|---|---|
-| `researcher` | watch videos, research tools and trends; sourced reports (skill `watch`) | sonnet |
-| `anti-stock-editor` | personal-channel reels via `creator-kit/` (Anti Stock branch) | sonnet |
-| `fd-ads` | Formula Dynamics builds, in a worktree of the FD branch | opus, high effort |
-| `se-ads` | Supercar Experience builds, in a worktree of an SE branch | opus, high effort |
-| `reviewer` | read-only check before delivery: figures, brand, layout, frames, copy (skill `slopmonster`), loudness | opus |
+The main session is the **lead**. It talks to Omarie, plans, briefs one agent at a time, delivers and
+pushes. Every agent looks facts up in the second brain first and hands back to the lead, never
+straight to Omarie.
 
-The usual run is **build → reviewer → lead delivers**: a chain of one agent at a time, not a fan-out. The
-builders work in worktrees of their workstream's branch, because this default branch doesn't carry
-`creator-kit/`, `formula-dynamics/` or `supercar-experience/`.
+| agent | class | model/effort | job |
+|---|---|---|---|
+| `nq-run` | run | opus/low | run a script or read a file; report the lines word for word |
+| `nq-label` | label | opus/low | tags, captions, sorting, contact-sheet calls; never a verdict |
+| `nq-build` | build | opus/medium | build the piece or write the step and run it, including sourced research reports |
+| `nq-fix` | fix | opus/medium | debug a failing chain and patch the source |
+| `nq-check` | check | opus/medium | read-only quality pass before delivery: style, brand, layout, frames, copy, loudness |
+| `nq-story` | story | opus/high | the big creative call: options with a recommendation, for the lead to put to Omarie |
+| `nq-facts` | facts (floor) | opus/xhigh | every figure and claim in the delivered file traced to a named source |
+| `nq-second` | second (floor) | sonnet/high | independent voter on a different model; may only add a block |
+
+The `plate` class is switched off, so it has no agent.
+
+**Brief with the class, the playbook and the style.** The workstream knowledge (branches, worktrees,
+pipelines, brand rules) is in `.claude/playbooks/`: `formula-dynamics.md`, `supercar-experience.md`,
+`anti-stock.md`, `research.md`, and `review.md` for the checks. Name the one that applies, so the same
+`nq-build` builds any workstream's piece. Builders work in worktrees of their workstream's branch,
+because this default branch doesn't carry `creator-kit/`, `formula-dynamics/` or `supercar-experience/`.
+
+**The usual chain** is `nq-build` → `nq-check` → lead delivers. When the piece carries figures, specs,
+prices, names or "we did X" claims, the facts panel runs before delivery: `nq-facts`, then
+`nq-second`. Either can block, and only both together clear. Don't pass one voter's verdict to the
+other, because a vote that saw the other's answer isn't independent. Run `nq-story` first only when
+the creative direction isn't settled.
+
+**A failed step goes sideways, not up.** `run`, `build` and `fix` retry once on the same class, then
+report; the lead sends a failure to `nq-fix`. A bigger model fails at a broken flag the same way.
+
+**Fewer agents is the saving.** An agent costs about 55k tokens of start-up context whatever the model,
+so a job the lead can do in a few commands stays with the lead.
 
 **Claude Code enforces the chain** (Omarie, 2026-09-28). `.claude/settings.json` sets
 `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` and `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` to 1: one subagent runs at a time,
@@ -91,7 +115,7 @@ one stops there until he answers.
 From research, 2026-09-28 — Ben AI, "Anthropic Just Revealed 7 New Rules for Prompting Claude 5
 Models" (full notes on the `claude/deep-research-report-5oh5nm-gemini-notes` branch, under
 `research/agent-videos-2026-09-28/gemini-notes.md`, video 1). Applies to how the lead briefs
-specialist agents and how any agent prompts a Claude 5 model directly. This is adopted guidance,
+the NQ OS agents and how any agent prompts a Claude 5 model directly. This is adopted guidance,
 not a standing instruction from Omarie — update or drop it if it doesn't hold up.
 
 1. **Give the whole job, not steps.** State the task, guardrails and exit criteria up front rather
@@ -103,9 +127,9 @@ not a standing instruction from Omarie — update or drop it if it doesn't hold 
 4. **Reasons beat hard rules.** "Never do X" lands worse than "do Y, because Z." Prefer the second
    form when writing standing rules, including in this file.
 5. **Don't ask it to double-check itself.** Skip "verify your work," "think step by step," or a
-   built-in review pass — Claude 5 models already self-correct on their own. Ask a human or the
-   `reviewer` agent for a second look instead, not the same model again.
-6. **Fix tone once, not every time.** If a specialist's output keeps needing the same tone or
+   built-in review pass — Claude 5 models already self-correct on their own. Ask a human or
+   `nq-check` for a second look instead, not the same agent again.
+6. **Fix tone once, not every time.** If an agent's output keeps needing the same tone or
    format correction, put it in that agent's `.md` file once instead of repeating it in every brief.
 
 Left out: the source's "Interview Me" skill (Anthropic uses one internally to ask clarifying
