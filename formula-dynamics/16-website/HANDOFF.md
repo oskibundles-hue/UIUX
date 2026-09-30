@@ -1,9 +1,13 @@
 # HANDOFF — Formula Dynamics site, "The Job Board" (built 30 Sept 2026)
 
 Branch: `claude/fd-website-render` (from `claude/formula-dynamics-assets-bnlnkm`). Never push to main.
-Render service: `formula-dynamics-job-board` (config in `/render.yaml`). The share pages assume the URL
-`https://formula-dynamics-job-board.onrender.com`; if Render gives a different one, change `BASE` in
-`../16-website-tools/make_episode_pages.py` and the canonical/og URLs at the top of `index.html`, then re-run the tool.
+Render service: `formula-dynamics-job-board`, live at
+`https://formula-dynamics-job-board.onrender.com` since 30 Sept 2026, 2:07 PM Pacific. It auto-deploys on every push to
+this branch. It was created with the Render connector, not as a Blueprint, so `/render.yaml` is not linked to it:
+change settings in the Render dashboard (publish directory `formula-dynamics/16-website`, build command a no-op
+echo). The 7-day `Cache-Control` on `/media/*` from `render.yaml` isn't set on the live service; add it under
+Settings → Headers if wanted. The share pages and the canonical/og URLs at the top of `index.html` use that URL
+(`BASE` in `../16-website-tools/make_episode_pages.py`).
 
 ## What it is
 The FD counterpart of the Supercar Experience site (supercar-experience-garage.onrender.com). Four jobs at once:
