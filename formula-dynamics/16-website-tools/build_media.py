@@ -43,7 +43,7 @@ COVER = dict(floor=72.9, sf90=57.6, tune=85.3, movein=58.6, inventory=104.3, mc2
 
 # before/after pairs: (id, episode, before second, after second, crop "w:h:x:y" or None for a full 9:16 split card)
 BA = [
-    ('detail', 'detail', 11.5, 66.0, '1080:900:0:700'),
+    # ('detail', ...) dropped 30 Sept: nq-check found it read backwards (clean car, then foam).
     ('ppf', 'ppf', 52.5, 60.0, '1080:860:0:430'),
     ('floor', 'floor', 32.0, 116.0, None),
     ('sf90', 'sf90', 90.0, 118.0, None),
