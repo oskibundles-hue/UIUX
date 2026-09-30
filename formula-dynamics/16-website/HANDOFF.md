@@ -85,3 +85,10 @@ F8 Spider's taillight cavity. The F8 Spider has a 3.9 L twin-turbo V8 (ferrari.c
 blurs that label, its POWERTRAIN tag and the reticle for those seconds only (logo, captions, length and chapters unchanged). The
 approved episode in Dropbox is untouched. Rebuild it with:
 `ffmpeg -i mc20.mp4 -filter_complex "[0:v]split=4[m][x][y][z];[x]crop=470:135:430:445,boxblur=luma_radius=30:luma_power=3:chroma_radius=15:chroma_power=2[a];[y]crop=280:55:430:395,boxblur=luma_radius=20:luma_power=3:chroma_radius=10:chroma_power=2[b];[z]crop=420:420:270:555,boxblur=luma_radius=40:luma_power=3:chroma_radius=20:chroma_power=2[c];[m][a]overlay=430:445:enable='between(t,80.05,83.8)'[m1];[m1][b]overlay=430:395:enable='between(t,80.05,83.8)'[m2];[m2][c]overlay=270:555:enable='between(t,80.05,83.8)',scale=720:1280:flags=lanczos[v]" -map "[v]" -map 0:a` plus the usual web-copy encode settings above.
+
+### Valve-controller spotlight (media/parts/valve-spot.mp4): trimmed web copy
+The approved spotlight master (`01 Valve controller - the build (video, 20s, sound on) (v4, graded).mp4`, posted 26 Sept) opens
+with a "FERRARI F8 SPYDER" title card for its first ~3.6 s. The model is the F8 Spider, so the site's copy starts at 3.9 s
+(first frame "02 ON THE LIFT") and the poster is the 4.5 s frame. `build_media.py` does this (`-ss 3.9`); re-encoding
+straight from the master would bring the misspelling back. The master itself is untouched.
+
