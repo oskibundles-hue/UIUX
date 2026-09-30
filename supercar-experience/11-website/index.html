@@ -291,6 +291,9 @@ h1,h2,h3{font-family:var(--f);font-weight:800;text-transform:uppercase;letter-sp
 .player .clip{position:absolute;inset:0;border-radius:22px;overflow:hidden;background:#000;box-shadow:0 50px 120px -40px rgba(0,0,0,.95),0 0 0 1px var(--d-line)}
 .player video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
 .player .lk{inset:-12px}
+/* iPhone Safari can paint a playing video black under backdrop blur, so nothing over the player blurs (30 Sept) */
+.player .tag.dim{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(10,10,12,.72)}
+@media (pointer:coarse){.nav{backdrop-filter:none;-webkit-backdrop-filter:none;background:rgba(10,10,12,.97)}}
 .player:fullscreen,.player:-webkit-full-screen{width:100%;height:100%;aspect-ratio:auto;border-radius:0;background:#000}
 .player:fullscreen .clip{border-radius:0}
 .big{position:absolute;left:50%;top:50%;z-index:5;width:92px;height:92px;margin:-46px 0 0 -46px;border-radius:50%;border:0;background:var(--orange);color:var(--ink);display:grid;place-items:center;box-shadow:0 20px 50px -10px rgba(255,79,22,.55);animation:pulse 2.2s var(--ease) infinite;transition:transform .3s var(--ease),opacity .3s}
@@ -326,7 +329,7 @@ h1,h2,h3{font-family:var(--f);font-weight:800;text-transform:uppercase;letter-sp
 .time span{color:var(--d-mute)}
 .vol{width:70px;accent-color:var(--orange)}
 .grow{flex:1}
-.upnext{position:absolute;inset:0;z-index:7;border-radius:22px;background:rgba(10,10,12,.82);backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);display:grid;place-items:center;text-align:center;padding:24px}
+.upnext{position:absolute;inset:0;z-index:7;border-radius:22px;background:rgba(10,10,12,.92);display:grid;place-items:center;text-align:center;padding:24px}
 .upnext .in{display:grid;gap:14px;justify-items:center;max-width:260px}
 .ring{position:relative;width:86px;height:86px}
 .ring svg{width:86px;height:86px;transform:rotate(-90deg)}
@@ -993,8 +996,15 @@ function watch(root=document){$$(".kin,.rv,[data-reel]",root).forEach(el=>{if(!e
 const NET=navigator.connection||{};
 const SAVER=!!(NET.saveData||/(^|-)2g$|^3g$/.test(NET.effectiveType||""));
 const SMALL=innerWidth<560||matchMedia("(pointer:coarse)").matches;
-/* play muted loops only while on screen */
-const loopIO=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target;if(e.isIntersecting&&!RM&&!SAVER){if(v.preload==="none")v.preload="auto";v.play().catch(()=>{})}else v.pause()}),{threshold:.1});
+/* play muted loops only while on screen. On phones a loop that leaves the screen also drops its source:
+   iPhone Safari allows only a few live video players, and paused loops kept theirs, which left the full
+   episode black (30 Sept). The poster or the image under each loop shows meanwhile. */
+const TOUCH=matchMedia("(pointer:coarse)").matches;
+const LOOPS=new Set();
+function sleepV(v){v.pause();if(TOUCH&&v.getAttribute("src")){v.dataset.src=v.getAttribute("src");v.removeAttribute("src");v.load()}}
+function wakeV(v){if(v.dataset.src&&!v.getAttribute("src"))v.src=v.dataset.src;if(v.preload==="none")v.preload="auto";v.play().catch(()=>{})}
+function watchLoop(v){LOOPS.add(v);loopIO.observe(v)}
+const loopIO=new IntersectionObserver(es=>es.forEach(e=>{const v=e.target;if(e.isIntersecting&&!RM&&!SAVER&&!(TOUCH&&pvBusy()))wakeV(v);else sleepV(v)}),{threshold:.1});
 
 /* ---------- scroll progress ---------- */
 const sp=$("#sprog");
@@ -1024,7 +1034,7 @@ $("#stats").innerHTML=[[pad(EP.length),"Episodes"],[String(totalMin),"Minutes of
       for(let t=0;t<count;t++){
         const src=pool[(pi++*5+c*3)%pool.length];
         const el=document.createElement("div");el.className="tile";
-        if(src.v&&vids<videoBudget&&(t+c)%2===0){vids++;el.innerHTML=`<video muted loop playsinline preload="none" poster="${src.p}" src="${src.v}"></video><span class="tn">${src.n}</span>`;loopIO.observe(el.querySelector("video"))}
+        if(src.v&&vids<videoBudget&&(t+c)%2===0){vids++;el.innerHTML=`<video muted loop playsinline preload="none" poster="${src.p}" src="${src.v}"></video><span class="tn">${src.n}</span>`;watchLoop(el.querySelector("video"))}
         else el.innerHTML=`<img src="${src.p}" alt="" loading="lazy">`+(src.n?`<span class="tn">${src.n}</span>`:"");
         col.appendChild(el);tiles.push(el);
       }
@@ -1041,7 +1051,7 @@ $("#stats").innerHTML=[[pad(EP.length),"Episodes"],[String(totalMin),"Minutes of
 
 /* ---------- latest episode card in the hero ---------- */
 $("#sh-img").src=M+"ep/"+LATEST.k+".jpg";
-const shv=$("#sh-vid");shv.src=M+"ep/"+LATEST.k+"-loop.mp4";shv.poster=M+"ep/"+LATEST.k+".jpg";loopIO.observe(shv);
+const shv=$("#sh-vid");shv.src=M+"ep/"+LATEST.k+"-loop.mp4";shv.poster=M+"ep/"+LATEST.k+".jpg";watchLoop(shv);
 $("#sh-len").textContent=LATEST.len;$("#sh-meta").textContent=`EP ${pad(LATEST.n)} · ${LATEST.d}`;$("#sh-title").textContent=LATEST.t;
 $("#sh-play").onclick=()=>openEp(LATEST.k,{play:true,scroll:true});
 
@@ -1081,6 +1091,7 @@ let railDragged=false;
 
 /* ---------- theatre: full episodes ---------- */
 const pv=$("#pv"),player=$("#player");
+function pvBusy(){return !pv.paused&&!pv.ended}
 let cur=null,unTimer=null,saveT=0;
 function renderQueue(){
   const p=prog();
@@ -1141,7 +1152,7 @@ function updCh(){
 function saveProg(force){if(!cur)return;const now=Date.now();if(!force&&now-saveT<4000)return;saveT=now;const p=prog();p[cur.k]=pv.ended?cur.sec:pv.currentTime;store.set("sev-prog",p)}
 pv.addEventListener("timeupdate",()=>{updTime();updCh();saveProg()});
 pv.addEventListener("progress",updTime);
-pv.addEventListener("play",()=>{$$(".reel-c video").forEach(v=>{if(!v.muted){v.pause();v.closest(".reel-c").classList.remove("playing")}});player.classList.add("playing");$("#pp-ico").innerHTML='<path d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/>';$("#pv-pp").setAttribute("aria-label","Pause");$("#pv-big").setAttribute("aria-label","Pause");$("#th-play").firstChild.textContent="Pause";bump();amb()});
+pv.addEventListener("play",()=>{if(TOUCH)LOOPS.forEach(sleepV);$$(".reel-c video").forEach(v=>{if(!v.muted){v.pause();v.closest(".reel-c").classList.remove("playing")}});player.classList.add("playing");$("#pp-ico").innerHTML='<path d="M4 2.5h3v11H4zM9 2.5h3v11H9z"/>';$("#pv-pp").setAttribute("aria-label","Pause");$("#pv-big").setAttribute("aria-label","Pause");$("#th-play").firstChild.textContent="Pause";bump();amb()});
 pv.addEventListener("pause",()=>{player.classList.remove("playing","idle");$("#pp-ico").innerHTML='<path d="M4 2.5v11L13.5 8z"/>';$("#pv-pp").setAttribute("aria-label","Play");$("#pv-big").setAttribute("aria-label","Play");$("#th-play").firstChild.textContent="Play episode";saveProg(true);renderRail();renderQueue()});
 pv.addEventListener("ended",()=>{saveProg(true);renderRail();renderQueue();showUpNext()});
 const toggle=()=>{if(!cur)openEp(LATEST.k);pv.paused?pv.play().catch(()=>{}):pv.pause()};
@@ -1170,8 +1181,10 @@ player.addEventListener("keydown",e=>{if(e.target.closest(".scrub")||e.target.ta
   if(k===" "||k==="k"){e.preventDefault();toggle()}else if(k==="j"){pv.currentTime=Math.max(0,pv.currentTime-10)}else if(k==="l"){pv.currentTime=Math.min(pv.duration||0,pv.currentTime+10)}else if(k==="m"){$("#pv-mute").click()}else if(k==="f"){$("#pv-fs").click()}});
 /* ambient glow: the playing frame, tiny and blurred, behind the player */
 const ac=$("#amb").getContext("2d");let ambT=0;
-function amb(){if(RM)return;clearTimeout(ambT);(function draw(){if(pv.paused||pv.ended)return;try{ac.drawImage(pv,0,0,18,32)}catch(e){}ambT=setTimeout(draw,140)})()}
-pv.addEventListener("loadeddata",()=>{try{ac.drawImage(pv,0,0,18,32)}catch(e){}});
+const LIVE_AMB=!TOUCH;   /* drawing live frames out of the video is skipped on phones (iPhone Safari) */
+function ambCover(){if(!cur)return;const im=new Image();im.onload=()=>{try{ac.clearRect(0,0,18,32);ac.drawImage(im,0,0,18,32)}catch(e){}};im.src=M+"ep/"+cur.k+".jpg"}
+function amb(){if(RM)return;if(!LIVE_AMB){ambCover();return}clearTimeout(ambT);(function draw(){if(pv.paused||pv.ended)return;try{ac.drawImage(pv,0,0,18,32)}catch(e){}ambT=setTimeout(draw,140)})()}
+pv.addEventListener("loadeddata",()=>{if(!LIVE_AMB)return ambCover();try{ac.drawImage(pv,0,0,18,32)}catch(e){}});
 /* up next, with a six-second ring */
 function showUpNext(){
   const i=EP.findIndex(x=>x.k===cur.k),nx=EP[i+1];
@@ -1203,7 +1216,7 @@ document.addEventListener("click",e=>{const a=e.target.closest("[data-ep]");if(!
     <div class="body"><div class="dt">${e.d} · EP ${pad(e.n)}</div><h3>${e.mo[1]}</h3><p>${e.mo[2]}</p>
     <button class="btn sm" type="button" data-t="${e.mo[0]}"><span class="wf">Watch </span>from ${fmt(e.mo[0])}<span class="ar" aria-hidden="true"><svg class="i" viewBox="0 0 16 16" style="fill:currentColor;stroke:none"><path d="M5 3.2v9.6L13 8z"/></svg></span></button></div></article>`).join("");
   dots.innerHTML=EP.map(e=>`<span>${e.d}</span>`).join("");
-  $$(".mo",track).forEach(m=>{m.querySelector(".btn").onclick=ev=>{ev.stopPropagation();openEp(m.dataset.k,{t:+ev.currentTarget.dataset.t,play:true,scroll:true})};loopIO.observe(m.querySelector("video"))});
+  $$(".mo",track).forEach(m=>{m.querySelector(".btn").onclick=ev=>{ev.stopPropagation();openEp(m.dataset.k,{t:+ev.currentTarget.dataset.t,play:true,scroll:true})};watchLoop(m.querySelector("video"))});
   const mos=$$(".mo",track),ds=$$("span",dots);
   const setOn=i=>{mos.forEach((m,j)=>m.classList.toggle("on",j===i));ds.forEach((d,j)=>d.classList.toggle("on",j<=i))};
   const wide=()=>innerWidth>900&&!RM;
