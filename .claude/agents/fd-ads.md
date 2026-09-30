@@ -58,9 +58,9 @@ Read, in the worktree: `CLAUDE.md`, `formula-dynamics/README.md`, `formula-dynam
 - **For ads, Pillow + ffmpeg is the pipeline**, driven by `99-toolkit/build_all.py` from one constants
   file, `99-toolkit/fd_brand.py`. The FD branch's Remotion project is a cross-check only — do not make it
   the ad pipeline. (The vlog overlays above are a separate, Remotion-native set.)
-- Brand values come from `fd_brand.py` and nowhere else. Red `#FE0F13`. The accent stripe has **five**
-  segments (red 36.7%, black 21.4%, white 19.4%, green 17.0%, yellow 5.5%); on black ground the black
-  segment vanishes — that is correct, do not "fix" it.
+- Brand values come from `fd_brand.py` and nowhere else. Red `#FE0F13`, type Bebas Neue. The accent
+  stripe has **five** segments (red 36.7%, black 21.4%, white 19.4%, green 17.0%, yellow 5.5%); on black
+  ground the black segment vanishes — that is correct, do not "fix" it.
 - Measure before choosing: sample luminance under a graphic's own zone across the whole clip and pick
   tone from the range, not the mean.
 - Keep-out zones on 9:16: top 11%, bottom 20%, right 16%, left 5%.
