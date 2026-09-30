@@ -124,10 +124,11 @@ def products():
         print('part', n)
     v = data['installed_on_camera']
     photo(v['images'][0], os.path.join(d, 'valve.jpg'))
-    ff('-i', os.path.join(STORE, 'valvecontroller-spotlight.mp4'), '-vf', 'scale=720:900:flags=lanczos', '-c:v', 'libx264', '-preset', 'slow',
+    # the site copy starts at 3.9 s, after the spotlight's 'F8 SPYDER' title card (the page says 'F8 Spider'); the approved master is untouched
+    ff('-ss', 3.9, '-i', os.path.join(STORE, 'valvecontroller-spotlight.mp4'), '-vf', 'scale=720:900:flags=lanczos', '-c:v', 'libx264', '-preset', 'slow',
        '-crf', 23, '-maxrate', '2500k', '-bufsize', '5000k', '-pix_fmt', 'yuv420p', '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart',
        os.path.join(d, 'valve-spot.mp4'))
-    ff('-ss', 2, '-i', os.path.join(STORE, 'valvecontroller-spotlight.mp4'), '-frames:v', 1, '-vf', 'scale=720:-2', '-q:v', 4, os.path.join(d, 'valve-spot.jpg'))
+    ff('-ss', 4.5, '-i', os.path.join(STORE, 'valvecontroller-spotlight.mp4'), '-frames:v', 1, '-vf', 'scale=720:-2', '-q:v', 4, os.path.join(d, 'valve-spot.jpg'))
     print('valve')
 
 

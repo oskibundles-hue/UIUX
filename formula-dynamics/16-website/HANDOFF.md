@@ -70,7 +70,7 @@ The store photo is only resized, never graded.
 - No performance figures anywhere (no hp, 0–60, gains). Loops and covers avoid the episodes' hp callouts.
 
 ## Open items
-- **Dry ice blasting** and **Turbo upgrades** show `[SHOP TO SUPPLY A LINE]` in the service menu.
+- **Dry ice blasting** and **Turbo upgrades** use lines from the shop's own service pages (`/services/dry-ice-blasting`, `/services/turbo-upgrades`, 30 Sept). Swap in anything the shop prefers.
 - Jobs 09 and 10 have no burned-in chapter bars; each has one line from its title card.
 - Job 12 has a brief "00:07 The fix" label; it's left out of the labor lines (two seconds after "One actuator live").
 - Vendor tag for RYFT products is written "ryft" (prose rule); the product titles are the store's own and keep "RYFT".
