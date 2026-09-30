@@ -41,7 +41,7 @@ def page(e, total):
     title = f"Job {n}: {e['t']} · Formula Dynamics"
     url = f"{BASE}/ep/{k}/"
     img = f"{BASE}/media/share/{k}.jpg"
-    desc = f"{e['s']} Full episode, {e['len']}, filmed {e['d']}, 2026, in our Las Vegas shop."
+    desc = f"{e['s']} Full episode, {e['len']}, filmed {e['d']}, 2026, at our Las Vegas shop."
     ld = {"@context": "https://schema.org", "@type": "VideoObject", "name": f"Job {n}: {e['t']}",
           "description": e['s'], "thumbnailUrl": [f"{BASE}/media/ep/{k}.jpg", img], "uploadDate": iso_day(e['d']),
           "duration": "PT%dM%dS" % divmod(e['sec'], 60), "contentUrl": f"{BASE}/media/ep/{k}.mp4",
