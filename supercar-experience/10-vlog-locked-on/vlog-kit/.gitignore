@@ -1,0 +1,10 @@
+# work folders and frame sequences (rebuilt by build.py)
+.work/
+.work2/
+__pycache__/
+lib/__pycache__/
+lib/cache/
+exports/qa/_tmp/
+# the CRF master is over 30 MB; the two-pass _DELIVERY copy (< 30 MiB) is the one to keep
+exports/vlog-kit-reel.mp4
+*.mov
