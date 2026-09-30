@@ -49,7 +49,7 @@ Hero (footage wall, latest episode card) · episode title strip · Episodes rail
 - Rates are the Las Vegas listings on supercarexp.vip/cars (day and 5-hour). Since 29 Sept the site lists every Las Vegas car there (27; the rally listing is left out), checked that day. The Escalade has its own deal (rent 2 days, get the 3rd free, so no half-price 2nd day: `d2full`); the R8, C8 and AMG GT 43 have no 5-hour rate. Don't invent specs (hp, 0–60) — research first.
 - Rally facts follow supercarexp.vip/rally (Omarie's call, 28 Sept): 3 days, Apr 9–11 2027, 2 hotel nights, $1,599 per car, Las Vegas → San Diego → Santa Barbara. Its /cars page still lists the rally at $2,999, its home page says Apr 9–12, and the approved rally ads say Apr 9–12 with Las Vegas / Scottsdale / Boise; those conflicts are for the client to settle.
 - **The car ads are Scottsdale cuts**: their graphics say 4 HOURS and 21+ (the site says 5 hours and 25+), and a gold RESERVE button fades in at 10.9 s. Car-card hovers play only the clean shot, 9.25–10.8 s, at 0.55x (`S0`, `S1`, `RATE`). The car bay and the ads row still play the full ads.
-- **iPhone video (30 Sept fix for a black player):** on touch screens every muted loop goes through `watchLoop()` and drops its source when it leaves the screen, all loops are freed when an episode plays, the glow behind the player uses the cover (`LIVE_AMB` off), and nothing over the player may use `backdrop-filter`. Keep new autoplaying videos on `watchLoop()`. Not yet confirmed on a real iPhone.
+- **iPhone video (30 Sept fix for a black player):** on touch screens every muted loop goes through `watchLoop()` and drops its source when it leaves the screen, all loops are freed when an episode plays, the glow behind the player uses the cover (`LIVE_AMB` off), and nothing over the player may use `backdrop-filter`. Keep new autoplaying videos on `watchLoop()`. Confirmed working on Omarie's iPhone, 30 Sept.
 - `[hidden]{display:none!important}` must stay in the CSS — without it a closed overlay blocks every tap (the 28 Sept bug).
 
 ## Open next steps
@@ -59,4 +59,4 @@ Hero (footage wall, latest episode card) · episode title strip · Episodes rail
 - Add Sep 24 and the Seattle McLaren trip episodes once approved.
 - Vegas cuts of the car ads (fixes the 4 hours / 21+ text in the bay and ads row).
 - "Type behind the car" (the one Locked-On effect not on the site): needs a matte and a clean frame per car.
-- Not yet checked on a real phone.
+- Episode playback checked on Omarie's iPhone (30 Sept); the rest of the page not yet gone through on a phone.
