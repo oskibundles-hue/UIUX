@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>FD share card</title>
+<!-- 1200x630 link-preview card for one job (or the series). Rendered by make_episode_pages.py.
+     Query: ?k=<key>&m=<media url>&no=12&d=Sep 18&t=<title>&car=<car>&len=2:44   or   ?k=series&m=<media url>&count=12 -->
+<style>
+@font-face{font-family:"Bebas Neue";src:url("../16-website/media/fonts/BebasNeue-400.woff2")}
+@font-face{font-family:"Barlow";font-weight:500;src:url("../16-website/media/fonts/Barlow-500.woff2")}
+@font-face{font-family:"Barlow";font-weight:600;src:url("../16-website/media/fonts/Barlow-600.woff2")}
+@font-face{font-family:"JetBrains Mono";font-weight:400 700;src:url("../16-website/media/fonts/JetBrainsMono.woff2")}
+*{box-sizing:border-box}
+html,body{margin:0;width:1200px;height:630px;overflow:hidden;background:#000;color:#fff;font-family:Barlow,Arial,sans-serif}
+.card{position:relative;width:1200px;height:630px;display:grid;grid-template-columns:420px 1fr}
+.shot{position:relative;background:#0B0B0B;overflow:hidden}
+.shot img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.shot .tag{position:absolute;left:18px;bottom:18px;background:#000;padding:8px 10px;font:700 14px/1 "JetBrains Mono",monospace;letter-spacing:.14em;display:flex;gap:8px;align-items:center}
+.sq{display:inline-block;width:10px;height:10px;background:#FE0F13}
+.body{position:relative;padding:44px 56px 40px 52px;display:flex;flex-direction:column}
+.logo{width:190px}
+.eb{margin-top:40px;font:500 17px/1 "JetBrains Mono",monospace;letter-spacing:.16em;color:#A3A3A3;display:flex;gap:12px;align-items:center;text-transform:uppercase}
+h1{margin:18px 0 0;font:400 92px/.9 "Bebas Neue","Bebas Local",Impact,sans-serif;letter-spacing:.02em;text-transform:uppercase}
+.car{margin-top:16px;font:600 26px/1.2 Barlow,Arial,sans-serif;color:#C9C9C9}
+.ruler{margin-top:auto;height:16px;border-bottom:2px solid rgba(255,255,255,.85);position:relative;
+  background-image:repeating-linear-gradient(90deg,rgba(255,255,255,.45) 0 1px,transparent 1px 14px),repeating-linear-gradient(90deg,rgba(255,255,255,.95) 0 2px,transparent 2px 112px);
+  background-size:100% 7px,100% 15px;background-position:0 100%,0 100%;background-repeat:repeat-x}
+.ruler i{position:absolute;bottom:-2px;left:68%;width:4px;height:22px;background:#FE0F13}
+.foot{display:flex;justify-content:space-between;align-items:center;margin-top:18px;font:500 15px/1 "JetBrains Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+.cta{font:400 34px/1 "Bebas Neue","Bebas Local",Impact,sans-serif;letter-spacing:.04em;background:#FE0F13;padding:10px 14px 8px}
+.stripe{position:absolute;right:56px;top:62px;display:flex;width:170px;height:7px}
+.stripe i{display:block;height:100%}
+.stripe i:nth-child(1){width:36.7%;background:#FE0F13}.stripe i:nth-child(2){width:21.4%;background:#000}.stripe i:nth-child(3){width:19.4%;background:#fff}.stripe i:nth-child(4){width:17%;background:#1DB14B}.stripe i:nth-child(5){width:5.5%;background:#FFDE00}
+.series .shot{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:1fr 1fr 1fr;gap:3px;background:#FE0F13}
+.series .shot img{position:static;width:100%;height:208px;min-height:0;object-fit:cover}
+</style>
+</head>
+<body>
+<div class="card" id="c">
+  <div class="shot" id="shot"></div>
+  <div class="body">
+    <img class="logo" id="logo" alt="">
+    <div class="stripe"><i></i><i></i><i></i><i></i><i></i></div>
+    <div class="eb" id="eb"></div>
+    <h1 id="h"></h1>
+    <div class="car" id="car"></div>
+    <div class="ruler"><i></i></div>
+    <div class="foot"><span>formuladynamicsperformance.com</span><span class="cta">Book your build</span></div>
+  </div>
+</div>
+<script>
+const q=new URLSearchParams(location.search),m=q.get("m")||"../16-website/media/";
+document.getElementById("logo").src=m+"brand/fd-primary-horizontal--white.svg";
+if(q.get("k")==="series"){
+  document.getElementById("c").classList.add("series");
+  const keys=["valve2","floor","sf90","mc20","rangerover","detail"];
+  document.getElementById("shot").innerHTML=keys.map(k=>`<img src="${m}ep/${k}.jpg" alt="">`).join("");
+  document.getElementById("eb").innerHTML='<span class="sq"></span>Las Vegas · '+(q.get("count")||"12")+" jobs on camera";
+  document.getElementById("h").textContent="The job board";
+  document.getElementById("car").textContent="Watch the work in our shop, then book the same work for your car.";
+}else{
+  const k=q.get("k");
+  document.getElementById("shot").innerHTML=`<img src="${m}ep/${k}.jpg" alt=""><div class="tag"><span class="sq"></span>JOB ${q.get("no")} · ${q.get("len")}</div>`;
+  document.getElementById("eb").innerHTML=`<span class="sq"></span>Job ${q.get("no")} · filmed ${q.get("d")}, 2026`;
+  document.getElementById("h").textContent=q.get("t");
+  document.getElementById("car").textContent=q.get("car")+" · Formula Dynamics, Las Vegas";
+}
+</script>
+</body>
+</html>
