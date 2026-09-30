@@ -78,3 +78,10 @@ The store photo is only resized, never graded.
   "ChatGPT_Image…"). They're used as the store shows them; the shop may want real photos.
 - Not yet checked on a real iPhone. H.264 playback was tested with VP9 stand-ins (the test Chromium has no H.264).
 - The approved 12th ad (white 911 oil service) isn't in the repo, so it's not in the rail.
+
+### Job 06 (mc20) web copy: one callout blurred
+The source episode carries a burned-in callout "POWERTRAIN · 3.0L TWIN-TURBO V6" from about 1:20.1 to 1:23.7, pointing at the
+F8 Spider's taillight cavity. The F8 Spider has a 3.9 L twin-turbo V8 (ferrari.com); 3.0 L V6 is the MC20's engine. The site's copy
+blurs that label, its POWERTRAIN tag and the reticle for those seconds only (logo, captions, length and chapters unchanged). The
+approved episode in Dropbox is untouched. Rebuild it with:
+`ffmpeg -i mc20.mp4 -filter_complex "[0:v]split=4[m][x][y][z];[x]crop=470:135:430:445,boxblur=luma_radius=30:luma_power=3:chroma_radius=15:chroma_power=2[a];[y]crop=280:55:430:395,boxblur=luma_radius=20:luma_power=3:chroma_radius=10:chroma_power=2[b];[z]crop=420:420:270:555,boxblur=luma_radius=40:luma_power=3:chroma_radius=20:chroma_power=2[c];[m][a]overlay=430:445:enable='between(t,80.05,83.8)'[m1];[m1][b]overlay=430:395:enable='between(t,80.05,83.8)'[m2];[m2][c]overlay=270:555:enable='between(t,80.05,83.8)',scale=720:1280:flags=lanczos[v]" -map "[v]" -map 0:a` plus the usual web-copy encode settings above.
