@@ -110,9 +110,12 @@ first to finish. Sessions with ultracode on are never refused.
 **The regret-list gate is on** (Omarie, 2026-09-27). `.claude/hooks/regret_gate.py` runs before every Bash
 and connector call (wired in `.claude/settings.json`). It **asks** before any paid Higgsfield call (quote the
 cost first), anything that publishes or changes a live account, Dropbox moves or deletes, Windsor.ai write
-actions, memory-store writes, force pushes, `git reset --hard`, `git clean -f` and recursive deletes outside
-`/tmp`. It **refuses** any push to `main`. An "ask" waits for Omarie's click, so an unattended routine that hits
-one stops there until he answers.
+actions, memory-store writes, force pushes, `git reset --hard`, `git clean -f`, and recursive deletes (`rm -r`,
+`find -delete`) outside `/tmp`. It **refuses** any push to `main`, `master` or this repo's default branch
+`claude/new-session-mucc2q`, because those only change through a PR. That covers a bare `git push` from one of them,
+`git -C`, and commands wrapped in `sudo`, `env` or `bash -c`. Its GitHub connector rules are on too: it refuses
+file writes to those branches and asks before merging a PR. An "ask" waits for Omarie's click, so an unattended routine that hits one stops there until
+he answers. Test it with `python3 .claude/hooks/test_regret_gate.py`.
 
 ## Prompting Claude 5 models (sourced, not Omarie's own rule)
 
@@ -227,7 +230,7 @@ Python 3.x (no external dependencies required)
 
 ## Git Workflow
 
-Never push directly to `main`. Always:
+Never push directly to `main` or the default branch (`claude/new-session-mucc2q`); the regret gate refuses both. Always:
 
 1. Create a new branch: `git checkout -b feat/...` or `fix/...`
 2. Commit changes
