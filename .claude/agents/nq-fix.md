@@ -1,8 +1,8 @@
 ---
 name: nq-fix
-description: NQ OS fix class (agentmesh cloud v1.3, opus/medium). Debugs a failing chain — a script exits 1, an output is the wrong length, an off-by-one, a render that stops partway. Finds the cause, patches the source, re-runs the step that failed and shows it passing. Use when nq-build or nq-run reports a failure.
+description: NQ OS fix class (agentmesh cloud v1.3, sonnet/medium). Debugs a failing chain — a script exits 1, an output is the wrong length, an off-by-one, a render that stops partway. Finds the cause, patches the source, re-runs the step that failed and shows it passing. Use when nq-build or nq-run reports a failure.
 tools: Read, Write, Edit, Grep, Glob, Bash
-model: opus
+model: sonnet
 effort: medium
 memory: project
 ---

@@ -61,7 +61,9 @@ Omarie, 2026-09-30: "I want my nq os team to be the main team that also runs wit
 agents in `.claude/agents/` are the NQ OS agentmesh classes, the same team his Mac runs. Each job goes
 to a class, and the class decides the model and effort. On 2026-09-30 he had the cloud cells tuned for
 speed ("assign each of my agents a sonnet to opus model ... for max efficiency"): Sonnet runs the lanes
-that follow a plan, Opus keeps the judgment calls. The policy and the reasons are in
+that follow a plan, Opus keeps the judgment calls. The head-to-head bench the same day moved build to
+Opus (only Opus caught a real defect in its own spec) and fix to Sonnet (same answer, twice as fast);
+see `.claude/agentmesh/bench-2026-09-30.md`. The policy and the reasons are in
 `.claude/agentmesh/MESH.md` (cloud v1.3); the Mac's `~/.nqos/os/agentmesh/` is still on v1.2.
 
 The main session is the **lead**. It talks to Omarie, plans, briefs one agent at a time, delivers and
@@ -72,8 +74,8 @@ straight to Omarie.
 |---|---|---|---|
 | `nq-run` | run | sonnet/low | run a script or read a file; report the lines word for word |
 | `nq-label` | label | sonnet/low | tags, captions, sorting, contact-sheet calls; never a verdict |
-| `nq-build` | build | sonnet/medium | build the piece or write the step and run it, including sourced research reports |
-| `nq-fix` | fix | opus/medium | debug a failing chain and patch the source |
+| `nq-build` | build | opus/medium | build the piece or write the step and run it, including sourced research reports |
+| `nq-fix` | fix | sonnet/medium | debug a failing chain and patch the source |
 | `nq-check` | check | opus/medium | read-only quality pass before delivery: style, brand, layout, frames, copy, loudness |
 | `nq-story` | story | opus/high | the big creative call: options with a recommendation, for the lead to put to Omarie |
 | `nq-facts` | facts (floor) | opus/high | every figure and claim in the delivered file traced to a named source |

@@ -1,8 +1,8 @@
 ---
 name: nq-build
-description: NQ OS build class (agentmesh cloud v1.3, sonnet/medium). Writes or patches a step and runs it — an ad, a reel, an overlay, a still set, a deliverable set, a script, or a sourced research report. The brief names the playbook (formula-dynamics, supercar-experience, anti-stock or research) and, for creative work, the style. Hands back to the lead, who sends the result to nq-check.
+description: NQ OS build class (agentmesh cloud v1.3, opus/medium). Writes or patches a step and runs it — an ad, a reel, an overlay, a still set, a deliverable set, a script, or a sourced research report. The brief names the playbook (formula-dynamics, supercar-experience, anti-stock or research) and, for creative work, the style. Hands back to the lead, who sends the result to nq-check.
 tools: Read, Write, Edit, Grep, Glob, Bash, WebFetch, WebSearch
-model: sonnet
+model: opus
 effort: medium
 memory: project
 ---

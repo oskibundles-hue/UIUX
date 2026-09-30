@@ -13,8 +13,8 @@ change. Keep the two in step: when one changes, note it in the other.
 |---|---|---|:--:|---|---|
 | `run` | `nq-run` | sonnet/low | | run a script, read a file, report lines word for word | run a checker and return its result lines; confirm a file exists and parses |
 | `label` | `nq-label` | sonnet/low | | tags, captions, sorting, contact-sheet calls — never a verdict | tag 40 files by topic; accept/reject thumbnails from one contact sheet |
-| `build` | `nq-build` | sonnet/medium | | write or patch a step and run it | build an ad from a cue; write a converter and run it; a sourced research report |
-| `fix` | `nq-fix` | opus/medium | | debug a failing chain | a script exits 1; an output is the wrong length; an off-by-one |
+| `build` | `nq-build` | opus/medium | | write or patch a step and run it | build an ad from a cue; write a converter and run it; a sourced research report |
+| `fix` | `nq-fix` | sonnet/medium | | debug a failing chain | a script exits 1; an output is the wrong length; an off-by-one |
 | `check` | `nq-check` | opus/medium | | is this good enough to show the owner | the quality and copy pass on a finished piece; which variant is strongest |
 | `story` | `nq-story` | opus/high | | the big creative call | the angle, the hook, the concept, one piece or two |
 | `plate` | — | opus/high | **yes** | visual truth check on the delivered file | switched off; no cloud agent until plate work comes back |
@@ -34,6 +34,18 @@ Evidence behind it (2026-09-30 facts-panel test on a fixture with known answers)
 opus/xhigh took 117 s and 39k tokens; `nq-second` at sonnet/high took 35 s and 22k tokens and caught the
 same three problems. v1.2 (2026-09-26) had Opus everywhere but `second`, so one run paid one cold cache
 start; a chain now pays two (Sonnet and Opus), which the cheaper Sonnet lanes more than cover.
+
+**Head-to-head bench, 2026-09-30** (`bench-2026-09-30.md`): build, check, fix and story each did the
+same real job on Sonnet and on Opus, and the rule was to keep Sonnet unless Opus got something right
+that Sonnet missed. Two cells moved. `build` goes to **opus/medium**: asked for a token counter that
+keeps the last usage record per message id, only Opus found that every transcript record is written
+mid-stream, so "last record" still undercounts output about 10x, and it took the final usage from the
+Agent result instead; Sonnet's build ran but its output column was wrong. `fix` goes to
+**sonnet/medium**: both found and reverted the planted bug and restored eval to 33/33, Sonnet in 24 s
+against 51 s. `check` stays on Opus (it caught a defect Sonnet's check passed), `story` stays on Opus
+(Omarie called the blind pair even; Sonnet's set carried a wrong claim about the brief), and `label`
+stays on Sonnet (58/58). Trade-off: `check` and `build` are now the same model, so the quality gate is
+no longer a different model from the builder; the facts panel still is.
 
 `build` applies a planned change; `fix` diagnoses a failure. The workstream knowledge (branches,
 pipelines, brand rules) lives in `.claude/playbooks/`, and the brief names the playbook, so the same
