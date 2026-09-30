@@ -1,0 +1,716 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Unanswered Threads</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap">
+<style>
+  :root {
+    --paper:      #eceef1;
+    --surface:    #ffffff;
+    --surface-2:  #f4f6f8;
+    --line:       #d2d8de;
+    --line-soft:  #e4e8ec;
+    --ink:        #15181d;
+    --ink-2:      #3c4450;
+    --muted:      #6b7480;
+    --accent:     #0e6a68;
+    --accent-ink: #0a4f4e;
+    --accent-wash:#e0eeed;
+    --live:       #ad3f1d;
+    --moot:       #8a6716;
+    --dead:       #66707c;
+    --ok:         #1d6b45;
+
+    --font-display: "Archivo", "Helvetica Neue", Arial, sans-serif;
+    --font-body: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+    --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  }
+
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --paper:      #101317;
+      --surface:    #171c22;
+      --surface-2:  #1c222a;
+      --line:       #2b333c;
+      --line-soft:  #222a32;
+      --ink:        #e7ebf0;
+      --ink-2:      #bcc5cf;
+      --muted:      #8a94a0;
+      --accent:     #45b5ae;
+      --accent-ink: #84d6d0;
+      --accent-wash:#17302f;
+      --live:       #e07f52;
+      --moot:       #cfa543;
+      --dead:       #8a94a0;
+      --ok:         #4cb583;
+    }
+  }
+  :root[data-theme="dark"] {
+    --paper:      #101317;
+    --surface:    #171c22;
+    --surface-2:  #1c222a;
+    --line:       #2b333c;
+    --line-soft:  #222a32;
+    --ink:        #e7ebf0;
+    --ink-2:      #bcc5cf;
+    --muted:      #8a94a0;
+    --accent:     #45b5ae;
+    --accent-ink: #84d6d0;
+    --accent-wash:#17302f;
+    --live:       #e07f52;
+    --moot:       #cfa543;
+    --dead:       #8a94a0;
+    --ok:         #4cb583;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 15px;
+    line-height: 1.55;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap {
+    max-width: 960px;
+    margin: 0 auto;
+    padding-inline: 20px;
+    padding-block: 40px 72px;
+  }
+
+  /* ---------- masthead ---------- */
+
+  .eyebrow {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 14px;
+  }
+  .eyebrow b { color: var(--accent-ink); font-weight: 500; }
+
+  h1 {
+    font-family: var(--font-display);
+    font-weight: 700;
+    font-size: clamp(32px, 6.4vw, 50px);
+    letter-spacing: -0.028em;
+    line-height: 1.02;
+    margin: 0 0 14px;
+    text-wrap: balance;
+  }
+
+  .standfirst {
+    margin: 0;
+    max-width: 62ch;
+    font-size: 16.5px;
+    color: var(--ink-2);
+  }
+
+  .tally {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-top: 30px;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .tally div {
+    flex: 1 1 120px;
+    padding: 14px 18px 13px 0;
+    margin-right: 18px;
+    border-right: 1px solid var(--line-soft);
+  }
+  .tally div:last-child { border-right: 0; margin-right: 0; }
+  .tally .n {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 26px;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+    display: block;
+    line-height: 1.1;
+  }
+  .tally .k {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .tally .live .n { color: var(--live); }
+  .tally .moot .n { color: var(--moot); }
+  .tally .dead .n { color: var(--dead); }
+
+  /* ---------- shortest path ---------- */
+
+  .path {
+    margin-top: 32px;
+    padding: 20px 22px;
+    background: var(--accent-wash);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 4px 4px 0;
+  }
+  .path h2 {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--accent-ink);
+    margin: 0 0 12px;
+    font-weight: 500;
+  }
+  .path ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 9px; }
+  .path li { display: flex; gap: 11px; align-items: baseline; font-size: 15px; color: var(--ink); }
+  .path .ref {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent-ink);
+    flex: 0 0 auto;
+    padding-top: 1px;
+  }
+
+  /* ---------- toolbar ---------- */
+
+  .toolbar {
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    margin-top: 40px;
+    padding: 11px 0 10px;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    flex-wrap: wrap;
+  }
+  .progress { display: flex; align-items: baseline; gap: 9px; }
+  .progress .count {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 17px;
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.01em;
+  }
+  .progress .lbl {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+  }
+  .bar {
+    flex: 1 1 120px;
+    height: 4px;
+    min-width: 90px;
+    background: var(--line);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .22s ease; }
+  .toolbar .right { margin-left: auto; display: flex; align-items: center; gap: 14px; }
+
+  .switch {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--muted);
+    cursor: pointer;
+  }
+  .switch input { accent-color: var(--accent); width: 14px; height: 14px; }
+
+  .sync {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--muted);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    white-space: nowrap;
+  }
+  .sync::before {
+    content: "";
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--muted);
+  }
+  .sync[data-state="on"] { color: var(--ok); }
+  .sync[data-state="on"]::before { background: var(--ok); }
+  .sync[data-state="off"]::before { background: var(--moot); }
+
+  /* ---------- groups ---------- */
+
+  .group { margin-top: 40px; }
+  .group > header {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+    margin-bottom: 4px;
+  }
+  .group h2 {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 19px;
+    letter-spacing: -0.015em;
+    margin: 0;
+  }
+  .group .gcount {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--muted);
+    font-variant-numeric: tabular-nums;
+  }
+  .group .gnote {
+    margin: 0 0 18px;
+    color: var(--muted);
+    font-size: 14px;
+    max-width: 68ch;
+  }
+  .group[data-band="live"] h2 { color: var(--live); }
+  .group[data-band="moot"] h2 { color: var(--moot); }
+  .group[data-band="dead"] h2 { color: var(--dead); }
+
+  .items { display: grid; gap: 12px; }
+
+  /* ---------- item ---------- */
+
+  .item {
+    background: var(--surface);
+    border: 1px solid var(--line-soft);
+    border-left: 3px solid var(--band);
+    border-radius: 3px;
+    padding: 17px 20px 15px;
+    display: grid;
+    gap: 10px;
+    transition: opacity .18s ease;
+  }
+  .item[data-band="live"] { --band: var(--live); }
+  .item[data-band="moot"] { --band: var(--moot); }
+  .item[data-band="dead"] { --band: var(--dead); }
+
+  .item.cleared { opacity: .52; }
+  .item.cleared .ttl { text-decoration: line-through; text-decoration-thickness: 1px; }
+
+  .itop { display: flex; gap: 14px; align-items: baseline; flex-wrap: wrap; }
+  .num {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--muted);
+    flex: 0 0 auto;
+    font-variant-numeric: tabular-nums;
+  }
+  .ttl {
+    font-family: var(--font-display);
+    font-weight: 600;
+    font-size: 17.5px;
+    letter-spacing: -0.014em;
+    margin: 0;
+    flex: 1 1 320px;
+    text-wrap: balance;
+  }
+
+  .meta {
+    font-family: var(--font-mono);
+    font-size: 11.5px;
+    color: var(--muted);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 10px;
+    line-height: 1.5;
+  }
+  .meta span { white-space: nowrap; }
+  .meta .sep { opacity: .45; }
+
+  .ask {
+    border-left: 2px solid var(--line);
+    padding: 2px 0 2px 13px;
+    margin: 0;
+    color: var(--ink-2);
+  }
+  .ask .lab {
+    display: block;
+    font-family: var(--font-mono);
+    font-size: 10.5px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin-bottom: 2px;
+  }
+  .ask q { font-style: italic; }
+
+  .say { margin: 0; color: var(--ink-2); }
+  .say b { color: var(--ink); font-weight: 600; }
+  .say code {
+    font-family: var(--font-mono);
+    font-size: 12.5px;
+    background: var(--surface-2);
+    border: 1px solid var(--line-soft);
+    border-radius: 2px;
+    padding: 0 4px;
+    white-space: nowrap;
+  }
+
+  .seg {
+    display: inline-flex;
+    border: 1px solid var(--line);
+    border-radius: 3px;
+    overflow: hidden;
+    width: fit-content;
+    background: var(--surface-2);
+  }
+  .seg button {
+    appearance: none;
+    border: 0;
+    border-right: 1px solid var(--line);
+    background: transparent;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--muted);
+    padding: 6px 13px;
+    cursor: pointer;
+    transition: background .14s ease, color .14s ease;
+  }
+  .seg button:last-child { border-right: 0; }
+  .seg button:hover { color: var(--ink); background: var(--line-soft); }
+  .seg button[aria-pressed="true"] { background: var(--ink); color: var(--surface); }
+  .seg button[aria-pressed="true"]:hover { background: var(--ink); color: var(--surface); }
+  .seg button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
+
+  footer.foot {
+    margin-top: 46px;
+    padding-top: 18px;
+    border-top: 1px solid var(--line);
+    color: var(--muted);
+    font-size: 13.5px;
+  }
+  footer.foot p { margin: 0 0 7px; max-width: 72ch; }
+  footer.foot code {
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+
+  a { color: var(--accent-ink); }
+
+  @media (prefers-reduced-motion: reduce) {
+    * { transition: none !important; }
+  }
+
+  @media (max-width: 560px) {
+    .wrap { padding-block: 28px 56px; }
+    .tally div { flex-basis: 45%; }
+    .toolbar { position: static; }
+  }
+</style>
+
+<div class="wrap">
+
+  <p class="eyebrow">Session audit &middot; <b>13 Sep 2026</b> &middot; 21 sessions reviewed</p>
+  <h1>Unanswered Threads</h1>
+  <p class="standfirst">
+    Every question a session left waiting on you, pulled from each one&rsquo;s stored
+    <span style="font-family:var(--font-mono);font-size:13.5px">needs_action</span> state, then checked
+    against the repo, the connectors and the artifact gallery as they stand today.
+  </p>
+
+  <div class="tally">
+    <div><span class="n">14</span><span class="k">open threads</span></div>
+    <div class="live"><span class="n">6</span><span class="k">still blocking</span></div>
+    <div class="moot"><span class="n">3</span><span class="k">answered by default</span></div>
+    <div class="dead"><span class="n">5</span><span class="k">dead</span></div>
+    <div><span class="n">91d</span><span class="k">oldest unanswered</span></div>
+  </div>
+
+  <section class="path">
+    <h2>Shortest path</h2>
+    <ul>
+      <li><span class="ref">01</span><span>Reconnect the Formula Dynamics ad connectors &mdash; nothing paid can be read until then.</span></li>
+      <li><span class="ref">02</span><span>Answer the reels session: rebuild MR3/4/6, or post the clean five now.</span></li>
+      <li><span class="ref">04</span><span>Merge or close PR&nbsp;#2 &mdash; it is the only thing holding two skill changes.</span></li>
+    </ul>
+  </section>
+
+  <div class="toolbar">
+    <div class="progress">
+      <span class="count" id="count">0 / 14</span>
+      <span class="lbl">cleared</span>
+    </div>
+    <div class="bar"><i id="bar"></i></div>
+    <div class="right">
+      <label class="switch" for="hide-cleared">
+        <input type="checkbox" id="hide-cleared">
+        Hide cleared
+      </label>
+      <span class="sync" id="sync" data-state="wait">Connecting</span>
+    </div>
+  </div>
+
+  <div id="board"></div>
+
+  <footer class="foot">
+    <p>
+      Scope: 21 sessions on this account, plus open branches and pull requests in
+      <code>oskibundles-hue/UIUX</code>. Five sessions finished with nothing pending &mdash; HANDOFF.md,
+      Motion graphics &amp; colour grade, Resume update, Skills download / supercar ads, Formula Dynamics ad.
+    </p>
+    <p>
+      Two standing facts behind several rows: the repo no longer has a <code>main</code> branch
+      (default is <code>claude/new-session-mucc2q</code>, so &ldquo;merge&rdquo; means merging there), and every
+      unmerged branch named here still exists &mdash; nothing was garbage-collected.
+    </p>
+  </footer>
+</div>
+
+<script>
+(function () {
+  "use strict";
+
+  var ITEMS = [
+    {
+      id: "fd-connectors", band: "live", n: "01",
+      title: "Reconnect the Formula Dynamics ad connectors",
+      meta: ["Formula Dynamics business reels for Meta ads", "asked 8 Sep", "5 days open", "session_01A11LJi"],
+      ask: "reconnect FD connectors (facebook, google_ads, bing, google_merchant, googleanalytics4, openai_ads, tiktok)",
+      say: "<b>Still blocking &mdash; verified live today.</b> Windsor currently holds only <code>instagram</code> (nq.young), <code>tiktok_organic</code> (Youngomarie) and <code>youtube</code>. The FD ad accounts are still disconnected, so the $3,109.46 of paid spend over 90 days remains unreadable. The organic read it did deliver &mdash; car POV and motivational outperform, 35.2% skip on &ldquo;Trust the process&rdquo; &mdash; stands on its own and needs no reconnect."
+    },
+    {
+      id: "reels-go", band: "live", n: "02",
+      title: "Say go on the reel rebuilds, or post the clean five",
+      meta: ["Instagram growth and video editing", "touched 12 Sep", "most recent open ask", "session_0134RSxd"],
+      ask: "say go to rebuild MR3/4/6, or post the 5 clean ones first",
+      say: "<b>Still live.</b> Post order MR8 &rarr; MR1 &rarr; MR2 &rarr; MR5 &rarr; MR7 stands; MR3/4/6 are held for caption rebuilds. A second ask in the same session is also unanswered: the Supercar re-host and the 765LT figures have to come from you, and nothing since has supplied them. Unposted reels only get staler."
+    },
+    {
+      id: "ad-ratios", band: "live", n: "03",
+      title: "Re-cut the 16:9 YouTube master, verify 12 service line items",
+      meta: ["Formula Dynamics video asset library", "flagged 8 Sep", "sheet updated 12 Sep", "session_0155AVEL"],
+      ask: "16:9 YouTube needs re-cut; 12 service line items need verification",
+      say: "<b>Still relevant.</b> The session closed itself &ldquo;completed&rdquo; but flagged these two on the way out, and the Ad Ratios Filing Sheet was updated on 12 Sep &mdash; this is live work, not a stale tail. The 66 ad files are filed under <code>/Portfolio/07 Ad Ratios/</code>; the 12 line items are pricing and service facts only you can confirm."
+    },
+    {
+      id: "pr2", band: "live", n: "04",
+      title: "Merge or close PR #2 &mdash; and the two questions inside it",
+      meta: ["Add fd-house-style skill; drop ui-styling", "opened 12 Sep", "3 comments, no reply", "claude/eloquent-ptolemy-umwi4i"],
+      ask: "may I open a separate PR for the broken workflow? / ANTHROPIC_API_KEY is unset at repo level",
+      say: "<b>Both questions check out.</b> <code>python-package-conda.yml</code> is GitHub&rsquo;s stock conda starter: there is no <code>environment.yml</code> in the repo and no tests, so it has gone red on every branch since 11 Sep &mdash; ten consecutive runs across five branches. And <code>claude-review</code> fails on every PR because the repo secret is unset; only you can add that under Settings &rarr; Secrets &rarr; Actions. Meanwhile 5.8&nbsp;MB of <code>ui-styling</code> stays in <code>.claude/skills/</code> until this merges."
+    },
+    {
+      id: "vertical-ad-cut", band: "live", n: "05",
+      title: "Decide what happens to the vertical-ad-cut skill branch",
+      meta: ["branch claude/fervent-gauss-k1a31k", "pushed 11 Sep", "no PR opened", "commit f818c9d"],
+      ask: "never asked — the branch was pushed and left",
+      say: "<b>Still open.</b> &ldquo;Production rules for 9:16 video ads&rdquo; was committed and never proposed for merge. It overlaps the <code>fd-house-style</code> skill in PR&nbsp;#2, so the two want deciding together: merge it, fold it into that PR, or drop it."
+    },
+    {
+      id: "gemini-key", band: "live", n: "06",
+      title: "GEMINI_API_KEY and the image-generation billing tier",
+      meta: ["Plugin marketplace setup", "raised 18 Jun", "87 days open", "session_01Jx9wR5"],
+      ask: "billing blocker identified (image gen free tier)",
+      say: "<b>Blocker still true; the code is not.</b> PR&nbsp;#2 re-reported the unset key independently on 12 Sep, and the logo, icon and CIP paths in the <code>design</code> skill still cannot run without it. But the vendored nano-banana MCP on <code>claude/plugin-marketplace-setup-35mg6v</code> is three months stale against current Gemini models &mdash; redo it rather than merge it."
+    },
+
+    {
+      id: "site-tweaks", band: "moot", n: "07",
+      title: "Keep all three ALIENATED design tweaks, or drop some",
+      meta: ["Website and brand feedback", "asked 23 Jun", "82 days open", "session_015sksQV"],
+      ask: "keep all, or call out which to drop (e.g. 'keep 1 and 2, undo 3')",
+      say: "<b>Answered by shipping.</b> Card hover underline, global grain and section marker are commit <code>e9f80d9</code>, the current tip of <code>claude/new-session-mucc2q</code>, and have been live for roughly three months. PR&nbsp;#1 was closed unmerged, but its commits landed on the branch directly, so nothing was lost. Only worth reopening if you dislike one of them."
+    },
+    {
+      id: "theme-selector", band: "moot", n: "08",
+      title: "The theme-selector branch is now a trading indicator",
+      meta: ["Theme package selector", "pushed 19 Jun", "never merged", "commit c07393f"],
+      ask: "branch claude/theme-package-selector-iwsam5 committed and pushed",
+      say: "<b>Question dead, branch alive.</b> The content drifted: it now holds a Pine Script &ldquo;IFVG Sniper Entry Engine&rdquo; and a win-rate dashboard, not a theme selector. The real decision is whether trading-indicator work belongs in the UI/UX kit repo at all."
+    },
+    {
+      id: "stream-border", band: "moot", n: "09",
+      title: "Stream overlay pack shipped without the answer",
+      meta: ["Stream border design", "asked 19 Jun", "82 days open", "commit b417b57"],
+      ask: "Which did you mean?",
+      say: "<b>Stale question, real leftover.</b> The disambiguation was never answered, but a sticker-style stream overlay pack for Youngomarie was built and committed anyway. What remains is the unmerged branch, not the question."
+    },
+
+    {
+      id: "tradingview", band: "dead", n: "10",
+      title: "TradingView bot &mdash; how to copy the code",
+      meta: ["TradingView AI bot with 1-5 strategy", "asked 10 Jul", "archived", "commit 9fec4c5"],
+      ask: "tell me where you're viewing this (phone/desktop) so I can suggest another route",
+      say: "<b>Solved itself.</b> The strategy was committed to <code>claude/tradingview-ai-bot-1-5-d3zj6u</code>, so the copy-paste problem went away. All that is left is whether to keep or delete that branch."
+    },
+    {
+      id: "alienated-book", band: "dead", n: "11",
+      title: "The ALIENATED book artifact would not render",
+      meta: ["Inspired bags, leggings, accessories", "asked 10 Jul", "archived", "session_011GSyoE"],
+      ask: "clarify what you see (blank panel, no panel, just text?) and your device",
+      say: "<b>Dead.</b> Both artifacts from that session are gone from your gallery, and the ALIENATED work moved into the live site under <code>alienated/</code> &mdash; index, media, manifest, sitemap and all. Nothing to diagnose."
+    },
+    {
+      id: "job-search", band: "dead", n: "12",
+      title: "Job-search tool waiting on approval",
+      meta: ["Entry-level remote work search", "asked 6 Jul", "archived", "session_01SNrpXe"],
+      ask: "Approve or deny mcp__…__search_jobs",
+      say: "<b>Dead.</b> That connector is no longer in the session toolset, so the approval has nothing to approve &mdash; and a two-month-old job search wants rerunning from scratch anyway."
+    },
+    {
+      id: "spam-unsub", band: "dead", n: "13",
+      title: "Unsubscribe run waiting on a permission prompt",
+      meta: ["Spam email unsubscribe", "asked 23 Jun", "archived", "session_01AKWJWi"],
+      ask: "Approve or deny AskUserQuestion",
+      say: "<b>Dead.</b> The session stalled waiting for permission to ask you a question, so the question itself was never put. Nothing is pending but the prompt."
+    },
+    {
+      id: "fable-fail", band: "dead", n: "14",
+      title: "Two sessions that died on an unavailable model",
+      meta: ["New session / UIPro CLI setup", "failed 14 Jun", "91 days", "2 sessions"],
+      ask: "Claude Fable 5 is currently unavailable",
+      say: "<b>Dead as a blocker.</b> Both failed before asking you anything, and Fable 5.1 exists now. Listed only so the count reconciles."
+    }
+  ];
+
+  var GROUPS = [
+    { band: "live", title: "Still relevant", note: "Verified against live state today. These are the only rows where an answer from you changes anything." },
+    { band: "moot", title: "Answered by default", note: "The work shipped, or drifted, while the question sat. Nothing to answer unless you disagree with what shipped." },
+    { band: "dead", title: "Safe to close", note: "The question no longer has a subject: the tool, artifact or blocker it referred to is gone." }
+  ];
+
+  var STATES = ["open", "done", "dropped"];
+  var LABELS = { open: "Open", done: "Done", dropped: "Dropped" };
+
+  var state = {};
+  var db = null;
+  var board = document.getElementById("board");
+
+  function esc(s) {
+    return String(s).replace(/&(?![a-z#0-9]+;)/gi, "&amp;").replace(/</g, "&lt;");
+  }
+
+  function build() {
+    GROUPS.forEach(function (g) {
+      var rows = ITEMS.filter(function (it) { return it.band === g.band; });
+      var sec = document.createElement("section");
+      sec.className = "group";
+      sec.setAttribute("data-band", g.band);
+
+      var head = document.createElement("header");
+      head.innerHTML = '<h2>' + g.title + '</h2><span class="gcount">' + rows.length + ' of 14</span>';
+      sec.appendChild(head);
+
+      var note = document.createElement("p");
+      note.className = "gnote";
+      note.textContent = g.note;
+      sec.appendChild(note);
+
+      var list = document.createElement("div");
+      list.className = "items";
+
+      rows.forEach(function (it) {
+        var el = document.createElement("article");
+        el.className = "item";
+        el.setAttribute("data-band", it.band);
+        el.id = "item-" + it.id;
+
+        var meta = it.meta.map(function (m) { return "<span>" + esc(m) + "</span>"; })
+                          .join('<span class="sep">/</span>');
+
+        el.innerHTML =
+          '<div class="itop"><span class="num">' + it.n + '</span><h3 class="ttl">' + it.title + '</h3></div>' +
+          '<div class="meta">' + meta + '</div>' +
+          '<p class="ask"><span class="lab">Waiting on</span><q>' + esc(it.ask) + '</q></p>' +
+          '<p class="say">' + it.say + '</p>';
+
+        var seg = document.createElement("div");
+        seg.className = "seg";
+        seg.setAttribute("role", "group");
+        seg.setAttribute("aria-label", "Status");
+        STATES.forEach(function (s) {
+          var b = document.createElement("button");
+          b.type = "button";
+          b.textContent = LABELS[s];
+          b.setAttribute("aria-pressed", "false");
+          b.dataset.state = s;
+          b.addEventListener("click", function () { setState(it.id, s); });
+          seg.appendChild(b);
+        });
+        el.appendChild(seg);
+
+        list.appendChild(el);
+      });
+
+      sec.appendChild(list);
+      board.appendChild(sec);
+    });
+  }
+
+  function paint() {
+    var cleared = 0;
+    var hide = document.getElementById("hide-cleared").checked;
+
+    ITEMS.forEach(function (it) {
+      var s = state[it.id] || "open";
+      var el = document.getElementById("item-" + it.id);
+      if (!el) return;
+      var done = s !== "open";
+      if (done) cleared++;
+      el.classList.toggle("cleared", done);
+      el.hidden = hide && done;
+      el.querySelectorAll(".seg button").forEach(function (b) {
+        b.setAttribute("aria-pressed", b.dataset.state === s ? "true" : "false");
+      });
+    });
+
+    document.getElementById("count").textContent = cleared + " / " + ITEMS.length;
+    document.getElementById("bar").style.width = (cleared / ITEMS.length * 100) + "%";
+  }
+
+  function setState(id, s) {
+    state[id] = (state[id] === s && s !== "open") ? "open" : s;
+    paint();
+    save();
+  }
+
+  function save() {
+    if (!db) return;
+    db.doc("board/state").set({ items: state, updatedAt: new Date().toISOString() })
+      .catch(function () { mark("off", "Not saved"); });
+  }
+
+  function mark(st, text) {
+    var el = document.getElementById("sync");
+    el.setAttribute("data-state", st);
+    el.textContent = text;
+  }
+
+  build();
+  paint();
+  document.getElementById("hide-cleared").addEventListener("change", paint);
+
+  if (window.claude && window.claude.use) {
+    window.claude.use("db").then(function (store) {
+      if (!store) { mark("off", "Local only"); return; }
+      db = store;
+      mark("on", "Saved");
+      db.doc("board/state").onSnapshot(function (snap) {
+        var data = snap.exists ? snap.data() : null;
+        if (data && data.items) { state = Object.assign({}, data.items); paint(); }
+      }, function () { mark("off", "Not syncing"); });
+    }).catch(function () { mark("off", "Local only"); });
+  } else {
+    mark("off", "Local only");
+  }
+})();
+</script>
+
+</body></html>

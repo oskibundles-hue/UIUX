@@ -1,0 +1,628 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1"><style>:root{color-scheme:light}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Formula Dynamics Ad System</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+
+<style>
+  /* ---------------------------------------------------------------
+     Palette and type come from the client's own brand spec:
+     formula-dynamics/01-brand-core/BRAND-SPEC.md and fd_brand.py.
+     Single dark world on purpose — black is the brand's primary
+     background and every ad in the system is dark. Every colour is
+     painted explicitly so the page holds on any host ground.
+     --------------------------------------------------------------- */
+  :root {
+    --ink:      #0A0A0B;
+    --surface:  #141416;
+    --raised:   #1B1B1E;
+    --bone:     #EDEAE4;
+    --dim:      #8B857C;
+    --faint:    #5C5852;
+    --red:      #FE0F13;
+    --hair:     rgba(237,234,228,0.13);
+    --hair-lit: rgba(237,234,228,0.24);
+
+    --display: "Bebas Neue", "Haettenschweiler", Impact, sans-serif;
+    --body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+    --mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
+
+    --measure: 68ch;
+    --pad: clamp(20px, 5vw, 56px);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    background: var(--ink);
+    color: var(--bone);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.62;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .wrap { max-width: 1000px; margin: 0 auto; padding: 0 var(--pad); }
+  .col  { max-width: var(--measure); }
+
+  /* --- the real four-colour accent stripe -------------------------
+     Five segments, not four: red .367 / black .214 / white .194 /
+     green .170 / yellow .055. The black segment vanishes on this
+     ground — that is the artwork, not a bug. --------------------- */
+  .stripe { display: flex; height: 7px; width: 100%; }
+  .stripe i { display: block; height: 100%; }
+  .stripe .s1 { width: 36.7%; background: #FE0F13; }
+  .stripe .s2 { width: 21.4%; background: #000000; }
+  .stripe .s3 { width: 19.4%; background: #FFFFFF; }
+  .stripe .s4 { width: 17.0%; background: #1DB14B; }
+  .stripe .s5 { width:  5.5%; background: #FFDE00; }
+  .stripe.thin { height: 4px; }
+
+  /* --- masthead --------------------------------------------------- */
+  header { padding-top: clamp(40px, 8vw, 84px); }
+
+  .eyebrow {
+    font-family: var(--mono);
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin: 0 0 20px;
+  }
+
+  h1 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(58px, 12vw, 132px);
+    line-height: 0.86;
+    letter-spacing: 0.01em;
+    margin: 0 0 22px;
+    text-wrap: balance;
+  }
+
+  .standfirst {
+    font-size: clamp(18px, 2.4vw, 21px);
+    color: var(--bone);
+    max-width: 60ch;
+    margin: 0 0 34px;
+  }
+  .standfirst strong { font-weight: 600; }
+
+  header .stripe { margin-bottom: 0; }
+
+  /* --- figures ---------------------------------------------------- */
+  .figures {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(128px, 1fr));
+    gap: 1px;
+    background: var(--hair);
+    border-bottom: 1px solid var(--hair);
+    margin-top: 0;
+  }
+  .fig { background: var(--ink); padding: 26px 4px 26px 0; }
+  .fig b {
+    display: block;
+    font-family: var(--display);
+    font-size: 46px;
+    line-height: 1;
+    font-weight: 400;
+    font-variant-numeric: tabular-nums;
+  }
+  .fig span {
+    display: block;
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.13em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-top: 9px;
+  }
+
+  /* --- sections --------------------------------------------------- */
+  section { padding: clamp(48px, 8vw, 82px) 0 0; }
+
+  h2 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: clamp(30px, 5vw, 44px);
+    line-height: 1;
+    letter-spacing: 0.015em;
+    margin: 0 0 6px;
+    text-wrap: balance;
+  }
+  .kicker {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin: 0 0 18px;
+  }
+  h3 {
+    font-family: var(--display);
+    font-weight: 400;
+    font-size: 25px;
+    letter-spacing: 0.03em;
+    margin: 0 0 4px;
+  }
+  p { margin: 0 0 16px; }
+  p:last-child { margin-bottom: 0; }
+  .sub { color: var(--dim); }
+
+  code {
+    font-family: var(--mono);
+    font-size: 0.86em;
+    color: var(--bone);
+    background: var(--raised);
+    padding: 1px 5px;
+    border-radius: 2px;
+  }
+  strong { font-weight: 600; }
+
+  /* --- the two ads ------------------------------------------------ */
+  .ads { display: grid; gap: 1px; background: var(--hair); margin-top: 30px; }
+  @media (min-width: 720px) { .ads { grid-template-columns: 1fr 1fr; } }
+  .ad { background: var(--surface); padding: 28px 26px 30px; }
+  .ad .car {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.16em;
+    text-transform: uppercase;
+    color: var(--red);
+    margin: 0 0 10px;
+  }
+  .ad p { font-size: 15.5px; color: var(--dim); margin-bottom: 14px; }
+  .ad dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 5px 16px;
+    font-family: var(--mono);
+    font-size: 12px;
+    border-top: 1px solid var(--hair);
+    padding-top: 14px;
+  }
+  .ad dt { color: var(--faint); text-transform: uppercase; letter-spacing: 0.08em; }
+  .ad dd { margin: 0; color: var(--bone); font-variant-numeric: tabular-nums; }
+
+  /* --- feature: the logo measurement ------------------------------ */
+  .feature {
+    background: var(--surface);
+    border-left: 3px solid var(--red);
+    padding: 30px 30px 32px;
+    margin-top: 30px;
+  }
+  .compare {
+    display: grid;
+    gap: 22px;
+    margin: 24px 0 0;
+  }
+  @media (min-width: 620px) { .compare { grid-template-columns: 1fr 1fr; } }
+  .measure b {
+    display: block;
+    font-family: var(--display);
+    font-size: 62px;
+    line-height: 0.9;
+    font-variant-numeric: tabular-nums;
+  }
+  .measure .before b { color: var(--dim); }
+  .measure .after  b { color: var(--red); }
+  .measure span {
+    display: block;
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.11em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-top: 8px;
+  }
+  .bar { height: 6px; background: var(--raised); margin-top: 14px; }
+  .bar i { display: block; height: 100%; }
+  .bar .fill-before { width: 100%; background: var(--dim); }
+  .bar .fill-after  { width: 9.6%; background: var(--red); }
+  .caption {
+    font-family: var(--mono);
+    font-size: 12px;
+    line-height: 1.6;
+    color: var(--faint);
+    margin: 20px 0 0;
+    padding-top: 16px;
+    border-top: 1px solid var(--hair);
+  }
+
+  /* --- axes ------------------------------------------------------- */
+  .axes { display: grid; gap: 1px; background: var(--hair); margin-top: 28px; }
+  @media (min-width: 760px) { .axes { grid-template-columns: repeat(3, 1fr); } }
+  .axis { background: var(--surface); padding: 24px 22px 26px; }
+  .axis .dir {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.12em;
+    color: var(--red);
+    margin: 0 0 12px;
+  }
+  .axis p { font-size: 15px; color: var(--dim); margin-bottom: 12px; }
+  .axis ul { margin: 0; padding: 0; list-style: none; font-family: var(--mono); font-size: 12px; }
+  .axis li { padding: 5px 0; border-top: 1px solid var(--hair); color: var(--bone); }
+  .axis li em { font-style: normal; color: var(--faint); }
+
+  /* --- tables ----------------------------------------------------- */
+  .scroll { overflow-x: auto; margin-top: 26px; }
+  table { border-collapse: collapse; width: 100%; min-width: 520px; }
+  th, td {
+    text-align: left;
+    padding: 11px 16px 11px 0;
+    border-bottom: 1px solid var(--hair);
+    vertical-align: top;
+  }
+  th {
+    font-family: var(--mono);
+    font-size: 10.5px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    font-weight: 500;
+    border-bottom-color: var(--hair-lit);
+  }
+  td { font-size: 15px; }
+  td.num { font-family: var(--mono); font-size: 13px; font-variant-numeric: tabular-nums; }
+  td.name { font-family: var(--display); font-size: 21px; letter-spacing: 0.03em; white-space: nowrap; }
+  .yes { color: var(--red); font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; }
+  .no  { color: var(--faint); font-family: var(--mono); font-size: 11px; letter-spacing: 0.1em; }
+
+  /* --- cue sheet (the session, as beats) -------------------------- */
+  .cuesheet {
+    font-family: var(--mono);
+    font-size: 13px;
+    margin-top: 26px;
+    overflow-x: auto;
+  }
+  .cuesheet table { min-width: 560px; }
+  .cuesheet td { font-family: var(--mono); font-size: 13px; padding: 10px 18px 10px 0; }
+  .cuesheet td.beat { color: var(--faint); font-variant-numeric: tabular-nums; white-space: nowrap; }
+  .cuesheet td.what { color: var(--bone); }
+  .cuesheet td.out  { color: var(--dim); }
+
+  /* --- rules list ------------------------------------------------- */
+  .rules { margin-top: 26px; display: grid; gap: 0; }
+  .rule { padding: 18px 0; border-top: 1px solid var(--hair); display: grid; gap: 4px; }
+  .rule:last-child { border-bottom: 1px solid var(--hair); }
+  .rule b { font-family: var(--body); font-weight: 600; font-size: 16px; }
+  .rule span { color: var(--dim); font-size: 15.5px; }
+
+  /* --- footer ----------------------------------------------------- */
+  footer { padding: clamp(48px, 7vw, 74px) 0 60px; }
+  .paths {
+    font-family: var(--mono);
+    font-size: 12.5px;
+    line-height: 2;
+    color: var(--dim);
+    overflow-x: auto;
+    white-space: pre;
+    margin: 20px 0 0;
+  }
+  .paths b { color: var(--bone); font-weight: 400; }
+  .sig {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--faint);
+    margin-top: 34px;
+    padding-top: 20px;
+    border-top: 1px solid var(--hair);
+  }
+
+  a { color: var(--bone); text-decoration-color: var(--red); text-underline-offset: 3px; }
+  a:focus-visible, :focus-visible { outline: 2px solid var(--red); outline-offset: 3px; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; } }
+</style>
+
+<header>
+  <div class="wrap">
+    <p class="eyebrow">Formula Dynamics Performance · Build report · 8 Sep 2026</p>
+    <h1>The ad<br>system</h1>
+    <p class="standfirst">
+      Two campaign ads for the shop, and the machinery that made them repeatable:
+      <strong>eleven finished cuts</strong>, a repaired logo pipeline, and three
+      independent axes of variation — all driven from cue files rather than
+      hand-built one at a time.
+    </p>
+  </div>
+  <div class="wrap"><div class="stripe" role="presentation"><i class="s1"></i><i class="s2"></i><i class="s3"></i><i class="s4"></i><i class="s5"></i></div></div>
+</header>
+
+<div class="wrap">
+  <div class="figures">
+    <div class="fig"><b>11</b><span>Finished cuts</span></div>
+    <div class="fig"><b>2</b><span>Cars</span></div>
+    <div class="fig"><b>4</b><span>Layouts</span></div>
+    <div class="fig"><b>867</b><span>Kit files rebuilt</span></div>
+    <div class="fig"><b>10</b><span>Commits</span></div>
+  </div>
+</div>
+
+<main class="wrap">
+
+  <section>
+    <p class="kicker">01 — The deliverables</p>
+    <h2>Two cars, eleven cuts</h2>
+    <div class="col">
+      <p class="sub">
+        Both ads are 1080×1920, 30fps, H.264, carrying the source clip's own
+        engine audio. Both are built on the brand kit — Bebas Neue, FD red,
+        the real logo artwork — rather than beside it.
+      </p>
+    </div>
+
+    <div class="ads">
+      <article class="ad">
+        <p class="car">McLaren 765LT · Stage 2</p>
+        <h3>The house cut</h3>
+        <p>
+          One locked-off take in a dark shop bay. Slow beats, an animated spec
+          counter and two indexed callouts anchored to the wing and the wheels —
+          the shot holds long enough for a leader line to stay true.
+        </p>
+        <dl>
+          <dt>Length</dt><dd>15.70s</dd>
+          <dt>Layout</dt><dd>hud</dd>
+          <dt>Cuts</dt><dd>1 — locked off</dd>
+        </dl>
+      </article>
+
+      <article class="ad">
+        <p class="car">Lamborghini Aventador S · Full build</p>
+        <h3>The variation set</h3>
+        <p>
+          A twelve-cut desert montage, one cut per second. Different footage
+          demanded a different design — and became the test bed for every
+          variation axis in the system.
+        </p>
+        <dl>
+          <dt>Length</dt><dd>14.04s base</dd>
+          <dt>Cuts</dt><dd>13 shots, 12 cuts</dd>
+          <dt>Versions</dt><dd>10</dd>
+        </dl>
+      </article>
+    </div>
+
+    <div class="caption col">
+      The footage decided the design, not preference. A 4fps brightness survey put
+      the Aventador's top band between 23 and 239 — blown desert sky to near-black
+      interior — so no corner logo bug survives, and the type moved to the mid band,
+      the stable zone at mean 59.
+    </div>
+  </section>
+
+  <section>
+    <p class="kicker">02 — The repair</p>
+    <h2>The logo was soft</h2>
+    <div class="col">
+      <p>
+        The kit traced its logo artwork out of the brand-guide raster, where the
+        lockup is 596×250px and the FD mark just <strong>149×114px</strong> — then
+        blurred it 0.7px before tracing. Corners came out rounded; the monogram
+        looked melted at end-card size.
+      </p>
+      <p class="sub">
+        Re-tracing from the supplied master artwork — transparent background,
+        exact brand hexes — closed the gap almost entirely.
+      </p>
+    </div>
+
+    <div class="feature">
+      <div class="compare measure">
+        <div class="before">
+          <b>8.71%</b>
+          <span>Shipped — mean error vs master</span>
+          <div class="bar"><i class="fill-before"></i></div>
+        </div>
+        <div class="after">
+          <b>0.84%</b>
+          <span>Re-traced — the anti-aliasing floor</span>
+          <div class="bar"><i class="fill-after"></i></div>
+        </div>
+      </div>
+      <p class="caption">
+        0.84% is as close as a traced vector gets to an anti-aliased raster — it is
+        measurement noise, not error. All four lockups, four variants and three PNG
+        widths were rebuilt from it, then 254 overlay and template files, ten
+        download bundles, the printable brand guide and the asset index.
+      </p>
+    </div>
+
+    <div class="col" style="margin-top:30px">
+      <h3>And the stripe had five segments</h3>
+      <p class="sub">
+        Reading the master turned up a second error. The accent stripe was
+        specified as four segments; the artwork has five — red 36.7%, black 21.4%,
+        white 19.4%, green 17.0%, yellow 5.5%. It carries both a black and a white
+        segment, and whichever matches the background reads as a gap. That is why
+        it looked like four.
+      </p>
+      <p class="caption" style="border:0;padding:0;margin-top:14px">
+        The rule under this page's masthead is that stripe, at true proportions.
+        The gap left of centre is the black segment.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <p class="kicker">03 — The system</p>
+    <h2>Three axes, one file format</h2>
+    <div class="col">
+      <p class="sub">
+        Every version is a cue file — copy, beat timings, layout fractions and the
+        grade. The three axes stay separate on purpose: a test on one axis stays
+        interpretable. <code>build_ad.py --all</code> renders the lot.
+      </p>
+    </div>
+
+    <div class="axes">
+      <div class="axis">
+        <p class="dir">layouts/</p>
+        <h3>Same video,<br>different design</h3>
+        <p>Four treatments, swappable by name. Each supplies four draw functions.</p>
+        <ul>
+          <li>hud <em>— approved</em></li>
+          <li>centred <em>— approved</em></li>
+          <li>panel <em>— busy footage</em></li>
+          <li>rail <em>— unsigned</em></li>
+        </ul>
+      </div>
+      <div class="axis">
+        <p class="dir">cuts/</p>
+        <h3>Different<br>videos</h3>
+        <p>Shot-level re-editing. A re-cut is a list of shot ids, not timecodes.</p>
+        <ul>
+          <li>base <em>— 14.04s</em></li>
+          <li>detail-walk <em>— 11.24s</em></li>
+          <li>6s-preroll <em>— 6.04s</em></li>
+        </ul>
+      </div>
+      <div class="axis">
+        <p class="dir">variants/</p>
+        <h3>Same video,<br>different message</h3>
+        <p>Only hook and CTA change, so a test isolates message from edit.</p>
+        <ul>
+          <li>a <em>— book your build</em></li>
+          <li>b <em>— get a quote</em></li>
+          <li>c <em>— engagement</em></li>
+          <li>d <em>— fitment</em></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="caption col">
+      Re-cutting was the half the kit was missing. <code>AUTO-EDIT.md</code> is
+      explicit that the overlay tool does not cut footage — it decorates a clip you
+      already cut. <code>recut.py</code> now trims and concatenates shots into a new
+      plate, working from a 13-shot list built by scene detection and confirmed
+      against a contact sheet.
+    </div>
+  </section>
+
+  <section>
+    <p class="kicker">04 — The comparison you asked for</p>
+    <h2>Pillow vs Remotion</h2>
+    <div class="col">
+      <p class="sub">
+        The Aventador base cut was built twice from the same <code>cue.json</code>,
+        so the pipelines could be judged on equal footing. Measured over the same
+        421 frames.
+      </p>
+    </div>
+
+    <div class="scroll">
+      <table>
+        <thead>
+          <tr><th>&nbsp;</th><th>Pillow + ffmpeg</th><th>Remotion</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Render</td><td class="num">~64s, single process</td><td class="num">~2 min at concurrency 2</td></tr>
+          <tr><td>Output</td><td class="num">6.9 MB</td><td class="num">12.7 MB at defaults</td></tr>
+          <tr><td>Install</td><td class="num">3 Python packages</td><td class="num">255 npm packages · 517 MB</td></tr>
+          <tr><td>Preview</td><td>Render a still</td><td>Live studio, hot reload</td></tr>
+          <tr><td>Layout</td><td>Absolute pixels in Python</td><td>CSS, browser text engine</td></tr>
+          <tr><td>Runtime</td><td>ffmpeg</td><td>ffmpeg <em>and</em> Chromium</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="caption col">
+      Pillow wins on speed, weight and exact pixel control — better for a repeatable
+      house format. Remotion wins on iteration: the studio previews the timeline live,
+      and a new component is a React component rather than a set of paste coordinates.
+      The two outputs are visually equivalent but <strong>not pixel-identical</strong> —
+      at t=2.6 the hook block sits within 26px of position and 5px of height. Two text
+      engines, and both causes are documented in the code.
+    </div>
+  </section>
+
+  <section>
+    <p class="kicker">05 — What is now written down</p>
+    <h2>The rules it cost us</h2>
+    <div class="col">
+      <p class="sub">
+        Recorded in <code>09-campaign-ads/HOUSE-STYLE.md</code>, and made findable —
+        the ads folder was missing from the kit README's map entirely. Each of these
+        cost a render or a rebuild.
+      </p>
+    </div>
+
+    <div class="rules col">
+      <div class="rule">
+        <b>Never stand the accent stripe on end.</b>
+        <span>Its black segment reads as a designed gap horizontally, and as a broken line vertically. The rail layout uses solid red.</span>
+      </div>
+      <div class="rule">
+        <b>The ticker sits at y=0.775.</b>
+        <span>Any layout placing a lockup near it collides. Rail sits at 0.688, centred at 0.845.</span>
+      </div>
+      <div class="rule">
+        <b>Measure the footage before choosing a band.</b>
+        <span>Sample mean brightness where each element will sit, across the whole clip, before committing to a treatment.</span>
+      </div>
+      <div class="rule">
+        <b>Callouts need a shot that lasts.</b>
+        <span>A leader line anchored to the car is invalid at the next cut. Fine on the 765LT; dropped on the Aventador.</span>
+      </div>
+      <div class="rule">
+        <b>Only put on screen what the shop can substantiate.</b>
+        <span>The 765LT's tuned column is invented for layout and flagged as replace-before-publish. The Aventador carries no horsepower figures at all — there is no dyno sheet for that car.</span>
+      </div>
+    </div>
+
+    <div class="col" style="margin-top:34px">
+      <h3>Approved treatments</h3>
+      <p class="sub">
+        <strong>hud</strong> and <strong>centred</strong> are both signed off and
+        equal — picked per job, on the footage. What was approved in hud is the
+        treatment itself, independent of whether the type band holds a spec counter
+        or a static build sheet.
+      </p>
+    </div>
+  </section>
+
+  <section>
+    <p class="kicker">06 — How it ran</p>
+    <h2>The session, as a cue sheet</h2>
+    <div class="cuesheet">
+      <table>
+        <tbody>
+          <tr><td class="beat">01</td><td class="what">765LT ad, first pass</td><td class="out">Invented palette — wrong</td></tr>
+          <tr><td class="beat">02</td><td class="what">Found the real brand kit in git</td><td class="out">Rebuilt on Bebas, FD red, real logo</td></tr>
+          <tr><td class="beat">03</td><td class="what">Logo re-traced from master</td><td class="out">8.71% → 0.84%; 867 files rebuilt</td></tr>
+          <tr><td class="beat">04</td><td class="what">Aventador analysed, then built</td><td class="out">Pillow and Remotion, one cue file</td></tr>
+          <tr><td class="beat">05</td><td class="what">Hook and CTA variants</td><td class="out">Four funnel stages</td></tr>
+          <tr><td class="beat">06</td><td class="what">Shot-level re-cutting</td><td class="out">detail-walk, 6s-preroll</td></tr>
+          <tr><td class="beat">07</td><td class="what">Layouts made swappable</td><td class="out">hud, centred, panel, rail</td></tr>
+          <tr><td class="beat">08</td><td class="what">House style recorded</td><td class="out">Approved looks, findable</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+</main>
+
+<footer class="wrap">
+  <div class="stripe thin" role="presentation"><i class="s1"></i><i class="s2"></i><i class="s3"></i><i class="s4"></i><i class="s5"></i></div>
+  <p class="kicker" style="margin-top:26px">Where it lives</p>
+  <div class="paths"><b>formula-dynamics/</b>
+├── 01-brand-core/logo-source/   <b>the master artwork — everything traces from it</b>
+├── 09-campaign-ads/
+│   ├── <b>HOUSE-STYLE.md</b>            approved looks · read before building an ad
+│   ├── mclaren-765lt-stage2/
+│   └── aventador-s/
+│       ├── cue.json             the edit: copy, beats, layout, grade
+│       ├── layouts.py           four treatments behind one registry
+│       ├── recut.py + shots.json   shot-level re-editing
+│       ├── layouts/ cuts/ variants/
+│       └── remotion/            the React renderer
+└── 99-toolkit/                  build_logos · build_overlays · fd_hud</div>
+  <p class="sig">Branch claude/formula-dynamics-ad-qpuh4m · 10 commits · oskibundles-hue/UIUX</p>
+</footer>
+
+</body></html>

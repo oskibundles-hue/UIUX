@@ -1,0 +1,76 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>NQ OS Mockups</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Schibsted+Grotesk:wght@400;500;700;800&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{--bg:#08090B;--ink:#0F1014;--pan:rgba(23,24,29,.88);--line:#2A2C33;--w:#F2F2F3;--mut:#9A9DA4;--or:#FF4F16;--g:'Schibsted Grotesk',system-ui,-apple-system,'Segoe UI',sans-serif;--m:'IBM Plex Mono',ui-monospace,Menlo,monospace}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--w);font-family:var(--g)}
+.top{padding:16px 16px 4px}.top h1{margin:0;font-size:24px;font-weight:800;letter-spacing:-.01em}.top p{margin:4px 0 0;color:var(--mut);font-size:13.5px}
+.rail{display:flex;gap:16px;overflow-x:auto;scroll-snap-type:x mandatory;padding:12px 16px 10px;-webkit-overflow-scrolling:touch}
+.card{flex:0 0 min(86vw,372px);scroll-snap-align:center}
+.cap{display:flex;justify-content:space-between;font:500 11px var(--m);letter-spacing:.1em;text-transform:uppercase;color:var(--mut);margin:0 2px 8px}.cap b{color:var(--w);font-weight:500}
+.ph{position:relative;aspect-ratio:9/18;background:var(--ink);border:1px solid var(--line);border-radius:26px;overflow:hidden;padding:14px 14px 16px;display:flex;flex-direction:column;gap:10px}
+.ph:before{content:"";position:absolute;inset:0;background:radial-gradient(100% 45% at 80% 0%,rgba(255,79,22,.14),transparent 60%);pointer-events:none}
+.ph>*{position:relative}
+.bar{display:flex;justify-content:space-between;align-items:center}
+.chap{background:var(--pan);border:1px solid var(--line);border-radius:999px;padding:7px 12px;font:500 10.5px var(--m);letter-spacing:.12em;display:flex;gap:9px;align-items:center;position:relative;overflow:hidden}.chap:after{content:"";position:absolute;left:0;bottom:0;height:2px;width:34%;background:var(--or)}.chap i{font-style:normal;color:var(--or)}
+.bug{background:var(--pan);border:1px solid var(--line);border-radius:10px;padding:6px 10px;font:800 11px var(--g);letter-spacing:.1em}.bug b{color:var(--or)}
+.cap2{background:var(--pan);border:1px solid var(--line);border-radius:16px;padding:14px 16px;font-size:23px;font-weight:700;line-height:1.15;letter-spacing:-.01em}
+.chip{background:var(--w);color:#111;border-radius:6px;padding:0 6px}.orc{color:var(--or)}
+.pl{background:var(--pan);border:1px solid var(--line);border-radius:14px;padding:11px 14px;display:flex;align-items:center;gap:12px}.pl .n{font:800 30px var(--g);letter-spacing:-.02em;min-width:46px}.pl .t{font-size:14px;font-weight:600}.pl small{display:block;color:var(--mut);font:400 11px var(--m);letter-spacing:.06em;margin-top:2px}.pl .sig{margin-left:auto;width:8px;height:8px;border-radius:50%;background:var(--or);box-shadow:0 0 10px var(--or)}
+.follow{background:var(--pan);border:1px solid var(--line);border-radius:14px;padding:10px 12px;display:flex;align-items:center;gap:10px;font-size:13px}.follow .av{width:30px;height:30px;border-radius:50%;background:var(--line)}.follow small{display:block;color:var(--mut);font:400 11px var(--m)}.follow button{margin-left:auto;font:600 12px var(--g);background:var(--w);color:#111;border:0;border-radius:8px;padding:6px 12px}
+.cta{margin-top:auto;display:flex;align-items:center;justify-content:space-between;background:var(--or);color:#fff;border-radius:14px;padding:14px 16px;font:700 13px var(--m);letter-spacing:.12em}
+.cta.o{background:transparent;border:1px solid var(--or);color:var(--or)}
+.lt{background:var(--pan);border:1px solid var(--line);border-radius:12px;padding:10px 12px}.lt .k{display:inline-block;font:500 10px var(--m);letter-spacing:.14em;color:var(--or);border:1px solid var(--or);border-radius:999px;padding:2px 8px;margin-bottom:6px}.lt b{display:block;font-size:17px}.lt small{color:var(--mut);font-size:12px}
+.sk{transform:skewX(-14deg);background:var(--or);color:#fff;font:800 13px var(--g);letter-spacing:.14em;padding:7px 16px;display:inline-block;align-self:flex-start}.sk span{display:inline-block;transform:skewX(14deg)}
+.big{font:800 68px/.9 var(--g);letter-spacing:-.03em;font-style:italic}.stripe{height:6px;width:64%;background:repeating-linear-gradient(115deg,var(--or) 0 12px,transparent 12px 20px)}
+.mono .pl,.mono .cap2,.mono .chap,.mono .bug,.mono .lt{background:#15161B}.mono .chap:after{background:var(--w)}.mono .cta{background:var(--w);color:#111}.mono .pl .sig{background:var(--w);box-shadow:0 0 10px #fff}.mono .lt .k{color:var(--w);border-color:var(--w)}
+.dots{display:flex;gap:8px;justify-content:center;padding:2px 0 14px}.dots i{width:24px;height:3px;background:var(--line);border-radius:2px}.dots i:first-child{background:var(--or)}
+.note{padding:0 16px 34px;color:var(--mut);font-size:13.5px;line-height:1.5}
+.banner{margin:0;padding:13px 16px;background:rgba(255,79,22,.10);border-bottom:1px solid var(--or);font-size:13.5px;line-height:1.5;color:var(--w)}
+.banner b{font:500 10.5px var(--m);letter-spacing:.14em;text-transform:uppercase;color:var(--or);display:block;margin-bottom:4px}
+.banner a{color:var(--w)}
+</style>
+<div class="banner"><b>Superseded &middot; kept for reference</b>The real command centre was built from these on 20 Sept 2026 &mdash; see <a href="https://claude.ai/code/artifact/8ebed08b-e9f3-4af1-93d5-52c73cfcf248">NQ OS</a>. Kept as the record of the choice; nothing here is live. Archived 21 Sept 2026.<br><br><b style="color:#F59E0B">Which layout won is not settled</b>Card A is captioned &ldquo;your pick&rdquo;, but the 19 Sept handoff stored in NQ&nbsp;V.A.U.L.T. reads &ldquo;he leans to B, Wordmark monochrome&rdquo; &mdash; and lists Booking-first Luxury separately, as the pick for <i>Supercar Experience vlogs</i>, which is a different decision. The two builds then went opposite ways: V.A.U.L.T. defaults to mono, NQ OS renders orange. <b style="display:inline;font:inherit;color:inherit;letter-spacing:0;text-transform:none">Confirm A or B</b> and this note can go.<br><br><b>Corrected 22 Sept 2026</b>Card D&rsquo;s end card read <b style="display:inline;font:inherit;color:inherit;letter-spacing:0;text-transform:none">25+</b>. The age rule you answered on <a href="https://claude.ai/code/artifact/9c2f1d22-0f49-4379-a538-589c34e2028e">Supercar Experience Overlays</a> on 14 Sept is <b style="display:inline;font:inherit;color:inherit;letter-spacing:0;text-transform:none">21+</b>, so the card now reads 21+. Nothing here was ever rendered or posted.</div>
+<div class="top"><h1>NQ OS · layout mockups</h1><p>Four looks built from your Supercar Experience vlog overlays. Swipe sideways. Static previews with real numbers, not the live page.</p></div>
+<div class="rail">
+
+<div class="card"><div class="cap"><b>A · Booking-first</b><span>your pick</span></div>
+<div class="ph"><div class="bar"><div class="chap"><i>01 / 04</i> TODAY</div><div class="bug">NQ<b>OS</b></div></div>
+<div class="cap2"><span class="chip">12</span> reels are ready to post on @nq.young.</div>
+<div class="pl"><span class="n">12</span><div class="t">Upload queue<small>POST IN ORDER · 01 THE FLOOR GOES DOWN</small></div><span class="sig"></span></div>
+<div class="pl"><span class="n">2</span><div class="t">Needs your review<small>SEP 11 PLATE · FD ADS V3</small></div><span class="sig"></span></div>
+<div class="pl"><span class="n">4</span><div class="t">Footage to cut<small>SEP 15 → SEP 18</small></div></div>
+<div class="follow"><span class="av"></span><div><b>Darkweb</b><small>fast cuts · needs your yes</small></div><button>Approve</button></div>
+<div class="cta"><span>OPEN MORNING REPORT</span><span>→</span></div></div></div>
+
+<div class="card"><div class="cap"><b>B · Wordmark mono</b><span>white chips</span></div>
+<div class="ph mono"><div class="bar"><div class="chap"><i style="color:#fff">02 / 04</i> WAITING</div><div class="bug">NQ<b style="color:#fff">OS</b></div></div>
+<div class="cap2">5 things are <span class="chip">waiting</span> on you.</div>
+<div class="lt"><span class="k">REVIEW</span><b>FD Story ads v3</b><small>About 90% · needs fine tuning</small></div>
+<div class="lt"><span class="k">REVIEW</span><b>Sep 11 reel</b><small>Escalade plate: blur it?</small></div>
+<div class="lt"><span class="k">WAITING</span><b>Poster photos</b><small>7 templates · shop ticks</small></div>
+<div class="lt"><span class="k">HOLD</span><b>765LT ad</b><small>Needs real dyno numbers</small></div>
+<div class="cta"><span>OPEN REVIEW QUEUE</span><span>→</span></div></div></div>
+
+<div class="card"><div class="cap"><b>C · Chevron motion</b><span>slanted</span></div>
+<div class="ph"><div class="bar"><div class="sk"><span>NQ OS · LIVE</span></div><div class="bug">05<b>%</b></div></div>
+<div class="big">READY<br><span class="orc">TO POST</span></div><div class="stripe"></div>
+<div class="pl"><span class="n">12</span><div class="t">Reel Cuts<small>2:29 – 2:51 EACH</small></div></div>
+<div class="pl"><span class="n">14</span><div class="t">Short reels<small>ASK BEFORE POSTING</small></div></div>
+<div class="pl"><span class="n">3,719</span><div class="t">Followers<small>28 DAYS · 191K VIEWS</small></div></div>
+<div class="cta o"><span>POST 01 · THE FLOOR GOES DOWN</span><span>→</span></div></div></div>
+
+<div class="card"><div class="cap"><b>D · Lower thirds</b><span>city style</span></div>
+<div class="ph"><div class="bar"><div class="chap"><i>03 / 04</i> TEAM + SYSTEM</div><div class="bug">NQ<b>OS</b></div></div>
+<div class="cap2">Everything is <span class="chip">running</span>.</div>
+<div class="lt"><span class="k">DELIVERED</span><b>Sep 11 hybrid reel</b><small>NQ Studio · 04 Exports</small></div>
+<div class="lt"><span class="k">UPLOADED</span><b>SD footage · 65 clips</b><small>Sep 15 – Sep 18 · 250 GB</small></div>
+<div class="lt"><span class="k">SCHEDULED</span><b>Morning report</b><small>Every day · 8:01 AM</small></div>
+<div class="lt"><span class="k">DARKWEB</span><b>Fast cuts, phone footage</b><small>Never posts without your yes</small></div>
+<div class="cta o"><span>A RIDE OF A LIFETIME</span><span>21+</span></div></div></div>
+
+</div>
+<div class="dots"><i></i><i></i><i></i><i></i></div>
+<div class="note">Tell me which one (or which mix, for example A on the home screen and D for the daily list). I'll then build the real page in that layout, with live data, the particle sphere and the report drawers.</div>
+
+</body></html>

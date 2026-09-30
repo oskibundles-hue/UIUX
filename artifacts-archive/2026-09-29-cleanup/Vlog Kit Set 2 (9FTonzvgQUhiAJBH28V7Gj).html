@@ -1,0 +1,397 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#faf9f5;color:#141413}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>Vlog Kit Set 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow:wght@400;500;600&family=Bebas+Neue&family=Michroma&display=swap">
+<style>
+  /* One committed look, the same as the Locked-On page: the SE canvas is black with one gold accent. */
+  :root {
+    color-scheme: dark;
+    --ground: #0b0b0c;
+    --panel: #141415;
+    --panel-2: #1b1b1c;
+    --line: #2b2a27;
+    --text: #f3f1ea;
+    --muted: #a09d94;
+    --faint: #6d6a62;
+    --gold: #fbd101;
+    --gold-ink: #0b0b0c;
+    --gold-soft: rgba(251, 209, 1, .12);
+    --display: "Bebas Neue", "Oswald", "Arial Narrow", Impact, sans-serif;
+    --label: "Michroma", "Eurostile", "Arial", sans-serif;
+    --body: "Barlow", "Helvetica Neue", Arial, sans-serif;
+  }
+  html { background: var(--ground); }
+  body {
+    background: var(--ground); color: var(--text); font-family: var(--body); font-size: 17px; line-height: 1.55;
+    padding-inline: clamp(16px, 4vw, 48px); padding-block: 28px 140px;
+  }
+  .wrap { max-width: 1120px; margin-inline: auto; display: grid; gap: 64px; }
+  h1, h2, h3 { font-family: var(--display); font-weight: 400; letter-spacing: .5px; line-height: .95; margin: 0; text-wrap: balance; }
+  h2 { font-size: clamp(38px, 6vw, 56px); }
+  h3 { font-size: 30px; }
+  p { margin: 0; max-width: 64ch; }
+  a { color: var(--gold); }
+  .eyebrow { font-family: var(--label); font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); }
+  .muted { color: var(--muted); }
+  .stripe { height: 6px; width: 100%; background: linear-gradient(90deg, var(--gold) 0 78%, var(--text) 78% 100%); }
+  code { font-family: ui-monospace, "SF Mono", Menlo, Consolas, monospace; font-size: .84em; background: var(--panel-2); padding: 1px 6px; border-radius: 3px; }
+  button { font: inherit; }
+  button:focus-visible, a:focus-visible { outline: 2px solid var(--gold); outline-offset: 3px; }
+  .btn { font-family: var(--label); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--text); background: transparent; border: 1px solid var(--line); padding: 10px 13px; cursor: pointer; }
+  .btn:hover { border-color: var(--gold); }
+  .btn[aria-pressed="true"] { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); }
+
+  /* hero */
+  .hero { display: grid; grid-template-columns: minmax(0, 340px) minmax(0, 1fr); gap: clamp(24px, 5vw, 64px); align-items: start; }
+  .frame { position: relative; width: 100%; aspect-ratio: 9 / 16; background: #000; border: 1px solid var(--line); overflow: hidden; }
+  .frame video { width: 100%; height: 100%; display: block; object-fit: cover; }
+  .frame-bar { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 10px; }
+  .hero-copy { display: grid; gap: 22px; padding-top: 6px; }
+  .hero h1 { font-size: clamp(66px, 12vw, 136px); line-height: .84; }
+  .hero h1 em { font-style: normal; color: var(--gold); }
+  .thesis { font-size: 21px; line-height: 1.45; max-width: 38ch; }
+  .quote { border-left: 3px solid var(--gold); padding-left: 14px; color: var(--muted); font-size: 16px; }
+  .quote b { color: var(--text); font-weight: 500; }
+  .specs { display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .spec { background: var(--ground); padding: 12px 14px; display: grid; gap: 4px; }
+  .spec b { font-family: var(--display); font-weight: 400; font-size: 28px; line-height: 1; font-variant-numeric: tabular-nums; }
+  .spec span { font-family: var(--label); font-size: 9px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+
+  /* timeline */
+  .sec { display: grid; gap: 24px; }
+  .sec-head { display: grid; gap: 10px; }
+  .tl { position: relative; }
+  .tl-bar { display: flex; height: 44px; border: 1px solid var(--line); }
+  .seg { border-right: 1px solid var(--ground); background: var(--panel-2); display: flex; align-items: center; justify-content: center; font-family: var(--display); font-size: 19px; color: var(--muted); cursor: pointer; padding: 0; border-top: 0; border-bottom: 0; border-left: 0; min-width: 0; overflow: hidden; }
+  .seg:last-child { border-right: 0; }
+  .seg.hot { background: var(--gold); color: var(--gold-ink); }
+  .seg.gap { background: #000; }
+  .seg:hover { outline: 1px solid var(--gold); outline-offset: -1px; }
+  .playhead { position: absolute; top: 0; width: 2px; height: 44px; background: var(--text); pointer-events: none; left: 0; }
+  .tl-scale { position: relative; height: 18px; font-family: var(--label); font-size: 9px; color: var(--faint); font-variant-numeric: tabular-nums; margin-top: 8px; }
+  .tl-scale span { position: absolute; transform: translateX(-50%); }
+  .tl-scale span:first-child { transform: none; } .tl-scale span:last-child { transform: translateX(-100%); }
+
+  /* groups and cards */
+  .group { display: grid; gap: 18px; }
+  .group-h { display: flex; align-items: baseline; gap: 14px; border-bottom: 1px solid var(--line); padding-bottom: 8px; flex-wrap: wrap; }
+  .group-h b { font-family: var(--display); font-weight: 400; font-size: 36px; color: var(--gold); line-height: 1; }
+  .group-h span { font-family: var(--label); font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); }
+  .cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr)); gap: 28px 24px; align-items: start; }
+  .card { display: grid; grid-template-columns: 120px minmax(0, 1fr); gap: 16px; align-items: start; }
+  .card img { width: 100%; aspect-ratio: 9 / 16; object-fit: cover; border: 1px solid var(--line); display: block; cursor: zoom-in; }
+  .card.picked img { border-color: var(--gold); box-shadow: 0 0 0 1px var(--gold); }
+  .card-body { display: grid; gap: 8px; align-content: start; }
+  .code { font-family: var(--display); font-size: 40px; line-height: .9; color: var(--gold); display: flex; align-items: baseline; gap: 10px; flex-wrap: wrap; }
+  .code small { font-family: var(--label); font-size: 10px; letter-spacing: 1.8px; color: var(--text); }
+  .card p { font-size: 15.5px; line-height: 1.45; color: var(--muted); }
+  .card p b { color: var(--text); font-weight: 500; }
+  .card .when { font-size: 14px; color: var(--text); }
+  .card .breaks { font-size: 13.5px; color: var(--faint); }
+  .card-actions { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px; }
+
+  .board img { width: 100%; display: block; border: 1px solid var(--line); cursor: zoom-in; }
+  .board-wrap { overflow-x: auto; }
+
+  .two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; background: var(--line); border: 1px solid var(--line); }
+  .two > div { background: var(--ground); padding: 20px 22px; display: grid; gap: 8px; align-content: start; }
+  .two h3 { font-size: 26px; }
+  .two p { color: var(--muted); font-size: 15.5px; }
+  .two p b { color: var(--text); font-weight: 500; }
+  .lesson { font-family: var(--label); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--gold); }
+
+  table { width: 100%; border-collapse: collapse; font-size: 15px; }
+  th { font-family: var(--label); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); font-weight: 400; text-align: left; padding: 8px 12px 8px 0; border-bottom: 1px solid var(--line); }
+  td { padding: 10px 12px 10px 0; border-bottom: 1px solid var(--line); vertical-align: top; }
+  .table-wrap { overflow-x: auto; }
+  .table-wrap table { min-width: 560px; }
+
+  footer { display: grid; gap: 8px; color: var(--muted); font-size: 14px; border-top: 1px solid var(--line); padding-top: 22px; }
+
+  /* pick bar */
+  .pickbar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; background: rgba(11, 11, 12, .96); border-top: 1px solid var(--line);
+    padding: 12px clamp(16px, 4vw, 48px) calc(12px + env(safe-area-inset-bottom, 0px)); backdrop-filter: blur(8px); }
+  .pickbar-in { max-width: 1120px; margin-inline: auto; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .picks { font-family: var(--display); font-size: 30px; line-height: 1; color: var(--gold); min-width: 0; flex: 1 1 200px; }
+  .picks .none { font-family: var(--body); font-size: 15px; color: var(--muted); }
+  .pickbar input { flex: 2 1 240px; min-width: 0; background: var(--panel); border: 1px solid var(--line); color: var(--text); font: 15px var(--body); padding: 10px 12px; }
+  .pickbar input:focus-visible { outline: 2px solid var(--gold); outline-offset: 1px; }
+  .save { background: var(--gold); color: var(--gold-ink); border-color: var(--gold); }
+  .save:disabled { opacity: .45; cursor: default; }
+  .status { font-family: var(--label); font-size: 9px; letter-spacing: 1.5px; text-transform: uppercase; color: var(--muted); flex-basis: 100%; }
+
+  /* lightbox */
+  .lb { position: fixed; inset: 0; z-index: 40; background: rgba(0, 0, 0, .92); display: grid; place-items: center; padding: 24px; cursor: zoom-out; }
+  .lb img { max-width: 100%; max-height: 100%; object-fit: contain; border: 1px solid var(--line); }
+
+  @media (max-width: 820px) {
+    .hero { grid-template-columns: 1fr; }
+    .frame { max-width: 340px; }
+    .two { grid-template-columns: 1fr; }
+    .card { grid-template-columns: 104px minmax(0, 1fr); }
+    .seg { font-size: 14px; }
+  }
+  @media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; } }
+</style>
+
+<div class="wrap">
+  <header class="hero">
+    <div>
+      <div class="frame"><video id="vid" src="media/set2-reel.mp4" poster="media/poster.jpg" playsinline muted loop autoplay controls preload="metadata"></video></div>
+      <div class="frame-bar">
+        <button class="btn" id="soundBtn" type="button" aria-pressed="false">Sound on</button>
+        <button class="btn" id="slowBtn" type="button" aria-pressed="false">Half speed</button>
+      </div>
+    </div>
+    <div class="hero-copy">
+      <div class="eyebrow">Locked-On · SE vlog kit · set 2 · proposed 29 Sept 2026</div>
+      <h1>Vlog kit<br>set <em>2</em></h1>
+      <div class="stripe" style="max-width:420px"></div>
+      <p class="thesis">Seven new variations in the Locked-On style, built to add what the first 22 couldn't: type <b>behind</b> people and cars, the next shot seen <b>through</b> the letters, a light that sweeps the car itself, and brackets that <b>turn with</b> the car.</p>
+      <p class="quote"><b>"Can we create new variations of our vlog kit using your best capabilities of dynamic motion graphic."</b> Omarie, 28 Sept 2026. Style picked: Locked-On. Groups picked: depth titles, through-shot transitions, car trace.</p>
+      <div class="specs">
+        <div class="spec"><b>7</b><span>new codes</span></div>
+        <div class="spec"><b>17.6 s</b><span>review reel</span></div>
+        <div class="spec"><b>1080×1920</b><span>29.97 fps</span></div>
+        <div class="spec"><b>0.5×</b><span>true slow-mo, 59.94 source</span></div>
+        <div class="spec"><b>DJI_0029</b><span>Red Rock · 22:49</span></div>
+      </div>
+      <p class="muted" style="font-size:15px">Same clip as the first 22, so they compare shot for shot, and the codes mix freely: "use A2, G3, H1, C4, I4" works. Tap <b style="color:var(--text)">Pick</b> on the ones you want and save; nothing is posted or put in a vlog until you say so. Set 1 is on the <a href="https://claude.ai/artifact/WCe1qHhTrMDw7bkDaskeQm" target="_blank" rel="noopener">Locked-On page</a>.</p>
+    </div>
+  </header>
+
+  <section class="sec" aria-labelledby="tl-h">
+    <div class="sec-head">
+      <div class="eyebrow">The reel · to scale</div>
+      <h2 id="tl-h">Where each code plays</h2>
+      <p class="muted">Gold sections carry a new code. Tap one to jump the player there.</p>
+    </div>
+    <div>
+      <div class="tl"><div class="tl-bar" id="tlbar"></div><div class="playhead" id="playhead"></div></div>
+      <div class="tl-scale" id="tlscale"></div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="pick-h">
+    <div class="sec-head">
+      <div class="eyebrow">The seven · tap an image to see it full size</div>
+      <h2 id="pick-h">Pick your set</h2>
+    </div>
+    <div class="group" id="groups"></div>
+  </section>
+
+  <section class="sec" aria-labelledby="board-h">
+    <div class="sec-head">
+      <div class="eyebrow">Board</div>
+      <h2 id="board-h">All seven side by side</h2>
+    </div>
+    <div class="board-wrap board"><img id="boardImg" src="media/board.jpg" alt="Board with one still of each of the seven set-2 variations" loading="lazy" width="2384" height="905"></div>
+  </section>
+
+  <section class="sec" aria-labelledby="how-h">
+    <div class="sec-head">
+      <div class="eyebrow">What's new under the hood</div>
+      <h2 id="how-h">How set 2 gets depth</h2>
+    </div>
+    <div class="two">
+      <div><h3>Cut-outs from Apple's own Vision</h3><p>The cars and Omarie are cut out with the Mac's built-in Vision framework: <b>a person matte on every frame</b> for B4, a car matte for each freeze. No model download. Where Vision merged a parked car into the Urus's roof, a hand line along the hood fixes it.</p><div class="lesson">lib/matte.swift · config2.json exclude</div></div>
+      <div><h3>Three layers, not one</h3><p>Each frame can have graphics in front, graphics <b>behind the subject</b> (the subject is laid back on top through its matte) and a <b>window</b> layer that shows the next shot. Every layer gets the same real motion blur.</p><div class="lesson">kit2.html passes · lib/compose2.py</div></div>
+      <div><h3>A lock that holds a surface</h3><p>C5 tracks the Urus's side as a plane: a perspective transform on every camera frame (86 or more matching points each). The brackets, grid and ruler are drawn through it, so they turn as the camera passes.</p><div class="lesson">lib/plane_track.py · lib/data/plane.json</div></div>
+      <div><h3>Real slow motion, real sound</h3><p>The camera shoots 59.94 fps, so C5's half speed uses every source frame with nothing blended. I6's tape stop is the clip's own sound slowing to a stop; no sound is added anywhere in the reel.</p><div class="lesson">hfr plates · build2.py audio</div></div>
+    </div>
+  </section>
+
+  <section class="sec" aria-labelledby="conf-h">
+    <div class="sec-head">
+      <div class="eyebrow">Before any of it goes in a vlog</div>
+      <h2 id="conf-h">To confirm</h2>
+    </div>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>On screen</th><th>Where</th><th>What to confirm</th></tr></thead>
+        <tbody>
+          <tr><td>LAMBORGHINI · URUS</td><td>C4, C5</td><td>The grey widebody is an Urus body (set 1 identified it). If it's SE's Mansory Urus, the tag can say so. It doesn't claim that now.</td></tr>
+          <tr><td>The dark SUV</td><td>I6</td><td>Not identified, so nothing names it. I6 never shows a make.</td></tr>
+          <tr><td>The guest in the lineup</td><td>G3</td><td>The same stand-in as set 1's B3. Confirm she's happy to be shown.</td></tr>
+          <tr><td>CH 04 · RED ROCK, CH 05</td><td>G3, I6, I4</td><td>Chapter numbers are examples. They get numbered to the real vlog.</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </section>
+
+  <footer>
+    <div class="stripe" style="max-width:220px"></div>
+    <p>Source: <code>oskibundles-hue/UIUX</code>, branch <code>claude/supercar-rental-ad-graphics-o64vo3</code>, <code>supercar-experience/10-vlog-locked-on/vlog-kit/</code> (<code>README2.md</code>, <code>build2.py</code>, <code>kit2.html</code>). Not pushed yet.</p>
+    <p>Checked: safe-area audit on every layer at every 0.1 s of the reel and at every still; every frame of the reel looked at on contact sheets; stills at the entry, middle and exit of each code.</p>
+  </footer>
+</div>
+
+<div class="pickbar" role="region" aria-label="Your picks">
+  <div class="pickbar-in">
+    <div class="picks" id="picks" aria-live="polite"><span class="none">No codes picked yet</span></div>
+    <label for="note" class="visually-hidden" style="position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)">Anything to change</label>
+    <input id="note" type="text" maxlength="400" placeholder="Anything to change? (optional)">
+    <button class="btn save" id="save" type="button" disabled>Save picks</button>
+    <button class="btn" id="copy" type="button" hidden>Copy reply</button>
+    <div class="status" id="status">Picks save to this page. Claude reads them from here.</div>
+  </div>
+</div>
+<div class="lb" id="lb" hidden><img id="lbImg" alt=""></div>
+
+<script>
+(function () {
+  var KIT = [
+    { g: 'Depth', gn: 'type behind the people and cars', items: [
+      { c: 'G3', n: 'Depth title', t: 2.84, img: 'G3.jpg',
+        d: 'The chapter title stands <b>between the background and the cars</b>. The letters rise from behind the lineup, and the cars and the guest cover their lower edge. The background, the title and the cars push in at three different speeds.',
+        w: 'A chapter open on a still or a locked-off shot of the cars.', b: 'Breaks on a moving shot, or when nothing tall stands in front of the title.' },
+      { c: 'B4', n: 'Name behind', t: 0.25, img: 'B4.jpg',
+        d: 'Omarie\'s name, huge, <b>behind him</b>. His hair and shoulders cover its lower edge on every frame; HOST · @NQ.YOUNG rides in front. The name drifts a little with him, so it feels part of the scene.',
+        w: 'Introducing the host, or a guest by their company, on a selfie shot.', b: 'Breaks if his face leaves the frame, or his head sits too low to tuck behind.' } ] },
+    { g: 'Cars', gn: 'the car itself', items: [
+      { c: 'C4', n: 'Car trace', t: 7.56, img: 'C4.jpg',
+        d: 'The picture <b>freezes</b>. The world around the car drops back, a gold line <b>traces its outline</b> with a live tip, ticks mark its front, rear and roof, and the make locks in. Then the line un-draws and the picture moves again.',
+        w: 'Introducing a hero car, once per vlog.', b: 'Breaks when the car is cut by the frame edge, or another car touches it.' },
+      { c: 'C5', n: 'Orbit brackets', t: 5.82, img: 'C5.jpg',
+        d: 'Brackets <b>pinned to the side of the car</b>, so they skew and turn as the camera moves round it. A perspective grid and a scan line sweep the panel and a ruler runs along the sill. Shown here in true half-speed slow motion.',
+        w: 'A car the camera walks past, or a slow-motion pass.', b: 'Breaks when the side leaves the frame, or the shot is too blurred to track.' } ] },
+    { g: 'Transitions', gn: 'through the shot', items: [
+      { c: 'I4', n: 'Letter window', t: 12.82, img: 'I4.jpg',
+        d: 'The next chapter\'s title rises as solid letters, the white drains out and <b>the next shot is inside the letters</b>. Then the camera flies into the B until the next shot fills the frame.',
+        w: 'Big chapter changes. Pairs with I6.', b: 'Breaks with a long title. Keep it to two short lines.' },
+      { c: 'I5', n: 'Stripe shutter', t: 2.2, img: 'I5.jpg',
+        d: 'The SE stripe draws across the middle, then <b>opens to fill the frame</b>: three frames of gold and white with the mark knocked out in black. The shot switches underneath and the stripe closes back into its line.',
+        w: 'A hard, branded cut into a hook or a new chapter.', b: 'It\'s loud. Once or twice a vlog.' },
+      { c: 'I6', n: 'Freeze sweep', t: 11.29, img: 'I6.jpg',
+        d: 'The chapter\'s last shot <b>freezes</b>, letterbox bars close into the phone\'s own UI bands, a studio light <b>sweeps across the car\'s body</b> and END OF CH 04 sets in. The clip\'s own sound tape-stops under it.',
+        w: 'The end of a chapter, into I4 or a cut.', b: 'A matte black car has no shine for the light to catch.' } ] }
+  ];
+  var TOTAL = 17.618;
+  var SEGS = [
+    { a: 0, b: 2.202, n: 'B4', hot: 1 }, { a: 2.202, b: 2.803, n: 'I5', hot: 1 }, { a: 2.803, b: 5.806, n: 'G3', hot: 1 },
+    { a: 5.806, b: 7.541, n: 'C5', hot: 1 }, { a: 7.541, b: 9.943, n: 'C4', hot: 1 }, { a: 9.943, b: 11.278, n: '' },
+    { a: 11.278, b: 12.813, n: 'I6', hot: 1 }, { a: 12.813, b: 14.148, n: 'I4', hot: 1 }, { a: 14.148, b: 15.616, n: '' },
+    { a: 15.616, b: 17.618, n: '', gap: 1 }
+  ];
+  var vid = document.getElementById('vid');
+  function seek(t) {
+    try { vid.currentTime = t; var p = vid.play(); if (p && p.catch) p.catch(function () {}); } catch (e) {}
+    vid.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+  var bar = document.getElementById('tlbar');
+  SEGS.forEach(function (s) {
+    var el = document.createElement('button'); el.type = 'button';
+    el.className = 'seg' + (s.hot ? ' hot' : '') + (s.gap ? ' gap' : '');
+    el.style.width = ((s.b - s.a) / TOTAL * 100) + '%';
+    el.textContent = s.n;
+    el.setAttribute('aria-label', (s.n || (s.gap ? 'Index card' : 'Plain footage')) + ', ' + s.a.toFixed(1) + ' to ' + s.b.toFixed(1) + ' seconds');
+    el.addEventListener('click', function () { seek(s.a + 0.03); });
+    bar.appendChild(el);
+  });
+  var scale = document.getElementById('tlscale');
+  [0, 3, 6, 9, 12, 15, 17.6].forEach(function (t) {
+    var sp = document.createElement('span'); sp.style.left = (t / TOTAL * 100) + '%'; sp.textContent = t + ' s'; scale.appendChild(sp);
+  });
+  var ph = document.getElementById('playhead');
+  vid.addEventListener('timeupdate', function () { ph.style.left = Math.min(100, vid.currentTime / (vid.duration || TOTAL) * 100) + '%'; });
+  var soundBtn = document.getElementById('soundBtn');
+  soundBtn.addEventListener('click', function () { vid.muted = !vid.muted; if (!vid.muted) { var p = vid.play(); if (p && p.catch) p.catch(function () {}); } });
+  vid.addEventListener('volumechange', function () { soundBtn.setAttribute('aria-pressed', String(!vid.muted)); soundBtn.textContent = vid.muted ? 'Sound on' : 'Sound off'; });
+  var slowBtn = document.getElementById('slowBtn');
+  slowBtn.addEventListener('click', function () { var s = vid.playbackRate === 1; vid.playbackRate = s ? 0.5 : 1; slowBtn.setAttribute('aria-pressed', String(s)); });
+
+  // lightbox
+  var lb = document.getElementById('lb'), lbImg = document.getElementById('lbImg');
+  function openLb(src, alt) { lbImg.src = src; lbImg.alt = alt; lb.hidden = false; }
+  lb.addEventListener('click', function () { lb.hidden = true; });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') lb.hidden = true; });
+  document.getElementById('boardImg').addEventListener('click', function () { openLb('media/board.jpg', 'Board'); });
+
+  // picks
+  var picked = [], savedCodes = null, savedNote = '', db = null, docRef = null;
+  var order = ['G3', 'B4', 'C4', 'C5', 'I4', 'I5', 'I6'];
+  var cardEls = {}, pickBtns = {};
+  var groups = document.getElementById('groups');
+  KIT.forEach(function (grp) {
+    var wrap = document.createElement('div'); wrap.className = 'group';
+    wrap.innerHTML = '<div class="group-h"><b>' + grp.g + '</b><span>' + grp.gn + '</span></div>';
+    var cards = document.createElement('div'); cards.className = 'cards';
+    grp.items.forEach(function (it) {
+      var c = document.createElement('article'); c.className = 'card';
+      c.innerHTML = '<img src="media/' + it.img + '" alt="' + it.c + ' ' + it.n + ' mockup over the Sep 15 footage" loading="lazy" width="360" height="640">' +
+        '<div class="card-body"><div class="code">' + it.c + '<small>' + it.n.toUpperCase() + '</small></div><p>' + it.d + '</p>' +
+        '<p class="when">' + it.w + '</p><p class="breaks">' + it.b + '</p><div class="card-actions"></div></div>';
+      var act = c.querySelector('.card-actions');
+      var pb = document.createElement('button'); pb.type = 'button'; pb.className = 'btn'; pb.setAttribute('aria-pressed', 'false');
+      pb.textContent = 'Pick ' + it.c;
+      pb.addEventListener('click', function () { toggle(it.c); });
+      var wb = document.createElement('button'); wb.type = 'button'; wb.className = 'btn'; wb.textContent = 'Watch';
+      wb.addEventListener('click', function () { seek(it.t); });
+      act.appendChild(pb); act.appendChild(wb);
+      c.querySelector('img').addEventListener('click', function () { openLb('media/' + it.img, it.c + ' ' + it.n); });
+      cardEls[it.c] = c; pickBtns[it.c] = pb;
+      cards.appendChild(c);
+    });
+    wrap.appendChild(cards); groups.appendChild(wrap);
+  });
+
+  var picksEl = document.getElementById('picks'), saveBtn = document.getElementById('save'), copyBtn = document.getElementById('copy');
+  var statusEl = document.getElementById('status'), note = document.getElementById('note');
+  function sorted(a) { return order.filter(function (c) { return a.indexOf(c) > -1; }); }
+  function reply() { var p = sorted(picked); return (p.length ? 'Use ' + p.join(', ') : 'None of set 2 for now') + (note.value.trim() ? '. ' + note.value.trim() : ''); }
+  function dirty() { return savedCodes === null ? picked.length > 0 || note.value.trim() !== '' : sorted(picked).join(',') !== sorted(savedCodes).join(',') || note.value.trim() !== savedNote; }
+  function render() {
+    var p = sorted(picked);
+    picksEl.innerHTML = p.length ? p.join(' · ') : '<span class="none">No codes picked yet</span>';
+    order.forEach(function (c) { var on = p.indexOf(c) > -1; cardEls[c].classList.toggle('picked', on); pickBtns[c].setAttribute('aria-pressed', String(on)); pickBtns[c].textContent = (on ? 'Picked ' : 'Pick ') + c; });
+    saveBtn.disabled = !db || !dirty();
+    try { localStorage.setItem('vlogkit2-picks', JSON.stringify({ p: p, n: note.value })); } catch (e) {}
+  }
+  function toggle(c) { var i = picked.indexOf(c); if (i > -1) picked.splice(i, 1); else picked.push(c); render(); }
+  note.addEventListener('input', render);
+  try { var ls = JSON.parse(localStorage.getItem('vlogkit2-picks') || 'null'); if (ls) { picked = ls.p || []; note.value = ls.n || ''; } } catch (e) {}
+  render();
+
+  saveBtn.addEventListener('click', function () {
+    if (!docRef) return;
+    saveBtn.disabled = true; statusEl.textContent = 'Saving…';
+    var body = { codes: sorted(picked), note: note.value.trim(), savedAt: new Date().toISOString() };
+    docRef.set(body).then(function () {
+      savedCodes = body.codes; savedNote = body.note;
+      statusEl.textContent = 'Saved ' + (body.codes.length ? body.codes.join(', ') : 'no codes') + '. Tell Claude "picks saved" and it builds from here.';
+      render();
+    }).catch(function (e) {
+      statusEl.textContent = 'Could not save (' + ((e && e.code) || 'error') + '). Copy the reply instead.';
+      copyBtn.hidden = false; render();
+    });
+  });
+  copyBtn.addEventListener('click', function () {
+    var txt = reply();
+    function done() { statusEl.textContent = 'Copied: ' + txt; }
+    try { navigator.clipboard.writeText(txt).then(done, function () { statusEl.textContent = txt; }); } catch (e) { statusEl.textContent = txt; }
+  });
+
+  // the saved picks live in the page's store (Claude reads them there); without it, fall back to copying a reply
+  var use = window.claude && window.claude.use;
+  (use ? window.claude.use('db') : Promise.resolve(null)).then(function (d) {
+    if (!d) { copyBtn.hidden = false; statusEl.textContent = 'Saving isn\'t available in this view. Copy the reply and paste it to Claude.'; return; }
+    db = d; docRef = db.doc('picks/set2');
+    docRef.onSnapshot(function (snap) {
+      if (snap.exists) {
+        var b = snap.data() || {};
+        var first = savedCodes === null;
+        savedCodes = (b.codes || []).slice(); savedNote = b.note || '';
+        if (first) { picked = savedCodes.slice(); note.value = savedNote; }
+        statusEl.textContent = 'Saved picks: ' + (savedCodes.length ? savedCodes.join(', ') : 'none') + (b.savedAt ? ' · ' + new Date(b.savedAt).toLocaleString() : '');
+      } else if (savedCodes === null) {
+        savedCodes = [];
+      }
+      render();
+    }, function () { copyBtn.hidden = false; });
+    render();
+  }).catch(function () { copyBtn.hidden = false; });
+})();
+</script>
+
+</body></html>
