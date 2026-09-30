@@ -117,6 +117,28 @@ actions, memory-store writes, force pushes, `git reset --hard`, `git clean -f`, 
 file writes to those branches and asks before merging a PR. An "ask" waits for Omarie's click, so an unattended routine that hits one stops there until
 he answers. Test it with `python3 .claude/hooks/test_regret_gate.py`.
 
+## Show what you're working on (the Working-now block on the NQ OS page)
+
+Omarie, 2026-09-30: "I want my NQ OS system to show me when it's actively working on something." The
+control room (https://claude.ai/artifact/JdMaXgCuUu7XHQ3yRhEYFy) opens with a **Working now** block. It
+reads the page's `work` collection, one document per session, so he can see from his phone what every
+session is on, with a link to it. A card with no update for 20 minutes shows as quiet and drops out
+after a day, so a card you stop updating goes stale in the open rather than looking current.
+
+The lead keeps the card; agents never write it. On any job past a couple of minutes:
+
+1. **Start:** `python3 .claude/brain/live_card.py start "<job>" "<first step>"` prints the payload
+   (url, collection `work`, this session's doc id, data). Pass it to `ArtifactData` as a `set`; a new
+   card needs no `if_version`.
+2. **Each new step, and at least every 15 minutes while working:** `... step "<what you're on now>"`
+   (add `--pct N` when there's a real percentage), then `ArtifactData` `update` with `if_version` set
+   to the version the last write returned.
+3. **End:** `... done "<what shipped>"`, or `blocked` / `waiting` with what's needed from him. Never
+   stop with a card still on `working`.
+
+One small tool call per step and no model call, so it costs almost nothing. The Mac runs the same rule
+(its handoff is in Dropbox `NQ Studio/06 Creator Kit/Agentic OS/`).
+
 ## Prompting Claude 5 models (sourced, not Omarie's own rule)
 
 From research, 2026-09-28 — Ben AI, "Anthropic Just Revealed 7 New Rules for Prompting Claude 5
