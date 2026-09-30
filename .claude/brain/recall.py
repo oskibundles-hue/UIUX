@@ -25,7 +25,9 @@ SYN = {
 # phrases that mean one note even though their words alone are ambiguous ("waiting" alone is the token policy's
 # "waiting is free"; "waiting on me" is the handoff list)
 PHRASES = [(r"\bwait\w*\s+(?:on|for)\s+(?:me|us|omarie|him)\b", ["handoff"]),
-           (r"\bpending\s+(?:decisions?|questions?|items?\s+for\s+me)\b", ["handoff"])]
+           (r"\bpending\s+(?:decisions?|questions?|items?\s+for\s+me)\b", ["handoff"]),
+           # "NQ OS team" is the agent team, not the control-room dashboard that "os" alone points at
+           (r"\b(?:nq\s*os|agent)\s+team\b|\bteam\s+of\s+agents\b", ["repo", "agents"])]
 def stem(w):
     for suf, rep in (("ies", "y"), ("ing", ""), ("ed", ""), ("es", ""), ("ly", ""), ("s", "")):
         if len(w) > len(suf) + 2 and w.endswith(suf): w = w[: -len(suf)] + rep; break
