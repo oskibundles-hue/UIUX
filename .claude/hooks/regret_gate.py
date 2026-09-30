@@ -31,11 +31,16 @@ MEMORY_WRITE = re.compile(r"^(remember|update_memory|archive_memory|approve_cons
 GITHUB_BRANCH_WRITE = {"push_files", "create_or_update_file", "delete_file"}
 GITHUB_MERGE = {"merge_pull_request", "enable_pr_auto_merge"}
 
-# Commands that run the command after them (sudo rm ..., env X=1 git push ..., xargs rm ...), and
-# their options that take a value, so the value isn't read as the command.
-WRAPPERS = {"sudo", "doas", "env", "nohup", "time", "nice", "command", "exec", "builtin", "xargs",
-            "stdbuf", "timeout"}
-WRAPPER_ARGS = {"-u", "-g", "-n", "-C", "-D", "-I", "-L", "-s", "-o", "-e", "-i", "-a", "-E", "-P", "-k"}
+# Commands that run the command after them (sudo rm ..., env X=1 git push ..., xargs rm ...), each with
+# its own options that take a value, so the value isn't read as the command. Per wrapper, because a
+# flag that takes a value for one (env -u) takes none for another (env -i), and treating it as if it
+# did would swallow the real command.
+WRAPPER_ARGS = {
+    "sudo": {"-u", "-g", "-C", "-D", "-h", "-p", "-r", "-t", "-U"}, "doas": {"-u", "-C"},
+    "env": {"-u", "-C", "-S"}, "nice": {"-n"}, "timeout": {"-s", "-k"}, "stdbuf": {"-i", "-o", "-e"},
+    "xargs": {"-a", "-d", "-E", "-I", "-L", "-n", "-P", "-s"},
+    "nohup": set(), "time": set(), "command": set(), "exec": set(), "builtin": set(),
+}
 SHELLS = {"bash", "sh", "zsh", "dash", "ksh"}
 GIT_OPTS_WITH_VALUE = {"-C", "-c", "--git-dir", "--work-tree", "--namespace", "--super-prefix", "--config-env"}
 PUSH_OPTS_WITH_VALUE = {"-o", "--push-option", "--receive-pack", "--exec", "--repo"}
@@ -122,13 +127,13 @@ def unwrap(words):
         if re.match(r"^\w+=", words[0]):
             words = words[1:]
             continue
-        if words[0] not in WRAPPERS:
+        if words[0] not in WRAPPER_ARGS:
             break
         via_xargs |= words[0] == "xargs"
         wrapper, words = words[0], words[1:]
         while words and words[0].startswith("-"):
             flag, words = words[0], words[1:]
-            if flag in WRAPPER_ARGS and words:
+            if flag in WRAPPER_ARGS[wrapper] and words:
                 words = words[1:]
         if wrapper in ("timeout", "nice") and words and re.match(r"^-?[\d.]+[smhd]?$", words[0]):
             words = words[1:]

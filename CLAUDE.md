@@ -85,9 +85,8 @@ cost first), anything that publishes or changes a live account, Dropbox moves or
 actions, memory-store writes, force pushes, `git reset --hard`, `git clean -f`, and recursive deletes (`rm -r`,
 `find -delete`) outside `/tmp`. It **refuses** any push to `main`, `master` or this repo's default branch
 `claude/new-session-mucc2q`, because those only change through a PR. That covers a bare `git push` from one of them,
-`git -C`, and commands wrapped in `sudo`, `env` or `bash -c`. Its GitHub connector rules (refuse file writes to
-those branches, ask before merging a PR) take effect once `github` is added to the hook's matcher in
-`.claude/settings.json`. An "ask" waits for Omarie's click, so an unattended routine that hits one stops there until
+`git -C`, and commands wrapped in `sudo`, `env` or `bash -c`. Its GitHub connector rules are on too: it refuses
+file writes to those branches and asks before merging a PR. An "ask" waits for Omarie's click, so an unattended routine that hits one stops there until
 he answers. Test it with `python3 .claude/hooks/test_regret_gate.py`.
 
 ## Prompting Claude 5 models (sourced, not Omarie's own rule)
