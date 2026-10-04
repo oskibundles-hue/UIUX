@@ -1555,6 +1555,14 @@ $("#makes-l").innerHTML=MAKES.map((m,i)=>`<span class="rv" style="transition-del
    (iPhone memory). Reduced motion or Save-Data: the still only. #ppf-debug / #detailing-debug shows what loaded. */
 function setHdr(){const t=$(".top");if(t)document.documentElement.style.setProperty("--hdr",Math.round((parseFloat(getComputedStyle(t).top)||0)+t.offsetHeight)+"px")}
 setHdr();addEventListener("resize",setHdr);
+/* the one muted play a scroll video needs; if the phone wants a tap first (Low Power Mode), the next tap anywhere does it */
+const needTap=new Set();let tapArmed=false;
+function primeVid(v){const p=v.play();if(p)p.catch(e=>{if(e&&e.name==="NotAllowedError"){needTap.add(v);armTap()}})}
+function armTap(){
+  if(tapArmed)return;tapArmed=true;const ev=["touchend","click","keydown"];
+  const go=()=>{tapArmed=false;ev.forEach(t=>removeEventListener(t,go,true));const vs=[...needTap];needTap.clear();vs.forEach(v=>{if(v.getAttribute("src"))primeVid(v)})};
+  ev.forEach(t=>addEventListener(t,go,{capture:true,passive:true}));
+}
 function scrollHero(id,{DUR,CLIP,CLIP_HD,STEPS,onUpdate}){
   const sec=document.getElementById(id);if(!sec)return;
   const track=sec.querySelector(".sc-track"),stage=sec.querySelector(".sc-stage"),v=sec.querySelector("video"),still=sec.querySelector(".sc-still");
@@ -1573,12 +1581,20 @@ function scrollHero(id,{DUR,CLIP,CLIP_HD,STEPS,onUpdate}){
     phs.forEach(el=>{const a=+el.dataset.from,b=+el.dataset.to,on=p>=a&&p<b;el.classList.toggle("on",on);el.style.setProperty("--q",clamp((p-a)/(Math.min(b,1)-a)).toFixed(3))});
     onUpdate&&onUpdate(p,k);
   }
-  function tick(){
-    if(near&&v.getAttribute("src")&&v.readyState>=1&&!v.seeking&&Math.abs(v.currentTime-target)>1/24)v.currentTime=target;
+  /* seek only once frames have loaded (a seek before that can hang in Safari), and re-ask if one hangs anyway */
+  let seekAt=0;
+  function tick(now){
+    if(near&&v.getAttribute("src")){
+      if(v.seeking){if(now-seekAt>1500){v.currentTime=target;seekAt=now}}
+      else if(v.readyState>=2&&Math.abs(v.currentTime-target)>1/24){v.currentTime=target;seekAt=now}
+    }
     raf=requestAnimationFrame(tick);
   }
   const wantHD=!SAVER&&innerWidth*(devicePixelRatio||1)>=700;
-  function setSrc(url){const t=v.currentTime||target;v.src=url;v.addEventListener("loadeddata",()=>{v.currentTime=t;still.style.visibility="hidden"},{once:true})}
+  /* iPhone Safari loads nothing for preload="none" and shows no frame until the video has played once:
+     ask for the data, then a muted play that pauses itself the moment it starts (tick then seeks) */
+  v.addEventListener("playing",()=>v.pause());
+  function setSrc(url){const t=v.currentTime||target;v.preload="auto";v.src=url;v.addEventListener("loadeddata",()=>{v.currentTime=t;still.style.visibility="hidden"},{once:true});primeVid(v)}
   async function loadHD(){
     if(hdAsked||!wantHD)return;hdAsked=true;
     try{const res=await fetch(CLIP_HD);if(!res.ok)return;hd=URL.createObjectURL(await res.blob())}catch(e){return}
@@ -1594,10 +1610,12 @@ function scrollHero(id,{DUR,CLIP,CLIP_HD,STEPS,onUpdate}){
   function sleep(){if(v.getAttribute("src")){v.removeAttribute("src");v.load();still.style.visibility="visible"}}
   new IntersectionObserver(es=>es.forEach(e=>{near=e.isIntersecting;if(near){wake();if(!raf)raf=requestAnimationFrame(tick)}else{sleep();cancelAnimationFrame(raf);raf=0}}),{rootMargin:"60% 0px"}).observe(sec);
   new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)&&!stillOnly)loadHD()},{rootMargin:"150% 0px"}).observe(sec);
+  /* Safari may refuse a play while the video is still off screen: try again once it is on screen */
+  new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)&&v.getAttribute("src")&&v.readyState<2)primeVid(v)}).observe(sec);
   addEventListener("scroll",update,{passive:true});addEventListener("resize",()=>{measure();update()});update();
   if(location.hash==="#"+id+"-debug"){
     const d=document.createElement("div");d.className="sc-dbg";stage.appendChild(d);
-    setInterval(()=>{d.textContent=(v.videoWidth?v.videoHeight+"p clip":"no clip yet")+" · HD "+(hd?"ready":hdAsked?"downloading":(wantHD?"waiting":"off"))+" · dpr "+(devicePixelRatio||1)+" · hdr "+getComputedStyle(document.documentElement).getPropertyValue("--hdr")},500);
+    setInterval(()=>{d.textContent=stillOnly?"still only: "+(RM?"Reduce Motion is on":"data saver is on"):(v.videoWidth?v.videoHeight+"p clip":"no clip yet")+" · ready "+v.readyState+"/4"+(needTap.has(v)?" · waiting for a tap":"")+" · HD "+(hd?"ready":hdAsked?"downloading":(wantHD?"waiting":"off"))+" · dpr "+(devicePixelRatio||1)+" · hdr "+getComputedStyle(document.documentElement).getPropertyValue("--hdr")},500);
     setTimeout(()=>sec.scrollIntoView(),400);
   }
 }
