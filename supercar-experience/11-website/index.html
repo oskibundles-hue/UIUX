@@ -1551,7 +1551,7 @@ $("#th-title").classList.add("in");
 /* ---------- GT3 RS scroll hero (3 Oct) ---------- */
 (()=>{
   const sec=document.getElementById("gt3"); if(!sec) return;
-  const DUR=31.9, CLIP="media/gt3/gt3rs-scroll.mp4";
+  const DUR=31.9, CLIP="media/gt3/gt3rs-scroll.mp4", CLIP_HD="media/gt3/gt3rs-scroll-hd.mp4"; /* 540p loads first so the scroll works fast; the 1080p (19 MB) swaps in when it arrives (Omarie, 3 Oct: "kind of blurry") */
   const STEPS=[0,.3009,.4514,.6082,.7335,.8746], KIN=["Open the door.","Take the wheel.","GT3 RS."];
   const track=sec.querySelector(".gt3-track"), v=sec.querySelector("video"), still=sec.querySelector(".gt3-still");
   const phs=[...sec.querySelectorAll(".gt3-ph")], kin=sec.querySelector(".gt3-kin"), hint=sec.querySelector(".gt3-hint");
@@ -1584,10 +1584,20 @@ $("#th-title").classList.add("in");
     if(near&&v.getAttribute("src")&&v.readyState>=1&&!v.seeking&&Math.abs(v.currentTime-target)>1/24) v.currentTime=target;
     raf=requestAnimationFrame(tick);
   }
+  let hd=null, hdAsked=false;
+  const wantHD=!SAVER&&(innerWidth*(devicePixelRatio||1)>=700);
+  function setSrc(url){ const t=v.currentTime||target; v.src=url; v.addEventListener("loadeddata",()=>{ v.currentTime=t; still.style.visibility="hidden"; },{once:true}); }
+  async function loadHD(){
+    if(hdAsked||!wantHD) return; hdAsked=true;
+    try{ const res=await fetch(CLIP_HD); if(!res.ok) return; hd=URL.createObjectURL(await res.blob()); }catch(e){ return; }
+    if(near&&v.getAttribute("src")){ setSrc(hd); }
+    if(blob){ URL.revokeObjectURL(blob); blob=null; }   /* free the 540p copy: phones have little memory for video */
+  }
   async function wake(){
     if(still_only||(TOUCH&&pvBusy())) return;
-    try{ if(!blob){ const res=await fetch(CLIP); blob=URL.createObjectURL(await res.blob()); } }catch(e){ return; }
-    if(near&&!v.getAttribute("src")){ v.src=blob; v.addEventListener("loadeddata",()=>{still.style.visibility="hidden"},{once:true}); }
+    if(!hd){ try{ if(!blob){ const res=await fetch(CLIP); blob=URL.createObjectURL(await res.blob()); } }catch(e){ return; } }
+    if(near&&!v.getAttribute("src")) setSrc(hd||blob);
+    loadHD();
   }
   function sleep(){ if(v.getAttribute("src")){ v.removeAttribute("src"); v.load(); still.style.visibility="visible"; } }
   new IntersectionObserver(es=>es.forEach(e=>{ near=e.isIntersecting; if(near){ wake(); if(!raf) raf=requestAnimationFrame(tick); } else { sleep(); cancelAnimationFrame(raf); raf=0; } }),{rootMargin:"60% 0px"}).observe(sec);
