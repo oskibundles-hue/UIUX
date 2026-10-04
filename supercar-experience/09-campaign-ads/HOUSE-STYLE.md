@@ -167,6 +167,20 @@ Code and how to make the next one: `flash-special-quick-cut/` (README). `story2.
 config-driven version: add a car to its `CARS` block and its cut list to `plate.py`.
 It takes about 15 minutes per ad, most of it choosing cut points on real frames.
 
+### `race-weekend` — event ads, Night and Day
+
+Approved by Omarie on 2026-10-03 ("approve all 3 f1 ads", "save the layouts") on the F1 weekend set (Las Vegas,
+Nov 19–21). An F1-inspired motion-graphics family in two variants, built on Car Scenes' unbranded footage with
+its own audio:
+
+- **Night**: black scrims, flat chequer bands, chequered wipes, whips, a sector strip (S1 THU · S2 FRI · S3 SAT ·
+  RACE NIGHT), lock-on gates.
+- **Day**: its own look for bright sky: dark glass panels, skewed flag strips, sun-flare wipes, heat-shimmer cuts.
+
+The copy is rental first: RENT A SUPERCAR on frame 0 and on the end card, with car names only as small labels held at
+least 1 s. No countdown, no prices, and F1 in plain text (no logos). Never LAS VEGAS over desert footage; a pickup line
+inside the booking panel is fine. Code, rules and how to run it: `race-weekend/` (README).
+
 ---
 
 ## Rules learned the hard way
@@ -268,6 +282,8 @@ Keeping them separate is deliberate: a test on one axis stays interpretable.
 | 2026-09-28 | Every session and branch | "make sure every session/branch/everything knows and implements it no matter what when creating any work but ask beforehand what style should be used" — ask which style first (a click), then build it fully (THE STANDARD) |
 | 2026-09-28 | Now Boarding and Paste-Up looks on ROOF DOWN | Two more graphics packages asked for ("impress me... give them unique names and store them in the same artifact"); proposed, not approved; on the style guide page |
 | 2026-09-28 | Locked-On style guide page | "My locked on artifact is my standard for any work I work on" — the page is the standard for every job in every workstream, each in its own brand. The page now has the feed cuts and the day-grade rule from ROOF DOWN (version 5) |
+
+| 2026-10-03 | F1 Weekend set: Rent a Supercar night + day, AMG night (`race-weekend/`) | "i dont approve the f1 add use the original audio" → original audio; "take out the 46 days to nov 19" → no countdown; "make it more of a ad to come rent a car no specific car", then "you can mention car names just make it subtle"; then "approve all 3 f1 ads" and "save the layouts" — `race-weekend` approved (Night + Day). Delivered to `SCE Ads/` and `Supercar Experience/07 F1 Weekend Ads (2026-10-03)/`. Not posted |
 
 Add a row when the shop reacts to something. This file is the reason a future ad
 does not have to re-litigate a settled look.
