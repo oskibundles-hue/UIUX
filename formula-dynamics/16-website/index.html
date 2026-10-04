@@ -134,13 +134,14 @@ h1,h2,h3,.h{font-family:var(--h);font-weight:400;letter-spacing:.02em;text-trans
 .nav a:hover::after,.nav a[aria-current="true"]::after{transform:none}
 .top .tel{font:500 13px/1 var(--mono);letter-spacing:.1em;text-decoration:none;white-space:nowrap}
 .top .btn{height:44px;font-size:21px;padding:0 18px}
+.nav a,.top .btn{white-space:nowrap}   /* eight links since the PPF and Detailing heroes (4 Oct): nothing wraps */
 .menu-b{display:none;width:48px;height:48px;border:1px solid rgba(255,255,255,.6);background:#000;align-items:center;justify-content:center}
 .menu-b svg{width:22px;height:22px;stroke:#fff;stroke-width:2;fill:none}
 .ticker{border-bottom:1px solid var(--line);background:#000}
 .ticker .wrap{display:flex;gap:28px;height:38px;align-items:center;font:500 11px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mute);overflow:hidden;white-space:nowrap}
 .ticker span{display:inline-flex;gap:10px;align-items:center}
 .ticker .sq{width:7px;height:7px}
-.menu{position:fixed;inset:0;z-index:90;background:#000;padding:24px var(--pad);display:flex;flex-direction:column;gap:6px}
+.menu{position:fixed;inset:0;z-index:90;background:#000;padding:24px var(--pad);display:flex;flex-direction:column;gap:6px;overflow-y:auto}
 .menu .x{align-self:flex-end;width:48px;height:48px;border:1px solid rgba(255,255,255,.6);background:#000;font:700 20px var(--mono)}
 .menu a{font:400 54px/1.05 var(--h);text-transform:uppercase;letter-spacing:.02em;text-decoration:none}
 .menu a:hover{color:var(--red)}
@@ -431,6 +432,62 @@ section{position:relative;scroll-margin-top:110px}
 .link-rule .cur{position:absolute;bottom:-1px;left:0;width:2px;height:15px;background:var(--red);animation:slide 3.2s cubic-bezier(.6,0,.4,1) infinite alternate}
 @keyframes slide{to{left:calc(100% - 2px)}}
 
+/* ---------- scroll heroes: PPF (MC20) and the detail (ZR1), 4 Oct 2026 ----------
+   Omarie: "implement my scroll hero into formula dynamics both the ppf one and the detail one". The approved
+   samples (3 Oct) ported onto the site: scrolling scrubs the clip. The stage sticks under the header (--hdr).
+   iPhone rules kept: nothing over the video uses backdrop-filter; clips are blobs (seekable) and drop their source
+   off screen. Reduced motion or Save-Data: the poster stays still and only the words change. */
+.sc{position:relative;background:#000;scroll-margin-top:var(--hdr,127px)}
+.sc-stage{position:sticky;top:var(--hdr,127px);height:calc(100vh - var(--hdr,127px));height:calc(100dvh - var(--hdr,127px));overflow:hidden;background:#000}
+.sc-bg{position:absolute;inset:-40px;background:center/cover no-repeat;filter:blur(30px) brightness(.45);transform:scale(1.1)}
+.sc video,.sc-still,.sc-frame{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+@media (min-aspect-ratio:4/5){.sc video,.sc-still,.sc-frame{object-fit:contain;left:auto;right:6vw;width:min(calc((100dvh - var(--hdr,127px))*.5625),46vw)}}
+.sc-shade{position:absolute;inset:0;pointer-events:none;background:linear-gradient(180deg,rgba(0,0,0,.62) 0,transparent 26%,transparent 44%,rgba(0,0,0,.9) 100%)}
+.sc-ph{position:absolute;inset:0;pointer-events:none;opacity:0;visibility:hidden;transition:opacity .3s var(--ease),visibility .3s}
+.sc-ph.on{opacity:1;visibility:visible}
+.sc-ph a{pointer-events:auto}
+.sc-copy{position:absolute;left:0;right:0;bottom:calc(26px + env(safe-area-inset-bottom,0px));padding:0 var(--pad);display:grid;gap:12px;max-width:720px}
+.sc-eb{display:flex;gap:10px;align-items:center;font:500 11.5px/1.2 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--soft)}
+.sc-h{font-size:clamp(52px,11vw,104px);line-height:.88;text-wrap:balance}
+.sc-sub{margin:0;color:var(--soft);max-width:38ch;font-size:18px;line-height:1.4}
+.sc-cta{display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center}
+.sc-fine{font:500 11px/1.45 var(--mono);color:var(--mute);letter-spacing:.06em}
+.sc-fine a{text-decoration:none}.sc-fine a:hover{color:#fff}
+.sc-tl{position:absolute;left:var(--pad);right:var(--pad);top:16px}
+.sc-tele{display:flex;justify-content:space-between;gap:10px;padding:8px 10px;background:rgba(0,0,0,.6);font:500 12px/1.3 var(--mono);letter-spacing:.08em;text-transform:uppercase;font-variant-numeric:tabular-nums}
+.sc-tele b{color:var(--red);font-weight:500}
+.sc-brk{position:absolute;inset:24% 12% 32%}
+.sc-brk i{position:absolute;width:26px;height:26px;border:0 solid var(--red)}
+.sc-brk .a{top:0;left:0;border-top-width:3px;border-left-width:3px}.sc-brk .b{top:0;right:0;border-top-width:3px;border-right-width:3px}
+.sc-brk .c{bottom:0;left:0;border-bottom-width:3px;border-left-width:3px}.sc-brk .d{bottom:0;right:0;border-bottom-width:3px;border-right-width:3px}
+.sc-bar{height:3px;width:min(260px,60%);background:var(--line);position:relative}
+.sc-bar i{position:absolute;inset:0 auto 0 0;width:calc(var(--q,0)*100%);background:var(--red)}
+.sc-steps{position:absolute;left:var(--pad);top:16px;display:grid;gap:5px;list-style:none;margin:0;padding:10px 14px 10px 12px;background:rgba(0,0,0,.7);border-left:3px solid var(--red)}
+.sc-steps li{display:flex;gap:10px;align-items:baseline;font:400 22px/1 var(--h);letter-spacing:.04em;text-transform:uppercase;color:rgba(255,255,255,.45)}
+.sc-steps li i{font:500 11px/1 var(--mono);font-style:normal;color:inherit;min-width:20px}
+.sc-steps li.on{color:#fff}.sc-steps li.on i{color:var(--red)}
+.sc-steps li.done{color:rgba(255,255,255,.72)}
+.sc-chips{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;padding:10px;background:rgba(0,0,0,.6)}
+.sc-chips div{display:grid;gap:6px;font:400 20px/1 var(--h);letter-spacing:.05em;text-transform:uppercase;color:rgba(255,255,255,.45);min-width:0}
+.sc-chips div u{display:block;height:3px;background:var(--line);position:relative;text-decoration:none}
+.sc-chips div u::after{content:"";position:absolute;inset:0 auto 0 0;width:calc(var(--f,0)*100%);background:var(--red)}
+.sc-chips div.on{color:#fff}
+.sc-prog{position:absolute;right:clamp(8px,1.6vw,18px);top:24%;bottom:24%;width:2px;background:var(--line)}
+.sc-prog i{position:absolute;left:0;right:0;top:0;height:calc(var(--p,0)*100%);background:var(--red)}
+.sc-hint{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(8px + env(safe-area-inset-bottom,0px));font:500 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mute);transition:opacity .3s}
+.sc-dbg{position:absolute;left:8px;bottom:120px;z-index:9;font:600 12px/1.3 var(--mono);background:#000;color:#fff;padding:6px 8px;border:1px solid var(--red)}
+
+/* ---------- detailing: the A&J Detail Supplies shelf ---------- */
+.aj .part .ph{aspect-ratio:1/1}
+.aj .part .inc{font:500 13px/1.35 var(--f);color:#444}
+.aj .part .vd span:last-child{white-space:nowrap}
+.aj .part .stp{background:var(--red)}
+.aj .part.out .ph img{opacity:.45}
+.aj .part .so{font:500 10px/1 var(--mono);letter-spacing:.14em;color:#555;text-transform:uppercase}
+.aj .shop.ink{background:var(--ink)}.aj .shop.ink:hover{background:var(--red)}
+.aj-eps{margin-top:70px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.aj-eps>small{grid-column:1/-1;font:500 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mute);display:flex;gap:8px;align-items:center}
+
 /* ---------- service menu ---------- */
 .menu-t{width:100%;border-collapse:collapse;margin-top:44px}
 .menu-t th{font:500 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mute);text-align:left;padding:0 12px 14px;border-bottom:2px solid #fff;font-weight:500}
@@ -529,7 +586,11 @@ footer ul a:hover{color:var(--red)}
   .book{grid-template-columns:minmax(0,1fr)}
   .book>*{min-width:0}
   .nav{gap:18px}
+  .nav a{letter-spacing:.12em}
 }
+/* the header only: the phone number gives way first, then the nav goes to the menu button (measured 4 Oct) */
+@media (max-width:1440px){.top .tel{display:none}}
+@media (max-width:1160px){.nav{display:none}.menu-b{display:flex}.top .btn{margin-left:auto}}
 @media (max-width:1000px){
   .nav,.top .tel{display:none}
   .menu-b{display:flex}
@@ -597,6 +658,13 @@ footer ul a:hover{color:var(--red)}
   .bridge .spot{border-right:0}
   .bridge .mid{border-right:0}
   .split img{max-height:none}
+  .sc-steps{padding:8px 12px 8px 10px;gap:4px}
+  .sc-steps li{font-size:19px}
+  .sc-chips div{font-size:17px}
+  .sc-tele{font-size:10.5px;letter-spacing:.06em}
+  .sc-h{font-size:clamp(46px,13vw,72px)}
+  .sc-sub{font-size:16px}
+  .aj-eps{grid-template-columns:1fr;margin-top:50px}
   .ba .cap{flex-direction:column;align-items:flex-start}
   .book h2{font-size:clamp(80px,26vw,120px)}
   .jobs{grid-template-columns:1fr 1fr}
@@ -632,7 +700,7 @@ footer ul a:hover{color:var(--red)}
   <div class="wrap">
     <a class="logo" href="#top" aria-label="Formula Dynamics Performance, back to top"><img src="media/brand/fd-primary-horizontal--white.svg" alt="Formula Dynamics Performance" width="150" height="46"></a>
     <nav class="nav" aria-label="Sections">
-      <a href="#board">The board</a><a href="#bay">In the bay</a><a href="#before-after">Before &amp; after</a><a href="#parts">Parts</a><a href="#services">Services</a><a href="#ads">The ads</a>
+      <a href="#board">The board</a><a href="#bay">In the bay</a><a href="#before-after">Before &amp; after</a><a href="#ppf">PPF</a><a href="#detailing">Detailing</a><a href="#parts">Parts</a><a href="#services">Services</a><a href="#ads">The ads</a>
     </nav>
     <a class="tel" href="tel:+17024301040">(702) 430-1040</a>
     <a class="btn" href="#book">Book your build</a>
@@ -641,7 +709,7 @@ footer ul a:hover{color:var(--red)}
 </header>
 <div class="menu" id="menu" hidden role="dialog" aria-modal="true" aria-label="Menu">
   <button class="x" type="button" id="menu-x" aria-label="Close the menu">✕</button>
-  <a href="#board">The board</a><a href="#bay">In the bay</a><a href="#before-after">Before &amp; after</a><a href="#parts">Parts counter</a><a href="#services">Services</a><a href="#ads">The ads</a><a href="#book" class="red">Book your build</a>
+  <a href="#board">The board</a><a href="#bay">In the bay</a><a href="#before-after">Before &amp; after</a><a href="#ppf">Paint protection</a><a href="#detailing">Detailing</a><a href="#parts">Parts counter</a><a href="#services">Services</a><a href="#ads">The ads</a><a href="#book" class="red">Book your build</a>
   <p class="mono">(702) 430-1040 · 4790 Polaris Ave, Las Vegas</p>
 </div>
 <div class="ticker"><div class="wrap">
@@ -769,10 +837,83 @@ footer ul a:hover{color:var(--red)}
   </div>
 </section>
 
-<!-- ============ THE PARTS COUNTER ============ -->
-<section class="sec band" id="parts" data-sec="05 · Parts counter">
+<!-- ============ PPF: scroll hero (Maserati MC20) ============ -->
+<section class="sc" id="ppf" data-sec="05 · Paint protection" aria-label="Paint protection film on a Maserati MC20. Scroll to move through the job.">
+  <div class="sc-track">
+    <div class="sc-stage">
+      <div class="sc-bg" style="background-image:url(media/scroll/ppf-mc20.jpg)"></div>
+      <img class="sc-still" src="media/scroll/ppf-mc20.jpg" alt="" loading="lazy">
+      <video muted playsinline preload="none" aria-hidden="true"></video>
+      <div class="sc-shade"></div>
+      <div class="sc-ph" data-from="0" data-to=".3656">
+        <div class="sc-frame" aria-hidden="true"><div class="sc-brk"><i class="a"></i><i class="b"></i><i class="c"></i><i class="d"></i></div></div>
+        <div class="sc-tl"><div class="sc-tele"><span>PPF · <b>MC20</b> · hood</span><span class="sc-tc">00:00.0 / 00:10.2</span></div></div>
+        <div class="sc-copy">
+          <div class="sc-eb"><span class="sq"></span>05 — Formula Dynamics Performance</div>
+          <h2 class="sc-h">Every inch by hand</h2>
+          <div class="sc-bar" aria-hidden="true"><i></i></div>
+        </div>
+      </div>
+      <div class="sc-ph" data-from=".3656" data-to="1.01">
+        <ol class="sc-steps" aria-label="The steps"></ol>
+        <div class="sc-copy">
+          <div class="sc-eb"><span class="sq"></span>Formula Dynamics Performance</div>
+          <h2 class="sc-h">Paint protection film</h2>
+          <p class="sc-sub">Maserati MC20. Prepped, laid, squeegeed, trimmed and wiped down by hand.</p>
+          <div class="sc-cta"><a class="btn" href="#book" data-job="ppf">Book your build</a>
+            <div class="sc-fine"><a href="https://formuladynamicsperformance.com" target="_blank" rel="noopener">formuladynamicsperformance.com</a> · <a href="https://instagram.com/formuladynamicsperformance" target="_blank" rel="noopener">@formuladynamicsperformance</a></div></div>
+        </div>
+      </div>
+      <div class="sc-prog" aria-hidden="true"><i></i></div>
+      <div class="sc-hint" aria-hidden="true">Scroll</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DETAILING: scroll hero (Corvette ZR1) ============ -->
+<section class="sc" id="detailing" data-sec="06 · Detailing" aria-label="A detail on a Corvette ZR1. Scroll to move through the wash.">
+  <div class="sc-track">
+    <div class="sc-stage">
+      <div class="sc-bg" style="background-image:url(media/scroll/detail-zr1.jpg)"></div>
+      <img class="sc-still" src="media/scroll/detail-zr1.jpg" alt="" loading="lazy">
+      <video muted playsinline preload="none" aria-hidden="true"></video>
+      <div class="sc-shade"></div>
+      <div class="sc-ph" data-from="0" data-to="1.01">
+        <div class="sc-tl"><div class="sc-chips" aria-hidden="true"></div></div>
+        <div class="sc-copy">
+          <div class="sc-eb"><span class="sq"></span>06 — Formula Dynamics Performance · Detailing</div>
+          <h2 class="sc-h">The detail</h2>
+          <p class="sc-sub">Corvette ZR1. Foam, rinse, wheels, and back on the road.</p>
+          <div class="sc-cta"><a class="btn" href="#book" data-job="ppf">Book your build</a>
+            <div class="sc-fine"><a href="#supplies">The A&amp;J products we use ↓</a></div></div>
+        </div>
+      </div>
+      <div class="sc-prog" aria-hidden="true"><i></i></div>
+      <div class="sc-hint" aria-hidden="true">Scroll</div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ DETAILING: A&J Detail Supplies (partner) ============ -->
+<section class="sec aj" id="supplies" data-sec="06 · Detailing" data-nav="detailing">
   <div class="wrap">
-    <div class="sh rv"><span class="sq"></span>05 — The parts counter<div class="ruler draw"></div><span class="rl">From our store · formuladynamics.com</span></div>
+    <div class="sh rv"><span class="sq"></span>06 — Detailing supplies<div class="ruler draw"></div><span class="rl">Partner · A&amp;J Detail Supplies</span></div>
+    <h2 class="kin">What goes on <br>your car</h2>
+    <p class="lede rv">We're partnered with A&amp;J Detail Supplies. Theirs is the only detailing line we use on client cars, and we sell it too. Each card opens the product on ajdetailsupply.com.</p>
+    <div class="pc-filters">
+      <div class="grp"><small>Show</small><div class="chips" id="aj-chips" role="group" aria-label="Filter A&amp;J products"><span class="chip-ind" aria-hidden="true"></span></div></div>
+    </div>
+    <div class="parts" id="aj-g"></div>
+    <p class="pc-note">Prices and stock from ajdetailsupply.com, 4 Oct 2026. A&amp;J's store has the current price. Step tags show the A&amp;J product for that step of a detail.</p>
+
+    <div class="aj-eps" id="aj-eps"><small><span class="sq"></span>Watch the detail work</small></div>
+  </div>
+</section>
+
+<!-- ============ THE PARTS COUNTER ============ -->
+<section class="sec band" id="parts" data-sec="07 · Parts counter">
+  <div class="wrap">
+    <div class="sh rv"><span class="sq"></span>07 — The parts counter<div class="ruler draw"></div><span class="rl">From our store · formuladynamics.com</span></div>
     <h2 class="kin">The parts counter</h2>
     <p class="lede rv">Everything we install, we can source. Here is a selection from our store; each card opens its listing on formuladynamics.com.</p>
     <div class="pc-filters">
@@ -809,9 +950,9 @@ footer ul a:hover{color:var(--red)}
 </section>
 
 <!-- ============ SERVICE MENU ============ -->
-<section class="sec" id="services" data-sec="06 · Service menu">
+<section class="sec" id="services" data-sec="08 · Service menu">
   <div class="wrap">
-    <div class="sh rv"><span class="sq"></span>06 — What we do<div class="ruler draw"></div><span class="rl">9 services · Ferrari to Audi</span></div>
+    <div class="sh rv"><span class="sq"></span>08 — What we do<div class="ruler draw"></div><span class="rl">9 services · Ferrari to Audi</span></div>
     <h2 class="kin">The service menu</h2>
     <p class="lede rv">Everything on the menu, the jobs you can watch, and the ads that go with them.</p>
     <table class="menu-t" id="menu-t">
@@ -822,9 +963,9 @@ footer ul a:hover{color:var(--red)}
 </section>
 
 <!-- ============ THE ADS ============ -->
-<section class="sec band" id="ads" data-sec="07 · The ads">
+<section class="sec band" id="ads" data-sec="09 · The ads">
   <div class="wrap">
-    <div class="sh rv"><span class="sq"></span>07 — The ads<div class="ruler draw"></div><span class="rl">Approved service ads · one car per ad</span></div>
+    <div class="sh rv"><span class="sq"></span>09 — The ads<div class="ruler draw"></div><span class="rl">Approved service ads · one car per ad</span></div>
     <h2 class="kin">One service per ad</h2>
     <p class="lede rv">One service per ad, with the offer on screen. Tap one to play it with sound.</p>
     <div class="rail" id="rail"></div>
@@ -832,18 +973,18 @@ footer ul a:hover{color:var(--red)}
 </section>
 
 <!-- ============ MAKES ============ -->
-<section class="sec" id="makes" data-sec="08 · Makes we service" style="padding-bottom:70px">
+<section class="sec" id="makes" data-sec="10 · Makes we service" style="padding-bottom:70px">
   <div class="wrap">
-    <div class="sh rv"><span class="sq"></span>08 — Makes we service<div class="ruler draw"></div><span class="rl">Ferrari to Audi</span></div>
+    <div class="sh rv"><span class="sq"></span>10 — Makes we service<div class="ruler draw"></div><span class="rl">Ferrari to Audi</span></div>
     <div class="makes" id="makes-l"></div>
     <p class="disc">Manufacturer names are used for identification purposes only and do not imply affiliation or endorsement.</p>
   </div>
 </section>
 
 <!-- ============ BOOK ============ -->
-<section class="sec band" id="book" data-sec="09 · Book your build">
+<section class="sec band" id="book" data-sec="11 · Book your build">
   <div class="wrap">
-    <div class="sh rv"><span class="sq"></span>09 — Open a work order<div class="ruler draw"></div></div>
+    <div class="sh rv"><span class="sq"></span>11 — Open a work order<div class="ruler draw"></div></div>
     <div class="book" style="margin-top:40px">
       <div>
         <h2 class="kin">Book your <br><span class="r">build</span></h2>
@@ -880,8 +1021,8 @@ footer ul a:hover{color:var(--red)}
 <footer>
   <div class="wrap">
     <div><a class="logo" href="#top"><img src="media/brand/fd-primary-horizontal--white.svg" alt="Formula Dynamics Performance" width="160" height="49"></a><div class="tl">PRECISION. PERFORMANCE. PASSION.</div></div>
-    <div><h4>SITE</h4><ul><li><a href="#board">The board</a></li><li><a href="#bay">In the bay</a></li><li><a href="#parts">Parts counter</a></li><li><a href="#services">Services</a></li><li><a href="#book">Book your build</a></li></ul></div>
-    <div><h4>SHOP</h4><ul><li>4790 Polaris Ave, Las Vegas</li><li><a href="tel:+17024301040">(702) 430-1040</a></li><li><a href="https://formuladynamicsperformance.com" target="_blank" rel="noopener">formuladynamicsperformance.com</a></li><li><a href="https://formuladynamics.com" target="_blank" rel="noopener">Store: formuladynamics.com</a></li></ul></div>
+    <div><h4>SITE</h4><ul><li><a href="#board">The board</a></li><li><a href="#bay">In the bay</a></li><li><a href="#ppf">Paint protection</a></li><li><a href="#detailing">Detailing</a></li><li><a href="#parts">Parts counter</a></li><li><a href="#services">Services</a></li><li><a href="#book">Book your build</a></li></ul></div>
+    <div><h4>SHOP</h4><ul><li>4790 Polaris Ave, Las Vegas</li><li><a href="tel:+17024301040">(702) 430-1040</a></li><li><a href="https://formuladynamicsperformance.com" target="_blank" rel="noopener">formuladynamicsperformance.com</a></li><li><a href="https://formuladynamics.com" target="_blank" rel="noopener">Store: formuladynamics.com</a></li><li><a href="https://ajdetailsupply.com" target="_blank" rel="noopener">Detail supplies: A&amp;J</a></li></ul></div>
     <div class="legal"><span>© 2026 Formula Dynamics Performance</span><span>Manufacturer names are used for identification purposes only and do not imply affiliation or endorsement.</span></div>
   </div>
 </footer>
@@ -966,19 +1107,35 @@ footer ul a:hover{color:var(--red)}
  {"id":"susp","name":"Suspension","copy":"Coilovers, lowering springs, air, lift kits.","eps":["rangerover"],"cat":"suspension","job":"suspension"},
  {"id":"brakes","name":"Brake upgrades","copy":"Big brake kits, two-piece rotors, and pad strategies matched to street or track duty.","eps":[],"cat":"brakes","job":"brakes"},
  {"id":"dryice","name":"Dry ice blasting","copy":"Removes road film, undercoating overspray and grime without abrasives, chemicals or residue.","eps":[],"cat":"","job":"other"},
- {"id":"detail","name":"Detailing & paint protection","copy":"Paint protection film, ceramic coating and maintenance detailing.","eps":["sf90","detail","ppf"],"cat":"","job":"ppf"},
+ {"id":"detail","name":"Detailing & paint protection","copy":"Paint protection film, ceramic coating and maintenance detailing.","eps":["sf90","detail","ppf"],"cat":"","job":"ppf","see":["#supplies","A&J SUPPLIES →"]},
  {"id":"turbo","name":"Turbo upgrades","copy":"Turbocharger and intercooler upgrades, supporting fueling and cooling hardware, and integrated dyno calibration.","eps":[],"cat":"","job":"other"},
  {"id":"maint","name":"Maintenance & repair","copy":"Oil services, brake jobs, tires, routine maintenance and general repair. Dealer-level care without the dealer experience.","eps":[],"cat":"service","job":"service"}
 ],
 "MAKES":["Ferrari","Maserati","Porsche","Lamborghini","McLaren","Aston Martin","Mercedes","Bentley","Rolls-Royce","Audi"],
-"JOBS":[["exhaust","Exhaust"],["tuning","Tuning"],["suspension","Suspension"],["wheels","Wheels"],["brakes","Brakes"],["ppf","PPF & detail"],["service","Service"],["other","Other"]]
+"JOBS":[["exhaust","Exhaust"],["tuning","Tuning"],["suspension","Suspension"],["wheels","Wheels"],["brakes","Brakes"],["ppf","PPF & detail"],["service","Service"],["other","Other"]],
+"AJ":[
+ {"id":"snow-foam","kind":"line","t":"Snow Foam Car Shampoo","size":"16 oz","p":12.99,"h":"copy-of-quick-exterior-detailer-16oz","step":"Foam"},
+ {"id":"wheel-cleaner","kind":"line","t":"Tire & Wheel Cleaner Pro","size":"16 oz","p":11.99,"h":"copy-of-snow-foam-car-shampoo-16oz","step":"Wheels"},
+ {"id":"wheel-shine","kind":"line","t":"Ultimate Wheel Shine","size":"16 oz","p":11.99,"h":"copy-of-tire-wheel-cleaner-pro-16oz","step":"Wheels"},
+ {"id":"quick-detailer","kind":"line","t":"Quick Exterior Detailer","size":"16 oz","p":12.99,"h":"copy-of-ceramic-interior-detailer-16oz","step":"Ready"},
+ {"id":"interior-detailer","kind":"line","t":"Ceramic Interior Detailer","size":"16 oz","p":13.99,"h":"ceramic-interior-detailer-16oz"},
+ {"id":"ceramic-coating","kind":"line","t":"Ceramic Coating","size":"50 mL","p":79.99,"h":"flight-coat-ceramic-coating"},
+ {"id":"drying-towel","kind":"line","t":"Drying Towel","size":"Towel","p":29.99,"h":"drying-towel","out":true},
+ {"id":"wash-kit","kind":"bundle","t":"Exterior Wash & Detail Kit","inc":"Snow Foam + Quick Exterior Detailer","p":23.99,"h":"exterior-wash-detail-kit"},
+ {"id":"wheel-kit","kind":"bundle","t":"Wheel Transformation Kit","inc":"Tire & Wheel Cleaner Pro + Ultimate Wheel Shine","p":21.99,"h":"wheel-cleaning-detailing-kit"},
+ {"id":"exterior-trio","kind":"bundle","t":"Exterior Trio","inc":"Snow Foam, Quick Exterior Detailer, Ultimate Wheel Shine","p":33.99,"h":"a-j-essential-detail-kit-2"},
+ {"id":"inside-out-duo","kind":"bundle","t":"Inside & Out Maintenance Duo","inc":"Quick Exterior Detailer + Ceramic Interior Detailer","p":23.99,"h":"inside-out-maintenance-duo"},
+ {"id":"complete-bundle","kind":"bundle","t":"Complete Detail Bundle","inc":"Snow Foam, Quick Exterior Detailer, Tire & Wheel Cleaner Pro, Ultimate Wheel Shine, Ceramic Interior Detailer","p":57.99,"h":"complete-garage-kit-2"},
+ {"id":"ceramic-duo","kind":"bundle","t":"Ceramic Protection Duo","inc":"Quick Exterior Detailer + Ceramic Coating 50 mL","p":92.99,"h":"ceramic-protection-kit-2"},
+ {"id":"towel-bundle","kind":"bundle","t":"Drying Towel X Quick Detailer Bundle","inc":"Drying Towel + Quick Exterior Detailer","p":42.99,"h":"drying-towel-x-quick-detailer-bundle","out":true}
+]
 }
 </script>
 <script>
 document.documentElement.classList.add("js");
 const M="media/";   /* every media path goes through this */
 const D=JSON.parse(document.getElementById("data").textContent);
-const {EP,LANES,BA,PARTS,CATS,ADS,SERVICES,MAKES,JOBS}=D;
+const {EP,LANES,BA,PARTS,CATS,ADS,SERVICES,MAKES,JOBS,AJ}=D;
 EP.forEach((e,i)=>{e.i=i;e.short=e.short||e.t});
 const LATEST=EP[EP.length-1];
 const RM=matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -1065,7 +1222,7 @@ function onScroll(){
   const lab=sp.querySelector(".lab");const lw=lab.offsetWidth;lab.style.transform=`translateX(${Math.min(w-lw-6,Math.max(6,p*(w-2)-lw/2))}px)`;
   $("#sp-n").textContent=cur.dataset.sec;
   sp.classList.toggle("show",scrollY>200);
-  $$(".nav a").forEach(a=>a.setAttribute("aria-current",a.getAttribute("href")==="#"+cur.id));
+  $$(".nav a").forEach(a=>a.setAttribute("aria-current",a.getAttribute("href")==="#"+(cur.dataset.nav||cur.id)));
 }
 addEventListener("scroll",()=>{if(!spT){spT=requestAnimationFrame(()=>{spT=0;onScroll()})}},{passive:true});
 addEventListener("resize",onScroll);
@@ -1330,6 +1487,24 @@ if(!fromHash())openEp(LATEST.k,{quiet:true});
   sv.addEventListener("pause",()=>{if(!sv.muted){sv.muted=true;$("#spot-ico").innerHTML='<path d="M2.5 6h2.5L8.5 3v10L5 10H2.5zM11 6l4 4M15 6l-4 4"/>'}});
 })();
 
+/* ---------- detailing: the A&J Detail Supplies shelf (partner, 4 Oct) ----------
+   FD only uses A&J's line on client cars and sells it. Cards open the product on ajdetailsupply.com; prices are a
+   snapshot (see the note under the grid). Step tags tie a product to the step of the detail it's used for. */
+(function(){
+  const g=$("#aj-g");if(!g||!AJ)return;
+  const url=h=>"https://ajdetailsupply.com/products/"+h;
+  g.innerHTML=AJ.map(a=>`<article class="part${a.out?" out":""}" data-kind="${a.kind}"><span class="hole" aria-hidden="true"></span>
+      <div class="ph"><img src="${M}aj/${a.id}.jpg" alt="${esc(a.t)}, A&amp;J product photo" loading="lazy">${a.step?`<span class="no stp">STEP · ${esc(a.step.toUpperCase())}</span>`:""}</div>
+      <div class="pb"><div class="vd"><span>A&amp;J Detail Supplies</span><span>${a.kind==="bundle"?"Bundle":esc(a.size)}</span></div><b>${esc(a.t)}</b>${a.inc?`<span class="inc">${esc(a.inc)}</span>`:""}${a.out?'<span class="so">Sold out at A&amp;J right now</span>':""}
+      <div class="pr"><span class="price">${money(a.p)}</span><a class="shop${a.out?" ink":""}" href="${url(a.h)}" target="_blank" rel="noopener" aria-label="${a.out?"View":"Shop"}: ${esc(a.t)} on ajdetailsupply.com">${a.out?"View":"Shop A&amp;J"} ${ARW}</a></div></div></article>`).join("");
+  const n=k=>AJ.filter(a=>k==="all"||a.kind===k).length;
+  chipGroup($("#aj-chips"),[["all","All",n("all")],["line","The line",n("line")],["bundle","Bundles",n("bundle")]],"all",id=>{
+    flip(()=>$$("#aj-g .part").filter(x=>x.offsetParent),()=>$$("#aj-g .part").forEach(el=>el.classList.toggle("gone",id!=="all"&&el.dataset.kind!==id)))});
+  /* the detail jobs from the board, as minis that open the episode */
+  const lane=LANES.find(l=>l.id==="detail");
+  $("#aj-eps").insertAdjacentHTML("beforeend",(lane?lane.eps:[]).map(byK).filter(Boolean).map(e=>`<button class="mini" type="button" data-ep="${e.k}"><img src="${M}ep/${e.k}.jpg" alt="" loading="lazy"><div><small>JOB ${e.no} · ${esc(e.len)}</small><b>${esc(e.car)}</b><span>${esc(e.t)}</span></div></button>`).join(""));
+})();
+
 /* ---------- service menu ---------- */
 (function(){
   const adsFor=id=>ADS.filter(a=>a.menu===id);
@@ -1338,7 +1513,7 @@ if(!fromHash())openEp(LATEST.k,{quiet:true});
     <td class="c">${s.copy?esc(s.copy):'<span class="ph-line">[SHOP TO SUPPLY A LINE]</span>'}</td>
     <td>${s.eps.length?`<div class="thumbs">${s.eps.map(k=>{const e=byK(k);return `<button type="button" data-ep="${k}" aria-label="Watch job ${e.no}, ${esc(e.t)}"><img src="${M}ep/${k}.jpg" alt="" loading="lazy"><span>${e.no}</span></button>`}).join("")}</div>`:'<span class="nf">NOT FILMED YET</span>'}</td>
     <td>${adsFor(s.id).length?`<div class="thumbs">${adsFor(s.id).map(a=>`<button type="button" data-ad="${a.id}" aria-label="Play the ${esc(a.svc)} ad, ${esc(a.car)}"><img src="${M}ads/${a.id}.jpg" alt="" loading="lazy"></button>`).join("")}</div>`:'<span class="nf">—</span>'}</td>
-    <td>${s.cat?`<a class="pl" href="#parts" data-cat="${s.cat}">SEE PARTS →</a>`:'<span class="nf">—</span>'}</td>
+    <td>${s.cat?`<a class="pl" href="#parts" data-cat="${s.cat}">SEE PARTS →</a>`:s.see?`<a class="pl" href="${s.see[0]}">${esc(s.see[1])}</a>`:'<span class="nf">—</span>'}</td>
     <td><a class="bk" href="#book" data-job="${s.job}">BOOK →</a></td></tr>`).join("");
   $$("#menu-t [data-cat]").forEach(a=>a.onclick=e=>{e.preventDefault();window.filterParts(a.dataset.cat)});
 })();
@@ -1371,6 +1546,78 @@ $("#makes-l").innerHTML=MAKES.map((m,i)=>`<span class="rv" style="transition-del
     const body=[`New work order from formula-dynamics-job-board`,``,`Car: ${[yr,car].filter(Boolean).join(" ")}`,`Work: ${jobs.length?jobs.join(", "):"Not sure yet"}`,``,`Notes: ${note||"-"}`,``,`Name: ${name}`,`Reply to: ${reach}`,PLAYED&&cur?`Watching: Job ${cur.no}, ${cur.t}`:""].join("\n");
     location.href=`mailto:service@formuladynamics.com?subject=${encodeURIComponent("Work order: "+[yr,car].filter(Boolean).join(" "))}&body=${encodeURIComponent(body)}`;
   });
+})();
+
+/* ---------- scroll heroes: PPF (MC20) and the detail (ZR1), 4 Oct ----------
+   The approved 3 Oct samples (fd-all, fd-c), on the SE site's GT3 RS engine: scrolling scrubs a muted clip.
+   The stage sticks under the header, so --hdr is measured. 540p loads first so the scrub works at once; the 1080p
+   swaps in at the same frame when it arrives and the 540p is freed. A hero drops its clip when it's well off screen
+   (iPhone memory). Reduced motion or Save-Data: the still only. #ppf-debug / #detailing-debug shows what loaded. */
+function setHdr(){const t=$(".top");if(t)document.documentElement.style.setProperty("--hdr",Math.round((parseFloat(getComputedStyle(t).top)||0)+t.offsetHeight)+"px")}
+setHdr();addEventListener("resize",setHdr);
+function scrollHero(id,{DUR,CLIP,CLIP_HD,STEPS,onUpdate}){
+  const sec=document.getElementById(id);if(!sec)return;
+  const track=sec.querySelector(".sc-track"),stage=sec.querySelector(".sc-stage"),v=sec.querySelector("video"),still=sec.querySelector(".sc-still");
+  const phs=$$(".sc-ph",sec),hint=sec.querySelector(".sc-hint");
+  track.style.height=Math.round(220+DUR*30)+"vh";
+  const stillOnly=RM||SAVER,clamp=x=>Math.min(1,Math.max(0,x));
+  let blob=null,hd=null,hdAsked=false,target=0,near=false,raf=0;
+  let hdr=0;const measure=()=>{hdr=parseFloat(getComputedStyle(stage).top)||0};measure();
+  function update(){
+    const r=track.getBoundingClientRect(),span=r.height-stage.offsetHeight;
+    const p=span>0?clamp((hdr-r.top)/span):0;
+    sec.style.setProperty("--p",p.toFixed(4));
+    hint.style.opacity=p>.02?0:1;
+    target=p*(Math.min(DUR,v.duration||DUR)-.05);
+    let k=0;STEPS.forEach((a,i)=>{if(p>=a)k=i});
+    phs.forEach(el=>{const a=+el.dataset.from,b=+el.dataset.to,on=p>=a&&p<b;el.classList.toggle("on",on);el.style.setProperty("--q",clamp((p-a)/(Math.min(b,1)-a)).toFixed(3))});
+    onUpdate&&onUpdate(p,k);
+  }
+  function tick(){
+    if(near&&v.getAttribute("src")&&v.readyState>=1&&!v.seeking&&Math.abs(v.currentTime-target)>1/24)v.currentTime=target;
+    raf=requestAnimationFrame(tick);
+  }
+  const wantHD=!SAVER&&innerWidth*(devicePixelRatio||1)>=700;
+  function setSrc(url){const t=v.currentTime||target;v.src=url;v.addEventListener("loadeddata",()=>{v.currentTime=t;still.style.visibility="hidden"},{once:true})}
+  async function loadHD(){
+    if(hdAsked||!wantHD)return;hdAsked=true;
+    try{const res=await fetch(CLIP_HD);if(!res.ok)return;hd=URL.createObjectURL(await res.blob())}catch(e){return}
+    if(near&&v.getAttribute("src"))setSrc(hd);
+    if(blob){URL.revokeObjectURL(blob);blob=null}
+  }
+  async function wake(){
+    if(stillOnly||(TOUCH&&pvBusy()))return;
+    if(!hd){try{if(!blob){const res=await fetch(CLIP);if(!res.ok)return;blob=URL.createObjectURL(await res.blob())}}catch(e){return}}
+    if(near&&!v.getAttribute("src"))setSrc(hd||blob);
+    loadHD();
+  }
+  function sleep(){if(v.getAttribute("src")){v.removeAttribute("src");v.load();still.style.visibility="visible"}}
+  new IntersectionObserver(es=>es.forEach(e=>{near=e.isIntersecting;if(near){wake();if(!raf)raf=requestAnimationFrame(tick)}else{sleep();cancelAnimationFrame(raf);raf=0}}),{rootMargin:"60% 0px"}).observe(sec);
+  new IntersectionObserver(es=>{if(es.some(e=>e.isIntersecting)&&!stillOnly)loadHD()},{rootMargin:"150% 0px"}).observe(sec);
+  addEventListener("scroll",update,{passive:true});addEventListener("resize",()=>{measure();update()});update();
+  if(location.hash==="#"+id+"-debug"){
+    const d=document.createElement("div");d.className="sc-dbg";stage.appendChild(d);
+    setInterval(()=>{d.textContent=(v.videoWidth?v.videoHeight+"p clip":"no clip yet")+" · HD "+(hd?"ready":hdAsked?"downloading":(wantHD?"waiting":"off"))+" · dpr "+(devicePixelRatio||1)+" · hdr "+getComputedStyle(document.documentElement).getPropertyValue("--hdr")},500);
+    setTimeout(()=>sec.scrollIntoView(),400);
+  }
+}
+(function(){
+  /* PPF: the squeegee pass, then the seven steps of the film (fd-all) */
+  const DUR=27.83,LAB=["Squeegee pass","Prep the film","Wet the panel","Lay the film","Squeegee","Trim the edge","Wipe down","Finished"];
+  const ol=$("#ppf .sc-steps"),tc=$("#ppf .sc-tc");if(!ol)return;
+  ol.innerHTML=LAB.slice(1).map((l,i)=>`<li><i>${pad(i+1)}</i>${esc(l)}</li>`).join("");
+  const lis=$$("li",ol),mmssT=t=>pad(Math.floor(t/60))+":"+(t%60).toFixed(1).padStart(4,"0");
+  scrollHero("ppf",{DUR,CLIP:M+"scroll/ppf-mc20.mp4",CLIP_HD:M+"scroll/ppf-mc20-hd.mp4",STEPS:[0,.3656,.4516,.5376,.6452,.7348,.8244,.9032],
+    onUpdate:(p,k)=>{const j=k-1;lis.forEach((li,i)=>{li.classList.toggle("on",i===j);li.classList.toggle("done",i<j)});tc.textContent=mmssT(Math.min(10.2,p*DUR))+" / 00:10.2"}});
+})();
+(function(){
+  /* the detail: foam, rinse, wheels, ready (fd-c) */
+  const LAB=["Foam","Rinse","Wheels","Ready"],AT=[0,.2344,.4531,.6875];
+  const box=$("#detailing .sc-chips");if(!box)return;
+  box.innerHTML=LAB.map(l=>`<div>${esc(l)}<u></u></div>`).join("");
+  const ch=$$("div",box);
+  scrollHero("detailing",{DUR:12.83,CLIP:M+"scroll/detail-zr1.mp4",CLIP_HD:M+"scroll/detail-zr1-hd.mp4",STEPS:AT,
+    onUpdate:(p,k)=>ch.forEach((c,i)=>{const a=AT[i],b=AT[i+1]??1;c.style.setProperty("--f",Math.min(1,Math.max(0,(p-a)/(b-a))).toFixed(3));c.classList.toggle("on",i===k)})});
 })();
 
 watch();onScroll();

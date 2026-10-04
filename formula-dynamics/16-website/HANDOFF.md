@@ -40,7 +40,8 @@ sweep once on first view. `prefers-reduced-motion` settles everything to its end
   time. Episodes use `preload="metadata"`, loops `preload="none"`, images `loading="lazy"`.
 
 ## Data (the JSON block `<script id="data">` in index.html)
-`EP` (episodes), `LANES`, `BA` (before/after pairs), `PARTS`, `CATS`, `ADS`, `SERVICES`, `MAKES`, `JOBS` (form checkboxes).
+`EP` (episodes), `LANES`, `BA` (before/after pairs), `PARTS`, `CATS`, `ADS`, `SERVICES`, `MAKES`, `JOBS` (form checkboxes),
+`AJ` (the A&J Detail Supplies shelf). A `SERVICES` row can carry `see: [href, label]` for its link column.
 All media paths go through `const M="media/"`.
 
 ### Adding an episode (into `media/ep/`)
@@ -63,6 +64,29 @@ and add a row to `PARTS` (n, cat, make, vendor, title as on the store, min, max,
 min ≠ max the card says "from". Re-check prices on formuladynamics.com and update the date in the parts note.
 The store photo is only resized, never graded.
 
+## PPF and Detailing (added 4 Oct 2026; he said "put it live" the same day)
+Omarie, 4 Oct: put both approved scroll heroes on the FD site, add a Detailing section, and add A&J Detail Supplies
+(ajdetailsupply.com): FD is partnered with A&J, sells the line and uses only A&J products on client cars.
+- **05 · Paint protection** (`#ppf`): scroll-scrubbed hero, the approved `fd-all` sample (MC20: the 10.2 s squeegee pass,
+  then seven steps; 27.83 s). **06 · Detailing** (`#detailing`): the approved `fd-c` sample (ZR1: Foam, Rinse, Wheels,
+  Ready; 12.83 s), then `#supplies`, the A&J shelf (14 cards: 7 products, 7 bundles; chips All / The line / Bundles) and
+  the three Detail & PPF jobs as minis. Sections after it renumbered 07–11. Nav, phone menu and footer link both.
+- Engine: `scrollHero()` near the end of the script, ported from the SE site's GT3 RS hero. The stage sticks under the
+  header (`--hdr`, measured from `.top`). 540p clip first, 1080p swaps in at the same frame, the 540p blob is freed; a
+  hero drops its clip when it's well off screen. Reduced motion or Save-Data: the still only. `#ppf-debug` /
+  `#detailing-debug` shows which clip loaded.
+- Media: `media/scroll/ppf-mc20{,-hd}.mp4` + `.jpg`, `media/scroll/detail-zr1{,-hd}.mp4` + `.jpg`; `media/aj/<id>.jpg`
+  (A&J's own product photos, resized only). Rebuild the clips from the read-only Shop videos with
+  `~/.local/vlogtools/work/research/2026-10-03-scrollscrub/variants/build_variants.py`:
+  `SIZE=540x960 CRF=28 python3 build_variants.py <OUT> fd-all fd-c`, then
+  `SIZE=1080x1920 CRF=23 GOP=6 python3 build_variants.py <OUT2> fd-all fd-c`, and copy `<OUT>/v/fd-all.mp4` →
+  `ppf-mc20.mp4`, `<OUT2>/v/fd-all.mp4` → `ppf-mc20-hd.mp4` (same for `fd-c` → `detail-zr1`).
+- A&J prices and stock are a 4 Oct snapshot (the note under the grid says so); two items were sold out (Drying Towel,
+  Drying Towel X Quick Detailer Bundle). Some A&J product URLs have shuffled handles (the Snow Foam page lives at
+  `/products/copy-of-quick-exterior-detailer-16oz`); `h` in `AJ` is the handle as it is on their store. Don't repeat A&J's
+  marketing claims (e.g. coating lifetimes) as fact.
+- Header: eight nav links now; the phone number hides at ≤1440 px and the nav goes to the menu button at ≤1160 px.
+
 ## Settled facts (checked by the facts floor, 30 Sept; don't regress)
 - Episode titles, dates, car labels and lengths: the table in the brief (`EP`). The car in Jobs 10–12 is the F8 Spider.
 - The hero: exhaust jobs reach the test drive; the tune is bench work and the lowering job ends "NOT DONE YET".
@@ -82,6 +106,9 @@ The store photo is only resized, never graded.
   "ChatGPT_Image…"). They're used as the store shows them; the shop may want real photos.
 - Not yet checked on a real iPhone. H.264 playback was tested with VP9 stand-ins (the test Chromium has no H.264).
 - The approved 12th ad (white 911 oil service) isn't in the repo, so it's not in the rail.
+- PPF / Detailing (4 Oct), not checked: a real iPhone; which A&J bottle appears in the ZR1 wheels clip (the step tags
+  name A&J's product for each step, not what's on camera); whose ZR1 it is and whether it can be shown; the MC20 hero's
+  installer wears a Supercar Experience shirt (approved footage, flagged only).
 
 ### Job 06 (mc20) web copy: one callout blurred
 The source episode carries a burned-in callout "POWERTRAIN · 3.0L TWIN-TURBO V6" from about 1:20.1 to 1:23.7, pointing at the
