@@ -106,9 +106,11 @@ Omarie, 4 Oct: put both approved scroll heroes on the FD site, add a Detailing s
   "ChatGPT_Image…"). They're used as the store shows them; the shop may want real photos.
 - Not yet checked on a real iPhone. H.264 playback was tested with VP9 stand-ins (the test Chromium has no H.264).
 - The approved 12th ad (white 911 oil service) isn't in the repo, so it's not in the rail.
-- PPF / Detailing (4 Oct), not checked: a real iPhone; which A&J bottle appears in the ZR1 wheels clip (the step tags
-  name A&J's product for each step, not what's on camera); whose ZR1 it is and whether it can be shown; the MC20 hero's
-  installer wears a Supercar Experience shirt (approved footage, flagged only).
+- PPF / Detailing (4 Oct), not checked: a real iPhone.
+- Settled 4 Oct (Omarie): the bottle on the ZR1's wheel is A&J's Quick Exterior Detailer (label "EXTERIOR" visible
+  ~5.9–8 s into the clip), so that card carries STEP · WHEELS; Snow Foam keeps STEP · FOAM (no label on camera). The
+  ZR1 is a Formula Dynamics customer's car. The Supercar Experience shirt in the MC20 PPF footage is fine: leave it,
+  don't flag it again.
 
 ### Job 06 (mc20) web copy: one callout blurred
 The source episode carries a burned-in callout "POWERTRAIN · 3.0L TWIN-TURBO V6" from about 1:20.1 to 1:23.7, pointing at the
