@@ -1,0 +1,482 @@
+<!doctype html>
+<!--
+  FD MC20 PPF full process -- "Locked-On ABC" v2 graphics layer (4 Oct 2026; v1 = lo_v1.html).
+  v2 (review of v1): every lock is cut at its shot's last frame and its exit ends before the cut; tracks hold their last
+  position; WRAP card narrowed clear of the shirt emblem; hook panel over dimmed #36 (compose_lo.py); no lock on #32 (it sat
+  under Instagram's buttons); the reveal chip appears in place instead of rising as a slab. Omarie: "Can I get an ABC mix for Locked On as
+  well? I love the Locked On. That's the classic way to go." Classic FD Locked-On first (frame-0 hook panel, tracked lock-on
+  brackets per step, kinetic STEP cards, whips and impacts in compose_lo.py, the FD end card v4 built in the Locked-On way),
+  with the A / B / C 3D moments as upgrades inside that language:
+    0-4    HOOK panel, complete on frame 0 (PAINT PROTECTION FILM / EVERY INCH / BY HAND / FD logo); brackets lock onto it
+    4-24   PREP & CLEAN (#37 lock: MICROFIBRE), PEEL THE FILM (#27 lock: BY HAND), LAY THE FILM (#32 lock on the hand)
+    24-31  SQUEEGEE: brackets lock onto the wet film on #33, A's FILM / CLEAR COAT / PAINT chip rises out of the box, seals
+    31-38  TRIM: B's extruded red-black TRIM slams in as the STEP card, standing on the red rail; lock on the blade (#38)
+    38-48  WRAP THE EDGES: C's traced edge, scan curtain and mesh; the brackets snap onto the tracked edge (FILM EDGE, PANEL EDGE)
+    48-55  REVEAL: lock-on on the trident on the drop (MASERATI / MC20), A's layer split over the hood, whip into
+    55-64  the FD end card v4 (fdc.js cardFD: black wipe, bands in one by one, light sweep; settles on the approved card)
+  Beats at 128 BPM from 0.000 s; window.renderAt(t) is pure in t.
+-->
+<html><head><meta charset="utf-8"><title>FD PPF 30 Locked-On ABC v2</title>
+<style>
+@font-face{font-family:Bebas;src:url('fonts/BebasNeue-Regular.ttf')}
+@font-face{font-family:Michroma;src:url('fonts/BebasNeue-Regular.ttf');size-adjust:132%}
+html,body{margin:0;padding:0;background:transparent;width:1080px;height:1920px;overflow:hidden}
+.a{position:absolute;left:0;top:0}
+.beb{font-family:Bebas;letter-spacing:0;line-height:1;white-space:pre;color:#fff}
+.mic{font-family:Michroma;letter-spacing:.08em;line-height:1;white-space:pre}
+.stripe{background:linear-gradient(90deg,#FE0F13 0 36.7%,#000 36.7% 58.1%,#fff 58.1% 77.5%,#1DB14B 77.5% 94.5%,#FFDE00 94.5% 100%);transform-origin:left center}
+.mask{overflow:hidden;padding:6px 24px 6px 0;margin:-6px 0 0 0}
+.edge{width:4px;margin-left:-2px;background:#fff;box-shadow:0 0 26px 9px rgba(255,255,255,.42),0 0 7px 2px rgba(255,255,255,.8);border-radius:2px}
+#world{position:absolute;left:0;top:0;width:1080px;height:1920px;perspective:1300px;perspective-origin:540px 960px}
+.p3{position:absolute;left:0;top:0;transform-style:preserve-3d}
+.ex{position:absolute;left:0;top:0;font-family:Bebas;line-height:.92;white-space:pre}
+</style>
+<script src="lib/kinetic.js"></script>
+<script src="lib/fd3d.js"></script>
+<script src="lib/sekit.js"></script>
+<script src="lib/v2kit.js"></script>
+<script src="lib/fdc.js"></script>
+<script src=".work/M/scene.js"></script>
+<script src=".work/M/kitdata.js"></script>
+<script src="tracks/r29s.js"></script>
+</head><body>
+<div id="sig" class="a"></div>
+<canvas id="cv" class="a" width="1080" height="1920"></canvas>
+<div id="world"><div id="trim" class="p3"></div></div>
+<div id="dom" class="a"></div>
+<div id="stage" class="a" style="width:1080px;height:1920px"></div>
+<script>
+const D = D3, E = D.E, FPS = D.FPS, B = D.BEAT, SC = window.SCENE;
+const KE = KT.ease, KP = KT.p, cl = KT.cl, lerp = KT.lerp;
+const { ink, line, el: sel, show, svgEl, svgRoot, glint, bracketSet, bracketDraw, grow, lerpRect, padRect, pingSet, pingDraw, f2, sigSvg, SAFE } = SEK.helpers;
+const RED = '#FE0F13';
+const fb = b => Math.round(b * B * FPS), tb = b => fb(b) / FPS;
+const cv = document.getElementById('cv'), g = cv.getContext('2d'), dom = document.getElementById('dom'), stage = document.getElementById('stage');
+const el = (cls, css, html) => { const d = document.createElement('div'); d.className = cls; d.style.cssText += css; if (html != null) d.innerHTML = html; dom.appendChild(d); return d; };
+const fit = (fam, text, maxW, maxS, ls) => Math.min(maxS, maxS * maxW / ink(fam, maxS, text, ls).w);
+const pad2 = v => String(v).padStart(2, '0');
+
+// ================================================================ tracked boxes (screen px; plates are full frame, 1:1)
+function lockBox(key, t) {
+  const s = SC.shots.find(x => x.key === key), L = SC.locks[key]; if (!s || !L) return null;
+  const gi = t * FPS; if (gi < s.g0 - 0.5 || gi >= s.g1 - 0.5) return null;
+  const n = L.frames.length, x = Math.max(0, Math.min(n - 1, s.off + (gi - s.g0) - L.f0));   // v2: hold the first / last tracked position
+  const i = Math.max(0, Math.min(n - 1, Math.floor(x))), j = Math.min(n - 1, i + 1), u = Math.min(1, Math.max(0, x - i)), a = L.frames[i], b = L.frames[j];
+  return { x: lerp(a[0], b[0], u), y: lerp(a[1], b[1], u), w: lerp(a[2], b[2], u), h: lerp(a[3], b[3], u) };
+}
+
+// ================================================================ Locked-On lock: brackets snap in (1.7x -> 1x over 8 frames), ping, hold on the
+// track, shrink out. A compact tag chip (red square + name) at the box's top-left corner, or a full label (kicker + name,
+// stripe cap, leader line) for the badge lock. FD red throughout; the ping flashes the brackets toward white, never gold.
+function makeLock(o) {
+  const root = sel('div', 'a', stage, 'width:1080px;height:1920px');
+  const svg = svgRoot(root), Bk = bracketSet(svg), pings = pingSet(svg);
+  const lu = svgEl('path', { fill: 'none', stroke: 'rgba(0,0,0,.45)', 'stroke-width': 8 }, svg), lo = svgEl('path', { fill: 'none', stroke: RED, 'stroke-width': 3 }, svg);
+  const dot = svgEl('circle', { r: 6.5, fill: RED }, svg);
+  let chip = null, CW = 0, CH = 0, lab = null, LW = 0, LH = 0, kk = null, nm = null, stripe = null;
+  if (o.tag) {
+    const fs = 30, ls = 0.16; CW = Math.ceil(ink('Michroma', fs, o.tag, ls).w + 38 + 22); CH = 52;
+    chip = sel('div', 'a', root, `width:${CW}px;height:${CH}px;background:rgba(0,0,0,.9);box-shadow:0 8px 24px rgba(0,0,0,.3)`);
+    sel('div', 'a', chip, `left:16px;top:${(CH - 12) / 2}px;width:12px;height:12px;background:${RED}`);
+    line(chip, 'Michroma', fs, o.tag, 38, (CH - ink('Michroma', fs, 'H', ls).aA) / 2, '#fff', { ls, split: false });
+  }
+  if (o.label) {
+    const ns = Math.min(84, 84 * 640 / ink('Bebas', 84, o.label.name).w), capN = ink('Bebas', ns, 'H').aA;
+    LW = Math.ceil(Math.max(ink('Michroma', 24, o.label.kicker, 0.2).w, ink('Bebas', ns, o.label.name).w) + 64); LH = Math.round(28 + 18 + 20 + capN + 28);
+    lab = sel('div', 'a', root, `width:${LW}px;height:${LH}px`);
+    sel('div', 'a', lab, `width:${LW}px;height:${LH}px;background:rgba(0,0,0,.9);box-shadow:0 10px 30px rgba(0,0,0,.3)`);
+    stripe = sel('div', 'a stripe', lab, `width:${LW}px;height:6px`);
+    kk = line(lab, 'Michroma', 24, o.label.kicker, 32, 28, RED, { mask: true, ls: 0.2 });
+    nm = line(lab, 'Bebas', ns, o.label.name, 30, 28 + 18 + 20, '#fff', { mask: true });
+  }
+  const rise = (ln, t, st) => { const q = KE.outExpo(KP(t, st, st + 0.32)); ln.t.style.transform = `translateY(${(108 * (1 - q)).toFixed(3)}%)`; ln.t.style.opacity = q > 0 ? 1 : 0; };
+  return { o, root, render(t) {
+    const ta = o.ta, tx = o.tx, gf = t * FPS, on = t >= ta - 1e-6 && t < tx + 0.3 && gf >= o.g0 - 0.5 && gf < o.g1 - 0.5; show(root, on); if (!on) return;
+    const b = o.boxAt(t); if (!b) { show(root, false); return; }
+    const tgt = padRect(b, o.pad ?? 12);
+    const qa = KE.outExpo(cl((t - ta) * FPS / 8));
+    let r = lerpRect(grow(tgt, 1.7), tgt, qa);
+    const tl = ta + 0.26, pl = t >= tl ? Math.exp(-(t - tl) * 14) * Math.min(1, (t - tl) * FPS / 1.5) : 0;
+    r = grow(r, (1 + 0.06 * pl) * (1 - 0.5 * KE.inCubic(KP(t, tx + 0.06, tx + 0.26))));
+    const pp = bracketDraw(Bk, r, { maxL: o.maxL ?? 46 });
+    Bk.bo.setAttribute('stroke', pl > 0.05 ? `rgb(255,${Math.round(15 + 225 * pl)},${Math.round(19 + 221 * pl)})` : RED);
+    [Bk.tu, Bk.to].forEach(e => e.setAttribute('opacity', cl(qa * 1.4 - 0.4).toFixed(3)));
+    pingDraw(pings, tgt, t, tl);
+    svg.style.opacity = (cl(qa * 3) * (1 - KE.inCubic(KP(t, tx + 0.1, tx + 0.26)))).toFixed(4);
+    const tin = ta + 0.28, qp = KE.outExpo(KP(t, tin, tin + 0.3)), qpo = KE.inCubic(KP(t, tx, tx + 0.2));
+    const right = qpo > 0 ? 100 * qpo : 100 * (1 - qp), clip = right > 0.001 ? `inset(-40px ${right.toFixed(3)}% -40px 0)` : 'inset(-40px 0 -40px 0)';
+    let lead = '';
+    if (chip) {
+      let cy = r.y - CH - 12; if (cy < SAFE.y0) cy = r.y + r.h + 12;
+      const cx = cl(r.x, SAFE.x0, SAFE.x1 - CW); cy = cl(cy, SAFE.y0, SAFE.y1 - CH);
+      chip.style.transform = `translate(${f2(cx)}px,${f2(cy)}px)`; chip.style.clipPath = clip; chip.style.display = qp > 0 && qpo < 1 ? 'block' : 'none';
+      [lu, lo, dot].forEach(e => e.setAttribute('opacity', 0));
+    }
+    if (lab) {
+      const b0 = o.boxAt(ta + 0.3) || b, t0r = padRect(b0, o.pad ?? 12);
+      const lx = cl(t0r.x - 20 + 0.45 * (tgt.x - t0r.x), SAFE.x0, SAFE.x1 - LW), ly = cl(t0r.y - 70 - LH + 0.45 * (tgt.y - t0r.y), SAFE.y0, SAFE.y1 - LH);
+      lab.style.transform = `translate(${f2(lx)}px,${f2(ly)}px)`; lab.style.clipPath = clip; lab.style.display = qp > 0 && qpo < 1 ? 'block' : 'none';
+      const bx = r.x, by = r.y, Ax = cl(bx, lx + 20, lx + LW - 20), Ay = ly + LH;
+      const qL = KE.inOutCubic(KP(t, ta + 0.2, ta + 0.44)) * (1 - KE.inCubic(KP(t, tx, tx + 0.14)));
+      const len = Math.hypot(Ax - bx, Ay - by); lead = `M${f2(bx)},${f2(by)}L${f2(Ax)},${f2(Ay)}`;
+      [lu, lo].forEach(e => { e.setAttribute('d', lead); e.setAttribute('opacity', 1); e.setAttribute('stroke-dasharray', `${f2(len * qL)} ${f2(len + 20)}`); });
+      dot.setAttribute('cx', f2(bx)); dot.setAttribute('cy', f2(by)); dot.setAttribute('opacity', qL > 0 && t < tx + 0.14 ? 1 : 0);
+      KT.drawStripe(stripe, t, { start: tin + 0.04, dur: 0.26 }); rise(kk, t, tin + 0.08); rise(nm, t, tin + 0.12);
+      glint(nm, t, tin + 0.7, 0.5);
+    }
+    sigSvg(svg, pp.br + lead + qa.toFixed(3));
+  } };
+}
+
+// ================================================================ HOOK: Locked-On panel, complete on frame 0
+function makeHook() {
+  const x = 54, w = 853, X = 40;
+  const root = sel('div', 'a', stage, 'width:1080px;height:1920px');
+  const S = Math.min(fit('Bebas', 'EVERY INCH', w - 2 * X, 236), fit('Bebas', 'BY HAND', w - 2 * X, 236));
+  const capE = ink('Michroma', 26, 'H', 0.24).aA, cap = ink('Bebas', S, 'H').aA;
+  const y1 = 44 + capE + 34, y2 = y1 + cap + 24, lw = 300, lh = lw * 1678 / 4000, ly = y2 + cap + 46, Hh = Math.round(ly + lh + 44);
+  const y = Math.round(960 - Hh / 2);
+  const clip = sel('div', 'a', root, `left:${x}px;top:${y}px;width:${w}px;height:${Hh}px;overflow:hidden`);
+  sel('div', 'a', clip, `width:${w}px;height:${Hh}px;background:#000`);
+  const inner = sel('div', 'a', clip, `width:${w}px;height:${Hh}px`);
+  const eb = line(inner, 'Michroma', 26, 'PAINT PROTECTION FILM', X, 44, RED, { ls: 0.24 });
+  const l1 = line(inner, 'Bebas', S, 'EVERY INCH', X, y1, '#fff', { mask: true });
+  const l2 = line(inner, 'Bebas', S, 'BY HAND', X, y2, RED, { mask: true });
+  const logoW = sel('div', 'a', inner, `left:${X}px;top:${ly}px;width:${lw}px;height:${lh.toFixed(2)}px`);
+  const img = sel('img', '', logoW, `width:${lw}px;display:block`); img.src = 'logos/fd-primary-horizontal--white.png';
+  const stripe = sel('div', 'a stripe', root, `left:${x}px;top:${y}px;width:${w}px;height:8px`);
+  const sweep = sel('div', 'a', root, `left:${x}px;top:${y}px;width:${w}px;height:8px;overflow:hidden`);
+  const sweepBar = sel('div', 'a', sweep, 'width:120px;height:8px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.95),rgba(255,255,255,0))');
+  const redge = sel('div', 'a', root, `left:${x}px;top:0;width:${w}px;height:3px;background:${RED};box-shadow:0 0 14px 3px rgba(254,15,19,.55);opacity:0`);
+  const svg = svgRoot(root), Bk = bracketSet(svg, { over: 5 }), pings = pingSet(svg);
+  const box = { x, y, w, h: Hh };
+  const x0 = tb(4) - 0.40, TA = 0.42;                      // brackets lock onto the panel on beat 1; the panel lifts out before the whip
+  return { box, render(t) {
+    const on = t < x0 + 0.42; show(root, on); if (!on) return;
+    KT.glint(l1.g, t, { start: 0.28, dur: 0.5, base: '#FFFFFF', warm: '#FFFFFF', hot: RED, width: 0.2 * l1.g.W, angle: 106 });
+    glint(l2, t, 0.85, 0.45, { base: RED, warm: '#FF5A5D', hot: '#FFFFFF', w: 0.18, glow: 8 });
+    const qs = KP(t, 1.0, 1.4); sweepBar.style.display = qs > 0 && qs < 1 ? 'block' : 'none';
+    sweepBar.style.transform = `translateX(${(-120 + (w + 240) * KE.inOutCubic(qs)).toFixed(2)}px)`;
+    const qp = KE.inOutCubic(KP(t, x0, x0 + 0.26));
+    inner.style.transform = qp > 0 ? `translateY(${(-80 * qp).toFixed(2)}px)` : 'none';
+    clip.style.clipPath = qp > 0 ? `inset(0 0 ${(100 * qp).toFixed(3)}% 0)` : 'none';
+    redge.style.opacity = qp > 0 && qp < 1 ? Math.min(1, Math.sin(Math.PI * qp) * 2).toFixed(4) : 0;
+    redge.style.transform = `translateY(${(y + Hh * (1 - qp) - 2).toFixed(2)}px)`;
+    const qst = KE.inExpo(KP(t, x0 + 0.2, x0 + 0.38));
+    stripe.style.transformOrigin = 'right center'; stripe.style.transform = qst > 0 ? `scaleX(${(1 - qst).toFixed(5)})` : 'none'; stripe.style.opacity = qst >= 1 ? 0 : 1;
+    // brackets on the panel corners
+    const qa = KE.outExpo(cl((t - TA) * FPS / 8)), tl = TA + 0.26;
+    const pl = t >= tl ? Math.exp(-(t - tl) * 14) * Math.min(1, (t - tl) * FPS / 1.5) : 0;
+    let r = lerpRect(grow(box, 1.25), box, qa); r = grow(r, (1 + 0.025 * pl) * (1 - 0.3 * KE.inCubic(KP(t, x0, x0 + 0.2))));
+    const pp = bracketDraw(Bk, r, { maxL: 64 });
+    Bk.bo.setAttribute('stroke', pl > 0.05 ? `rgb(255,${Math.round(15 + 225 * pl)},${Math.round(19 + 221 * pl)})` : RED);
+    [Bk.tu, Bk.to].forEach(e => e.setAttribute('opacity', 0));
+    pingDraw(pings, box, t, tl);
+    svg.style.opacity = (t < TA ? 0 : cl(qa * 3) * (1 - KE.inCubic(KP(t, x0 + 0.05, x0 + 0.22)))).toFixed(4);
+    sigSvg(svg, pp.br + qa.toFixed(3));
+  } };
+}
+
+// ================================================================ kinetic STEP card (fdc.js stepCard + max size / top placement)
+function makeStep(cfg) {
+  const p = Object.assign({ n: 1, total: 6, label: 'STEP', title: '', x: 62, bottom: 1500, top: null, maxW: 800, maxS: 176, exitDur: 0.2, slam: 1.45 }, cfg);
+  const root = sel('div', 'a', stage, 'width:1080px;height:1920px');
+  const S = fit('Bebas', p.title, p.maxW, p.maxS), cap = ink('Bebas', S, 'H').aA, tw = ink('Bebas', S, p.title).w;
+  const tagTxt = `${p.label} ${pad2(p.n)} / ${pad2(p.total)}`;
+  let segY = p.bottom - 8, stY = segY - 34, tiY = stY - 22 - cap, tagY = tiY - 52;
+  if (p.top != null) { const d = p.top - tagY; segY += d; stY += d; tiY += d; tagY += d; }
+  const scrim = p.top != null
+    ? sel('div', 'a', root, `left:0;top:0;width:1080px;height:${segY + 300}px;background:linear-gradient(0deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.42) 45%,rgba(0,0,0,.55) 100%)`)
+    : sel('div', 'a', root, 'left:0;top:1020px;width:1080px;height:900px;background:linear-gradient(180deg,rgba(0,0,0,0) 0%,rgba(0,0,0,.5) 45%,rgba(0,0,0,.62) 100%)');
+  const cw = ink('Michroma', 30, tagTxt, 0.3).w;
+  const chipEl = sel('div', 'a', root, `left:${p.x - 12}px;top:${tagY - 10}px;width:${(cw + 30).toFixed(1)}px;height:50px;background:rgba(0,0,0,.88);transform-origin:left center`);
+  const tag = line(root, 'Michroma', 30, tagTxt, p.x, tagY, RED, { ls: 0.3 });
+  const holder = sel('div', 'a', root, `width:1080px;height:1920px;transform-origin:${p.x}px ${tiY + cap}px`);
+  const mask = sel('div', 'a', holder, `left:0;top:${tiY - 30}px;width:1080px;height:${cap + 60}px;overflow:hidden`);
+  const ti = line(mask, 'Bebas', S, p.title, p.x, 30, '#fff');
+  const stripe = sel('div', 'a stripe', root, `left:${p.x}px;top:${stY}px;width:${tw.toFixed(1)}px;height:10px`);
+  const edge = sel('div', 'a edge', root, `left:${p.x}px;top:${stY - 11}px;height:32px;opacity:0`);
+  const segs = [], SW = 58, SG = 10;
+  for (let i = 0; i < p.total; i++) segs.push(sel('div', 'a', root, `left:${p.x + i * (SW + SG)}px;top:${segY}px;width:${SW}px;height:8px;background:${i < p.n - 1 ? '#fff' : i === p.n - 1 ? RED : 'rgba(255,255,255,.22)'};transform-origin:left center`));
+  const flash = sel('div', 'a', root, `left:${p.x - 60}px;top:${tiY - 50}px;width:${tw + 160}px;height:${cap + 100}px;background:radial-gradient(ellipse at 30% 50%,rgba(255,240,235,.45) 0%,rgba(254,15,19,.2) 40%,rgba(254,15,19,0) 70%);opacity:0`);
+  return { p, render(t) {
+    const x0 = p.t1 - p.exitDur, on = t >= p.t0 && t < p.t1; show(root, on); if (!on) return;
+    const t0 = p.t0, th = t0 + 0.12;
+    const qs = KE.outExpo(KP(t, t0, th + 0.06)), qo = KE.inCubic(KP(t, x0, p.t1));
+    scrim.style.opacity = (KE.outCubic(KP(t, t0, t0 + 0.2)) * (1 - qo)).toFixed(3);
+    holder.style.transform = `scale(${lerp(p.slam, 1, qs).toFixed(5)}) translateY(${(-cap * 0.3 * qo).toFixed(2)}px)`;
+    holder.style.opacity = (1 - qo).toFixed(4);
+    ti.w.style.opacity = cl(KP(t, t0, t0 + 0.05)).toFixed(3);
+    const hit = t >= th ? Math.exp(-(t - th) * 7) : 0;
+    flash.style.opacity = (0.4 * hit * (1 - qo)).toFixed(3);
+    const qst = KE.outExpo(KP(t, th, th + 0.34));
+    stripe.style.transform = `scaleX(${qst.toFixed(5)})`; stripe.style.opacity = (1 - qo).toFixed(3);
+    edge.style.opacity = (qst > 0 && qst < 1 ? Math.sin(Math.PI * qst) : 0).toFixed(3);
+    edge.style.transform = `translateX(${(tw * qst).toFixed(2)}px)`;
+    KT.track(tag.g, t, { start: th, dur: 0.34, spread: 2.0 }); tag.w.style.opacity = (1 - qo).toFixed(3);
+    chipEl.style.transform = `scaleX(${KE.outExpo(KP(t, th - 0.04, th + 0.24)).toFixed(4)})`; chipEl.style.opacity = (1 - qo).toFixed(3);
+    segs.forEach((s, i) => {
+      const q = i === p.n - 1 ? KE.outExpo(KP(t, th + 0.16, th + 0.46)) : KE.outCubic(KP(t, th + 0.1 + 0.025 * i, th + 0.3 + 0.025 * i));
+      s.style.transform = `scaleX(${q.toFixed(4)})`; s.style.opacity = (1 - qo).toFixed(3);
+    });
+    glint(ti, t, th + 0.5, 0.5, { w: 0.2, glow: 10 });
+    if (t >= th - 0.001) { const k = (t - th) * FPS, amp = Math.exp(-k / 2.2);
+      if (k < 12) window.FX.punch = { s: 1 + 0.045 * Math.exp(-(t - th) * 9), dx: 9 * amp * Math.sin(k * 2.1), dy: 7 * amp * Math.cos(k * 2.7) }; }
+  } };
+}
+
+// ================================================================ A: the cross-section chip (SQUEEGEE on #33, REVEAL on #29) -- from abc-mix v3,
+// plus o.trace=false (the Locked-On brackets are the box the chip rises out of) and render.foot(gi) = the footprint's screen box
+function makeChip(o) {
+  const cam = D.camera(o.cam), FP = cam.toPlane(o.fp[0], o.fp[1], 0), TARGET = cam.unproj(o.tg[0], o.tg[1], o.tg[2]);
+  const SZ = { w: 176, d: 118 }, GAP = 34, LAY = [{ name: 'PAINT', h: 36, kind: 'paint' }, { name: 'CLEAR COAT', h: 13, kind: 'clear' }, { name: 'FILM', h: 9, kind: 'film' }], HTOT = 58;
+  const labs = LAY.map((L, i) => el('a', `width:340px;height:${o.lfs + 8}px;left:${o.lx}px;top:${o.rows[i] - o.lfs - 8}px;opacity:0`,
+    `<div class="beb" style="position:absolute;right:0;bottom:6px;font-size:${o.lfs}px;color:${L.kind === 'film' ? '#FE0F13' : '#fff'};text-shadow:0 2px 14px rgba(0,0,0,.55)">${L.name}</div>`));
+  const T = o.T;
+  const pose = bt => {
+    const sk = o.inPlace ? 0 : E.inOut5(D.p(bt, T.sink[0], T.sink[1]));
+    const u = o.inPlace ? 1 : E.inOut5(D.p(bt, T.rise[0], T.rise[1])) * (1 - sk), up = o.inPlace ? 1 : E.out3(D.p(bt, T.rise[0], T.rise[0] + 0.45)) * (1 - sk);
+    const base = D.mix3(D.mix3([FP[0], -HTOT - 4, FP[2]], FP, up), TARGET, u); base[1] += Math.sin(Math.PI * u) * 30;
+    const drift = Math.max(0, bt - T.rise[1]) * B;
+    return { base, yaw: D.lerp(-8, 30, u) * D.deg + drift * 3.2 * D.deg * (1 - sk), tilt: D.lerp(0, o.tilt, u) * D.deg,
+      gap: GAP * E.spring(D.p(bt, T.explode, T.explode + 2.2) * 1.1, 13, .38) * (1 - E.inExpo(D.p(bt, T.seal - 0.34, T.seal))), u, up, sk,
+      seal: E.inExpo(D.p(bt, T.seal - 0.34, T.seal)) };
+  };
+  const corners = (P, y0, h, grow = 0) => { const w = SZ.w / 2 + grow, d = SZ.d / 2 + grow;
+    return [[-w, y0, -d], [w, y0, -d], [w, y0, d], [-w, y0, d], [-w, y0 + h, -d], [w, y0 + h, -d], [w, y0 + h, d], [-w, y0 + h, d]]
+      .map(v => { let q = [v[0], v[1] - 60, v[2]]; q = D.rotX(q, -P.tilt); q = D.rotY(q, P.yaw); q[1] += 60; return D.add(P.base, q); }); };
+  const FACES = [[0, 1, 2, 3], [4, 7, 6, 5], [0, 4, 5, 1], [1, 5, 6, 2], [2, 6, 7, 3], [3, 7, 4, 0]], FN = ['bottom', 'top', 'front', 'right', 'back', 'left'];
+  const hidden = (w, f) => { const a = w[f[0]], b = w[f[1]], c = w[f[2]]; const n = D.cross(D.sub(b, a), D.sub(c, a));
+    const ctr = D.mul(D.add(D.add(w[f[0]], w[f[1]]), D.add(w[f[2]], w[f[3]])), .25); return D.dot(n, D.sub(cam.eye, ctr)) < 0; };
+  function box(L, w, bt) {
+    const P = w.map(cam.proj);
+    const order = FACES.map((f, i) => ({ f, i, z: f.reduce((m, k) => m + P[k][2], 0) / 4, vis: !hidden(w, f) })).sort((a, b) => b.z - a.z);
+    for (const F of order) {
+      const pts = F.f.map(k => P[k]), nm = FN[F.i];
+      if (L.kind === 'paint') { if (!F.vis) continue;
+        let fill; if (nm === 'top') { const gr = g.createLinearGradient(pts[0][0], pts[0][1], pts[2][0], pts[2][1]); gr.addColorStop(0, '#9a9ea3'); gr.addColorStop(1, '#6e7277'); fill = gr; }
+        else fill = (nm === 'front' || nm === 'back') ? '#4b4f54' : '#3b3e42';
+        D.poly(g, pts, fill, 'rgba(255,255,255,.22)', 1.2);
+      } else if (L.kind === 'clear') D.poly(g, pts, `rgba(214,232,255,${F.vis ? (nm === 'top' ? .16 : .10) : .05})`, F.vis ? 'rgba(255,255,255,.62)' : 'rgba(255,255,255,.16)', F.vis ? 1.6 : 1);
+      else {
+        D.poly(g, pts, `rgba(255,255,255,${F.vis ? (nm === 'top' ? .20 : .14) : .05})`);
+        const q = E.inOut(D.p(bt, T.glint[0], T.glint[1]));
+        if (F.vis && nm === 'top' && q > 0 && q < 1) { g.save(); D.poly(g, pts); g.clip();
+          const gx = D.lerp(pts[0][0], pts[1][0], -0.3 + 1.6 * q), gy = D.lerp(pts[0][1], pts[1][1], -0.3 + 1.6 * q), gr = g.createLinearGradient(gx - 80, gy, gx + 60, gy);
+          gr.addColorStop(0, 'rgba(254,15,19,0)'); gr.addColorStop(.45, 'rgba(255,120,110,.55)'); gr.addColorStop(.5, 'rgba(255,255,255,.85)'); gr.addColorStop(.55, 'rgba(255,120,110,.55)'); gr.addColorStop(1, 'rgba(254,15,19,0)');
+          g.fillStyle = gr; g.fillRect(0, 0, 1080, 1920); g.restore(); }
+        g.save(); g.shadowColor = 'rgba(254,15,19,.9)'; g.shadowBlur = F.vis ? 14 : 0; D.poly(g, pts, null, F.vis ? 'rgba(254,15,19,.95)' : 'rgba(254,15,19,.25)', F.vis ? 2.4 : 1.2); g.restore();
+      }
+    }
+    return P;
+  }
+  const quadAt = (grow, yd) => { const w = SZ.w / 2 + grow, d = SZ.d / 2 + grow, y = yd * D.deg; return [[-w, 0, -d], [w, 0, -d], [w, 0, d], [-w, 0, d]].map(v => D.add(FP, D.rotY(v, y))); };
+  const R = function render(bt, gi) {
+    labs.forEach(l => l.style.opacity = 0);
+    if (bt < T.on[0] || bt >= T.on[1]) return;
+    const H = o.onSurface ? o.onSurface(gi) : (p => p);
+    const P = pose(bt), quad = quadAt(0, -8).map(cam.proj).map(H);
+    const cav = o.inPlace ? 0 : D.p(bt, T.rise[0], T.rise[0] + 0.5) * (1 - 0.6 * P.seal) * (1 - P.sk);
+    if (cav > 0) { g.save(); g.filter = 'blur(10px)'; D.poly(g, quad, `rgba(0,0,0,${0.30 * cav})`); g.restore(); }
+    if (!o.inPlace) { const s = quadAt(26, D.lerp(-8, 30, P.u)).map(cam.proj).map(H); g.save(); g.filter = `blur(${18 + 26 * P.u}px)`; D.poly(g, s, `rgba(0,0,0,${0.28 * P.u})`); g.restore(); }
+    const tq = o.trace === false ? 0 : E.inOut(D.p(bt, T.trace[0], T.trace[1]));
+    if (tq > 0) { g.save(); g.setLineDash([16, 10]); g.lineDashOffset = -bt * 18; g.shadowColor = 'rgba(254,15,19,.8)'; g.shadowBlur = 10;
+      D.line(g, D.partial([...quad, quad[0]], tq), `rgba(254,15,19,${(0.95 - 0.45 * P.seal) * (1 - P.sk)})`, 3); g.restore();
+      for (const c of quad) { g.fillStyle = `rgba(255,255,255,${0.9 * tq * (1 - P.sk)})`; g.fillRect(c[0] - 3, c[1] - 3, 6, 6); } }
+    if (P.up <= 0 && P.u <= 0) return;
+    // v2 inPlace (reveal): the chip fades and grows in where it floats (0.8x -> 1x) and fades out at the end -- no slab rising
+    const ap = o.inPlace ? E.out3(D.p(bt, T.rise[0], T.rise[1])) * (1 - E.inOut(D.p(bt, T.sink[0], T.sink[1]))) : 1;
+    if (ap <= 0.001) return;
+    const sc0 = o.inPlace ? D.lerp(0.8, 1, ap) : 1, cc = cam.proj(P.base);
+    let y = 0; const anchors = [], bw = corners(P, 0, LAY[0].h);
+    const ga = D.p(bt, T.rise[0] + 0.1, T.rise[0] + 0.6) * (1 - D.p(bt, T.seal + 0.3, T.seal + 0.9));
+    if (ga > 0) { g.save(); g.setLineDash([3, 7]); for (let i = 0; i < 4; i++) D.line(g, [quad[i], cam.proj(bw[i])], `rgba(255,255,255,${0.5 * ga})`, 1.3); g.restore(); }
+    LAY.forEach(L => {
+      const lo = P.u < 0.05 ? Math.max(y, -P.base[1]) : y, hh = y + L.h - lo;
+      if (hh <= 0.2) { anchors.push(null); y += L.h + P.gap; return; }
+      g.save(); g.globalAlpha = ap; g.translate(cc[0], cc[1]); g.scale(sc0, sc0); g.translate(-cc[0], -cc[1]);
+      const Pp = box(L, corners(P, lo, hh, L.kind === 'film' ? 1.5 : 0), bt); g.restore();
+      let best = null; for (const [a, b] of [[0, 4], [1, 5], [2, 6], [3, 7]]) { const m = [(Pp[a][0] + Pp[b][0]) / 2, (Pp[a][1] + Pp[b][1]) / 2]; if (!best || m[0] < best[0]) best = m; }
+      anchors.push(best); y += L.h + P.gap;
+    });
+    LAY.forEach((L, i) => {
+      const q = E.outExpo(D.p(bt, T.labels + 0.15 * (2 - i), T.labels + 0.15 * (2 - i) + 0.95)) * (1 - E.inOut(D.p(bt, T.lout[0] + 0.08 * i, T.lout[1] + 0.08 * i)));
+      labs[i].style.opacity = q > 0 ? 1 : 0; labs[i].style.clipPath = `inset(0 0 0 ${(1 - q) * 100}%)`;
+      const a = anchors[i]; if (q <= 0 || !a) return;
+      const ry = o.rows[i], kx = Math.min(a[0] - 34, 540);
+      D.line(g, D.partial([[a[0], a[1]], [kx, ry], [o.lx + 348, ry]], q), 'rgba(255,255,255,.85)', 2);
+      g.beginPath(); g.arc(a[0], a[1], 6, 0, 7); g.fillStyle = L.kind === 'film' ? '#FE0F13' : '#fff'; g.fill();
+    });
+    const gq = E.out3(D.p(bt, T.labels - 0.1, T.labels + 0.7)) * (1 - E.inOut(D.p(bt, T.lout[0], T.lout[1] + 0.25)));
+    if (gq > 0) FX.glass.push(Object.assign({ r: 18, blur: 22, dark: 0.48 * gq }, o.glass));
+  };
+  R.foot = gi => { const H = o.onSurface ? o.onSurface(gi) : (p => p), q = quadAt(0, -8).map(cam.proj).map(H);
+    const xs = q.map(p => p[0]), ys = q.map(p => p[1]); return { x: Math.min(...xs), y: Math.min(...ys), w: Math.max(...xs) - Math.min(...xs), h: Math.max(...ys) - Math.min(...ys) }; };
+  return R;
+}
+// SQUEEGEE on #33 (locked camera): strokes at beats 24.9 / 26.1 / 26.9; the brackets lock on after the whip, the chip rises out of the box,
+// splits on beat 25 and seals on beat 27, after the last stroke
+const chipSq = makeChip({ cam: { eye: [0, 400, 0], pitch: 10 * D.deg, f: 2059 }, fp: [610, 1600], tg: [745, 1420, 760], tilt: 14, trace: false,
+  rows: [1385, 1295, 1205], lx: 42, lfs: 62, glass: { x: 40, y: 1113, w: 384, h: 298 },     // 35 px higher than v3: the WET FILM tag sits under it
+  T: { on: [24, 28], trace: [24, 24], rise: [24.55, 25.05], explode: 25.05, labels: 25.2, seal: 27.0, glint: [27.05, 27.7], lout: [27.25, 27.6], sink: [27.35, 27.98] } });
+// REVEAL on #29: the trident lock-on lands on the drop first; the split follows half a beat later, label panel low, clear of the badge
+const TRR_at = gi => { const r = SC.shots.find(s => s.key === 'r29'); const i = r.off + (gi - r.g0), M = TRR.m;
+  const at = j => M[Math.max(0, Math.min(M.length - 1, j))], lm = x => { const i0 = Math.floor(x), u = x - i0, a = at(i0), b = at(i0 + 1); return [0, 1, 2].map(k => a[k] + (b[k] - a[k]) * u); };
+  if (i < 45) { const a = lm(45), b = lm(60); return [0, 1, 2].map(k => a[k] + (a[k] - b[k]) * (45 - i) / 15); } return lm(i); };
+const chipRv = makeChip({ cam: { eye: [0, 400, 0], pitch: 30 * D.deg, f: 2059 }, fp: [700, 1610], tg: [812, 1440, 1120], tilt: 12,
+  rows: [1520, 1462, 1404], lx: 42, lfs: 54, glass: { x: 40, y: 1340, w: 476, h: 192 }, inPlace: true,
+  onSurface: gi => { const m = TRR_at(gi); return p => [TRR.c[0] + m[0] + m[2] * (p[0] - TRR.c[0]), TRR.c[1] + m[1] + m[2] * (p[1] - TRR.c[1])]; },
+  T: { on: [48.4, 54.4], trace: [48.5, 49.4], rise: [48.6, 49.5], explode: 49.5, labels: 49.65, seal: 52.1, glint: [52.15, 52.8], lout: [52.4, 52.75], sink: [53.0, 54.0] } });
+
+// ================================================================ B: TRIM -- the extruded red-black word slams in from the lens as the STEP 05 card
+const trim = document.getElementById('trim');
+(function buildTrim() {
+  let html = '';
+  for (let k = 22; k >= 1; k--) { const u = k / 22, r = Math.round(D.lerp(150, 40, u)), gg = Math.round(D.lerp(6, 2, u));
+    html += `<div class="ex" style="font-size:190px;color:rgb(${r},${gg},${gg + 1});transform:translateZ(${-k * 3}px)">TRIM</div>`; }
+  html += `<div class="ex" style="font-size:190px;color:#fff;text-shadow:0 0 1px rgba(255,255,255,.4)">TRIM</div>`;
+  html += `<div id="trchip" style="position:absolute;left:-6px;top:-74px;width:262px;height:50px;background:rgba(0,0,0,.88);transform-origin:left center"></div>`;
+  html += `<div class="mic" id="trtag" style="position:absolute;left:6px;top:-62px;font-size:30px;color:#FE0F13;letter-spacing:.3em">STEP 05 / 06</div>`;
+  html += `<div id="trl" style="position:absolute;left:6px;top:196px;width:130px;height:8px;background:#FE0F13;transform-origin:left center"></div>`;
+  for (let i = 0; i < 6; i++) html += `<div class="trseg" style="position:absolute;left:${6 + i * 68}px;top:222px;width:58px;height:8px;background:${i < 4 ? '#fff' : i === 4 ? '#FE0F13' : 'rgba(255,255,255,.22)'};transform-origin:left center"></div>`;
+  trim.innerHTML = html;
+  const rail = document.createElement('div'); rail.id = 'rail'; rail.className = 'p3';
+  rail.style.cssText += 'width:8px;height:950px;margin-top:-475px;background:linear-gradient(180deg,#FE0F13 0%,#FE0F13 45%,rgba(254,15,19,0) 100%);box-shadow:0 0 22px 4px rgba(254,15,19,.5)';
+  trim.appendChild(rail);
+})();
+function renderTrim(t) {
+  const t31 = tb(31), bt = t / B, on = t >= t31 && bt < 38;
+  trim.style.display = on ? '' : 'none';
+  if (!on) return;
+  const q = KE.outExpo(KP(t, t31 + 0.03, t31 + 0.26)), th = t31 + 0.2;
+  const outq = E.in3(D.p(bt, 37.45, 37.98)), drift = D.p(bt, 31, 38);
+  // slam: scales down 1.6x -> 1x about the word's foot (bottom-left), so it never leaves the text band on the way in
+  const x = -350 + 380 * outq, z = 120 - 900 * outq - 30 * drift, sc = lerp(1.6, 1, q);
+  trim.style.transformOrigin = '0px 190px';
+  trim.style.transform = `translate3d(${540 + x}px, 1210px, ${z}px) rotateY(${-20 + 4 * drift}deg) scale3d(${sc},${sc},${sc})`;
+  trim.style.opacity = (cl(q * 5) * Math.pow(1 - outq, 3)).toFixed(4);
+  const word = trim.querySelectorAll('.ex'), rot = (1 - q) * -28;
+  word.forEach((e, k) => { e.style.transformOrigin = '0 100%'; const z0 = k < word.length - 1 ? -(22 - k) * 3 : 0; e.style.transform = `translateZ(${z0}px) rotateX(${rot}deg)`; });
+  document.getElementById('trchip').style.transform = `scaleX(${KE.outExpo(KP(t, th - 0.02, th + 0.26)).toFixed(4)})`;
+  document.getElementById('trtag').style.clipPath = `inset(0 ${(100 * (1 - KE.outExpo(KP(t, th, th + 0.34)))).toFixed(2)}% 0 0)`;
+  document.getElementById('trl').style.transform = `scaleX(${KE.outExpo(KP(t, th, th + 0.4))})`;
+  trim.querySelectorAll('.trseg').forEach((s, i) => s.style.transform = `scaleX(${(i === 4 ? KE.outExpo(KP(t, th + 0.16, th + 0.46)) : KE.outCubic(KP(t, th + 0.1 + 0.025 * i, th + 0.3 + 0.025 * i))).toFixed(4)})`);
+  document.getElementById('rail').style.transform = `translate3d(440px, 205px, 325px) rotateX(90deg) scaleY(${KE.outExpo(KP(t, th - 0.05, th + 0.5))})`;
+  if (t >= th) { const k = (t - th) * FPS, amp = Math.exp(-k / 2.2);
+    if (k < 12) window.FX.punch = { s: 1 + 0.05 * Math.exp(-(t - th) * 9), dx: 10 * amp * Math.sin(k * 2.1), dy: 8 * amp * Math.cos(k * 2.7) }; }
+}
+
+// ================================================================ C: WRAP THE EDGES -- traced + tracked edge, wrap ticks, scan curtain and mesh (abc-mix v3);
+// the pins are now Locked-On brackets on the tracked edge (makeLock below)
+function cr(pts, n) { const P = [pts[0], ...pts, pts[pts.length - 1]], out = [];
+  for (let i = 1; i < P.length - 2; i++) for (let j = 0; j < n; j++) { const t = j / n, t2 = t * t, t3 = t2 * t, a = P[i - 1], b = P[i], c = P[i + 1], d = P[i + 2];
+    out.push([0, 1].map(k => 0.5 * ((2 * b[k]) + (-a[k] + c[k]) * t + (2 * a[k] - 5 * b[k] + 4 * c[k] - d[k]) * t2 + (-a[k] + 3 * b[k] - 3 * c[k] + d[k]) * t3))); }
+  out.push(pts[pts.length - 1]); return out; }
+function sampler(pts) { const dense = cr(pts, 24), L = [0];
+  for (let i = 1; i < dense.length; i++) L.push(L[i - 1] + Math.hypot(dense[i][0] - dense[i - 1][0], dense[i][1] - dense[i - 1][1]));
+  const tot = L[L.length - 1];
+  return u => { const w = D.clamp(u) * tot; let i = 1; while (i < L.length - 1 && L[i] < w) i++; const k = (w - L[i - 1]) / ((L[i] - L[i - 1]) || 1);
+    return [D.lerp(dense[i - 1][0], dense[i][0], k), D.lerp(dense[i - 1][1], dense[i][1], k)]; }; }
+const applyH = (M, p) => { const w = M[2][0] * p[0] + M[2][1] * p[1] + M[2][2]; return [(M[0][0] * p[0] + M[0][1] * p[1] + M[0][2]) / w, (M[1][0] * p[0] + M[1][1] * p[1] + M[1][2]) / w]; };
+const Hlerp = (L, x) => { x = Math.max(0, Math.min(L.length - 1, x)); const i = Math.floor(x), j = Math.min(L.length - 1, i + 1), k = x - i; return L[i].map((r, a) => r.map((v, b) => v + (L[j][a][b] - v) * k)); };
+function edgeRig(pts, side, width) {
+  const S = sampler(pts);
+  const nrm = u => { const a = S(Math.max(0, u - 0.01)), b = S(Math.min(1, u + 0.01)); const dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1; return [side * -dy / l, side * dx / l]; };
+  return { S, at: (u, v) => { const p = S(u), n = nrm(u); return [p[0] + n[0] * v * width, p[1] + n[1] * v * width]; }, nrm };
+}
+const WR = {
+  s35: { rig: edgeRig([[420, 1085], [330, 1150], [250, 1240], [170, 1330], [90, 1420], [20, 1500]], -1, 330), H: SC.T35, f0: SC.s35_f0, b0: 38, b1: 41, pin: 0.52 },
+  s22: { rig: edgeRig([[0, 1180], [200, 1270], [400, 1370], [560, 1450], [700, 1530], [850, 1640], [1000, 1760]], -1, 300), H: SC.T22, f0: Math.round(41 * B * FPS), b0: 41, b1: 48, pin: 0.2 },
+};
+const pinBox = (k, t) => { const W = WR[k], gi = t * FPS, c = applyH(Hlerp(W.H, gi - W.f0), W.rig.at(W.pin, 0)); return { x: c[0] - 70, y: c[1] - 70, w: 140, h: 140 }; };
+function glowLine(pts, col, lw, glow, a = 1) { g.save(); g.globalAlpha = a; g.shadowColor = 'rgba(254,15,19,.9)'; g.shadowBlur = glow; D.line(g, pts, col, lw); g.restore(); }
+function renderWrap(bt, gi) {
+  for (const k in WR) {
+    const W = WR[k]; if (bt < W.b0 || bt >= W.b1) continue;
+    const Hm = Hlerp(W.H, gi - W.f0), P = (u, v) => applyH(Hm, W.rig.at(u, v));
+    const lb = bt - W.b0, riser = k === 's22' && bt >= 44;
+    const tr = E.inOut(D.p(lb, 0.2, 1.0));
+    const fade = 1 - E.inOut(D.p(bt, W.b1 - 0.35, W.b1 - 0.02));
+    let sc = D.p(lb, 0.5, 1.8);
+    if (riser) { const rb = bt - 44, n = rb < 2 ? rb : 2 + (rb - 2) * 2; sc = n - Math.floor(n); }
+    const meshA = (riser ? 0.55 : 0.42) * D.clamp(D.p(lb, 0.5, 1.2)) * fade;
+    const NU = 16, NV = 5, SMP = 30;
+    const line_ = (fn, n) => Array.from({ length: n + 1 }, (_, j) => fn(j / n));
+    if (meshA > 0) {
+      const reach = riser ? 1 : sc;
+      for (let j = 1; j <= NV; j++) { const v = j / NV; D.line(g, line_(u => P(u * Math.max(reach, 0.001), v), SMP), `rgba(255,255,255,${meshA * (1 - v * 0.6)})`, 1.3); }
+      for (let i = 0; i <= NU; i++) { const u = i / NU; if (u > reach) break; D.line(g, line_(v => P(u, v), 8), `rgba(255,255,255,${meshA * 0.8})`, 1.1); }
+    }
+    if (sc > 0 && sc < 1) {
+      const L = line_(v => P(sc, v), 10), n = W.rig.nrm(sc), back = L.map(p => [p[0] - n[1] * 26, p[1] + n[0] * 26]);
+      const gr = g.createLinearGradient(L[0][0], L[0][1], back[0][0], back[0][1]); gr.addColorStop(0, 'rgba(254,15,19,.45)'); gr.addColorStop(1, 'rgba(254,15,19,0)');
+      g.save(); g.globalAlpha = fade; D.poly(g, [...L, ...back.reverse()], gr); g.restore();
+      glowLine(L, '#fff', 3, 22, fade);
+    }
+    const edge = D.partial(line_(u => P(u, 0), 60), tr);
+    glowLine(edge, '#FE0F13', riser ? 5 : 4, riser ? 22 : 14, fade);
+    const ta = D.p(lb, 0.6, 1.1) * fade;
+    if (ta > 0) for (let i = 0; i <= 10; i++) { const u = i / 10; if (u > tr) break; glowLine([P(u, -0.10), P(u, 0.04)], 'rgba(254,15,19,.85)', 2.2, 8, ta); }
+  }
+}
+
+// ================================================================ build the timeline
+let hook, steps = [], locks = [], card;
+window.FX = {};
+window.renderAt = function (t) {
+  window.FX = { glass: [] };
+  const bt = t / B, gf = t * FPS;
+  D.sig(bt < 55 ? t : 0);
+  g.clearRect(0, 0, 1080, 1920);
+  hook.render(t);
+  steps.forEach(s => s.render(t));
+  chipSq(bt, gf); renderTrim(t); renderWrap(bt, gf); chipRv(bt, gf);
+  locks.forEach(l => l.render(t));
+  card.render(t);
+  if (!FX.glass.length) delete FX.glass;
+};
+(async () => {
+  await document.fonts.load('150px Bebas'); await document.fonts.load('40px Michroma');
+  await KT.ready();
+  SEK.init(stage, { box: () => null, clip: () => null, data: () => null });
+  hook = makeHook();
+  // STEP cards: on from the cut (the whip lands them), out with the whip into the next step
+  const S = (n, title, b0, b1, o = {}) => steps.push(makeStep(Object.assign({ n, title, t0: tb(b0) + 0.02, t1: tb(b1) }, o)));
+  S(1, 'PREP & CLEAN', 4, 11, { maxW: 640, maxS: 150 });
+  S(2, 'PEEL THE FILM', 11, 17, { maxW: 480, maxS: 150 });                 // left of his fists on #27, never near his head
+  S(3, 'LAY THE FILM', 17, 24, { maxW: 600, maxS: 150 });
+  S(4, 'SQUEEGEE', 24, 31, { top: 300, maxW: 700, maxS: 176 });          // top: the chip and its labels sit low; clear of the applicator on #25
+  S(6, 'WRAP THE EDGES', 38, 41, { top: 300, maxW: 560, maxS: 150, slam: 1.25 });   // v2: ends ~x 620, well clear of the shirt emblem    // #35 only: on #22 his face fills the top half
+  // lock-ons (times in beats; each holds on its tracked subject and leaves before the next cut)
+  // v2: each lock belongs to one shot; it never draws outside [g0, g1) and its exit (tx .. tx + 0.3 s) ends a frame before the cut
+  const Lk = (o) => { const s = SC.shots.find(x => x.key === o.shot); const tx = Math.min(tb(o.x), (s.g1 - 1) / FPS - 0.30);
+    locks.push(makeLock(Object.assign(o, { ta: tb(o.a), tx, g0: s.g0, g1: s.g1 }))); };
+  Lk({ shot: 's37', a: 4.5, x: 7.55, boxAt: t => lockBox('s37', t), tag: 'MICROFIBRE', pad: 6 });
+  Lk({ shot: 's27', a: 14.35, x: 16.2, boxAt: t => lockBox('s27', t), tag: 'BY HAND', pad: 6 });   // gone before the whip into #32
+  // v2: no lock on #32 -- the hand sits in the bottom 20 % / right 16 %, half off frame, under Instagram's buttons
+  Lk({ shot: 's33', a: 24.22, x: 26.95, boxAt: t => { const b = t * FPS; return b >= fb(24) && b < fb(28) ? chipSq.foot(b) : null; }, tag: 'WET FILM', pad: 26 });
+  Lk({ shot: 's38', a: 31.55, x: 34.6, boxAt: t => lockBox('s38', t), tag: 'BLADE', pad: 8 });
+  Lk({ shot: 's35', a: 38.7, x: 40.3, boxAt: t => { const b = t / B; return b >= 38 && b < 41 ? pinBox('s35', t) : null; }, tag: 'FILM EDGE', pad: 0 });
+  Lk({ shot: 's22', a: 41.45, x: 43.6, boxAt: t => { const b = t / B; return b >= 41 && b < 48 ? pinBox('s22', t) : null; }, tag: 'PANEL EDGE', pad: 0 });
+  Lk({ shot: 'r29', a: 48.3, x: 50.9, boxAt: t => lockBox('r29', t), label: { kicker: 'MASERATI', name: 'MC20' }, pad: 14, maxL: 60 });
+  card = SEK.cardFD({ code: 'END', t0: tb(55), t1: SC.nf / FPS });
+  await Promise.all([...document.images].map(im => im.complete && im.naturalWidth ? 0 : new Promise((r, j) => { im.onload = r; im.onerror = () => j(new Error('missing ' + im.src)); })));
+  window.renderAt(0); window.__ktReady = true;
+})();
+// capture plan: K sub-samples only where things move fast
+const sp = (a, b, k) => ({ a, b, k });
+const SPANS = [sp(0.40, 0.95, 8), sp(tb(4) - 0.42, tb(4) + 0.05, 10)];
+[[4, 11], [11, 17], [17, 24], [24, 31], [38, 41]].forEach(([a, b]) => { SPANS.push(sp(tb(a), tb(a) + 0.62, 12)); SPANS.push(sp(tb(b) - 0.22, tb(b), 8)); });
+[[4.5, 7.55], [14.35, 16.2], [24.22, 26.95], [31.55, 34.6], [38.7, 40.3], [41.45, 43.6], [48.3, 50.9]].forEach(([a, x]) => { SPANS.push(sp(tb(a), tb(a) + 0.8, 10)); SPANS.push(sp(tb(x) - 0.02, tb(x) + 0.34, 8)); });
+SPANS.push(sp(tb(24), tb(28), 6), sp(tb(31), tb(31) + 0.9, 14), sp(tb(37.4), tb(38.1), 12), sp(tb(38), tb(48), 5), sp(tb(48), tb(55), 6), sp(tb(55), tb(55) + 1.0, 10), sp(tb(55) + 1.1, tb(55) + 1.7, 6));
+window.KT_PLAN = { k: 3, shutter: 180, spans: SPANS };
+// QA (v2): every lock must be invisible on every sub-frame sample outside its own shot [g0, g1)
+window.lockAudit = function () {
+  const bad = [];
+  locks.forEach((L, k) => { const o = L.o;
+    for (const [a, b] of [[o.g0 - 12, o.g0 - 0.5], [o.g1 - 0.5, o.g1 + 12]]) for (let f = a; f < b; f += 0.05) {
+      window.renderAt(f / FPS); if (L.root.style.display !== 'none') bad.push([k, o.shot, +f.toFixed(2)]); } });
+  return bad;
+};
+</script>
+</body></html>
