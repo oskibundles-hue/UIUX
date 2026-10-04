@@ -5,6 +5,10 @@ way to go", then "Approve, add next to 30s PPF" and "Save + push to FD branch"),
 process" ad, v2. Delivered: Dropbox `Portfolio/14 FD Commercials/2026-10-03 Shop videos - MC20 PPF full process (30s)/`,
 file 02, next to the abc-mix cut (01). Post one or the other, not back to back.
 
+**Variations: use the layout engine (2026-10-04).** This layout is the engine recipe `locked-on-abc` (positions still
+to be matched against this hand build). For a new car, offer or A/B/C look on a step, use the `layout-engine` skill
+instead of copying this kit. The engine is private and local; nothing of it is copied here.
+
 `per-shot-sheet-v2.jpg` shows one frame per shot of the approved v2.
 
 | Part | Look |

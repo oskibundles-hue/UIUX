@@ -44,7 +44,7 @@ formula-dynamics/
 ├── 06-video-system/      How to shoot, edit, and export. CapCut workflow.
 ├── 07-fonts/             Bebas Neue (bundled) + notes on the accent face.
 ├── 08-download-bundles/  Zipped packs, ready to download and unzip.
-├── 16-commercials/       Approved commercial styles with their build kits (abc-mix: flat footage + 3D graphics per step; locked-on-abc: classic Locked-On + the abc-mix 3D moments).
+├── 16-commercials/       Approved commercial styles with their build kits (abc-mix: flat footage + 3D graphics per step; locked-on-abc: classic Locked-On + the abc-mix 3D moments; variations: `layout-engine` skill).
 ├── 99-toolkit/           Scripts that generated everything here.
 └── FORMULA-DYNAMICS-BRAND-GUIDE.pdf    The whole system, printable.
 ```

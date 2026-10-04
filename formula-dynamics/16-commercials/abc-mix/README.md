@@ -3,6 +3,10 @@
 Approved by Omarie on 2026-10-03 ("approve the 30s PPF", then "save the abc mix layout"), on the 30-second MC20 PPF
 "full process" ad. Delivered: Dropbox `Portfolio/14 FD Commercials/2026-10-03 Shop videos - MC20 PPF full process (30s)/`.
 
+**Variations: use the layout engine (2026-10-04).** This layout is the engine recipe `abc-mix-v3-ppf` (rebuilt almost
+frame for frame, SSIM min 0.950). For a new car, offer or A/B/C look on a step, use the `layout-engine` skill instead
+of copying this kit. The engine is private and local; nothing of it is copied here.
+
 `style-frames-ABC.jpg` shows the three style frames it mixes. Omarie sent that sheet back with "like this" and picked
 "mix all 3, in that order":
 
