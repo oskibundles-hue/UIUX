@@ -1,0 +1,342 @@
+<!doctype html>
+<!--
+  FD MC20 PPF full process -- v2 "A-B-C mix" graphics layer (3 Oct 2026). Omarie: "Mix all 3, in that order".
+  Flat full-frame footage underneath (compose30.py G, base per frame from FX.base), v1's exact shot order and timing.
+    0-4    HOOK on black: FD logo, PAINT PROTECTION FILM, EVERY INCH / BY HAND (frosted-panel language), complete on frame 0
+    4-24   frosted title panels (A/C): PREP & CLEAN (low), PEEL THE FILM (top), LAY THE FILM (low)
+    24-31  SQUEEGEE = A: top panel; on #33 the FILM / CLEAR COAT / PAINT chip rises from the wet film, splits, seals after the stroke
+    31-38  TRIM = B: extruded red-black TRIM, skewed kicker, red floor-rail line (graphics only, footage flat)
+    38-48  WRAP THE EDGES = C: top panel; the traced + tracked edge glows red with its wrap ticks, scan mesh, depth pins;
+           #22 runs on through the riser (44-48) with the scan speeding up
+    48-55  REVEAL = A's split over the finished hood (label panel low, clear of the trident), then a frosted lead-in to
+    55-64  the approved end card v4 file (compose; this layer draws nothing)
+  Beats at 128 BPM from 0.000 s; window.renderAt(t) is pure in t.
+-->
+<html><head><meta charset="utf-8"><title>FD PPF 30 v2 A-B-C mix</title>
+<style>
+@font-face{font-family:Bebas;src:url('fonts/BebasNeue-Regular.ttf')}
+@font-face{font-family:PlexB;src:url('fonts/IBMPlexMono-Bold.ttf')}
+html,body{margin:0;padding:0;background:transparent;width:1080px;height:1920px;overflow:hidden}
+.a{position:absolute;left:0;top:0}
+.beb{font-family:Bebas;line-height:1;white-space:pre;color:#fff}
+.mono{font-family:PlexB;line-height:1;white-space:pre;color:#fff;letter-spacing:.16em}
+.rule{position:absolute;width:118px;height:7px;background:#FE0F13;transform-origin:left center}
+#world{position:absolute;left:0;top:0;width:1080px;height:1920px;perspective:1300px;perspective-origin:540px 960px}
+.p3{position:absolute;left:0;top:0;transform-style:preserve-3d}
+.ex{position:absolute;left:0;top:0;font-family:Bebas;line-height:.92;white-space:pre}
+.band{position:absolute;left:0;width:1080px}
+</style>
+<script src="lib/kinetic.js"></script>
+<script src="lib/fd3d.js"></script>
+<script src=".work/H/scene.js"></script>
+<script src="tracks/r29s.js"></script>
+</head><body>
+<div id="sig" class="a"></div>
+<canvas id="cv" class="a" width="1080" height="1920"></canvas>
+<div id="world"><div id="trim" class="p3"></div></div>
+<div id="dom" class="a"></div>
+<div id="bands" class="a"></div>
+<script>
+const D = D3, E = D.E, FPS = D.FPS, B = D.BEAT, SC = window.SCENE;
+const fb = b => Math.round(b * B * FPS);
+const cv = document.getElementById('cv'), g = cv.getContext('2d'), dom = document.getElementById('dom');
+const el = (cls, css, html) => { const d = document.createElement('div'); d.className = cls; d.style.cssText += css; if (html != null) d.innerHTML = html; dom.appendChild(d); return d; };
+const shotAt = gi => SC.shots.find(s => gi >= s.g0 && gi < s.g1);
+const localOf = (key, gi) => { const s = SC.shots.find(x => x.key === key); return s.off + (gi - s.g0); };
+
+// ================================================================ frosted title panels (A / C language)
+// spec: beats [b0, b1), y of the panel top, title, title size. The glass is cut from the picture in compose (FX.glass).
+const PANELS = [
+  { b0: 4, b1: 11, y: 1232, title: 'PREP & CLEAN', fs: 150 },
+  { b0: 11, b1: 17, y: 1250, title: 'PEEL THE FILM', fs: 108 },     // v3: low, clear of his head on #26 and #27
+  { b0: 17, b1: 24, y: 1232, title: 'LAY THE FILM', fs: 150 },
+  { b0: 24, b1: 31, y: 290, title: 'SQUEEGEE', fs: 178 },
+  { b0: 38, b1: 44, y: 290, title: 'WRAP THE EDGES', fs: 136 },
+];
+const bar = el('a', 'width:0;height:3px;background:#fff;box-shadow:0 0 18px 5px rgba(254,15,19,.85);opacity:0');
+PANELS.forEach(P => {
+  P.k = el('a mono', `left:72px;top:${P.y + 28}px;font-size:27px`, 'PAINT PROTECTION FILM');
+  P.t = el('a beb', `left:66px;top:${P.y + 66}px;font-size:${P.fs}px;letter-spacing:.01em`, P.title);
+  P.r = el('rule', `left:72px;top:${P.y + 66 + P.fs * 0.95 + 18}px`);
+});
+function panelLayout(P) {                                       // measured once fonts are in
+  P.w = Math.max(P.t.offsetWidth, P.k.offsetWidth) + 70; P.h = 66 + P.fs * 0.95 + 18 + 7 + 30;
+}
+function renderPanels(bt) {
+  bar.style.opacity = 0;
+  for (const P of PANELS) {
+    const inq = E.inOut(D.p(bt, P.b0, P.b0 + 0.75)), outq = E.inOut(D.p(bt, P.b1 - 0.55, P.b1 - 0.02));
+    const on = bt >= P.b0 - 0.01 && bt < P.b1;
+    for (const e of [P.k, P.t, P.r]) e.style.opacity = on ? 1 : 0;
+    if (!on) continue;
+    // in: a scan bar sweeps down the panel and reveals it (C); out: the panel wipes up off its own top edge
+    const yb = D.lerp(P.y, P.y + P.h, inq), yt = D.lerp(P.y, P.y + P.h, outq);
+    for (const e of [P.k, P.t, P.r]) {
+      const r = e.offsetTop, h = e.offsetHeight;
+      const vis0 = D.clamp((yt - r) / h), vis1 = D.clamp((yb - r) / h);
+      e.style.clipPath = `inset(${vis0 * 100}% 0 ${(1 - vis1) * 100}% 0)`;
+    }
+    if (inq > 0 && inq < 1) { bar.style.opacity = 1; bar.style.left = '56px'; bar.style.width = (P.w - 30) + 'px'; bar.style.top = (yb - 1) + 'px'; }
+    // v3: the glass is revealed by the same scan bar as the type (and leaves with it), so it is never an empty box
+    const gTop = yt, gBot = yb;
+    if (gBot - gTop > 2) FX.glass.push({ x: 40, y: gTop, w: P.w, h: gBot - gTop, r: Math.min(18, (gBot - gTop) / 2), dark: 0.42, blur: 24 });
+  }
+}
+
+// ================================================================ hook on black (frame 0 complete)
+const hook = {
+  logo: (() => { const i = document.createElement('img'); i.src = 'logos/fd-primary-horizontal--white.png'; i.className = 'a'; i.style.cssText += 'left:70px;top:330px;width:380px'; dom.appendChild(i); return i; })(),
+  k: el('a mono', 'left:74px;top:540px;font-size:30px', 'PAINT PROTECTION FILM'),
+  t: el('a beb', 'left:64px;top:590px;font-size:210px;line-height:.9', 'EVERY INCH\nBY HAND'),
+  r: el('rule', 'left:74px;top:982px;width:150px;height:8px'),
+};
+function renderHook(bt) {
+  const out = E.inOut(D.p(bt, 3.45, 3.98));
+  for (const e of Object.values(hook)) { e.style.opacity = bt < 4 ? 1 : 0;
+    const r = e.offsetTop, h = e.offsetHeight || 40; const y = D.lerp(300, 1010, out); e.style.clipPath = `inset(${D.clamp((y - r) / h) * 100}% 0 0 0)`; }
+}
+
+// ================================================================ A: the cross-section chip (SQUEEGEE on #33, REVEAL on #29)
+function makeChip(o) {
+  const cam = D.camera(o.cam), FP = cam.toPlane(o.fp[0], o.fp[1], 0), TARGET = cam.unproj(o.tg[0], o.tg[1], o.tg[2]);
+  const SZ = { w: 176, d: 118 }, GAP = 34, LAY = [{ name: 'PAINT', h: 36, kind: 'paint' }, { name: 'CLEAR COAT', h: 13, kind: 'clear' }, { name: 'FILM', h: 9, kind: 'film' }], HTOT = 58;
+  const labs = LAY.map((L, i) => el('a', `width:340px;height:${o.lfs + 8}px;left:${o.lx}px;top:${o.rows[i] - o.lfs - 8}px;opacity:0`,
+    `<div class="beb" style="position:absolute;right:0;bottom:6px;font-size:${o.lfs}px;color:${L.kind === 'film' ? '#FE0F13' : '#fff'};text-shadow:0 2px 14px rgba(0,0,0,.55)">${L.name}</div>`));
+  const kick = o.kicker ? el('a mono', `left:72px;top:${o.kicker}px;font-size:27px;opacity:0`, 'PAINT PROTECTION FILM') : null;
+  const T = o.T;
+  const pose = bt => {
+    const sk = E.inOut5(D.p(bt, T.sink[0], T.sink[1]));
+    const u = E.inOut5(D.p(bt, T.rise[0], T.rise[1])) * (1 - sk), up = E.out3(D.p(bt, T.rise[0], T.rise[0] + 0.45)) * (1 - sk);
+    const base = D.mix3(D.mix3([FP[0], -HTOT - 4, FP[2]], FP, up), TARGET, u); base[1] += Math.sin(Math.PI * u) * 30;
+    const drift = Math.max(0, bt - T.rise[1]) * B;
+    return { base, yaw: D.lerp(-8, 30, u) * D.deg + drift * 3.2 * D.deg * (1 - sk), tilt: D.lerp(0, o.tilt, u) * D.deg,
+      gap: GAP * E.spring(D.p(bt, T.explode, T.explode + 2.2) * 1.1, 13, .38) * (1 - E.inExpo(D.p(bt, T.seal - 0.34, T.seal))), u, up, sk,
+      seal: E.inExpo(D.p(bt, T.seal - 0.34, T.seal)) };
+  };
+  const corners = (P, y0, h, grow = 0) => { const w = SZ.w / 2 + grow, d = SZ.d / 2 + grow;
+    return [[-w, y0, -d], [w, y0, -d], [w, y0, d], [-w, y0, d], [-w, y0 + h, -d], [w, y0 + h, -d], [w, y0 + h, d], [-w, y0 + h, d]]
+      .map(v => { let q = [v[0], v[1] - 60, v[2]]; q = D.rotX(q, -P.tilt); q = D.rotY(q, P.yaw); q[1] += 60; return D.add(P.base, q); }); };
+  const FACES = [[0, 1, 2, 3], [4, 7, 6, 5], [0, 4, 5, 1], [1, 5, 6, 2], [2, 6, 7, 3], [3, 7, 4, 0]], FN = ['bottom', 'top', 'front', 'right', 'back', 'left'];
+  const hidden = (w, f) => { const a = w[f[0]], b = w[f[1]], c = w[f[2]]; const n = D.cross(D.sub(b, a), D.sub(c, a));
+    const ctr = D.mul(D.add(D.add(w[f[0]], w[f[1]]), D.add(w[f[2]], w[f[3]])), .25); return D.dot(n, D.sub(cam.eye, ctr)) < 0; };
+  function box(L, w, bt) {
+    const P = w.map(cam.proj);
+    const order = FACES.map((f, i) => ({ f, i, z: f.reduce((m, k) => m + P[k][2], 0) / 4, vis: !hidden(w, f) })).sort((a, b) => b.z - a.z);
+    for (const F of order) {
+      const pts = F.f.map(k => P[k]), nm = FN[F.i];
+      if (L.kind === 'paint') { if (!F.vis) continue;
+        let fill; if (nm === 'top') { const gr = g.createLinearGradient(pts[0][0], pts[0][1], pts[2][0], pts[2][1]); gr.addColorStop(0, '#9a9ea3'); gr.addColorStop(1, '#6e7277'); fill = gr; }
+        else fill = (nm === 'front' || nm === 'back') ? '#4b4f54' : '#3b3e42';
+        D.poly(g, pts, fill, 'rgba(255,255,255,.22)', 1.2);
+      } else if (L.kind === 'clear') D.poly(g, pts, `rgba(214,232,255,${F.vis ? (nm === 'top' ? .16 : .10) : .05})`, F.vis ? 'rgba(255,255,255,.62)' : 'rgba(255,255,255,.16)', F.vis ? 1.6 : 1);
+      else {
+        D.poly(g, pts, `rgba(255,255,255,${F.vis ? (nm === 'top' ? .20 : .14) : .05})`);
+        const q = E.inOut(D.p(bt, T.glint[0], T.glint[1]));
+        if (F.vis && nm === 'top' && q > 0 && q < 1) { g.save(); D.poly(g, pts); g.clip();
+          const gx = D.lerp(pts[0][0], pts[1][0], -0.3 + 1.6 * q), gy = D.lerp(pts[0][1], pts[1][1], -0.3 + 1.6 * q), gr = g.createLinearGradient(gx - 80, gy, gx + 60, gy);
+          gr.addColorStop(0, 'rgba(254,15,19,0)'); gr.addColorStop(.45, 'rgba(255,120,110,.55)'); gr.addColorStop(.5, 'rgba(255,255,255,.85)'); gr.addColorStop(.55, 'rgba(255,120,110,.55)'); gr.addColorStop(1, 'rgba(254,15,19,0)');
+          g.fillStyle = gr; g.fillRect(0, 0, 1080, 1920); g.restore(); }
+        g.save(); g.shadowColor = 'rgba(254,15,19,.9)'; g.shadowBlur = F.vis ? 14 : 0; D.poly(g, pts, null, F.vis ? 'rgba(254,15,19,.95)' : 'rgba(254,15,19,.25)', F.vis ? 2.4 : 1.2); g.restore();
+      }
+    }
+    return P;
+  }
+  const quadAt = (grow, yd) => { const w = SZ.w / 2 + grow, d = SZ.d / 2 + grow, y = yd * D.deg; return [[-w, 0, -d], [w, 0, -d], [w, 0, d], [-w, 0, d]].map(v => D.add(FP, D.rotY(v, y))); };
+  return function render(bt, gi) {
+    labs.forEach(l => l.style.opacity = 0); if (kick) kick.style.opacity = 0;
+    if (bt < T.on[0] || bt >= T.on[1]) return;
+    const H = o.onSurface ? o.onSurface(gi) : (p => p);
+    const P = pose(bt), quad = quadAt(0, -8).map(cam.proj).map(H);
+    const tq = E.inOut(D.p(bt, T.trace[0], T.trace[1]));
+    const cav = D.p(bt, T.rise[0], T.rise[0] + 0.5) * (1 - 0.6 * P.seal) * (1 - P.sk);
+    if (cav > 0) { g.save(); g.filter = 'blur(10px)'; D.poly(g, quad, `rgba(0,0,0,${0.30 * cav})`); g.restore(); }
+    { const s = quadAt(26, D.lerp(-8, 30, P.u)).map(cam.proj).map(H); g.save(); g.filter = `blur(${18 + 26 * P.u}px)`; D.poly(g, s, `rgba(0,0,0,${0.28 * P.u})`); g.restore(); }
+    if (tq > 0) { g.save(); g.setLineDash([16, 10]); g.lineDashOffset = -bt * 18; g.shadowColor = 'rgba(254,15,19,.8)'; g.shadowBlur = 10;
+      D.line(g, D.partial([...quad, quad[0]], tq), `rgba(254,15,19,${(0.95 - 0.45 * P.seal) * (1 - P.sk)})`, 3); g.restore();
+      for (const c of quad) { g.fillStyle = `rgba(255,255,255,${0.9 * tq * (1 - P.sk)})`; g.fillRect(c[0] - 3, c[1] - 3, 6, 6); } }
+    if (P.up <= 0 && P.u <= 0) return;
+    let y = 0; const anchors = [], bw = corners(P, 0, LAY[0].h);
+    const ga = D.p(bt, T.rise[0] + 0.1, T.rise[0] + 0.6) * (1 - D.p(bt, T.seal + 0.3, T.seal + 0.9));
+    if (ga > 0) { g.save(); g.setLineDash([3, 7]); for (let i = 0; i < 4; i++) D.line(g, [quad[i], cam.proj(bw[i])], `rgba(255,255,255,${0.5 * ga})`, 1.3); g.restore(); }
+    LAY.forEach(L => {
+      const lo = P.u < 0.05 ? Math.max(y, -P.base[1]) : y, hh = y + L.h - lo;
+      if (hh <= 0.2) { anchors.push(null); y += L.h + P.gap; return; }
+      const Pp = box(L, corners(P, lo, hh, L.kind === 'film' ? 1.5 : 0), bt);
+      let best = null; for (const [a, b] of [[0, 4], [1, 5], [2, 6], [3, 7]]) { const m = [(Pp[a][0] + Pp[b][0]) / 2, (Pp[a][1] + Pp[b][1]) / 2]; if (!best || m[0] < best[0]) best = m; }
+      anchors.push(best); y += L.h + P.gap;
+    });
+    LAY.forEach((L, i) => {
+      const q = E.outExpo(D.p(bt, T.labels + 0.15 * (2 - i), T.labels + 0.15 * (2 - i) + 0.95)) * (1 - E.inOut(D.p(bt, T.lout[0] + 0.08 * i, T.lout[1] + 0.08 * i)));
+      labs[i].style.opacity = q > 0 ? 1 : 0; labs[i].style.clipPath = `inset(0 0 0 ${(1 - q) * 100}%)`;
+      const a = anchors[i]; if (q <= 0 || !a) return;
+      const ry = o.rows[i], kx = Math.min(a[0] - 34, 540);
+      D.line(g, D.partial([[a[0], a[1]], [kx, ry], [o.lx + 348, ry]], q), 'rgba(255,255,255,.85)', 2);
+      g.beginPath(); g.arc(a[0], a[1], 6, 0, 7); g.fillStyle = L.kind === 'film' ? '#FE0F13' : '#fff'; g.fill();
+    });
+    const kq = E.outExpo(D.p(bt, T.labels - 0.1, T.labels + 0.8)) * (1 - E.inOut(D.p(bt, T.lout[0], T.lout[1])));
+    if (kick) { kick.style.opacity = kq; kick.style.clipPath = `inset(0 ${(1 - kq) * 100}% 0 0)`; }
+    const gq = E.out3(D.p(bt, T.labels - 0.1, T.labels + 0.7)) * (1 - E.inOut(D.p(bt, T.lout[0], T.lout[1] + 0.25)));
+    if (gq > 0) FX.glass.push(Object.assign({ r: 18, blur: 22, dark: 0.48 * gq }, o.glass));
+  };
+}
+// SQUEEGEE on #33: the A frame's own geometry (same clip, locked camera); strokes on camera at src 2.03 / 2.57 / 2.97 s
+// = beats 24.9 / 26.1 / 26.9 -> the layers split on beat 25 and seal on beat 27, after the last stroke
+const chipSq = makeChip({ cam: { eye: [0, 400, 0], pitch: 10 * D.deg, f: 2059 }, fp: [610, 1600], tg: [745, 1420, 760], tilt: 14,
+  rows: [1420, 1330, 1240], lx: 42, lfs: 62, glass: { x: 40, y: 1148, w: 384, h: 298 },
+  T: { on: [24, 28], trace: [24.0, 24.9], rise: [24.2, 25.0], explode: 25.0, labels: 25.15, seal: 27.0, glint: [27.05, 27.7], lout: [27.25, 27.6], sink: [27.35, 27.98] } });
+// REVEAL on #29: footprint follows the trident (centre + scale track); the label panel sits low, clear of the badge
+const TRR_at = gi => { const r = SC.shots.find(s => s.key === 'r29'); const i = r.off + (gi - r.g0), M = TRR.m;
+  const at = j => M[Math.max(0, Math.min(M.length - 1, j))], lm = x => { const i0 = Math.floor(x), u = x - i0, a = at(i0), b = at(i0 + 1); return [0, 1, 2].map(k => a[k] + (b[k] - a[k]) * u); };
+  if (i < 45) { const a = lm(45), b = lm(60); return [0, 1, 2].map(k => a[k] + (a[k] - b[k]) * (45 - i) / 15); } return lm(i); };
+const chipRv = makeChip({ cam: { eye: [0, 400, 0], pitch: 30 * D.deg, f: 2059 }, fp: [700, 1610], tg: [812, 1440, 1120], tilt: 12,
+  rows: [1520, 1462, 1404], lx: 42, lfs: 54, kicker: 1318, glass: { x: 40, y: 1300, w: 476, h: 232 },
+  onSurface: gi => { const m = TRR_at(gi); return p => [TRR.c[0] + m[0] + m[2] * (p[0] - TRR.c[0]), TRR.c[1] + m[1] + m[2] * (p[1] - TRR.c[1])]; },
+  T: { on: [48, 54], trace: [48.0, 48.9], rise: [48.1, 49.0], explode: 49.0, labels: 49.15, seal: 51.9, glint: [51.95, 52.6], lout: [52.2, 52.6], sink: [52.9, 53.9] } });
+
+// ================================================================ B: TRIM -- extruded red-black type, skewed kicker, red floor rail
+const trim = document.getElementById('trim');
+(function buildTrim() {
+  let html = '';
+  for (let k = 22; k >= 1; k--) { const u = k / 22, r = Math.round(D.lerp(150, 40, u)), gg = Math.round(D.lerp(6, 2, u));
+    html += `<div class="ex" style="font-size:190px;color:rgb(${r},${gg},${gg + 1});transform:translateZ(${-k * 3}px)">TRIM</div>`; }
+  html += `<div class="ex" style="font-size:190px;color:#fff;text-shadow:0 0 1px rgba(255,255,255,.4)">TRIM</div>`;
+  html += `<div class="mono" style="position:absolute;left:6px;top:-46px;font-size:30px">PAINT PROTECTION FILM</div>`;
+  html += `<div id="trl" style="position:absolute;left:6px;top:196px;width:130px;height:8px;background:#FE0F13;transform-origin:left center"></div>`;
+  trim.innerHTML = html;
+  // floor rail: a long red strip on the floor under the type, running into depth; a white tick under the word
+  const rail = document.createElement('div'); rail.id = 'rail'; rail.className = 'p3';
+  rail.style.cssText += 'width:8px;height:950px;margin-top:-475px;background:linear-gradient(180deg,#FE0F13 0%,#FE0F13 45%,rgba(254,15,19,0) 100%);box-shadow:0 0 22px 4px rgba(254,15,19,.5)';
+  trim.appendChild(rail);
+  const tick = document.createElement('div'); tick.className = 'p3'; tick.style.cssText += 'width:520px;height:3px;background:rgba(255,255,255,.8)'; tick.id = 'tick';
+  trim.appendChild(tick);
+})();
+function renderTrim(bt) {
+  const on = bt >= 30.75 && bt < 38;
+  trim.style.display = on ? '' : 'none';
+  if (!on) return;
+  const inq = E.spring(D.p(bt, 31.0 - 0.15, 31.0 + 1.4) * 1.0, 11, .55), arr = D.clamp(D.p(bt, 30.85, 31.25));
+  const outq = E.in3(D.p(bt, 37.45, 37.98));
+  const drift = D.p(bt, 31, 38);
+  // the word stands on the floor plane at the lower left, turned -20 deg into the frame; it rises up off the floor on the beat
+  // and leaves at the end running away down its rail into depth
+  const x = -350 + 380 * outq, z = 120 - 900 * outq - 30 * drift;
+  trim.style.transform = `translate3d(${540 + x}px, ${1210}px, ${z}px) rotateY(${-20 + 4 * drift}deg)`;
+  trim.style.opacity = (arr * Math.pow(1 - outq, 3)).toFixed(4);
+  [...trim.querySelectorAll('.ex')].forEach(e => e.style.transformOrigin = '0 100%');
+  const word = trim.querySelectorAll('.ex'), rot = (1 - Math.min(1, inq)) * -78;
+  word.forEach((e, k) => { const z0 = k < word.length - 1 ? -(22 - k) * 3 : 0; e.style.transform = `translateZ(${z0}px) rotateX(${rot}deg)`; });
+  document.getElementById('trl').style.transform = `scaleX(${E.outExpo(D.p(bt, 31.3, 32.0))})`;
+  const rail = document.getElementById('rail'); rail.style.transform = `translate3d(150px, 205px, 325px) rotateX(90deg) scaleY(${E.outExpo(D.p(bt, 30.9, 31.8))})`;   // from the word's foot toward the lens (z -150..+800)
+  document.getElementById('tick').style.transform = `translate3d(-20px, 200px, 40px) rotateX(90deg)`;
+}
+
+// ================================================================ C: WRAP THE EDGES -- traced edge, wrap ticks, scan mesh, depth pins
+function cr(pts, n) { const P = [pts[0], ...pts, pts[pts.length - 1]], out = [];
+  for (let i = 1; i < P.length - 2; i++) for (let j = 0; j < n; j++) { const t = j / n, t2 = t * t, t3 = t2 * t, a = P[i - 1], b = P[i], c = P[i + 1], d = P[i + 2];
+    out.push([0, 1].map(k => 0.5 * ((2 * b[k]) + (-a[k] + c[k]) * t + (2 * a[k] - 5 * b[k] + 4 * c[k] - d[k]) * t2 + (-a[k] + 3 * b[k] - 3 * c[k] + d[k]) * t3))); }
+  out.push(pts[pts.length - 1]); return out; }
+function sampler(pts) { const dense = cr(pts, 24), L = [0];
+  for (let i = 1; i < dense.length; i++) L.push(L[i - 1] + Math.hypot(dense[i][0] - dense[i - 1][0], dense[i][1] - dense[i - 1][1]));
+  const tot = L[L.length - 1];
+  return u => { const w = D.clamp(u) * tot; let i = 1; while (i < L.length - 1 && L[i] < w) i++; const k = (w - L[i - 1]) / ((L[i] - L[i - 1]) || 1);
+    return [D.lerp(dense[i - 1][0], dense[i][0], k), D.lerp(dense[i - 1][1], dense[i][1], k)]; }; }
+const applyH = (M, p) => { const w = M[2][0] * p[0] + M[2][1] * p[1] + M[2][2]; return [(M[0][0] * p[0] + M[0][1] * p[1] + M[0][2]) / w, (M[1][0] * p[0] + M[1][1] * p[1] + M[1][2]) / w]; };
+const Hlerp = (L, x) => { x = Math.max(0, Math.min(L.length - 1, x)); const i = Math.floor(x), j = Math.min(L.length - 1, i + 1), k = x - i; return L[i].map((r, a) => r.map((v, b) => v + (L[j][a][b] - v) * k)); };
+// the wrapped edge (u along it) and the surface beside it, offset along the edge normal into the panel (v)
+function edgeRig(pts, side, width) {
+  const S = sampler(pts);
+  const nrm = u => { const a = S(Math.max(0, u - 0.01)), b = S(Math.min(1, u + 0.01)); const dx = b[0] - a[0], dy = b[1] - a[1], l = Math.hypot(dx, dy) || 1; return [side * -dy / l, side * dx / l]; };
+  return { S, at: (u, v) => { const p = S(u), n = nrm(u); return [p[0] + n[0] * v * width, p[1] + n[1] * v * width]; }, nrm };
+}
+const WR = {
+  s35: { rig: edgeRig([[420, 1085], [330, 1150], [250, 1240], [170, 1330], [90, 1420], [20, 1500]], -1, 330), H: SC.T35, f0: SC.s35_f0,
+         b0: 38, b1: 41, pin: { u: 0.52, d: [170, 120], label: 'FILM EDGE' } },
+  s22: { rig: edgeRig([[0, 1180], [200, 1270], [400, 1370], [560, 1450], [700, 1530], [850, 1640], [1000, 1760]], -1, 300), H: SC.T22, f0: Math.round(41 * B * FPS),
+         b0: 41, b1: 48, pin: { u: 0.2, d: [-60, -190], label: 'PANEL EDGE' } },
+};
+const pinEls = {}; for (const k in WR) pinEls[k] = el('a mono', 'font-size:24px;opacity:0', `<span style="display:inline-block;width:12px;height:12px;background:#FE0F13;margin-right:12px;vertical-align:1px"></span>${WR[k].pin.label}`);
+function glowLine(pts, col, lw, glow, a = 1) { g.save(); g.globalAlpha = a; g.shadowColor = 'rgba(254,15,19,.9)'; g.shadowBlur = glow; D.line(g, pts, col, lw); g.restore(); }
+function renderWrap(bt, gi) {
+  for (const k in WR) pinEls[k].style.opacity = 0;
+  for (const k in WR) {
+    const W = WR[k]; if (bt < W.b0 || bt >= W.b1) continue;
+    const Hm = Hlerp(W.H, gi - W.f0 + (k === 's35' ? 0 : 0)), P = (u, v) => applyH(Hm, W.rig.at(u, v));
+    const lb = bt - W.b0, riser = k === 's22' && bt >= 44;
+    const tr = E.inOut(D.p(lb, 0.0, 0.8));                                   // edge draws on
+    const fade = 1 - E.inOut(D.p(bt, W.b1 - 0.35, W.b1 - 0.02));
+    // scan: a curtain sweeping along the edge, leaving the mesh; in the riser it repeats, faster each beat
+    let sc = D.p(lb, 0.3, 1.6);
+    if (riser) { const rb = bt - 44, n = rb < 2 ? rb : 2 + (rb - 2) * 2; sc = n - Math.floor(n); }
+    const meshA = (riser ? 0.55 : 0.42) * D.clamp(D.p(lb, 0.3, 1.0)) * fade;
+    const NU = 16, NV = 5, SMP = 30;
+    const line = (fn, n) => Array.from({ length: n + 1 }, (_, j) => fn(j / n));
+    if (meshA > 0) {
+      const reach = riser ? 1 : sc;
+      for (let j = 1; j <= NV; j++) { const v = j / NV; D.line(g, line(u => P(u * Math.max(reach, 0.001), v), SMP), `rgba(255,255,255,${meshA * (1 - v * 0.6)})`, 1.3); }
+      for (let i = 0; i <= NU; i++) { const u = i / NU; if (u > reach) break; D.line(g, line(v => P(u, v), 8), `rgba(255,255,255,${meshA * 0.8})`, 1.1); }
+    }
+    if (sc > 0 && sc < 1) {                                                 // the scan curtain across the band
+      const L = line(v => P(sc, v), 10), n = W.rig.nrm(sc), back = L.map(p => [p[0] - n[1] * 26, p[1] + n[0] * 26]);
+      const gr = g.createLinearGradient(L[0][0], L[0][1], back[0][0], back[0][1]); gr.addColorStop(0, 'rgba(254,15,19,.45)'); gr.addColorStop(1, 'rgba(254,15,19,0)');
+      g.save(); g.globalAlpha = fade; D.poly(g, [...L, ...back.reverse()], gr); g.restore();
+      glowLine(L, '#fff', 3, 22, fade);
+    }
+    // the wrapped edge itself, red, with the wrap ticks crossing it
+    const edge = D.partial(line(u => P(u, 0), 60), tr);
+    glowLine(edge, '#FE0F13', riser ? 5 : 4, riser ? 22 : 14, fade);
+    const ta = D.p(lb, 0.5, 1.0) * fade;
+    if (ta > 0) for (let i = 0; i <= 10; i++) { const u = i / 10; if (u > tr) break; glowLine([P(u, -0.10), P(u, 0.04)], 'rgba(254,15,19,.85)', 2.2, 8, ta); }
+    // depth pin on the edge
+    const pa = E.outExpo(D.p(lb, 0.9, 1.5)) * (1 - E.inOut(D.p(bt, Math.min(W.b1, 44) - 0.4, Math.min(W.b1, 44) - 0.05)));
+    if (pa > 0) {
+      const b0 = P(W.pin.u, 0), tip = [b0[0] + W.pin.d[0] * pa, b0[1] + W.pin.d[1] * pa], pe = pinEls[k];
+      const left = W.pin.d[0] < 0, tx = left ? tip[0] - 26 : tip[0] + 26;
+      D.line(g, [b0, tip, [tx, tip[1]]], 'rgba(255,255,255,.95)', 2);
+      g.beginPath(); g.arc(b0[0], b0[1], 7, 0, 7); g.fillStyle = '#FE0F13'; g.fill();
+      pe.style.opacity = 1; const w = pe.offsetWidth;
+      const lx = Math.max(66, Math.min(907 - w, left ? tx - w - 10 : tx + 10));
+      pe.style.left = lx + 'px'; pe.style.top = (tip[1] - 12) + 'px'; pe.style.clipPath = `inset(0 ${(1 - pa) * 100}% 0 0)`;
+      FX.glass.push({ x: lx - 14, y: tip[1] - 24, w: w + 28, h: 48, r: 10, dark: 0.5 * pa, blur: 14 });
+    }
+  }
+}
+
+// ================================================================ end: frosted lead-in over #29, then the card bands (1:1 with the file)
+const BANDS = [['logo', 468, 814], ['tag', 859, 895], ['cta', 934, 1007], ['stripe', 1037, 1051], ['site', 1075, 1109], ['handle', 1118, 1147]];
+const bandsEl = document.getElementById('bands');
+const bands = BANDS.map(([n, y0, y1]) => { const i = document.createElement('img'); i.className = 'band'; i.src = `logos/bands/${n}.png`; i.style.top = y0 + 'px'; i.style.height = (y1 - y0) + 'px'; bandsEl.appendChild(i); return i; });
+function renderEnd(bt) {
+  bandsEl.style.display = bt >= 54 && bt < 55 ? '' : 'none';
+  if (bt < 54 || bt >= 55) return;
+  const up = E.inOut(D.p(bt, 54.0, 54.62));                                // a frosted panel rises over the reveal and fills the frame
+  FX.glass.push({ x: 0, y: D.lerp(1920, 0, up), w: 1080, h: 1920, r: 2, dark: 0.97, blur: 40 });
+  // v3: settle exactly on the card's #08080A ground over the last ~5 frames before the approved file takes over
+  const gq = E.inOut(D.p(bt, 54.62, 54.97)); if (gq > 0) { g.fillStyle = `rgba(8,8,10,${gq})`; g.fillRect(0, 0, 1080, 1920); }
+  bands.forEach((im, k) => { const q = E.outExpo(D.p(bt, 54.38 + 0.06 * k, 54.85 + 0.03 * k)); im.style.opacity = q.toFixed(4); im.style.clipPath = `inset(0 0 ${(1 - q) * 100}% 0)`; });
+}
+
+// ================================================================ render
+window.FX = {};
+window.renderAt = function (t) {
+  window.FX = { glass: [] };
+  const bt = t / B, gi = Math.round(t * FPS);
+  D.sig(bt < 55 ? t : 0);
+  g.clearRect(0, 0, 1080, 1920);
+  // base for the compositor
+  if (gi >= fb(55)) FX.card = 1;
+  else if (gi < fb(4)) FX.ground = 1;
+  else { const s = shotAt(gi); FX.base = [s.rel, s.off + (gi - s.g0)]; }
+  renderHook(bt); renderPanels(bt); chipSq(bt, gi); renderTrim(bt); renderWrap(bt, gi); chipRv(bt, gi); renderEnd(bt);
+  if (!FX.glass.length) delete FX.glass;
+};
+const sp = (a, b, k) => ({ a: a * B, b: b * B, k });
+window.KT_PLAN = { k: 3, shutter: 180, spans: [sp(3.4, 4.3, 8), sp(24, 28, 6), sp(30.7, 32.6, 14), sp(37.4, 38.1, 12), sp(38, 48, 5), sp(48, 55, 6), sp(55, 64.1, 1)] };
+(async () => {
+  await document.fonts.load('150px Bebas'); await document.fonts.load('30px PlexB');
+  await Promise.all([...document.images].map(im => im.complete && im.naturalWidth ? 0 : new Promise((r, j) => { im.onload = r; im.onerror = () => j(new Error('missing ' + im.src)); })));
+  await KT.ready();
+  PANELS.forEach(panelLayout);
+  window.renderAt(0); window.__ktReady = true;
+})();
+</script>
+</body></html>
