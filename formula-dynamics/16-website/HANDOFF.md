@@ -75,7 +75,13 @@ Omarie, 4 Oct: put both approved scroll heroes on the FD site, add a Detailing s
 - Engine: `scrollHero()` near the end of the script, ported from the SE site's GT3 RS hero. The stage sticks under the
   header (`--hdr`, measured from `.top`). 540p clip first, 1080p swaps in at the same frame, the 540p blob is freed; a
   hero drops its clip when it's well off screen. Reduced motion or Save-Data: the still only. `#ppf-debug` /
-  `#detailing-debug` shows which clip loaded.
+  `#detailing-debug` shows which clip loaded, its ready state (x/4), "waiting for a tap", or why it's still-only.
+- **iPhone (fixed 4 Oct, commit d1405b2):** iPhone Safari loads nothing for `preload="none"` and shows no frame until a
+  video has played once, so both heroes sat on the still. `setSrc()` now sets `preload="auto"` and calls `primeVid()`
+  (one muted play; a `playing` listener pauses it at once). The tick seeks only at readyState ≥ 2 (an earlier seek hung
+  in WebKit) and re-asks a seek that's pending > 1.5 s. If the play is refused (Low Power Mode), the next tap anywhere
+  runs it. Headless Chrome never showed this bug: test scroll video in WebKit (`scratchpad/wk/iphone.swift`-style
+  WKWebView with `_setMediaDataLoadsAutomatically:` off), not Chrome.
 - Media: `media/scroll/ppf-mc20{,-hd}.mp4` + `.jpg`, `media/scroll/detail-zr1{,-hd}.mp4` + `.jpg`; `media/aj/<id>.jpg`
   (A&J's own product photos, resized only). Rebuild the clips from the read-only Shop videos with
   `~/.local/vlogtools/work/research/2026-10-03-scrollscrub/variants/build_variants.py`:
