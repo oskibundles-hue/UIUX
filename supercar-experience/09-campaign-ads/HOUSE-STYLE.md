@@ -5,6 +5,12 @@ signed off on, so a new ad starts from a known-good treatment instead of a fresh
 guess. `06-video-system/AUTO-EDIT.md` covers timing and the overlay tool; this
 covers which look to reach for.
 
+**Build variations with the layout engine (2026-10-04).** A new variation of an approved layout (new car, new offer,
+A/B/C looks on one step) starts from an engine recipe through the `layout-engine` skill, not a hand build: an A/B/C
+test of one step takes about a minute instead of 45-60. The engine is private and local, so none of it is copied into
+this repo; only the approved export is delivered. SE recipe so far: race-weekend Night v5 (RENT). Its two hook
+placements outside the 4:5 band (F1 WEEKEND +12 px, THREE NIGHTS +43 px) are approved; every new layout stays strict.
+
 ---
 
 ## THE STANDARD: `locked-on` (Supercar Experience ads)
