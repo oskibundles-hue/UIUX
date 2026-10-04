@@ -849,8 +849,8 @@ footer nav a:hover{color:#fff}
 <section class="gt3" id="gt3" aria-label="Porsche 911 GT3 RS: scroll to move the camera">
   <div class="gt3-track">
     <div class="gt3-stage">
-      <div class="gt3-bg" style="background-image:url(media/gt3/gt3rs-scroll.jpg)"></div>
-      <img class="gt3-still" src="media/gt3/gt3rs-scroll.jpg" alt="" loading="lazy">
+      <div class="gt3-bg" style="background-image:url(media/gt3/gt3rs-poster-1080.jpg)"></div>
+      <img class="gt3-still" src="media/gt3/gt3rs-poster-1080.jpg" alt="" loading="lazy">
       <video muted playsinline preload="none" aria-hidden="true"></video>
       <div class="gt3-shade"></div>
       <div class="gt3-ph" data-from="0" data-to=".3009">
@@ -1601,7 +1601,14 @@ $("#th-title").classList.add("in");
   }
   function sleep(){ if(v.getAttribute("src")){ v.removeAttribute("src"); v.load(); still.style.visibility="visible"; } }
   new IntersectionObserver(es=>es.forEach(e=>{ near=e.isIntersecting; if(near){ wake(); if(!raf) raf=requestAnimationFrame(tick); } else { sleep(); cancelAnimationFrame(raf); raf=0; } }),{rootMargin:"60% 0px"}).observe(sec);
+  new IntersectionObserver(es=>{ if(es.some(e=>e.isIntersecting)&&!still_only) loadHD(); },{rootMargin:"150% 0px"}).observe(sec);
   addEventListener("scroll",update,{passive:true}); addEventListener("resize",update); update();
+  if(location.hash==="#gt3-debug"){
+    const d=document.createElement("div"); d.style.cssText="position:absolute;left:8px;top:calc(70px + env(safe-area-inset-top,0px));z-index:9;font:600 12px/1.3 var(--mono);background:#000;color:#fff;padding:6px 8px;border:1px solid var(--orange)";
+    sec.querySelector(".gt3-stage").appendChild(d);
+    setInterval(()=>{ d.textContent=(v.videoWidth?v.videoWidth+"p-wide clip":"no clip yet")+" · HD "+(hd?"ready":hdAsked?"downloading":(wantHD?"waiting":"off"))+" · dpr "+(devicePixelRatio||1); },500);
+    setTimeout(()=>sec.scrollIntoView(),400);
+  }
 })();
 </script>
 </body>
