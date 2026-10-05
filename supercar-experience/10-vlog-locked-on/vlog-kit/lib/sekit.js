@@ -1016,9 +1016,11 @@
   }
   // E1 compact corner route (top-left panel). p: {x, y, title, waypoints, steps: [{t, k}], exit}
   SEK.routeCompact = function (cfg) {
-    const p = Object.assign({ x: 54, y: 300, title: 'THE ROUTE', waypoints: [], steps: [], exit: cfg.t1 - 0.4 }, cfg.p);
+    const p = Object.assign({ x: 54, y: 300, title: 'THE ROUTE', waypoints: [], steps: [], exit: cfg.t1 - 0.4, fit: false }, cfg.p);
     const root = el('div', 'a', stage);
-    const W = 452, H = 470;
+    // fit: true sizes the plate and the path to the stops given (HUD on the Oct 4 drive, 3 stops); default stays the 6-stop plate
+    const nFit = p.fit ? Math.min(6, Math.max(2, p.waypoints.length)) : 6;
+    const W = 452, H = [96, 158, 220, 282, 344, 406][nFit - 1] + 64;
     const pn = panel(root, p.x, p.y, W, H, { stripe: 6, alpha: .88 });
     const hd = line(pn.inner, 'Michroma', 17, p.title, 28, 26, GOLD);
     const n = p.waypoints.length;
@@ -1031,6 +1033,7 @@
     // node positions on the path
     const nodeIdx = [0, 1, 4, 5, 8, 9];
     pts[4] = [X2, Y[2]]; pts[8] = [X1, Y[4]];
+    if (nFit < 6) pts.length = nodeIdx[nFit - 1] + 1;
     const svg = svgRoot(pn.inner); svg.setAttribute('width', W); svg.setAttribute('height', H); svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
     const RB = routeBuild(pn.inner, svg, { pts, nodes: p.waypoints.map((w, k) => ({ i: nodeIdx[k], label: w })) }, { sw: 6, nr: 11, ls: 40, lx: 30, dur: 0.5 });
     return { code: cfg.code, render(t) {

@@ -1,13 +1,15 @@
 #!/usr/bin/env python3
 """side_g.py -- the SIDE G series for the DRV plate, from the Osmo's own motion sensor (no GPS needed).
 
-  side_g.py <clip.mp4> <start_s> <dur_s> <out.json> [--turn a,b,right|left]
+  side_g.py <clip.mp4> <start_s> <dur_s> <out.json> [--turn a,b,right|left [--level]]
 
 Reads the camera's metadata track (djmd, one record per frame; needs `pip install pyosmogps`), low-passes the
 accelerometer over 1 s, removes gravity and keeps the horizontal component along one axis, sampled at 30 fps.
 --turn names a stretch with a known turn: the axis is the one that swings most there, and the sign is set so the
 turn reads toward its own side. Without --turn the camera's x axis is used (cabin mount, as on the Oct 3 clip) and
 left/right is NOT confirmed. Values are in g; the plate shows +-0.5 g full scale.
+--level (with --turn) re-zeroes on the straight driving outside the turn (median, 1 s margin): gravity is taken as the
+window's mean, so a strong turn in a short window otherwise tilts the straight parts by up to ~0.1 g (Oct 4 clip).
 """
 import json, math, subprocess, sys
 from pyosmogps import dji_pb2
@@ -39,6 +41,9 @@ lat = [sum(h[k] * ax[k] for k in range(3)) for h in hor]
 if turn:
     mt = sum(lat[i0:i1]) / max(1, i1 - i0)
     if (mt < 0) == (turn[2] == 'right'): lat = [-x for x in lat]
+    if '--level' in sys.argv:
+        st = sorted(lat[i] for i in range(n) if i < i0 - W or i >= i1 + W)
+        if st: lat = [x - st[len(st) // 2] for x in lat]
 series = [round(lat[min(n - 1, int(i / 30 * n / dur))], 4) for i in range(int(dur * 30))]
 json.dump(series, open(out, 'w'))
 print('side G', min(series), max(series))

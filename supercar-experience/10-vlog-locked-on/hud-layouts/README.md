@@ -11,7 +11,7 @@ Say the code: "use HUD-1 on this clip".
 | Code | Camera | What is on screen | Preview |
 |---|---|---|---|
 | **HUD-1 · Cabin cam** | Mounted behind the driver's seat, looking forward past the driver | A2 SE banner tab (right edge), D1 camera clock + place (top left), DRV drive plate (top right), B1 lock-on on the driver with OMARIE · @NQ.YOUNG | `previews/hud-1-cabin.jpg` |
-| **HUD-2 · Hood cam** | Mounted on the hood or dash, looking down the road | A2 SE banner tab, E1 route plate stepping stop to stop (top left), DRV drive plate (top right), C3 lead lock on the car ahead (CONVOY / CAR AHEAD), D1 camera clock + place (bottom left, over the hood) | `previews/hud-2-hood.jpg` |
+| **HUD-2 · Hood cam** | Mounted on the hood or dash, looking down the road (also works on a roof mount looking back down the road; see the Oct 4 build) | A2 SE banner tab, E1 route plate stepping stop to stop (top left), DRV drive plate (top right), C3 lead lock on the car ahead (CONVOY / CAR AHEAD), D1 camera clock + place (bottom left, over the hood) | `previews/hud-2-hood.jpg` |
 
 **No road line in either.** Omarie, 5 Oct: "I don't like the road cursor for this point of view and it's not
 supercar experience theme". The first look (Wayline, a gold line drawn on the road) is kept only on its page.
@@ -26,7 +26,10 @@ supercar experience theme". The first look (Wayline, a gold line drawn on the ro
   the cut starts after it.
 - **Heading is an estimate** until a clip carries GPS (the Osmo Action 6 has no GPS of its own; DJI's GPS Bluetooth
   Remote records it). Side G is real: the camera's own accelerometer, low-passed over 1 s (`tools/side_g.py`).
-- **Only name a car when it is identified for sure**; otherwise CONVOY / CAR AHEAD. Clients and guests as text only.
+- **Only name a car when it is identified for sure**; otherwise CONVOY / CAR AHEAD (a camera looking back: REAR VIEW /
+  CAR BEHIND). Clients and guests as text only.
+- **Camera looking back** (roof or engine-cover mount): the heading is the car's, the opposite of what the camera faces,
+  and a left turn shifts the picture to the right. Work it out from the signs and the sun (the Oct 4 build has the method).
 - Banner label, route and place lines must be real for the clip (file names, the guide's briefing, a sign in shot).
 
 ## What to change per clip
@@ -38,9 +41,9 @@ supercar experience theme". The first look (Wayline, a gold line drawn on the ro
 | `A2.label` | e.g. ON THE ROAD · OCT 3 | e.g. RALLY DAY · LAS VEGAS |
 | `A2.progress`, every `t1` | the cut's length | the cut's length |
 | tracks | `host` (driver's head, kit tracker `../vlog-kit/lib/track.py`) | `car` (car ahead, `tools/track_csrt.py`; the kit tracker drifted at night) |
-| `E1.waypoints`, `E1.steps` | none | the route and when each stop goes active; `k` is the 0-based index of the active stop |
+| `E1.waypoints`, `E1.steps` | none | the route and when each stop goes active; `k` is the 0-based index of the active stop. Fewer than six stops: add `"fit": true` so the plate is sized to them |
 | `DRV.heading` / `DRV.hdgKeys` | one heading | heading keyframes through turns |
-| `C3.kicker`, `C3.name` | none | CONVOY / CAR AHEAD unless the car is identified |
+| `C3.kicker`, `C3.name`, `C3.exit` | none | CONVOY / CAR AHEAD unless the car is identified (camera looking back: REAR VIEW / CAR BEHIND); `exit` drops the lock before the tracker loses the car |
 
 ## Build a new clip
 
@@ -49,8 +52,10 @@ supercar experience theme". The first look (Wayline, a gold line drawn on the ro
    just the cut. Each Dropbox download link is single-use, so ask `download_link` for the same file id once per request.
 2. **Cut a base** at 1080x1920, 30000/1001 fps: `ffmpeg -ss <in> -i clip.mp4 -t <len> -vf "scale=1080:1920,fps=30000/1001" ...`
    (square 3840 Osmo footage: crop 2160x3840 first, e.g. `crop=2160:3840:360:0` on the Oct 3 clip). Apply the speedometer blur here.
-3. **Track** the driver or the car ahead; **blur plates** with `tools/plate_blur.py`.
-4. **Side G**: `tools/side_g.py clip.mp4 <in> <len> side_g.json [--turn a,b,right]` (needs `pip install pyosmogps`).
+3. **Track** the driver or the car ahead (`tools/track_csrt.py base.mov x,y,w,h tracks.json car [frames]`, the box on
+   the first frame); **blur plates** with `tools/plate_blur.py`. Arizona cars often have no front plate; check at 3x anyway.
+4. **Side G**: `tools/side_g.py clip.mp4 <in> <len> side_g.json [--turn a,b,right|left --level]` (needs `pip install
+   pyosmogps`). `--level` re-zeroes the straight driving outside the turn; use it when the turn fills much of the cut.
 5. **Layer page**: `python3 build_hud.py --scene <your scene>.json --tracks tracks.json --side-g side_g.json --name <name>`
    then `cd ../vlog-kit && node lib/kcapture.js "file://$PWD/.hud_<name>.html" <outDir> seq 30000/1001 <len> --workers 3`
    (needs Pillow for `lib/accum.py`). About 45-65 s for 12 s on a cloud box.
@@ -67,3 +72,16 @@ supercar experience theme". The first look (Wayline, a gold line drawn on the ro
 | Redacted | dash speedometer, whole clip | the purple convoy car's plate, tracked; a second car's plate was already unreadable |
 
 Each folder holds the `scene.json`, `tracks.json` and `side_g.json` used. No footage is stored here.
+
+### HUD-2 on a camera looking back: `examples/2026-10-04-old-town/`
+
+The first clip a layout was put on by its code ("put HUD-2 on the next drive clip", 5 Oct). The R8 to the Supercar
+Experience lounge in Scottsdale, camera on the roof looking back over the engine cover and the wing.
+
+| | |
+|---|---|
+| Source | `NQ Studio/raw footage/2026-10-04/DJI_20261004094505_0165_D.MP4`, 898.0-910.0 s; crop `2160:3840:840:0` on the square 3840 footage |
+| Clock | 10:00:03 (file 09:45:05 + 898 s) |
+| Real data | camera clock; street signs in shot (Indian School Rd at 899 s, Scottsdale Rd through the turn); Old Town (the Sugar Bowl at 911 s); the drive ends at the SE Scottsdale lounge (clip 0167, about 80 s in); side G with `--turn 7,11.5,left --level`, peak 0.31 g in the left turn |
+| Estimated | heading: south on Scottsdale Rd, then east after the left turn. With the camera looking back, the facades it sees are lit, so the sun (azimuth 133 degrees at 10:00 MST) is behind the camera |
+| Redacted | nothing: the following car has no front plate and the other plates are unreadable at 3x |

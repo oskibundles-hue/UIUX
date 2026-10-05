@@ -50,7 +50,8 @@ elif cmd == 'span':
     print(a[1] - 2_000_000, b[1] + b[2] + 2_000_000)
 elif cmd == 'fill':
     path, a, b, url = sys.argv[2], int(sys.argv[3]), int(sys.argv[4]), sys.argv[5]
-    curl(url, a, b - 1, path + '.part'); d = open(path + '.part', 'rb').read(); os.remove(path + '.part')
+    part = f'{path}.{a}.part'  # one temp file per range, so several fills of one clip can run at once
+    curl(url, a, b - 1, part); d = open(part, 'rb').read(); os.remove(part)
     assert len(d) == b - a, (len(d), b - a)
     with open(path, 'r+b') as f: f.seek(a); f.write(d)
     print('filled', len(d))
