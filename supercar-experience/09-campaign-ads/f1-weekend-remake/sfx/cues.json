@@ -1,25 +1,25 @@
 {
  "summary": {
-  "audible": "88 of 88",
-  "cues": 88,
-  "skipped": 70,
+  "audible": "84 of 84",
+  "cues": 84,
+  "skipped": 74,
   "cuts_sounded": "10 of 34",
   "per_10s": [
    5,
+   13,
    14,
-   15,
+   16,
    17,
-   17,
-   9,
+   8,
    10,
    1
   ],
   "integrated_lufs": -14.0,
   "true_peak_dbfs": -1.6,
-  "sfx_stem_lufs": -24.0,
-  "limiter_max_reduction_db": 3.03,
+  "sfx_stem_lufs": -23.5,
+  "limiter_max_reduction_db": 4.19,
   "reference_hits": 0,
-  "limiter_ceiling_dbfs": -2.3
+  "limiter_ceiling_dbfs": -1.8
  },
  "cues": [
   {
@@ -30,7 +30,7 @@
    "what": "title lockup lands",
    "sound": "impact + crack",
    "level_vs_bed_db": 9,
-   "gain_db": -10.0,
+   "gain_db": -4.0,
    "prio": 5,
    "start_frame": 7.0,
    "why": "opening hero hit on the frame the title lands",
@@ -38,7 +38,7 @@
    "note": "spring 14/140 reaches full size 7 f after it starts",
    "crack": "R15: body is mostly below 300 Hz, phones would lose it",
    "screen_change_pct": 3.0,
-   "audible_margin_db": 28.8,
+   "audible_margin_db": 29.4,
    "reference": false
   },
   {
@@ -49,7 +49,7 @@
    "what": "light streak crosses the lockup",
    "sound": "whoosh",
    "level_vs_bed_db": 0,
-   "gain_db": -20.3,
+   "gain_db": -17.7,
    "prio": 2,
    "start_frame": 5.63,
    "why": "sweep: whoosh peak on its fastest point",
@@ -57,7 +57,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": null,
-   "audible_margin_db": 4.4,
+   "audible_margin_db": 1.0,
    "reference": false
   },
   {
@@ -68,7 +68,7 @@
    "what": "cut into shot 3",
    "sound": "hit_soft",
    "level_vs_bed_db": 3,
-   "gain_db": -12.3,
+   "gain_db": -8.0,
    "prio": 3,
    "start_frame": 117.84,
    "why": "punch flash on the cut: short hit",
@@ -76,7 +76,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": null,
-   "audible_margin_db": 18.2,
+   "audible_margin_db": 11.4,
    "reference": false
   },
   {
@@ -87,7 +87,7 @@
    "what": "cut into shot 4",
    "sound": "boom_cut + crack",
    "level_vs_bed_db": 5,
-   "gain_db": -4.9,
+   "gain_db": -5.8,
    "prio": 4,
    "start_frame": 236.28,
    "why": "new act: section cuts are the only cuts that get a boom",
@@ -95,7 +95,7 @@
    "note": "",
    "crack": "R15: body is mostly below 300 Hz, phones would lose it",
    "screen_change_pct": null,
-   "audible_margin_db": 23.0,
+   "audible_margin_db": 32.0,
    "reference": false
   },
   {
@@ -106,7 +106,7 @@
    "what": "client text \"Need a supercar for F1 weekend. ASAP.\"",
    "sound": "message",
    "level_vs_bed_db": 2,
-   "gain_db": -18.1,
+   "gain_db": -14.8,
    "prio": 3,
    "start_frame": 253.99,
    "why": "message arrives: notification on its first frame",
@@ -114,7 +114,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 3.4,
-   "audible_margin_db": 15.8,
+   "audible_margin_db": 18.7,
    "reference": false
   },
   {
@@ -125,7 +125,7 @@
    "what": "REV pops in",
    "sound": "blip",
    "level_vs_bed_db": 0,
-   "gain_db": -27.5,
+   "gain_db": -24.7,
    "prio": 2,
    "start_frame": 385.0,
    "why": "REV pops in: bright blip",
@@ -133,7 +133,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 1.9,
-   "audible_margin_db": 3.4,
+   "audible_margin_db": 4.1,
    "reference": false
   },
   {
@@ -144,7 +144,7 @@
    "what": "caption \"What\"",
    "sound": "pop",
    "level_vs_bed_db": 0,
-   "gain_db": -19.2,
+   "gain_db": -18.8,
    "prio": 2,
    "start_frame": 403.0,
    "why": "caption pops",
@@ -152,7 +152,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 2.3,
-   "audible_margin_db": 13.0,
+   "audible_margin_db": 5.6,
    "reference": false
   },
   {
@@ -163,7 +163,7 @@
    "what": "caption \"this time?\"",
    "sound": "pop (+1 st)",
    "level_vs_bed_db": -1,
-   "gain_db": -24.7,
+   "gain_db": -21.7,
    "prio": 2,
    "start_frame": 415.0,
    "why": "caption pops",
@@ -171,7 +171,7 @@
    "note": "last of a burst of 3",
    "crack": "",
    "screen_change_pct": 1.4,
-   "audible_margin_db": 4.9,
+   "audible_margin_db": 7.5,
    "reference": false
   },
   {
@@ -179,10 +179,10 @@
    "frame": 452,
    "shot": 7,
    "kind": "morph",
-   "what": "REV morphs into a coupe",
+   "what": "the thought bubble shows a Hurac\u00e1n EVO",
    "sound": "blip (+1 st)",
    "level_vs_bed_db": -1,
-   "gain_db": -26.4,
+   "gain_db": -21.2,
    "prio": 2,
    "start_frame": 452.0,
    "why": "shape change = state change: blip",
@@ -190,7 +190,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 2.5,
-   "audible_margin_db": 5.3,
+   "audible_margin_db": 2.9,
    "reference": false
   },
   {
@@ -198,10 +198,10 @@
    "frame": 476,
    "shot": 7,
    "kind": "morph",
-   "what": "REV morphs into a wedge",
+   "what": "the bubble dissolves to a McLaren 750S, top down",
    "sound": "blip (-1 st)",
    "level_vs_bed_db": -2,
-   "gain_db": -28.5,
+   "gain_db": -22.5,
    "prio": 2,
    "start_frame": 476.0,
    "why": "shape change = state change: blip",
@@ -209,7 +209,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 1.4,
-   "audible_margin_db": 8.5,
+   "audible_margin_db": 4.0,
    "reference": false
   },
   {
@@ -220,7 +220,7 @@
    "what": "caption \"Launch?\"",
    "sound": "pop (-1 st)",
    "level_vs_bed_db": -2,
-   "gain_db": -25.7,
+   "gain_db": -19.4,
    "prio": 2,
    "start_frame": 503.0,
    "why": "caption pops",
@@ -228,7 +228,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 3.5,
-   "audible_margin_db": 0.5,
+   "audible_margin_db": 2.0,
    "reference": false
   },
   {
@@ -239,7 +239,7 @@
    "what": "explosion flash and sparks",
    "sound": "boom_big + crack",
    "level_vs_bed_db": 8,
-   "gain_db": -2.7,
+   "gain_db": -3.2,
    "prio": 5,
    "start_frame": 506.58,
    "why": "explosion flash: boom plus crack so phones hear it",
@@ -247,26 +247,7 @@
    "note": "",
    "crack": "R15: body is mostly below 300 Hz, phones would lose it",
    "screen_change_pct": 99.5,
-   "audible_margin_db": 27.7,
-   "reference": false
-  },
-  {
-   "t": 17.67,
-   "frame": 530,
-   "shot": 9,
-   "kind": "typing",
-   "what": "pixel code types on",
-   "sound": "tick run x5 (random pitch -2..+2 st, level jitter)",
-   "level_vs_bed_db": -5,
-   "gain_db": -13.9,
-   "prio": 1,
-   "start_frame": 530,
-   "why": "typing: one quiet run of ticks, not one per character",
-   "rules": "R6 R9",
-   "note": "",
-   "crack": "",
-   "screen_change_pct": null,
-   "audible_margin_db": 0.9,
+   "audible_margin_db": 20.3,
    "reference": false
   },
   {
@@ -277,7 +258,7 @@
    "what": "caption \"Specs?\"",
    "sound": "pop (+2 st)",
    "level_vs_bed_db": -3,
-   "gain_db": -22.9,
+   "gain_db": -23.7,
    "prio": 2,
    "start_frame": 548.0,
    "why": "caption pops",
@@ -285,7 +266,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 0.8,
-   "audible_margin_db": 1.6,
+   "audible_margin_db": 3.6,
    "reference": false
   },
   {
@@ -296,7 +277,7 @@
    "what": "REV pops in",
    "sound": "blip (+2 st)",
    "level_vs_bed_db": -1,
-   "gain_db": -26.4,
+   "gain_db": -23.4,
    "prio": 2,
    "start_frame": 570.0,
    "why": "REV pops in: bright blip",
@@ -304,7 +285,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 3.0,
-   "audible_margin_db": 2.8,
+   "audible_margin_db": 2.2,
    "reference": false
   },
   {
@@ -315,7 +296,7 @@
    "what": "\"Wait\"",
    "sound": "pop (-2 st)",
    "level_vs_bed_db": -4,
-   "gain_db": -23.9,
+   "gain_db": -24.1,
    "prio": 2,
    "start_frame": 574.0,
    "why": "caption pops",
@@ -323,7 +304,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 4.9,
-   "audible_margin_db": 3.7,
+   "audible_margin_db": -2.0,
    "reference": false
   },
   {
@@ -334,7 +315,7 @@
    "what": "\"No\"",
    "sound": "pop",
    "level_vs_bed_db": -4,
-   "gain_db": -24.3,
+   "gain_db": -24.1,
    "prio": 2,
    "start_frame": 582.0,
    "why": "caption pops",
@@ -342,7 +323,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 4.0,
-   "audible_margin_db": 2.2,
+   "audible_margin_db": 2.9,
    "reference": false
   },
   {
@@ -353,7 +334,7 @@
    "what": "\"Let me book it\"",
    "sound": "pop (+1 st)",
    "level_vs_bed_db": -4,
-   "gain_db": -27.8,
+   "gain_db": -23.9,
    "prio": 2,
    "start_frame": 590.0,
    "why": "caption pops",
@@ -361,7 +342,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 2.5,
-   "audible_margin_db": 0.8,
+   "audible_margin_db": 2.1,
    "reference": false
   },
   {
@@ -372,7 +353,7 @@
    "what": "prompt bar slides up",
    "sound": "whoosh",
    "level_vs_bed_db": -3,
-   "gain_db": -21.4,
+   "gain_db": -16.2,
    "prio": 1,
    "start_frame": 583.63,
    "why": "prompt bar slides up",
@@ -380,26 +361,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": null,
-   "audible_margin_db": 5.1,
-   "reference": false
-  },
-  {
-   "t": 20.0,
-   "frame": 600,
-   "shot": 10,
-   "kind": "typing",
-   "what": "prompt types \"I need a car for F1 weekend\u2026\"",
-   "sound": "tick run x10 (random pitch -2..+2 st, level jitter)",
-   "level_vs_bed_db": -6,
-   "gain_db": -12.8,
-   "prio": 1,
-   "start_frame": 600,
-   "why": "typing: one quiet run of ticks, not one per character",
-   "rules": "R6 R9",
-   "note": "",
-   "crack": "",
-   "screen_change_pct": null,
-   "audible_margin_db": 1.1,
+   "audible_margin_db": 0.4,
    "reference": false
   },
   {
@@ -410,7 +372,7 @@
    "what": "send pressed",
    "sound": "send",
    "level_vs_bed_db": 3,
-   "gain_db": -22.0,
+   "gain_db": -15.8,
    "prio": 3,
    "start_frame": 651.94,
    "why": "send: short rising swoosh on the press frame",
@@ -418,7 +380,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 1.2,
-   "audible_margin_db": 8.7,
+   "audible_margin_db": 15.8,
    "reference": false
   },
   {
@@ -429,7 +391,7 @@
    "what": "cut into shot 11",
    "sound": "boom + crack",
    "level_vs_bed_db": 5,
-   "gain_db": -5.3,
+   "gain_db": -7.0,
    "prio": 4,
    "start_frame": 660.0,
    "why": "new act: section cuts are the only cuts that get a boom",
@@ -437,7 +399,7 @@
    "note": "",
    "crack": "R15: body is mostly below 300 Hz, phones would lose it",
    "screen_change_pct": null,
-   "audible_margin_db": 25.6,
+   "audible_margin_db": 18.0,
    "reference": false
   },
   {
@@ -448,15 +410,15 @@
    "what": "cut into shot 12",
    "sound": "hit_soft (+1 st)",
    "level_vs_bed_db": 2,
-   "gain_db": -7.1,
+   "gain_db": -6.4,
    "prio": 3,
    "start_frame": 696.96,
    "why": "punch flash on the cut: short hit",
    "rules": "R12",
-   "note": "body peak held 0.9 dB down so the limiter leaves the transient alone (R14)",
+   "note": "body peak held 1.1 dB down so the limiter leaves the transient alone (R14)",
    "crack": "",
    "screen_change_pct": null,
-   "audible_margin_db": 23.1,
+   "audible_margin_db": 11.2,
    "reference": false
   },
   {
@@ -467,7 +429,7 @@
    "what": "badge ring draws",
    "sound": "whoosh (+1 st)",
    "level_vs_bed_db": -1,
-   "gain_db": -15.4,
+   "gain_db": -10.1,
    "prio": 2,
    "start_frame": 698.1,
    "why": "sweep: whoosh peak on its fastest point",
@@ -475,7 +437,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": null,
-   "audible_margin_db": -1.6,
+   "audible_margin_db": -2.1,
    "reference": false
   },
   {
@@ -486,7 +448,7 @@
    "what": "gear pops",
    "sound": "pop (-1 st)",
    "level_vs_bed_db": -1,
-   "gain_db": -22.9,
+   "gain_db": -17.9,
    "prio": 2,
    "start_frame": 707.0,
    "why": "element pops in",
@@ -494,7 +456,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 13.8,
-   "audible_margin_db": -1.6,
+   "audible_margin_db": 0.4,
    "reference": false
   },
   {
@@ -505,7 +467,7 @@
    "what": "disc pops",
    "sound": "pop (+2 st)",
    "level_vs_bed_db": -2,
-   "gain_db": -23.8,
+   "gain_db": -18.6,
    "prio": 2,
    "start_frame": 713.0,
    "why": "element pops in",
@@ -513,7 +475,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 19.8,
-   "audible_margin_db": 3.3,
+   "audible_margin_db": 4.3,
    "reference": false
   },
   {
@@ -524,7 +486,7 @@
    "what": "check mark draws",
    "sound": "tick",
    "level_vs_bed_db": -3,
-   "gain_db": -8.6,
+   "gain_db": -7.8,
    "prio": 1,
    "start_frame": 719.0,
    "why": "check ticks",
@@ -532,7 +494,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 26.0,
-   "audible_margin_db": 7.7,
+   "audible_margin_db": -2.4,
    "reference": false
   },
   {
@@ -543,7 +505,7 @@
    "what": "zoom out to the editor",
    "sound": "whoosh_long",
    "level_vs_bed_db": 0,
-   "gain_db": -13.0,
+   "gain_db": -12.7,
    "prio": 2,
    "start_frame": 719.06,
    "why": "zoom-out: longer, lower whoosh for a bigger move",
@@ -551,7 +513,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": null,
-   "audible_margin_db": 11.1,
+   "audible_margin_db": 6.2,
    "reference": false
   },
   {
@@ -562,15 +524,15 @@
    "what": "SE monogram stamps onto the badge",
    "sound": "stamp + hit_soft -6 dB + crack",
    "level_vs_bed_db": 8,
-   "gain_db": -2.2,
+   "gain_db": -1.5,
    "prio": 5,
    "start_frame": 738.84,
    "why": "stamp = proof moment: impact plus a bright crack on the contact frame",
    "rules": "R2 R15",
-   "note": "spring 9/220 reaches full size 4 f after it starts; body peak held 1.0 dB down so the limiter leaves the transient alone (R14)",
+   "note": "spring 9/220 reaches full size 4 f after it starts; body peak held 2.3 dB down so the limiter leaves the transient alone (R14)",
    "crack": "R15: hero hit, crack keeps it on phones",
    "screen_change_pct": 27.0,
-   "audible_margin_db": 10.8,
+   "audible_margin_db": 11.1,
    "reference": false
   },
   {
@@ -581,7 +543,7 @@
    "what": "layer bar slides in (1/3)",
    "sound": "tick (+1 st)",
    "level_vs_bed_db": -4,
-   "gain_db": -8.2,
+   "gain_db": -9.2,
    "prio": 1,
    "start_frame": 780.0,
    "why": "rows slide in",
@@ -589,7 +551,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 7.3,
-   "audible_margin_db": 14.5,
+   "audible_margin_db": -1.3,
    "reference": false
   },
   {
@@ -599,16 +561,16 @@
    "kind": "row",
    "what": "layer bar slides in (3/3)",
    "sound": "tick (-1 st)",
-   "level_vs_bed_db": -5,
-   "gain_db": -9.2,
+   "level_vs_bed_db": -2.5,
+   "gain_db": -8.3,
    "prio": 1,
    "start_frame": 788.0,
    "why": "rows slide in",
    "rules": "R9",
-   "note": "last of a burst of 3",
+   "note": "last of a burst of 3; raised 2.5 dB: the music + other cues covered it (best octave 4000 Hz, R10)",
    "crack": "",
    "screen_change_pct": 2.5,
-   "audible_margin_db": 3.8,
+   "audible_margin_db": -2.5,
    "reference": false
   },
   {
@@ -619,7 +581,7 @@
    "what": "playhead scrubs THU \u2192 SAT",
    "sound": "whoosh (-1 st)",
    "level_vs_bed_db": -2,
-   "gain_db": -16.8,
+   "gain_db": -15.0,
    "prio": 2,
    "start_frame": 784.12,
    "why": "sweep: whoosh peak on its fastest point",
@@ -627,7 +589,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": null,
-   "audible_margin_db": 3.7,
+   "audible_margin_db": 0.9,
    "reference": false
   },
   {
@@ -638,7 +600,7 @@
    "what": "\"HI, I'M REV!\" speech bubble",
    "sound": "message (+1 st)",
    "level_vs_bed_db": 1,
-   "gain_db": -16.1,
+   "gain_db": -14.9,
    "prio": 3,
    "start_frame": 813.99,
    "why": "message arrives: notification on its first frame",
@@ -646,7 +608,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 1.5,
-   "audible_margin_db": 12.4,
+   "audible_margin_db": 9.0,
    "reference": false
   },
   {
@@ -655,9 +617,9 @@
    "shot": 15,
    "kind": "typing",
    "what": "prompt types \"Pull the fleet\u2026\"",
-   "sound": "tick run x7 (random pitch -2..+2 st, level jitter)",
-   "level_vs_bed_db": -7,
-   "gain_db": -16.5,
+   "sound": "tick run x9 (random pitch -2..+2 st, level jitter)",
+   "level_vs_bed_db": -5,
+   "gain_db": -16.4,
    "prio": 1,
    "start_frame": 857,
    "why": "typing: one quiet run of ticks, not one per character",
@@ -665,7 +627,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": null,
-   "audible_margin_db": 5.0,
+   "audible_margin_db": -0.2,
    "reference": false
   },
   {
@@ -676,7 +638,7 @@
    "what": "send pressed",
    "sound": "send (+1 st)",
    "level_vs_bed_db": 2,
-   "gain_db": -22.2,
+   "gain_db": -16.3,
    "prio": 3,
    "start_frame": 914.94,
    "why": "send: short rising swoosh on the press frame",
@@ -684,7 +646,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 0.2,
-   "audible_margin_db": 5.8,
+   "audible_margin_db": 12.5,
    "reference": false
   },
   {
@@ -695,7 +657,7 @@
    "what": "white card \"Pulling cars, dates, and pickup times\u2026\"",
    "sound": "plink",
    "level_vs_bed_db": 1,
-   "gain_db": -9.2,
+   "gain_db": -9.9,
    "prio": 2,
    "start_frame": 925.55,
    "why": "status card appears: soft plink on its first frame",
@@ -703,7 +665,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 100.0,
-   "audible_margin_db": 4.2,
+   "audible_margin_db": 10.2,
    "reference": false
   },
   {
@@ -713,16 +675,16 @@
    "kind": "chip",
    "what": "chip slides in",
    "sound": "tick (+2 st)",
-   "level_vs_bed_db": -3,
-   "gain_db": -10.6,
+   "level_vs_bed_db": -1.0,
+   "gain_db": -7.4,
    "prio": 1,
    "start_frame": 938.0,
    "why": "chip slides in: quiet tick",
    "rules": "R6",
-   "note": "",
+   "note": "raised 2.0 dB: the music + other cues covered it (best octave 2000 Hz, R10)",
    "crack": "",
    "screen_change_pct": 0.6,
-   "audible_margin_db": 0.6,
+   "audible_margin_db": -2.5,
    "reference": false
   },
   {
@@ -733,15 +695,15 @@
    "what": "cut into shot 17",
    "sound": "swish_hit + whoosh -4 dB",
    "level_vs_bed_db": 4,
-   "gain_db": -10.0,
+   "gain_db": -8.4,
    "prio": 3,
    "start_frame": 955.54,
    "why": "whip: whoosh peak on the first frame of the new shot",
    "rules": "R4",
-   "note": "",
+   "note": "body peak held 1.4 dB down so the limiter leaves the transient alone (R14)",
    "crack": "",
    "screen_change_pct": null,
-   "audible_margin_db": 14.9,
+   "audible_margin_db": 7.8,
    "reference": false
   },
   {
@@ -751,16 +713,16 @@
    "kind": "row",
    "what": "fleet row cascades in (1/8)",
    "sound": "tick (-2 st)",
-   "level_vs_bed_db": -6,
-   "gain_db": -13.3,
+   "level_vs_bed_db": -2.9,
+   "gain_db": -7.7,
    "prio": 1,
    "start_frame": 977.0,
    "why": "rows slide in",
    "rules": "R9",
-   "note": "",
+   "note": "raised 3.1 dB: the music + other cues covered it (best octave 4000 Hz, R10)",
    "crack": "",
    "screen_change_pct": 0.8,
-   "audible_margin_db": -0.5,
+   "audible_margin_db": -2.5,
    "reference": false
   },
   {
@@ -770,16 +732,16 @@
    "kind": "check",
    "what": "car ticked available (1/6)",
    "sound": "tick",
-   "level_vs_bed_db": -4,
-   "gain_db": -12.6,
+   "level_vs_bed_db": -1.2000000000000002,
+   "gain_db": -8.9,
    "prio": 1,
    "start_frame": 982.0,
    "why": "check ticks",
    "rules": "R9 R16",
-   "note": "",
+   "note": "raised 2.8 dB: the music + other cues covered it (best octave 2000 Hz, R10)",
    "crack": "",
    "screen_change_pct": 0.7,
-   "audible_margin_db": -0.9,
+   "audible_margin_db": -2.5,
    "reference": false
   },
   {
@@ -789,16 +751,16 @@
    "kind": "row",
    "what": "fleet row cascades in (8/8)",
    "sound": "tick (+1 st)",
-   "level_vs_bed_db": -7,
-   "gain_db": -10.8,
+   "level_vs_bed_db": -3.3,
+   "gain_db": -8.5,
    "prio": 1,
    "start_frame": 987.0,
    "why": "rows slide in",
    "rules": "R9",
-   "note": "last of a burst of 8",
+   "note": "last of a burst of 8; raised 3.7 dB: the music + other cues covered it (best octave 2000 Hz, R10)",
    "crack": "",
    "screen_change_pct": 0.8,
-   "audible_margin_db": -1.3,
+   "audible_margin_db": -2.5,
    "reference": false
   },
   {
@@ -809,7 +771,7 @@
    "what": "asset tile pops (1/5)",
    "sound": "pop (-2 st)",
    "level_vs_bed_db": -3,
-   "gain_db": -24.5,
+   "gain_db": -23.8,
    "prio": 2,
    "start_frame": 996.0,
    "why": "element pops in",
@@ -817,7 +779,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 4.2,
-   "audible_margin_db": -2.6,
+   "audible_margin_db": 1.3,
    "reference": false
   },
   {
@@ -828,7 +790,7 @@
    "what": "asset tile pops (5/5)",
    "sound": "pop",
    "level_vs_bed_db": -4,
-   "gain_db": -26.4,
+   "gain_db": -24.6,
    "prio": 2,
    "start_frame": 1008.0,
    "why": "element pops in",
@@ -836,7 +798,7 @@
    "note": "last of a burst of 5",
    "crack": "",
    "screen_change_pct": 10.5,
-   "audible_margin_db": 4.4,
+   "audible_margin_db": 0.5,
    "reference": false
   },
   {
@@ -847,7 +809,7 @@
    "what": "OK badge springs in",
    "sound": "chime",
    "level_vs_bed_db": 2,
-   "gain_db": -14.6,
+   "gain_db": -13.9,
    "prio": 3,
    "start_frame": 1017.96,
    "why": "OK badge = success: rising chime",
@@ -855,7 +817,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 9.0,
-   "audible_margin_db": 1.8,
+   "audible_margin_db": 11.7,
    "reference": false
   },
   {
@@ -866,7 +828,7 @@
    "what": "sector keyframe lights up (1/4)",
    "sound": "tick (-1 st)",
    "level_vs_bed_db": -4,
-   "gain_db": -8.4,
+   "gain_db": -5.7,
    "prio": 1,
    "start_frame": 1045.0,
    "why": "keyframe lights: quiet tick",
@@ -874,7 +836,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 11.7,
-   "audible_margin_db": 13.0,
+   "audible_margin_db": 1.2,
    "reference": false
   },
   {
@@ -884,16 +846,16 @@
    "kind": "keyframe",
    "what": "sector keyframe lights up (2/4)",
    "sound": "tick (+2 st)",
-   "level_vs_bed_db": -5,
-   "gain_db": -13.1,
+   "level_vs_bed_db": -3.8,
+   "gain_db": -7.9,
    "prio": 1,
    "start_frame": 1059.0,
    "why": "keyframe lights: quiet tick",
    "rules": "R7",
-   "note": "",
+   "note": "raised 1.2 dB: the music + other cues covered it (best octave 2000 Hz, R10)",
    "crack": "",
    "screen_change_pct": 12.7,
-   "audible_margin_db": 4.2,
+   "audible_margin_db": -2.5,
    "reference": false
   },
   {
@@ -904,7 +866,7 @@
    "what": "sector keyframe lights up (3/4)",
    "sound": "tick (-2 st)",
    "level_vs_bed_db": -6,
-   "gain_db": -10.1,
+   "gain_db": -7.0,
    "prio": 1,
    "start_frame": 1073.0,
    "why": "keyframe lights: quiet tick",
@@ -912,7 +874,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 13.9,
-   "audible_margin_db": 7.1,
+   "audible_margin_db": 4.3,
    "reference": false
   },
   {
@@ -923,7 +885,7 @@
    "what": "sector keyframe lights up (4/4)",
    "sound": "tick",
    "level_vs_bed_db": -7,
-   "gain_db": -15.2,
+   "gain_db": -11.1,
    "prio": 1,
    "start_frame": 1087.0,
    "why": "keyframe lights: quiet tick",
@@ -931,7 +893,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 14.9,
-   "audible_margin_db": 0.3,
+   "audible_margin_db": 4.2,
    "reference": false
   },
   {
@@ -942,7 +904,7 @@
    "what": "cut into shot 20",
    "sound": "boom_cut (-1 st) + crack",
    "level_vs_bed_db": 5,
-   "gain_db": -4.5,
+   "gain_db": -3.8,
    "prio": 4,
    "start_frame": 1106.05,
    "why": "new act: section cuts are the only cuts that get a boom",
@@ -950,26 +912,7 @@
    "note": "",
    "crack": "R15: body is mostly below 300 Hz, phones would lose it",
    "screen_change_pct": null,
-   "audible_margin_db": 21.6,
-   "reference": false
-  },
-  {
-   "t": 37.2,
-   "frame": 1116,
-   "shot": 20,
-   "kind": "typing",
-   "what": "prompt types \"Map the drive\u2026\"",
-   "sound": "tick run x9 (random pitch -2..+2 st, level jitter)",
-   "level_vs_bed_db": -8,
-   "gain_db": -16.2,
-   "prio": 1,
-   "start_frame": 1116,
-   "why": "typing: one quiet run of ticks, not one per character",
-   "rules": "R6 R9",
-   "note": "",
-   "crack": "",
-   "screen_change_pct": null,
-   "audible_margin_db": -2.6,
+   "audible_margin_db": 17.4,
    "reference": false
   },
   {
@@ -980,7 +923,7 @@
    "what": "send pressed",
    "sound": "send (-1 st)",
    "level_vs_bed_db": 1,
-   "gain_db": -22.3,
+   "gain_db": -21.7,
    "prio": 3,
    "start_frame": 1185.93,
    "why": "send: short rising swoosh on the press frame",
@@ -988,7 +931,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 0.2,
-   "audible_margin_db": 9.6,
+   "audible_margin_db": 2.7,
    "reference": false
   },
   {
@@ -999,15 +942,15 @@
    "what": "cut into shot 21",
    "sound": "hit_soft (-1 st)",
    "level_vs_bed_db": 1,
-   "gain_db": -7.1,
+   "gain_db": -9.4,
    "prio": 3,
    "start_frame": 1197.71,
    "why": "punch flash on the cut: short hit",
    "rules": "R12",
-   "note": "body peak held 0.1 dB down so the limiter leaves the transient alone (R14)",
+   "note": "",
    "crack": "",
    "screen_change_pct": null,
-   "audible_margin_db": 19.9,
+   "audible_margin_db": 8.0,
    "reference": false
   },
   {
@@ -1018,15 +961,15 @@
    "what": "\"ROUTE!\" slams in",
    "sound": "impact_reveal + crack",
    "level_vs_bed_db": 8,
-   "gain_db": -1.7,
+   "gain_db": -1.0,
    "prio": 5,
    "start_frame": 1203.9,
    "why": "word slam: impact on the frame it reaches full size",
    "rules": "R2 R15",
-   "note": "spring 9/300 reaches full size 4 f after it starts; body peak held 5.1 dB down so the limiter leaves the transient alone (R14)",
+   "note": "spring 9/300 reaches full size 4 f after it starts; body peak held 4.0 dB down so the limiter leaves the transient alone (R14)",
    "crack": "R15: body is mostly below 300 Hz, phones would lose it",
    "screen_change_pct": 10.2,
-   "audible_margin_db": 19.0,
+   "audible_margin_db": 14.2,
    "reference": false
   },
   {
@@ -1037,7 +980,7 @@
    "what": "white card \"Mapped.\"",
    "sound": "plink (+1 st)",
    "level_vs_bed_db": 0,
-   "gain_db": -9.9,
+   "gain_db": -8.9,
    "prio": 2,
    "start_frame": 1255.8,
    "why": "status card appears: soft plink on its first frame",
@@ -1045,7 +988,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 100.0,
-   "audible_margin_db": 14.4,
+   "audible_margin_db": 9.7,
    "reference": false
   },
   {
@@ -1056,7 +999,7 @@
    "what": "map island rises",
    "sound": "whoosh_long (+1 st)",
    "level_vs_bed_db": -2,
-   "gain_db": -15.4,
+   "gain_db": -9.7,
    "prio": 2,
    "start_frame": 1286.96,
    "why": "map rises: soft long whoosh",
@@ -1064,7 +1007,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": null,
-   "audible_margin_db": 11.8,
+   "audible_margin_db": 8.9,
    "reference": false
   },
   {
@@ -1075,7 +1018,7 @@
    "what": "landmark pops (1/5)",
    "sound": "pop (+1 st)",
    "level_vs_bed_db": -5,
-   "gain_db": -23.1,
+   "gain_db": -21.5,
    "prio": 2,
    "start_frame": 1310.0,
    "why": "element pops in",
@@ -1083,7 +1026,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 0.7,
-   "audible_margin_db": 2.6,
+   "audible_margin_db": 2.1,
    "reference": false
   },
   {
@@ -1093,16 +1036,16 @@
    "kind": "pop",
    "what": "landmark pops (5/5)",
    "sound": "pop (-1 st)",
-   "level_vs_bed_db": -2.8,
-   "gain_db": -24.0,
+   "level_vs_bed_db": -5,
+   "gain_db": -21.5,
    "prio": 2,
    "start_frame": 1322.0,
    "why": "element pops in",
    "rules": "R6 R9",
-   "note": "last of a burst of 5; raised 2.2 dB: the music + other cues covered it (best octave 1000 Hz, R10)",
+   "note": "last of a burst of 5",
    "crack": "",
    "screen_change_pct": 0.6,
-   "audible_margin_db": -2.5,
+   "audible_margin_db": 2.0,
    "reference": false
   },
   {
@@ -1112,16 +1055,16 @@
    "kind": "pin",
    "what": "Sphere marker grows",
    "sound": "pop (-3 st)",
-   "level_vs_bed_db": 1.0,
-   "gain_db": -20.3,
+   "level_vs_bed_db": -1,
+   "gain_db": -19.2,
    "prio": 2,
    "start_frame": 1332.0,
    "why": "pin lands: low pop",
    "rules": "R9",
-   "note": "raised 2.0 dB: the music + other cues covered it (best octave 500 Hz, R10)",
+   "note": "",
    "crack": "",
    "screen_change_pct": 0.3,
-   "audible_margin_db": -2.5,
+   "audible_margin_db": -0.3,
    "reference": false
   },
   {
@@ -1131,16 +1074,16 @@
    "kind": "route_draw",
    "what": "route line draws",
    "sound": "scan_swell",
-   "level_vs_bed_db": -0.2999999999999998,
-   "gain_db": -6.9,
+   "level_vs_bed_db": -4,
+   "gain_db": -8.3,
    "prio": 2,
    "start_frame": 1314.25,
    "why": "line draw: line-draw swell from the library, peaking as the line completes",
    "rules": "R19 R20",
-   "note": "raised 3.7 dB: the music + other cues covered it (best octave 250 Hz, R10); body peak held 0.2 dB down so the limiter leaves the transient alone (R14)",
+   "note": "",
    "crack": "",
    "screen_change_pct": null,
-   "audible_margin_db": -2.8,
+   "audible_margin_db": -1.1,
    "reference": false
   },
   {
@@ -1151,7 +1094,7 @@
    "what": "white card \"Pulling every stop\u2026\"",
    "sound": "plink (-1 st)",
    "level_vs_bed_db": -1,
-   "gain_db": -14.6,
+   "gain_db": -11.3,
    "prio": 2,
    "start_frame": 1357.28,
    "why": "status card appears: soft plink on its first frame",
@@ -1159,7 +1102,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 100.0,
-   "audible_margin_db": 18.3,
+   "audible_margin_db": 6.8,
    "reference": false
   },
   {
@@ -1169,16 +1112,16 @@
    "kind": "chip",
    "what": "chip slides in",
    "sound": "tick (+1 st)",
-   "level_vs_bed_db": -4,
-   "gain_db": -8.0,
+   "level_vs_bed_db": -2.0,
+   "gain_db": -4.8,
    "prio": 1,
    "start_frame": 1370.0,
    "why": "chip slides in: quiet tick",
    "rules": "R6",
-   "note": "",
+   "note": "raised 2.0 dB: the music + other cues covered it (best octave 8000 Hz, R10)",
    "crack": "",
    "screen_change_pct": 0.6,
-   "audible_margin_db": 14.4,
+   "audible_margin_db": -2.5,
    "reference": false
   },
   {
@@ -1189,7 +1132,7 @@
    "what": "map pin drops (1/5)",
    "sound": "pop (-2 st)",
    "level_vs_bed_db": -2,
-   "gain_db": -23.8,
+   "gain_db": -21.8,
    "prio": 2,
    "start_frame": 1412.0,
    "why": "pin lands: low pop",
@@ -1197,7 +1140,7 @@
    "note": "spring 8/160 reaches full size 5 f after it starts",
    "crack": "",
    "screen_change_pct": 0.7,
-   "audible_margin_db": 1.0,
+   "audible_margin_db": 3.4,
    "reference": false
   },
   {
@@ -1208,7 +1151,7 @@
    "what": "stop photo card pops (1/5)",
    "sound": "pop (+2 st)",
    "level_vs_bed_db": -1,
-   "gain_db": -22.7,
+   "gain_db": -18.5,
    "prio": 2,
    "start_frame": 1421.0,
    "why": "photo card pops",
@@ -1216,7 +1159,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 2.7,
-   "audible_margin_db": 9.5,
+   "audible_margin_db": 2.9,
    "reference": false
   },
   {
@@ -1227,7 +1170,7 @@
    "what": "map pin drops (5/5)",
    "sound": "pop (-4 st)",
    "level_vs_bed_db": -3,
-   "gain_db": -22.7,
+   "gain_db": -22.8,
    "prio": 2,
    "start_frame": 1432.0,
    "why": "pin lands: low pop",
@@ -1235,7 +1178,7 @@
    "note": "last of a burst of 5",
    "crack": "",
    "screen_change_pct": 7.9,
-   "audible_margin_db": -1.3,
+   "audible_margin_db": 0.8,
    "reference": false
   },
   {
@@ -1246,7 +1189,7 @@
    "what": "stop photo card pops (5/5)",
    "sound": "pop (-2 st)",
    "level_vs_bed_db": -2,
-   "gain_db": -23.8,
+   "gain_db": -21.2,
    "prio": 2,
    "start_frame": 1441.0,
    "why": "photo card pops",
@@ -1254,7 +1197,7 @@
    "note": "last of a burst of 5",
    "crack": "",
    "screen_change_pct": 8.2,
-   "audible_margin_db": -0.4,
+   "audible_margin_db": 2.2,
    "reference": false
   },
   {
@@ -1265,15 +1208,15 @@
    "what": "cursor clicks (ripple)",
    "sound": "plink + tick -6 dB",
    "level_vs_bed_db": 1,
-   "gain_db": -9.2,
+   "gain_db": -7.3,
    "prio": 2,
    "start_frame": 1458.55,
    "why": "cursor click on the contact frame",
    "rules": "R6",
-   "note": "",
+   "note": "body peak held 0.0 dB down so the limiter leaves the transient alone (R14)",
    "crack": "",
    "screen_change_pct": 0.9,
-   "audible_margin_db": 7.8,
+   "audible_margin_db": 12.4,
    "reference": false
   },
   {
@@ -1284,7 +1227,7 @@
    "what": "cut into shot 27",
    "sound": "boom (-1 st) + crack",
    "level_vs_bed_db": 5,
-   "gain_db": -4.6,
+   "gain_db": -4.8,
    "prio": 4,
    "start_frame": 1488.0,
    "why": "new act: section cuts are the only cuts that get a boom",
@@ -1292,7 +1235,7 @@
    "note": "",
    "crack": "R15: body is mostly below 300 Hz, phones would lose it",
    "screen_change_pct": null,
-   "audible_margin_db": 7.9,
+   "audible_margin_db": 6.7,
    "reference": false
   },
   {
@@ -1303,15 +1246,15 @@
    "what": "cut into shot 27",
    "sound": "whoosh_hit + whoosh_long -4 dB",
    "level_vs_bed_db": 3,
-   "gain_db": -8.9,
+   "gain_db": -8.2,
    "prio": 3,
    "start_frame": 1472.06,
    "why": "whip: whoosh peak on the first frame of the new shot",
    "rules": "R4",
-   "note": "body peak held 4.5 dB down so the limiter leaves the transient alone (R14)",
+   "note": "body peak held 6.8 dB down so the limiter leaves the transient alone (R14)",
    "crack": "",
    "screen_change_pct": null,
-   "audible_margin_db": 13.9,
+   "audible_margin_db": 1.2,
    "reference": false
   },
   {
@@ -1320,9 +1263,9 @@
    "shot": 28,
    "kind": "typing",
    "what": "prompt types \"Hold the GT3 RS\u2026\"",
-   "sound": "tick run x8 (random pitch -2..+2 st, level jitter)",
-   "level_vs_bed_db": -9,
-   "gain_db": -18.6,
+   "sound": "tick run x9 (random pitch -2..+2 st, level jitter)",
+   "level_vs_bed_db": -6,
+   "gain_db": -10.2,
    "prio": 1,
    "start_frame": 1534,
    "why": "typing: one quiet run of ticks, not one per character",
@@ -1330,7 +1273,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": null,
-   "audible_margin_db": -2.9,
+   "audible_margin_db": -1.7,
    "reference": false
   },
   {
@@ -1341,7 +1284,7 @@
    "what": "send pressed",
    "sound": "send (+2 st)",
    "level_vs_bed_db": 0,
-   "gain_db": -24.7,
+   "gain_db": -18.4,
    "prio": 3,
    "start_frame": 1623.95,
    "why": "send: short rising swoosh on the press frame",
@@ -1349,7 +1292,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 0.2,
-   "audible_margin_db": 2.1,
+   "audible_margin_db": 5.7,
    "reference": false
   },
   {
@@ -1360,34 +1303,15 @@
    "what": "glow ring bursts and opens on the GT3 RS",
    "sound": "impact_reveal + chime -8 dB + crack",
    "level_vs_bed_db": 6,
-   "gain_db": -4.5,
+   "gain_db": -3.8,
    "prio": 4,
    "start_frame": 1645.9,
    "why": "glow ring opens on the car: reveal hit",
    "rules": "R5 R19",
-   "note": "body peak held 4.6 dB down so the limiter leaves the transient alone (R14)",
+   "note": "body peak held 3.3 dB down so the limiter leaves the transient alone (R14)",
    "crack": "R15: body is mostly below 300 Hz, phones would lose it",
    "screen_change_pct": 99.8,
-   "audible_margin_db": 26.7,
-   "reference": false
-  },
-  {
-   "t": 56.37,
-   "frame": 1691,
-   "shot": 30,
-   "kind": "typing",
-   "what": "\"THE GT3 RS\" big type-on",
-   "sound": "tick run x7 (random pitch -2..+2 st, level jitter)",
-   "level_vs_bed_db": -5.8,
-   "gain_db": -13.9,
-   "prio": 1,
-   "start_frame": 1691,
-   "why": "typing: one quiet run of ticks, not one per character",
-   "rules": "R6 R9",
-   "note": "raised 3.2 dB: the music + other cues covered it (best octave 4000 Hz, R10)",
-   "crack": "",
-   "screen_change_pct": null,
-   "audible_margin_db": -2.5,
+   "audible_margin_db": 21.2,
    "reference": false
   },
   {
@@ -1398,7 +1322,7 @@
    "what": "tag pops (1/4)",
    "sound": "pop",
    "level_vs_bed_db": -2,
-   "gain_db": -21.1,
+   "gain_db": -21.2,
    "prio": 2,
    "start_frame": 1723.0,
    "why": "tag pops",
@@ -1406,7 +1330,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 1.0,
-   "audible_margin_db": 8.0,
+   "audible_margin_db": 6.5,
    "reference": false
   },
   {
@@ -1417,7 +1341,7 @@
    "what": "tag pops (4/4)",
    "sound": "pop (+1 st)",
    "level_vs_bed_db": -3,
-   "gain_db": -25.8,
+   "gain_db": -19.6,
    "prio": 2,
    "start_frame": 1735.0,
    "why": "tag pops",
@@ -1425,7 +1349,7 @@
    "note": "last of a burst of 4",
    "crack": "",
    "screen_change_pct": 0.9,
-   "audible_margin_db": -0.2,
+   "audible_margin_db": 3.0,
    "reference": false
   },
   {
@@ -1436,7 +1360,7 @@
    "what": "thumbnail pops (1/3)",
    "sound": "pop (-1 st)",
    "level_vs_bed_db": -3,
-   "gain_db": -26.4,
+   "gain_db": -20.7,
    "prio": 2,
    "start_frame": 1741.0,
    "why": "photo card pops",
@@ -1444,7 +1368,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 1.6,
-   "audible_margin_db": 2.7,
+   "audible_margin_db": 1.0,
    "reference": false
   },
   {
@@ -1455,7 +1379,7 @@
    "what": "thumbnail pops (3/3)",
    "sound": "pop (+2 st)",
    "level_vs_bed_db": -4,
-   "gain_db": -22.8,
+   "gain_db": -24.5,
    "prio": 2,
    "start_frame": 1753.0,
    "why": "photo card pops",
@@ -1463,7 +1387,7 @@
    "note": "last of a burst of 3",
    "crack": "",
    "screen_change_pct": 3.6,
-   "audible_margin_db": 6.1,
+   "audible_margin_db": 0.2,
    "reference": false
   },
   {
@@ -1474,15 +1398,15 @@
    "what": "badge stamps onto the poster",
    "sound": "stamp + hit_soft -6 dB (-1 st) + crack",
    "level_vs_bed_db": 8,
-   "gain_db": -2.3,
+   "gain_db": -1.6,
    "prio": 5,
    "start_frame": 1768.71,
    "why": "stamp = proof moment: impact plus a bright crack on the contact frame",
    "rules": "R2 R15",
-   "note": "spring 10/260 reaches full size 4 f after it starts; body peak held 0.1 dB down so the limiter leaves the transient alone (R14)",
+   "note": "spring 10/260 reaches full size 4 f after it starts; body peak held 2.2 dB down so the limiter leaves the transient alone (R14)",
    "crack": "R15: hero hit, crack keeps it on phones",
    "screen_change_pct": 5.8,
-   "audible_margin_db": 22.3,
+   "audible_margin_db": 22.8,
    "reference": false
   },
   {
@@ -1493,7 +1417,7 @@
    "what": "cut into shot 31",
    "sound": "boom_cut (+1 st) + crack",
    "level_vs_bed_db": 5,
-   "gain_db": -6.6,
+   "gain_db": -4.2,
    "prio": 4,
    "start_frame": 1796.49,
    "why": "new act: section cuts are the only cuts that get a boom",
@@ -1501,7 +1425,7 @@
    "note": "",
    "crack": "R15: body is mostly below 300 Hz, phones would lose it",
    "screen_change_pct": null,
-   "audible_margin_db": 20.3,
+   "audible_margin_db": 12.5,
    "reference": false
   },
   {
@@ -1510,9 +1434,9 @@
    "shot": 31,
    "kind": "typing",
    "what": "prompt types \"Lock it in\u2026\"",
-   "sound": "tick run x10 (random pitch -2..+2 st, level jitter)",
-   "level_vs_bed_db": -9,
-   "gain_db": -19.1,
+   "sound": "tick run x8 (random pitch -2..+2 st, level jitter)",
+   "level_vs_bed_db": -7,
+   "gain_db": -18.9,
    "prio": 1,
    "start_frame": 1808,
    "why": "typing: one quiet run of ticks, not one per character",
@@ -1520,7 +1444,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": null,
-   "audible_margin_db": 19.4,
+   "audible_margin_db": 18.6,
    "reference": false
   },
   {
@@ -1531,7 +1455,7 @@
    "what": "send pressed",
    "sound": "send (-2 st)",
    "level_vs_bed_db": -1,
-   "gain_db": -21.8,
+   "gain_db": -27.7,
    "prio": 3,
    "start_frame": 1879.92,
    "why": "send: short rising swoosh on the press frame",
@@ -1539,7 +1463,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 0.2,
-   "audible_margin_db": 7.0,
+   "audible_margin_db": 17.6,
    "reference": false
   },
   {
@@ -1550,15 +1474,15 @@
    "what": "cut into shot 32",
    "sound": "swish_hit + whoosh -4 dB (+1 st)",
    "level_vs_bed_db": 5,
-   "gain_db": -8.5,
+   "gain_db": -13.2,
    "prio": 3,
    "start_frame": 1889.47,
    "why": "speed cut: whoosh peak on the cut",
    "rules": "R4",
-   "note": "body peak held 4.7 dB down so the limiter leaves the transient alone (R14)",
+   "note": "",
    "crack": "",
    "screen_change_pct": null,
-   "audible_margin_db": 12.9,
+   "audible_margin_db": 21.0,
    "reference": false
   },
   {
@@ -1569,15 +1493,15 @@
    "what": "tension into the speed cut",
    "sound": "scan_swell",
    "level_vs_bed_db": 1,
-   "gain_db": -6.9,
+   "gain_db": -9.1,
    "prio": 3,
    "start_frame": 1865.25,
    "why": "riser peaking on the speed cut",
    "rules": "R5",
-   "note": "body peak held 7.2 dB down so the limiter leaves the transient alone (R14)",
+   "note": "",
    "crack": "",
    "screen_change_pct": null,
-   "audible_margin_db": -3.0,
+   "audible_margin_db": 0.8,
    "reference": false
   },
   {
@@ -1588,7 +1512,7 @@
    "what": "\"typing\u2026\" indicator",
    "sound": "tick (-1 st)",
    "level_vs_bed_db": -4,
-   "gain_db": -7.0,
+   "gain_db": -11.9,
    "prio": 1,
    "start_frame": 1939.0,
    "why": "typing indicator: one quiet tick",
@@ -1596,7 +1520,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 0.5,
-   "audible_margin_db": 7.2,
+   "audible_margin_db": -2.7,
    "reference": false
   },
   {
@@ -1607,7 +1531,7 @@
    "what": "\"Looks perfect! Booked.\" arrives",
    "sound": "message (-1 st)",
    "level_vs_bed_db": 4,
-   "gain_db": -18.8,
+   "gain_db": -15.4,
    "prio": 4,
    "start_frame": 1950.99,
    "why": "\"Booked.\" is the payoff, so its message sound is featured",
@@ -1615,7 +1539,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 3.4,
-   "audible_margin_db": 16.4,
+   "audible_margin_db": 15.8,
    "reference": false
   },
   {
@@ -1626,7 +1550,7 @@
    "what": "REV hops in",
    "sound": "blip (-2 st)",
    "level_vs_bed_db": -2,
-   "gain_db": -25.0,
+   "gain_db": -22.4,
    "prio": 2,
    "start_frame": 2050.0,
    "why": "REV pops in: bright blip",
@@ -1634,7 +1558,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 0.6,
-   "audible_margin_db": 2.3,
+   "audible_margin_db": 2.2,
    "reference": false
   },
   {
@@ -1645,7 +1569,7 @@
    "what": "REV lands a hop (1/8)",
    "sound": "blip",
    "level_vs_bed_db": -3,
-   "gain_db": -29.9,
+   "gain_db": -22.1,
    "prio": 1,
    "start_frame": 2065.0,
    "why": "REV lands a hop",
@@ -1653,7 +1577,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 1.4,
-   "audible_margin_db": 5.0,
+   "audible_margin_db": 0.1,
    "reference": false
   },
   {
@@ -1664,7 +1588,7 @@
    "what": "REV lands a hop (2/8)",
    "sound": "blip (+1 st)",
    "level_vs_bed_db": -4,
-   "gain_db": -27.0,
+   "gain_db": -24.1,
    "prio": 1,
    "start_frame": 2079.0,
    "why": "REV lands a hop",
@@ -1672,7 +1596,7 @@
    "note": "",
    "crack": "",
    "screen_change_pct": 0.9,
-   "audible_margin_db": 3.9,
+   "audible_margin_db": 3.1,
    "reference": false
   },
   {
@@ -1683,15 +1607,15 @@
    "what": "SE logo lands on the end card",
    "sound": "outro_hit + chime -10 dB + crack",
    "level_vs_bed_db": 7,
-   "gain_db": -8.0,
+   "gain_db": -1.0,
    "prio": 5,
    "start_frame": 2179.83,
    "why": "logo settles: stinger on the settle frame, tail dies before the loop",
    "rules": "R5 R23",
-   "note": "spring 14/120 reaches full size 8 f after it starts",
+   "note": "spring 14/120 reaches full size 8 f after it starts; body peak held 0.2 dB down so the limiter leaves the transient alone (R14)",
    "crack": "R15: hero hit, crack keeps it on phones",
    "screen_change_pct": 2.9,
-   "audible_margin_db": 50.1,
+   "audible_margin_db": 20.9,
    "reference": false
   }
  ],
@@ -2149,14 +2073,14 @@
    "shot": 7,
    "kind": "word",
    "what": "caption \"Coupe?\"",
-   "why": "R9: lands within 2 f of \"REV morphs into a coupe\"; two arrivals at once smear, so the bigger one plays"
+   "why": "R9: lands within 2 f of \"the thought bubble shows a Hurac\u00e1n EVO\"; two arrivals at once smear, so the bigger one plays"
   },
   {
    "frame": 478,
    "shot": 7,
    "kind": "word",
-   "what": "caption \"Spider?\"",
-   "why": "R9: lands within 2 f of \"REV morphs into a wedge\"; two arrivals at once smear, so the bigger one plays"
+   "what": "caption \"Spyder?\"",
+   "why": "R9: lands within 2 f of \"the bubble dissolves to a McLaren 750S, top down\"; two arrivals at once smear, so the bigger one plays"
   },
   {
    "frame": 816,
@@ -2180,11 +2104,39 @@
    "why": "R9: lands within 2 f of \"glow ring bursts and opens on the GT3 RS\"; two arrivals at once smear, so the bigger one plays"
   },
   {
+   "frame": 530,
+   "shot": 9,
+   "kind": "typing",
+   "what": "pixel code types on",
+   "why": "R10: masked here (best octave 2000 Hz is -7.2 dB under the music + other cues), and +4 dB would not clear it"
+  },
+  {
+   "frame": 600,
+   "shot": 10,
+   "kind": "typing",
+   "what": "prompt types \"I need a car for F1 weekend\u2026\"",
+   "why": "R10: masked here (best octave 2000 Hz is -6.7 dB under the music + other cues), and +4 dB would not clear it"
+  },
+  {
+   "frame": 1116,
+   "shot": 20,
+   "kind": "typing",
+   "what": "prompt types \"Map the drive\u2026\"",
+   "why": "R10: masked here (best octave 8000 Hz is -12.4 dB under the music + other cues), and +4 dB would not clear it"
+  },
+  {
+   "frame": 1691,
+   "shot": 30,
+   "kind": "typing",
+   "what": "\"THE GT3 RS\" big type-on",
+   "why": "R10: masked here (best octave 4000 Hz is -10.9 dB under the music + other cues), and +4 dB would not clear it"
+  },
+  {
    "frame": 2204,
    "shot": 35,
    "kind": "sweep",
    "what": "shine sweeps across the logo",
-   "why": "R10: masked here (best octave 8000 Hz is -7.2 dB under the music + other cues), and +4 dB would not clear it"
+   "why": "R10: masked here (best octave 4000 Hz is -10.9 dB under the music + other cues), and +4 dB would not clear it"
   }
  ]
 }

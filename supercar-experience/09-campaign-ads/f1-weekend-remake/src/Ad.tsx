@@ -3,8 +3,9 @@ import {AbsoluteFill, Audio, Img, Sequence, interpolate, spring, staticFile, use
 import {noise2D} from '@remotion/noise';
 import {C, F, clamp, lin, s2f} from './theme';
 import {Bokeh, Finish, Flash, FloatWords, HandleBug, Plate, PromptBar, StatusCard, TextBubble} from './core';
-import {PixelCode, PixelFire, Rev, Sparks} from './pixel';
-import {AssetBoard, Badge, EditorChrome, FleetPanel, KeyframeStreak, LayerStack} from './editor';
+import {Driver, PixelCode, PixelFire, Sparks} from './pixel';
+import {AssetBoard, Badge, EditorChrome, FleetPanel} from './editor';
+import {DayTimeline, ScrubTimeline} from './timeline';
 import {MapBuild, MapFull} from './map';
 import {EndCard, GlowReveal, Poster, TitleLockup} from './poster';
 
@@ -141,14 +142,14 @@ export const Ad: React.FC = () => {
       </Sequence>
       <Sequence from={from(6)} durationInFrames={len(6)}>
         <Plate id={6} len={len(6)} push={[1.04, 1.08]} dim={0.1} />
-        <Rev at={4} x={300} y={760} px={24} />
+        <Driver at={4} x={60} y={554} px={14} poses={[{at: 10, pose: 'wave'}, {at: 30, pose: 'idle'}]} />
         <FloatWords words={[{t: 'What', at: 22, x: 640, y: 640, rot: -4}, {t: 'is it', at: 28, x: 600, y: 720, rot: 3}, {t: 'this time?', at: 34, x: 560, y: 800, rot: -2}]} />
       </Sequence>
       <Sequence from={from(7)} durationInFrames={len(7)}>
         <Plate id={7} len={len(7)} push={[1.04, 1.08]} dim={0.1} />
-        <Rev at={-20} x={300} y={760} px={24} morph={[{to: 'coupe', at: 2}, {from: 'coupe', to: 'wedge', at: 26}]} />
+        <Driver at={-20} x={60} y={554} px={14} pose="think" think={[{car: 'evo', at: 2}, {car: 'm750', at: 26}]} />
         <FloatWords words={[{t: 'Coupe?', at: 4, x: 640, y: 660, rot: -3}]} out={24} />
-        <FloatWords words={[{t: 'Spider?', at: 28, x: 640, y: 660, rot: 3}]} />
+        <FloatWords words={[{t: 'Spyder?', at: 28, x: 640, y: 660, rot: 3}]} />
       </Sequence>
       <Sequence from={from(8)} durationInFrames={len(8)}>
         <Plate id={8} len={len(8)} push={[1.06, 1.14]} grade="hot" shake={8} />
@@ -165,7 +166,7 @@ export const Ad: React.FC = () => {
       </Sequence>
       <Sequence from={from(10)} durationInFrames={len(10)}>
         <Plate id={10} len={len(10)} push={[1.03, 1.1]} dim={0.15} />
-        <Rev at={0} x={120} y={720} px={24} />
+        <Driver at={0} x={60} y={514} px={14} poses={[{at: 4, pose: 'think'}, {at: 20, pose: 'thumb'}]} />
         <Stack x={560} y={560} items={[{t: 'Wait', at: 4}, {t: 'No', at: 12}, {t: 'Let me book it', at: 20}]} />
         <PromptBar text="I need a car for F1 weekend. Fast. No mistakes." typeAt={30} cps={1.6} sendAt={82} />
       </Sequence>
@@ -176,7 +177,7 @@ export const Ad: React.FC = () => {
         <BadgeBuild dur={len(12)} />
       </Sequence>
       <Sequence from={from(13)} durationInFrames={len(13)}>
-        <LayerStack />
+        <DayTimeline />
       </Sequence>
       <Sequence from={from(14)} durationInFrames={len(14)}>
         <EditorChrome comp="Race_Weekend_Pass" viewerH={1100} playhead={0.6}>
@@ -185,7 +186,7 @@ export const Ad: React.FC = () => {
             <Badge at={-200} size={360} full />
           </div>
           <SpeechBubble at={4} x={360} y={130} />
-          <Rev at={6} x={430} y={760} px={12} />
+          <Driver at={6} x={414} y={657} px={7} pose="wave" />
         </EditorChrome>
       </Sequence>
       <Sequence from={from(15)} durationInFrames={len(15)}>
@@ -202,7 +203,7 @@ export const Ad: React.FC = () => {
         <AssetBoard />
       </Sequence>
       <Sequence from={from(19)} durationInFrames={len(19)}>
-        <KeyframeStreak dur={len(19)} />
+        <ScrubTimeline dur={len(19)} />
       </Sequence>
       <Sequence from={from(20)} durationInFrames={len(20)}>
         <Plate id={20} len={len(20)} push={[1.0, 1.1]} />
@@ -254,7 +255,7 @@ export const Ad: React.FC = () => {
       </Sequence>
       <Sequence from={from(34)} durationInFrames={len(34)}>
         <Plate id={34} len={len(34)} push={[1.0, 1.1]} dim={0.25} grade="night" />
-        <Rev at={10} x={680} y={1240} px={13} hop />
+        <Driver at={10} x={656} y={1113} px={8} pose="happy" hop />
         <CtaLine at={20} />
       </Sequence>
       <Sequence from={from(35)} durationInFrames={len(35)}>

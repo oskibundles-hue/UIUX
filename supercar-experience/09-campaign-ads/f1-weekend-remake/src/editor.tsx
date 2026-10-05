@@ -146,90 +146,7 @@ export const MiniTimeline: React.FC<{playhead: number; grow?: number}> = ({playh
   );
 };
 
-// full-screen day bars (shot 13): THU, FRI, SAT · RACE NIGHT; the playhead lands on Saturday
-export const LayerStack: React.FC = () => {
-  const f = useCurrentFrame();
-  const ph = lin(f, 2, 24, 0.04, 0.82, inOut);
-  const [d, date] = dayAt(ph);
-  return (
-    <AbsoluteFill style={{background: '#0f0f11', fontFamily: F.mono, justifyContent: 'center'}}>
-      <div style={{display: 'flex', alignItems: 'baseline', gap: 22, padding: '0 30px 30px'}}>
-        <span style={{color: C.yellow, fontSize: 40}}>{date}</span>
-        <span style={{color: C.chalk, fontSize: 30}}>{d}</span>
-      </div>
-      <div style={{position: 'relative'}}>
-        {DAYS.map(([n, , c], i) => {
-          const p = lin(f, i * 4, i * 4 + 10);
-          return (
-            <div key={n} style={{display: 'flex', alignItems: 'center', height: 190, borderBottom: `1px solid ${C.rule}`, opacity: p, transform: `translateY(${(1 - p) * 60}px)`}}>
-              <div style={{width: 400, padding: '0 30px', fontSize: 30, color: '#cfcdc5', display: 'flex', gap: 16, alignItems: 'center', whiteSpace: 'nowrap'}}>
-                <div style={{width: 20, height: 20, flexShrink: 0, background: c}} />
-                <span style={{lineHeight: 1.2}}>{n}</span>
-              </div>
-              <div style={{flex: 1, position: 'relative', height: 84, marginRight: 30}}>
-                <div style={{position: 'absolute', left: `${i * 33.3}%`, width: `${33.3 * p}%`, top: 0, bottom: 0, background: c, borderRadius: 6}} />
-              </div>
-            </div>
-          );
-        })}
-        <div style={{position: 'absolute', top: -20, bottom: 0, left: `calc(400px + (100% - 430px) * ${ph})`, width: 4, background: C.yellow, boxShadow: '0 0 12px rgba(242,197,0,0.8)'}} />
-      </div>
-    </AbsoluteFill>
-  );
-};
-
-// keyframe streak timeline (shot 19)
-export const KeyframeStreak: React.FC<{dur: number}> = ({dur}) => {
-  const f = useCurrentFrame();
-  const zoom = interpolate(f, [0, dur], [1, 1.5], clamp);
-  const pan = f * 26;
-  const tracks = [C.yellow, C.chalk, C.blue, C.red, C.magenta, '#7BD389', '#9a8cff', C.yellow, C.chalk, C.red];
-  return (
-    <AbsoluteFill style={{background: '#0f0f11', overflow: 'hidden'}}>
-      <AbsoluteFill style={{transform: `scale(${zoom}) rotate(-4deg)`, top: 200}}>
-        {tracks.map((c, i) => (
-          <div key={i} style={{position: 'absolute', left: -200, right: -200, top: 120 + i * 150, height: 54}}>
-            <div style={{position: 'absolute', inset: 0, background: c, opacity: 0.22, borderRadius: 6}} />
-            {Array.from({length: 26}).map((_, k) => {
-              const x = ((k * 190 + rnd(i * 31 + k) * 120 - pan * (0.7 + (i % 3) * 0.25)) % 5000 + 5000) % 5000 - 300;
-              const streak = Math.min(220, 26 * (0.7 + (i % 3) * 0.25) * 4);
-              return (
-                <div key={k} style={{position: 'absolute', left: x, top: 10}}>
-                  <div style={{position: 'absolute', left: 30, top: 14, width: streak, height: 6, background: `linear-gradient(90deg, ${c}, transparent)`, opacity: 0.6}} />
-                  <div style={{width: 34, height: 34, background: c, transform: 'rotate(45deg)', boxShadow: `0 0 14px ${c}`}} />
-                </div>
-              );
-            })}
-          </div>
-        ))}
-      </AbsoluteFill>
-      {/* race-weekend sector strip: the streaks run through it and light each sector in turn */}
-      <div style={{position: 'absolute', left: 40, right: 40, top: 880, height: 130, display: 'flex', gap: 8, padding: 8, background: 'rgba(11,11,12,0.88)', border: `2px solid ${C.rule}`, borderRadius: 10, opacity: lin(f, 0, 8)}}>
-        {SECTORS.map(([s, d], k) => {
-          const on = lin(f, 10 + k * 14, 16 + k * 14);
-          const last = k === SECTORS.length - 1;
-          return (
-            <div key={d} style={{flex: last ? 1.3 : 1, position: 'relative', overflow: 'hidden', borderRadius: 6, background: C.panel2}}>
-              <div style={{position: 'absolute', inset: 0, background: last ? C.red : C.yellow, transform: `scaleX(${on})`, transformOrigin: '0% 50%'}} />
-              <div style={{position: 'relative', height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'center', padding: '0 18px', fontFamily: F.mono, color: on > 0.5 ? (last ? C.chalk : C.asphalt) : C.mute}}>
-                {s && <div style={{fontSize: 22}}>{s}</div>}
-                <div style={{fontFamily: F.display, fontSize: last ? 30 : 38, lineHeight: 1}}>{d}</div>
-              </div>
-            </div>
-          );
-        })}
-      </div>
-      <div style={{position: 'absolute', top: 0, bottom: 0, left: 520, width: 4, background: C.yellow, boxShadow: '0 0 20px rgba(242,197,0,0.9)'}} />
-    </AbsoluteFill>
-  );
-};
-
-const SECTORS = [
-  ['S1', 'THU'],
-  ['S2', 'FRI'],
-  ['S3', 'SAT'],
-  ['', 'RACE NIGHT'],
-] as const;
+// shots 13 and 19 (the day tracks and the scrubbing edit) live in timeline.tsx
 
 // fleet list cascade (shot 17). Only cars on supercarexp.vip's Las Vegas page (checked 2026-10-05); never the SF90.
 const FLEET = [
@@ -277,83 +194,60 @@ export const FleetPanel: React.FC = () => {
 };
 
 // booking kit (shot 18): sunburst, car card, key fob, pickup pin, license card, chequered tile
+// one photo tile: slow push, a light sweep across the glass, a label chip
+const PhotoTile: React.FC<{src: string; i: number; label: string; pos?: string; ripple?: boolean; children?: React.ReactNode}> = ({src, i, label, pos = '50% 50%', ripple, children}) => {
+  const f = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  const sp = spring({frame: f - i * 3, fps, config: {damping: 13, stiffness: 190}});
+  const sweep = lin(f, 8 + i * 3, 30 + i * 3, -60, 160);
+  const fid = `ripple${i}`;
+  return (
+    <div style={{position: 'relative', overflow: 'hidden', borderRadius: 18, border: `1px solid ${C.rule}`, background: C.panel, transform: `scale(${0.85 + sp * 0.15})`, opacity: Math.min(1, sp * 1.6), boxShadow: '0 18px 40px rgba(0,0,0,0.55)'}}>
+      {ripple && (
+        <svg width="0" height="0" style={{position: 'absolute'}}>
+          <filter id={fid}>
+            <feTurbulence type="fractalNoise" baseFrequency="0.008 0.014" numOctaves={2} seed={3} result="n" />
+            <feOffset in="n" dx={-f * 3} dy={0} result="m" />
+            <feDisplacementMap in="SourceGraphic" in2="m" scale={22} xChannelSelector="R" yChannelSelector="G" />
+          </filter>
+        </svg>
+      )}
+      <Img src={staticFile(src)} style={{position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: pos, transform: `scale(${1.06 + lin(f, 0, 90) * 0.06})`, filter: ripple ? `url(#${fid})` : undefined}} />
+      <div style={{position: 'absolute', inset: 0, background: `linear-gradient(115deg, rgba(255,255,255,0) ${sweep - 18}%, rgba(255,255,255,0.16) ${sweep}%, rgba(255,255,255,0) ${sweep + 18}%)`}} />
+      <div style={{position: 'absolute', inset: 0, background: 'linear-gradient(180deg, rgba(0,0,0,0) 62%, rgba(0,0,0,0.6))'}} />
+      {children}
+      <div style={{position: 'absolute', left: 18, bottom: 16, display: 'flex', alignItems: 'center', gap: 10, fontFamily: F.mono, fontSize: 21, letterSpacing: 2, color: C.chalk}}>
+        <div style={{width: 9, height: 9, borderRadius: 5, background: C.red, boxShadow: `0 0 10px ${C.red}`}} />
+        {label}
+      </div>
+    </div>
+  );
+};
+
 export const AssetBoard: React.FC = () => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const tile = (i: number) => spring({frame: f - i * 3, fps, config: {damping: 11, stiffness: 200}});
   const ok = spring({frame: f - 22, fps, config: {damping: 9, stiffness: 260}});
-  const T: React.CSSProperties = {background: C.panel, border: `1px solid ${C.rule}`, borderRadius: 18, position: 'relative', overflow: 'hidden', display: 'flex', alignItems: 'center', justifyContent: 'center'};
-  const lbl = (t: string) => <div style={{position: 'absolute', left: 18, bottom: 14, fontFamily: F.mono, fontSize: 20, color: C.mute}}>{t}</div>;
+  const pin = spring({frame: f - 14, fps, config: {damping: 8, stiffness: 170}});
+  const pulse = (f % 24) / 24;
   return (
-    <AbsoluteFill style={{background: '#0f0f11', backgroundImage: 'radial-gradient(rgba(255,255,255,0.06) 1.5px, transparent 1.5px)', backgroundSize: '36px 36px', padding: '230px 44px 140px', display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr 1fr', gap: 26}}>
-      <div style={{...T, transform: `scale(${tile(0)})`}}>
-        <svg width="380" height="380" viewBox="-190 -190 380 380">
-          {Array.from({length: 20}).map((_, i) => (
-            <path key={i} d="M 0 0 L -14 -190 L 14 -190 Z" fill={i % 2 ? C.yellow : '#2a2a2e'} transform={`rotate(${i * 18 + f * 3})`} />
-          ))}
-          <circle r="54" fill={C.asphalt} stroke={C.yellow} strokeWidth="8" />
-        </svg>
-        {lbl('sunburst')}
-      </div>
-      <div style={{...T, transform: `scale(${tile(1)})`, padding: 22, flexDirection: 'column'}}>
-        <div style={{width: '100%', height: '78%', borderRadius: 10, overflow: 'hidden', border: `4px solid ${C.chalk}`}}>
-          <Still src="gt3_side" />
+    <AbsoluteFill style={{background: '#0f0f11', backgroundImage: 'radial-gradient(rgba(255,255,255,0.05) 1.5px, transparent 1.5px)', backgroundSize: '36px 36px', padding: '230px 44px 140px', display: 'grid', gridTemplateColumns: '1fr 1fr', gridTemplateRows: '1fr 1fr 1fr', gap: 26}}>
+      <PhotoTile src="tiles/pass.png" i={0} label="RACE PASS" pos="40% 60%" />
+      <PhotoTile src="stills/gt3_side.jpg" i={1} label="911 GT3 RS" />
+      <PhotoTile src="tiles/fob.png" i={2} label="KEY FOB" pos="45% 45%" />
+      {/* pickup: a crop of the real map with a live pin */}
+      <PhotoTile src="map/pickup_tile.jpg" i={3} label="PICKUP">
+        <div style={{position: 'absolute', left: '50%', top: '50%', width: 0, height: 0}}>
+          <div style={{position: 'absolute', left: -60 - pulse * 40, top: -60 - pulse * 40, width: 120 + pulse * 80, height: 120 + pulse * 80, borderRadius: '50%', border: `3px solid ${C.red}`, opacity: (1 - pulse) * pin}} />
+          <div style={{position: 'absolute', left: -14, top: -14, width: 28, height: 28, borderRadius: '50%', background: C.red, border: `5px solid ${C.chalk}`, boxShadow: `0 0 24px ${C.red}`, transform: `scale(${pin})`}} />
         </div>
-        <div style={{fontFamily: F.display, fontSize: 30, color: C.chalk, marginTop: 12, alignSelf: 'flex-start'}}>911 GT3 RS</div>
-      </div>
-      {/* key fob swinging on its ring */}
-      <div style={{...T, transform: `scale(${tile(2)})`}}>
-        <svg width="200" height="300" viewBox="0 0 100 150" style={{transform: `rotate(${Math.sin(f * 0.22) * 9}deg)`, transformOrigin: '50% 8%'}}>
-          <circle cx="50" cy="14" r="11" fill="none" stroke={C.chalk} strokeWidth="4" />
-          <rect x="44" y="22" width="12" height="14" rx="3" fill={C.mute} />
-          <rect x="18" y="34" width="64" height="108" rx="26" fill={C.asphalt} stroke={C.yellow} strokeWidth="4" />
-          {[62, 88, 114].map((y, i) => (
-            <circle key={y} cx="50" cy={y} r="10" fill={i === 1 ? C.yellow : '#2a2a2e'} stroke="#3a3a3e" strokeWidth="2" />
-          ))}
-        </svg>
-        {lbl('key fob')}
-      </div>
-      {/* pickup pin */}
-      <div style={{...T, transform: `scale(${tile(3)})`, flexDirection: 'column', gap: 12}}>
-        <svg width="170" height="220" viewBox="0 0 100 130" style={{transform: `translateY(${Math.sin(f * 0.25) * 10}px)`}}>
-          <path d="M50 125 C 50 125 8 72 8 46 A 42 42 0 1 1 92 46 C 92 72 50 125 50 125 Z" fill={C.red} stroke={C.asphalt} strokeWidth="5" />
-          <circle cx="50" cy="46" r="17" fill={C.chalk} />
-        </svg>
-        <div style={{fontFamily: F.display, fontSize: 30, color: C.chalk, background: C.asphalt, padding: '4px 16px', borderRadius: 20}}>PICKUP</div>
-      </div>
-      {/* license card with a verified stamp */}
-      <div style={{...T, transform: `scale(${tile(4)})`}}>
-        <div style={{width: 360, height: 226, background: C.chalk, borderRadius: 16, overflow: 'hidden', position: 'relative', transform: 'rotate(-3deg)', boxShadow: '0 12px 30px rgba(0,0,0,0.5)'}}>
-          <div style={{height: 46, background: C.yellow, display: 'flex', alignItems: 'center', padding: '0 18px', fontFamily: F.mono, fontSize: 19, color: C.asphalt, letterSpacing: 2}}>DRIVER LICENSE</div>
-          <div style={{display: 'flex', gap: 18, padding: 18}}>
-            <svg width="96" height="120" viewBox="0 0 96 120">
-              <rect width="96" height="120" rx="8" fill="#d8d5cc" />
-              <circle cx="48" cy="46" r="22" fill="#a9a59a" />
-              <path d="M 12 120 C 14 88, 82 88, 84 120 Z" fill="#a9a59a" />
-            </svg>
-            <div style={{flex: 1, display: 'flex', flexDirection: 'column', gap: 14, paddingTop: 6}}>
-              {[90, 70, 80, 50].map((w, i) => (
-                <div key={i} style={{width: `${w}%`, height: 12, borderRadius: 6, background: i === 0 ? '#8e8c86' : '#cfcbc0'}} />
-              ))}
-            </div>
-          </div>
-          {f >= 22 && (
-            <div style={{position: 'absolute', right: 16, bottom: 18, transform: `scale(${2 - ok}) rotate(-10deg)`, opacity: Math.min(1, ok * 2), border: '4px solid #2fa84f', color: '#2fa84f', fontFamily: F.display, fontSize: 26, padding: '2px 12px', borderRadius: 8}}>✓ VERIFIED</div>
-          )}
-        </div>
-        {lbl('license')}
-      </div>
-      <div style={{...T, transform: `scale(${tile(5)})`}}>
-        <svg width="260" height="200" viewBox="0 0 260 200">
-          {Array.from({length: 6}).flatMap((_, x) =>
-            Array.from({length: 4}).map((__, y) => {
-              const wave = Math.sin(f * 0.3 + x * 0.7) * 10;
-              return <rect key={x + '-' + y} x={20 + x * 36} y={20 + y * 36 + wave} width="36" height="36" fill={(x + y) % 2 ? C.asphalt : C.chalk} />;
-            }),
-          )}
-        </svg>
-        {lbl('flag')}
-      </div>
+      </PhotoTile>
+      <PhotoTile src="tiles/licence.png" i={4} label="LICENSE" pos="60% 45%">
+        {f >= 22 && (
+          <div style={{position: 'absolute', right: 22, top: 30, transform: `scale(${2 - ok}) rotate(-10deg)`, opacity: Math.min(1, ok * 2), border: '5px solid #2fa84f', background: 'rgba(10,30,16,0.55)', color: '#41d36a', fontFamily: F.display, fontSize: 30, padding: '4px 14px', borderRadius: 10, letterSpacing: 1}}>✓ VERIFIED</div>
+        )}
+      </PhotoTile>
+      <PhotoTile src="tiles/flag.png" i={5} label="RACE NIGHT" pos="55% 50%" ripple />
     </AbsoluteFill>
   );
 };
