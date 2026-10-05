@@ -1,0 +1,6 @@
+node_modules/
+raw/
+out/
+build/
+public/plates/
+public/audio/

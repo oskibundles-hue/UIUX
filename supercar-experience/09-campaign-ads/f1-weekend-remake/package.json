@@ -1,0 +1,28 @@
+{
+  "name": "se-f1-weekend-remake",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "still": "remotion still src/index.ts RaceWeekend out/still.png",
+    "render": "remotion render src/index.ts RaceWeekend out/SCE_F1-Weekend_Remake_76s-9x16.mp4 --codec=h264 --crf=18 --audio-codec=aac",
+    "audio": "python3 audio/synth.py",
+    "plates": "python3 tools/cut_plates.py --raw raw"
+  },
+  "dependencies": {
+    "remotion": "4.0.532",
+    "@remotion/cli": "4.0.532",
+    "@remotion/transitions": "4.0.532",
+    "@remotion/paths": "4.0.532",
+    "@remotion/shapes": "4.0.532",
+    "@remotion/noise": "4.0.532",
+    "@remotion/layout-utils": "4.0.532",
+    "@remotion/media-utils": "4.0.532",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "@fontsource/archivo-black": "5.3.0",
+    "@fontsource/archivo": "5.3.0",
+    "@fontsource/silkscreen": "5.3.0",
+    "@fontsource/dm-mono": "5.3.0"
+  }
+}

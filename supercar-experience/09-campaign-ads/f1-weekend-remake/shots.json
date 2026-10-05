@@ -1,0 +1,454 @@
+[
+ {
+  "id": 1,
+  "t0": 0.0,
+  "t1": 2.3,
+  "hf": "Title lockup: Higgsfield MCP \u00d7 Claude, OPUS 5.5, 'for Motion Design' pill. Jungle with flowers in the foreground, light streak, parallax.",
+  "anim": [
+   "Logo lockup reveal",
+   "Light streak sweep",
+   "Foreground parallax"
+  ],
+  "se": "Title lockup: SUPERCAR EXPERIENCE, big 'F1 WEEKEND', 'for Las Vegas' pill. Hurac\u00e1n STO parked outside a Vegas building at night, light streak sweep, parallax push.",
+  "src": "sto.mp4",
+  "ss": 18.0
+ },
+ {
+  "id": 2,
+  "t0": 2.3,
+  "t1": 4.0,
+  "hf": "Establishing shot of the jungle, slow push-in.",
+  "anim": [
+   "Camera push-in"
+  ],
+  "se": "Establishing: the Sphere glowing over the Strip, slow push-in.",
+  "src": "amg.mov",
+  "ss": 15.0
+ },
+ {
+  "id": 3,
+  "t0": 4.0,
+  "t1": 8.0,
+  "hf": "Hero climbs a log beside a waterfall (action intro).",
+  "anim": [
+   "Live action",
+   "Handheld energy"
+  ],
+  "se": "Action intro: the STO cruising the Strip at night.",
+  "src": "sto.mp4",
+  "ss": 11.0
+ },
+ {
+  "id": 4,
+  "t0": 8.0,
+  "t1": 11.6,
+  "hf": "Hero checks phone. iMessage bubble pops in: 'Need a motion promo video. ASAP.' with timestamp and 'Client' label.",
+  "anim": [
+   "Message bubble pop (spring)",
+   "Timestamp fade",
+   "Typing reveal"
+  ],
+  "se": "POV hands on the wheel. Bubble pops in: 'Need a supercar for F1 weekend. ASAP.' from Client.",
+  "src": "mcl750.mov",
+  "ss": 16.2,
+  "speed": 0.45
+ },
+ {
+  "id": 5,
+  "t0": 11.6,
+  "t1": 12.7,
+  "hf": "Insert: hands open the backpack.",
+  "anim": [
+   "Insert cut"
+  ],
+  "se": "Insert: hand presses the STO's start button.",
+  "src": "sto.mp4",
+  "ss": 1.0
+ },
+ {
+  "id": 6,
+  "t0": 12.7,
+  "t1": 15.0,
+  "hf": "Pixel-art cat mascot pops in. Floating words: 'What is it this time?'",
+  "anim": [
+   "Mascot squash-and-stretch pop",
+   "Idle bob",
+   "Word-by-word floating captions"
+  ],
+  "se": "Original pixel mascot REV (a tiny pixel supercar) pops in. Floating words: 'What is it this time?'",
+  "src": "sf90.mov",
+  "ss": 6.6
+ },
+ {
+  "id": 7,
+  "t0": 15.0,
+  "t1": 16.7,
+  "hf": "Mascot morphs to a 3D cube ('Objects?') then a triangle ('Shapes?'). Hero gestures.",
+  "anim": [
+   "Shape morph",
+   "Pixel 3D cube",
+   "Captions swap"
+  ],
+  "se": "REV morphs into a pixel coupe silhouette ('Coupe?') then a wedge ('Spider?').",
+  "src": "sf90.mov",
+  "ss": 10.5
+ },
+ {
+  "id": 8,
+  "t0": 16.7,
+  "t1": 17.6,
+  "hf": "Pixel fire bursts into a fireball ('VFX?'). Whole shot color-grades warm, sparks fly.",
+  "anim": [
+   "Pixel fire sprite",
+   "Explosion flash",
+   "Warm color grade",
+   "Spark particles"
+  ],
+  "se": "Pixel flames burst off REV ('Launch?'). Shot grades hot orange, sparks fly.",
+  "src": "amg.mov",
+  "ss": 8.5
+ },
+ {
+  "id": 9,
+  "t0": 17.6,
+  "t1": 19.0,
+  "hf": "Pixel-font code floats in: 'time * 60 / wiggle(2,10)' ('Expressions?').",
+  "anim": [
+   "Pixel code type-on",
+   "Ember particles"
+  ],
+  "se": "Pixel code floats in: 'rpm * 9000 / launch(3.0)' ('Specs?').",
+  "src": "sf90.mov",
+  "ss": 12.2
+ },
+ {
+  "id": 10,
+  "t0": 19.0,
+  "t1": 22.0,
+  "hf": "Mascot returns. Stacked words 'Wait / No / Let me explain'. Prompt bar slides up and types 'I need a promo. Fast. No mistakes.' Send button glows.",
+  "anim": [
+   "Stacked word pops",
+   "Prompt bar slide-up",
+   "Typewriter",
+   "Send-button glow pulse"
+  ],
+  "se": "REV returns. 'Wait / No / Let me book it'. Prompt bar types 'I need a car for F1 weekend. Fast. No mistakes.'",
+  "src": "sf90.mov",
+  "ss": 13.6
+ },
+ {
+  "id": 11,
+  "t0": 22.0,
+  "t1": 23.3,
+  "hf": "White screen: spark icon + 'Promo brief received. Starting with the reserve logo.' typed with a soft fade.",
+  "anim": [
+   "Icon spin-in",
+   "Text reveal with blur"
+  ],
+  "se": "White card: SE mark + 'Booking request received. Starting with the race-weekend badge.'",
+  "src": null
+ },
+ {
+  "id": 12,
+  "t0": 23.3,
+  "t1": 26.0,
+  "hf": "Editor view: green blob badge with a glowing pixel ring, then zooms out into the comp; badge builds layer by layer.",
+  "anim": [
+   "Particle ring",
+   "Badge assembly",
+   "Zoom-out to editor UI"
+  ],
+  "se": "Editor view: SE race badge assembles (rings, rays, checkered flag, monogram) inside a glowing pixel ring, then zooms out to the editor window.",
+  "src": "sto.mp4",
+  "ss": 20.0
+ },
+ {
+  "id": 13,
+  "t0": 26.0,
+  "t1": 27.0,
+  "hf": "Editor timeline: colored layer bars stack in.",
+  "anim": [
+   "Layer bars stack",
+   "Playhead scrub"
+  ],
+  "se": "Editor timeline: colored layer bars stack in, playhead scrubs.",
+  "src": null
+ },
+ {
+  "id": 14,
+  "t0": 27.0,
+  "t1": 28.3,
+  "hf": "Badge + speech bubble 'HI, I'M ARA!' pop beside hero in the comp window, mascot waves.",
+  "anim": [
+   "Speech bubble pop",
+   "Badge wobble"
+  ],
+  "se": "Badge + bubble 'HI, I'M REV! Ask me about the fleet.' pop over the footage window.",
+  "src": "sto.mp4",
+  "ss": 21.0
+ },
+ {
+  "id": 15,
+  "t0": 28.3,
+  "t1": 31.0,
+  "hf": "Hero runs through the forest with a laptop. Prompt types 'Create visual assets for Ivayu Reserve.'",
+  "anim": [
+   "Prompt typewriter",
+   "Send pulse"
+  ],
+  "se": "750S blasts through the desert. Prompt types 'Pull the fleet for race weekend.'",
+  "src": "mcl750.mov",
+  "ss": 3.0
+ },
+ {
+  "id": 16,
+  "t0": 31.0,
+  "t1": 32.4,
+  "hf": "White card: 'Creating photos, pins, and badges\u2026' + tool chip 'Generating visuals for Ivayu Reserve.'",
+  "anim": [
+   "Status text shimmer",
+   "Chip slide-in"
+  ],
+  "se": "White card: 'Pulling cars, specs, and rates\u2026' + chip 'Building cards for the Las Vegas fleet.'",
+  "src": null
+ },
+ {
+  "id": 17,
+  "t0": 32.4,
+  "t1": 33.2,
+  "hf": "Whip pan into the editor's project panel (asset list).",
+  "anim": [
+   "Whip pan blur",
+   "File list cascade"
+  ],
+  "se": "Whip into the project panel: file list cascades in.",
+  "src": null
+ },
+ {
+  "id": 18,
+  "t0": 33.2,
+  "t1": 34.5,
+  "hf": "Asset board: badge, rotating sunburst, photo frame, pin, path line, terrain tile pop in.",
+  "anim": [
+   "Rotating sunburst",
+   "Asset pops",
+   "Path draw"
+  ],
+  "se": "Asset board: rotating sunburst, car card, pin, route line, gauge, checkered tile pop in.",
+  "src": null
+ },
+ {
+  "id": 19,
+  "t0": 34.5,
+  "t1": 37.0,
+  "hf": "Timeline zoom: keyframe dots streak across colored tracks.",
+  "anim": [
+   "Keyframe dot streaks",
+   "Timeline pan/zoom"
+  ],
+  "se": "Timeline zoom: keyframe dots streak across tracks.",
+  "src": null
+ },
+ {
+  "id": 20,
+  "t0": 37.0,
+  "t1": 40.0,
+  "hf": "Hero crosses a rope bridge (monkeys chase). Prompt: 'Make a map showing how to get to the reserve.'",
+  "anim": [
+   "Prompt typewriter"
+  ],
+  "se": "Purple Urus on a desert road. Prompt: 'Map the drive from pickup to the Strip.'",
+  "src": "urus.mp4",
+  "ss": 0.0
+ },
+ {
+  "id": 21,
+  "t0": 40.0,
+  "t1": 41.2,
+  "hf": "Close-up shout, word 'route!' pops.",
+  "anim": [
+   "Word pop with shake"
+  ],
+  "se": "Rally driver selfie (slowed to half speed), ROUTE! slams in.",
+  "src": "rally1.mov",
+  "ss": 8.85,
+  "speed": 0.5
+ },
+ {
+  "id": 22,
+  "t0": 41.2,
+  "t1": 42.0,
+  "hf": "Insert: feet on the bridge planks.",
+  "anim": [
+   "Insert cut"
+  ],
+  "se": "Insert: low wheel shot on the road line.",
+  "src": "mcl750.mov",
+  "ss": 6.5
+ },
+ {
+  "id": 23,
+  "t0": 42.0,
+  "t1": 43.2,
+  "hf": "White card: 'Mapped. Five stops. One route. Walking times included.'",
+  "anim": [
+   "Text reveal"
+  ],
+  "se": "White card: 'Mapped. Five stops. One route. Drive times included.'",
+  "src": null
+ },
+ {
+  "id": 24,
+  "t0": 43.2,
+  "t1": 45.4,
+  "hf": "Illustrated island map builds: river draws, trails draw, landmarks pop.",
+  "anim": [
+   "Island extrude",
+   "River path draw",
+   "Landmark pops"
+  ],
+  "se": "Illustrated Las Vegas valley island builds: Strip line draws, Lake Mead fills, Red Rock rises, landmarks pop.",
+  "src": null
+ },
+ {
+  "id": 25,
+  "t0": 45.4,
+  "t1": 46.7,
+  "hf": "White card chip: 'Generating photos of the trail stops\u2026'",
+  "anim": [
+   "Chip shimmer"
+  ],
+  "se": "White card chip: 'Generating photos of every stop\u2026'",
+  "src": null
+ },
+ {
+  "id": 26,
+  "t0": 46.7,
+  "t1": 49.6,
+  "hf": "Map with title 'SUN GATE TRAIL', pins drop, photo cards pop around, cursor clicks.",
+  "anim": [
+   "Pin drops",
+   "Photo card pops",
+   "Cursor click ripple"
+  ],
+  "se": "Map titled 'RACE WEEKEND ROUTE': pins drop, photo cards pop, cursor clicks.",
+  "src": null
+ },
+ {
+  "id": 27,
+  "t0": 49.6,
+  "t1": 50.8,
+  "hf": "Arrow whips past; hero ducks.",
+  "anim": [
+   "Whip transition",
+   "Motion blur"
+  ],
+  "se": "Semi-truck whips past the GT3 RS.",
+  "src": "gt3_white.mov",
+  "ss": 25.0
+ },
+ {
+  "id": 28,
+  "t0": 50.8,
+  "t1": 55.0,
+  "hf": "Hero against a stone wall with laptop. Prompt: 'Create a visual of the reserve's landmark.'",
+  "anim": [
+   "Prompt typewriter"
+  ],
+  "se": "GT3 RS tracking shot. Prompt: 'Create a hero poster of the GT3 RS.'",
+  "src": "gt3_white.mov",
+  "ss": 13.0
+ },
+ {
+  "id": 29,
+  "t0": 55.0,
+  "t1": 56.3,
+  "hf": "Glow ring reveals the landmark photo inside a custom frame shape.",
+  "anim": [
+   "Glow ring burst",
+   "Masked photo reveal"
+  ],
+  "se": "Glow ring reveals the GT3 RS inside a custom frame shape.",
+  "src": "gt3_livery.mov",
+  "ss": 12.4,
+  "note": "Uses stills from public/stills, not a plate."
+ },
+ {
+  "id": 30,
+  "t0": 56.3,
+  "t1": 60.0,
+  "hf": "Poster: 'THE SUN GATE' types on, body copy, tags, thumbnails pop, badge stamps.",
+  "anim": [
+   "Big type-on",
+   "Tag pops",
+   "Thumbnail pops",
+   "Badge stamp"
+  ],
+  "se": "Poster: 'THE GT3 RS' types on, specs, tags, thumbnails pop, SE badge stamps.",
+  "src": "gt3_livery.mov",
+  "ss": 12.4,
+  "note": "Uses stills from public/stills, not a plate."
+ },
+ {
+  "id": 31,
+  "t0": 60.0,
+  "t1": 63.5,
+  "hf": "Giant boulder behind hero. Prompt: 'Render the final and send it to the client!'",
+  "anim": [
+   "Prompt typewriter",
+   "Tension"
+  ],
+  "se": "Truck closes in on the GT3 RS. Prompt: 'Render the final and send it to the client!'",
+  "src": "gt3_white.mov",
+  "ss": 23.5
+ },
+ {
+  "id": 32,
+  "t0": 63.5,
+  "t1": 64.5,
+  "hf": "Hero escapes the boulder.",
+  "anim": [
+   "Speed cut"
+  ],
+  "se": "AMG GT Black Series pulls out of the night, fast.",
+  "src": "amg.mov",
+  "ss": 0.0
+ },
+ {
+  "id": 33,
+  "t0": 64.5,
+  "t1": 68.0,
+  "hf": "Hero catches breath; phone bubble: 'Looks great! Next brief: a safety video for the reserve.'",
+  "anim": [
+   "Message bubble pop"
+  ],
+  "se": "SF90 at golden hour. Bubble: 'Looks perfect! Booked. Next: the whole crew for the rally.'",
+  "src": "sf90.mov",
+  "ss": 21.0
+ },
+ {
+  "id": 34,
+  "t0": 68.0,
+  "t1": 72.5,
+  "hf": "Hero walks off, mascot hops along. CTA line: 'Try Higgsfield MCP for motion design\u2026'",
+  "anim": [
+   "Mascot hop",
+   "CTA line fade"
+  ],
+  "se": "STO under the lights, REV hops along. CTA: 'TEXT OR DM TO BOOK \u00b7 (725) 425-3583 \u00b7 SUPERCAREXP.VIP'",
+  "src": "sto.mp4",
+  "ss": 19.8
+ },
+ {
+  "id": 35,
+  "t0": 72.5,
+  "t1": 76.5,
+  "hf": "End card: Instagram glyph + @HIGGSFIELD.AI, glyph color-shifts.",
+  "anim": [
+   "Glyph gradient shift",
+   "Fade to black"
+  ],
+  "se": "End card: SE logo + @supercar_experience_, logo shimmer, 21+ line.",
+  "src": null
+ }
+]
