@@ -16,6 +16,25 @@ Say the code: "use HUD-1 on this clip".
 **No road line in either.** Omarie, 5 Oct: "I don't like the road cursor for this point of view and it's not
 supercar experience theme". The first look (Wayline, a gold line drawn on the road) is kept only on its page.
 
+## Themes and progress bar (proposed, 5 Oct)
+
+Omarie, 5 Oct: "change the progress bar and give me some mockups on different themes ... like glass ... and
+supercarexperince colors weve used in the past im not digging the yellow". Proposed, not picked yet.
+
+- **Themes**, `themes/*.json`, chosen with `build_hud.py --theme themes/<name>.json`:
+  - `glass`: frosted, white.
+  - `glass-orange`: dark glass with SE orange #FF4F16, the F1 race-weekend Day look.
+  - `night-orange`: black plates with SE orange, the race-weekend Night colours.
+  - `chrome`: black, white and silver only.
+  - `gold`: the current look, the same as no `--theme`.
+- **Progress bar**, PRG (`hud_progress.js`), with A2 `"rail": false`. Three styles:
+  - `underline`: a scrubber inside the clock plate.
+  - `edge`: a lap line across the top of the HUD.
+  - `led`: segments down the banner.
+- **Glass blurs the footage behind it.** Render a glass still with `tools/hud_still.js page.html <t> frame.png out.png`.
+  A glass video needs the footage behind each frame, which the transparent-layer capture doesn't have yet. Add that
+  once a glass theme is picked.
+
 ## Rules that come with them
 
 - **No speed anywhere** (Omarie, 5 Oct: "No MPH"). Blur the car's own speedometer for the whole clip (HUD-1 reference:

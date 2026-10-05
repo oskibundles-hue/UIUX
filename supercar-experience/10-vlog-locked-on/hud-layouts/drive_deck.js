@@ -3,7 +3,7 @@
  * Built only from the vlog kit's own helpers (plate, stripe cap, Bebas + Michroma), so it reads as the same family.
  * p: {x, y, w, h, colW, vsize, heading, hdgKeys: [[t, deg], ...]}. Heading is an estimate until a clip carries GPS. */
 SEK.driveDeck = function (cfg) {
-  const H = SEK.helpers, GOLD = '#FBD101', E = KT.ease, P = KT.p, cl = KT.cl;
+  const H = SEK.helpers, GOLD = (window.THEME || {}).accent || '#FBD101', GLOW = (window.THEME || {}).glow || '251,209,1', E = KT.ease, P = KT.p, cl = KT.cl;
   const p = Object.assign({ x: 430, y: 292, w: 477, h: 196, heading: 206, colW: 236, vsize: 76, hdgKeys: null }, cfg.p);
   const root = H.el('div', 'a', null);
   const pn = H.panel(root, p.x, p.y, p.w, p.h, { stripe: 5 });
@@ -28,7 +28,7 @@ SEK.driveDeck = function (cfg) {
   const vy = 74;
   H.el('div', 'a', pn.inner, `left:${gx}px;top:${vy}px;width:${gw}px;height:28px;border:2px solid rgba(255,255,255,.85);border-radius:14px`);
   [-18, 18].forEach(o => H.el('div', 'a', pn.inner, `left:${gx + gw / 2 + o}px;top:${vy}px;width:2px;height:28px;background:rgba(255,255,255,.85)`));
-  const bead = H.el('div', 'a', pn.inner, `left:${gx + gw / 2 - 10}px;top:${vy + 4}px;width:20px;height:20px;border-radius:50%;background:${GOLD};box-shadow:0 0 12px rgba(251,209,1,.7)`);
+  const bead = H.el('div', 'a', pn.inner, `left:${gx + gw / 2 - 10}px;top:${vy + 4}px;width:20px;height:20px;border-radius:50%;background:${GOLD};box-shadow:0 0 12px rgba(${GLOW},.7)`);
   const gv = H.line(pn.inner, 'Bebas', 44, '0.00 G', gx, vy + 50, '#fff', { split: false });
   H.line(pn.inner, 'Michroma', 12, 'L', gx, p.h - 38, 'rgba(255,255,255,.55)', { ls: 0.1, split: false });
   H.line(pn.inner, 'Michroma', 12, 'R', gx + gw - 12, p.h - 38, 'rgba(255,255,255,.55)', { ls: 0.1, split: false });

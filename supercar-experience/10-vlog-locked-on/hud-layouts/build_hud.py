@@ -9,7 +9,10 @@ side-G series and the DRV drive plate (drive_deck.js) inlined. It renders with t
 
     cd ../vlog-kit && node lib/kcapture.js "file://$PWD/.hud_<name>.html" <outDir> seq 30000/1001 <seconds> --workers 3
 
-Then lay the PNG sequence over the clip with tools/encode.sh. Every component is the kit's (lib/sekit.js) except DRV.
+Then lay the PNG sequence over the clip with tools/encode.sh. Every component is the kit's (lib/sekit.js) except DRV
+(drive_deck.js) and PRG (hud_progress.js). --theme themes/<name>.json swaps the accent and restyles the plates; the
+glass themes blur the footage behind the plates, so they only show right with the footage behind the page:
+tools/hud_still.js renders a still that way (the transparent layer alone has nothing to blur).
 """
 import argparse, base64, json, pathlib
 HERE = pathlib.Path(__file__).resolve().parent
@@ -19,7 +22,9 @@ LOGOS = HERE.parent.parent / '02-logos' / 'png'
 ap = argparse.ArgumentParser()
 ap.add_argument('--scene', required=True); ap.add_argument('--tracks', required=True)
 ap.add_argument('--side-g', default=None); ap.add_argument('--name', required=True)
+ap.add_argument('--theme', default=None, help='themes/<name>.json: accent colour and plate/stripe CSS (default: the gold)')
 a = ap.parse_args()
+theme = json.load(open(a.theme)) if a.theme else {}
 scene = json.load(open(a.scene)); tracks = json.load(open(a.tracks))
 lat = json.load(open(a.side_g)) if a.side_g else []
 logos = {f: 'data:image/png;base64,' + base64.b64encode((LOGOS / f).read_bytes()).decode()
@@ -28,9 +33,11 @@ kit = (KIT / 'kit.html').read_text()
 head, rest = kit.split('<script src=".work/scene.js"></script>', 1)
 rest = rest.replace('<script src=".work/tracks.js"></script>\n', '').replace('<script src=".work/kitdata.js"></script>\n', '')
 inject = ('<script>window.SCENE = ' + json.dumps(scene) + ';\nwindow.TRACKS = ' + json.dumps(tracks) +
-          ';\nwindow.KITDATA = ' + json.dumps({'logos': logos}) + ';\nwindow.LAT = ' + json.dumps(lat) + ';</script>\n')
-deck = (HERE / 'drive_deck.js').read_text()
+          ';\nwindow.KITDATA = ' + json.dumps({'logos': logos}) + ';\nwindow.LAT = ' + json.dumps(lat) +
+          ';\nwindow.THEME = ' + json.dumps({k: theme[k] for k in ('accent', 'glow') if k in theme}) + ';</script>\n')
+deck = (HERE / 'drive_deck.js').read_text() + '\n' + (HERE / 'hud_progress.js').read_text()
 rest = rest.replace('<script src="lib/sekit.js"></script>', '<script src="lib/sekit.js"></script>\n<script>' + deck + '</script>', 1)
+if theme.get('css'): head = head.replace('</style>', theme['css'] + '\n</style>', 1)
 html = head.replace('<title>SE Vlog Kit Layer</title>', '<title>SE Driving HUD Layer</title>') + inject + rest
 html = html.replace("const CHIP = hashArg('chip') !== '0';", 'const CHIP = false;')
 out = KIT / f'.hud_{a.name}.html'

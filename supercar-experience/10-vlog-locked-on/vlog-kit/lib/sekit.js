@@ -22,7 +22,13 @@
   const SEK = {};
   const E = KT.ease, P = KT.p, cl = KT.cl, lerp = KT.lerp;
   const FPS = 30000 / 1001;
-  const GOLD = '#FBD101';
+  // window.THEME (optional, from hud-layouts/themes/*.json via build_hud.py) swaps the accent; default is the SE gold
+  const THEME = window.THEME || {};
+  const GOLD = THEME.accent || '#FBD101';
+  const GLOW = THEME.glow || '251,209,1';
+  // lock-on pulse: the accent flashing toward white (the gold default keeps its original warm-white curve)
+  const pulse = pl => THEME.accent ? `rgb(${GLOW.split(',').map(c => Math.round(+c + (255 - c) * pl)).join(',')})`
+    : `rgb(255,${Math.round(209 + 46 * pl)},${Math.round(1 + 200 * pl)})`;
   const SAFE = { x0: 54, y0: 269, x1: 907, y1: 1536 };
   const BANNER = { y0: 269, y1: 1056 };
   const LOGO = '../../02-logos/png/';
@@ -83,7 +89,7 @@
     if (!ln.g) return 0;
     const g = KT.glint(ln.g, t, { start, dur, base: o.base || '#FFFFFF', warm: o.warm || '#FFF2B0', hot: o.hot || GOLD,
       width: (o.w || 0.22) * ln.g.W, angle: 106 });
-    ln.w.style.filter = g > 0 ? `drop-shadow(0 0 ${(o.glow || 9) * g}px rgba(251,209,1,${(.32 * g).toFixed(3)}))` : 'none';
+    ln.w.style.filter = g > 0 ? `drop-shadow(0 0 ${(o.glow || 9) * g}px rgba(${GLOW},${(.32 * g).toFixed(3)}))` : 'none';
     return g;
   }
   // mask-rise a whole line (the text slides up inside its mask)
@@ -103,14 +109,14 @@
   // the stripe (gold edge on the boundary), stripe wipes off.
   function panel(parent, x, y, w, h, o = {}) {
     const root = el('div', 'a', parent);
-    const shadow = el('div', 'a', root, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;box-shadow:0 10px 34px rgba(0,0,0,${o.shadow ?? .30})`);
+    const shadow = el('div', 'a pshadow', root, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;box-shadow:0 10px 34px rgba(0,0,0,${o.shadow ?? .30})`);
     const clip = el('div', 'a', root, `left:${x}px;top:${y}px;width:${w}px;height:${h}px;overflow:hidden`);
-    const bg = el('div', 'a', clip, `width:${w}px;height:${h}px;background:rgba(0,0,0,${o.alpha ?? .9})`);
+    const bg = el('div', 'a plate', clip, `width:${w}px;height:${h}px;background:rgba(0,0,0,${o.alpha ?? .9})`);
     const inner = el('div', 'a', clip, `width:${w}px;height:${h}px`);
     const sh = o.stripe ?? 6;
     const stripe = el('div', 'a stripe', root, `left:${x}px;top:${y}px;width:${w}px;height:${sh}px`);
     const edge = el('div', 'a edge', root, `left:${x}px;top:${y - 7}px;height:${sh + 14}px;opacity:0`);
-    const redge = el('div', 'a', root, `left:${x}px;top:0;width:${w}px;height:3px;background:${GOLD};box-shadow:0 0 12px 3px rgba(251,209,1,.5);opacity:0`);
+    const redge = el('div', 'a', root, `left:${x}px;top:0;width:${w}px;height:3px;background:${GOLD};box-shadow:0 0 12px 3px rgba(${GLOW},.5);opacity:0`);
     return { root, shadow, clip, bg, inner, stripe, edge, redge, x, y, w, h, fromRight: !!o.fromRight };
   }
   function panelAt(pn, t, ts, tx, o = {}) {
@@ -137,7 +143,7 @@
   // pulsing live dot with a ripple ring (period T)
   function liveDot(parent, cx, cy, r = 6) {
     const ring = el('div', 'a', parent, `left:${cx - r}px;top:${cy - r}px;width:${2 * r}px;height:${2 * r}px;border-radius:50%;border:2px solid ${GOLD};box-sizing:border-box`);
-    const dot = el('div', 'a', parent, `left:${cx - r}px;top:${cy - r}px;width:${2 * r}px;height:${2 * r}px;border-radius:50%;background:${GOLD};box-shadow:0 0 8px rgba(251,209,1,.7)`);
+    const dot = el('div', 'a', parent, `left:${cx - r}px;top:${cy - r}px;width:${2 * r}px;height:${2 * r}px;border-radius:50%;background:${GOLD};box-shadow:0 0 8px rgba(${GLOW},.7)`);
     return { ring, dot };
   }
   function liveDotAt(d, t, t0, T = 1.2, amp = 1) {
@@ -236,7 +242,7 @@
       if (gq > 0 && gq < 1) {
         const gx = -60 + (lw + 120) * E.inOutCubic(gq);
         gl.style.opacity = 1;
-        gl.style.background = `linear-gradient(106deg, rgba(251,209,1,0) ${gx - 46}px, rgba(255,242,176,.95) ${gx - 12}px, #FFFFFF ${gx}px, rgba(251,209,1,.95) ${gx + 14}px, rgba(251,209,1,0) ${gx + 48}px)`;
+        gl.style.background = `linear-gradient(106deg, rgba(${GLOW},0) ${gx - 46}px, rgba(255,242,176,.95) ${gx - 12}px, #FFFFFF ${gx}px, rgba(${GLOW},.95) ${gx + 14}px, rgba(${GLOW},0) ${gx + 48}px)`;
       } else gl.style.opacity = 0;
       liveDotAt(dot, t, cfg.t0 + 0.2, 1.2);
       tile.style.opacity = 0;
@@ -247,14 +253,14 @@
   //     a live dot, SUPERCAR EXPERIENCE + the live status set vertically, and a progress rail that fills with
   //     the video. p: {w, y, h, name, label, enter: 'built'|'slide', progress: [t0, t1]}
   SEK.bannerTab = function (cfg) {
-    const p = Object.assign({ w: 88, y: 300, h: 600, name: 'SUPERCAR EXPERIENCE', label: 'RALLY DAY · LAS VEGAS', enter: 'slide', progress: null, cobill: null }, cfg.p);
+    const p = Object.assign({ w: 88, y: 300, h: 600, name: 'SUPERCAR EXPERIENCE', label: 'RALLY DAY · LAS VEGAS', enter: 'slide', progress: null, cobill: null, rail: true }, cfg.p);
     if (p.cobill) p.h = Math.max(p.h, Math.ceil(24 + 52 * 215 / 338 + 48 + ink('Michroma', 18, p.name + '  ' + p.cobill, 0.14).w + 30));
     p.h = Math.min(p.h, BANNER.y1 - p.y);
     const x = 1080 - p.w;
     const root = el('div', 'a', stage);
     const body = el('div', 'a', root, `width:1080px;height:1920px`);
-    const sh = el('div', 'a', body, `left:${x}px;top:${p.y}px;width:${p.w}px;height:${p.h}px;box-shadow:-10px 0 34px rgba(0,0,0,.30)`);
-    const bg = el('div', 'a', body, `left:${x}px;top:${p.y}px;width:${p.w}px;height:${p.h}px;background:rgba(0,0,0,.9)`);
+    const sh = el('div', 'a pshadow', body, `left:${x}px;top:${p.y}px;width:${p.w}px;height:${p.h}px;box-shadow:-10px 0 34px rgba(0,0,0,.30)`);
+    const bg = el('div', 'a plate', body, `left:${x}px;top:${p.y}px;width:${p.w}px;height:${p.h}px;background:rgba(0,0,0,.9)`);
     const inner = el('div', 'a', body, `left:${x}px;top:${p.y}px;width:${p.w}px;height:${p.h}px`);
     const stripe = el('div', 'a stripe', body, `left:${x}px;top:${p.y}px;width:${p.w}px;height:6px;transform-origin:right center`);
     const iw = 52, ih = iw * 215 / 338;
@@ -268,10 +274,10 @@
     // progress rail on the inner (left) edge
     const r0 = 24 + ih + 48, r1 = p.h - 18;
     const rail = el('div', 'a', inner, `left:12px;top:${r0}px;width:2px;height:${r1 - r0}px;background:rgba(255,255,255,.22)`);
-    const fill = el('div', 'a', inner, `left:12px;top:${r0}px;width:2px;height:${r1 - r0}px;background:${GOLD};transform-origin:50% 0;box-shadow:0 0 6px rgba(251,209,1,.6)`);
+    const fill = el('div', 'a', inner, `left:12px;top:${r0}px;width:2px;height:${r1 - r0}px;background:${GOLD};transform-origin:50% 0;box-shadow:0 0 6px rgba(${GLOW},.6)`);
     const ticks = [];
     for (let yy = r0; yy <= r1; yy += 40) ticks.push(el('div', 'a', inner, `left:14px;top:${yy}px;width:6px;height:2px;background:rgba(255,255,255,.35)`));
-    const head = el('div', 'a', inner, `left:9px;top:${r0 - 4}px;width:8px;height:8px;background:${GOLD};box-shadow:0 0 10px rgba(251,209,1,.8)`);
+    const head = el('div', 'a', inner, `left:9px;top:${r0 - 4}px;width:8px;height:8px;background:${GOLD};box-shadow:0 0 10px rgba(${GLOW},.8)`);
     return { code: cfg.code, render(t) {
       const on = t >= cfg.t0 && t < cfg.t1; show(root, on); if (!on) return;
       const slide = p.enter === 'slide';
@@ -289,6 +295,7 @@
       fill.style.transform = `scaleY(${(pr * qa).toFixed(5)})`;
       head.style.transform = `translateY(${((r1 - r0) * pr * qa).toFixed(2)}px)`;
       rail.style.opacity = qa.toFixed(3);
+      if (!p.rail) [rail, fill, head, ...ticks].forEach(e => { e.style.display = 'none'; });
       // a gold glint along the name every 4.8 s
       glint(nm, t, cfg.t0 + 1.0 + Math.floor(Math.max(0, t - cfg.t0 - 1.0) / 4.8) * 4.8, 0.7, { w: 0.2, glow: 6 });
     } };
@@ -355,7 +362,7 @@
       // idle: gold glint across the mark every 4.5 s
       const ph = phase(t, cfg.t0 + 0.9, 4.5), gq = ph >= 0 ? P(ph * 4.5, 0, 0.55) : 0;
       if (gq > 0 && gq < 1) { const gx = -30 + (iw + 60) * E.inOutCubic(gq); igl.style.opacity = 1;
-        igl.style.background = `linear-gradient(106deg, rgba(251,209,1,0) ${gx - 26}px, #FFF2B0 ${gx - 8}px, #FFFFFF ${gx}px, ${GOLD} ${gx + 8}px, rgba(251,209,1,0) ${gx + 28}px)`; }
+        igl.style.background = `linear-gradient(106deg, rgba(${GLOW},0) ${gx - 26}px, #FFF2B0 ${gx - 8}px, #FFFFFF ${gx}px, ${GOLD} ${gx + 8}px, rgba(${GLOW},0) ${gx + 28}px)`; }
       else igl.style.opacity = 0;
     } };
   };
@@ -369,7 +376,7 @@
     const top = o.kicker ? 22 : 24;
     const w = Math.ceil(Math.max(bw, sw) + 2 * pad + 4), h = Math.round(top + bigCap + 16 + smCap + 22);
     const lab = el('div', 'a', parent, `width:${w}px;height:${h}px`);
-    el('div', 'a', lab, `width:${w}px;height:${h}px;background:rgba(0,0,0,.9);box-shadow:0 10px 30px rgba(0,0,0,.3)`);
+    el('div', 'a plate', lab, `width:${w}px;height:${h}px;background:rgba(0,0,0,.9);box-shadow:0 10px 30px rgba(0,0,0,.3)`);
     const stripe = el('div', 'a stripe', lab, `width:${w}px;height:6px`);
     const bl = line(lab, 'Bebas', bs, big, pad, top, '#fff', { mask: true });
     const sl = line(lab, 'Michroma', ss, small, pad + 2, top + bigCap + 16, o.smallColor || GOLD, { mask: true, ls: o.smallLs, dots: '#fff' });
@@ -409,7 +416,7 @@
       const qx = p.whip ? 0 : E.inCubic(P(t, tx + 0.06, tx + 0.26));
       r = grow(r, 1 - 0.5 * qx);
       const pp = bracketDraw(B, r);
-      B.bo.setAttribute('stroke', pl > 0.05 ? `rgb(255,${Math.round(209 + 46 * pl)},${Math.round(1 + 200 * pl)})` : GOLD);
+      B.bo.setAttribute('stroke', pl > 0.05 ? pulse(pl) : GOLD);
       [B.tu, B.to].forEach(e => e.setAttribute('opacity', cl(qa * 1.4 - 0.4).toFixed(3)));
       pingDraw(pings, tgt, t, tl);
       svg.style.opacity = (cl(qa * 3) * (1 - E.inCubic(P(t, tx + 0.1, tx + 0.26)) * (p.whip ? 0 : 1))).toFixed(4);
@@ -504,7 +511,7 @@
     const root = el('div', 'a', stage, 'width:1080px;height:1920px');
     const svg = svgRoot(root);
     const B = bracketSet(svg), pings = pingSet(svg);
-    const scanU = svgEl('path', { stroke: 'rgba(251,209,1,.25)', 'stroke-width': 18, fill: 'none' }, svg), scan = svgEl('path', { stroke: '#FFF6C8', 'stroke-width': 2.5, fill: 'none' }, svg);
+    const scanU = svgEl('path', { stroke: `rgba(${GLOW},.25)`, 'stroke-width': 18, fill: 'none' }, svg), scan = svgEl('path', { stroke: '#FFF6C8', 'stroke-width': 2.5, fill: 'none' }, svg);
     const lu = svgEl('path', { fill: 'none', stroke: 'rgba(0,0,0,.45)', 'stroke-width': 8 }, svg), lo = svgEl('path', { fill: 'none', stroke: GOLD, 'stroke-width': 3 }, svg);
     const T = nameTag(root, p.name, p.kicker, { bigSize: 64, smallSize: 17, pad: 26 });
     return { code: cfg.code, render(t) {
@@ -518,7 +525,7 @@
       const tl = ta + 0.26, pl = t >= tl ? Math.exp(-(t - tl) * 14) * Math.min(1, (t - tl) * FPS / 1.5) : 0;
       r = grow(r, (1 + 0.05 * pl) * (1 - 0.5 * E.inCubic(P(t, tx + 0.06, tx + 0.26))));
       const pp = bracketDraw(B, r, { maxL: 40 });
-      B.bo.setAttribute('stroke', pl > 0.05 ? `rgb(255,${Math.round(209 + 46 * pl)},${Math.round(1 + 200 * pl)})` : GOLD);
+      B.bo.setAttribute('stroke', pl > 0.05 ? pulse(pl) : GOLD);
       [B.tu, B.to].forEach(e => e.setAttribute('opacity', cl(qa * 1.4 - 0.4).toFixed(3)));
       pingDraw(pings, tgt, t, tl);
       // scan line sweeps down the body once, right after the snap
@@ -558,7 +565,7 @@
     const makeW = Math.max(...p.segs.map(s => ink('Bebas', 58, s.make).w), ink('Bebas', 58, 'LOCK LOST').w);
     const LW = Math.ceil(Math.max(makeW + 64, 300)), LH = 120;
     const lab = el('div', 'a', root, `width:${LW}px;height:${LH}px`);
-    el('div', 'a', lab, `width:${LW}px;height:${LH}px;background:rgba(0,0,0,.9);box-shadow:0 10px 30px rgba(0,0,0,.3)`);
+    el('div', 'a plate', lab, `width:${LW}px;height:${LH}px;background:rgba(0,0,0,.9);box-shadow:0 10px 30px rgba(0,0,0,.3)`);
     const stripe = el('div', 'a stripe', lab, `width:${LW}px;height:6px`);
     const head = el('div', 'a', lab, 'left:30px;top:22px');
     const hl = line(head, 'Michroma', 18, p.label + ' ', 0, 0, GOLD, { split: false });
@@ -628,7 +635,7 @@
       r = grow(r, (1 + 0.06 * pl) * (1 - 0.5 * qx));
       const pp = bracketDraw(B, r, { maxL: 46 });
       const lostNow = s.mode === 'relock' && t < tsn;
-      B.bo.setAttribute('stroke', lostNow ? `rgba(251,209,1,${(1 - 0.3 * lostK).toFixed(3)})` : pl > 0.05 ? `rgb(255,${Math.round(209 + 46 * pl)},${Math.round(1 + 200 * pl)})` : GOLD);
+      B.bo.setAttribute('stroke', lostNow ? `rgba(${GLOW},${(1 - 0.3 * lostK).toFixed(3)})` : pl > 0.05 ? pulse(pl) : GOLD);
       B.tu.setAttribute('opacity', lostNow ? 0 : 1); B.to.setAttribute('opacity', lostNow ? 0 : 1);
       if (!lostNow) pingDraw(pings, tgt, t, tl); else pingDraw(pings, tgt, -1, 0);
       svg.style.opacity = (parseFloat(svg.style.opacity || 1) * (1 - E.inCubic(P(t, p.exit + 0.1, p.exit + 0.26)))).toFixed(4);
@@ -695,7 +702,7 @@
     const W = Math.ceil(Math.max(ink('Bebas', ns, p.name).w, qw, ink('Michroma', 18, p.kicker).w) + 64);
     const nCap = ink('Bebas', ns, 'H').aA, H = Math.round(24 + 14 + 16 + nCap + (q ? 20 + 12 : 0) + 24);
     const lab = el('div', 'a', root, `width:${W}px;height:${H}px`);
-    el('div', 'a', lab, `width:${W}px;height:${H}px;background:rgba(0,0,0,.9);box-shadow:0 10px 30px rgba(0,0,0,.3)`);
+    el('div', 'a plate', lab, `width:${W}px;height:${H}px;background:rgba(0,0,0,.9);box-shadow:0 10px 30px rgba(0,0,0,.3)`);
     const stripe = el('div', 'a stripe', lab, `width:${W}px;height:6px`);
     const kk = line(lab, 'Michroma', 18, p.kicker, 32, 24, GOLD, { mask: true });
     const nm = line(lab, 'Bebas', ns, p.name, 30, 24 + 14 + 16, '#fff', { mask: true });
@@ -714,7 +721,7 @@
       const tl = ta + 0.26, pl = t >= tl ? Math.exp(-(t - tl) * 14) * Math.min(1, (t - tl) * FPS / 1.5) : 0;
       r = grow(r, (1 + 0.05 * pl) * (1 - 0.5 * E.inCubic(P(t, tx + 0.06, tx + 0.26))));
       const pp = bracketDraw(B, r, { maxL: 56 });
-      B.bo.setAttribute('stroke', pl > 0.05 ? `rgb(255,${Math.round(209 + 46 * pl)},${Math.round(1 + 200 * pl)})` : GOLD);
+      B.bo.setAttribute('stroke', pl > 0.05 ? pulse(pl) : GOLD);
       [B.tu, B.to].forEach(e => e.setAttribute('opacity', cl(qa * 1.4 - 0.4).toFixed(3)));
       pingDraw(pings, tgt, t, tl);
       // lead chevrons: three carets above the brackets, lighting up bottom -> top on a 0.9 s loop
@@ -755,7 +762,7 @@
     const p = Object.assign({ targets: [], ts: cfg.t0, sweep: 0.7, x0: 60, x1: 900, title: 'LINEUP SCAN', px: 54, py: 640, exit: cfg.t1 - 0.3 }, cfg.p);
     const root = el('div', 'a', stage, 'width:1080px;height:1920px');
     const svg = svgRoot(root);
-    const beamG = svgEl('rect', { fill: 'rgba(251,209,1,.18)', width: 60, height: 1 }, svg), beam = svgEl('rect', { fill: '#FFF3B8', width: 3, height: 1 }, svg);
+    const beamG = svgEl('rect', { fill: `rgba(${GLOW},.18)`, width: 60, height: 1 }, svg), beam = svgEl('rect', { fill: '#FFF3B8', width: 3, height: 1 }, svg);
     const tg = p.targets.map(() => ({ B: bracketSet(svg, { under: 7, over: 3 }), chip: null }));
     const n2 = n => String(n).padStart(2, '0');
     tg.forEach((g, k) => {
@@ -921,7 +928,7 @@
       });
       const landed = t >= lands[3] + 0.15;
       const hit = lands.reduce((a, tl) => a + (t >= tl ? Math.exp(-(t - tl - 0.03) * 10) * (t - tl < 0.03 ? (t - tl) / 0.03 : 1) : 0), 0);
-      body.style.filter = hit > 0.02 ? `drop-shadow(0 0 ${(18 * Math.min(1, hit)).toFixed(2)}px rgba(251,209,1,${(0.4 * Math.min(1, hit)).toFixed(3)}))` : 'none';
+      body.style.filter = hit > 0.02 ? `drop-shadow(0 0 ${(18 * Math.min(1, hit)).toFixed(2)}px rgba(${GLOW},${(0.4 * Math.min(1, hit)).toFixed(3)}))` : 'none';
       KT.track(dl.g, t, { start: lands[3] + 0.05, dur: 0.32, spread: 1.8 });
       KT.track(pl.g, t, { start: lands[3] + 0.12, dur: 0.34, spread: 1.7 });
       KT.track(dt.g, t, { start: lands[3] + 0.2, dur: 0.34, spread: 1.7 });
@@ -962,7 +969,7 @@
         core: svgEl('circle', { cx: x, cy: y, r: o.nr * 0.55, fill: GOLD, opacity: 0 }, svg) };
     });
     const comet = svgEl('circle', { r: o.nr * 0.6, fill: '#FFFFFF', opacity: 0 }, svg);
-    const cometG = svgEl('circle', { r: o.nr * 1.6, fill: 'rgba(251,209,1,.35)', opacity: 0 }, svg);
+    const cometG = svgEl('circle', { r: o.nr * 1.6, fill: `rgba(${GLOW},.35)`, opacity: 0 }, svg);
     const labels = nodes.map(N => {
       const ln = line(parent, 'Bebas', o.ls, N.n.label, N.x + (N.n.lx ?? o.lx), N.y + (N.n.ly ?? 0) - ink('Bebas', o.ls, 'H').aA / 2, '#fff', { mask: true });
       const ul = el('div', 'a', parent, `left:${N.x + (N.n.lx ?? o.lx)}px;top:${N.y + (N.n.ly ?? 0) + ink('Bebas', o.ls, 'H').aA / 2 + 8}px;width:${ln.m.w}px;height:3px;background:${GOLD};transform-origin:0 50%;transform:scaleX(0)`);
@@ -1166,7 +1173,7 @@
     const p = Object.assign({ q: 'HOW WAS IT?', host: 'OMARIE', handle: '@NQ.YOUNG', a: '[GUEST ANSWER]', label: 'RALLY GUEST', qt: cfg.t0 + 0.4, at: cfg.t0 + 1.7, wordGap: 0.2, meter: 'meter', seam: 960, exit: cfg.t1 - 0.4 }, cfg.p);
     const root = el('div', 'a', stage, 'width:1080px;height:1920px');
     const seam = el('div', 'a stripe', root, `left:0;top:${p.seam - 5}px;width:1080px;height:10px`);
-    const seamGlow = el('div', 'a', root, `left:0;top:${p.seam - 1}px;width:1080px;height:2px;box-shadow:0 0 22px 6px rgba(251,209,1,.45)`);
+    const seamGlow = el('div', 'a', root, `left:0;top:${p.seam - 1}px;width:1080px;height:2px;box-shadow:0 0 22px 6px rgba(${GLOW},.45)`);
     // top: host tag + question
     const T = nameTag(root, p.host, p.handle, { bigSize: 52, smallSize: 16, pad: 22 });
     const qTag = line(root, 'Michroma', 16, 'Q', 60, 0, '#000', { split: false });
@@ -1230,7 +1237,7 @@
     const ti = line(mask, 'Bebas', S, p.title, CX - tw / 2, 30, '#fff');
     const stripe = el('div', 'a stripe', root, `left:${CX - tw / 2}px;top:${p.y + cap + 26}px;width:${tw}px;height:12px`);
     const edge = el('div', 'a edge', root, `left:${CX - tw / 2}px;top:${p.y + cap + 16}px;height:32px;opacity:0`);
-    const flash = el('div', 'a', root, `left:${CX - tw / 2 - 40}px;top:${p.y - 40}px;width:${tw + 80}px;height:${cap + 80}px;background:radial-gradient(ellipse at center,rgba(255,246,200,.55) 0%,rgba(251,209,1,.18) 40%,rgba(251,209,1,0) 70%);opacity:0`);
+    const flash = el('div', 'a', root, `left:${CX - tw / 2 - 40}px;top:${p.y - 40}px;width:${tw + 80}px;height:${cap + 80}px;background:radial-gradient(ellipse at center,rgba(255,246,200,.55) 0%,rgba(${GLOW},.18) 40%,rgba(${GLOW},0) 70%);opacity:0`);
     const cob = p.cobill ? line(root, 'Michroma', 20, p.cobill, CX - ink('Michroma', 20, p.cobill, 0.24).w / 2, p.y + cap + 62, '#fff', { ls: 0.24, dots: GOLD }) : null;
     if (cob) cob.g.forEach(g => { if (g.dataset.ch === '×') g.style.color = GOLD; });
     return { code: cfg.code, render(t) {
@@ -1421,7 +1428,7 @@
     const k = Math.tan(p.angle * Math.PI / 180);
     const band = el('div', 'a', root, `left:0;top:-200px;width:${p.width * 2}px;height:2320px;transform-origin:0 0`);
     const W = p.width;
-    band.style.background = `linear-gradient(90deg, rgba(251,209,1,0) 0px, rgba(251,209,1,.06) ${W - 240}px, rgba(251,209,1,.18) ${W - 120}px, rgba(251,209,1,.52) ${W - 36}px, rgba(255,248,214,.95) ${W - 8}px, #FFFFFF ${W}px, rgba(255,248,214,.9) ${W + 8}px, rgba(251,209,1,.42) ${W + 30}px, rgba(251,209,1,.12) ${W + 90}px, rgba(251,209,1,0) ${W + 170}px)`;
+    band.style.background = `linear-gradient(90deg, rgba(${GLOW},0) 0px, rgba(${GLOW},.06) ${W - 240}px, rgba(${GLOW},.18) ${W - 120}px, rgba(${GLOW},.52) ${W - 36}px, rgba(255,248,214,.95) ${W - 8}px, #FFFFFF ${W}px, rgba(255,248,214,.9) ${W + 8}px, rgba(${GLOW},.42) ${W + 30}px, rgba(${GLOW},.12) ${W + 90}px, rgba(${GLOW},0) ${W + 170}px)`;
     return { code: cfg.code, render(t) {
       const on = t >= cfg.t0 && t < cfg.t1; show(root, on); if (!on) return;
       const q = E.inOutCubic(P(t, cfg.t0, cfg.t1));
@@ -1440,7 +1447,7 @@
       const cw = ink('Michroma', 20, it.codes, 0.1).w, nw = ink('Michroma', 13, it.name, 0.14).w;
       const W = Math.ceil(Math.max(cw, nw) + 88);
       el('div', 'a', w, `width:${W}px;height:74px;background:rgba(0,0,0,.62);border:1px solid rgba(255,255,255,.35);box-sizing:border-box`);
-      el('div', 'a', w, `left:12px;top:12px;width:34px;height:50px;border:1.5px dashed rgba(251,209,1,.9);box-sizing:border-box`);
+      el('div', 'a', w, `left:12px;top:12px;width:34px;height:50px;border:1.5px dashed rgba(${GLOW},.9);box-sizing:border-box`);
       line(w, 'Michroma', 11, 'KIT', 17, 31, GOLD, { split: false, ls: 0.1 });
       line(w, 'Michroma', 20, it.codes, 60, 16, '#fff', { split: false, ls: 0.1 });
       line(w, 'Michroma', 13, it.name, 61, 48, 'rgba(255,255,255,.72)', { split: false, ls: 0.14 });
