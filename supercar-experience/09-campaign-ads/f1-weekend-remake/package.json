@@ -7,7 +7,10 @@
     "still": "remotion still src/index.ts RaceWeekend out/still.png",
     "render": "remotion render src/index.ts RaceWeekend out/SCE_F1-Weekend_Remake_76s-9x16.mp4 --codec=h264 --crf=18 --audio-codec=aac",
     "audio": "python3 audio/synth.py",
-    "plates": "python3 tools/cut_plates.py --raw raw"
+    "plates": "python3 tools/cut_plates.py --raw raw",
+    "finish": "python3 tools/finish.py",
+    "sfx": "uv run --no-project --quiet --with numpy --with soundfile python ~/.local/vlogtools/sfx/engine.py .",
+    "sfx:check": "uv run --no-project --quiet --with numpy --with soundfile python ~/.local/vlogtools/sfx/verify.py ."
   },
   "dependencies": {
     "remotion": "4.0.532",

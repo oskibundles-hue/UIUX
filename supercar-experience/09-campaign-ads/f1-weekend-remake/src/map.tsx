@@ -8,13 +8,47 @@ const ISLAND =
   'M 140 330 C 120 220, 260 150, 380 170 C 470 110, 620 120, 700 180 C 820 170, 920 260, 900 380 C 960 470, 930 600, 860 660 C 880 770, 800 880, 680 900 C 600 980, 430 990, 340 930 C 220 940, 110 850, 120 740 C 50 650, 60 520, 110 460 C 90 410, 110 360, 140 330 Z';
 const ROUTE = 'M 610 860 C 470 830, 300 760, 270 640 C 240 520, 250 470, 280 440 C 360 470, 450 520, 520 560 C 560 560, 600 520, 640 500 C 700 470, 760 430, 800 470';
 
-export const STOPS = [
-  {x: 610, y: 860, name: 'PICKUP', t: 'Start', img: 'stop_pickup'},
-  {x: 280, y: 440, name: 'RED ROCK', t: '30 min', img: 'stop_redrock'},
-  {x: 520, y: 560, name: 'THE STRIP', t: '25 min', img: 'stop_skyline'},
-  {x: 640, y: 500, name: 'THE SPHERE', t: '5 min', img: 'stop_sphere'},
-  {x: 800, y: 470, name: 'LAKE MEAD', t: '35 min', img: 'stop_desert'},
+// photo cards only where the footage really is that place (Las Vegas night); the others are drawn in the map's style
+export const STOPS: {x: number; y: number; name: string; img?: string; draw?: 'rock' | 'lake'}[] = [
+  {x: 610, y: 860, name: 'PICKUP', img: 'stop_pickup'},
+  {x: 280, y: 440, name: 'RED ROCK', draw: 'rock'},
+  {x: 520, y: 560, name: 'THE STRIP', img: 'stop_skyline'},
+  {x: 640, y: 500, name: 'THE SPHERE', img: 'stop_sphere'},
+  {x: 800, y: 470, name: 'LAKE MEAD', draw: 'lake'},
 ];
+
+const DrawnStop: React.FC<{kind: 'rock' | 'lake'}> = ({kind}) => (
+  <svg viewBox="0 0 250 190" width="100%" height="100%" preserveAspectRatio="xMidYMid slice">
+    <rect width="250" height="190" fill="#F6D9A6" />
+    <rect y="112" width="250" height="78" fill={C.sand} />
+    <line x1="0" y1="112" x2="250" y2="112" stroke={C.asphalt} strokeWidth={4} />
+    {kind === 'rock' ? (
+      <>
+        {[[70, 112, 1.25], [150, 112, 1.6], [215, 112, 1.0], [30, 112, 0.8]].map(([x, y, s], i) => (
+          <g key={i} transform={`translate(${x} ${y}) scale(${s})`}>
+            <path d="M -50 0 L -8 -70 L 12 -48 L 50 0 Z" fill={C.rock} stroke={C.asphalt} strokeWidth={4} strokeLinejoin="round" />
+            <path d="M -16 -26 L -8 -70 L 6 -42 Z" fill="#E28A62" />
+          </g>
+        ))}
+        <path d="M 60 190 C 100 160, 150 150, 190 112" stroke={C.asphalt} strokeWidth={14} fill="none" />
+        <path d="M 60 190 C 100 160, 150 150, 190 112" stroke={C.yellow} strokeWidth={3} fill="none" strokeDasharray="10 8" />
+      </>
+    ) : (
+      <>
+        {[[40, 112, 0.8], [210, 112, 1.0]].map(([x, y, s], i) => (
+          <path key={i} transform={`translate(${x} ${y}) scale(${s})`} d="M -50 0 L 0 -52 L 50 0 Z" fill="#C98B5E" stroke={C.asphalt} strokeWidth={4} strokeLinejoin="round" />
+        ))}
+        <path d="M 20 150 C 40 118, 110 116, 150 124 C 200 116, 240 132, 232 156 C 220 182, 130 186, 80 178 C 30 176, 6 168, 20 150 Z" fill={C.lake} stroke={C.asphalt} strokeWidth={4} />
+        {[[70, 146], [130, 158], [175, 142]].map(([x, y], i) => (
+          <path key={i} d={`M ${x} ${y} q 8 -6 16 0 q 8 6 16 0`} stroke={C.chalk} strokeWidth={3} fill="none" strokeLinecap="round" />
+        ))}
+      </>
+    )}
+    {Array.from({length: 7}).map((_, i) => (
+      <circle key={i} cx={20 + rnd(i * 5 + (kind === 'rock' ? 1 : 2)) * 210} cy={120 + rnd(i * 11) * 60} r={4 + rnd(i * 3) * 3} fill="#9BAA5A" opacity={kind === 'lake' && i % 2 ? 0 : 0.85} />
+    ))}
+  </svg>
+);
 
 const Pin: React.FC<{x: number; y: number; at: number; label?: string}> = ({x, y, at, label}) => {
   const f = useCurrentFrame();
@@ -142,7 +176,7 @@ export const MapFull: React.FC<{dur: number}> = ({dur}) => {
         </div>
         <div style={{fontFamily: F.display, fontSize: 92, lineHeight: 0.95, color: C.chalk, marginTop: 10}}>RACE WEEKEND<br />ROUTE</div>
         <div style={{display: 'flex', gap: 12, marginTop: 18}}>
-          {['5 STOPS', '1 ROUTE', 'DRIVE TIMES'].map((t, i) => (
+          {['5 STOPS', '1 ROUTE'].map((t, i) => (
             <div key={t} style={{fontFamily: F.ui, fontWeight: 800, fontSize: 22, padding: '8px 18px', borderRadius: 30, background: [C.yellow, C.red, C.chalk][i], color: i === 1 ? C.chalk : C.asphalt, opacity: lin(f, 6 + i * 3, 12 + i * 3)}}>
               {t}
             </div>
@@ -158,11 +192,10 @@ export const MapFull: React.FC<{dur: number}> = ({dur}) => {
         return (
           <div key={i} style={{position: 'absolute', left: c.x, top: c.y, width: 270, transform: `rotate(${c.r}deg) scale(${sp})`, background: C.chalk, padding: 10, paddingBottom: 14, boxShadow: '0 18px 40px rgba(0,0,0,0.5)'}}>
             <div style={{height: 190, overflow: 'hidden'}}>
-              <Still src={st.img} />
+              {st.draw ? <DrawnStop kind={st.draw} /> : <Still src={st.img!} />}
             </div>
             <div style={{display: 'flex', justifyContent: 'space-between', marginTop: 10, fontFamily: F.ui, fontWeight: 800, fontSize: 21, color: C.asphalt}}>
               <span>{st.name}</span>
-              <span style={{color: C.red}}>{st.t}</span>
             </div>
           </div>
         );

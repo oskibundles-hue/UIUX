@@ -4,7 +4,7 @@ import {noise2D} from '@remotion/noise';
 import {C, F, clamp, lin, s2f} from './theme';
 import {Bokeh, Finish, Flash, FloatWords, HandleBug, Plate, PromptBar, StatusCard, TextBubble} from './core';
 import {PixelCode, PixelFire, Rev, Sparks} from './pixel';
-import {AssetBoard, Badge, EditorChrome, KeyframeStreak, LayerStack, ProjectPanel} from './editor';
+import {AssetBoard, Badge, EditorChrome, FleetPanel, KeyframeStreak, LayerStack} from './editor';
 import {MapBuild, MapFull} from './map';
 import {EndCard, GlowReveal, Poster, TitleLockup} from './poster';
 
@@ -85,7 +85,7 @@ const BadgeBuild: React.FC<{dur: number}> = ({dur}) => {
   const scale = 1 + z * 0.9;
   return (
     <AbsoluteFill style={{transform: `scale(${scale})`, transformOrigin: '50% 37%'}}>
-      <EditorChrome comp="Race_Badge.comp" viewerH={1100} playhead={lin(f, 0, dur)}>
+      <EditorChrome comp="Race_Weekend_Pass" viewerH={1100} playhead={lin(f, 0, dur)}>
         <div style={{position: 'absolute', inset: 0, opacity: lin(f, 30, 50)}}>
           <Plate id={12} len={dur} push={[1.05, 1.1]} dim={0.35} />
         </div>
@@ -109,51 +109,9 @@ const CtaLine: React.FC<{at: number}> = ({at}) => {
 };
 
 // ---------- sound design ----------
-type Cue = [string, number, number?]; // file, absolute frame, volume
-const cues: Cue[] = [];
-const at = (shot: number, local: number, file: string, vol = 0.8) => cues.push([file, from(shot) + local, vol]);
-const ticks = (shot: number, a: number, b: number, step = 3) => {
-  for (let x = a; x < b; x += step) at(shot, x, 'tick', 0.35);
-};
-at(1, 0, 'whoosh_long', 0.7); at(1, 6, 'impact', 0.8);
-at(3, 0, 'whoosh', 0.4);
-at(4, 2, 'tick', 0.3); at(4, 14, 'message', 0.9);
-at(6, 4, 'pop', 0.9); at(6, 22, 'blip', 0.4); at(6, 28, 'blip', 0.4); at(6, 34, 'blip', 0.4);
-at(7, 4, 'blip', 0.7); at(7, 26, 'blip', 0.7);
-at(8, 0, 'blip', 0.5); at(8, 12, 'boom', 1);
-ticks(9, 2, 30, 2);
-at(10, 0, 'pop', 0.8); at(10, 4, 'blip', 0.5); at(10, 12, 'blip', 0.5); at(10, 20, 'blip', 0.5);
-ticks(10, 30, 60); at(10, 82, 'send', 0.8);
-at(11, 0, 'chime', 0.6);
-at(12, 0, 'whoosh', 0.5); at(12, 8, 'pop', 0.7); at(12, 14, 'pop', 0.6); at(12, 38, 'stamp', 0.7); at(12, 46, 'whoosh_long', 0.5);
-for (let i = 0; i < 7; i++) at(13, i * 2.5 | 0, 'tick', 0.45);
-at(14, 0, 'pop', 0.7); at(14, 6, 'blip', 0.6);
-ticks(15, 8, 33); at(15, 66, 'send', 0.8);
-at(16, 0, 'chime', 0.6);
-at(17, 0, 'whoosh', 0.8);
-for (let i = 0; i < 6; i++) at(18, i * 3, 'pop', 0.55);
-at(19, 0, 'whoosh_long', 0.6);
-ticks(20, 6, 31); at(20, 76, 'send', 0.8);
-at(21, 4, 'impact', 1);
-at(22, 0, 'whoosh', 0.4);
-at(23, 0, 'chime', 0.6);
-at(24, 0, 'whoosh', 0.6); for (let i = 0; i < 5; i++) at(24, 14 + i * 3, 'pop', 0.4); at(24, 28, 'whoosh_long', 0.35);
-at(25, 0, 'chime', 0.6);
-for (let i = 0; i < 5; i++) at(26, 6 + i * 5, 'pop', 0.6);
-for (let i = 0; i < 5; i++) at(26, 20 + i * 5, 'blip', 0.3);
-at(26, 62, 'tick', 0.9);
-at(27, 0, 'whoosh_long', 1);
-ticks(28, 10, 37); at(28, 100, 'send', 0.8);
-at(29, 0, 'whoosh', 0.6); at(29, 10, 'chime', 0.5);
-for (let i = 0; i < 8; i++) at(30, 2 + i * 2.5 | 0, 'tick', 0.7);
-for (let i = 0; i < 4; i++) at(30, 34 + i * 4, 'pop', 0.5);
-for (let i = 0; i < 3; i++) at(30, 52 + i * 6, 'pop', 0.5);
-at(30, 78, 'stamp', 1);
-ticks(31, 8, 37); at(31, 80, 'send', 0.9);
-at(32, 0, 'whoosh_long', 0.9);
-at(33, 4, 'tick', 0.3); at(33, 16, 'message', 0.9);
-for (let i = 0; i < 6; i++) at(34, 10 + i * 14, 'blip', 0.25);
-at(35, 0, 'impact', 0.7); at(35, 16, 'chime', 0.5);
+// Music + every SFX is one mixed file made by the SFX engine (npm run sfx): it reads sfx/events.json
+// (what happens on screen, frame-exact), picks the sound, places its hit on the frame and sets its level
+// over the music. The cue sheet with the reason for every sound and every skip is sfx/cuesheet.md.
 
 export const Ad: React.FC = () => {
   const f = useCurrentFrame();
@@ -212,7 +170,7 @@ export const Ad: React.FC = () => {
         <PromptBar text="I need a car for F1 weekend. Fast. No mistakes." typeAt={30} cps={1.6} sendAt={82} />
       </Sequence>
       <Sequence from={from(11)} durationInFrames={len(11)}>
-        <StatusCard lines={['Booking request received.', 'Starting with the race-weekend badge.']} dur={len(11)} />
+        <StatusCard lines={['Booking request received.', 'Checking the fleet for race weekend.']} dur={len(11)} />
       </Sequence>
       <Sequence from={from(12)} durationInFrames={len(12)}>
         <BadgeBuild dur={len(12)} />
@@ -221,7 +179,7 @@ export const Ad: React.FC = () => {
         <LayerStack />
       </Sequence>
       <Sequence from={from(14)} durationInFrames={len(14)}>
-        <EditorChrome comp="Race_Badge.comp" viewerH={1100} playhead={0.6}>
+        <EditorChrome comp="Race_Weekend_Pass" viewerH={1100} playhead={0.6}>
           <Plate id={14} len={len(14)} push={[1.08, 1.12]} dim={0.2} />
           <div style={{position: 'absolute', left: 40, top: 60}}>
             <Badge at={-200} size={360} full />
@@ -235,10 +193,10 @@ export const Ad: React.FC = () => {
         <PromptBar text="Pull the fleet for race weekend." typeAt={8} cps={1.4} sendAt={66} />
       </Sequence>
       <Sequence from={from(16)} durationInFrames={len(16)}>
-        <StatusCard lines={['Pulling cars, specs, and rates…']} chip="Building cards for the Las Vegas fleet." dur={len(16)} />
+        <StatusCard lines={['Pulling cars, dates, and pickup times…']} chip="Building cards for the Las Vegas fleet." dur={len(16)} />
       </Sequence>
       <Sequence from={from(17)} durationInFrames={len(17)}>
-        <ProjectPanel />
+        <FleetPanel />
       </Sequence>
       <Sequence from={from(18)} durationInFrames={len(18)}>
         <AssetBoard />
@@ -258,13 +216,13 @@ export const Ad: React.FC = () => {
         <Plate id={22} len={len(22)} push={[1.1, 1.18]} />
       </Sequence>
       <Sequence from={from(23)} durationInFrames={len(23)}>
-        <StatusCard lines={['Mapped.', 'Five stops. One route. Drive times included.']} dur={len(23)} />
+        <StatusCard lines={['Mapped.', 'Five stops. One route.']} dur={len(23)} />
       </Sequence>
       <Sequence from={from(24)} durationInFrames={len(24)}>
         <MapBuild />
       </Sequence>
       <Sequence from={from(25)} durationInFrames={len(25)}>
-        <StatusCard lines={['Adding a photo to every stop…']} chip="Pulling frames from the fleet footage." dur={len(25)} />
+        <StatusCard lines={['Pulling every stop…']} chip="Pulling frames from the fleet footage." dur={len(25)} />
       </Sequence>
       <Sequence from={from(26)} durationInFrames={len(26)}>
         <MapFull dur={len(26)} />
@@ -274,7 +232,7 @@ export const Ad: React.FC = () => {
       </Sequence>
       <Sequence from={from(28)} durationInFrames={len(28)}>
         <Plate id={28} len={len(28)} push={[1.04, 1.1]} />
-        <PromptBar text="Create a hero poster of the GT3 RS." typeAt={10} cps={1.3} sendAt={100} />
+        <PromptBar text="Hold the GT3 RS for race weekend." typeAt={10} cps={1.3} sendAt={100} />
       </Sequence>
       <Sequence from={from(29)} durationInFrames={len(29)}>
         <GlowReveal />
@@ -284,7 +242,7 @@ export const Ad: React.FC = () => {
       </Sequence>
       <Sequence from={from(31)} durationInFrames={len(31)}>
         <Plate id={31} len={len(31)} push={[1.0, 1.16]} shake={4} />
-        <PromptBar text="Render the final and send it to the client!" typeAt={8} cps={1.5} sendAt={80} />
+        <PromptBar text="Lock it in and send the confirmation!" typeAt={8} cps={1.5} sendAt={80} />
       </Sequence>
       <Sequence from={from(32)} durationInFrames={len(32)}>
         <Plate id={32} len={len(32)} push={[1.12, 1.0]} grade="night" />
@@ -313,12 +271,7 @@ export const Ad: React.FC = () => {
       <Flash at={from(29)} color={C.yellow} peak={0.4} len={5} />
 
       {/* sound */}
-      <Audio src={staticFile('audio/music.wav')} volume={0.55} />
-      {cues.map(([file, fr, vol], i) => (
-        <Sequence key={i} from={Math.max(0, Math.round(fr))} durationInFrames={60}>
-          <Audio src={staticFile(`audio/${file}.wav`)} volume={vol ?? 0.8} />
-        </Sequence>
-      ))}
+      <Audio src={staticFile('audio/soundtrack.wav')} />
     </AbsoluteFill>
   );
 };

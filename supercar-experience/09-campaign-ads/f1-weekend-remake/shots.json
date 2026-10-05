@@ -9,7 +9,7 @@
    "Light streak sweep",
    "Foreground parallax"
   ],
-  "se": "Title lockup: SUPERCAR EXPERIENCE, big 'F1 WEEKEND', 'for Las Vegas' pill. Hurac\u00e1n STO parked outside a Vegas building at night, light streak sweep, parallax push.",
+  "se": "Title lockup: SUPERCAR EXPERIENCE \u00d7 REV, big 'RENT A SUPERCAR' on screen from frame 0 (Instagram cover), 'for F1 Weekend' pill, LAS VEGAS \u00b7 NOV 19\u201321. Hurac\u00e1n STO parked outside a Vegas building at night, light streak sweep, parallax push.",
   "src": "sto.mp4",
   "ss": 18.0
  },
@@ -145,7 +145,7 @@
    "Icon spin-in",
    "Text reveal with blur"
   ],
-  "se": "White card: SE mark + 'Booking request received. Starting with the race-weekend badge.'",
+  "se": "White card: SE mark + 'Booking request received. Checking the fleet for race weekend.'",
   "src": null
  },
  {
@@ -158,7 +158,7 @@
    "Badge assembly",
    "Zoom-out to editor UI"
   ],
-  "se": "Editor view: SE race badge assembles (rings, rays, checkered flag, monogram) inside a glowing pixel ring, then zooms out to the editor window.",
+  "se": "SE Concierge booking window (menus Fleet \u00b7 Dates \u00b7 Route \u00b7 Pickup): the race-weekend pass assembles (rings, rays, checkered band, monogram; text ring RACE WEEKEND PASS \u2605 THU \u00b7 FRI \u00b7 SAT) inside a glowing pixel ring, then zooms out to the window.",
   "src": "sto.mp4",
   "ss": 20.0
  },
@@ -171,7 +171,7 @@
    "Layer bars stack",
    "Playhead scrub"
   ],
-  "se": "Editor timeline: colored layer bars stack in, playhead scrubs.",
+  "se": "Day bars THU, FRI, SAT \u00b7 RACE NIGHT stack in; the playhead lands on Saturday.",
   "src": null
  },
  {
@@ -183,7 +183,7 @@
    "Speech bubble pop",
    "Badge wobble"
   ],
-  "se": "Badge + bubble 'HI, I'M REV! Ask me about the fleet.' pop over the footage window.",
+  "se": "Pass + bubble 'HI, I'M REV! Ask me about the fleet.' pop over the footage in the booking window.",
   "src": "sto.mp4",
   "ss": 21.0
  },
@@ -209,7 +209,7 @@
    "Status text shimmer",
    "Chip slide-in"
   ],
-  "se": "White card: 'Pulling cars, specs, and rates\u2026' + chip 'Building cards for the Las Vegas fleet.'",
+  "se": "White card: 'Pulling cars, dates, and pickup times\u2026' + chip 'Building cards for the Las Vegas fleet.'",
   "src": null
  },
  {
@@ -221,7 +221,7 @@
    "Whip pan blur",
    "File list cascade"
   ],
-  "se": "Whip into the project panel: file list cascades in.",
+  "se": "Whip into the fleet list: Las Vegas cars from supercarexp.vip cascade in as name rows, each with an AVAILABLE tick.",
   "src": null
  },
  {
@@ -234,7 +234,7 @@
    "Asset pops",
    "Path draw"
   ],
-  "se": "Asset board: rotating sunburst, car card, pin, route line, gauge, checkered tile pop in.",
+  "se": "Booking kit: rotating sunburst, GT3 RS car card, key fob, pickup pin, license card (VERIFIED stamp), checkered tile pop in.",
   "src": null
  },
  {
@@ -246,7 +246,7 @@
    "Keyframe dot streaks",
    "Timeline pan/zoom"
   ],
-  "se": "Timeline zoom: keyframe dots streak across tracks.",
+  "se": "Keyframe dots streak across tracks through the race-weekend sector strip S1 THU \u00b7 S2 FRI \u00b7 S3 SAT \u00b7 RACE NIGHT.",
   "src": null
  },
  {
@@ -294,7 +294,7 @@
   "anim": [
    "Text reveal"
   ],
-  "se": "White card: 'Mapped. Five stops. One route. Drive times included.'",
+  "se": "White card: 'Mapped. Five stops. One route.'",
   "src": null
  },
  {
@@ -318,7 +318,7 @@
   "anim": [
    "Chip shimmer"
   ],
-  "se": "White card chip: 'Generating photos of every stop\u2026'",
+  "se": "White card: 'Pulling every stop\u2026' + chip 'Pulling frames from the fleet footage.'",
   "src": null
  },
  {
@@ -331,7 +331,7 @@
    "Photo card pops",
    "Cursor click ripple"
   ],
-  "se": "Map titled 'RACE WEEKEND ROUTE': pins drop, photo cards pop, cursor clicks.",
+  "se": "Map titled 'RACE WEEKEND ROUTE': pins drop, cards pop (photos for PICKUP, THE STRIP, THE SPHERE; drawn cards for RED ROCK and LAKE MEAD), cursor clicks.",
   "src": null
  },
  {
@@ -355,7 +355,7 @@
   "anim": [
    "Prompt typewriter"
   ],
-  "se": "GT3 RS tracking shot. Prompt: 'Create a hero poster of the GT3 RS.'",
+  "se": "GT3 RS tracking shot. Prompt: 'Hold the GT3 RS for race weekend.'",
   "src": "gt3_white.mov",
   "ss": 13.0
  },
@@ -384,7 +384,7 @@
    "Thumbnail pops",
    "Badge stamp"
   ],
-  "se": "Poster: 'THE GT3 RS' types on, specs, tags, thumbnails pop, SE badge stamps.",
+  "se": "Poster: 'RACE WEEKEND' types on; photo label PORSCHE 911 GT3 RS \u00b7 AVAILABLE IN LAS VEGAS; tags THU \u00b7 FRI \u00b7 SAT, RACE NIGHT, 518 HP, 9,000 RPM; thumbnails pop, pass stamps.",
   "src": "gt3_livery.mov",
   "ss": 12.4,
   "note": "Uses stills from public/stills, not a plate."
@@ -398,7 +398,7 @@
    "Prompt typewriter",
    "Tension"
   ],
-  "se": "Truck closes in on the GT3 RS. Prompt: 'Render the final and send it to the client!'",
+  "se": "Truck closes in on the GT3 RS. Prompt: 'Lock it in and send the confirmation!'",
   "src": "gt3_white.mov",
   "ss": 23.5
  },
@@ -422,9 +422,10 @@
   "anim": [
    "Message bubble pop"
   ],
-  "se": "SF90 at golden hour. Bubble: 'Looks perfect! Booked. Next: the whole crew for the rally.'",
-  "src": "sf90.mov",
-  "ss": 21.0
+  "se": "GT3 RS in the garage (livery clip, slowed to 0.55\u00d7), slow push. Bubble: 'Looks perfect! Booked. Next: the whole crew for the rally.'",
+  "src": "gt3_livery.mov",
+  "ss": 12.05,
+  "speed": 0.55
  },
  {
   "id": 34,
