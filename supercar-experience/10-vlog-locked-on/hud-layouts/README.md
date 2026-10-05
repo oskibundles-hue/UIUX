@@ -4,14 +4,14 @@ Two saved layout options for Supercar Experience driving clips, built on 5 Oct 2
 future clips ("instead of saving both clips how about saving both layouts, I'm creating layout options for future
 clips"). They are the vlog kit's own components (`../vlog-kit`, the Locked-On language: black plates with the 78/22
 gold/white stripe cap, gold #FBD101 as the only accent, Bebas + Michroma) plus one new plate, DRV. HUD-2 has since
-moved to dark glass + SE orange #FF4F16 (see Themes below); HUD-1 is still gold. **Status: saved as
+moved to dark glass + SE orange #FF4F16 (see Themes below), and HUD-1 followed the same day. **Status: saved as
 options, not approved for posting yet.**
 
 Say the code: "use HUD-1 on this clip".
 
 | Code | Camera | What is on screen | Preview |
 |---|---|---|---|
-| **HUD-1 · Cabin cam** | Mounted behind the driver's seat, looking forward past the driver | A2 SE banner tab (right edge), D1 camera clock + place (top left), DRV drive plate (top right), B1 lock-on on the driver with OMARIE · @NQ.YOUNG | `previews/hud-1-cabin.jpg` |
+| **HUD-1 · Cabin cam** (dark glass + SE orange, clock scrubber; 5 Oct) | Mounted behind the driver's seat, looking forward past the driver | A2 SE banner tab (right edge), D1 camera clock + place (top left), DRV drive plate (top right), B1 lock-on on the driver with OMARIE · @NQ.YOUNG | `previews/hud-1-cabin.jpg` |
 | **HUD-2 · Hood cam** (dark glass + SE orange, clock scrubber; picked 5 Oct) | Mounted on the hood or dash, looking down the road (also works on a roof mount looking back down the road; see the Oct 4 build) | A2 SE banner tab, E1 route plate stepping stop to stop (top left), DRV drive plate (top right), C3 lead lock on the car ahead (CONVOY / CAR AHEAD), D1 camera clock + place (bottom left, over the hood) | `previews/hud-2-hood.jpg` |
 
 **No road line in either.** Omarie, 5 Oct: "I don't like the road cursor for this point of view and it's not
@@ -21,8 +21,9 @@ supercar experience theme". The first look (Wayline, a gold line drawn on the ro
 
 Omarie, 5 Oct: "change the progress bar and give me some mockups on different themes ... like glass ... and
 supercarexperince colors weve used in the past im not digging the yellow". From four mockups he picked **dark glass +
-SE orange** (`glass-orange`) with the **clock scrubber** for HUD-2, so `layouts/hud-2-hood.json` now carries
-`"theme": "glass-orange"`, A2 `"rail": false` and a PRG `underline`. The other themes and progress styles stay options.
+SE orange** (`glass-orange`) with the **clock scrubber** for HUD-2, then "switch HUD-1 to dark glass too". Both
+`layouts/hud-*.json` now carry `"theme": "glass-orange"`, A2 `"rail": false` and a PRG `underline`. The other themes
+and progress styles stay options. Over a dark cabin (HUD-1) the glass reads as smoky black; over sky (HUD-2) it shows.
 
 - **Themes**, `themes/*.json`, chosen with `build_hud.py --theme themes/<name>.json`:
   - `glass`: frosted, white.
