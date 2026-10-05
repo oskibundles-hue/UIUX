@@ -1569,6 +1569,14 @@ $("#th-title").classList.add("in");
   }
   const still_only=RM||SAVER;
   let blob=null, target=0, near=false, raf=0;
+  /* the one muted play a scroll video needs; if the phone wants a tap first (Low Power Mode), the next tap anywhere does it (4 Oct, same fix as the FD site) */
+  let needTap=false, tapArmed=false;
+  function primeVid(){ const pr=v.play(); if(pr) pr.catch(e=>{ if(e&&e.name==="NotAllowedError"){ needTap=true; armTap(); } }); }
+  function armTap(){
+    if(tapArmed) return; tapArmed=true; const ev=["touchend","click","keydown"];
+    const go=()=>{ tapArmed=false; ev.forEach(t=>removeEventListener(t,go,true)); if(needTap){ needTap=false; if(v.getAttribute("src")) primeVid(); } };
+    ev.forEach(t=>addEventListener(t,go,{capture:true,passive:true}));
+  }
   const clamp=x=>Math.min(1,Math.max(0,x));
   function update(){
     const r=track.getBoundingClientRect(), span=r.height-innerHeight, p=clamp(-r.top/span);
@@ -1580,13 +1588,21 @@ $("#th-title").classList.add("in");
     sec.style.setProperty("--k",clamp((p-.33)/.12).toFixed(3));
     if(k>=3) kin.textContent=KIN[k-3];
   }
-  function tick(){
-    if(near&&v.getAttribute("src")&&v.readyState>=1&&!v.seeking&&Math.abs(v.currentTime-target)>1/24) v.currentTime=target;
+  /* seek only once frames have loaded (a seek before that can hang in Safari), and re-ask if one hangs anyway */
+  let seekAt=0;
+  function tick(now){
+    if(near&&v.getAttribute("src")){
+      if(v.seeking){ if(now-seekAt>1500){ v.currentTime=target; seekAt=now; } }
+      else if(v.readyState>=2&&Math.abs(v.currentTime-target)>1/24){ v.currentTime=target; seekAt=now; }
+    }
     raf=requestAnimationFrame(tick);
   }
   let hd=null, hdAsked=false;
   const wantHD=!SAVER&&(innerWidth*(devicePixelRatio||1)>=700);
-  function setSrc(url){ const t=v.currentTime||target; v.src=url; v.addEventListener("loadeddata",()=>{ v.currentTime=t; still.style.visibility="hidden"; },{once:true}); }
+  /* iPhone Safari loads nothing for preload="none" and shows no frame until the video has played once:
+     ask for the data, then a muted play that pauses itself the moment it starts (tick then seeks) */
+  v.addEventListener("playing",()=>v.pause());
+  function setSrc(url){ const t=v.currentTime||target; v.preload="auto"; v.src=url; v.addEventListener("loadeddata",()=>{ v.currentTime=t; still.style.visibility="hidden"; },{once:true}); primeVid(); }
   async function loadHD(){
     if(hdAsked||!wantHD) return; hdAsked=true;
     try{ const res=await fetch(CLIP_HD); if(!res.ok) return; hd=URL.createObjectURL(await res.blob()); }catch(e){ return; }
@@ -1602,11 +1618,13 @@ $("#th-title").classList.add("in");
   function sleep(){ if(v.getAttribute("src")){ v.removeAttribute("src"); v.load(); still.style.visibility="visible"; } }
   new IntersectionObserver(es=>es.forEach(e=>{ near=e.isIntersecting; if(near){ wake(); if(!raf) raf=requestAnimationFrame(tick); } else { sleep(); cancelAnimationFrame(raf); raf=0; } }),{rootMargin:"60% 0px"}).observe(sec);
   new IntersectionObserver(es=>{ if(es.some(e=>e.isIntersecting)&&!still_only) loadHD(); },{rootMargin:"150% 0px"}).observe(sec);
+  /* Safari may refuse a play while the video is still off screen: try again once it is on screen */
+  new IntersectionObserver(es=>{ if(es.some(e=>e.isIntersecting)&&v.getAttribute("src")&&v.readyState<2) primeVid(); }).observe(sec);
   addEventListener("scroll",update,{passive:true}); addEventListener("resize",update); update();
   if(location.hash==="#gt3-debug"){
     const d=document.createElement("div"); d.style.cssText="position:absolute;left:8px;top:calc(70px + env(safe-area-inset-top,0px));z-index:9;font:600 12px/1.3 var(--mono);background:#000;color:#fff;padding:6px 8px;border:1px solid var(--orange)";
     sec.querySelector(".gt3-stage").appendChild(d);
-    setInterval(()=>{ d.textContent=(v.videoWidth?v.videoWidth+"p-wide clip":"no clip yet")+" · HD "+(hd?"ready":hdAsked?"downloading":(wantHD?"waiting":"off"))+" · dpr "+(devicePixelRatio||1); },500);
+    setInterval(()=>{ d.textContent=still_only?"still only: "+(RM?"Reduce Motion is on":"data saver is on"):(v.videoWidth?v.videoWidth+"p-wide clip":"no clip yet")+" · ready "+v.readyState+"/4"+(needTap?" · waiting for a tap":"")+" · HD "+(hd?"ready":hdAsked?"downloading":(wantHD?"waiting":"off"))+" · dpr "+(devicePixelRatio||1); },500);
     setTimeout(()=>sec.scrollIntoView(),400);
   }
 })();
