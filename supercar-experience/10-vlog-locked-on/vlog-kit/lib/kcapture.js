@@ -19,6 +19,9 @@
  * the `frames` mode above, `fps` may be fractional (24000/1001), and the page is loaded once
  * with a longer ready timeout.
  *   options: --k 10 (default samples) --shutter 180 --workers 2 --scale 1
+ *            --bg <dir>  put the footage behind the page: <dir>/<name>.jpg for each output frame (ffmpeg
+ *                        -start_number 0 %05d.jpg). Frames come out opaque, already composited. For themes whose
+ *                        plates blur what's behind them (hud-layouts/themes/glass*.json), which a transparent layer can't do.
  *
  * The page may define window.KT_PLAN = {k, shutter, spans:[{a,b,k,shutter}]} (see kinetic.js) to
  * raise K only where motion is fast. Frames whose DOM style state (KT.signature) is identical at
@@ -45,6 +48,10 @@ fs.mkdirSync(outDir, { recursive: true });
   await pg.waitForFunction(() => window.__ktReady === true, null, { timeout: 60000 });
   const cdp = await pg.context().newCDPSession(pg);
   await cdp.send('Emulation.setDefaultBackgroundColorOverride', { color: { r: 0, g: 0, b: 0, a: 0 } });
+  const BG = opt('bg', null);
+  if (BG) await pg.evaluate(() => { const im = new Image(); im.id = '__bg';
+    im.style.cssText = 'position:absolute;left:0;top:0;width:1080px;height:1920px;z-index:0';
+    document.body.insertBefore(im, document.body.firstChild); });
   const plan = await pg.evaluate(() => window.KT_PLAN || {});
   const fps = mode === 'seq' || mode === 'frames' || mode === 'list' ? (a1.includes('/') ? a1.split('/')[0] / a1.split('/')[1] : +a1) : 24;
   const planAt = t => { let k = plan.k || K0, sh = plan.shutter || SH0;
@@ -69,6 +76,8 @@ fs.mkdirSync(outDir, { recursive: true });
       if (s0 === s1 && s0 === sm) { ts.length = 0; ts.push(t); } }
     const bufs = [];
     const sub = span / ts.length;
+    if (BG) await pg.evaluate(async src => { const im = document.getElementById('__bg'); im.src = src; await im.decode(); },
+      'file://' + path.resolve(BG, name + '.jpg'));
     for (const ti of ts) { await pg.evaluate(([ti, sub]) => { window.__ktSub = sub; window.renderAt(ti); }, [ti, sub]); bufs.push(await shot()); nShots++; }
     const fx = await pg.evaluate(t => { window.renderAt(t); return window.FX || {}; }, t);
     if (Object.keys(fx).length) fs.writeFileSync(path.join(outDir, `fx_${name}.json`), JSON.stringify(fx));

@@ -11,8 +11,9 @@ side-G series and the DRV drive plate (drive_deck.js) inlined. It renders with t
 
 Then lay the PNG sequence over the clip with tools/encode.sh. Every component is the kit's (lib/sekit.js) except DRV
 (drive_deck.js) and PRG (hud_progress.js). --theme themes/<name>.json swaps the accent and restyles the plates; the
-glass themes blur the footage behind the plates, so they only show right with the footage behind the page:
-tools/hud_still.js renders a still that way (the transparent layer alone has nothing to blur).
+glass themes blur the footage behind the plates, so they need the footage behind the page: for a video, extract the
+base's frames (ffmpeg -i base.mov -q:v 1 -start_number 0 bg/%05d.jpg) and add --bg bg to kcapture; for a still,
+tools/hud_still.js. A recipe can name its theme ("theme": "glass-orange"); --theme overrides it.
 """
 import argparse, base64, json, pathlib
 HERE = pathlib.Path(__file__).resolve().parent
@@ -24,8 +25,11 @@ ap.add_argument('--scene', required=True); ap.add_argument('--tracks', required=
 ap.add_argument('--side-g', default=None); ap.add_argument('--name', required=True)
 ap.add_argument('--theme', default=None, help='themes/<name>.json: accent colour and plate/stripe CSS (default: the gold)')
 a = ap.parse_args()
-theme = json.load(open(a.theme)) if a.theme else {}
+
 scene = json.load(open(a.scene)); tracks = json.load(open(a.tracks))
+# a recipe can name its theme ("theme": "glass-orange"); --theme overrides it
+theme_file = a.theme or (str(HERE / 'themes' / (scene['theme'] + '.json')) if scene.get('theme') else None)
+theme = json.load(open(theme_file)) if theme_file else {}
 lat = json.load(open(a.side_g)) if a.side_g else []
 logos = {f: 'data:image/png;base64,' + base64.b64encode((LOGOS / f).read_bytes()).decode()
          for f in ['sce-primary-horizontal--white.png', 'sce-icon-mark-only--white.png']}

@@ -26,7 +26,8 @@
     "progress": [
      0,
      12.012
-    ]
+    ],
+    "rail": false
    }
   },
   {
@@ -112,6 +113,20 @@
     "built": false,
     "exit": false
    }
+  },
+  {
+   "code": "PRG",
+   "type": "progressBar",
+   "t0": 0.5,
+   "t1": 13.0,
+   "p": {
+    "style": "underline",
+    "anchor": "D1",
+    "range": [
+     0,
+     12.012
+    ]
+   }
   }
  ],
  "plan": {
@@ -125,5 +140,6 @@
     "shutter": 180
    }
   ]
- }
+ },
+ "theme": "glass-orange"
 }
