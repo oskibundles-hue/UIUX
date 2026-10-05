@@ -96,8 +96,12 @@ expects: `sto.mp4, amg.mov, mcl750.mov, sf90.mov, urus.mp4, gt3_white.mov, gt3_l
   - dips the music under heroes (R14);
   - finally checks every cue for masking on the real render, raising or dropping it (R10).
 - **Output:** `public/audio/soundtrack.wav` (music + SFX, −14 LUFS), `sfx/cuesheet.md`, `sfx/cues.json`, `sfx/sfx_stem.wav`.
-- **Reference timing:** an optional `sfx/reference.json` (hits learned from the Higgsfield reel) promotes events the reel
-  also sounds. Timing only; no reel audio is used.
+- **Reference timing:** `sfx/reference.json`, made by `~/.local/vlogtools/sfx/reference.py <project> <reel>`, promotes
+  events the reference also sounds. Timing only; the reel's audio is analysed in memory and never saved or mixed. It splits
+  the reel's effects from its music (REPET), then tests our event moments against shifted ones and writes hits only if
+  they beat chance. **Checked 2026-10-05 on the Higgsfield reel** (Dropbox `Mobile Uploads/Video Oct 04 2026, 9 50 36 PM.mp4`):
+  picture lines up (23 of 34 cuts within 70 ms, median 0 ms), but its effects (quiet UI blips and the mascot's chirps) hit
+  7 of 122 moments vs 7.7% by chance (lift x0.7, p 0.84). No hits written; the engine runs on the research rules alone.
 - **Spotting render:** `npx remotion render src/index.ts RaceWeekend sfx/gfx.mp4 --scale=0.25 --props='{"gfxOnly":true}'` blanks the
   footage and grain (`GFX_ONLY` in `src/core.tsx`) so motion analysis sees only the graphics.
 
