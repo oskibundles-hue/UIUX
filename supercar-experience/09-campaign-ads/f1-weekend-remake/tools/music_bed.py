@@ -18,14 +18,20 @@ Automation (ad seconds):
 Writes public/audio/music_roar.wav (48 kHz float, matched to the synth bed's loudness, -9.7 LUFS) for
 sfx/events.json. The original synth bed (npm run audio -> public/audio/music.wav) is untouched.
 
-  uv run --no-project --with numpy --with scipy --with soundfile python tools/music_bed.py
+--cut 30 fits the same track to the 30 s cut (src/cut30.json) and writes music_roar30.wav:
+  ad  0.0 - 17.7  same first part (beat 64 on the title -> open cut at 2.3 s)
+  ad 17.8 - end   beat 324, so the drop lands on the GT3 RS's engine start in shot 30 (its frame 36)
+  automation: low-pass opening, a gentle pull back under the text bubble (shot 4, 3.17 - 5.70),
+  tension 16.6 - 17.7 (900 -> 250 Hz, -4 -> -10 dB), 0.1 s of air, drop at 17.8; the track's own stop at 29.72.
+
+  uv run --no-project --with numpy --with scipy --with soundfile python tools/music_bed.py [--cut 30]
 """
-import os, re, subprocess
+import argparse, os, re, subprocess
 import numpy as np, soundfile as sf
 from scipy.signal import butter, sosfiltfilt
 
 SR = 48000
-DUR = 2295 / 30                  # ad length, s
+DUR = 2295 / 30                  # ad length, s (76 s cut; --cut 30 changes these in main)
 T0, BEAT = 0.0679, 0.42554       # track beat grid (measured, median residual 6 ms)
 LEAD = 0.042                     # kicks start this much before the grid (41.5-43.7 ms on four section drops)
 OFF_A = T0 - LEAD + 64 * BEAT - 2.3     # track = ad + OFF_A for the first part
@@ -71,7 +77,26 @@ def loudness(path):
     return float(re.findall(r'I:\s+(-?[\d.]+) LUFS', s)[-1]), float(re.findall(r'Peak:\s+(-?[\d.]+) dBFS', s)[-1])
 
 
+# per cut: length, end of the first part, the drop, and the automation points (ad seconds)
+DRY = 20000
+CUTS = {
+    '76': dict(dur=2295 / 30, cut_a=CUT_A, gap_end=GAP_END, dst=DST,
+               fc=[(0.0, 300), (2.2, 1000), (2.3, DRY), (7.85, DRY), (8.0, 1200), (12.55, 1200), (12.7, DRY),
+                   (59.9, DRY), (60.0, 900), (CUT_A, 250), (GAP_END, DRY)],
+               gain=[(7.85, 0), (8.0, -2), (12.55, -2), (12.7, 0), (59.9, 0), (60.0, -4), (CUT_A, -10), (GAP_END, 0)]),
+    '30': dict(dur=30.0, cut_a=17.7, gap_end=17.8, dst=os.path.join(P, 'public', 'audio', 'music_roar30.wav'),
+               fc=[(0.0, 300), (2.2, 1000), (2.3, DRY), (3.1, DRY), (3.2, 1500), (5.6, 1500), (5.7, DRY),
+                   (16.5, DRY), (16.6, 900), (17.7, 250), (17.8, DRY)],
+               gain=[(3.1, 0), (3.2, -1.5), (5.6, -1.5), (5.7, 0), (16.5, 0), (16.6, -4), (17.7, -10), (17.8, 0)]),
+}
+
+
 def main():
+    ap = argparse.ArgumentParser()
+    ap.add_argument('--cut', default='76', choices=sorted(CUTS))
+    c = CUTS[ap.parse_args().cut]
+    DUR, CUT_A, GAP_END, DST = c['dur'], c['cut_a'], c['gap_end'], c['dst']
+    OFF_B = T0 - LEAD + 324 * BEAT - GAP_END
     trk = decode(SRC)
     n = int(round(DUR * SR))
     t = np.arange(n) / SR
@@ -88,12 +113,8 @@ def main():
     i0, b = take(GAP_END, DUR, OFF_B)
     out[i0:i0 + len(b)] = b
 
-    dry = 20000
-    fc = ramp(t, [(0.0, 300), (2.2, 1000), (2.3, dry),
-                  (7.85, dry), (8.0, 1200), (12.55, 1200), (12.7, dry),
-                  (59.9, dry), (60.0, 900), (CUT_A, 250), (GAP_END, dry)])
-    gain_db = ramp(t, [(7.85, 0), (8.0, -2), (12.55, -2), (12.7, 0),
-                       (59.9, 0), (60.0, -4), (CUT_A, -10), (GAP_END, 0)])
+    fc = ramp(t, c['fc'])
+    gain_db = ramp(t, c['gain'])
     out = lowpass_blend(out, fc) * (10 ** (gain_db / 20))[:, None]
 
     # de-click every edge: in at 0, out at the first part's end, the track's own stop at the very end

@@ -26,13 +26,13 @@ Made by `~/.local/vlogtools/sfx/engine.py` from `sfx/events.json`. Rules R1-R23:
 | 18 | 19.73 s | 592 | 10 | prompt bar slides up | whoosh | -3 | prompt bar slides up (R19) |
 | 19 | 21.73 s | 652 | 10 | send pressed | send | +3 | send: short rising swoosh on the press frame (R6 R19) |
 | 20 | 22.00 s | 660 | 11 | cut into shot 11 | boom + crack | +5 | new act: section cuts are the only cuts that get a boom (R7 R12 R15). R15: body is mostly below 300 Hz, phones would lose it |
-| 21 | 23.30 s | 699 | 12 | cut into shot 12 | hit_soft (+1 st) | +2 | punch flash on the cut: short hit (R12). body peak held 1.1 dB down so the limiter leaves the transient alone (R14) |
+| 21 | 23.30 s | 699 | 12 | cut into shot 12 | hit_soft (+1 st) | +2 | punch flash on the cut: short hit (R12) |
 | 22 | 23.53 s | 706 | 12 | badge ring draws | whoosh (+1 st) | -1 | sweep: whoosh peak on its fastest point (R4 R19) |
 | 23 | 23.57 s | 707 | 12 | gear pops | pop (-1 st) | -1 | element pops in (R6 R9) |
 | 24 | 23.77 s | 713 | 12 | disc pops | pop (+2 st) | -2 | element pops in (R6 R9) |
 | 25 | 23.97 s | 719 | 12 | check mark draws | tick | -3 | check ticks (R9 R16) |
 | 26 | 24.50 s | 735 | 12 | zoom out to the editor | whoosh_long | +0 | zoom-out: longer, lower whoosh for a bigger move (R19) |
-| 27 | 24.70 s | 741 | 12 | SE monogram stamps onto the badge | stamp + hit_soft -6 dB + crack | +8 | stamp = proof moment: impact plus a bright crack on the contact frame (R2 R15). spring 9/220 reaches full size 4 f after it starts; body peak held 2.3 dB down so the limiter leaves the transient alone (R14). R15: hero hit, crack keeps it on phones |
+| 27 | 24.70 s | 741 | 12 | SE monogram stamps onto the badge | stamp + hit_soft -6 dB + crack | +8 | stamp = proof moment: impact plus a bright crack on the contact frame (R2 R15). spring 9/220 reaches full size 4 f after it starts. R15: hero hit, crack keeps it on phones |
 | 28 | 26.00 s | 780 | 13 | layer bar slides in (1/3) | tick (+1 st) | -4 | rows slide in (R9) |
 | 29 | 26.27 s | 788 | 13 | layer bar slides in (3/3) | tick (-1 st) | -2 | rows slide in (R9). last of a burst of 3; raised 2.5 dB: the music + other cues covered it (best octave 4000 Hz, R10) |
 | 30 | 26.43 s | 793 | 13 | playhead scrubs THU → SAT | whoosh (-1 st) | -2 | sweep: whoosh peak on its fastest point (R4 R19) |
@@ -40,11 +40,11 @@ Made by `~/.local/vlogtools/sfx/engine.py` from `sfx/events.json`. Rules R1-R23:
 | 32 | 28.57 s | 857 | 15 | prompt types "Pull the fleet…" | tick run x9 (random pitch -2..+2 st, level jitter) | -5 | typing: one quiet run of ticks, not one per character (R6 R9) |
 | 33 | 30.50 s | 915 | 15 | send pressed | send (+1 st) | +2 | send: short rising swoosh on the press frame (R6 R19) |
 | 34 | 31.00 s | 930 | 16 | white card "Pulling cars, dates, and pickup times…" | plink | +1 | status card appears: soft plink on its first frame (R6) |
-| 35 | 31.27 s | 938 | 16 | chip slides in | tick (+2 st) | -1 | chip slides in: quiet tick (R6). raised 2.0 dB: the music + other cues covered it (best octave 2000 Hz, R10) |
-| 36 | 32.40 s | 972 | 17 | cut into shot 17 | swish_hit + whoosh -4 dB | +4 | whip: whoosh peak on the first frame of the new shot (R4). body peak held 1.4 dB down so the limiter leaves the transient alone (R14) |
-| 37 | 32.57 s | 977 | 17 | fleet row cascades in (1/8) | tick (-2 st) | -3 | rows slide in (R9). raised 3.1 dB: the music + other cues covered it (best octave 4000 Hz, R10) |
-| 38 | 32.73 s | 982 | 17 | car ticked available (1/6) | tick | -1 | check ticks (R9 R16). raised 2.8 dB: the music + other cues covered it (best octave 2000 Hz, R10) |
-| 39 | 32.90 s | 987 | 17 | fleet row cascades in (8/8) | tick (+1 st) | -3 | rows slide in (R9). last of a burst of 8; raised 3.7 dB: the music + other cues covered it (best octave 2000 Hz, R10) |
+| 35 | 31.27 s | 938 | 16 | chip slides in | tick (+2 st) | -1 | chip slides in: quiet tick (R6). raised 1.9 dB: the music + other cues covered it (best octave 2000 Hz, R10) |
+| 36 | 32.40 s | 972 | 17 | cut into shot 17 | swish_hit + whoosh -4 dB | +4 | whip: whoosh peak on the first frame of the new shot (R4) |
+| 37 | 32.57 s | 977 | 17 | fleet row cascades in (1/8) | tick (-2 st) | -2 | rows slide in (R9). raised 3.6 dB: the music + other cues covered it (best octave 4000 Hz, R10) |
+| 38 | 32.73 s | 982 | 17 | car ticked available (1/6) | tick | -1 | check ticks (R9 R16). raised 3.1 dB: the music + other cues covered it (best octave 2000 Hz, R10) |
+| 39 | 32.90 s | 987 | 17 | fleet row cascades in (8/8) | tick (+1 st) | -3 | rows slide in (R9). last of a burst of 8; raised 3.8 dB: the music + other cues covered it (best octave 2000 Hz, R10) |
 | 40 | 33.20 s | 996 | 18 | asset tile pops (1/5) | pop (-2 st) | -3 | element pops in (R6 R9) |
 | 41 | 33.60 s | 1008 | 18 | asset tile pops (5/5) | pop | -4 | element pops in (R6 R9). last of a burst of 5 |
 | 42 | 33.93 s | 1018 | 18 | OK badge springs in | chime | +2 | OK badge = success: rising chime (R19) |
@@ -55,7 +55,7 @@ Made by `~/.local/vlogtools/sfx/engine.py` from `sfx/events.json`. Rules R1-R23:
 | 47 | 37.00 s | 1110 | 20 | cut into shot 20 | boom_cut (-1 st) + crack | +5 | new act: section cuts are the only cuts that get a boom (R7 R12 R15). R15: body is mostly below 300 Hz, phones would lose it |
 | 48 | 39.53 s | 1186 | 20 | send pressed | send (-1 st) | +1 | send: short rising swoosh on the press frame (R6 R19) |
 | 49 | 40.00 s | 1200 | 21 | cut into shot 21 | hit_soft (-1 st) | +1 | punch flash on the cut: short hit (R12) |
-| 50 | 40.27 s | 1208 | 21 | "ROUTE!" slams in | impact_reveal + crack | +8 | word slam: impact on the frame it reaches full size (R2 R15). spring 9/300 reaches full size 4 f after it starts; body peak held 4.0 dB down so the limiter leaves the transient alone (R14). R15: body is mostly below 300 Hz, phones would lose it |
+| 50 | 40.27 s | 1208 | 21 | "ROUTE!" slams in | impact_reveal + crack | +8 | word slam: impact on the frame it reaches full size (R2 R15). spring 9/300 reaches full size 4 f after it starts; body peak held 1.1 dB down so the limiter leaves the transient alone (R14). R15: body is mostly below 300 Hz, phones would lose it |
 | 51 | 42.00 s | 1260 | 23 | white card "Mapped." | plink (+1 st) | +0 | status card appears: soft plink on its first frame (R6) |
 | 52 | 43.40 s | 1302 | 24 | map island rises | whoosh_long (+1 st) | -2 | map rises: soft long whoosh (R19) |
 | 53 | 43.67 s | 1310 | 24 | landmark pops (1/5) | pop (+1 st) | -5 | element pops in (R6 R9) |
@@ -68,28 +68,28 @@ Made by `~/.local/vlogtools/sfx/engine.py` from `sfx/events.json`. Rules R1-R23:
 | 60 | 47.37 s | 1421 | 26 | stop photo card pops (1/5) | pop (+2 st) | -1 | photo card pops (R9) |
 | 61 | 47.73 s | 1432 | 26 | map pin drops (5/5) | pop (-4 st) | -3 | pin lands: low pop (R9). last of a burst of 5 |
 | 62 | 48.03 s | 1441 | 26 | stop photo card pops (5/5) | pop (-2 st) | -2 | photo card pops (R9). last of a burst of 5 |
-| 63 | 48.77 s | 1463 | 26 | cursor clicks (ripple) | plink + tick -6 dB | +1 | cursor click on the contact frame (R6). body peak held 0.0 dB down so the limiter leaves the transient alone (R14) |
+| 63 | 48.77 s | 1463 | 26 | cursor clicks (ripple) | plink + tick -6 dB | +1 | cursor click on the contact frame (R6) |
 | 64 | 49.60 s | 1488 | 27 | cut into shot 27 | boom (-1 st) + crack | +5 | new act: section cuts are the only cuts that get a boom (R7 R12 R15). R15: body is mostly below 300 Hz, phones would lose it |
-| 65 | 49.60 s | 1488 | 27 | cut into shot 27 | whoosh_hit + whoosh_long -4 dB | +3 | whip: whoosh peak on the first frame of the new shot (R4). body peak held 6.8 dB down so the limiter leaves the transient alone (R14) |
+| 65 | 49.60 s | 1488 | 27 | cut into shot 27 | whoosh_hit + whoosh_long -4 dB | +3 | whip: whoosh peak on the first frame of the new shot (R4). body peak held 2.9 dB down so the limiter leaves the transient alone (R14) |
 | 66 | 51.13 s | 1534 | 28 | prompt types "Hold the GT3 RS…" | tick run x9 (random pitch -2..+2 st, level jitter) | -6 | typing: one quiet run of ticks, not one per character (R6 R9) |
 | 67 | 54.13 s | 1624 | 28 | send pressed | send (+2 st) | +0 | send: short rising swoosh on the press frame (R6 R19) |
-| 68 | 55.00 s | 1650 | 29 | glow ring bursts and opens on the GT3 RS | impact_reveal + chime -8 dB + crack | +6 | glow ring opens on the car: reveal hit (R5 R19). body peak held 3.3 dB down so the limiter leaves the transient alone (R14). R15: body is mostly below 300 Hz, phones would lose it |
-| 69 | 57.43 s | 1723 | 30 | tag pops (1/4) | pop | -2 | tag pops (R9) |
-| 70 | 57.83 s | 1735 | 30 | tag pops (4/4) | pop (+1 st) | -3 | tag pops (R9). last of a burst of 4 |
-| 71 | 58.03 s | 1741 | 30 | thumbnail pops (1/3) | pop (-1 st) | -3 | photo card pops (R9) |
-| 72 | 58.43 s | 1753 | 30 | thumbnail pops (3/3) | pop (+2 st) | -4 | photo card pops (R9). last of a burst of 3 |
-| 73 | 59.03 s | 1771 | 30 | badge stamps onto the poster | stamp + hit_soft -6 dB (-1 st) + crack | +8 | stamp = proof moment: impact plus a bright crack on the contact frame (R2 R15). spring 10/260 reaches full size 4 f after it starts; body peak held 2.2 dB down so the limiter leaves the transient alone (R14). R15: hero hit, crack keeps it on phones |
+| 68 | 55.00 s | 1650 | 29 | glow ring bursts and opens on the GT3 RS | impact_reveal + chime -8 dB + crack | +6 | glow ring opens on the car: reveal hit (R5 R19). body peak held 0.6 dB down so the limiter leaves the transient alone (R14). R15: body is mostly below 300 Hz, phones would lose it |
+| 69 | 56.40 s | 1692 | 30 | IGNITION tag types on | pop | -2 | tag pops (R9) |
+| 70 | 56.80 s | 1704 | 30 | MODE · SPORT tag | pop (+1 st) | -3 | tag pops (R9) |
+| 71 | 58.37 s | 1751 | 30 | lock-on gate closes on the GT3 RS | pop (-1 st) | -4 | element pops in (R6 R9). raised 1.5 dB: the music + other cues covered it (best octave 500 Hz, R10) |
+| 72 | 58.93 s | 1768 | 30 | sector strip lights S1 THU · S2 FRI · S3 SAT · RACE NIGHT (4/4) | pop (+2 st) | -3 | tag pops (R9). last of a burst of 4; raised 1.2 dB: the music + other cues covered it (best octave 1000 Hz, R10) |
+| 73 | 59.37 s | 1781 | 30 | RACE WEEKEND PASS badge stamps | stamp + hit_soft -6 dB (-1 st) + crack | +8 | stamp = proof moment: impact plus a bright crack on the contact frame (R2 R15). spring 10/260 reaches full size 4 f after it starts; body peak held 5.0 dB down so the limiter leaves the transient alone (R14). R15: hero hit, crack keeps it on phones |
 | 74 | 60.00 s | 1800 | 31 | cut into shot 31 | boom_cut (+1 st) + crack | +5 | new act: section cuts are the only cuts that get a boom (R7 R12 R15). R15: body is mostly below 300 Hz, phones would lose it |
-| 75 | 60.27 s | 1808 | 31 | prompt types "Lock it in…" | tick run x8 (random pitch -2..+2 st, level jitter) | -7 | typing: one quiet run of ticks, not one per character (R6 R9) |
+| 75 | 60.27 s | 1808 | 31 | prompt types "Lock it in…" | tick run x8 (random pitch -2..+2 st, level jitter) | -6 | typing: one quiet run of ticks, not one per character (R6 R9). raised 1.0 dB: the music + other cues covered it (best octave 8000 Hz, R10) |
 | 76 | 62.67 s | 1880 | 31 | send pressed | send (-2 st) | -1 | send: short rising swoosh on the press frame (R6 R19) |
 | 77 | 63.50 s | 1905 | 32 | cut into shot 32 | swish_hit + whoosh -4 dB (+1 st) | +5 | speed cut: whoosh peak on the cut (R4) |
-| 78 | 63.50 s | 1905 | 31 | tension into the speed cut | scan_swell | +1 | riser peaking on the speed cut (R5) |
+| 78 | 63.50 s | 1905 | 31 | tension into the speed cut | scan_swell | +1 | riser peaking on the speed cut (R5). body peak held 0.8 dB down so the limiter leaves the transient alone (R14) |
 | 79 | 64.63 s | 1939 | 33 | "typing…" indicator | tick (-1 st) | -4 | typing indicator: one quiet tick (R6) |
 | 80 | 65.03 s | 1951 | 33 | "Looks perfect! Booked." arrives | message (-1 st) | +4 | "Booked." is the payoff, so its message sound is featured (R12) |
 | 81 | 68.33 s | 2050 | 34 | REV hops in | blip (-2 st) | -2 | REV pops in: bright blip (R6 R19) |
 | 82 | 68.83 s | 2065 | 34 | REV lands a hop (1/8) | blip | -3 | REV lands a hop (R7 R8) |
 | 83 | 69.30 s | 2079 | 34 | REV lands a hop (2/8) | blip (+1 st) | -4 | REV lands a hop (R7 R8) |
-| 84 | 72.77 s | 2183 | 35 | SE logo lands on the end card | outro_hit + chime -10 dB + crack | +7 | logo settles: stinger on the settle frame, tail dies before the loop (R5 R23). spring 14/120 reaches full size 8 f after it starts; body peak held 0.2 dB down so the limiter leaves the transient alone (R14). R15: hero hit, crack keeps it on phones |
+| 84 | 72.77 s | 2183 | 35 | SE logo lands on the end card | outro_hit + chime -10 dB + crack | +7 | logo settles: stinger on the settle frame, tail dies before the loop (R5 R23). spring 14/120 reaches full size 8 f after it starts. R15: hero hit, crack keeps it on phones |
 
 ## Skipped, and why
 
@@ -106,9 +106,9 @@ Made by `~/.local/vlogtools/sfx/engine.py` from `sfx/events.json`. Rules R1-R23:
 | 15.93 s | 7 | caption "Spyder?" | R9: lands within 2 f of "the bubble dissolves to a McLaren 750S, top down"; two arrivals at once smear, so the bigger one plays |
 | 16.70 s | 8 | cut into shot 8 | R7 R8: plain cut, the music carries it (sound at most 1 in 3 cuts) |
 | 17.60 s | 9 | cut into shot 9 | R7 R8: plain cut, the music carries it (sound at most 1 in 3 cuts) |
-| 17.67 s | 9 | pixel code types on | R10: masked here (best octave 2000 Hz is -7.2 dB under the music + other cues), and +4 dB would not clear it |
+| 17.67 s | 9 | pixel code types on | R10: masked here (best octave 2000 Hz is -8.5 dB under the music + other cues), and +4 dB would not clear it |
 | 19.00 s | 10 | cut into shot 10 | R7 R8: plain cut, the music carries it (sound at most 1 in 3 cuts) |
-| 20.00 s | 10 | prompt types "I need a car for F1 weekend…" | R10: masked here (best octave 2000 Hz is -6.7 dB under the music + other cues), and +4 dB would not clear it |
+| 20.00 s | 10 | prompt types "I need a car for F1 weekend…" | R10: masked here (best octave 8000 Hz is -8.7 dB under the music + other cues), and +4 dB would not clear it |
 | 22.00 s | 11 | white agent card "Booking request received." | R10: +0 f from "cut into shot 11", masked by it |
 | 22.30 s | 11 | second line fades in | event table: a text line fading in gets no sound (the card already has one) |
 | 26.00 s | 13 | cut into shot 13 | R7 R8: plain cut, the music carries it (sound at most 1 in 3 cuts) |
@@ -133,7 +133,7 @@ Made by `~/.local/vlogtools/sfx/engine.py` from `sfx/events.json`. Rules R1-R23:
 | 33.40 s | 18 | asset tile pops (3/5) | R9: 5 pops inside 12 f read as one gesture, so only the first and last sound |
 | 33.50 s | 18 | asset tile pops (4/5) | R9: 5 pops inside 12 f read as one gesture, so only the first and last sound |
 | 34.50 s | 19 | cut into shot 19 | R7 R8: plain cut, the music carries it (sound at most 1 in 3 cuts) |
-| 37.20 s | 20 | prompt types "Map the drive…" | R10: masked here (best octave 8000 Hz is -12.4 dB under the music + other cues), and +4 dB would not clear it |
+| 37.20 s | 20 | prompt types "Map the drive…" | R10: masked here (best octave 8000 Hz is -12.2 dB under the music + other cues), and +4 dB would not clear it |
 | 41.20 s | 22 | cut into shot 22 | R7 R8: plain cut, the music carries it (sound at most 1 in 3 cuts) |
 | 42.00 s | 23 | cut into shot 23 | R7 R8: plain cut, the music carries it (sound at most 1 in 3 cuts) |
 | 42.30 s | 23 | "Five stops. One route." fades in | event table: a text line fading in gets no sound (the card already has one) |
@@ -153,11 +153,11 @@ Made by `~/.local/vlogtools/sfx/engine.py` from `sfx/events.json`. Rules R1-R23:
 | 50.80 s | 28 | cut into shot 28 | R7 R8: plain cut, the music carries it (sound at most 1 in 3 cuts) |
 | 55.00 s | 29 | cut into shot 29 | R9: lands within 2 f of "glow ring bursts and opens on the GT3 RS"; two arrivals at once smear, so the bigger one plays |
 | 56.30 s | 30 | cut into shot 30 | R7 R8: plain cut, the music carries it (sound at most 1 in 3 cuts) |
-| 56.37 s | 30 | "THE GT3 RS" big type-on | R10: masked here (best octave 4000 Hz is -10.9 dB under the music + other cues), and +4 dB would not clear it |
-| 57.03 s | 30 | body copy fades in | event table: a text line fading in gets no sound (the card already has one) |
-| 57.57 s | 30 | tag pops (2/4) | R9: 4 tags inside 12 f read as one gesture, so only the first and last sound |
-| 57.70 s | 30 | tag pops (3/4) | R9: 4 tags inside 12 f read as one gesture, so only the first and last sound |
-| 58.23 s | 30 | thumbnail pops (2/3) | R9: 3 photo_cards inside 12 f read as one gesture, so only the first and last sound |
+| 57.50 s | 30 | RACE WEEKEND slams in as the engine fires: no SFX, the engine (and in the 30 s cut the drop) carries it | event table: a text line fading in gets no sound (the card already has one) |
+| 58.43 s | 30 | sector strip lights S1 THU · S2 FRI · S3 SAT · RACE NIGHT (1/4) | R9: lands within 2 f of "lock-on gate closes on the GT3 RS"; two arrivals at once smear, so the bigger one plays |
+| 58.60 s | 30 | sector strip lights S1 THU · S2 FRI · S3 SAT · RACE NIGHT (2/4) | R9: 4 tags inside 15 f read as one gesture, so only the first and last sound |
+| 58.63 s | 30 | rental line fades up | event table: a text line fading in gets no sound (the card already has one) |
+| 58.77 s | 30 | sector strip lights S1 THU · S2 FRI · S3 SAT · RACE NIGHT (3/4) | R9: 4 tags inside 15 f read as one gesture, so only the first and last sound |
 | 64.50 s | 33 | cut into shot 33 | R7 R8: plain cut, the music carries it (sound at most 1 in 3 cuts) |
 | 68.00 s | 34 | cut into shot 34 | R7 R8: plain cut, the music carries it (sound at most 1 in 3 cuts) |
 | 68.67 s | 34 | CTA line fades in | event table: a text line fading in gets no sound (the card already has one) |
@@ -168,4 +168,4 @@ Made by `~/.local/vlogtools/sfx/engine.py` from `sfx/events.json`. Rules R1-R23:
 | 71.67 s | 34 | REV lands a hop (7/8) | R7 R8: a repeating move gets a sound only the first 2 times; scoring every hop is Mickey-Mousing |
 | 72.17 s | 34 | REV lands a hop (8/8) | R7 R8: a repeating move gets a sound only the first 2 times; scoring every hop is Mickey-Mousing |
 | 72.50 s | 35 | cut into shot 35 | R7 R8: plain cut, the music carries it (sound at most 1 in 3 cuts) |
-| 73.47 s | 35 | shine sweeps across the logo | R10: masked here (best octave 4000 Hz is -10.9 dB under the music + other cues), and +4 dB would not clear it |
+| 73.47 s | 35 | shine sweeps across the logo | R10: masked here (best octave 4000 Hz is -11.1 dB under the music + other cues), and +4 dB would not clear it |

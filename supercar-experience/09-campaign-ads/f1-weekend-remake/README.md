@@ -8,6 +8,23 @@ reaction: "this was actually amazing". Not yet marked approved for posting.
 - Rendered file: `SCE_F1-Weekend_Remake_76s-9x16.mp4` was delivered in that chat (the master is not in Dropbox yet).
 - Look: SE gold (#F2C500) on black. Mascot **REV** is an original pixel supercar, not the reference's cat.
 
+## Two cuts: the 76 s reference and the 30 s ad
+
+The boss liked the ad but wants it 30 s for paid ads (2026-10-05). Both cuts come from the same code:
+
+| Cut | Composition | File | Job |
+|---|---|---|---|
+| 76.5 s | `RaceWeekend` | `SCE_F1-Weekend_Remake_76s-9x16` | **the reference**: every move of the pixel/animated style at full length; the template for the next ad in this style |
+| 30.0 s | `RaceWeekend30` | `SCE_F1-Weekend_Remake_30s-9x16` | **the ad**: 16 of the 35 shots (`src/cut30.json`), tighter caption timings (`short` in `src/Ad.tsx`) |
+
+The 30 s cut keeps the story in four beats: the ask (1–10), the booking (12, 17, 21), the route (26), the car (30, 32)
+and the payoff (33–35). Its music is the same track re-fitted (`tools/music_bed.py --cut 30`) so the beat drops on the
+GT3 RS's engine start in shot 30 (17.8 s). To re-cut it: edit `src/cut30.json`, then `npm run cut30`, `npm run music`,
+`npm run carsound`, `npm run sfx30`, `npm run render30`, `npm run finish30`.
+
+**Sound in both cuts:** music (ROAR), the engine's SFX, and since 2026-10-05 each car shot's own engine and road sound
+(`tools/car_audio.py`: level by role, the music ducks where a car leads; `sfx/car_audio<cut>.json` says what each shot got).
+
 ## Story (acts)
 
 | Shots | Time | What happens |
@@ -16,7 +33,7 @@ reaction: "this was actually amazing". Not yet marked approved for posting.
 | 4–10 | 8–22 s | Client text "Need a supercar for F1 weekend. ASAP." REV pops in, morphs coupe → spider, pixel fire, pixel code, "Wait / No / Let me book it", prompt bar |
 | 11–19 | 22–37 s | White card "Booking request received.", the race-weekend pass builds in the SE Concierge booking window, THU · FRI · SAT day bars, "HI, I'M REV!", "Pull the fleet for race weekend.", the Las Vegas fleet list with AVAILABLE ticks, booking kit, sector keyframes |
 | 20–26 | 37–49.6 s | "Map the drive from pickup to the Strip.", ROUTE! slam, "Mapped.", map island builds, "Pulling every stop…", route map with 5 pins, photo cards, cursor click |
-| 27–30 | 49.6–60 s | Semi whips past the GT3 RS, "Hold the GT3 RS for race weekend.", glow-ring reveal, RACE WEEKEND poster with badge stamp |
+| 27–30 | 49.6–60 s | Semi whips past the GT3 RS, "Hold the GT3 RS for race weekend.", glow-ring reveal, **Ignition** (shot 30): the GT3 RS start-up, RACE WEEKEND slams in on the engine, lock-on gate, sector strip, rev meter driven by the real engine sound, badge stamp |
 | 31–35 | 60–76.5 s | "Lock it in and send the confirmation!", AMG speed cut, "Looks perfect! Booked." text, REV hops with the booking line, end card |
 
 `shots.json` holds every shot: timing, the reference shot, our shot, the animation moves, and the footage source + in-point.
@@ -31,13 +48,19 @@ src/
   pixel.tsx    REV sprite + morphs (coupe, wedge), PixelFire, Sparks, PixelCode
   editor.tsx   Badge (staged build), EditorChrome, LayerStack, KeyframeStreak, ProjectPanel, AssetBoard
   map.tsx      MapIsland (Las Vegas valley), MapBuild, MapFull (pins, photo cards, cursor)
-  poster.tsx   GlowReveal, Poster, TitleLockup, EndCard
+  poster.tsx   GlowReveal, Poster (old shot 30, kept), TitleLockup, EndCard
+  ignition.tsx shot 30 "Ignition": HUD tags, slam title, chequer band, lock-on gate, sector strip, rev meter, badge
+  cut30.json   the 30 s cut: which shots, how many frames each
+  rev_env.ts   shot 30's engine loudness per frame (made by tools/car_audio.py)
 audio/synth.py    generates music.wav (76.5 s bed) and the synth SFX into public/audio/ (all original, numpy only)
 sfx/events.json   spotting list for the SFX engine: every on-screen event, frame-exact, taken from the animation code
 sfx/cuesheet.md   engine output: every sound placed and every event skipped, each with its reason (rules R1–R23)
 sfx/cues.json     the same as data, plus loudness, density and per-cue audibility
 tools/cut_plates.py  cuts public/plates/sNN.mp4 from the raw clips using shots.json
-tools/finish.py      masters the sound (house limiter, -14 LUFS, last 50 ms silent) and writes the one Instagram file
+tools/finish.py      masters the sound (house limiter, -14 LUFS, last 50 ms silent) and writes the one Instagram file (--name for the 30 s)
+tools/music_bed.py   fits ROAR to the cut (--cut 76 | 30)
+tools/car_audio.py   the clips' own car sound, levelled per shot, + the music ducks -> public/audio/bed<cut>.wav (the engine's music)
+tools/cut30.py       shots30.json + sfx/events30.json for the 30 s cut
 public/brand/     SE logo + monogram, vectorised from the overlay-kit PNGs
 public/stills/    frames used by the map cards and the poster
 ```

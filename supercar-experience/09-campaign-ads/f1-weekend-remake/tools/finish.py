@@ -2,6 +2,7 @@
 
 Usage:
     python3 tools/finish.py                       # out/SCE_F1-Weekend_Remake_76s-9x16.mp4 -> ..._IG.mp4
+    python3 tools/finish.py --name SCE_F1-Weekend_Remake_30s-9x16   # the 30 s cut
     python3 tools/finish.py --audio-only in.wav   # master the sound only and print the numbers
 
 Sound: linked true-peak limiter (detector max(|L|, |R|, 0.707 |L+R|), 4x oversampled) at -2.0 dBTP,
@@ -78,16 +79,21 @@ def check(path):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument('--src', default=os.path.join(ROOT, 'out', NAME + '.mp4'))
+    ap.add_argument('--name', default=NAME, help='render name in out/ (without .mp4); writes <name>_IG.mp4')
+    ap.add_argument('--src', help='default: out/<name>.mp4')
     ap.add_argument('--audio-only')
     a = ap.parse_args()
+    a.src = a.src or os.path.join(ROOT, 'out', a.name + '.mp4')
     out = os.path.join(ROOT, 'out')
     wav = os.path.join(out, '_mastered.wav')
     if a.audio_only:
         print('master', master(a.audio_only, wav))
         return
     print('master', master(a.src, wav))
-    dst = os.path.join(out, NAME + '_IG.mp4')
+    dst = os.path.join(out, a.name + '_IG.mp4')
+    # the picture sets the length: pad the sound and cut at the video's end (-shortest lost the last frame)
+    dur = float(subprocess.run(['ffprobe', '-v', 'error', '-select_streams', 'v:0', '-show_entries', 'stream=duration',
+                                '-of', 'csv=p=0', a.src], capture_output=True, text=True, check=True).stdout)
     log = os.path.join(out, '_x264pass')
     v = ['-c:v', 'libx264', '-profile:v', 'high', '-pix_fmt', 'yuv420p', '-b:v', '11.5M',
          '-maxrate', '15M', '-bufsize', '23M', '-preset', 'slow', '-passlogfile', log]
@@ -95,12 +101,14 @@ def main():
                     '-f', 'mp4', os.devnull], check=True)
     subprocess.run(['ffmpeg', '-v', 'error', '-y', '-i', a.src, '-i', wav, '-map', '0:v:0', '-map', '1:a:0',
                     *v, '-pass', '2', '-c:a', 'aac', '-b:a', '320k', '-ar', str(SR), '-movflags', '+faststart',
-                    '-shortest', dst], check=True)
+                    '-af', 'apad', '-t', f'{dur:.4f}', dst], check=True)
     for f in os.listdir(out):
         if f.startswith('_x264pass'):
             os.remove(os.path.join(out, f))
     print('wrote', dst, f'{os.path.getsize(dst) / 1e6:.1f} MB')
-    print('check', check(dst))
+    frames = lambda f: subprocess.run(['ffprobe', '-v', 'error', '-count_packets', '-select_streams', 'v:0', '-show_entries',
+                                       'stream=nb_read_packets', '-of', 'csv=p=0', f], capture_output=True, text=True).stdout.strip()
+    print('check', check(dst), 'frames', frames(dst), 'of', frames(a.src))
 
 
 if __name__ == '__main__':

@@ -3,13 +3,13 @@
   "id": 1,
   "t0": 0.0,
   "t1": 2.3,
-  "hf": "Title lockup: Higgsfield MCP \u00d7 Claude, OPUS 5.5, 'for Motion Design' pill. Jungle with flowers in the foreground, light streak, parallax.",
+  "hf": "Title lockup: Higgsfield MCP × Claude, OPUS 5.5, 'for Motion Design' pill. Jungle with flowers in the foreground, light streak, parallax.",
   "anim": [
    "Logo lockup reveal",
    "Light streak sweep",
    "Foreground parallax"
   ],
-  "se": "Title lockup: SUPERCAR EXPERIENCE \u00d7 REV, big 'RENT A SUPERCAR' on screen from frame 0 (Instagram cover), 'for F1 Weekend' pill, LAS VEGAS \u00b7 NOV 19\u201321. Hurac\u00e1n STO parked outside a Vegas building at night, light streak sweep, parallax push.",
+  "se": "Title lockup: SUPERCAR EXPERIENCE × REV, big 'RENT A SUPERCAR' on screen from frame 0 (Instagram cover), 'for F1 Weekend' pill, LAS VEGAS · NOV 19–21. Huracán STO parked outside a Vegas building at night, light streak sweep, parallax push.",
   "src": "sto.mp4",
   "ss": 18.0
  },
@@ -158,7 +158,7 @@
    "Badge assembly",
    "Zoom-out to editor UI"
   ],
-  "se": "SE Concierge booking window (menus Fleet \u00b7 Dates \u00b7 Route \u00b7 Pickup): the race-weekend pass assembles (rings, rays, checkered band, monogram; text ring RACE WEEKEND PASS \u2605 THU \u00b7 FRI \u00b7 SAT) inside a glowing pixel ring, then zooms out to the window.",
+  "se": "SE Concierge booking window (menus Fleet · Dates · Route · Pickup): the race-weekend pass assembles (rings, rays, checkered band, monogram; text ring RACE WEEKEND PASS ★ THU · FRI · SAT) inside a glowing pixel ring, then zooms out to the window.",
   "src": "sto.mp4",
   "ss": 20.0
  },
@@ -171,7 +171,7 @@
    "Layer bars stack",
    "Playhead scrub"
   ],
-  "se": "Day bars THU, FRI, SAT \u00b7 RACE NIGHT stack in; the playhead lands on Saturday.",
+  "se": "Day bars THU, FRI, SAT · RACE NIGHT stack in; the playhead lands on Saturday.",
   "src": null
  },
  {
@@ -204,12 +204,12 @@
   "id": 16,
   "t0": 31.0,
   "t1": 32.4,
-  "hf": "White card: 'Creating photos, pins, and badges\u2026' + tool chip 'Generating visuals for Ivayu Reserve.'",
+  "hf": "White card: 'Creating photos, pins, and badges…' + tool chip 'Generating visuals for Ivayu Reserve.'",
   "anim": [
    "Status text shimmer",
    "Chip slide-in"
   ],
-  "se": "White card: 'Pulling cars, dates, and pickup times\u2026' + chip 'Building cards for the Las Vegas fleet.'",
+  "se": "White card: 'Pulling cars, dates, and pickup times…' + chip 'Building cards for the Las Vegas fleet.'",
   "src": null
  },
  {
@@ -246,7 +246,7 @@
    "Keyframe dot streaks",
    "Timeline pan/zoom"
   ],
-  "se": "Keyframe dots streak across tracks through the race-weekend sector strip S1 THU \u00b7 S2 FRI \u00b7 S3 SAT \u00b7 RACE NIGHT.",
+  "se": "Keyframe dots streak across tracks through the race-weekend sector strip S1 THU · S2 FRI · S3 SAT · RACE NIGHT.",
   "src": null
  },
  {
@@ -314,11 +314,11 @@
   "id": 25,
   "t0": 45.4,
   "t1": 46.7,
-  "hf": "White card chip: 'Generating photos of the trail stops\u2026'",
+  "hf": "White card chip: 'Generating photos of the trail stops…'",
   "anim": [
    "Chip shimmer"
   ],
-  "se": "White card: 'Pulling every stop\u2026' + chip 'Pulling frames from the fleet footage.'",
+  "se": "White card: 'Pulling every stop…' + chip 'Pulling frames from the fleet footage.'",
   "src": null
  },
  {
@@ -379,15 +379,29 @@
   "t1": 60.0,
   "hf": "Poster: 'THE SUN GATE' types on, body copy, tags, thumbnails pop, badge stamps.",
   "anim": [
-   "Big type-on",
-   "Tag pops",
-   "Thumbnail pops",
+   "HUD tags",
+   "Type slam on the engine roar",
+   "Chequer band",
+   "Lock-on gate",
+   "Sector strip",
+   "Rev meter",
    "Badge stamp"
   ],
-  "se": "Poster: 'RACE WEEKEND' types on; photo label PORSCHE 911 GT3 RS \u00b7 AVAILABLE IN LAS VEGAS; tags THU \u00b7 FRI \u00b7 SAT, RACE NIGHT, 518 HP, 9,000 RPM; thumbnails pop, pass stamps.",
+  "se": "GT3 RS start-up: finger on the start button, SPORT on the dial, foot down and the engine fires on local frame 36 (the 30 s cut's music drop lands there too), then the car launches down the tunnel. RACE WEEKEND slams in on a black scrim with a flat chequer band, a lock-on gate closes on the car (PORSCHE 911 GT3 RS · LAS VEGAS FLEET · AVAILABLE; no hp or rpm figures: client-ad rule), the sector strip lights S1 THU · S2 FRI · S3 SAT · RACE NIGHT, a rev meter follows the clip's own engine sound, the pass stamps.",
   "src": "gt3_livery.mov",
-  "ss": 12.4,
-  "note": "Uses stills from public/stills, not a plate."
+  "ss": 2.0,
+  "parts": [
+   {
+    "ss": 2.0,
+    "len": 2.0,
+    "what": "start button, SPORT dial, foot down (engine fires at src 3.20)"
+   },
+   {
+    "ss": 8.592,
+    "len": 1.7,
+    "what": "launches away down the tunnel (src cut at 8.592)"
+   }
+  ]
  },
  {
   "id": 31,
@@ -422,7 +436,7 @@
   "anim": [
    "Message bubble pop"
   ],
-  "se": "GT3 RS in the garage (livery clip, slowed to 0.55\u00d7), slow push. Bubble: 'Looks perfect! Booked. Next: the whole crew for the rally.'",
+  "se": "GT3 RS in the garage (livery clip, slowed to 0.55×), slow push. Bubble: 'Looks perfect! Booked. Next: the whole crew for the rally.'",
   "src": "gt3_livery.mov",
   "ss": 12.05,
   "speed": 0.55
@@ -431,12 +445,12 @@
   "id": 34,
   "t0": 68.0,
   "t1": 72.5,
-  "hf": "Hero walks off, mascot hops along. CTA line: 'Try Higgsfield MCP for motion design\u2026'",
+  "hf": "Hero walks off, mascot hops along. CTA line: 'Try Higgsfield MCP for motion design…'",
   "anim": [
    "Mascot hop",
    "CTA line fade"
   ],
-  "se": "STO under the lights, REV hops along. CTA: 'TEXT OR DM TO BOOK \u00b7 (725) 425-3583 \u00b7 SUPERCAREXP.VIP'",
+  "se": "STO under the lights, REV hops along. CTA: 'TEXT OR DM TO BOOK · (725) 425-3583 · SUPERCAREXP.VIP'",
   "src": "sto.mp4",
   "ss": 19.8
  },

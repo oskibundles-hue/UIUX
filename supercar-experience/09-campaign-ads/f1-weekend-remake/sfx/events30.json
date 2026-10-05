@@ -1,22 +1,17 @@
 {
- "about": "Spotting list for the SFX engine (~/.local/vlogtools/sfx/engine.py). Frames are shot-local and come from the animation code (src/*.tsx). The engine decides which of these get a sound, which sound, how loud, and writes why.",
+ "about": "Spotting list for the 30 s cut, made by tools/cut30.py from sfx/events.json and src/cut30.json. Spotting list for the SFX engine (~/.local/vlogtools/sfx/engine.py). Frames are shot-local and come from the animation code (src/*.tsx). The engine decides which of these get a sound, which sound, how loud, and writes why.",
  "fps": 30,
- "total": 2295,
- "shots_from": "shots.json",
+ "total": 900,
+ "shots_from": "shots30.json",
  "music": {
-  "file": "public/audio/bed76.wav",
+  "file": "public/audio/bed30.wav",
   "gain": 1.0,
-  "note": "music_roar.wav x 0.55 with ducks + the natural car sound stem, made by tools/car_audio.py --cut 76"
+  "note": "music_roar30.wav x 0.55 with ducks + the natural car sound stem, made by tools/car_audio.py --cut 30"
  },
- "spotting_video": "sfx/gfx.mp4",
+ "spotting_video": null,
+ "motion": null,
  "cuts": {
-  "3": [
-   "punch"
-  ],
   "4": [
-   "section"
-  ],
-  "11": [
    "section"
   ],
   "12": [
@@ -25,21 +20,11 @@
   "17": [
    "whip"
   ],
-  "20": [
-   "section"
-  ],
   "21": [
    "punch"
   ],
-  "27": [
-   "section",
-   "whip"
-  ],
-  "29": [
+  "30": [
    "punch"
-  ],
-  "31": [
-   "section"
   ],
   "32": [
    "speed"
@@ -91,19 +76,19 @@
   },
   {
    "shot": 6,
-   "at": 22,
+   "at": 6,
    "kind": "word",
    "what": "caption \"What\""
   },
   {
    "shot": 6,
-   "at": 28,
+   "at": 11,
    "kind": "word",
    "what": "caption \"is it\""
   },
   {
    "shot": 6,
-   "at": 34,
+   "at": 16,
    "kind": "word",
    "what": "caption \"this time?\""
   },
@@ -144,19 +129,6 @@
    "what": "explosion flash and sparks"
   },
   {
-   "shot": 9,
-   "at": 2,
-   "kind": "typing",
-   "len": 14,
-   "what": "pixel code types on"
-  },
-  {
-   "shot": 9,
-   "at": 20,
-   "kind": "word",
-   "what": "caption \"Specs?\""
-  },
-  {
    "shot": 10,
    "at": 0,
    "kind": "mascot",
@@ -170,46 +142,15 @@
   },
   {
    "shot": 10,
-   "at": 12,
+   "at": 10,
    "kind": "word",
    "what": "\"No\""
   },
   {
    "shot": 10,
-   "at": 20,
+   "at": 16,
    "kind": "word",
    "what": "\"Let me book it\""
-  },
-  {
-   "shot": 10,
-   "at": 22,
-   "kind": "bar_in",
-   "what": "prompt bar slides up"
-  },
-  {
-   "shot": 10,
-   "at": 30,
-   "kind": "typing",
-   "len": 29,
-   "what": "prompt types \"I need a car for F1 weekend…\""
-  },
-  {
-   "shot": 10,
-   "at": 82,
-   "kind": "send",
-   "what": "send pressed"
-  },
-  {
-   "shot": 11,
-   "at": 0,
-   "kind": "card",
-   "what": "white agent card \"Booking request received.\""
-  },
-  {
-   "shot": 11,
-   "at": 9,
-   "kind": "line",
-   "what": "second line fades in"
   },
   {
    "shot": 12,
@@ -257,59 +198,6 @@
    "what": "SE monogram stamps onto the badge"
   },
   {
-   "shot": 13,
-   "at": 0,
-   "kind": "row",
-   "repeat": 3,
-   "step": 4,
-   "what": "layer bar slides in"
-  },
-  {
-   "shot": 13,
-   "at": 2,
-   "kind": "sweep",
-   "len": 22,
-   "peak_at": 13,
-   "what": "playhead scrubs THU → SAT"
-  },
-  {
-   "shot": 14,
-   "at": 4,
-   "kind": "bubble",
-   "what": "\"HI, I'M REV!\" speech bubble"
-  },
-  {
-   "shot": 14,
-   "at": 6,
-   "kind": "mascot",
-   "what": "REV appears in the editor"
-  },
-  {
-   "shot": 15,
-   "at": 8,
-   "kind": "typing",
-   "len": 23,
-   "what": "prompt types \"Pull the fleet…\""
-  },
-  {
-   "shot": 15,
-   "at": 66,
-   "kind": "send",
-   "what": "send pressed"
-  },
-  {
-   "shot": 16,
-   "at": 0,
-   "kind": "card",
-   "what": "white card \"Pulling cars, dates, and pickup times…\""
-  },
-  {
-   "shot": 16,
-   "at": 8,
-   "kind": "chip",
-   "what": "chip slides in"
-  },
-  {
    "shot": 17,
    "at": 5,
    "kind": "row",
@@ -326,45 +214,6 @@
    "what": "car ticked available"
   },
   {
-   "shot": 18,
-   "at": 0,
-   "kind": "pop",
-   "repeat": 5,
-   "step": 3,
-   "what": "asset tile pops"
-  },
-  {
-   "shot": 18,
-   "at": 22,
-   "kind": "confirm",
-   "spring": [
-    9,
-    260
-   ],
-   "what": "OK badge springs in"
-  },
-  {
-   "shot": 19,
-   "at": 10,
-   "kind": "keyframe",
-   "repeat": 4,
-   "step": 14,
-   "what": "sector keyframe lights up"
-  },
-  {
-   "shot": 20,
-   "at": 6,
-   "kind": "typing",
-   "len": 24,
-   "what": "prompt types \"Map the drive…\""
-  },
-  {
-   "shot": 20,
-   "at": 76,
-   "kind": "send",
-   "what": "send pressed"
-  },
-  {
    "shot": 21,
    "at": 4,
    "kind": "slam",
@@ -374,59 +223,6 @@
    ],
    "align": "contact",
    "what": "\"ROUTE!\" slams in"
-  },
-  {
-   "shot": 23,
-   "at": 0,
-   "kind": "card",
-   "what": "white card \"Mapped.\""
-  },
-  {
-   "shot": 23,
-   "at": 9,
-   "kind": "line",
-   "what": "\"Five stops. One route.\" fades in"
-  },
-  {
-   "shot": 24,
-   "at": 0,
-   "kind": "build",
-   "len": 16,
-   "peak_at": 6,
-   "what": "map island rises"
-  },
-  {
-   "shot": 24,
-   "at": 14,
-   "kind": "pop",
-   "repeat": 5,
-   "step": 3,
-   "what": "landmark pops"
-  },
-  {
-   "shot": 24,
-   "at": 28,
-   "kind": "route_draw",
-   "len": 30,
-   "what": "route line draws"
-  },
-  {
-   "shot": 24,
-   "at": 36,
-   "kind": "pin",
-   "what": "Sphere marker grows"
-  },
-  {
-   "shot": 25,
-   "at": 0,
-   "kind": "card",
-   "what": "white card \"Pulling every stop…\""
-  },
-  {
-   "shot": 25,
-   "at": 8,
-   "kind": "chip",
-   "what": "chip slides in"
   },
   {
    "shot": 26,
@@ -456,29 +252,12 @@
    "what": "stop photo card pops"
   },
   {
-   "shot": 26,
-   "at": 62,
-   "kind": "click",
-   "what": "cursor clicks (ripple)"
-  },
-  {
-   "shot": 28,
-   "at": 10,
-   "kind": "typing",
-   "len": 25,
-   "what": "prompt types \"Hold the GT3 RS…\""
-  },
-  {
-   "shot": 28,
-   "at": 100,
-   "kind": "send",
-   "what": "send pressed"
-  },
-  {
-   "shot": 29,
+   "shot": 30,
    "at": 0,
-   "kind": "reveal",
-   "what": "glow ring bursts and opens on the GT3 RS"
+   "kind": "tension",
+   "until_cut": 30,
+   "until_at": 36,
+   "what": "tension into the drop: the GT3 RS engine fires and the beat comes back on the same frame"
   },
   {
    "shot": 30,
@@ -530,26 +309,6 @@
    "what": "RACE WEEKEND PASS badge stamps"
   },
   {
-   "shot": 31,
-   "at": 8,
-   "kind": "typing",
-   "len": 25,
-   "what": "prompt types \"Lock it in…\""
-  },
-  {
-   "shot": 31,
-   "at": 80,
-   "kind": "send",
-   "what": "send pressed"
-  },
-  {
-   "shot": 31,
-   "at": 80,
-   "kind": "tension",
-   "until_cut": 32,
-   "what": "tension into the speed cut"
-  },
-  {
    "shot": 33,
    "at": 4,
    "kind": "typing_dots",
@@ -569,17 +328,17 @@
   },
   {
    "shot": 34,
-   "at": 24.3,
-   "kind": "hop",
-   "repeat": 8,
-   "step": 14.28,
-   "what": "REV lands a hop"
-  },
-  {
-   "shot": 34,
    "at": 20,
    "kind": "line",
    "what": "CTA line fades in"
+  },
+  {
+   "shot": 34,
+   "at": 24.3,
+   "kind": "hop",
+   "repeat": 4,
+   "step": 14.28,
+   "what": "REV lands a hop"
   },
   {
    "shot": 35,
