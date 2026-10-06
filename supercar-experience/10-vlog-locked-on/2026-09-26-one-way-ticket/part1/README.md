@@ -12,7 +12,22 @@ folder is a copy of that build with this vlog's cut, config and the changes list
 
 **Exports** (`exports/`, git-ignored; `2026-09-26 One-way ticket Part 1 - SE LOCKED-ON vlog …`):
 
-EXPORTS_TABLE
+| File | What |
+|---|---|
+| `… - 1080x1920.mp4` | **the master.** H.264 High, yuv420p bt709, 1080x1920, 29.97 fps, x264 medium CRF 17.3 (VBV 16M / 22M), AAC-LC 48 kHz 256k, +faststart: **314.7 MB (300.2 MiB), 13.97 Mb/s**. 5401 frames = 180.21 s. Loudness on the mp4 (ffmpeg loudnorm): **-14.11 LUFS integrated, -1.69 dBTP true peak**, LRA 4.2; the last 102 ms are digital silence |
+| `… - 1080x1920_DELIVERY.mp4` | the master re-encoded two-pass at 11.2 Mb/s (the build makes it whenever the master is over 11.5 Mb/s, the Instagram delivery rate), same audio: 246.9 MiB, -14.11 LUFS, -1.69 dBTP. **Upload this one** |
+| `… - NO MUSIC - 1080x1920.mp4` | the same video stream with dialog + nat + SFX only: 298.9 MiB, -14.05 LUFS, -1.93 dBTP |
+| `… - PREVIEW 720x1280.mp4` | phone preview, two-pass 1.1 Mb/s from the master (the single-pass CRF preview came out at 38.8 MiB): **27.3 MiB** (< 30 MiB), -14.62 LUFS, -1.90 dBTP |
+| `… - music-stem.wav` | the music alone, as it sits in the master |
+| `poster.jpg`, `contact-sheet.jpg` | frame 0 (the hook) and one frame every 2 s |
+| `qa/` | first / middle / last frame of every beat and every graphic, `beats-sheet.jpg`, `elements-sheet.jpg`, `shots-sheet.jpg`, `caption-swaps-sheet.jpg`, `track_*.jpg`, `gates.md`, `swapcheck.json`, `qa_summary.json` |
+
+**QA gates** (`exports/qa/gates.md`, `qa_summary.json`): 0 errors before the render. Loudness: every export inside -14 ±0.5
+LUFS (preview -14.62 against its -14.5 ±0.6 target) and ≤ -1.5 dBTP. Caption sync: median lag 0 ms over 28 pieces,
+largest 70 ms. Swap check: 58 caption page changes, 0 frames with two pages or mixed texts. Safe zone: 2 of 361 sampled
+times touch the edge, both the first frame of a chapter slam (THE PICKUP at 54.02 s, HIT THE ROAD at 113.02 s), where the
+kit's G1 slam enters at 1.55x scale with motion blur for a frame or two before it settles inside the safe area (the
+rally's slams do the same; its samples did not land on them).
 
 ## What is on screen
 
@@ -76,16 +91,95 @@ here went through SlopMonster: 5/5.
 
 ## Sound
 
-SOUND_SECTION
+**Music: original and easy to remove.** The bed is rally v2's synth bed (`lib/music.py`: numpy only, fixed seeds, no
+samples, so it is ours to use), re-timed to this cut: F minor, 104.73 BPM, the DROP on the vibes montage (119.8 s) through
+both HUD strips, a no-kick breath under the plane window (43.4-48.4 s), a lift as the car rolls up (78.9 s), risers into
+every chapter, a breakdown from Oregon (146.9 s), the music's own tape stop (173.65-174.23 s) and the bell sting on the end
+card (174.8 s). DROP and end card are exactly 24 bars apart, so both land on a downbeat.
+
+- **Switch it off:** `"enabled": false` in `config.json` → `music`, or `MUSIC=0 ./render.sh --stage audio,compose,qa`. The
+  **NO MUSIC master is exported every time anyway** (for a trending sound in Instagram).
+- **Swap it:** drop a licensed track at `audio/music.wav` (48 kHz stereo) and set `bpm`, `downbeat0`, `offset`.
+- **Stem:** `exports/… - music-stem.wav` is the music as it sits in the master.
+
+**Ducking** as rally v2: side-chained from every dialog piece, -11 dB, 60 ms attack, 400 ms release, gaps under 0.6 s held
+down (`.work/mix.json` `duck_check` has the level under each of the 28 pieces).
+
+**Dialog.** 28 pieces from the mezzanine audio, rally v2's chain: high-pass 80 Hz, `afftdn`, a slow 2:1 compressor, centred
+mono, each levelled to -16 LUFS, 12 ms edge fades. Piece edges sit in the pauses of the word timings (no trims needed).
+
+**Nat.** Only under B-roll shots with no dialog: the terminal and escalator, the gate, the plane window (engines, -24 LUFS),
+the red shop building, the car rolling up (-20 LUFS: the engine as it arrives), the roof opening, the hook montage. **The
+driving clips 0094-0099 carry no nat**: he says "we're gonna play some music too" in 0094 (12:11) and 0092 has a song on the
+car stereo, so their own sound could carry a copyrighted track; the music bed covers them.
+
+**Accents** (the SE-LO pack, `10-motion-sfx/locked-on-sfx/`), placed by the build from the layer: open hit, whooshes on the
+whips and sweeps, a drop hit on each chapter slam, acquire / lock ticks on the name lock and the car lock, a tick on the
+clock stamp, the place and tease tags, the end-card hit; 45 % of the music's unducked RMS, a further 6 dB down under speech.
+
+**Master:** sum → 30 Hz high-pass → 4x-oversampled true-peak limiter at -2.0 dBTP → gain to -14.0 LUFS, the last 60 ms
+zeros. On the delivered master: -14.11 LUFS integrated, -1.69 dBTP true peak.
 
 ## Picture
 
-PICTURE_SECTION
+- **The cut** is `data/edl.json` (`tools/make_edl.py`): 41 shots + the end card, 5,401 frames at 29.97 fps (180.2 s),
+  28 dialog pieces. Sources are the Osmo Action 6 open-gate clips (3840x3840 59.94p), fetched as 1920x1920 mezzanines
+  (`vlog.py plan` / `fetch`); 59.94 sources drop every other frame at 1x.
+- **Reframe:** a 1080x1920 window centred on the square frame with rally v2's slow 4 % push; the two HUD shots hold still
+  (no push under the strip).
+- **Rotation (new):** 0090 (the car arriving, the red interior) was filmed with the camera on its side and is turned 90°
+  clockwise; 0079 (at the gate) was upside down and is turned 180° (`config.json` `shots.N.rot`, applied before the crop).
+- **Speed ramp:** the roof going down (0092): 1x while he says "let's make sure this top work", then 3x through the roof.
+- **Transitions:** whips through the hook montage and the forest montage, into the snow peaks and the second HUD shot; an
+  impact cut onto the McLaren on "McLaren 600 LT" (7.6 s); the orange light sweep at every chapter change; the chapter-slam
+  plate punch; the end card wipes up over the last shot. Hard cuts elsewhere.
+- **Grade:** rally v2's grade family per shot (a 33³ LUT fitted on the shot's own frames): `day` for the daylight
+  exteriors, `terminal` (a lifted interior look) for the airport, `cabin` for the cabin-cam and passenger-cam driving
+  shots. `exports/qa/shots-sheet.jpg` has every shot's first / middle / last frame.
+- **Speedometer blurred:** the McLaren's digital cluster is readable at phone size on the cabin-cam shots (the digits show
+  in the raw frames), so a feathered static blur sits over it on every cabin-cam shot (`config.json` `speedo`, 12 boxes).
+- **Licence plates are not blurred** (Omarie, 6 Oct: "we dont need plate blur"); `config.json` `blurs` is empty and no
+  plate is tracked.
+- **Lock-ons** are tracked on the rendered shots with `lib/track_mid.py` from a sharp anchor frame (QA sheets
+  `exports/qa/track_*.jpg`): his face at the terminal doors (B1) and the McLaren as it rolls up (LOCK). The lock-on gate
+  checks both frame by frame.
+- **The HUD glass:** the strip's plate is the glass-orange theme's dark tint (rgba(8,8,10,.58) and its 1 px edge) drawn by
+  the layer; the frosting is drawn in the picture: inside the strip's visible rect, frame by frame (following its unroll
+  and retract), the plate is blurred (22 px) and saturated (1.3), exactly what the theme's `backdrop-filter` does in a
+  browser over the footage. The layer is captured transparent, so a CSS backdrop-filter would have nothing behind it.
+- **Clocks:** camera clock = file-name start + in-point (DJI_20260926HHMMSS, local time). CH1 04:57:10, CH2 10:14:18,
+  CH3 12:10:23; IN THE AIR 09:00:01; STRIP-1 13:28:13; STRIP-2 15:42:36.
 
 ## Where this differs from rally v2, and why
 
-DIFF_SECTION
+1. **SE orange #FF4F16 for every accent** the rally layer draws in gold (stripes, slams, ticks, the banner rail, lock-ons,
+   sweeps, the caption box, the end card's accents), pale gold highlights moved to pale orange. End-card copy unchanged.
+2. **The HUD-1 strip** (`lib/drive_strip.js`, a copy of `../../hud-layouts/drive_strip.js`, changes marked `part1 copy`):
+   the glass is drawn in the picture (above), the strip can retract (`exit`), its clock is the build's camera clock and its
+   side G is the build's per-strip series.
+3. **Glass only on the strip.** The storyboard mockup themed every panel as glass; the brief names the rally v2 build plus
+   the glass strip, so the rally's black plates stay (lead's call, 6 Oct).
+4. **Captions** start a new page at every dialog piece and after any pause of 0.45 s (the rally's pager only broke on
+   sentence ends, and this footage's transcripts often have none), `lib/sekit.js` `capPages`, marked `part1 copy`.
+5. **Rotation** of sideways / upside-down shots and **static blur boxes** (`speedo`) in `lib/plate.py`.
+6. **Music** re-timed (above); `lib/mix.py` writes an empty meter when there is no quote card.
+7. **Paths** one level deeper (`../../../07-fonts`, `../../../02-logos`).
+8. **CH1's clock reads 04:57**, not the storyboard's 04:56: the chapter's first shot is 58 s into 0076 (04:56:12).
+9. **No CTA chip, quote card, route card or quote wall**: none of them was in the approved storyboard for Part 1.
 
 ## Open items
 
-OPEN_SECTION
+1. **Listen before posting.** Every sound check is numeric. Nobody has listened. In particular:
+   - whether the car stereo is playing a song under 0094's "get the vibes" line (12:10) and the "trees and nature" line;
+   - the caption readings in `data/caption_fixes.json` (two whisper models; "look at us" vs "look at this" at 0076 50.8 s,
+     "treating you" at 0077);
+   - the edges of the 28 pieces.
+2. **STRIP-2's HEADING (SE 135) is the weakest number on screen**: set from the trip, and the light in the frame suggests
+   otherwise (see HEADING and SIDE G). Confirm with Omarie or change it.
+3. **Side G left / right is not confirmed** (no turn in either window to calibrate on).
+4. **Held lines** (lead, 6 Oct): the fuel-stop "I don't think I'm going to go to sleep, I'm just gonna run it the whole
+   way" (reads as a drowsy-driving boast), the shop's name, the gas price, the miles and the "12 hours" lines.
+5. **Phone in hand while driving** in 0094 176-232 s is out (config `forbidden`); a water bottle in hand shows briefly in a
+   few driving frames elsewhere and was avoided where the footage allowed.
+6. **The index missed one speed line** (0093 1:55.8-2:00.2, "speed limit 35 we're going 45"): not in the cut, and added to
+   config `forbidden`.
