@@ -1,0 +1,122 @@
+<!doctype html>
+<!--
+  story.html -- the Locked-On motion layer of the Sep 15 rally vlog v2 (Egnyte rally day). Transparent 1080x1920.
+  window.renderAt(t) is a pure function of t (seconds on the 30000/1001 fps timeline of the cut): no CSS animation,
+  no timers, no clock, no randomness. lib/kcapture.js samples it several times per frame (true motion blur);
+  build.py composites it over the plate with ffmpeg.
+
+  What it renders is the SCENE build.py writes to .work/scene.js from config.json + the EDL + captions:
+  a list of component instances {code, type, t0, t1, p} (vlog kit types from lib/sekit.js, this vlog's own
+  from lib/v2kit.js), the capture plan and the on-screen windows.
+  Loads (written by build.py --stage prep): .work/scene.js (window.SCENE), .work/tracks.js (window.TRACKS: tracked
+  boxes in OUTPUT pixels, keyed by output frame), .work/clock.js (window.CLOCK: the camera clock of every output
+  frame, seconds of the day, from the file names), .work/layerdata.js (window.LAYERDATA: the speech meter for the quote card).
+  Fonts ../../07-fonts, logos ../../02-logos/png.
+    story.html#only=A2,G1   only those codes (preview)
+-->
+<html><head><meta charset="utf-8"><title>Rally Vlog v2 Layer</title>
+<style>
+@font-face{font-family:Bebas;src:url('../../07-fonts/BebasNeue-Regular.ttf')}
+@font-face{font-family:Michroma;src:url('../../07-fonts/Michroma-Regular.ttf')}
+:root{--gold:#FBD101;--white:#FFFFFF;--black:#000000}
+html,body{margin:0;padding:0;background:transparent;width:1080px;height:1920px;overflow:hidden}
+*{box-sizing:border-box}
+.a{position:absolute;left:0;top:0}
+.beb{font-family:Bebas;letter-spacing:0;line-height:1;white-space:pre}
+.mic{font-family:Michroma;letter-spacing:.08em;line-height:1;white-space:pre}
+.stripe{background:linear-gradient(90deg,#FBD101 0 78%,#fff 78% 100%);transform-origin:left center}
+.mask{overflow:hidden;padding:6px 24px 6px 0;margin:-6px 0 0 0}
+.edge{width:4px;margin-left:-2px;background:#fff;box-shadow:0 0 26px 9px rgba(255,255,255,.42),0 0 7px 2px rgba(255,255,255,.8);border-radius:2px}
+</style>
+<script src=".work/scene.js"></script>
+<script src=".work/tracks.js"></script>
+<script src=".work/clock.js"></script>
+<script src=".work/layerdata.js"></script>
+<script src="lib/kinetic.js"></script>
+<script src="lib/sekit.js"></script>
+<script src="lib/v2kit.js"></script>
+</head><body>
+<div id="stage" class="a" style="width:1080px;height:1920px"></div>
+<script>
+const SC = window.SCENE, TR = window.TRACKS || {}, CLK = window.CLOCK || [], DATA = window.LAYERDATA || {};
+const FPS = 30000 / 1001;
+const stage = document.getElementById('stage');
+const hashArg = k => { const m = location.hash.match(new RegExp('[#&]' + k + '=([^&]*)')); return m ? decodeURIComponent(m[1]) : null; };
+
+// tracked boxes are stored per OUTPUT frame, in output pixels (track.py ran on the rendered plate)
+function trackBox(name, fp) {
+  const tr = TR[name]; if (!tr) return null;
+  const f = fp - tr.f0, n = tr.frames.length;
+  if (f < -0.5 || f > n - 0.5) return null;
+  const i = Math.max(0, Math.min(n - 1, Math.floor(f))), j = Math.min(i + 1, n - 1), k = Math.min(1, Math.max(0, f - i));
+  const a = tr.frames[i], b = tr.frames[j], L = (u, v) => u + (v - u) * k;
+  return { x: L(a.x, b.x), y: L(a.y, b.y), w: L(a.w, b.w), h: L(a.h, b.h), conf: Math.min(a.conf, b.conf) };
+}
+const CTX = {
+  dur: SC.dur,
+  box(name, t) { return trackBox(name, t * FPS); },
+  // camera clock (seconds of the day) of the frame on screen: CLOCK[f] + the time since that frame at the shot's speed
+  // (a motion-blur sample belongs to its nominal frame, so every sample of a shot's first frame reads that shot's clock)
+  clip(t) { const f = Math.round(t * FPS + 1e-9), c = CLK[f]; if (c == null) return null; return c[0] + (t - f / FPS) * c[1]; },
+  data(name) { return DATA[name]; },
+};
+
+let ONLY = (hashArg('only') || '').split(',').filter(Boolean);
+window.setOnly = list => { ONLY = list || []; };
+let comps = [];
+window.FX = {};
+(async () => {
+  await document.fonts.load('100px Bebas'); await document.fonts.load('40px Michroma'); await KT.ready();
+  SEK.init(stage, CTX); SEK.v2init(CTX);
+  const Z = { chapterSlam: 10, v2slam: 12, captionsBox: 30, bannerTab: 50, sweep: 60, v2hook: 70, v2end: 90 };
+  comps = SC.comps.map(c => {
+    const f = SEK[c.type]; if (!f) throw new Error('unknown component type ' + c.type);
+    const n0 = stage.childElementCount, o = f(c);
+    for (let i = n0; i < stage.childElementCount; i++) { const e = stage.children[i]; e.style.zIndex = Z[c.type] ?? 20; e.dataset.type = c.type; e.dataset.code = c.code; }
+    o.code = c.code; o.t0 = c.t0; o.t1 = c.t1; return o;
+  });
+  const imgs = [...document.images];
+  await Promise.all(imgs.map(i => i.complete ? 0 : new Promise(r => { i.onload = r; i.onerror = r; })));
+  window.renderAt(0);
+  window.__ktReady = true;
+})().catch(e => { console.error(e); throw e; });
+
+window.renderAt = function (t) {
+  window.FX = {};
+  for (const c of comps) {
+    if (ONLY.length && !ONLY.includes(c.code)) { c.render(-1e9); continue; }
+    c.render(t);
+  }
+};
+window.KT_PLAN = SC.plan || { k: 1, shutter: 180, spans: [] };
+window.WINDOWS = SC.windows || [[0, SC.dur]];
+// QA: ink rects of visible text at t (safe-zone audit; clip-aware, as in the kit)
+window.inkAudit = function (t) {
+  window.renderAt(t);
+  const out = [];
+  document.querySelectorAll('.beb,.mic').forEach(n => {
+    let vis = true, m = n;
+    while (m && m !== document.body) { const cs = getComputedStyle(m); if (cs.display === 'none' || +cs.opacity < 0.05) { vis = false; break; } m = m.parentElement; }
+    if (!vis || !n.textContent.trim()) return;
+    const rr = n.getBoundingClientRect(); let r = { left: rr.left, right: rr.right, top: rr.top, bottom: rr.bottom };
+    for (let a = n.parentElement; a && a !== document.body; a = a.parentElement) {
+      const cs = getComputedStyle(a), b = a.getBoundingClientRect();
+      let c = null;
+      if (cs.overflow === 'hidden') c = { l: b.left, r: b.right, t: b.top, b: b.bottom };
+      const mm = cs.clipPath && cs.clipPath.match(/^inset\(([^)]*)\)/);
+      if (mm) {
+        const v = mm[1].trim().split(/\s+/), q = v.length === 1 ? [v[0], v[0], v[0], v[0]] : v.length === 2 ? [v[0], v[1], v[0], v[1]] : v.length === 3 ? [v[0], v[1], v[2], v[1]] : v;
+        const u = (s, L) => s.endsWith('%') ? parseFloat(s) / 100 * L : parseFloat(s);
+        const ci = { l: b.left + u(q[3], b.width), r: b.right - u(q[1], b.width), t: b.top + u(q[0], b.height), b: b.bottom - u(q[2], b.height) };
+        c = c ? { l: Math.max(c.l, ci.l), r: Math.min(c.r, ci.r), t: Math.max(c.t, ci.t), b: Math.min(c.b, ci.b) } : ci;
+      }
+      if (c) { r.left = Math.max(r.left, c.l); r.right = Math.min(r.right, c.r); r.top = Math.max(r.top, c.t); r.bottom = Math.min(r.bottom, c.b); }
+    }
+    if (r.right - r.left < 1 || r.bottom - r.top < 1) return;
+    let host = n; while (host && host.parentElement !== stage) host = host.parentElement;
+    out.push({ text: n.textContent, type: host ? host.dataset.type : null, code: host ? host.dataset.code : null, x0: r.left, x1: r.right, y0: r.top, y1: r.bottom });
+  });
+  return out;
+};
+</script>
+</body></html>

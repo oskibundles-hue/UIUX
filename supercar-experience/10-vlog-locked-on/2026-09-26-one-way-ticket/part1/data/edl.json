@@ -1,0 +1,900 @@
+{
+ "fps": "30000/1001",
+ "size": [
+  1080,
+  1920
+ ],
+ "duration": 180.2,
+ "chapters": [
+  {
+   "t": 9.6,
+   "title": "WHEELS UP",
+   "clock": ""
+  },
+  {
+   "t": 53.8,
+   "title": "THE PICKUP",
+   "clock": ""
+  },
+  {
+   "t": 112.8,
+   "title": "HIT THE ROAD",
+   "clock": ""
+  }
+ ],
+ "shots": [
+  {
+   "beat": 0,
+   "src": "0097",
+   "in": 10.4,
+   "out": 12.6,
+   "speed": 1.0,
+   "t": 0.0,
+   "dur": 2.2,
+   "note": "hook frame: snow peaks ahead, cabin cam"
+  },
+  {
+   "beat": 0,
+   "src": "0095",
+   "in": 36.0,
+   "out": 37.8,
+   "speed": 1.0,
+   "t": 2.2,
+   "dur": 1.8,
+   "note": "forest road"
+  },
+  {
+   "beat": 0,
+   "src": "0096",
+   "in": 44.0,
+   "out": 45.8,
+   "speed": 1.0,
+   "t": 4.0,
+   "dur": 1.8,
+   "note": "mountains open up"
+  },
+  {
+   "beat": 0,
+   "src": "0099",
+   "in": 172.0,
+   "out": 173.8,
+   "speed": 1.0,
+   "t": 5.8,
+   "dur": 1.8,
+   "note": "open plains"
+  },
+  {
+   "beat": 0,
+   "src": "0102",
+   "in": 15.6,
+   "out": 17.6,
+   "speed": 1.0,
+   "t": 7.6,
+   "dur": 2.0,
+   "note": "the McLaren at the pump, on \"McLaren 600 LT\""
+  },
+  {
+   "beat": 1,
+   "src": "0076",
+   "in": 58.0,
+   "out": 62.2,
+   "speed": 1.0,
+   "t": 9.6,
+   "dur": 4.2,
+   "note": "terminal, walking in"
+  },
+  {
+   "beat": 1,
+   "src": "0077",
+   "in": 20.0,
+   "out": 23.6,
+   "speed": 1.0,
+   "t": 13.8,
+   "dur": 3.6,
+   "note": "escalator down"
+  },
+  {
+   "beat": 2,
+   "src": "0076",
+   "in": 40.0,
+   "out": 51.2,
+   "speed": 1.0,
+   "t": 17.4,
+   "dur": 11.2,
+   "note": "SYNC: at the terminal doors"
+  },
+  {
+   "beat": 3,
+   "src": "0077",
+   "in": 57.8,
+   "out": 59.5,
+   "speed": 1.0,
+   "t": 28.6,
+   "dur": 1.7,
+   "note": "SYNC: reading his phone"
+  },
+  {
+   "beat": 3,
+   "src": "0077",
+   "in": 67.7,
+   "out": 70.7,
+   "speed": 1.0,
+   "t": 30.3,
+   "dur": 3.0,
+   "note": "SYNC"
+  },
+  {
+   "beat": 4,
+   "src": "0079",
+   "in": 51.4,
+   "out": 53.5,
+   "speed": 1.0,
+   "t": 33.3,
+   "dur": 2.1,
+   "note": "SYNC: at the gate"
+  },
+  {
+   "beat": 4,
+   "src": "0078",
+   "in": 30.0,
+   "out": 34.6,
+   "speed": 1.0,
+   "t": 35.4,
+   "dur": 4.6,
+   "note": "the gate area"
+  },
+  {
+   "beat": 5,
+   "src": "0081",
+   "in": 1.6,
+   "out": 5.0,
+   "speed": 1.0,
+   "t": 40.0,
+   "dur": 3.4,
+   "note": "SYNC: the jet bridge"
+  },
+  {
+   "beat": 6,
+   "src": "0082",
+   "in": 2.0,
+   "out": 4.4,
+   "speed": 1.0,
+   "t": 43.4,
+   "dur": 2.4,
+   "note": "window: wing and the city"
+  },
+  {
+   "beat": 6,
+   "src": "0082",
+   "in": 12.0,
+   "out": 14.6,
+   "speed": 1.0,
+   "t": 45.8,
+   "dur": 2.6,
+   "note": "window: coming in low"
+  },
+  {
+   "beat": 7,
+   "src": "0084",
+   "in": 88.8,
+   "out": 94.2,
+   "speed": 1.0,
+   "t": 48.4,
+   "dur": 5.4,
+   "note": "SYNC: arrivals, walking"
+  },
+  {
+   "beat": 8,
+   "src": "0087",
+   "in": 4.0,
+   "out": 6.6,
+   "speed": 1.0,
+   "t": 53.8,
+   "dur": 2.6,
+   "note": "the red shop building, cars out front"
+  },
+  {
+   "beat": 8,
+   "src": "0087",
+   "in": 44.3,
+   "out": 47.9,
+   "speed": 1.0,
+   "t": 56.4,
+   "dur": 3.6,
+   "note": "SYNC: at the door"
+  },
+  {
+   "beat": 8,
+   "src": "0087",
+   "in": 52.0,
+   "out": 53.7,
+   "speed": 1.0,
+   "t": 60.0,
+   "dur": 1.7,
+   "note": "SYNC"
+  },
+  {
+   "beat": 8,
+   "src": "0087",
+   "in": 54.9,
+   "out": 59.9,
+   "speed": 1.0,
+   "t": 61.7,
+   "dur": 5.0,
+   "note": "SYNC"
+  },
+  {
+   "beat": 9,
+   "src": "0088",
+   "in": 0.2,
+   "out": 5.4,
+   "speed": 1.0,
+   "t": 66.7,
+   "dur": 5.2,
+   "note": "SYNC: inside the shop"
+  },
+  {
+   "beat": 10,
+   "src": "0089",
+   "in": 140.6,
+   "out": 147.6,
+   "speed": 1.0,
+   "t": 71.9,
+   "dur": 7.0,
+   "note": "SYNC: outside the shop"
+  },
+  {
+   "beat": 11,
+   "src": "0090",
+   "in": 15.0,
+   "out": 20.6,
+   "speed": 1.0,
+   "t": 78.9,
+   "dur": 5.6,
+   "note": "the McLaren rolls in (camera on its side: rotated)"
+  },
+  {
+   "beat": 12,
+   "src": "0090",
+   "in": 103.8,
+   "out": 109.4,
+   "speed": 1.0,
+   "t": 84.5,
+   "dur": 5.6,
+   "note": "SYNC (rotated)"
+  },
+  {
+   "beat": 12,
+   "src": "0090",
+   "in": 114.6,
+   "out": 118.0,
+   "speed": 1.0,
+   "t": 90.1,
+   "dur": 3.4,
+   "note": "SYNC: the red interior (rotated)"
+  },
+  {
+   "beat": 13,
+   "src": "0091",
+   "in": 1.9,
+   "out": 5.2,
+   "speed": 1.0,
+   "t": 93.5,
+   "dur": 3.3,
+   "note": "SYNC: first sit, red seats"
+  },
+  {
+   "beat": 13,
+   "src": "0091",
+   "in": 14.8,
+   "out": 17.6,
+   "speed": 1.0,
+   "t": 96.8,
+   "dur": 2.8,
+   "note": "SYNC"
+  },
+  {
+   "beat": 14,
+   "src": "0092",
+   "in": 7.5,
+   "out": 19.5,
+   "speed": 1.0,
+   "t": 99.6,
+   "dur": 5.0,
+   "note": "SYNC then the roof opening at speed"
+  },
+  {
+   "beat": 15,
+   "src": "0093",
+   "in": 3.7,
+   "out": 11.9,
+   "speed": 1.0,
+   "t": 104.6,
+   "dur": 8.2,
+   "note": "SYNC: driving, passenger-side cam"
+  },
+  {
+   "beat": 16,
+   "src": "0094",
+   "in": 2.2,
+   "out": 9.2,
+   "speed": 1.0,
+   "t": 112.8,
+   "dur": 7.0,
+   "note": "SYNC: him, then the camera turns to the road"
+  },
+  {
+   "beat": 17,
+   "src": "0095",
+   "in": 46.0,
+   "out": 47.7,
+   "speed": 1.0,
+   "t": 119.8,
+   "dur": 1.7,
+   "note": "forest"
+  },
+  {
+   "beat": 17,
+   "src": "0095",
+   "in": 52.0,
+   "out": 53.6,
+   "speed": 1.0,
+   "t": 121.5,
+   "dur": 1.6,
+   "note": "forest, the road opens"
+  },
+  {
+   "beat": 18,
+   "src": "0095",
+   "in": 28.0,
+   "out": 33.8,
+   "speed": 1.0,
+   "t": 123.1,
+   "dur": 5.8,
+   "note": "forest road (his line from 0094 over it: hands on the wheel here)"
+  },
+  {
+   "beat": 19,
+   "src": "0096",
+   "in": 38.0,
+   "out": 46.0,
+   "speed": 1.0,
+   "t": 128.9,
+   "dur": 8.0,
+   "note": "HUD-1: mountains open up"
+  },
+  {
+   "beat": 20,
+   "src": "0097",
+   "in": 16.0,
+   "out": 18.0,
+   "speed": 1.0,
+   "t": 136.9,
+   "dur": 2.0,
+   "note": "snow peaks"
+  },
+  {
+   "beat": 21,
+   "src": "0099",
+   "in": 166.0,
+   "out": 174.0,
+   "speed": 1.0,
+   "t": 138.9,
+   "dur": 8.0,
+   "note": "HUD-1: open plains"
+  },
+  {
+   "beat": 22,
+   "src": "0100",
+   "in": 33.0,
+   "out": 37.4,
+   "speed": 1.0,
+   "t": 146.9,
+   "dur": 4.4,
+   "note": "SYNC: cabin cam"
+  },
+  {
+   "beat": 23,
+   "src": "0101",
+   "in": 2.6,
+   "out": 8.4,
+   "speed": 1.0,
+   "t": 151.3,
+   "dur": 5.8,
+   "note": "SYNC: pulled over"
+  },
+  {
+   "beat": 24,
+   "src": "0102",
+   "in": 4.4,
+   "out": 8.2,
+   "speed": 1.0,
+   "t": 157.1,
+   "dur": 3.8,
+   "note": "SYNC"
+  },
+  {
+   "beat": 24,
+   "src": "0102",
+   "in": 17.3,
+   "out": 25.6,
+   "speed": 1.0,
+   "t": 160.9,
+   "dur": 8.3,
+   "note": "SYNC: Red Bull and snacks"
+  },
+  {
+   "beat": 24,
+   "src": "0102",
+   "in": 81.6,
+   "out": 87.2,
+   "speed": 1.0,
+   "t": 169.2,
+   "dur": 5.6,
+   "note": "SYNC: keep on going (tease card)"
+  },
+  {
+   "beat": 25,
+   "src": "card",
+   "in": 0,
+   "out": 5.4,
+   "speed": 1.0,
+   "t": 174.8,
+   "dur": 5.4,
+   "note": "END CARD"
+  }
+ ],
+ "dialog": [
+  {
+   "beat": 0,
+   "src": "0075",
+   "in": 69.4,
+   "out": 76.72,
+   "t": 2.0,
+   "trim_pauses": null
+  },
+  {
+   "beat": 1,
+   "src": "0076",
+   "in": 14.38,
+   "out": 18.14,
+   "t": 10.1,
+   "trim_pauses": null
+  },
+  {
+   "beat": 1,
+   "src": "0076",
+   "in": 25.58,
+   "out": 28.66,
+   "t": 14.1,
+   "trim_pauses": null
+  },
+  {
+   "beat": 2,
+   "src": "0076",
+   "in": 40.1,
+   "out": 51.1,
+   "t": 17.5,
+   "trim_pauses": null
+  },
+  {
+   "beat": 3,
+   "src": "0077",
+   "in": 57.9,
+   "out": 59.38,
+   "t": 28.7,
+   "trim_pauses": null
+  },
+  {
+   "beat": 3,
+   "src": "0077",
+   "in": 67.82,
+   "out": 70.44,
+   "t": 30.42,
+   "trim_pauses": null
+  },
+  {
+   "beat": 4,
+   "src": "0079",
+   "in": 51.56,
+   "out": 53.34,
+   "t": 33.46,
+   "trim_pauses": null
+  },
+  {
+   "beat": 4,
+   "src": "0079",
+   "in": 58.62,
+   "out": 62.96,
+   "t": 35.5,
+   "trim_pauses": null
+  },
+  {
+   "beat": 5,
+   "src": "0081",
+   "in": 2.9,
+   "out": 4.66,
+   "t": 41.3,
+   "trim_pauses": null
+  },
+  {
+   "beat": 7,
+   "src": "0084",
+   "in": 89.04,
+   "out": 93.94,
+   "t": 48.64,
+   "trim_pauses": null
+  },
+  {
+   "beat": 8,
+   "src": "0087",
+   "in": 44.42,
+   "out": 47.8,
+   "t": 56.52,
+   "trim_pauses": null
+  },
+  {
+   "beat": 8,
+   "src": "0087",
+   "in": 52.1,
+   "out": 53.52,
+   "t": 60.1,
+   "trim_pauses": null
+  },
+  {
+   "beat": 8,
+   "src": "0087",
+   "in": 55.04,
+   "out": 59.74,
+   "t": 61.84,
+   "trim_pauses": null
+  },
+  {
+   "beat": 9,
+   "src": "0088",
+   "in": 0.4,
+   "out": 5.22,
+   "t": 66.9,
+   "trim_pauses": null
+  },
+  {
+   "beat": 10,
+   "src": "0089",
+   "in": 140.78,
+   "out": 147.48,
+   "t": 72.08,
+   "trim_pauses": null
+  },
+  {
+   "beat": 12,
+   "src": "0090",
+   "in": 103.9,
+   "out": 109.34,
+   "t": 84.6,
+   "trim_pauses": null
+  },
+  {
+   "beat": 12,
+   "src": "0090",
+   "in": 114.66,
+   "out": 116.14,
+   "t": 90.16,
+   "trim_pauses": null
+  },
+  {
+   "beat": 13,
+   "src": "0091",
+   "in": 2.04,
+   "out": 5.1,
+   "t": 93.64,
+   "trim_pauses": null
+  },
+  {
+   "beat": 13,
+   "src": "0091",
+   "in": 14.9,
+   "out": 17.46,
+   "t": 96.9,
+   "trim_pauses": null
+  },
+  {
+   "beat": 14,
+   "src": "0092",
+   "in": 7.62,
+   "out": 9.3,
+   "t": 99.72,
+   "trim_pauses": null
+  },
+  {
+   "beat": 15,
+   "src": "0093",
+   "in": 3.86,
+   "out": 11.72,
+   "t": 104.76,
+   "trim_pauses": null
+  },
+  {
+   "beat": 16,
+   "src": "0094",
+   "in": 2.34,
+   "out": 9.06,
+   "t": 112.94,
+   "trim_pauses": null
+  },
+  {
+   "beat": 18,
+   "src": "0094",
+   "in": 156.98,
+   "out": 162.4,
+   "t": 123.3,
+   "trim_pauses": null
+  },
+  {
+   "beat": 22,
+   "src": "0100",
+   "in": 34.46,
+   "out": 36.96,
+   "t": 148.36,
+   "trim_pauses": null
+  },
+  {
+   "beat": 23,
+   "src": "0101",
+   "in": 2.74,
+   "out": 8.26,
+   "t": 151.44,
+   "trim_pauses": null
+  },
+  {
+   "beat": 24,
+   "src": "0102",
+   "in": 4.5,
+   "out": 8.12,
+   "t": 157.2,
+   "trim_pauses": null
+  },
+  {
+   "beat": 24,
+   "src": "0102",
+   "in": 17.4,
+   "out": 25.46,
+   "t": 161.0,
+   "trim_pauses": null
+  },
+  {
+   "beat": 24,
+   "src": "0102",
+   "in": 81.74,
+   "out": 86.64,
+   "t": 169.34,
+   "trim_pauses": null
+  }
+ ],
+ "audio_extra": [
+  {
+   "beat": -1,
+   "src": "0096",
+   "in": 32.0,
+   "out": 52.0,
+   "t": 0.0,
+   "kind": "slack"
+  },
+  {
+   "beat": -1,
+   "src": "0099",
+   "in": 158.0,
+   "out": 182.0,
+   "t": 0.0,
+   "kind": "slack"
+  },
+  {
+   "beat": -1,
+   "src": "0090",
+   "in": 10.0,
+   "out": 30.0,
+   "t": 0.0,
+   "kind": "slack"
+  },
+  {
+   "beat": -1,
+   "src": "0097",
+   "in": 4.0,
+   "out": 22.0,
+   "t": 0.0,
+   "kind": "slack"
+  },
+  {
+   "beat": -1,
+   "src": "0102",
+   "in": 12.0,
+   "out": 28.0,
+   "t": 0.0,
+   "kind": "slack"
+  }
+ ],
+ "beats": [
+  {
+   "i": 0,
+   "ch": "OPEN",
+   "t0": 0.0,
+   "t1": 9.6,
+   "note": "hook panel on frame 0; VO 0075 (04:38, leaving home): \"So we are heading to Seattle Washington to go pick up a McLaren 600 LT\""
+  },
+  {
+   "i": 1,
+   "ch": "CH1",
+   "t0": 9.6,
+   "t1": 17.4,
+   "note": "\"at the airport right now as you can see\" / \"a little tired, but we up now\""
+  },
+  {
+   "i": 2,
+   "ch": "CH1",
+   "t0": 17.4,
+   "t1": 28.6,
+   "note": "\"This is our Supercar Experience vlog. We usually transport our vehicles, but I'm driving this one, look at us.\" NAME LOCK"
+  },
+  {
+   "i": 3,
+   "ch": "CH1",
+   "t0": 28.6,
+   "t1": 33.3,
+   "note": "MetaMuse weather: \"it says Seattle's treating you well today\" / \"it says no rain, good day to pick up your McLaren\""
+  },
+  {
+   "i": 4,
+   "ch": "CH1",
+   "t0": 33.3,
+   "t1": 40.0,
+   "note": "\"I'm gonna try to put some animations in this ... make like a flying animation\""
+  },
+  {
+   "i": 5,
+   "ch": "CH1",
+   "t0": 40.0,
+   "t1": 43.4,
+   "note": "\"I'm finally getting on the plane.\""
+  },
+  {
+   "i": 6,
+   "ch": "CH1",
+   "t0": 43.4,
+   "t1": 48.4,
+   "note": "CLOCK STAMP 09:00 IN THE AIR: window shots, engine nat"
+  },
+  {
+   "i": 7,
+   "ch": "CH1",
+   "t0": 48.4,
+   "t1": 53.8,
+   "note": "\"But we finna get in the Uber and I'm finna pick up this car\""
+  },
+  {
+   "i": 8,
+   "ch": "CH2",
+   "t0": 53.8,
+   "t1": 66.7,
+   "note": "CH2 slam over the red shop building; \"How you doing? I'm here to pick up the 600 LT ... from Supercar Experience. I think you guys just put a brand new engine in it. I gotta drive it all the way back to Vegas.\""
+  },
+  {
+   "i": 9,
+   "ch": "CH2",
+   "t0": 66.7,
+   "t1": 71.9,
+   "note": "\"So they got one more hour until they're done with the car.\""
+  },
+  {
+   "i": 10,
+   "ch": "CH2",
+   "t0": 71.9,
+   "t1": 78.9,
+   "note": "\"right now he's finna go grab the 600 LT from the warehouse\""
+  },
+  {
+   "i": 11,
+   "ch": "CH2",
+   "t0": 78.9,
+   "t1": 84.5,
+   "note": "THE CAR ARRIVES (nat): LOCK-ON MCLAREN 600LT"
+  },
+  {
+   "i": 12,
+   "ch": "CH2",
+   "t0": 84.5,
+   "t1": 93.5,
+   "note": "\"but we have the 600LT that we will be driving from Seattle to Vegas.\" / \"This is the interior chat.\""
+  },
+  {
+   "i": 13,
+   "ch": "CH2",
+   "t0": 93.5,
+   "t1": 99.6,
+   "note": "\"We are in the 600 LT\" / \"Man, it's gonna be a long drive.\""
+  },
+  {
+   "i": 14,
+   "ch": "CH2",
+   "t0": 99.6,
+   "t1": 104.6,
+   "note": "\"Let's make sure this top work\" -> the roof goes down"
+  },
+  {
+   "i": 15,
+   "ch": "CH2",
+   "t0": 104.6,
+   "t1": 112.8,
+   "note": "\"It is beautiful out here, like gorgeous. Like I'm talking gorgeous.\" / \"we're on our way ... to Las Vegas\""
+  },
+  {
+   "i": 16,
+   "ch": "CH3",
+   "t0": 112.8,
+   "t1": 119.8,
+   "note": "CH3 slam; \"I like it. I want y'all to get the vibe. So you feel me? We gonna get the vibes right now.\""
+  },
+  {
+   "i": 17,
+   "ch": "CH3",
+   "t0": 119.8,
+   "t1": 123.1,
+   "note": "the vibes: forest montage (music up, nat under)"
+  },
+  {
+   "i": 18,
+   "ch": "CH3",
+   "t0": 123.1,
+   "t1": 128.9,
+   "note": "\"Man, I miss trees and nature. Good lord. I just know they got some fire hiking trails out here.\""
+  },
+  {
+   "i": 19,
+   "ch": "CH3",
+   "t0": 128.9,
+   "t1": 136.9,
+   "note": "HUD-1 STRIP: into the mountains (13:28)"
+  },
+  {
+   "i": 20,
+   "ch": "CH3",
+   "t0": 136.9,
+   "t1": 138.9,
+   "note": "snow peaks"
+  },
+  {
+   "i": 21,
+   "ch": "CH3",
+   "t0": 138.9,
+   "t1": 146.9,
+   "note": "HUD-1 STRIP: open road (15:42)"
+  },
+  {
+   "i": 22,
+   "ch": "CH3",
+   "t0": 146.9,
+   "t1": 151.3,
+   "note": "\"I just wanted to let you guys know. We're in Oregon!\" PLACE: JUST GOT INTO OREGON"
+  },
+  {
+   "i": 23,
+   "ch": "CH3",
+   "t0": 151.3,
+   "t1": 157.1,
+   "note": "\"I just pulled over so I can put the top down, I mean the top back up cuz my ears are ringing\""
+  },
+  {
+   "i": 24,
+   "ch": "TEASE",
+   "t0": 157.1,
+   "t1": 174.8,
+   "note": "the fuel stop (16:47): \"Gassing up the McLaren 600 LT right now\" / Red Bull, snacks, In-N-Out / \"All right chat, so we are about to keep on going\" -> TO BE CONTINUED"
+  },
+  {
+   "i": 25,
+   "ch": "END",
+   "t0": 174.8,
+   "t1": 180.2,
+   "note": "end card"
+  }
+ ],
+ "warnings": []
+}

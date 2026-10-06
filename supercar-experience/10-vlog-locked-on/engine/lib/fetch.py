@@ -297,7 +297,7 @@ def _cut_worker(args):
     return time.time() - t
 
 
-def run_fetch(day_root, plan_path, links, out, workers=4, crf=13, preset='superfast', streams=6):
+def run_fetch(day_root, plan_path, links, out, workers=4, crf=13, preset='superfast', streams=6, keep_sparse=False):
     import multiprocessing as mp
     day = Day(day_root)
     wdir = os.path.dirname(os.path.abspath(plan_path)) if plan_path else day.p('fetch')
@@ -389,7 +389,7 @@ def run_fetch(day_root, plan_path, links, out, workers=4, crf=13, preset='superf
     el = time.time() - t0
     log(f'fetch+cut done in {el:.0f}s: {len(finished)}/{len(jobs)} mezzanines in {out}, fetched {fetched_bytes[0] / 1e9:.2f} GB'
         + (f'; missing: {missing}' if missing else ''))
-    if not missing:
+    if not missing and not keep_sparse:
         import shutil
         shutil.rmtree(sparse_dir, ignore_errors=True)
     write_json(os.path.join(wdir, 'fetch_report.json'), {'wall_s': round(el, 1), 'cuts': cut_s, 'errors': errors,

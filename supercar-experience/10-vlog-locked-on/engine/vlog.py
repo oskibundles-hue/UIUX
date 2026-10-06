@@ -185,7 +185,7 @@ def cmd_fetch(a):
         print(f'local mode: {n} span link(s)' + (f'; not found on this machine: {missing}' if missing else ''), flush=True)
     try:
         rc = run_fetch(a.day, a.plan, a.links, out=a.out, workers=a.workers, crf=a.crf, preset=a.preset,
-                       streams=a.streams)
+                       streams=a.streams, keep_sparse=a.keep_sparse)
     finally:
         if loc:
             loc.stop()
@@ -261,6 +261,8 @@ def main():
     p.add_argument('--streams', type=int, default=6)
     p.add_argument('--crf', type=float, default=13)
     p.add_argument('--preset', default='superfast', help='x264 preset (superfast: 4.7 fps/core, beats the Sep 15 mezz)')
+    p.add_argument('--keep-sparse', action='store_true', help='keep fetch/sparse/ afterwards (the fetched byte spans, '
+                   'including the camera metadata track that hud-layouts/tools/side_g.py reads)')
     p.add_argument('--local', action='store_true', help='read the files on this machine (Dropbox desktop folder)')
     p.add_argument('--local-root', action='append', default=[], metavar='DIR',
                    help='folder that Dropbox paths are found under (default: the Dropbox desktop folder)')
