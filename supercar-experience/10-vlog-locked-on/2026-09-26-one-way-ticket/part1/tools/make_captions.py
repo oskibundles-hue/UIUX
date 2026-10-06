@@ -10,10 +10,17 @@ say. A word is kept when 0.15 s of it lies inside the piece [in, out) (see words
 import argparse, json, os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-TR = '/tmp/claude-0/-home-user-UIUX/367d87e8-d068-53b7-8f18-ebc5dc9cdf69/scratchpad/days/trip-0926/tr'
+TR = '/home/user/day/tr'     # part1 v2: the day index's new home (was the v1 session's scratchpad)
+FIXW = json.load(open(os.path.join(ROOT, 'data', 'words_small_fix.json')))   # small.en re-runs where the index missed words
 
 # (clip, words as whisper small.en wrote them) -> words to show; times are re-spread over the matched span
 FIX = {
+    # part1 v2 (fix A tails, 6 Oct): the words a run-on tail adds
+    '0075': [(['or'], [], 'v2 tail: "... 600 LT or Supercar experience": both models hear "or", which reads as a mis-hearing of '
+                          '"for", so the word is not captioned'),
+             (['Supercar', 'experience'], ['Supercar', 'Experience'], 'the brand (both models: "supercar experience")')],
+    '0079': [(['and', 'like', 'all', 'that', 'stuff'], ['like', 'all', 'that', 'stuff.'],
+              'v2 tail: medium.en "like all that stuff." (small.en adds "and", medium.en does not, so it is not captioned)')],
     '0076': [(['That\'s'], [], 'piece 2 now opens in the pause before it (25.25 s): the word before "a little tired" is "I was" in medium.en '
                               'and "That\'s" in small.en / base.en, so it is not captioned (never a word the two models do not share)'),
              (['a', 'super', 'car', 'experience', 'vlog.'], ['a', 'Supercar', 'Experience', 'vlog.'],
@@ -21,7 +28,6 @@ FIX = {
              (['this.'], ['us.'], 'medium.en: "look at us."')],
     # 0077 "Seattle's ... well today" is not in the cut (its middle word is unconfirmed: the day index says "treated",
     # medium.en and small.en say "training", the lead heard "treating you"), so it needs no fix here
-    '0079': [],
     '0087': [(['you', 'doing?'], ['How', 'you', 'doing?'], 'medium.en: "How you doing?" (small.en ran "How you" into one word)'),
              (['got', 'to'], ['gotta'], 'medium.en: "I gotta drive it"')],
     '0089': [(['finna'], ['gonna'], 'medium.en (four runs) and small.en: "he\'s gonna go grab the 600 LT"; the day index said finna')],
@@ -57,9 +63,13 @@ PIN = {('0093', 4.42): (4.56, 4.70)}
 
 def words_of(clip, a, b):
     t = json.load(open(os.path.join(TR, f'{clip}.json')))
+    sm = [w for s in t['segments'] for w in s['words']]
+    fx = FIXW.get(clip, [])
+    if fx:
+        sm = sorted([w for w in sm if not (fx[0][0] - 0.01 <= w[0] <= fx[-1][1])] + fx)
     out = []
-    for s in t['segments']:
-        for w in s['words']:
+    if True:
+        for w in sm:
             # a word is shown when at least 0.15 s of it is inside the piece (whisper stretches a word over the pause
             # before it, so a start slightly before `in` is normal), or it starts inside and not in the last 0.1 s
             ov = min(w[1], b) - max(w[0], a)
@@ -105,7 +115,8 @@ def main():
             used.append(dict(clip=d['src'], at=ov[0][0], whisper='(piece rewritten)', shown=' '.join(w[2] for w in ov),
                              why='wording settled by the lead (6 Oct); timings from medium.en / small.en, see OVERRIDE'))
         else:
-            ws = apply_fix(d['src'], words_of(d['src'], a, d['out']), used)
+            # v2: words up to the last word's end (the tail past it holds no word; a stretched next word must not count)
+            ws = apply_fix(d['src'], words_of(d['src'], a, d.get('last_word_end', d['out']) + 0.01), used)
             pin = PIN.get((d['src'], d['in']))
             if pin:
                 ws[0][0], ws[0][1] = pin

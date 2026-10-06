@@ -1,5 +1,19 @@
 [
  {
+  "clip": "0075",
+  "at": 76.64,
+  "whisper": "or",
+  "shown": "(dropped)",
+  "why": "v2 tail: \"... 600 LT or Supercar experience\": both models hear \"or\", which reads as a mis-hearing of \"for\", so the word is not captioned"
+ },
+ {
+  "clip": "0075",
+  "at": 78.52,
+  "whisper": "Supercar experience",
+  "shown": "Supercar Experience",
+  "why": "the brand (both models: \"supercar experience\")"
+ },
+ {
   "clip": "0076",
   "at": 25.25,
   "whisper": "That's",
@@ -19,6 +33,13 @@
   "whisper": "this.",
   "shown": "us.",
   "why": "medium.en: \"look at us.\""
+ },
+ {
+  "clip": "0079",
+  "at": 62.95,
+  "whisper": "and like all that stuff",
+  "shown": "like all that stuff.",
+  "why": "v2 tail: medium.en \"like all that stuff.\" (small.en adds \"and\", medium.en does not, so it is not captioned)"
  },
  {
   "clip": "0087",

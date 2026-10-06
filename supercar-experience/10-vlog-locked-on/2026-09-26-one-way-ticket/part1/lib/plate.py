@@ -667,6 +667,24 @@ def glass_rects():
         return 4 * x ** 3 if x < 0.5 else 1 - (-2 * x + 2) ** 3 / 2
     out = {}
     for c in CFG['layer']['comps']:
+        if c['type'] == 'seStrip':                    # part1 v2: the episode-long strip (lib/drive_strip.js seStrip)
+            p = dict(x=54, y=292, w=853, hc=84, hx=140, exit=None, expand=[]); p.update(c['p'])
+            ts, tx = c['t0'], p.get('exit')
+            for f in range(int(math.floor(c['t0'] * FPS)), int(math.ceil(c['t1'] * FPS)) + 1):
+                t = f / FPS
+                if not (c['t0'] <= t < c['t1']):
+                    continue
+                ex = 0.0
+                for w in p['expand']:
+                    ex = max(ex, in_out_cubic(P(t, w['a'], w['a'] + 0.4)) * (1 - in_out_cubic(P(t, w['b'] - 0.4, w['b']))))
+                h = p['hc'] + (p['hx'] - p['hc']) * ex
+                qr = out_expo(P(t, ts + 0.02, ts + 0.26 + 0.08))
+                qc = in_out_cubic(P(t, tx, tx + 0.34 * 0.72)) if tx is not None else 0.0
+                bottom = qc if qc > 0 else 1 - qr
+                vh = h * (1 - bottom)
+                if vh > 0.5:
+                    out.setdefault(f, []).append((p['x'], p['y'], p['w'], vh))
+            continue
         if c['type'] != 'driveStrip':
             continue
         p = dict(x=54, y=292, w=853, h=140, exit=None); p.update(c['p'])
