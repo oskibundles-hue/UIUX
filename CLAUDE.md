@@ -68,7 +68,8 @@ straight to Omarie.
 
 The `plate` class is switched off, so it has no agent.
 
-- **Brief with the class, the playbook** (`.claude/playbooks/`) **and the style.** Builders work in
+- **Brief with the class, the playbook** (`.claude/playbooks/`; `vlog-lifestyle.md` for spotting and tagging the
+  moments that carry a personal, YouTube-style vlog in any workstream) **and the style.** Builders work in
   worktrees of their workstream's branch, because this default branch doesn't carry the workstream folders.
 - **The usual chain** is `nq-build` → `nq-check` → lead delivers. Figures, specs, prices, names or
   "we did X" claims go through `nq-facts`, then `nq-second`, independently; either can block.
