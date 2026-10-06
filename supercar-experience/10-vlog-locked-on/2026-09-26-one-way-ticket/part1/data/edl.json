@@ -315,13 +315,13 @@
   },
   {
    "beat": 16,
-   "src": "0094",
-   "in": 2.2,
-   "out": 5.4,
+   "src": "0095",
+   "in": 27.2,
+   "out": 30.4,
    "speed": 1.0,
    "t": 112.8,
    "dur": 3.2,
-   "note": "SYNC: him, then the camera turns to the road"
+   "note": "CUTAWAY over 112.8-116.0 (7 Oct): he gestures with both hands off the wheel, holding the camera, car stopped (0094 2.2-5.4 s); both hands on the wheel here; his 0094 audio and captions run on"
   },
   {
    "beat": 16,
@@ -744,7 +744,7 @@
    "ch": "CH1",
    "t0": 17.4,
    "t1": 28.6,
-   "note": "\"This is our Supercar Experience vlog. We usually transport our vehicles, but I'm driving this one, look at us.\" NAME LOCK"
+   "note": "\"This is a Supercar Experience vlog. We usually transport our vehicles, but I'm driving this one, look at us.\" NAME LOCK"
   },
   {
    "i": 3,

@@ -1,5 +1,5 @@
 {
- "_about": "One-way ticket, Part 1 (Sep 26 2026): the SE vlog standard (rally v2) re-built for this trip, SE orange #FF4F16 for every accent, the HUD-1 one-strip (dark glass) on two cabin-cam shots. Everything that is not in the EDL lives here: paths, the per-shot reframe / look / ramp / rotation, transitions, the music slot, the clocks, the blurs and every on-screen line. The cut itself is tools/make_edl.py -> data/edl.json; captions tools/make_captions.py. Edit, then run ./render.sh. Sources for every line: README.md.",
+ "_about": "One-way ticket, Part 1 (Sep 26 2026): the SE vlog standard (rally v2) re-built for this trip, SE orange #FF4F16 for every accent, the HUD-1 one-strip (dark glass: clock, place, ROUTE; no side-G readout) on two cabin-cam shots. Everything that is not in the EDL lives here: paths, the per-shot reframe / look / ramp / rotation, transitions, the music slot, the clocks, the blurs and every on-screen line. The cut itself is tools/make_edl.py -> data/edl.json; captions tools/make_captions.py. Edit, then run ./render.sh. Sources for every line: README.md.",
  "paths": {
   "scratch": "/tmp/claude-0/-home-user-UIUX/367d87e8-d068-53b7-8f18-ebc5dc9cdf69/scratchpad",
   "ffmpeg": "/usr/local/lib/python3.11/dist-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2",
@@ -273,7 +273,8 @@
    "look": "cabin"
   },
   "29": {
-   "look": "cabin"
+   "look": "cabin",
+   "s1": 1.0
   },
   "30": {
    "look": "cabin",
@@ -480,7 +481,7 @@
     "t0": 113.0,
     "t1": 114.95,
     "p": {
-     "tag": "12:10 · CH 03 / 03",
+     "tag": "12:17 · CH 03 / 03",
      "title": "HIT THE ROAD",
      "y": 350,
      "maxW": 700,
@@ -569,12 +570,12 @@
      "place": "INTO THE MOUNTAINS",
      "heading": 95,
      "route_text": "SEATTLE → VEGAS",
-     "g_mag": true,
      "range": [
       129.1,
       136.9
      ],
-     "exit": 136.45000000000002
+     "exit": 136.45000000000002,
+     "hide_g": true
     }
    },
    {
@@ -587,12 +588,12 @@
      "place": "OPEN ROAD",
      "heading": 135,
      "route_text": "SEATTLE → VEGAS",
-     "g_mag": true,
      "range": [
       139.1,
       146.9
      ],
-     "exit": 146.45000000000002
+     "exit": 146.45000000000002,
+     "hide_g": true
     }
    },
    {
@@ -711,7 +712,13 @@
     "b": 17.6,
     "t": 7.6,
     "lufs": -30,
-    "why": "the McLaren at the pump, on \"McLaren 600 LT\""
+    "why": "the McLaren at the pump, on \"McLaren 600 LT\"",
+    "mute": [
+     [
+      15.6,
+      17.6
+     ]
+    ]
    },
    {
     "src": "0076",
@@ -719,7 +726,17 @@
     "b": 62.2,
     "t": 9.6,
     "lufs": -30,
-    "why": "terminal, walking in"
+    "why": "terminal, walking in",
+    "mute": [
+     [
+      58.0,
+      59.25
+     ],
+     [
+      59.95,
+      62.2
+     ]
+    ]
    },
    {
     "src": "0077",
@@ -735,7 +752,13 @@
     "b": 34.6,
     "t": 35.4,
     "lufs": -30,
-    "why": "the gate area"
+    "why": "the gate area",
+    "mute": [
+     [
+      30.0,
+      33.95
+     ]
+    ]
    },
    {
     "src": "0082",
@@ -810,19 +833,6 @@
   ]
  },
  "blurs": [],
- "sideG": {
-  "_about": "SIDE G on each STRIP: hud-layouts/tools/side_g.py <fetched sparse clip> <start> <dur> (no --turn: the camera x axis, left/right not confirmed; straight driving, no turn to calibrate on), low-passed over 1 s, in g",
-  "STRIP-1": {
-   "file": "data/side_g_0096_32-52.json",
-   "start": 32.0,
-   "shot": 35
-  },
-  "STRIP-2": {
-   "file": "data/side_g_0099_158-182.json",
-   "start": 158.0,
-   "shot": 37
-  }
- },
  "speedo": [
   {
    "shot": 0,
@@ -980,6 +990,18 @@
    "pad": 16,
    "radius": 16,
    "why": "0095 speedometer (cutaway)"
+  },
+  {
+   "shot": 29,
+   "box": [
+    330,
+    985,
+    230,
+    115
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0095 speedometer (cutaway 112.8-116.0, 0095 27.2-30.4)"
   }
  ],
  "_aboutSpeedo": "speedo: the McLaren's own speedometer on every cabin-cam shot (its digits are readable at phone size), blurred in a static feathered box per shot (no speed on screen). blurs: licence plates are not blurred in this vlog (Omarie, 6 Oct)."

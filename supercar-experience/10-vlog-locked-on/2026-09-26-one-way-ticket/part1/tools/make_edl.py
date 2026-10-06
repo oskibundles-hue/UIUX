@@ -35,7 +35,7 @@ beat('CH1', '"at the airport right now as you can see" / "a little tired, but we
     ('0076', 58.0, 4.2, 1.0, 'terminal, walking in'),
     ('0077', 20.0, 3.6, 1.0, 'escalator down'),
 ], [('0076', 14.38, 18.14, ('at', 0.5)), ('0076', 25.25, 28.56, ('at', 4.45))])
-beat('CH1', '"This is our Supercar Experience vlog. We usually transport our vehicles, but I\'m driving this one, look at us." NAME LOCK', [
+beat('CH1', '"This is a Supercar Experience vlog. We usually transport our vehicles, but I\'m driving this one, look at us." NAME LOCK', [
     ('0076', 40.0, 11.2, 1.0, 'SYNC: at the terminal doors'),
 ], [('0076', 40.10, 51.10, ('sync', 0))])
 beat('CH1', 'MetaMuse weather: "it says no rain, good day to pick up your McLaren" (the line before it, "Seattle\'s ... well today", is out: its middle word is not confirmed by ear, small.en and medium.en both give "training"; the first shot stays as the phone-reading picture)', [
@@ -90,10 +90,10 @@ beat('CH2', '"It is beautiful out here, like gorgeous. Like I\'m talking gorgeou
 
 # ---------------------------------------------------------------- CH3 HIT THE ROAD (12:10)
 beat('CH3', 'CH3 slam; "I like it. I want y\'all to get the vibe. So you feel me? We gonna get the vibes right now."', [
-    ('0094', 2.2, 3.2, 1.0, 'SYNC: him, then the camera turns to the road'),
+    ('0095', 27.2, 3.2, 1.0, 'CUTAWAY over 112.8-116.0 (7 Oct): he gestures with both hands off the wheel, holding the camera, car stopped (0094 2.2-5.4 s); both hands on the wheel here; his 0094 audio and captions run on'),
     ('0095', 33.9, 2.2, 1.0, 'CUTAWAY over 116.0-118.2: he holds and taps a lit phone at a junction (0094 5.6-7.6 s), so the picture is the road (his audio and captions run on)'),
     ('0094', 7.6, 1.6, 1.0, 'SYNC: back to him, hand off the phone'),
-], [('0094', 2.34, 9.06, ('sync', 0))])
+], [('0094', 2.34, 9.06, ('at', 0.14))])
 beat('CH3', 'the vibes: forest montage (music up, nat under)', [
     ('0095', 46.0, 1.7, 1.0, 'forest'),
     ('0095', 52.0, 1.6, 1.0, 'forest, the road opens'),

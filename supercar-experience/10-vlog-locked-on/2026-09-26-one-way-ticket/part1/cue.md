@@ -35,7 +35,7 @@ Timeline: 5401 frames at 30000/1001 fps = 180.213 s. Frame n is shown at n x 100
 | 26 | 96.80 | 2901-2984 | 0091 | 14.80-17.57 (1x) | cabin | c centre s 1.0-1.04 |  |
 | 27 | 99.60 | 2985-3134 | 0092 | 7.80-18.51 (ramp 0.00:1.0 0.34:1.0 0.50:3.0 1.00:3.0) | cabin | c centre s 1.0-1.04 |  |
 | 28 | 104.60 | 3135-3380 | 0093 | 4.10-12.28 (1x) | cabin | c centre s 1.0-1.04 |  |
-| 29 | 112.80 | 3381-3476 | 0094 | 2.21-5.38 (1x) | cabin | c centre s 1.0-1.04 | sweep 0.36 s |
+| 29 | 112.80 | 3381-3476 | 0095 | 27.21-30.38 (1x) | cabin | c centre s 1.0-1.0 | sweep 0.36 s |
 | 30 | 116.00 | 3477-3541 | 0095 | 33.92-36.05 (1x) | cabin | c centre s 1.0-1.0 |  |
 | 31 | 118.20 | 3542-3589 | 0094 | 7.58-9.15 (1x) | cabin | c centre s 1.0-1.04 |  |
 | 32 | 119.80 | 3590-3640 | 0095 | 45.99-47.65 (1x) | cabin | c centre s 1.0-1.04 | whip left |
@@ -59,7 +59,7 @@ Timeline: 5401 frames at 30000/1001 fps = 180.213 s. Frame n is shown at n x 100
 | A2 | bannerTab | 1.62 | 174.80 | SUPERCAR EXPERIENCE  |
 | G1-01 | chapterSlam | 9.80 | 11.75 | WHEELS UP 04:57 · CH 01 / 03 |
 | G1-02 | chapterSlam | 54.00 | 55.95 | THE PICKUP 10:14 · CH 02 / 03 |
-| G1-03 | chapterSlam | 113.00 | 114.95 | HIT THE ROAD 12:10 · CH 03 / 03 |
+| G1-03 | chapterSlam | 113.00 | 114.95 | HIT THE ROAD 12:17 · CH 03 / 03 |
 | I1 | sweep | 9.60 | 9.96 |   |
 | I1 | sweep | 53.80 | 54.16 |   |
 | I1 | sweep | 112.80 | 113.16 |   |

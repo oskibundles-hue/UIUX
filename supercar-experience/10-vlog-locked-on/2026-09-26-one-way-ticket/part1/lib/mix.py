@@ -259,7 +259,17 @@ def build_nat_raw(report):
         x = mezz_audio(e['src'], e['a'], e['b'], 'highpass=f=40')
         L = lufs(x)
         g = float(np.clip(e.get('lufs', A['natLufs']) - L, -20, 20))
-        x = fades(x * 10 ** (g / 20), e.get('fin', 0.15), e.get('fout', 0.15))
+        x = x * 10 ** (g / 20)
+        # part1: `mute` = [[src a, src b], ...] third-party speech in the bed (7 Oct): silenced with 40 ms ramps, level of the rest unchanged
+        for ma, mb in e.get('mute', []):
+            i0, i1 = max(0, int(round((ma - e['a']) * SR))), min(len(x), int(round((mb - e['a']) * SR)))
+            if i1 > i0:
+                k = min(int(0.04 * SR), (i1 - i0) // 2)
+                w = np.zeros(i1 - i0)
+                w[:k] = 0.5 + 0.5 * np.cos(np.pi * np.arange(k) / k)
+                w[i1 - i0 - k:] = 0.5 - 0.5 * np.cos(np.pi * np.arange(k) / k)
+                x[i0:i1] *= (w if x.ndim == 1 else w[:, None])
+        x = fades(x, e.get('fin', 0.15), e.get('fout', 0.15))
         place(bus, x, e['t'])
         report['nat'].append(dict(src=e['src'], a=e['a'], b=e['b'], t=e['t'], lufs_in=round(L, 2), gain_db=round(g, 2)))
     return bus

@@ -28,8 +28,9 @@ SEK.driveStrip = function (cfg) {
   const pl = H.line(IN, 'Michroma', 15, p.place, cx + 1, 20 + hm.capH + 18, dim, { ls: 0.12 });
   // heading and side G columns, divided by hairlines
   const c2 = Math.max(cx + H.ink('Bebas', 78, '10:00').adv + H.ink('Bebas', 46, ':00').adv + 34, cx + H.ink('Michroma', 15, p.place, 0.12).w + 34);
-  const c3 = c2 + (p.w - c2) * 0.48;
-  [c2, c3].forEach(x => H.el('div', 'a', IN, `left:${x - 16}px;top:22px;width:1px;height:${p.h - 44}px;background:rgba(255,255,255,.18)`));
+  // part1 copy: p.hide_g drops the SIDE G column (7 Oct: an unsourced accelerometer figure); ROUTE then takes the whole right side
+  const c3 = p.hide_g ? p.w - 24 + 16 : c2 + (p.w - c2) * 0.48;
+  (p.hide_g ? [c2] : [c2, c3]).forEach(x => H.el('div', 'a', IN, `left:${x - 16}px;top:22px;width:1px;height:${p.h - 44}px;background:rgba(255,255,255,.18)`));
   // part1 copy: p.route_text ('SEATTLE → VEGAS') replaces the heading column with a static ROUTE label and the text,
   // fitted to the column (the arrow is drawn: the display face has no arrow glyph). No heading is computed then.
   let hv;
@@ -47,16 +48,19 @@ SEK.driveStrip = function (cfg) {
     H.line(IN, 'Michroma', 14, 'HEADING', c2, 24, dim, { ls: 0.16, split: false });
     hv = H.line(IN, 'Bebas', 62, 'S 180', c2, 50, '#fff', { split: false });
   }
+  let gv = null, vx = 0, vw = 0, vy = 0, bead = null;
+  if (!p.hide_g) {
   H.line(IN, 'Michroma', 14, 'SIDE G', c3, 24, dim, { ls: 0.16, split: false });
-  const gv = H.line(IN, 'Bebas', 62, '0.00 G', c3, 50, '#fff', { split: false });
-  const vx = c3 + H.ink('Bebas', 62, '0.00 G').adv + 16, vw = Math.max(40, p.w - 24 - vx), vy = 50 + gv.capH / 2 - 9;
+  gv = H.line(IN, 'Bebas', 62, '0.00 G', c3, 50, '#fff', { split: false });
+  vx = c3 + H.ink('Bebas', 62, '0.00 G').adv + 16; vw = Math.max(40, p.w - 24 - vx); vy = 50 + gv.capH / 2 - 9;
   H.el('div', 'a', IN, `left:${vx}px;top:${vy}px;width:${vw}px;height:18px;border:1.5px solid rgba(255,255,255,.7);border-radius:9px`);
   // part1 copy: p.g_mag = magnitude only (the side-G sign was never calibrated against a turn, so nothing may imply left or
   // right): no centre tick, and the bar fills from the left end by |g| instead of a bead swinging about the centre
   if (!p.g_mag) H.el('div', 'a', IN, `left:${vx + vw / 2 - 1}px;top:${vy}px;width:2px;height:18px;background:rgba(255,255,255,.7)`);
-  const bead = p.g_mag
+  bead = p.g_mag
     ? H.el('div', 'a', IN, `left:${vx + 3}px;top:${vy + 3}px;width:${vw - 6}px;height:12px;border-radius:6px;background:${ACC};transform-origin:0 50%;box-shadow:0 0 10px rgba(${GLOW},.6)`)
     : H.el('div', 'a', IN, `left:${vx + vw / 2 - 6}px;top:${vy + 3}px;width:12px;height:12px;border-radius:50%;background:${ACC};box-shadow:0 0 10px rgba(${GLOW},.7)`);
+  }
   // scrubber along the bottom of the plate
   const sL = 24, sW = p.w - 48, sT = p.h - 10;
   H.el('div', 'a', IN, `left:${sL}px;top:${sT}px;width:${sW}px;height:3px;border-radius:2px;background:rgba(255,255,255,.2)`);
@@ -89,9 +93,10 @@ SEK.driveStrip = function (cfg) {
     const hd = base + 1.6 * Math.sin(t * 0.55) + 0.7 * Math.sin(t * 1.7), hr = Math.round(((hd % 360) + 360) % 360) % 360;
     if (!p.route_text) hv.t.textContent = card(hr) + ' ' + String(hr).padStart(3, '0');
     const g = LAT.length ? LAT[Math.max(0, Math.min(LAT.length - 1, Math.round(t * 30)))] : 0;
-    gv.t.textContent = Math.abs(g).toFixed(2) + ' G';
     const qb = E.outCubic(P(t, cfg.t0 + 0.3, cfg.t0 + 0.9));
-    if (p.g_mag) bead.style.transform = `scaleX(${(Math.max(0.04, Math.min(1, Math.abs(g) / 0.5)) * qb).toFixed(4)})`;
+    if (gv) gv.t.textContent = Math.abs(g).toFixed(2) + ' G';
+    if (!bead) { /* hide_g: no side-G readout */ }
+    else if (p.g_mag) bead.style.transform = `scaleX(${(Math.max(0.04, Math.min(1, Math.abs(g) / 0.5)) * qb).toFixed(4)})`;
     else bead.style.transform = `translateX(${((vw / 2 - 9) * Math.max(-1, Math.min(1, g / 0.5)) * qb).toFixed(2)}px)`;
     fill.style.transform = `scaleX(${(P(t, p.range[0], p.range[1]) * qb).toFixed(5)})`;
     if (rt) {

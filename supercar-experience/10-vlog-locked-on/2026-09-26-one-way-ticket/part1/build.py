@@ -744,8 +744,8 @@ def st_compose(A):
     if mbps > 11.5:
         log(f'compose: master {mbps:.2f} Mb/s > 11.5 -> _DELIVERY copy')
         plog = os.path.join(WORK, 'x264pass')
-        sh([FF, '-v', 'error', '-y', '-i', master, '-c:v', 'libx264', '-preset', 'slow', '-b:v', '11.2M', '-pass', '1', '-passlogfile', plog + 'd', '-an', '-f', 'null', '-'])
-        sh([FF, '-v', 'error', '-y', '-i', master, '-c:v', 'libx264', '-preset', 'slow', '-b:v', '11.2M', '-pass', '2', '-passlogfile', plog + 'd',
+        sh([FF, '-v', 'error', '-y', '-i', master, '-c:v', 'libx264', '-preset', 'slow', '-b:v', '11.1M', '-pass', '1', '-passlogfile', plog + 'd', '-an', '-f', 'null', '-'])
+        sh([FF, '-v', 'error', '-y', '-i', master, '-c:v', 'libx264', '-preset', 'slow', '-b:v', '11.1M', '-pass', '2', '-passlogfile', plog + 'd',
             '-c:a', 'copy', '-movflags', '+faststart', deliv])
     elif os.path.exists(deliv):
         os.remove(deliv)
