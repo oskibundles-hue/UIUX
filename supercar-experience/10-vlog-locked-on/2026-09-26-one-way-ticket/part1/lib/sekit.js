@@ -398,7 +398,7 @@
       const qx = p.whip ? 0 : E.inCubic(P(t, tx + 0.06, tx + 0.26));
       r = grow(r, 1 - 0.5 * qx);
       const pp = bracketDraw(B, r);
-      B.bo.setAttribute('stroke', pl > 0.05 ? `rgb(255,${Math.round(209 + 46 * pl)},${Math.round(1 + 200 * pl)})` : GOLD);
+      B.bo.setAttribute('stroke', pl > 0.05 ? `rgb(255,${Math.round(79 + 176 * pl)},${Math.round(22 + 233 * pl)})` : GOLD);
       [B.tu, B.to].forEach(e => e.setAttribute('opacity', cl(qa * 1.4 - 0.4).toFixed(3)));
       pingDraw(pings, tgt, t, tl);
       svg.style.opacity = (cl(qa * 3) * (1 - E.inCubic(P(t, tx + 0.1, tx + 0.26)) * (p.whip ? 0 : 1))).toFixed(4);
@@ -507,7 +507,7 @@
       const tl = ta + 0.26, pl = t >= tl ? Math.exp(-(t - tl) * 14) * Math.min(1, (t - tl) * FPS / 1.5) : 0;
       r = grow(r, (1 + 0.05 * pl) * (1 - 0.5 * E.inCubic(P(t, tx + 0.06, tx + 0.26))));
       const pp = bracketDraw(B, r, { maxL: 40 });
-      B.bo.setAttribute('stroke', pl > 0.05 ? `rgb(255,${Math.round(209 + 46 * pl)},${Math.round(1 + 200 * pl)})` : GOLD);
+      B.bo.setAttribute('stroke', pl > 0.05 ? `rgb(255,${Math.round(79 + 176 * pl)},${Math.round(22 + 233 * pl)})` : GOLD);
       [B.tu, B.to].forEach(e => e.setAttribute('opacity', cl(qa * 1.4 - 0.4).toFixed(3)));
       pingDraw(pings, tgt, t, tl);
       // scan line sweeps down the body once, right after the snap
@@ -620,7 +620,7 @@
       r = grow(r, (1 + 0.06 * pl) * (1 - 0.5 * qx));
       const pp = bracketDraw(B, r, { maxL: 46 });
       const lostNow = s.mode === 'relock' && t < tsn;
-      B.bo.setAttribute('stroke', lostNow ? `rgba(255,79,22,${(1 - 0.3 * lostK).toFixed(3)})` : pl > 0.05 ? `rgb(255,${Math.round(209 + 46 * pl)},${Math.round(1 + 200 * pl)})` : GOLD);
+      B.bo.setAttribute('stroke', lostNow ? `rgba(255,79,22,${(1 - 0.3 * lostK).toFixed(3)})` : pl > 0.05 ? `rgb(255,${Math.round(79 + 176 * pl)},${Math.round(22 + 233 * pl)})` : GOLD);
       B.tu.setAttribute('opacity', lostNow ? 0 : 1); B.to.setAttribute('opacity', lostNow ? 0 : 1);
       if (!lostNow) pingDraw(pings, tgt, t, tl); else pingDraw(pings, tgt, -1, 0);
       svg.style.opacity = (parseFloat(svg.style.opacity || 1) * (1 - E.inCubic(P(t, p.exit + 0.1, p.exit + 0.26)))).toFixed(4);
@@ -712,7 +712,7 @@
       const tl = ta + 0.26, pl = t >= tl ? Math.exp(-(t - tl) * 14) * Math.min(1, (t - tl) * FPS / 1.5) : 0;
       r = grow(r, (1 + 0.05 * pl) * (1 - 0.5 * E.inCubic(P(t, tx + 0.06, tx + 0.26))));
       const pp = bracketDraw(B, r, { maxL: 56 });
-      B.bo.setAttribute('stroke', pl > 0.05 ? `rgb(255,${Math.round(209 + 46 * pl)},${Math.round(1 + 200 * pl)})` : GOLD);
+      B.bo.setAttribute('stroke', pl > 0.05 ? `rgb(255,${Math.round(79 + 176 * pl)},${Math.round(22 + 233 * pl)})` : GOLD);
       [B.tu, B.to].forEach(e => e.setAttribute('opacity', cl(qa * 1.4 - 0.4).toFixed(3)));
       pingDraw(pings, tgt, t, tl);
       // lead chevrons: three carets above the brackets, lighting up bottom -> top on a 0.9 s loop

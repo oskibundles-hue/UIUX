@@ -1,6 +1,13 @@
 [
  {
   "clip": "0076",
+  "at": 25.25,
+  "whisper": "That's",
+  "shown": "(dropped)",
+  "why": "piece 2 now opens in the pause before it (25.25 s): the word before \"a little tired\" is \"I was\" in medium.en and \"That's\" in small.en / base.en, so it is not captioned (never a word the two models do not share)"
+ },
+ {
+  "clip": "0076",
   "at": 40.58,
   "whisper": "a super car experience vlog.",
   "shown": "our Supercar Experience vlog.",
@@ -12,13 +19,6 @@
   "whisper": "this.",
   "shown": "us.",
   "why": "medium.en: \"look at us.\""
- },
- {
-  "clip": "0077",
-  "at": 58.66,
-  "whisper": "treated",
-  "shown": "treating you",
-  "why": "medium.en: \"Seattle's treating you well today\""
  },
  {
   "clip": "0087",
@@ -35,6 +35,13 @@
   "why": "medium.en: \"I gotta drive it\""
  },
  {
+  "clip": "0089",
+  "at": 143.2,
+  "whisper": "finna",
+  "shown": "gonna",
+  "why": "medium.en (four runs) and small.en: \"he's gonna go grab the 600 LT\"; the day index said finna"
+ },
+ {
   "clip": "0090",
   "at": 104.75,
   "whisper": "600lt",
@@ -43,10 +50,10 @@
  },
  {
   "clip": "0094",
-  "at": 3.79,
-  "whisper": "y 'all",
-  "shown": "y'all",
-  "why": "one word"
+  "at": 2.37,
+  "whisper": "(piece rewritten)",
+  "shown": "I like it. I want y'all to, you know what I'm saying, get the vibes, so you feel me. We gon' catch the vibes right now.",
+  "why": "wording settled by the lead (6 Oct); timings from medium.en / small.en, see OVERRIDE"
  },
  {
   "clip": "0102",

@@ -28,7 +28,7 @@ for k in ks:
         d = ImageDraw.Draw(img)
         cx, cy, s = pl['wins'][q]
         ww, hh = PL.W / s * (m['h'] / PL.H), PL.H / s * (m['h'] / PL.H)
-        d.rectangle([(cx - ww / 2) * sc, (cy - hh / 2) * sc, (cx + ww / 2) * sc - 1, (cy + hh / 2) * sc - 1], outline=(251, 209, 1), width=2)
+        d.rectangle([(cx - ww / 2) * sc, (cy - hh / 2) * sc, (cx + ww / 2) * sc - 1, (cy + hh / 2) * sc - 1], outline=(255, 79, 22), width=2)
         for gx in range(0, m['w'], 240):
             d.line([(gx * sc, th - 8), (gx * sc, th)], fill=(255, 0, 0), width=1)
         d.text((3, 3), f'{k} {PL.SHOTS[k]["src"]} {nm} t{pl["ts"][q][0]:.2f}', fill=(255, 255, 0))

@@ -64,7 +64,7 @@ PER-FRAME FX
 AUDIO (numpy -> wav, 48 kHz)
   sfx_whoosh(dur), sfx_hit(), mix_to_wav(events, total_dur, path)
 
-Brand accent (light leaks default palette) = SE gold #FBD101.
+Brand accent (light leaks default palette) = SE orange #FF4F16.
 """
 import os
 import math
@@ -82,7 +82,7 @@ FOOT = os.path.join(SCRATCH, "footage")
 CACHE = os.path.join(HERE, "cache")
 FPS = 24000 / 1001
 W, H = 1080, 1920
-GOLD = (251 / 255, 209 / 255, 1 / 255)
+GOLD = (255 / 255, 79 / 255, 22 / 255)   # SE orange #FF4F16 (the name is the rally's)
 
 
 # ------------------------------------------------------------------------------------ IO
@@ -409,15 +409,15 @@ def bloom(img, thresh=0.7, radius=40, gain=0.35, ds=4):
     return img + up(b * gain, img.shape[0], img.shape[1])
 
 
-# warm leak palette: gold-highlight -> amber -> ember. Pure #FBD101 reads olive when a screen
-# blend keeps it dim, so the leak runs warmer and saves the brand gold for type/stripe.
-_LEAK_PAL = [(1.0, 0.80, 0.38), (1.0, 0.56, 0.16), (0.95, 0.36, 0.12)]
+# warm leak palette: pale-orange highlight -> SE orange -> ember. A pure accent colour reads dim under a screen blend,
+# so the leak runs a little lighter and saves the full SE orange (#FF4F16) for type/stripe.
+_LEAK_PAL = [(1.0, 0.62, 0.42), (1.0, 0.40, 0.14), (0.95, 0.31, 0.09)]
 
 
 def light_leak(img, t, strength=0.5, seed=3, palette=_LEAK_PAL, side="left"):
     """Generated light leak: 3-4 soft blobs drifting across a low-res field + a diagonal
     burn band, upscaled and SCREEN-blended. t in seconds (drives drift). Default palette is
-    SE gold -> amber. strength 0..1 (animate it for leak 'bursts')."""
+    SE orange -> ember. strength 0..1 (animate it for leak 'bursts')."""
     if strength <= 0.003:
         return img
     rng = np.random.default_rng(seed)

@@ -709,7 +709,7 @@ def sheet(video, out, cols=9, tw=200, only=None):
     for n, (q, lb) in enumerate(labels):
         x, y = (n % cols) * tw, (n // cols) * (th + 14)
         sh.paste(Image.fromarray(fr[q]).resize((tw, th), Image.BILINEAR), (x, y + 14))
-        d.text((x + 2, y + 1), f'{lb} f{q}', fill=(251, 209, 1))
+        d.text((x + 2, y + 1), f'{lb} f{q}', fill=(255, 79, 22))
     sh.save(out, quality=85)
     return out
 

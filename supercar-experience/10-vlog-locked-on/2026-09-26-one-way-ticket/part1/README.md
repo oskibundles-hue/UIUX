@@ -14,17 +14,17 @@ folder is a copy of that build with this vlog's cut, config and the changes list
 
 | File | What |
 |---|---|
-| `… - 1080x1920.mp4` | **the master.** H.264 High, yuv420p bt709, 1080x1920, 29.97 fps, x264 medium CRF 17.3 (VBV 16M / 22M), AAC-LC 48 kHz 256k, +faststart: **314.7 MB (300.2 MiB), 13.97 Mb/s**. 5401 frames = 180.21 s. Loudness on the mp4 (ffmpeg loudnorm): **-14.11 LUFS integrated, -1.69 dBTP true peak**, LRA 4.2; the last 102 ms are digital silence |
-| `… - 1080x1920_DELIVERY.mp4` | the master re-encoded two-pass at 11.2 Mb/s (the build makes it whenever the master is over 11.5 Mb/s, the Instagram delivery rate), same audio: 246.9 MiB, -14.11 LUFS, -1.69 dBTP. **Upload this one** |
-| `… - NO MUSIC - 1080x1920.mp4` | the same video stream with dialog + nat + SFX only: 298.9 MiB, -14.05 LUFS, -1.93 dBTP |
-| `… - PREVIEW 720x1280.mp4` | phone preview, two-pass 1.1 Mb/s from the master (the single-pass CRF preview came out at 38.8 MiB): **27.3 MiB** (< 30 MiB), -14.62 LUFS, -1.90 dBTP |
+| `… - 1080x1920.mp4` | **the master.** H.264 High, yuv420p bt709, 1080x1920, 29.97 fps, x264 medium CRF 17.3 (VBV 16M / 22M), AAC-LC 48 kHz 256k, +faststart: **314.6 MB (300.0 MiB), 13.97 Mb/s**. 5401 frames = 180.21 s. Loudness on the mp4 (ffmpeg loudnorm): **-14.11 LUFS integrated, -1.78 dBTP true peak**, LRA 4.0; the last 102 ms are digital silence |
+| `… - 1080x1920_DELIVERY.mp4` | the master re-encoded two-pass at 11.2 Mb/s (the build makes it whenever the master is over 11.5 Mb/s, the Instagram delivery rate), same audio: 246.9 MiB (11.49 Mb/s overall), -14.11 LUFS, -1.78 dBTP. **Upload this one** |
+| `… - NO MUSIC - 1080x1920.mp4` | the same video stream with dialog + nat + SFX only: 298.7 MiB, -14.04 LUFS, -1.92 dBTP |
+| `… - PREVIEW 720x1280.mp4` | phone preview, two-pass 1.1 Mb/s from the master (the single-pass CRF preview came out at 38.8 MiB): **27.3 MiB** (< 30 MiB), -14.63 LUFS, -1.98 dBTP |
 | `… - music-stem.wav` | the music alone, as it sits in the master |
 | `poster.jpg`, `contact-sheet.jpg` | frame 0 (the hook) and one frame every 2 s |
 | `qa/` | first / middle / last frame of every beat and every graphic, `beats-sheet.jpg`, `elements-sheet.jpg`, `shots-sheet.jpg`, `caption-swaps-sheet.jpg`, `track_*.jpg`, `gates.md`, `swapcheck.json`, `qa_summary.json` |
 
 **QA gates** (`exports/qa/gates.md`, `qa_summary.json`): 0 errors before the render. Loudness: every export inside -14 ±0.5
-LUFS (preview -14.62 against its -14.5 ±0.6 target) and ≤ -1.5 dBTP. Caption sync: median lag 0 ms over 28 pieces,
-largest 70 ms. Swap check: 58 caption page changes, 0 frames with two pages or mixed texts. Safe zone: 2 of 361 sampled
+LUFS (preview -14.63 against its -14.5 ±0.6 target) and ≤ -1.5 dBTP. Caption sync: median lag 0 ms over 27 pieces,
+largest 120 ms (0076 "a little tired" and 0093, the two pieces whose heads moved: the word before the first caption word is not captioned, and 0093 opens on cabin noise, so the energy match is loose, corr 0.57-0.65). Swap check: 59 caption page changes, 0 frames with two pages or mixed texts. Safe zone: 2 of 361 sampled
 times touch the edge, both the first frame of a chapter slam (THE PICKUP at 54.02 s, HIT THE ROAD at 113.02 s), where the
 kit's G1 slam enters at 1.55x scale with motion blur for a frame or two before it settles inside the safe area (the
 rally's slams do the same; its samples did not land on them).
@@ -40,8 +40,8 @@ rally's slams do the same; its samples did not land on them).
 | B1 | **Host name lock** OMARIE · @NQ.YOUNG on his tracked face, while he says "This is our Supercar Experience vlog" | 18.2 – 20.9 | tracked |
 | D1 | **Clock stamp** 09:00 with the camera's own seconds, IN THE AIR, SEP 26 2026, over the plane window (right after "make like a flying animation") | 43.6 – 48.3 | top-left |
 | LOCK | **Lock-on** LOCKED ON · MCLAREN 600LT on the car as it rolls up to the shop | 78.95 – 80.5 | tracked |
-| STRIP-1 | **HUD-1 strip** (dark glass, SE orange): SE mark, camera clock 13:28:xx + INTO THE MOUNTAINS, HEADING, SIDE G, scrubber | 129.1 – 136.9 | top, x 54-907, y 292-432 |
-| STRIP-2 | **HUD-1 strip**: camera clock 15:42:xx + OPEN ROAD, HEADING, SIDE G, scrubber | 139.1 – 146.9 | same |
+| STRIP-1 | **HUD-1 strip** (dark glass, SE orange): SE mark, camera clock 13:28:xx + INTO THE MOUNTAINS, ROUTE SEATTLE → VEGAS, SIDE G, scrubber | 129.1 – 136.9 | top, x 54-907, y 292-432 |
+| STRIP-2 | **HUD-1 strip**: camera clock 15:42:xx + OPEN ROAD, ROUTE SEATTLE → VEGAS, SIDE G, scrubber | 139.1 – 146.9 | same |
 | PLACE | **Place tag** JUST GOT INTO · OREGON, on "We're in Oregon!" | 148.2 – 151.2 | top-left |
 | TEASE | **Tease tag** TO BE CONTINUED · PART 2: THE NIGHT, on "so we are about to keep on going" | 169.6 – 174.7 | top-left |
 | H1 | **Captions** (rally v2 H1 boxed karaoke), active word on an orange box | every dialog piece 2.0 – 174.8 | y 1190-1382, x 130-830 |
@@ -62,7 +62,7 @@ Every in / out time: `cue.md` (generated). All copy lives in `config.json` (`lay
 | LOCKED ON · MCLAREN 600LT | Omarie, 6 Oct ("its a mclaren 600 lt"); he names it on camera ("pick up a McLaren 600 LT", 0075; "I'm here to pick up the 600LT", 0087; "We are in the 600 LT", 0091). No trim or spec added |
 | 13:28:xx / 15:42:xx (strip clocks) | the camera clock of each frame: 0096 13:27:35 + 38.0 s…, 0099 15:39:50 + 166.0 s… |
 | INTO THE MOUNTAINS / OPEN ROAD (strip place lines) | the approved storyboard; what the shot shows (mountains ahead in 0096, open plains in 0099). No road or town is named |
-| HEADING E 095 / SE 135 (± a slow drift of 2°) | **an estimate**, see "HEADING and SIDE G" |
+| ROUTE · SEATTLE → VEGAS (both strips; static) | his own words: "from Seattle to Vegas" (0090, "the 600LT that we will be driving from Seattle to Vegas") and "drive it all the way back to Vegas" (0087). It replaces the two HEADING readings (E 095 / SE 135), which were estimates with no sourced figure. `config.json` `p.route_text`; `lib/drive_strip.js` draws the arrow and fits the text to the column |
 | SIDE G 0.00-0.3x G | the camera's own accelerometer, `../../hud-layouts/tools/side_g.py` on the fetched source span (see below) |
 | JUST GOT INTO · OREGON | his words in 0100 ("we just got into Oregon", "We're in Oregon!") and 0102 ("we are in Oregon") |
 | TO BE CONTINUED · PART 2: THE NIGHT | the approved storyboard (Part 2 is the night drive, README one level up) |
@@ -74,9 +74,11 @@ are in his captions; the pickup shop is not named (its name in 0087 is unclear b
 specs anywhere in the graphics; the spoken figures in the footage (miles, gas price, "12 hour") are cut out. Copy written
 here went through SlopMonster: 5/5.
 
-### HEADING and SIDE G
+### HEADING (dropped) and SIDE G
 
-- **HEADING** is an estimate; the clips carry no GPS.
+- **HEADING was removed from both strips** (lead, 6 Oct): it had no sourced figure; the strips show ROUTE · SEATTLE → VEGAS
+  instead (`heading` stays in the config, unused, if a sourced reading is ever added and `route_text` is taken out). What it was:
+  an estimate; the clips carry no GPS.
   - STRIP-1 (0096, 13:28): **E 095**. The sun at 13:28 PDT on Sep 26 near 47° N sits at about 195° (SSW); the trees on the
     left of the road are lit on their road-facing (south) side and the mountain ahead-right is lit, so the sun is to the
     right of the car: heading about east, into the mountains.
@@ -103,10 +105,10 @@ card (174.8 s). DROP and end card are exactly 24 bars apart, so both land on a d
 - **Stem:** `exports/… - music-stem.wav` is the music as it sits in the master.
 
 **Ducking** as rally v2: side-chained from every dialog piece, -11 dB, 60 ms attack, 400 ms release, gaps under 0.6 s held
-down (`.work/mix.json` `duck_check` has the level under each of the 28 pieces).
+down (`.work/mix.json` `duck_check` has the level under each of the 27 pieces).
 
-**Dialog.** 28 pieces from the mezzanine audio, rally v2's chain: high-pass 80 Hz, `afftdn`, a slow 2:1 compressor, centred
-mono, each levelled to -16 LUFS, 12 ms edge fades. Piece edges sit in the pauses of the word timings (no trims needed).
+**Dialog.** 27 pieces from the mezzanine audio, rally v2's chain: high-pass 80 Hz, `afftdn`, a slow 2:1 compressor, centred
+mono, each levelled to -16 LUFS, 12 ms edge fades. Piece edges sit in the pauses of the word timings (no trims needed); four were moved into pauses in the 6 Oct review.
 
 **Nat.** Only under B-roll shots with no dialog: the terminal and escalator, the gate, the plane window (engines, -24 LUFS),
 the red shop building, the car rolling up (-20 LUFS: the engine as it arrives), the roof opening, the hook montage. **The
@@ -123,7 +125,7 @@ zeros. On the delivered master: -14.11 LUFS integrated, -1.69 dBTP true peak.
 ## Picture
 
 - **The cut** is `data/edl.json` (`tools/make_edl.py`): 41 shots + the end card, 5,401 frames at 29.97 fps (180.2 s),
-  28 dialog pieces. Sources are the Osmo Action 6 open-gate clips (3840x3840 59.94p), fetched as 1920x1920 mezzanines
+  27 dialog pieces. Sources are the Osmo Action 6 open-gate clips (3840x3840 59.94p), fetched as 1920x1920 mezzanines
   (`vlog.py plan` / `fetch`); 59.94 sources drop every other frame at 1x.
 - **Reframe:** a 1080x1920 window centred on the square frame with rally v2's slow 4 % push; the two HUD shots hold still
   (no push under the strip).
@@ -172,10 +174,15 @@ zeros. On the delivered master: -14.11 LUFS integrated, -1.69 dBTP true peak.
 1. **Listen before posting.** Every sound check is numeric. Nobody has listened. In particular:
    - whether the car stereo is playing a song under 0094's "get the vibes" line (12:10) and the "trees and nature" line;
    - the caption readings in `data/caption_fixes.json` (two whisper models; "look at us" vs "look at this" at 0076 50.8 s,
-     "treating you" at 0077);
-   - the edges of the 28 pieces.
-2. **STRIP-2's HEADING (SE 135) is the weakest number on screen**: set from the trip, and the light in the frame suggests
-   otherwise (see HEADING and SIDE G). Confirm with Omarie or change it.
+     "I was" vs "That's" before "a little tired" at 0076 25.3 s: captioned as "a little tired" only);
+   - the edges of the 27 pieces.
+2. **Review fixes applied (6 Oct, lead's decisions)**: 0077 "Seattle's treating you well today" is out of the cut (small.en and
+   medium.en both hear "training", the lead heard "treating you": unconfirmed, so no caption and no sound; its shot stays as
+   the phone picture, with the music under it). 0089 reads "gonna" (not "finna"). 0094's caption is "I like it. I want y'all to,
+   you know what I'm saying, get the vibes, so you feel me. We gon' catch the vibes right now." (`OVERRIDE` in
+   `tools/make_captions.py`; timings medium.en + small.en). Piece edges: 0092 opens at 7.93 s (no "damn"), 0093 opens in the pause
+   before "It is beautiful" (4.42 s), 0076's "a little tired" opens in the pause at 25.25 s, 0089 opens in the pause at 140.55 s.
+   The HEADING readings are gone (ROUTE · SEATTLE → VEGAS instead) and every gold fallback is SE orange.
 3. **Side G left / right is not confirmed** (no turn in either window to calibrate on).
 4. **Held lines** (lead, 6 Oct): the fuel-stop "I don't think I'm going to go to sleep, I'm just gonna run it the whole
    way" (reads as a drowsy-driving boast), the shop's name, the gas price, the miles and the "12 hours" lines.

@@ -549,6 +549,7 @@
      "start": "00:00:00",
      "place": "INTO THE MOUNTAINS",
      "heading": 95,
+     "route_text": "SEATTLE → VEGAS",
      "range": [
       129.1,
       136.9
@@ -565,6 +566,7 @@
      "start": "00:00:00",
      "place": "OPEN ROAD",
      "heading": 135,
+     "route_text": "SEATTLE → VEGAS",
      "range": [
       139.1,
       146.9

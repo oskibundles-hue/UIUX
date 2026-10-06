@@ -169,7 +169,7 @@
       (o.called || []).forEach(c => { if (c.k === k && t >= c.t) call = Math.max(call, Math.exp(-(t - c.t) * 2.2)); });
       const base = isAct ? 1 : reached ? 0.78 : 0.42 + 0.5 * call;
       const gold = call > 0.05 && !reached ? call : 0;
-      L.ln.t.style.color = gold > 0 ? `rgba(${Math.round(255 - 4 * gold)},${Math.round(255 - 46 * gold)},${Math.round(255 - 254 * gold)},${base.toFixed(3)})` : `rgba(255,255,255,${base.toFixed(3)})`;
+      L.ln.t.style.color = gold > 0 ? `rgba(${Math.round(255)},${Math.round(255 - 176 * gold)},${Math.round(255 - 233 * gold)},${base.toFixed(3)})` : `rgba(255,255,255,${base.toFixed(3)})`;
       L.ul.style.transform = `scaleX(${(isAct ? E.outExpo(P(t, tk, tk + 0.3)) : 0).toFixed(4)})`;
       glint(L.ln, t, tk < 1e8 ? tk + 0.1 : 1e9, 0.45, { w: 0.35 });
       (o.called || []).forEach(c => { if (c.k === k) glint(L.ln, t, c.t, 0.45, { w: 0.35 }); });
@@ -342,7 +342,7 @@
       const tl = ta + 0.26, pl = t >= tl ? Math.exp(-(t - tl) * 14) * Math.min(1, (t - tl) * FPS / 1.5) : 0;
       r = grow(r, (1 + 0.06 * pl) * (1 - 0.5 * E.inCubic(P(t, tx + 0.06, tx + 0.26))));
       const pp = bracketDraw(B, r, { maxL: 50 });
-      B.bo.setAttribute('stroke', pl > 0.05 ? `rgb(255,${Math.round(209 + 46 * pl)},${Math.round(1 + 200 * pl)})` : GOLD);
+      B.bo.setAttribute('stroke', pl > 0.05 ? `rgb(255,${Math.round(79 + 176 * pl)},${Math.round(22 + 233 * pl)})` : GOLD);
       [B.tu, B.to].forEach(e => e.setAttribute('opacity', cl(qa * 1.4 - 0.4).toFixed(3)));
       pingDraw(pings, tgt, t, tl);
       svg.style.opacity = (cl(qa * 3) * (1 - E.inCubic(P(t, tx + 0.1, tx + 0.26)))).toFixed(4);

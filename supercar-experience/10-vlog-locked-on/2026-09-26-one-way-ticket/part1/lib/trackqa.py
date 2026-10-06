@@ -18,7 +18,7 @@ W, H = 1080, 1920
 raw = subprocess.run([a.ffmpeg, '-v', 'error', '-i', a.video, '-vf', f"select='between(n\\,{f0}\\,{f1})'", '-vsync', '0',
                       '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-'], capture_output=True, check=True).stdout
 fr = np.frombuffer(raw, np.uint8).reshape(-1, H, W, 3)
-cols = ['#FBD101', '#00FFFF', '#FF40FF', '#40FF40', '#FF8040', '#FFFFFF']
+cols = ['#FF4F16', '#00FFFF', '#FF40FF', '#40FF40', '#FF8040', '#FFFFFF']
 tiles = []
 for i in range(0, len(fr), a.every):
     f = f0 + i

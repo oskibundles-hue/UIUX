@@ -22,7 +22,7 @@ for k in ks:
     for q, a in zip(idx, arr):
         im = Image.fromarray(a); d = ImageDraw.Draw(im)
         d.rectangle([54 * tw / 1080, 269 * th / 1920, 907 * tw / 1080, 1536 * th / 1920], outline=(90, 90, 90))
-        d.text((3, 3), f'{k} {PL.SHOTS[k]["src"]} f{q}', fill=(251, 209, 1))
+        d.text((3, 3), f'{k} {PL.SHOTS[k]["src"]} f{q}', fill=(255, 79, 22))
         l = float(np.mean(a) / 255)
         d.text((3, th - 12), f'mean {l:.2f}', fill=(255, 255, 255))
         tiles.append(im)

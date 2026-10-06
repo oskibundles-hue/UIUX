@@ -236,8 +236,8 @@
   {
    "beat": 10,
    "src": "0089",
-   "in": 140.6,
-   "out": 147.6,
+   "in": 140.5,
+   "out": 147.5,
    "speed": 1.0,
    "t": 71.9,
    "dur": 7.0,
@@ -296,8 +296,8 @@
   {
    "beat": 14,
    "src": "0092",
-   "in": 7.5,
-   "out": 19.5,
+   "in": 7.8,
+   "out": 19.8,
    "speed": 1.0,
    "t": 99.6,
    "dur": 5.0,
@@ -306,8 +306,8 @@
   {
    "beat": 15,
    "src": "0093",
-   "in": 3.7,
-   "out": 11.9,
+   "in": 4.1,
+   "out": 12.3,
    "speed": 1.0,
    "t": 104.6,
    "dur": 8.2,
@@ -464,9 +464,9 @@
   {
    "beat": 1,
    "src": "0076",
-   "in": 25.58,
-   "out": 28.66,
-   "t": 14.1,
+   "in": 25.25,
+   "out": 28.56,
+   "t": 14.05,
    "trim_pauses": null
   },
   {
@@ -475,14 +475,6 @@
    "in": 40.1,
    "out": 51.1,
    "t": 17.5,
-   "trim_pauses": null
-  },
-  {
-   "beat": 3,
-   "src": "0077",
-   "in": 57.9,
-   "out": 59.38,
-   "t": 28.7,
    "trim_pauses": null
   },
   {
@@ -560,9 +552,9 @@
   {
    "beat": 10,
    "src": "0089",
-   "in": 140.78,
+   "in": 140.55,
    "out": 147.48,
-   "t": 72.08,
+   "t": 71.95,
    "trim_pauses": null
   },
   {
@@ -600,17 +592,17 @@
   {
    "beat": 14,
    "src": "0092",
-   "in": 7.62,
+   "in": 7.93,
    "out": 9.3,
-   "t": 99.72,
+   "t": 99.73,
    "trim_pauses": null
   },
   {
    "beat": 15,
    "src": "0093",
-   "in": 3.86,
+   "in": 4.42,
    "out": 11.72,
-   "t": 104.76,
+   "t": 104.92,
    "trim_pauses": null
   },
   {
@@ -739,7 +731,7 @@
    "ch": "CH1",
    "t0": 28.6,
    "t1": 33.3,
-   "note": "MetaMuse weather: \"it says Seattle's treating you well today\" / \"it says no rain, good day to pick up your McLaren\""
+   "note": "MetaMuse weather: \"it says no rain, good day to pick up your McLaren\" (the line before it, \"Seattle's ... well today\", is out: its middle word is not confirmed by ear, small.en and medium.en both give \"training\"; the first shot stays as the phone-reading picture)"
   },
   {
    "i": 4,
@@ -788,7 +780,7 @@
    "ch": "CH2",
    "t0": 71.9,
    "t1": 78.9,
-   "note": "\"right now he's finna go grab the 600 LT from the warehouse\""
+   "note": "\"right now he's gonna go grab the 600 LT from the warehouse\""
   },
   {
    "i": 11,

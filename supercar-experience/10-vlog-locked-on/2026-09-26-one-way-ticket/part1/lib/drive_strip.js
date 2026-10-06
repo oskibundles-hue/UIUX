@@ -4,12 +4,12 @@
  * (glass_rects in build.py repeats panelAt's unroll / retract maths). The strip can retract (p.exit).
  * drive_strip.js -- STRIP, the decluttered driving HUD: one slim plate across the top in place of the A2 banner, D1
  * clock, DRV drive plate and PRG bar. Omarie, 6 Oct: "i feel like its too clutteres can we fix that plz".
- *   [SE mark] [10:00:08 + place] | [HEADING S 180] | [SIDE G 0.10 G + bead]   with a progress scrubber along the bottom
+ *   [SE mark] [10:00:08 + place] | [HEADING S 180, or ROUTE SEATTLE → VEGAS with p.route_text] | [SIDE G 0.10 G + bead]   with a progress scrubber along the bottom
  * p: {x, y, w, h, start, place, heading, hdgKeys, range, route: {waypoints, steps}} -- route adds one slim line under
  * the strip (the stop you're on in the accent, the next one in white). Side G from window.LAT, as DRV.
  * Colours follow window.THEME; the plate is a kit panel, so a glass theme frosts it. */
 SEK.driveStrip = function (cfg) {
-  const H = SEK.helpers, TH = window.THEME || {}, ACC = TH.accent || '#FBD101', GLOW = TH.glow || '251,209,1';
+  const H = SEK.helpers, TH = window.THEME || {}, ACC = TH.accent || '#FF4F16', GLOW = TH.glow || '255,79,22';
   const E = KT.ease, P = KT.p, cl = KT.cl;
   const p = Object.assign({ x: 54, y: 292, w: 853, h: 140, start: '10:00:00', place: '', heading: 0, hdgKeys: null,
     range: [0, cfg.t1], route: null }, cfg.p);
@@ -30,11 +30,26 @@ SEK.driveStrip = function (cfg) {
   const c2 = Math.max(cx + H.ink('Bebas', 78, '10:00').adv + H.ink('Bebas', 46, ':00').adv + 34, cx + H.ink('Michroma', 15, p.place, 0.12).w + 34);
   const c3 = c2 + (p.w - c2) * 0.48;
   [c2, c3].forEach(x => H.el('div', 'a', IN, `left:${x - 16}px;top:22px;width:1px;height:${p.h - 44}px;background:rgba(255,255,255,.18)`));
-  H.line(IN, 'Michroma', 14, 'HEADING', c2, 24, dim, { ls: 0.16, split: false });
-  const hv = H.line(IN, 'Bebas', 62, 'S 180', c2, 50, '#fff', { split: false });
+  // part1 copy: p.route_text ('SEATTLE → VEGAS') replaces the heading column with a static ROUTE label and the text,
+  // fitted to the column (the arrow is drawn: the display face has no arrow glyph). No heading is computed then.
+  let hv;
+  if (p.route_text) {
+    H.line(IN, 'Michroma', 14, p.route_label || 'ROUTE', c2, 24, dim, { ls: 0.16, split: false });
+    const [ra, rb] = String(p.route_text).split(/\s*(?:→|->|>)\s*/), colW = c3 - c2 - 20, gap = 12, arW = 0.5;   // arrow length = 0.5 em
+    const rs = Math.min(62, 62 * (colW - 2 * gap) / (H.ink('Bebas', 62, ra).adv + H.ink('Bebas', 62, rb).adv + 62 * arW));
+    const CAP62 = H.ink('Bebas', 62, 'H').aA, rcap = H.ink('Bebas', rs, 'H').aA, aw = rs * arW, ay = 50 + rcap / 2;
+    hv = H.line(IN, 'Bebas', rs, ra, c2, 50 + (CAP62 - rcap) / 2, '#fff', { split: false });
+    const ax = c2 + H.ink('Bebas', rs, ra).adv + gap;
+    H.el('div', 'a', IN, `left:${ax}px;top:${50 + (CAP62) / 2 - 1.25}px;width:${aw}px;height:2.5px;background:${ACC}`);
+    H.el('div', 'a', IN, `left:${ax + aw - 9}px;top:${50 + (CAP62) / 2 - 6}px;width:12px;height:12px;border-top:2.5px solid ${ACC};border-right:2.5px solid ${ACC};transform:rotate(45deg) scale(.9);transform-origin:50% 50%`);
+    H.line(IN, 'Bebas', rs, rb, ax + aw + gap, 50 + (CAP62 - rcap) / 2, '#fff', { split: false });
+  } else {
+    H.line(IN, 'Michroma', 14, 'HEADING', c2, 24, dim, { ls: 0.16, split: false });
+    hv = H.line(IN, 'Bebas', 62, 'S 180', c2, 50, '#fff', { split: false });
+  }
   H.line(IN, 'Michroma', 14, 'SIDE G', c3, 24, dim, { ls: 0.16, split: false });
   const gv = H.line(IN, 'Bebas', 62, '0.00 G', c3, 50, '#fff', { split: false });
-  const vx = c3 + H.ink('Bebas', 62, '0.00 G').adv + 16, vw = Math.max(40, p.w - 24 - vx), vy = 50 + hv.capH / 2 - 9;
+  const vx = c3 + H.ink('Bebas', 62, '0.00 G').adv + 16, vw = Math.max(40, p.w - 24 - vx), vy = 50 + gv.capH / 2 - 9;
   H.el('div', 'a', IN, `left:${vx}px;top:${vy}px;width:${vw}px;height:18px;border:1.5px solid rgba(255,255,255,.7);border-radius:9px`);
   H.el('div', 'a', IN, `left:${vx + vw / 2 - 1}px;top:${vy}px;width:2px;height:18px;background:rgba(255,255,255,.7)`);
   const bead = H.el('div', 'a', IN, `left:${vx + vw / 2 - 6}px;top:${vy + 3}px;width:12px;height:12px;border-radius:50%;background:${ACC};box-shadow:0 0 10px rgba(${GLOW},.7)`);
@@ -68,7 +83,7 @@ SEK.driveStrip = function (cfg) {
     let base = p.heading;
     if (p.hdgKeys) { const K = p.hdgKeys; base = K[0][1]; for (let j = 1; j < K.length; j++) { if (t >= K[j - 1][0]) { const u = E.inOutCubic(P(t, K[j - 1][0], K[j][0])); base = K[j - 1][1] + (K[j][1] - K[j - 1][1]) * u; } } }
     const hd = base + 1.6 * Math.sin(t * 0.55) + 0.7 * Math.sin(t * 1.7), hr = Math.round(((hd % 360) + 360) % 360) % 360;
-    hv.t.textContent = card(hr) + ' ' + String(hr).padStart(3, '0');
+    if (!p.route_text) hv.t.textContent = card(hr) + ' ' + String(hr).padStart(3, '0');
     const g = LAT.length ? LAT[Math.max(0, Math.min(LAT.length - 1, Math.round(t * 30)))] : 0;
     gv.t.textContent = Math.abs(g).toFixed(2) + ' G';
     const qb = E.outCubic(P(t, cfg.t0 + 0.3, cfg.t0 + 0.9));

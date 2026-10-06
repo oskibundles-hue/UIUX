@@ -34,14 +34,14 @@ beat('OPEN', 'hook panel on frame 0; VO 0075 (04:38, leaving home): "So we are h
 beat('CH1', '"at the airport right now as you can see" / "a little tired, but we up now"', [
     ('0076', 58.0, 4.2, 1.0, 'terminal, walking in'),
     ('0077', 20.0, 3.6, 1.0, 'escalator down'),
-], [('0076', 14.38, 18.14, ('at', 0.5)), ('0076', 25.58, 28.66, ('at', 4.5))])
+], [('0076', 14.38, 18.14, ('at', 0.5)), ('0076', 25.25, 28.56, ('at', 4.45))])
 beat('CH1', '"This is our Supercar Experience vlog. We usually transport our vehicles, but I\'m driving this one, look at us." NAME LOCK', [
     ('0076', 40.0, 11.2, 1.0, 'SYNC: at the terminal doors'),
 ], [('0076', 40.10, 51.10, ('sync', 0))])
-beat('CH1', 'MetaMuse weather: "it says Seattle\'s treating you well today" / "it says no rain, good day to pick up your McLaren"', [
+beat('CH1', 'MetaMuse weather: "it says no rain, good day to pick up your McLaren" (the line before it, "Seattle\'s ... well today", is out: its middle word is not confirmed by ear, small.en and medium.en both give "training"; the first shot stays as the phone-reading picture)', [
     ('0077', 57.8, 1.7, 1.0, 'SYNC: reading his phone'),
     ('0077', 67.7, 3.0, 1.0, 'SYNC'),
-], [('0077', 57.90, 59.38, ('sync', 0)), ('0077', 67.64, 70.44, ('sync', 1))])
+], [('0077', 67.64, 70.44, ('sync', 1))])
 beat('CH1', '"I\'m gonna try to put some animations in this ... make like a flying animation"', [
     ('0079', 51.4, 2.1, 1.0, 'SYNC: at the gate'),
     ('0078', 30.0, 4.6, 1.0, 'the gate area'),
@@ -67,9 +67,9 @@ beat('CH2', 'CH2 slam over the red shop building; "How you doing? I\'m here to p
 beat('CH2', '"So they got one more hour until they\'re done with the car."', [
     ('0088', 0.2, 5.2, 1.0, 'SYNC: inside the shop'),
 ], [('0088', 0.40, 5.22, ('sync', 0))])
-beat('CH2', '"right now he\'s finna go grab the 600 LT from the warehouse"', [
-    ('0089', 140.6, 7.0, 1.0, 'SYNC: outside the shop'),
-], [('0089', 140.78, 147.48, ('sync', 0))])
+beat('CH2', '"right now he\'s gonna go grab the 600 LT from the warehouse"', [
+    ('0089', 140.5, 7.0, 1.0, 'SYNC: outside the shop'),
+], [('0089', 140.55, 147.48, ('sync', 0))])
 beat('CH2', 'THE CAR ARRIVES (nat): LOCK-ON MCLAREN 600LT', [
     ('0090', 15.0, 5.6, 1.0, 'the McLaren rolls in (camera on its side: rotated)'),
 ])
@@ -82,11 +82,11 @@ beat('CH2', '"We are in the 600 LT" / "Man, it\'s gonna be a long drive."', [
     ('0091', 14.8, 2.8, 1.0, 'SYNC'),
 ], [('0091', 2.04, 5.10, ('sync', 0)), ('0091', 14.90, 17.46, ('sync', 1))])
 beat('CH2', '"Let\'s make sure this top work" -> the roof goes down', [
-    ('0092', 7.5, 5.0, 'ramp', 'SYNC then the roof opening at speed'),
-], [('0092', 7.62, 9.30, ('sync', 0))])
+    ('0092', 7.8, 5.0, 'ramp', 'SYNC then the roof opening at speed'),
+], [('0092', 7.93, 9.30, ('sync', 0))])
 beat('CH2', '"It is beautiful out here, like gorgeous. Like I\'m talking gorgeous." / "we\'re on our way ... to Las Vegas"', [
-    ('0093', 3.7, 8.2, 1.0, 'SYNC: driving, passenger-side cam'),
-], [('0093', 3.86, 11.72, ('sync', 0))])
+    ('0093', 4.1, 8.2, 1.0, 'SYNC: driving, passenger-side cam'),
+], [('0093', 4.42, 11.72, ('sync', 0))])
 
 # ---------------------------------------------------------------- CH3 HIT THE ROAD (12:10)
 beat('CH3', 'CH3 slam; "I like it. I want y\'all to get the vibe. So you feel me? We gonna get the vibes right now."', [
