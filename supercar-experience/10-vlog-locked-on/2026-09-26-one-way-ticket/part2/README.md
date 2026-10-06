@@ -44,3 +44,10 @@ car reads MCLAREN 600LT. The full README (every element, every line's source, so
   0119 box moved right onto the digits (180,1090). Check sheet: `exports/qa/round1-replacements-speedo.jpg` (`tools/shot_sheet.py`).
 - **Caption sync:** four pieces shifted later by the gate's own measure (`tools/make_captions.py` SHIFT): gates now 0 warnings.
 
+## Round 2 (nq-check, 6 Oct)
+
+- **CH2 slam lip sync:** 0116 126.5-129.8 showed him talking under another line. The slam is now 0116 103.6-106.9, the picture of
+  his own "It was actually perfect weather this time" (104.50, at 0.9): in sync. Right hand on the wheel throughout, no phone
+  (sheet `exports/qa/round2-ch2-slam-sync.jpg`). Clock 06:24:37 + 103.6 = 06:26, unchanged. Dialog and captions unchanged.
+- Master 9.78 Mb/s (under 11.5, so build.py makes no re-encoded _DELIVERY); the _DELIVERY path holds a copy of the master.
+

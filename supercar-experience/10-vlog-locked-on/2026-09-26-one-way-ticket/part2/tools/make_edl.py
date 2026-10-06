@@ -120,7 +120,7 @@ beat('CH1', '02:46 gas: "gassing up, dude, it is freezing"', [
 
 # ---------------------------------------------------------------- CH2 FIRST LIGHT (06:26)
 beat('CH2', 'CH2 slam; "It was actually perfect weather this time."', [
-    ('0116', 126.5, 3.3, 1.0, 'sunrise at the wheel, both hands on (round 1: 103.6-106.9 had a hand off the wheel); clock 06:26'),
+    ('0116', 103.6, 3.3, 1.0, 'sunrise at the wheel, in sync with his line (round 2: 126.5 showed him talking under another line); right hand on the wheel, no phone; clock 06:26'),
 ], [('0116', 104.50, 106.62, ('at', 0.9))])
 beat('CH2', '"We got the beautiful view to us right here." / first light', [
     ('0121', 155.0, 3.0, 1.0, 'CUTAWAY the road (round 1: 0116 121.1-124.1 had a hand off the wheel); his audio runs on'),
