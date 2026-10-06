@@ -967,8 +967,7 @@
    "why": "0100 speedometer"
   },
   {
-   "f0": 3501,
-   "f1": 3589,
+   "shot": 31,
    "box": [
     280,
     975,
@@ -977,7 +976,7 @@
    ],
    "pad": 16,
    "radius": 16,
-   "why": "0094 speedometer once the camera faces the road"
+   "why": "0094 speedometer (shot 31, 0094 7.6-9.2, frames 3542-3589; was f0 3501-3589, which overlapped cutaway shot 30)"
   },
   {
    "shot": 30,
@@ -994,14 +993,14 @@
   {
    "shot": 29,
    "box": [
-    330,
+    290,
     985,
-    230,
+    270,
     115
    ],
    "pad": 16,
    "radius": 16,
-   "why": "0095 speedometer (cutaway 112.8-116.0, 0095 27.2-30.4)"
+   "why": "0095 speedometer (cutaway 112.8-116.0, 0095 21.2-24.4; cluster drifts left late in the span, box widened 40 px left)"
   }
  ],
  "_aboutSpeedo": "speedo: the McLaren's own speedometer on every cabin-cam shot (its digits are readable at phone size), blurred in a static feathered box per shot (no speed on screen). blurs: licence plates are not blurred in this vlog (Omarie, 6 Oct)."

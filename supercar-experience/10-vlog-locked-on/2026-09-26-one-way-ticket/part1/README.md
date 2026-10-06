@@ -56,7 +56,7 @@ Every in / out time: `cue.md` (generated). All copy lives in `config.json` (`lay
 | SUPERCAR EXPERIENCE · ROAD TRIP / ONE-WAY TICKET / PART 1 · SEP 26 2026 (hook) | the storyboard Omarie approved on 6 Oct (`../mockup/storyboard-part1.jpg`, `../mockup/gen.py`); the date is the camera files' (DJI_20260926…) |
 | SUPERCAR EXPERIENCE · ONE-WAY TICKET · PART 1 (side banner) | the approved storyboard |
 | SE lockup, SE mark, stacked SE logo | `02-logos/png/` |
-| HH:MM · CH 0N / 03 and the chapter titles WHEELS UP, THE PICKUP, HIT THE ROAD | titles: the approved storyboard. Clocks: the camera clock of the chapter's first frame = file-name start + in-point: 0076 04:56:12 + 58.0 s = **04:57** (the storyboard said 04:56, the clip's start), 0087 10:14:14 + 4.0 s = 10:14, CH3 = 0095 12:17:04 + 27.4 s (the slam's first frame, 113.0 s, is 0.2 s into the 0095 cutaway that opens at 27.2) = 12:17:31 = **12:17** (it was 0094 12:10:21 + 2.2 s = 12:10 until the 7 Oct cutaway) |
+| HH:MM · CH 0N / 03 and the chapter titles WHEELS UP, THE PICKUP, HIT THE ROAD | titles: the approved storyboard. Clocks: the camera clock of the chapter's first frame = file-name start + in-point: 0076 04:56:12 + 58.0 s = **04:57** (the storyboard said 04:56, the clip's start), 0087 10:14:14 + 4.0 s = 10:14, CH3 = 0095 12:17:04 + 21.4 s (the slam's first frame, 113.0 s, is 0.2 s into the 0095 cutaway that opens at 21.2; round 5) = 12:17:25 = **12:17**; the slam's last frame (114.95 s) is 0095 23.35 s = 12:17:27, so the whole slam sits inside 12:17 (it was 0094 12:10:21 + 2.2 s = 12:10 until the 7 Oct cutaway, then 0095 27.4 s = 12:17:31) |
 | OMARIE · @NQ.YOUNG | the approved follow card ("Omarie Young @nq.young"), as in rally v2 |
 | 09:00:xx · IN THE AIR · SEP 26 2026 | the camera clock of clip 0082 (DJI_20260926085959: 08:59:59 + 2.0 s); the window shots are the plane on approach; place line from the approved storyboard |
 | LOCKED ON · MCLAREN 600LT | Omarie, 6 Oct ("its a mclaren 600 lt"); he names it on camera ("pick up a McLaren 600 LT", 0075; "I'm here to pick up the 600LT", 0087; "We are in the 600 LT", 0091). No trim or spec added |
@@ -65,7 +65,7 @@ Every in / out time: `cue.md` (generated). All copy lives in `config.json` (`lay
 | ROUTE · SEATTLE → VEGAS (both strips; static) | his own words: "from Seattle to Vegas" (0090, "the 600LT that we will be driving from Seattle to Vegas") and "drive it all the way back to Vegas" (0087). It replaces the two HEADING readings (E 095 / SE 135), which were estimates with no sourced figure. `config.json` `p.route_text`; `lib/drive_strip.js` draws the arrow and fits the text to the column |
 | JUST GOT INTO · OREGON | his words in 0100 ("we just got into Oregon", "We're in Oregon!") and 0102 ("we are in Oregon") |
 | TO BE CONTINUED · PART 2: THE NIGHT | the approved storyboard (Part 2 is the night drive, README one level up) |
-| Captions | his own words, `data/captions.json` (word timings from the day index, small.en; every piece re-checked with medium.en; the 10 readings that differ are in `data/caption_fixes.json`) |
+| Captions | his own words, `data/captions.json` (word timings from the day index, small.en; every piece re-checked with medium.en; the 11 readings that differ are in `data/caption_fixes.json`) |
 | End card: A RIDE OF A LIFETIME. · TEXT OR DM TO BOOK · (725) 425-3583 · SUPERCAREXP.VIP · @SUPERCAR_EXPERIENCE_ · LAS VEGAS · SCOTTSDALE · BOISE · RENTERS 25+ · AGES 21–24 WITH $299 UNDERAGE FEE · FILMED BY @NQ.YOUNG | the approved rally layer's end card, copy byte-identical (`build`: asserted against the rally v2 config); sources in `../../2026-09-15-rally/README.md` |
 
 Places only where he says them or a sign shows them: Seattle (Washington), Vegas / Las Vegas, Oregon, Supercar Experience
@@ -135,7 +135,7 @@ zeros. On the delivered master: -14.11 LUFS integrated, -1.69 dBTP true peak.
   exteriors, `terminal` (a lifted interior look) for the airport, `cabin` for the cabin-cam and passenger-cam driving
   shots. `exports/qa/shots-sheet.jpg` has every shot's first / middle / last frame.
 - **Speedometer blurred:** the McLaren's digital cluster is readable at phone size on the cabin-cam shots (the digits show
-  in the raw frames), so a feathered static blur sits over it on every cabin-cam shot (`config.json` `speedo`, 12 boxes).
+  in the raw frames), so a feathered static blur sits over it on every cabin-cam shot (`config.json` `speedo`, 14 boxes; the old frame-range box 3501-3589 became a box on shot 31 only, so it no longer overlaps cutaway shot 30).
 - **Licence plates are not blurred** (Omarie, 6 Oct: "we dont need plate blur"); `config.json` `blurs` is empty and no
   plate is tracked.
 - **Lock-ons** are tracked on the rendered shots with `lib/track_mid.py` from a sharp anchor frame (QA sheets
@@ -182,7 +182,7 @@ zeros. On the delivered master: -14.11 LUFS integrated, -1.69 dBTP true peak.
 3. **Side G is off both strips** (7 Oct): see "HEADING and SIDE G".
 4. **Held lines** (lead, 6 Oct): the fuel-stop "I don't think I'm going to go to sleep, I'm just gonna run it the whole
    way" (reads as a drowsy-driving boast), the shop's name, the gas price, the miles and the "12 hours" lines.
-5. **Phone in hand while driving** in 0094 176-232 s, 0096 41.8-47 s and 0094 5.6-7.5 s (the junction, under "you feel me" / "we gon' catch the vibes") is out (config `forbidden`); 112.8-116.0 s is a cutaway to the road (0095 27.2-30.4 s, both hands on the wheel, speedometer blurred) over his hands-off-the-wheel gesture (0094 2.2-5.4 s), and 116.0-118.2 s is a cutaway to the road (0095 33.9-36.1 s, both hands on the wheel, speedometer blurred) with his audio and captions running on; STRIP-1 now sits on 0096 32.6-40.6 s and the hook's 0096 frames on 39.0-40.8 s (both hands on the wheel, checked frame by frame; every other cabin-cam shot was swept for a held phone: none); a water bottle in hand shows briefly in a
+5. **Phone in hand while driving** in 0094 176-232 s, 0096 41.8-47 s and 0094 5.6-7.5 s (the junction, under "you feel me" / "we gon' catch the vibes") is out (config `forbidden`); 112.8-116.0 s is a cutaway to the road (0095 21.2-24.4 s, round 5: both hands on the wheel, car rolling through forest, speedometer blurred; the span is used nowhere else in the cut, so no gesture repeats) over his hands-off-the-wheel gesture (0094 2.2-5.4 s), and 116.0-118.2 s is a cutaway to the road (0095 33.9-36.1 s, both hands on the wheel, speedometer blurred) with his audio and captions running on; STRIP-1 now sits on 0096 32.6-40.6 s and the hook's 0096 frames on 39.0-40.8 s (both hands on the wheel, checked frame by frame; every other cabin-cam shot was swept for a held phone: none); a water bottle in hand shows briefly in a
    few driving frames elsewhere and was avoided where the footage allowed.
 6. **The index missed one speed line** (0093 1:55.8-2:00.2, "speed limit 35 we're going 45"): not in the cut, and added to
    config `forbidden`.
