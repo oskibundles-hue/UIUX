@@ -25,7 +25,7 @@ def beat(ch, note, shots, dialog=(), tail=0.0):
 beat('OPEN', 'hook panel on frame 0; VO 0075 (04:38, leaving home): "So we are heading to Seattle Washington to go pick up a McLaren 600 LT"', [
     ('0097', 10.4, 2.2, 1.0, 'hook frame: snow peaks ahead, cabin cam'),
     ('0095', 36.0, 1.8, 1.0, 'forest road'),
-    ('0096', 44.0, 1.8, 1.0, 'mountains open up'),
+    ('0096', 39.0, 1.8, 1.0, 'mountains open up (hands on the wheel)'),
     ('0099', 172.0, 1.8, 1.0, 'open plains'),
     ('0102', 15.6, 2.0, 1.0, 'the McLaren at the pump, on "McLaren 600 LT"'),
 ], [('0075', 69.40, 76.72, ('at', 2.0))])
@@ -100,7 +100,7 @@ beat('CH3', '"Man, I miss trees and nature. Good lord. I just know they got some
     ('0095', 28.0, 5.8, 1.0, 'forest road (his line from 0094 over it: hands on the wheel here)'),
 ], [('0094', 156.98, 162.40, ('at', 0.2))])
 beat('CH3', 'HUD-1 STRIP: into the mountains (13:28)', [
-    ('0096', 38.0, 8.0, 1.0, 'HUD-1: mountains open up'),
+    ('0096', 32.6, 8.0, 1.0, 'HUD-1: mountains open up (both hands on the wheel; a phone is held from 42 s)'),
 ])
 beat('CH3', 'snow peaks', [
     ('0097', 16.0, 2.0, 1.0, 'snow peaks'),

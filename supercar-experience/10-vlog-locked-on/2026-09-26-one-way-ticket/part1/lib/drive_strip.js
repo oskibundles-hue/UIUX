@@ -51,8 +51,12 @@ SEK.driveStrip = function (cfg) {
   const gv = H.line(IN, 'Bebas', 62, '0.00 G', c3, 50, '#fff', { split: false });
   const vx = c3 + H.ink('Bebas', 62, '0.00 G').adv + 16, vw = Math.max(40, p.w - 24 - vx), vy = 50 + gv.capH / 2 - 9;
   H.el('div', 'a', IN, `left:${vx}px;top:${vy}px;width:${vw}px;height:18px;border:1.5px solid rgba(255,255,255,.7);border-radius:9px`);
-  H.el('div', 'a', IN, `left:${vx + vw / 2 - 1}px;top:${vy}px;width:2px;height:18px;background:rgba(255,255,255,.7)`);
-  const bead = H.el('div', 'a', IN, `left:${vx + vw / 2 - 6}px;top:${vy + 3}px;width:12px;height:12px;border-radius:50%;background:${ACC};box-shadow:0 0 10px rgba(${GLOW},.7)`);
+  // part1 copy: p.g_mag = magnitude only (the side-G sign was never calibrated against a turn, so nothing may imply left or
+  // right): no centre tick, and the bar fills from the left end by |g| instead of a bead swinging about the centre
+  if (!p.g_mag) H.el('div', 'a', IN, `left:${vx + vw / 2 - 1}px;top:${vy}px;width:2px;height:18px;background:rgba(255,255,255,.7)`);
+  const bead = p.g_mag
+    ? H.el('div', 'a', IN, `left:${vx + 3}px;top:${vy + 3}px;width:${vw - 6}px;height:12px;border-radius:6px;background:${ACC};transform-origin:0 50%;box-shadow:0 0 10px rgba(${GLOW},.6)`)
+    : H.el('div', 'a', IN, `left:${vx + vw / 2 - 6}px;top:${vy + 3}px;width:12px;height:12px;border-radius:50%;background:${ACC};box-shadow:0 0 10px rgba(${GLOW},.7)`);
   // scrubber along the bottom of the plate
   const sL = 24, sW = p.w - 48, sT = p.h - 10;
   H.el('div', 'a', IN, `left:${sL}px;top:${sT}px;width:${sW}px;height:3px;border-radius:2px;background:rgba(255,255,255,.2)`);
@@ -87,7 +91,8 @@ SEK.driveStrip = function (cfg) {
     const g = LAT.length ? LAT[Math.max(0, Math.min(LAT.length - 1, Math.round(t * 30)))] : 0;
     gv.t.textContent = Math.abs(g).toFixed(2) + ' G';
     const qb = E.outCubic(P(t, cfg.t0 + 0.3, cfg.t0 + 0.9));
-    bead.style.transform = `translateX(${((vw / 2 - 9) * Math.max(-1, Math.min(1, g / 0.5)) * qb).toFixed(2)}px)`;
+    if (p.g_mag) bead.style.transform = `scaleX(${(Math.max(0.04, Math.min(1, Math.abs(g) / 0.5)) * qb).toFixed(4)})`;
+    else bead.style.transform = `translateX(${((vw / 2 - 9) * Math.max(-1, Math.min(1, g / 0.5)) * qb).toFixed(2)}px)`;
     fill.style.transform = `scaleX(${(P(t, p.range[0], p.range[1]) * qb).toFixed(5)})`;
     if (rt) {
       H.panelAt(rt.rp, t, cfg.t0 + 0.25, null);

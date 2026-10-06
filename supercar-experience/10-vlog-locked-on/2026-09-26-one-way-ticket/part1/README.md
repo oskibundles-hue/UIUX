@@ -40,8 +40,8 @@ rally's slams do the same; its samples did not land on them).
 | B1 | **Host name lock** OMARIE · @NQ.YOUNG on his tracked face, while he says "This is our Supercar Experience vlog" | 18.2 – 20.9 | tracked |
 | D1 | **Clock stamp** 09:00 with the camera's own seconds, IN THE AIR, SEP 26 2026, over the plane window (right after "make like a flying animation") | 43.6 – 48.3 | top-left |
 | LOCK | **Lock-on** LOCKED ON · MCLAREN 600LT on the car as it rolls up to the shop | 78.95 – 80.5 | tracked |
-| STRIP-1 | **HUD-1 strip** (dark glass, SE orange): SE mark, camera clock 13:28:xx + INTO THE MOUNTAINS, ROUTE SEATTLE → VEGAS, SIDE G, scrubber | 129.1 – 136.9 | top, x 54-907, y 292-432 |
-| STRIP-2 | **HUD-1 strip**: camera clock 15:42:xx + OPEN ROAD, ROUTE SEATTLE → VEGAS, SIDE G, scrubber | 139.1 – 146.9 | same |
+| STRIP-1 | **HUD-1 strip** (dark glass, SE orange): SE mark, camera clock 13:28:xx + INTO THE MOUNTAINS, ROUTE SEATTLE → VEGAS, SIDE G (magnitude bar), scrubber | 129.1 – 136.9 | top, x 54-907, y 292-432 |
+| STRIP-2 | **HUD-1 strip**: camera clock 15:42:xx + OPEN ROAD, ROUTE SEATTLE → VEGAS, SIDE G (magnitude bar), scrubber | 139.1 – 146.9 | same |
 | PLACE | **Place tag** JUST GOT INTO · OREGON, on "We're in Oregon!" | 148.2 – 151.2 | top-left |
 | TEASE | **Tease tag** TO BE CONTINUED · PART 2: THE NIGHT, on "so we are about to keep on going" | 169.6 – 174.7 | top-left |
 | H1 | **Captions** (rally v2 H1 boxed karaoke), active word on an orange box | every dialog piece 2.0 – 174.8 | y 1190-1382, x 130-830 |
@@ -60,10 +60,10 @@ Every in / out time: `cue.md` (generated). All copy lives in `config.json` (`lay
 | OMARIE · @NQ.YOUNG | the approved follow card ("Omarie Young @nq.young"), as in rally v2 |
 | 09:00:xx · IN THE AIR · SEP 26 2026 | the camera clock of clip 0082 (DJI_20260926085959: 08:59:59 + 2.0 s); the window shots are the plane on approach; place line from the approved storyboard |
 | LOCKED ON · MCLAREN 600LT | Omarie, 6 Oct ("its a mclaren 600 lt"); he names it on camera ("pick up a McLaren 600 LT", 0075; "I'm here to pick up the 600LT", 0087; "We are in the 600 LT", 0091). No trim or spec added |
-| 13:28:xx / 15:42:xx (strip clocks) | the camera clock of each frame: 0096 13:27:35 + 38.0 s…, 0099 15:39:50 + 166.0 s… |
+| 13:28:xx / 15:42:xx (strip clocks) | the camera clock of each frame: 0096 13:27:35 + 32.6 s…, 0099 15:39:50 + 166.0 s… |
 | INTO THE MOUNTAINS / OPEN ROAD (strip place lines) | the approved storyboard; what the shot shows (mountains ahead in 0096, open plains in 0099). No road or town is named |
 | ROUTE · SEATTLE → VEGAS (both strips; static) | his own words: "from Seattle to Vegas" (0090, "the 600LT that we will be driving from Seattle to Vegas") and "drive it all the way back to Vegas" (0087). It replaces the two HEADING readings (E 095 / SE 135), which were estimates with no sourced figure. `config.json` `p.route_text`; `lib/drive_strip.js` draws the arrow and fits the text to the column |
-| SIDE G 0.00-0.3x G | the camera's own accelerometer, `../../hud-layouts/tools/side_g.py` on the fetched source span (see below) |
+| SIDE G 0.00-0.3x G, shown as a bar that fills from the left by the magnitude (no centre mark, no left / right) | the camera's own accelerometer, magnitude only (`p.g_mag` in `lib/drive_strip.js`; the left / right sign was never calibrated against a turn, so nothing on screen implies a direction), `../../hud-layouts/tools/side_g.py` on the fetched source span (see below) |
 | JUST GOT INTO · OREGON | his words in 0100 ("we just got into Oregon", "We're in Oregon!") and 0102 ("we are in Oregon") |
 | TO BE CONTINUED · PART 2: THE NIGHT | the approved storyboard (Part 2 is the night drive, README one level up) |
 | Captions | his own words, `data/captions.json` (word timings from the day index, small.en; every piece re-checked with medium.en; the 10 readings that differ are in `data/caption_fixes.json`) |
@@ -89,7 +89,7 @@ here went through SlopMonster: 5/5.
 - **SIDE G** comes from the camera's metadata track (djmd, Osmo Action 6 accelerometer), read with
   `../../hud-layouts/tools/side_g.py <clip> <start> <dur>` on the fetched byte span (`vlog.py fetch --keep-sparse`):
   0096 32-52 s and 0099 158-182 s, saved as `data/side_g_*.json`. No `--turn`: there is no turn in either window to
-  calibrate the axis, so left/right is not confirmed (the bead may swing the wrong way); the magnitude is the sensor's.
+  calibrate the axis, so left/right is not confirmed: the strips show the magnitude only (a bar filling from the left).
 
 ## Sound
 
@@ -150,7 +150,7 @@ zeros. On the delivered master: -14.11 LUFS integrated, -1.69 dBTP true peak.
   and retract), the plate is blurred (22 px) and saturated (1.3), exactly what the theme's `backdrop-filter` does in a
   browser over the footage. The layer is captured transparent, so a CSS backdrop-filter would have nothing behind it.
 - **Clocks:** camera clock = file-name start + in-point (DJI_20260926HHMMSS, local time). CH1 04:57:10, CH2 10:14:18,
-  CH3 12:10:23; IN THE AIR 09:00:01; STRIP-1 13:28:13; STRIP-2 15:42:36.
+  CH3 12:10:23; IN THE AIR 09:00:01; STRIP-1 13:28:08; STRIP-2 15:42:36.
 
 ## Where this differs from rally v2, and why
 
@@ -183,10 +183,10 @@ zeros. On the delivered master: -14.11 LUFS integrated, -1.69 dBTP true peak.
    `tools/make_captions.py`; timings medium.en + small.en). Piece edges: 0092 opens at 7.93 s (no "damn"), 0093 opens in the pause
    before "It is beautiful" (4.42 s), 0076's "a little tired" opens in the pause at 25.25 s, 0089 opens in the pause at 140.55 s.
    The HEADING readings are gone (ROUTE · SEATTLE → VEGAS instead) and every gold fallback is SE orange.
-3. **Side G left / right is not confirmed** (no turn in either window to calibrate on).
+3. **Side G shows magnitude only** (6 Oct, facts panel): the left / right sign was never calibrated (no turn in either window), so the bar fills from the left and nothing implies a direction.
 4. **Held lines** (lead, 6 Oct): the fuel-stop "I don't think I'm going to go to sleep, I'm just gonna run it the whole
    way" (reads as a drowsy-driving boast), the shop's name, the gas price, the miles and the "12 hours" lines.
-5. **Phone in hand while driving** in 0094 176-232 s is out (config `forbidden`); a water bottle in hand shows briefly in a
+5. **Phone in hand while driving** in 0094 176-232 s and 0096 41.8-47 s is out (config `forbidden`); STRIP-1 now sits on 0096 32.6-40.6 s and the hook's 0096 frames on 39.0-40.8 s (both hands on the wheel, checked frame by frame; every other cabin-cam shot was swept for a held phone: none); a water bottle in hand shows briefly in a
    few driving frames elsewhere and was avoided where the footage allowed.
 6. **The index missed one speed line** (0093 1:55.8-2:00.2, "speed limit 35 we're going 45"): not in the cut, and added to
    config `forbidden`.

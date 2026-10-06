@@ -47,6 +47,12 @@
    "a": 78.0,
    "b": 112.0,
    "why": "ad mockups with prices on the phone screen"
+  },
+  {
+   "src": "0096",
+   "a": 41.8,
+   "b": 47.0,
+   "why": "phone in hand while driving (facts panel, 6 Oct)"
   }
  ],
  "timelapseShutter": 1.0,
@@ -550,6 +556,7 @@
      "place": "INTO THE MOUNTAINS",
      "heading": 95,
      "route_text": "SEATTLE → VEGAS",
+     "g_mag": true,
      "range": [
       129.1,
       136.9
@@ -567,6 +574,7 @@
      "place": "OPEN ROAD",
      "heading": 135,
      "route_text": "SEATTLE → VEGAS",
+     "g_mag": true,
      "range": [
       139.1,
       146.9

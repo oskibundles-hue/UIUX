@@ -46,12 +46,12 @@
   {
    "beat": 0,
    "src": "0096",
-   "in": 44.0,
-   "out": 45.8,
+   "in": 39.0,
+   "out": 40.8,
    "speed": 1.0,
    "t": 4.0,
    "dur": 1.8,
-   "note": "mountains open up"
+   "note": "mountains open up (hands on the wheel)"
   },
   {
    "beat": 0,
@@ -356,12 +356,12 @@
   {
    "beat": 19,
    "src": "0096",
-   "in": 38.0,
-   "out": 46.0,
+   "in": 32.6,
+   "out": 40.6,
    "speed": 1.0,
    "t": 128.9,
    "dur": 8.0,
-   "note": "HUD-1: mountains open up"
+   "note": "HUD-1: mountains open up (both hands on the wheel; a phone is held from 42 s)"
   },
   {
    "beat": 20,
