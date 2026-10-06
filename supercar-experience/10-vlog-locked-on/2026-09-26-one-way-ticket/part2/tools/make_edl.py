@@ -77,7 +77,7 @@ def tail(src, a, b):
 
 # ---------------------------------------------------------------- OPEN: the hook, his own line over first light
 beat('OPEN', 'hook panel on frame 0 (sunrise); VO 0116 (06:25): "So we are currently in somewhere in Nevada. I don\'t know where."', [
-    ('0116', 4.0, 2.4, 1.0, 'hook frame: first light over the desert ("you see the beautiful desert")'),
+    ('0121', 128.0, 2.4, 1.0, 'hook frame: the desert road, morning (round 1: 0116 4.0-6.4 had his right hand off the wheel with a phone / can)'),
     ('0121', 100.0, 1.8, 1.0, 'rear-deck cam, the road behind'),
     ('0122', 300.0, 1.8, 1.0, 'the freeway'),
     ('0119', 67.0, 1.8, 1.0, 'the McLaren at the pump, door up behind him (hands / phone check 6 Oct)'),
@@ -105,7 +105,7 @@ beat('CH1', 'night road (music only)', [
     ('0113', 112.5, 2.2, 1.0, 'night drive, headlights'),
     ('0113', 108.5, 2.0, 1.0, 'night drive, hands on the wheel (104 had a hand off the wheel)'),
     ('0113', 115.0, 2.0, 1.0, 'night drive, hands on the wheel (128.5 was black)'),
-    ('0113', 120.0, 2.0, 1.0, 'night drive'),
+    ('0113', 118.0, 2.0, 1.0, 'night drive, hand on the wheel (round 1: 120.6-122 had the hand off the wheel, seen once the 16:9 fill was fixed)'),
 ])
 beat('CH1', 'CLOCK STAMP 01:29 AFTER THE NAP: "I definitely did take a nice McLaren nap." / "Pretty nice parking lot. Reminds me of Vegas." / "I feel refreshed. I\'m parched." / "We back in business, baby!"', [
     ('0114', 7.3, 4.2, 1.0, 'SYNC: parked after the nap (16:9 source)'),
@@ -114,17 +114,18 @@ beat('CH1', 'CLOCK STAMP 01:29 AFTER THE NAP: "I definitely did take a nice McLa
     ('0114', 42.6, 2.5, 1.0, 'SYNC'),
 ], [('0114', 7.45, 11.10, ('sync', 0)), ('0114', 19.75, 22.65, ('sync', 1)), ('0114', 34.92, 35.95, ('sync', 2)), ('0114', 42.70, 44.70, ('sync', 3))])
 beat('CH1', '02:46 gas: "gassing up, dude, it is freezing"', [
-    ('0115', 10.2, 4.7, 1.0, 'SYNC: at the pump, night'),
+    ('0115', 10.2, 2.0, 1.0, 'SYNC: at the pump, night (round 1: ends before the selfie turns sideways)'),
+    ('0115', 20.8, 2.7, 1.0, 'CUTAWAY: the McLaren at the pump, doors up (phone on its side: config rot 90); his audio runs on'),
 ], [('0115', 10.35, 14.75, ('sync', 0))])
 
 # ---------------------------------------------------------------- CH2 FIRST LIGHT (06:26)
 beat('CH2', 'CH2 slam; "It was actually perfect weather this time."', [
-    ('0116', 103.6, 3.3, 1.0, 'SYNC: sunrise at the wheel (ends before the hours line at 106.9)'),
-], [('0116', 104.50, 106.62, ('sync', 0))])
+    ('0116', 126.5, 3.3, 1.0, 'sunrise at the wheel, both hands on (round 1: 103.6-106.9 had a hand off the wheel); clock 06:26'),
+], [('0116', 104.50, 106.62, ('at', 0.9))])
 beat('CH2', '"We got the beautiful view to us right here." / first light', [
-    ('0116', 121.1, 3.0, 1.0, 'SYNC'),
+    ('0121', 155.0, 3.0, 1.0, 'CUTAWAY the road (round 1: 0116 121.1-124.1 had a hand off the wheel); his audio runs on'),
     ('0121', 110.0, 2.5, 1.0, 'the road (music; 0116 25.0 had the phone in his hand while driving)'),
-], [('0116', 121.25, 123.90, ('sync', 0))])
+], [('0116', 121.25, 123.90, ('at', 0.15))])
 beat('CH2', 'the desert, low on gas (road cutaways, his audio runs on): "There\'s nothing out here." / "As you can see, it\'s just all field." / "No cell service, not an SOS."', [
     ('0121', 104.0, 3.6, 1.0, 'CUTAWAY (the road; 0117 48.6-52.2 has the phone in his hand while driving)'),
     ('0121', 132.0, 2.4, 1.0, 'CUTAWAY (the road; 0117 74.7-77.1: phone in hand while driving)'),

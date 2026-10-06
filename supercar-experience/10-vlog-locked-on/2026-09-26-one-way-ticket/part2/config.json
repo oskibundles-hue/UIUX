@@ -229,7 +229,7 @@
  },
  "shots": {
   "0": {
-   "look": "cabin"
+   "look": "day"
   },
   "1": {
    "look": "day"
@@ -262,61 +262,36 @@
    "look": "night"
   },
   "11": {
-   "look": "night",
-   "s0": 1.8,
-   "s1": 1.8,
-   "_why": "0113 is a 16:9 source: a 1080x1920 window needs s >= 1.78"
+   "look": "night"
   },
   "12": {
-   "look": "night",
-   "s0": 1.8,
-   "s1": 1.8,
-   "_why": "0113 is a 16:9 source: a 1080x1920 window needs s >= 1.78"
+   "look": "night"
   },
   "13": {
-   "look": "night",
-   "s0": 1.8,
-   "s1": 1.8,
-   "_why": "0113 is a 16:9 source: a 1080x1920 window needs s >= 1.78"
+   "look": "night"
   },
   "14": {
-   "look": "night",
-   "s0": 1.8,
-   "s1": 1.8,
-   "_why": "0113 is a 16:9 source: a 1080x1920 window needs s >= 1.78"
+   "look": "night"
   },
   "15": {
-   "look": "night",
-   "s0": 1.8,
-   "s1": 1.8,
-   "_why": "0114 is a 16:9 source: a 1080x1920 window needs s >= 1.78"
+   "look": "night"
   },
   "16": {
-   "look": "night",
-   "s0": 1.8,
-   "s1": 1.8,
-   "_why": "0114 is a 16:9 source: a 1080x1920 window needs s >= 1.78"
+   "look": "night"
   },
   "17": {
-   "look": "night",
-   "s0": 1.8,
-   "s1": 1.8,
-   "_why": "0114 is a 16:9 source: a 1080x1920 window needs s >= 1.78"
+   "look": "night"
   },
   "18": {
-   "look": "night",
-   "s0": 1.8,
-   "s1": 1.8,
-   "_why": "0114 is a 16:9 source: a 1080x1920 window needs s >= 1.78"
+   "look": "night"
   },
   "19": {
-   "look": "night",
-   "s0": 1.8,
-   "s1": 1.8,
-   "_why": "0115 is a 16:9 source: a 1080x1920 window needs s >= 1.78"
+   "look": "night"
   },
   "20": {
-   "look": "cabin"
+   "look": "night",
+   "rot": 90,
+   "_why": "0115 21.2 was shot with the phone on its side: turned upright (round 1)"
   },
   "21": {
    "look": "cabin"
@@ -334,10 +309,10 @@
    "look": "day"
   },
   "26": {
-   "look": "cabin"
+   "look": "day"
   },
   "27": {
-   "look": "day"
+   "look": "cabin"
   },
   "28": {
    "look": "day"
@@ -346,11 +321,11 @@
    "look": "day"
   },
   "30": {
-   "look": "day",
-   "s1": 1.0
+   "look": "day"
   },
   "31": {
-   "look": "day"
+   "look": "day",
+   "s1": 1.0
   },
   "32": {
    "look": "day"
@@ -371,19 +346,22 @@
    "look": "day"
   },
   "38": {
+   "look": "day"
+  },
+  "39": {
    "look": "day",
    "s1": 1.0
   },
-  "39": {
-   "look": "day"
-  },
   "40": {
-   "look": "interior"
+   "look": "day"
   },
   "41": {
-   "look": "day"
+   "look": "interior"
   },
   "42": {
+   "look": "day"
+  },
+  "43": {
    "look": "day"
   }
  },
@@ -413,29 +391,29 @@
    "dur": 0.36
   },
   {
-   "into": 20,
+   "into": 21,
    "type": "sweep",
    "t0": 56.1,
    "dur": 0.36
   },
   {
-   "into": 27,
+   "into": 28,
    "type": "impact",
    "strength": 0.45
   },
   {
-   "into": 29,
+   "into": 30,
    "type": "sweep",
    "t0": 88.2,
    "dur": 0.36
   },
   {
-   "into": 32,
+   "into": 33,
    "type": "whip",
    "dir": "left"
   },
   {
-   "into": 33,
+   "into": 34,
    "type": "whip",
    "dir": "right"
   }
@@ -708,7 +686,7 @@
  "tracks": {
   "_about": "lock-on targets: shot, output frame range f0-f1, anchor frame (sharp, mid-shot) and the box x,y,w,h on it (output px). Tracked with lib/track_mid.py both ways from the anchor.",
   "mclaren": {
-   "shot": 27,
+   "shot": 28,
    "f0": 2392,
    "f1": 2440,
    "anchor": 2410,
@@ -833,40 +811,28 @@
  "blurs": [],
  "speedo": [
   {
-   "shot": 0,
-   "box": [
-    290,
-    940,
-    220,
-    170
-   ],
-   "pad": 16,
-   "radius": 16,
-   "why": "0116 cluster behind the wheel"
-  },
-  {
    "shot": 9,
    "box": [
-    180,
-    980,
-    200,
-    170
+    640,
+    960,
+    160,
+    150
    ],
    "pad": 16,
    "radius": 16,
-   "why": "0112 cluster (parked)"
+   "why": "0112 cluster behind the wheel (parked; round 1: was on his face)"
   },
   {
    "shot": 10,
    "box": [
-    180,
-    980,
-    200,
-    170
+    640,
+    960,
+    160,
+    150
    ],
    "pad": 16,
    "radius": 16,
-   "why": "0112 cluster (parked)"
+   "why": "0112 cluster behind the wheel (parked; round 1: was on his face)"
   },
   {
    "shot": 11,
@@ -917,40 +883,28 @@
    "why": "0113 night cluster"
   },
   {
-   "shot": 20,
-   "box": [
-    290,
-    940,
-    220,
-    170
-   ],
-   "pad": 16,
-   "radius": 16,
-   "why": "0116 cluster behind the wheel"
-  },
-  {
    "shot": 21,
    "box": [
-    290,
-    940,
-    220,
-    170
+    880,
+    980,
+    190,
+    140
    ],
    "pad": 16,
    "radius": 16,
-   "why": "0116 cluster behind the wheel"
+   "why": "0116 cluster right of the wheel (round 1: was on his mouth / beard)"
   },
   {
-   "shot": 26,
+   "shot": 27,
    "box": [
-    40,
+    180,
     1090,
-    230,
-    170
+    200,
+    190
    ],
    "pad": 16,
    "radius": 16,
-   "why": "0119 cluster, digits readable"
+   "why": "0119 cluster, digits readable (round 1: moved right onto the digits)"
   }
  ],
  "_aboutSpeedo": "speedo: the McLaren's own speedometer on every cabin-cam shot (its digits are readable at phone size), blurred in a static feathered box per shot (no speed on screen). blurs: licence plates are not blurred in this vlog (Omarie, 6 Oct). PART 2: filled in phase B from the mezzanines (every cabin-cam shot)."

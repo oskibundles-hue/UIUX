@@ -25,13 +25,13 @@
  "shots": [
   {
    "beat": 0,
-   "src": "0116",
-   "in": 4.0,
-   "out": 6.4,
+   "src": "0121",
+   "in": 128.0,
+   "out": 130.4,
    "speed": 1.0,
    "t": 0.0,
    "dur": 2.4,
-   "note": "hook frame: first light over the desert (\"you see the beautiful desert\")"
+   "note": "hook frame: the desert road, morning (round 1: 0116 4.0-6.4 had his right hand off the wheel with a phone / can)"
   },
   {
    "beat": 0,
@@ -166,12 +166,12 @@
   {
    "beat": 6,
    "src": "0113",
-   "in": 120.0,
-   "out": 122.0,
+   "in": 118.0,
+   "out": 120.0,
    "speed": 1.0,
    "t": 36.5,
    "dur": 2.0,
-   "note": "night drive"
+   "note": "night drive, hand on the wheel (round 1: 120.6-122 had the hand off the wheel, seen once the 16:9 fill was fixed)"
   },
   {
    "beat": 7,
@@ -217,31 +217,41 @@
    "beat": 8,
    "src": "0115",
    "in": 10.2,
-   "out": 14.9,
+   "out": 12.2,
    "speed": 1.0,
    "t": 51.4,
-   "dur": 4.7,
-   "note": "SYNC: at the pump, night"
+   "dur": 2.0,
+   "note": "SYNC: at the pump, night (round 1: ends before the selfie turns sideways)"
+  },
+  {
+   "beat": 8,
+   "src": "0115",
+   "in": 20.8,
+   "out": 23.5,
+   "speed": 1.0,
+   "t": 53.4,
+   "dur": 2.7,
+   "note": "CUTAWAY: the McLaren at the pump, doors up (phone on its side: config rot 90); his audio runs on"
   },
   {
    "beat": 9,
    "src": "0116",
-   "in": 103.6,
-   "out": 106.9,
+   "in": 126.5,
+   "out": 129.8,
    "speed": 1.0,
    "t": 56.1,
    "dur": 3.3,
-   "note": "SYNC: sunrise at the wheel (ends before the hours line at 106.9)"
+   "note": "sunrise at the wheel, both hands on (round 1: 103.6-106.9 had a hand off the wheel); clock 06:26"
   },
   {
    "beat": 10,
-   "src": "0116",
-   "in": 121.1,
-   "out": 124.1,
+   "src": "0121",
+   "in": 155.0,
+   "out": 158.0,
    "speed": 1.0,
    "t": 59.4,
    "dur": 3.0,
-   "note": "SYNC"
+   "note": "CUTAWAY the road (round 1: 0116 121.1-124.1 had a hand off the wheel); his audio runs on"
   },
   {
    "beat": 10,

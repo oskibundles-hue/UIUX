@@ -25,6 +25,10 @@ FIX = {
 OVERRIDE = {}
 LEAD = {}
 PIN = {}
+# round 1 (6 Oct): four pages sat +220 to +300 ms off the speech (build.py caption_sync, the gate's own measure: the
+# speech-band energy of the dialog stem lands that much after small.en's word times). Every word of the piece moves by
+# the shift that brings the gate's lag to within +/-30 ms (searched in 50 ms steps on the round-1 stem).
+SHIFT = {('0111', 54.70): +0.22, ('0115', 10.35): +0.40, ('0116', 121.25): +0.40, ('0117', 100.80): +0.25}
 
 
 def words_of(clip, a, b):
@@ -83,6 +87,8 @@ def main():
             if pin:
                 ws[0][0], ws[0][1] = pin
                 ws[1][0] = max(ws[1][0], pin[1])
+        sh = SHIFT.get((d['src'], round(d['in'], 2)), 0.0)
+        ws = [[w[0] + sh, w[1] + sh, w[2]] for w in ws]
         caps.append(dict(src=d['src'], **{'in': d['in']}, out=d['out'], t=d['t'],
                          words=[[round(d['t'] + w[0] - d['in'], 3), round(d['t'] + w[1] - d['in'], 3), w[2]] for w in ws]))
     json.dump(caps, open(os.path.join(ROOT, 'data', 'captions.json'), 'w'), indent=1)

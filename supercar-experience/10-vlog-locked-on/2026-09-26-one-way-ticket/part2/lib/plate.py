@@ -246,7 +246,12 @@ def shot_mezz(k):
     if s['speed'] == 'keyframes':
         return find_mezz(s['src'], 0, 0, timelapse=True)
     ts = src_times(k, post_frames(k))
-    return find_mezz(s['src'], min(t for t, _ in ts), max(t for t, _ in ts))
+    m = find_mezz(s['src'], min(t for t, _ in ts), max(t for t, _ in ts))
+    if scfg(k).get('rot', 0) in (90, -90, 270) and m['w'] != m['h']:
+        # part2 round 1: a 16:9 file shot with the phone on its side; the Reader turns it before the crop, so the
+        # window and crop maths work in the turned (portrait) frame
+        m = dict(m, w=m['h'], h=m['w'])
+    return m
 
 
 # ------------------------------------------------------------------------------------ grade LUT
@@ -343,14 +348,17 @@ class Reader:
         self.p.stdout.close(); self.p.kill(); self.p.wait()
 
 
-def reframe(img, crop, win):
-    """source crop image -> 1080x1920 output for window (cx, cy, s) given in full-source px."""
+def reframe(img, crop, win, src_h=H):
+    """source crop image -> 1080x1920 output for window (cx, cy, s) given in full-source px.
+    part2 round 1: the window is 1080/s x 1920/s OUTPUT px of a source whose height maps to 1920 (windows()), so one
+    output px is (src_h / H) / s source px. The square 1920 mezzanines have src_h == H; the 16:9 ones (1080 high) were
+    drawn at 1/s and played as a small window on black."""
     cx, cy, s = win
     x0, y0 = crop[0], crop[1]
-    a = 1.0 / s
+    a = (src_h / H) / s
     c = cx - x0 - (W / 2) * a
     f = cy - y0 - (H / 2) * a
-    if abs(s - 1) < 1e-6 and abs(c - round(c)) < 1e-6 and abs(f - round(f)) < 1e-6:
+    if abs(a - 1) < 1e-6 and abs(c - round(c)) < 1e-6 and abs(f - round(f)) < 1e-6:
         c, f = int(round(c)), int(round(f))
         return np.ascontiguousarray(img[f:f + H, c:c + W])
     im = Image.fromarray(img)
@@ -449,7 +457,7 @@ def render_shot(k, force=False):
             for j in js:
                 acc += r.get(max(j, j_first))
             img = (acc / na + 0.5).astype(np.uint8)
-        o = reframe(img, pl['crop'], pl['wins'][i])
+        o = reframe(img, pl['crop'], pl['wins'][i], m['h'])
         enc.stdin.write(o.tobytes())
     enc.stdin.close(); enc.wait(); r.close()
     if r.short:
