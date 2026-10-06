@@ -4,15 +4,16 @@ Two saved layout options for Supercar Experience driving clips, built on 5 Oct 2
 future clips ("instead of saving both clips how about saving both layouts, I'm creating layout options for future
 clips"). They are the vlog kit's own components (`../vlog-kit`, the Locked-On language: black plates with the 78/22
 gold/white stripe cap, gold #FBD101 as the only accent, Bebas + Michroma) plus one new plate, DRV. HUD-2 has since
-moved to dark glass + SE orange #FF4F16 (see Themes below), and HUD-1 followed the same day. **Status: saved as
+moved to dark glass + SE orange #FF4F16 (see Themes below), HUD-1 followed the same day, and on 6 Oct both were
+decluttered into one strip (see "One strip" below). **Status: saved as
 options, not approved for posting yet.**
 
 Say the code: "use HUD-1 on this clip".
 
 | Code | Camera | What is on screen | Preview |
 |---|---|---|---|
-| **HUD-1 · Cabin cam** (dark glass + SE orange, clock scrubber; 5 Oct) | Mounted behind the driver's seat, looking forward past the driver | A2 SE banner tab (right edge), D1 camera clock + place (top left), DRV drive plate (top right), B1 lock-on on the driver with OMARIE · @NQ.YOUNG | `previews/hud-1-cabin.jpg` |
-| **HUD-2 · Hood cam** (dark glass + SE orange, clock scrubber; picked 5 Oct) | Mounted on the hood or dash, looking down the road (also works on a roof mount looking back down the road; see the Oct 4 build) | A2 SE banner tab, E1 route plate stepping stop to stop (top left), DRV drive plate (top right), C3 lead lock on the car ahead (CONVOY / CAR AHEAD), D1 camera clock + place (bottom left, over the hood) | `previews/hud-2-hood.jpg` |
+| **HUD-1 · Cabin cam** (one strip, dark glass + SE orange; 6 Oct) | Mounted behind the driver's seat, looking forward past the driver | STRIP across the top (SE mark, camera clock + place, heading, side G, progress scrubber); B1 lock-on on the driver with OMARIE · @NQ.YOUNG for the first 4 s | `previews/hud-1-cabin.jpg` |
+| **HUD-2 · Hood cam** (one strip, dark glass + SE orange; 6 Oct) | Mounted on the hood or dash, looking down the road (also works on a roof mount looking back down the road; see the Oct 4 build) | STRIP across the top with a route line under it (the stop you're on, then NEXT); C3 lock on the car ahead (CONVOY / CAR AHEAD) for the first 4.5 s | `previews/hud-2-hood.jpg` |
 
 **No road line in either.** Omarie, 5 Oct: "I don't like the road cursor for this point of view and it's not
 supercar experience theme". The first look (Wayline, a gold line drawn on the road) is kept only on its page.
@@ -39,6 +40,15 @@ and progress styles stay options. Over a dark cabin (HUD-1) the glass reads as s
   and add `--bg` to kcapture (build step 5). The frames come out already composited; `tools/encode.sh` is unchanged.
   A glass still: `tools/hud_still.js page.html <t> frame.png out.png`.
 
+## One strip (6 Oct)
+
+Omarie, 6 Oct: "i feel like its too clutteres can we fix that plz". Of two lighter versions he picked **A · One
+strip**: `drive_strip.js` (STRIP) puts the SE mark, camera clock + place, heading, side G and the progress scrubber
+in one dark-glass bar across the top, in place of the A2 banner, D1 clock, DRV plate and PRG bar. HUD-2's route
+becomes one line under the strip (`STRIP.route`: the stop you're on, then NEXT). The lock (B1 / C3) now leaves after
+its intro (`exit` 4.0 / 4.5 s). The older components still work for other layouts; B ("trimmed": DRV `compact`,
+D1 with no `date`) is on file but not used.
+
 ## Rules that come with them
 
 - **No speed anywhere** (Omarie, 5 Oct: "No MPH"). Blur the car's own speedometer for the whole clip (HUD-1 reference:
@@ -59,13 +69,12 @@ and progress styles stay options. Over a dark cabin (HUD-1) the glass reads as s
 
 | Field | HUD-1 (`layouts/hud-1-cabin.json`) | HUD-2 (`layouts/hud-2-hood.json`) |
 |---|---|---|
-| `D1.start` | camera clock at the cut's first frame (file name time + in-point) | same |
-| `D1.place`, `D1.date` | e.g. AT THE WHEEL, OCT 3 2026 | e.g. BACK TO THE VENETIAN, SEP 15 2026 |
-| `A2.label` | e.g. ON THE ROAD · OCT 3 | e.g. RALLY DAY · LAS VEGAS |
-| `A2.progress`, every `t1` | the cut's length | the cut's length |
+| `STRIP.start` | camera clock at the cut's first frame (file name time + in-point) | same |
+| `STRIP.place` | e.g. AT THE WHEEL | e.g. OLD TOWN SCOTTSDALE |
+| `STRIP.range`, every `t1` | the cut's length | the cut's length |
 | tracks | `host` (driver's head, kit tracker `../vlog-kit/lib/track.py`) | `car` (car ahead, `tools/track_csrt.py`; the kit tracker drifted at night) |
-| `E1.waypoints`, `E1.steps` | none | the route and when each stop goes active; `k` is the 0-based index of the active stop. Fewer than six stops: add `"fit": true` so the plate is sized to them |
-| `DRV.heading` / `DRV.hdgKeys` | one heading | heading keyframes through turns |
+| `STRIP.route.waypoints`, `.steps` | none | the route and when each stop goes active; `k` is the 0-based index of the stop you're on |
+| `STRIP.heading` / `STRIP.hdgKeys` | one heading | heading keyframes through turns |
 | `C3.kicker`, `C3.name`, `C3.exit` | none | CONVOY / CAR AHEAD unless the car is identified (camera looking back: REAR VIEW / CAR BEHIND); `exit` drops the lock before the tracker loses the car |
 
 ## Build a new clip

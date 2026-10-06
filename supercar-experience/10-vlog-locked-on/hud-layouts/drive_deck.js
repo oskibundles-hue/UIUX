@@ -4,7 +4,7 @@
  * p: {x, y, w, h, colW, vsize, heading, hdgKeys: [[t, deg], ...]}. Heading is an estimate until a clip carries GPS. */
 SEK.driveDeck = function (cfg) {
   const H = SEK.helpers, GOLD = (window.THEME || {}).accent || '#FBD101', GLOW = (window.THEME || {}).glow || '251,209,1', E = KT.ease, P = KT.p, cl = KT.cl;
-  const p = Object.assign({ x: 430, y: 292, w: 477, h: 196, heading: 206, colW: 236, vsize: 76, hdgKeys: null }, cfg.p);
+  const p = Object.assign({ x: 430, y: 292, w: 477, h: 196, heading: 206, colW: 236, vsize: 76, hdgKeys: null, compact: false }, cfg.p);
   const root = H.el('div', 'a', null);
   const pn = H.panel(root, p.x, p.y, p.w, p.h, { stripe: 5 });
   const colW = p.colW;
@@ -32,6 +32,7 @@ SEK.driveDeck = function (cfg) {
   const gv = H.line(pn.inner, 'Bebas', 44, '0.00 G', gx, vy + 50, '#fff', { split: false });
   H.line(pn.inner, 'Michroma', 12, 'L', gx, p.h - 38, 'rgba(255,255,255,.55)', { ls: 0.1, split: false });
   H.line(pn.inner, 'Michroma', 12, 'R', gx + gw - 12, p.h - 38, 'rgba(255,255,255,.55)', { ls: 0.1, split: false });
+  if (p.compact) { tapeClip.style.display = 'none'; [...pn.inner.children].forEach(e => { if (/border-bottom:9px/.test(e.style.cssText) || /^[LR]$/.test(e.textContent)) e.style.display = 'none'; }); }
   const card = d => ['N','NE','E','SE','S','SW','W','NW'][Math.round((((d % 360) + 360) % 360) / 45) % 8];
   const LAT = window.LAT || [];
   return { code: cfg.code, render(t) {

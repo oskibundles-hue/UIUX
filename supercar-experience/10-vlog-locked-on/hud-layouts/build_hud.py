@@ -10,7 +10,7 @@ side-G series and the DRV drive plate (drive_deck.js) inlined. It renders with t
     cd ../vlog-kit && node lib/kcapture.js "file://$PWD/.hud_<name>.html" <outDir> seq 30000/1001 <seconds> --workers 3
 
 Then lay the PNG sequence over the clip with tools/encode.sh. Every component is the kit's (lib/sekit.js) except DRV
-(drive_deck.js) and PRG (hud_progress.js). --theme themes/<name>.json swaps the accent and restyles the plates; the
+(drive_deck.js), PRG (hud_progress.js) and STRIP (drive_strip.js, the one-strip HUD both layouts use since 6 Oct). --theme themes/<name>.json swaps the accent and restyles the plates; the
 glass themes blur the footage behind the plates, so they need the footage behind the page: for a video, extract the
 base's frames (ffmpeg -i base.mov -q:v 1 -start_number 0 bg/%05d.jpg) and add --bg bg to kcapture; for a still,
 tools/hud_still.js. A recipe can name its theme ("theme": "glass-orange"); --theme overrides it.
@@ -39,7 +39,7 @@ rest = rest.replace('<script src=".work/tracks.js"></script>\n', '').replace('<s
 inject = ('<script>window.SCENE = ' + json.dumps(scene) + ';\nwindow.TRACKS = ' + json.dumps(tracks) +
           ';\nwindow.KITDATA = ' + json.dumps({'logos': logos}) + ';\nwindow.LAT = ' + json.dumps(lat) +
           ';\nwindow.THEME = ' + json.dumps({k: theme[k] for k in ('accent', 'glow') if k in theme}) + ';</script>\n')
-deck = (HERE / 'drive_deck.js').read_text() + '\n' + (HERE / 'hud_progress.js').read_text()
+deck = '\n'.join((HERE / f).read_text() for f in ('drive_deck.js', 'hud_progress.js', 'drive_strip.js'))
 rest = rest.replace('<script src="lib/sekit.js"></script>', '<script src="lib/sekit.js"></script>\n<script>' + deck + '</script>', 1)
 if theme.get('css'): head = head.replace('</style>', theme['css'] + '\n</style>', 1)
 html = head.replace('<title>SE Vlog Kit Layer</title>', '<title>SE Driving HUD Layer</title>') + inject + rest

@@ -15,46 +15,17 @@
  ],
  "comps": [
   {
-   "code": "A2",
-   "type": "bannerTab",
-   "t0": 0.0,
+   "code": "STRIP",
+   "type": "driveStrip",
+   "t0": 0.2,
    "t1": 13.012,
    "p": {
-    "label": "ON THE ROAD · OCT 3",
-    "enter": "slide",
-    "exit": false,
-    "progress": [
+    "start": "14:22:20",
+    "place": "AT THE WHEEL",
+    "range": [
      0,
      12.012
     ],
-    "rail": false
-   }
-  },
-  {
-   "code": "D1",
-   "type": "clockStamp",
-   "t0": 0.35,
-   "t1": 13.012,
-   "p": {
-    "x": 54,
-    "y": 292,
-    "start": "14:22:20",
-    "place": "AT THE WHEEL",
-    "date": "OCT 3 2026",
-    "built": false,
-    "exit": false
-   }
-  },
-  {
-   "code": "DRV",
-   "type": "driveDeck",
-   "t0": 0.75,
-   "t1": 13.012,
-   "p": {
-    "x": 430,
-    "y": 292,
-    "w": 477,
-    "h": 196,
     "heading": 206
    }
   },
@@ -68,22 +39,8 @@
     "name": "OMARIE",
     "handle": "@NQ.YOUNG",
     "acquire": 1.4,
-    "exit": 17.012,
+    "exit": 4.0,
     "maxBottom": 1536
-   }
-  },
-  {
-   "code": "PRG",
-   "type": "progressBar",
-   "t0": 0.5,
-   "t1": 13.012,
-   "p": {
-    "style": "underline",
-    "anchor": "D1",
-    "range": [
-     0,
-     12.012
-    ]
    }
   }
  ],

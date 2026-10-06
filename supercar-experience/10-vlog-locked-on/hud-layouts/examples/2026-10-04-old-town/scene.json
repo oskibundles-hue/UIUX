@@ -15,57 +15,17 @@
  ],
  "comps": [
   {
-   "code": "A2",
-   "type": "bannerTab",
-   "t0": 0.0,
-   "t1": 13.0,
+   "code": "STRIP",
+   "type": "driveStrip",
+   "t0": 0.2,
+   "t1": 13.012,
    "p": {
-    "label": "MORNING DRIVE · SCOTTSDALE",
-    "enter": "slide",
-    "exit": false,
-    "progress": [
+    "start": "10:00:03",
+    "place": "OLD TOWN SCOTTSDALE",
+    "range": [
      0,
      12.012
     ],
-    "rail": false
-   }
-  },
-  {
-   "code": "E1",
-   "type": "routeCompact",
-   "t0": 0.3,
-   "t1": 13.0,
-   "p": {
-    "x": 54,
-    "y": 300,
-    "title": "THE ROUTE",
-    "waypoints": [
-     "SCOTTSDALE RD",
-     "INDIAN SCHOOL RD",
-     "SUPERCAR EXPERIENCE"
-    ],
-    "steps": [
-     {
-      "t": 1.2,
-      "k": 1
-     }
-    ],
-    "exit": 99,
-    "fit": true
-   }
-  },
-  {
-   "code": "DRV",
-   "type": "driveDeck",
-   "t0": 0.6,
-   "t1": 13.0,
-   "p": {
-    "x": 526,
-    "y": 300,
-    "w": 381,
-    "h": 196,
-    "colW": 206,
-    "vsize": 64,
     "hdgKeys": [
      [
       0,
@@ -83,7 +43,20 @@
       12.1,
       90
      ]
-    ]
+    ],
+    "route": {
+     "waypoints": [
+      "SCOTTSDALE RD",
+      "INDIAN SCHOOL RD",
+      "SUPERCAR EXPERIENCE"
+     ],
+     "steps": [
+      {
+       "t": 1.2,
+       "k": 1
+      }
+     ]
+    }
    }
   },
   {
@@ -96,36 +69,7 @@
     "kicker": "REAR VIEW",
     "name": "CAR BEHIND",
     "acquire": 1.3,
-    "exit": 6.0
-   }
-  },
-  {
-   "code": "D1",
-   "type": "clockStamp",
-   "t0": 0.5,
-   "t1": 13.0,
-   "p": {
-    "x": 54,
-    "y": 1330,
-    "start": "10:00:03",
-    "place": "OLD TOWN SCOTTSDALE",
-    "date": "OCT 4 2026",
-    "built": false,
-    "exit": false
-   }
-  },
-  {
-   "code": "PRG",
-   "type": "progressBar",
-   "t0": 0.5,
-   "t1": 13.0,
-   "p": {
-    "style": "underline",
-    "anchor": "D1",
-    "range": [
-     0,
-     12.012
-    ]
+    "exit": 4.5
    }
   }
  ],

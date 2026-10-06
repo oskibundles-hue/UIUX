@@ -832,7 +832,7 @@
     const s0 = parseT(p.start);
     const hmW = ink('Bebas', 104, '22:49').w, colW = ink('Bebas', 56, ':').adv, dW = ink('Bebas', 56, '0').adv + 1;
     const plW = ink('Michroma', 19, p.place, 0.1).w, dtW = ink('Michroma', 15, p.date, 0.14).w;
-    const W = Math.ceil(Math.max(hmW + 14 + colW + 2 * dW + 10, plW + 8, dtW + 30) + 52), H = 196;
+    const W = Math.ceil(Math.max(hmW + 14 + colW + 2 * dW + 10, plW + 8, dtW + 30) + 52), H = p.date ? 196 : 164;
     const pn = panel(root, p.x, p.y, W, H, { stripe: 5 });
     const hm = line(pn.inner, 'Bebas', 104, '22:49', 26, 26, '#fff');
     const capH = hm.capH, sCap = ink('Bebas', 56, '0').aA;
@@ -847,7 +847,8 @@
     const tick = el('div', 'a', pn.inner, `left:${sx + colW + 2 + 2 * dW + 8}px;top:${sy + 2}px;width:8px;height:8px;border-radius:50%;background:${GOLD}`);
     const pl = line(pn.inner, 'Michroma', 19, p.place, 27, 26 + capH + 26, '#fff', { ls: 0.1 });
     const dt = line(pn.inner, 'Michroma', 15, p.date, 44, 26 + capH + 62, 'rgba(255,255,255,.72)', { ls: 0.14 });
-    el('div', 'a', pn.inner, `left:27px;top:${26 + capH + 64}px;width:9px;height:9px;background:${GOLD}`);
+    const dsq = el('div', 'a', pn.inner, `left:27px;top:${26 + capH + 64}px;width:9px;height:9px;background:${GOLD}`);
+    if (!p.date) { dt.w.style.display = 'none'; dsq.style.display = 'none'; }
     return { code: cfg.code, render(t) {
       const on = t >= cfg.t0 && t < cfg.t1; show(root, on); if (!on) return;
       const ts = p.built ? null : cfg.t0;
