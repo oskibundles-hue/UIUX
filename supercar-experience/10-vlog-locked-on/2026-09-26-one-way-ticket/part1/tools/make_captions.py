@@ -17,7 +17,7 @@ FIX = {
     '0076': [(['That\'s'], [], 'piece 2 now opens in the pause before it (25.25 s): the word before "a little tired" is "I was" in medium.en '
                               'and "That\'s" in small.en / base.en, so it is not captioned (never a word the two models do not share)'),
              (['a', 'super', 'car', 'experience', 'vlog.'], ['a', 'Supercar', 'Experience', 'vlog.'],
-              'two clean ASR passes on the source (0076 around 46 s) and one on the delivered audio all hear "this is a Supercar Experience vlog" (7 Oct, nq-second); the brand is one word'),
+              'two clean ASR passes on the source (0076 at about 39.9-41.7 s) and one on the delivered audio all hear "this is a Supercar Experience vlog" (6 Oct, nq-second); the brand is one word'),
              (['this.'], ['us.'], 'medium.en: "look at us."')],
     # 0077 "Seattle's ... well today" is not in the cut (its middle word is unconfirmed: the day index says "treated",
     # medium.en and small.en say "training", the lead heard "treating you"), so it needs no fix here

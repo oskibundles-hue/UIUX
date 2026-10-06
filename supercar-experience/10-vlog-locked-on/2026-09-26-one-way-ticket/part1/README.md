@@ -85,7 +85,7 @@ here went through SlopMonster: 5/5.
     "we passed the welcome to Oregon sign"), and Oregon is south of every road in the area. **The frame does not confirm
     it**: the driver's cap is lit on its left, which with the sun at about 220° would put the heading nearer north-west.
     Treat STRIP-2's heading as the weakest number on screen; change `heading` in `config.json` if Omarie knows the road.
-- **SIDE G was removed from both strips** (7 Oct, second facts voter): its value came from one camera accelerometer axis that was never shown to be lateral (0.30 G on a straight road), so it was an unsourced figure, and a g-number on a rental client's car invites a "driving hard" reading. The strips are now clock + place | ROUTE (`config.json` `layer.comps` STRIP-1 / STRIP-2 `hide_g`; `lib/drive_strip.js`); the `sideG` config and the `data/side_g_*.json` series are no longer read. What it was (kept for the record): the djmd accelerometer read with `../../hud-layouts/tools/side_g.py`, 0096 32-52 s and 0099 158-182 s, no `--turn`.
+- **SIDE G was removed from both strips** (6 Oct, second facts voter): its value came from one camera accelerometer axis that was never shown to be lateral (0.30 G on a straight road), so it was an unsourced figure, and a g-number on a rental client's car invites a "driving hard" reading. The strips are now clock + place | ROUTE (`config.json` `layer.comps` STRIP-1 / STRIP-2 `hide_g`; `lib/drive_strip.js`); the `sideG` config and the `data/side_g_*.json` series are no longer read. What it was (kept for the record): the djmd accelerometer read with `../../hud-layouts/tools/side_g.py`, 0096 32-52 s and 0099 158-182 s, no `--turn`.
 
 ## Sound
 
@@ -146,7 +146,7 @@ zeros. On the delivered master: -14.11 LUFS integrated, -1.69 dBTP true peak.
   and retract), the plate is blurred (22 px) and saturated (1.3), exactly what the theme's `backdrop-filter` does in a
   browser over the footage. The layer is captured transparent, so a CSS backdrop-filter would have nothing behind it.
 - **Clocks:** camera clock = file-name start + in-point (DJI_20260926HHMMSS, local time). CH1 04:57:10, CH2 10:14:18,
-  CH3 12:17:31; IN THE AIR 09:00:01; STRIP-1 13:28:08; STRIP-2 15:42:36.
+  CH3 12:17:25; IN THE AIR 09:00:01; STRIP-1 13:28:08; STRIP-2 15:42:36.
 
 ## Where this differs from rally v2, and why
 
@@ -179,7 +179,7 @@ zeros. On the delivered master: -14.11 LUFS integrated, -1.69 dBTP true peak.
    `tools/make_captions.py`; timings medium.en + small.en). Piece edges: 0092 opens at 7.93 s (no "damn"), 0093 opens in the pause
    before "It is beautiful" (4.42 s), 0076's "a little tired" opens in the pause at 25.25 s, 0089 opens in the pause at 140.55 s.
    The HEADING readings are gone (ROUTE · SEATTLE → VEGAS instead) and every gold fallback is SE orange.
-3. **Side G is off both strips** (7 Oct): see "HEADING and SIDE G".
+3. **Side G is off both strips** (6 Oct): see "HEADING and SIDE G".
 4. **Held lines** (lead, 6 Oct): the fuel-stop "I don't think I'm going to go to sleep, I'm just gonna run it the whole
    way" (reads as a drowsy-driving boast), the shop's name, the gas price, the miles and the "12 hours" lines.
 5. **Phone in hand while driving** in 0094 176-232 s, 0096 41.8-47 s and 0094 5.6-7.5 s (the junction, under "you feel me" / "we gon' catch the vibes") is out (config `forbidden`); 112.8-116.0 s is a cutaway to the road (0095 21.2-24.4 s, round 5: both hands on the wheel, car rolling through forest, speedometer blurred; the span is used nowhere else in the cut, so no gesture repeats) over his hands-off-the-wheel gesture (0094 2.2-5.4 s), and 116.0-118.2 s is a cutaway to the road (0095 33.9-36.1 s, both hands on the wheel, speedometer blurred) with his audio and captions running on; STRIP-1 now sits on 0096 32.6-40.6 s and the hook's 0096 frames on 39.0-40.8 s (both hands on the wheel, checked frame by frame; every other cabin-cam shot was swept for a held phone: none); a water bottle in hand shows briefly in a

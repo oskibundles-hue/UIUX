@@ -11,7 +11,7 @@
   "at": 40.58,
   "whisper": "a super car experience vlog.",
   "shown": "a Supercar Experience vlog.",
-  "why": "two clean ASR passes on the source (0076 around 46 s) and one on the delivered audio all hear \"this is a Supercar Experience vlog\" (7 Oct, nq-second); the brand is one word"
+  "why": "two clean ASR passes on the source (0076 at about 39.9-41.7 s) and one on the delivered audio all hear \"this is a Supercar Experience vlog\" (6 Oct, nq-second); the brand is one word"
  },
  {
   "clip": "0076",

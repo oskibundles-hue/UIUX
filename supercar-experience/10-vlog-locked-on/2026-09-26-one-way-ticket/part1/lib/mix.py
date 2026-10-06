@@ -260,7 +260,7 @@ def build_nat_raw(report):
         L = lufs(x)
         g = float(np.clip(e.get('lufs', A['natLufs']) - L, -20, 20))
         x = x * 10 ** (g / 20)
-        # part1: `mute` = [[src a, src b], ...] third-party speech in the bed (7 Oct): silenced with 40 ms ramps, level of the rest unchanged
+        # part1: `mute` = [[src a, src b], ...] third-party speech in the bed (6 Oct): silenced with 40 ms ramps, level of the rest unchanged
         for ma, mb in e.get('mute', []):
             i0, i1 = max(0, int(round((ma - e['a']) * SR))), min(len(x), int(round((mb - e['a']) * SR)))
             if i1 > i0:
