@@ -85,7 +85,8 @@ The `plate` class is switched off, so it has no agent.
 
 **Brief with the class, the playbook and the style.** The workstream knowledge (branches, worktrees,
 pipelines, brand rules) is in `.claude/playbooks/`: `formula-dynamics.md`, `supercar-experience.md`,
-`anti-stock.md`, `research.md`, and `review.md` for the checks. Name the one that applies, so the same
+`anti-stock.md`, `research.md`, `review.md` for the checks, and `vlog-lifestyle.md` for spotting and tagging
+the moments that carry a personal, YouTube-style vlog (any workstream). Name the one that applies, so the same
 `nq-build` builds any workstream's piece. Builders work in worktrees of their workstream's branch,
 because this default branch doesn't carry `creator-kit/`, `formula-dynamics/` or `supercar-experience/`.
 
