@@ -53,6 +53,12 @@
    "a": 41.8,
    "b": 47.0,
    "why": "phone in hand while driving (facts panel, 6 Oct)"
+  },
+  {
+   "src": "0094",
+   "a": 5.6,
+   "b": 7.5,
+   "why": "phone held and tapped at a junction (cutaway over 116.0-118.2 s, 6 Oct)"
   }
  ],
  "timelapseShutter": 1.0,
@@ -224,6 +230,18 @@
   "20": {
    "look": "terminal"
   },
+  "22": {
+   "look": "day",
+   "rot": 90
+  },
+  "23": {
+   "look": "day",
+   "rot": 90
+  },
+  "24": {
+   "look": "day",
+   "rot": 90
+  },
   "25": {
    "look": "cabin"
   },
@@ -258,7 +276,8 @@
    "look": "cabin"
   },
   "30": {
-   "look": "cabin"
+   "look": "cabin",
+   "s1": 1.0
   },
   "31": {
    "look": "cabin"
@@ -267,8 +286,7 @@
    "look": "cabin"
   },
   "33": {
-   "look": "cabin",
-   "s1": 1.0
+   "look": "cabin"
   },
   "34": {
    "look": "cabin"
@@ -281,19 +299,14 @@
    "look": "cabin"
   },
   "37": {
+   "look": "cabin",
+   "s1": 1.0
+  },
+  "38": {
    "look": "cabin"
   },
-  "22": {
-   "look": "day",
-   "rot": 90
-  },
-  "23": {
-   "look": "day",
-   "rot": 90
-  },
-  "24": {
-   "look": "day",
-   "rot": 90
+  "39": {
+   "look": "cabin"
   }
  },
  "slips": {
@@ -339,22 +352,22 @@
    "dur": 0.36
   },
   {
-   "into": 30,
+   "into": 32,
    "type": "whip",
    "dir": "left"
   },
   {
-   "into": 31,
+   "into": 33,
    "type": "whip",
    "dir": "right"
   },
   {
-   "into": 34,
+   "into": 36,
    "type": "whip",
    "dir": "right"
   },
   {
-   "into": 35,
+   "into": 37,
    "type": "whip",
    "dir": "left"
   }
@@ -802,12 +815,12 @@
   "STRIP-1": {
    "file": "data/side_g_0096_32-52.json",
    "start": 32.0,
-   "shot": 33
+   "shot": 35
   },
   "STRIP-2": {
    "file": "data/side_g_0099_158-182.json",
    "start": 158.0,
-   "shot": 35
+   "shot": 37
   }
  },
  "speedo": [
@@ -860,7 +873,7 @@
    "why": "0099 speedometer"
   },
   {
-   "shot": 30,
+   "shot": 32,
    "box": [
     280,
     940,
@@ -872,7 +885,7 @@
    "why": "0095 speedometer"
   },
   {
-   "shot": 31,
+   "shot": 33,
    "box": [
     340,
     970,
@@ -884,7 +897,7 @@
    "why": "0095 speedometer"
   },
   {
-   "shot": 32,
+   "shot": 34,
    "box": [
     330,
     985,
@@ -896,7 +909,7 @@
    "why": "0095 speedometer"
   },
   {
-   "shot": 33,
+   "shot": 35,
    "box": [
     290,
     990,
@@ -908,7 +921,7 @@
    "why": "0096 speedometer"
   },
   {
-   "shot": 34,
+   "shot": 36,
    "box": [
     300,
     985,
@@ -920,7 +933,7 @@
    "why": "0097 speedometer"
   },
   {
-   "shot": 35,
+   "shot": 37,
    "box": [
     260,
     990,
@@ -932,7 +945,7 @@
    "why": "0099 speedometer"
   },
   {
-   "shot": 36,
+   "shot": 38,
    "box": [
     340,
     1050,
@@ -955,6 +968,18 @@
    "pad": 16,
    "radius": 16,
    "why": "0094 speedometer once the camera faces the road"
+  },
+  {
+   "shot": 30,
+   "box": [
+    280,
+    1000,
+    200,
+    110
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0095 speedometer (cutaway)"
   }
  ],
  "_aboutSpeedo": "speedo: the McLaren's own speedometer on every cabin-cam shot (its digits are readable at phone size), blurred in a static feathered box per shot (no speed on screen). blurs: licence plates are not blurred in this vlog (Omarie, 6 Oct)."

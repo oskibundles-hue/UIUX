@@ -35,19 +35,21 @@ Timeline: 5401 frames at 30000/1001 fps = 180.213 s. Frame n is shown at n x 100
 | 26 | 96.80 | 2901-2984 | 0091 | 14.80-17.57 (1x) | cabin | c centre s 1.0-1.04 |  |
 | 27 | 99.60 | 2985-3134 | 0092 | 7.80-18.51 (ramp 0.00:1.0 0.34:1.0 0.50:3.0 1.00:3.0) | cabin | c centre s 1.0-1.04 |  |
 | 28 | 104.60 | 3135-3380 | 0093 | 4.10-12.28 (1x) | cabin | c centre s 1.0-1.04 |  |
-| 29 | 112.80 | 3381-3589 | 0094 | 2.21-9.15 (1x) | cabin | c centre s 1.0-1.04 | sweep 0.36 s |
-| 30 | 119.80 | 3590-3640 | 0095 | 45.99-47.65 (1x) | cabin | c centre s 1.0-1.04 | whip left |
-| 31 | 121.50 | 3641-3688 | 0095 | 51.99-53.56 (1x) | cabin | c centre s 1.0-1.04 | whip right |
-| 32 | 123.10 | 3689-3862 | 0095 | 27.99-33.76 (1x) | cabin | c centre s 1.0-1.04 |  |
-| 33 | 128.90 | 3863-4102 | 0096 | 32.60-40.57 (1x) | cabin | c centre s 1.0-1.0 |  |
-| 34 | 136.90 | 4103-4162 | 0097 | 16.00-17.97 (1x) | cabin | c centre s 1.0-1.04 | whip right |
-| 35 | 138.90 | 4163-4402 | 0099 | 166.01-173.98 (1x) | cabin | c centre s 1.0-1.0 | whip left |
-| 36 | 146.90 | 4403-4533 | 0100 | 33.01-37.35 (1x) | cabin | c centre s 1.0-1.04 |  |
-| 37 | 151.30 | 4534-4707 | 0101 | 2.58-8.36 (1x) | cabin | c centre s 1.0-1.04 |  |
-| 38 | 157.10 | 4708-4821 | 0102 | 4.39-8.16 (1x) | day | c centre s 1.0-1.04 |  |
-| 39 | 160.90 | 4822-5070 | 0102 | 17.29-25.57 (1x) | day | c centre s 1.0-1.04 |  |
-| 40 | 169.20 | 5071-5238 | 0102 | 81.60-87.17 (1x) | day | c centre s 1.0-1.04 |  |
-| 41 | 174.80 | 5239-5400 | end card | | | the last shot runs 0.35 s under the card wipe, then black | |
+| 29 | 112.80 | 3381-3476 | 0094 | 2.21-5.38 (1x) | cabin | c centre s 1.0-1.04 | sweep 0.36 s |
+| 30 | 116.00 | 3477-3541 | 0095 | 33.92-36.05 (1x) | cabin | c centre s 1.0-1.0 |  |
+| 31 | 118.20 | 3542-3589 | 0094 | 7.58-9.15 (1x) | cabin | c centre s 1.0-1.04 |  |
+| 32 | 119.80 | 3590-3640 | 0095 | 45.99-47.65 (1x) | cabin | c centre s 1.0-1.04 | whip left |
+| 33 | 121.50 | 3641-3688 | 0095 | 51.99-53.56 (1x) | cabin | c centre s 1.0-1.04 | whip right |
+| 34 | 123.10 | 3689-3862 | 0095 | 27.99-33.76 (1x) | cabin | c centre s 1.0-1.04 |  |
+| 35 | 128.90 | 3863-4102 | 0096 | 32.60-40.57 (1x) | cabin | c centre s 1.0-1.0 |  |
+| 36 | 136.90 | 4103-4162 | 0097 | 16.00-17.97 (1x) | cabin | c centre s 1.0-1.04 | whip right |
+| 37 | 138.90 | 4163-4402 | 0099 | 166.01-173.98 (1x) | cabin | c centre s 1.0-1.0 | whip left |
+| 38 | 146.90 | 4403-4533 | 0100 | 33.01-37.35 (1x) | cabin | c centre s 1.0-1.04 |  |
+| 39 | 151.30 | 4534-4707 | 0101 | 2.58-8.36 (1x) | cabin | c centre s 1.0-1.04 |  |
+| 40 | 157.10 | 4708-4821 | 0102 | 4.39-8.16 (1x) | day | c centre s 1.0-1.04 |  |
+| 41 | 160.90 | 4822-5070 | 0102 | 17.29-25.57 (1x) | day | c centre s 1.0-1.04 |  |
+| 42 | 169.20 | 5071-5238 | 0102 | 81.60-87.17 (1x) | day | c centre s 1.0-1.04 |  |
+| 43 | 174.80 | 5239-5400 | end card | | | the last shot runs 0.35 s under the card wipe, then black | |
 
 ## Layer elements
 
@@ -142,10 +144,10 @@ Music: original synth bed (lib/music.py), no music.wav supplied (104.7273 BPM, f
 | SE-LO_11_tick_lock.wav | 79.21 | lock LOCK | -17.6 dB (-0.4) |
 | SE-LO_04_whoosh_left_to_right.wav | 112.98 | gold light sweep | -13.3 dB (+0.0) |
 | SE-LO_02_hit_drop.wav | 113.16 | chapter slam HIT THE ROAD | -26.1 dB (-6.0) |
-| SE-LO_05_whoosh_right_to_left.wav | 119.8 | whip into shot 30 | -16.2 dB (-5.9) |
-| SE-LO_04_whoosh_left_to_right.wav | 121.5 | whip into shot 31 | -10.5 dB (+0.0) |
-| SE-LO_05_whoosh_right_to_left.wav | 136.9 | whip into shot 34 | -8.3 dB (+0.0) |
-| SE-LO_04_whoosh_left_to_right.wav | 138.9 | whip into shot 35 | -12.5 dB (+0.0) |
+| SE-LO_05_whoosh_right_to_left.wav | 119.8 | whip into shot 32 | -16.2 dB (-5.9) |
+| SE-LO_04_whoosh_left_to_right.wav | 121.5 | whip into shot 33 | -10.5 dB (+0.0) |
+| SE-LO_05_whoosh_right_to_left.wav | 136.9 | whip into shot 36 | -8.3 dB (+0.0) |
+| SE-LO_04_whoosh_left_to_right.wav | 138.9 | whip into shot 37 | -12.5 dB (+0.0) |
 | SE-LO_11_tick_lock.wav | 148.4 | v2place in | -25.5 dB (-6.0) |
 | SE-LO_11_tick_lock.wav | 169.8 | v2place in | -27.1 dB (-6.0) |
 | SE-LO_03_hit_endcard.wav | 174.8 | end card | -11.7 dB (+0.0) |

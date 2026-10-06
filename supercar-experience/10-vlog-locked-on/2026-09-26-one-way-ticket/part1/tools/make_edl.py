@@ -90,7 +90,9 @@ beat('CH2', '"It is beautiful out here, like gorgeous. Like I\'m talking gorgeou
 
 # ---------------------------------------------------------------- CH3 HIT THE ROAD (12:10)
 beat('CH3', 'CH3 slam; "I like it. I want y\'all to get the vibe. So you feel me? We gonna get the vibes right now."', [
-    ('0094', 2.2, 7.0, 1.0, 'SYNC: him, then the camera turns to the road'),
+    ('0094', 2.2, 3.2, 1.0, 'SYNC: him, then the camera turns to the road'),
+    ('0095', 33.9, 2.2, 1.0, 'CUTAWAY over 116.0-118.2: he holds and taps a lit phone at a junction (0094 5.6-7.6 s), so the picture is the road (his audio and captions run on)'),
+    ('0094', 7.6, 1.6, 1.0, 'SYNC: back to him, hand off the phone'),
 ], [('0094', 2.34, 9.06, ('sync', 0))])
 beat('CH3', 'the vibes: forest montage (music up, nat under)', [
     ('0095', 46.0, 1.7, 1.0, 'forest'),

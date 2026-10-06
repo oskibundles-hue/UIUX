@@ -317,11 +317,31 @@
    "beat": 16,
    "src": "0094",
    "in": 2.2,
-   "out": 9.2,
+   "out": 5.4,
    "speed": 1.0,
    "t": 112.8,
-   "dur": 7.0,
+   "dur": 3.2,
    "note": "SYNC: him, then the camera turns to the road"
+  },
+  {
+   "beat": 16,
+   "src": "0095",
+   "in": 33.9,
+   "out": 36.1,
+   "speed": 1.0,
+   "t": 116.0,
+   "dur": 2.2,
+   "note": "CUTAWAY over 116.0-118.2: he holds and taps a lit phone at a junction (0094 5.6-7.6 s), so the picture is the road (his audio and captions run on)"
+  },
+  {
+   "beat": 16,
+   "src": "0094",
+   "in": 7.6,
+   "out": 9.2,
+   "speed": 1.0,
+   "t": 118.2,
+   "dur": 1.6,
+   "note": "SYNC: back to him, hand off the phone"
   },
   {
    "beat": 17,

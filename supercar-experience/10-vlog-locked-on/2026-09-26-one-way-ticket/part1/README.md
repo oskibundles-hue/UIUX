@@ -124,7 +124,7 @@ zeros. On the delivered master: -14.11 LUFS integrated, -1.69 dBTP true peak.
 
 ## Picture
 
-- **The cut** is `data/edl.json` (`tools/make_edl.py`): 41 shots + the end card, 5,401 frames at 29.97 fps (180.2 s),
+- **The cut** is `data/edl.json` (`tools/make_edl.py`): 43 shots + the end card, 5,401 frames at 29.97 fps (180.2 s),
   27 dialog pieces. Sources are the Osmo Action 6 open-gate clips (3840x3840 59.94p), fetched as 1920x1920 mezzanines
   (`vlog.py plan` / `fetch`); 59.94 sources drop every other frame at 1x.
 - **Reframe:** a 1080x1920 window centred on the square frame with rally v2's slow 4 % push; the two HUD shots hold still
@@ -186,7 +186,7 @@ zeros. On the delivered master: -14.11 LUFS integrated, -1.69 dBTP true peak.
 3. **Side G shows magnitude only** (6 Oct, facts panel): the left / right sign was never calibrated (no turn in either window), so the bar fills from the left and nothing implies a direction.
 4. **Held lines** (lead, 6 Oct): the fuel-stop "I don't think I'm going to go to sleep, I'm just gonna run it the whole
    way" (reads as a drowsy-driving boast), the shop's name, the gas price, the miles and the "12 hours" lines.
-5. **Phone in hand while driving** in 0094 176-232 s and 0096 41.8-47 s is out (config `forbidden`); STRIP-1 now sits on 0096 32.6-40.6 s and the hook's 0096 frames on 39.0-40.8 s (both hands on the wheel, checked frame by frame; every other cabin-cam shot was swept for a held phone: none); a water bottle in hand shows briefly in a
+5. **Phone in hand while driving** in 0094 176-232 s, 0096 41.8-47 s and 0094 5.6-7.5 s (the junction, under "you feel me" / "we gon' catch the vibes") is out (config `forbidden`); 116.0-118.2 s is a cutaway to the road (0095 33.9-36.1 s, both hands on the wheel, speedometer blurred) with his audio and captions running on; STRIP-1 now sits on 0096 32.6-40.6 s and the hook's 0096 frames on 39.0-40.8 s (both hands on the wheel, checked frame by frame; every other cabin-cam shot was swept for a held phone: none); a water bottle in hand shows briefly in a
    few driving frames elsewhere and was avoided where the footage allowed.
 6. **The index missed one speed line** (0093 1:55.8-2:00.2, "speed limit 35 we're going 45"): not in the cut, and added to
    config `forbidden`.
