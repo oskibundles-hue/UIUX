@@ -16,8 +16,11 @@ in Dropbox itself, deliver it through the **Video Drop** page: https://claude.ai
 - The steps are in the notes:
   1. Split the master into 19 MiB parts.
   2. Upload them as the page's assets in one call.
-  3. Add a card and republish.
-  4. Test that the rejoined file's SHA-256 matches the master.
+  3. Add a card and republish. Read the page once first, with `path: "index.html"`, never a plain read
+     plus a path read: each returns the whole page (in Part 2 the double read pushed the lead past 300k for
+     9 calls).
+  4. Test that the rejoined file's SHA-256 matches the master. Read each asset back with its own `path`
+     (the asset id), one per call: a multi-`paths` read of asset ids failed in Part 2.
   5. Once he has saved it, confirm the file in Dropbox at the exact size.
 - The page holds 1 GiB. Clear older cards only once they're confirmed in Dropbox, and ask him first.
 

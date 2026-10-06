@@ -96,6 +96,9 @@ The `plate` class is switched off, so it has no agent.
   denies a second Read of the same image in the lead.
 - **Wait on a PID, a marker file or `run_in_background`, with a hard timeout,** never a `pgrep -f` loop,
   because that loop matches itself and never ends.
+- **Read a page by file only:** before republishing an artifact, read it once with `path: "index.html"`, never
+  a plain read plus a path read, because each returns the whole page ("One-way ticket" Part 2: the double read
+  kept the lead over 300k for 9 calls). Asset read-backs for the SHA-256 test take one `path` per call.
 - **Filter render, ffmpeg and ingest logs through `tail` or `grep`** before they reach the context.
 - **Lean agents:** run, label, facts and second skip CLAUDE.md (`omitClaudeMd`); build and fix have `maxTurns` caps.
 - **The meter:** `python3 .claude/brain/cost_meter.py` meters a session; `live_card.py done` logs the job's cost
