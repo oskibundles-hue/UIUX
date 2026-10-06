@@ -1,0 +1,233 @@
+[
+ {
+  "id": 1,
+  "t0": 0.0,
+  "t1": 2.3,
+  "hf": "Title lockup: Higgsfield MCP × Claude, OPUS 5.5, 'for Motion Design' pill. Jungle with flowers in the foreground, light streak, parallax.",
+  "anim": [
+   "Logo lockup reveal",
+   "Light streak sweep",
+   "Foreground parallax"
+  ],
+  "se": "Title lockup: SUPERCAR EXPERIENCE × REV, big 'RENT A SUPERCAR' on screen from frame 0 (Instagram cover), 'for F1 Weekend' pill, LAS VEGAS · NOV 19–21. Huracán STO parked outside a Vegas building at night, light streak sweep, parallax push.",
+  "src": "sto.mp4",
+  "ss": 18.0
+ },
+ {
+  "id": 2,
+  "t0": 2.3,
+  "t1": 3.1667,
+  "hf": "Establishing shot of the jungle, slow push-in.",
+  "anim": [
+   "Camera push-in"
+  ],
+  "se": "Establishing: the Sphere glowing over the Strip, slow push-in.",
+  "src": "amg.mov",
+  "ss": 15.0
+ },
+ {
+  "id": 4,
+  "t0": 3.1667,
+  "t1": 5.7,
+  "hf": "Hero checks phone. iMessage bubble pops in: 'Need a motion promo video. ASAP.' with timestamp and 'Client' label.",
+  "anim": [
+   "Message bubble pop (spring)",
+   "Timestamp fade",
+   "Typing reveal"
+  ],
+  "se": "POV hands on the wheel. Bubble pops in: 'Need a supercar for F1 weekend. ASAP.' from Client.",
+  "src": "mcl750.mov",
+  "ss": 16.2,
+  "speed": 0.45
+ },
+ {
+  "id": 6,
+  "t0": 5.7,
+  "t1": 6.7667,
+  "hf": "Pixel-art cat mascot pops in. Floating words: 'What is it this time?'",
+  "anim": [
+   "Mascot squash-and-stretch pop",
+   "Idle bob",
+   "Word-by-word floating captions"
+  ],
+  "se": "Original pixel mascot REV (a tiny pixel supercar) pops in. Floating words: 'What is it this time?'",
+  "src": "sf90.mov",
+  "ss": 6.6
+ },
+ {
+  "id": 7,
+  "t0": 6.7667,
+  "t1": 8.4667,
+  "hf": "Mascot morphs to a 3D cube ('Objects?') then a triangle ('Shapes?'). Hero gestures.",
+  "anim": [
+   "Shape morph",
+   "Pixel 3D cube",
+   "Captions swap"
+  ],
+  "se": "REV morphs into a pixel coupe silhouette ('Coupe?') then a wedge ('Spider?').",
+  "src": "sf90.mov",
+  "ss": 10.5
+ },
+ {
+  "id": 8,
+  "t0": 8.4667,
+  "t1": 9.3333,
+  "hf": "Pixel fire bursts into a fireball ('VFX?'). Whole shot color-grades warm, sparks fly.",
+  "anim": [
+   "Pixel fire sprite",
+   "Explosion flash",
+   "Warm color grade",
+   "Spark particles"
+  ],
+  "se": "Pixel flames burst off REV ('Launch?'). Shot grades hot orange, sparks fly.",
+  "src": "amg.mov",
+  "ss": 8.5
+ },
+ {
+  "id": 10,
+  "t0": 9.3333,
+  "t1": 10.6,
+  "hf": "Mascot returns. Stacked words 'Wait / No / Let me explain'. Prompt bar slides up and types 'I need a promo. Fast. No mistakes.' Send button glows.",
+  "anim": [
+   "Stacked word pops",
+   "Prompt bar slide-up",
+   "Typewriter",
+   "Send-button glow pulse"
+  ],
+  "se": "REV returns. 'Wait / No / Let me book it'. Prompt bar types 'I need a car for F1 weekend. Fast. No mistakes.'",
+  "src": "sf90.mov",
+  "ss": 13.6
+ },
+ {
+  "id": 12,
+  "t0": 10.6,
+  "t1": 12.7333,
+  "hf": "Editor view: green blob badge with a glowing pixel ring, then zooms out into the comp; badge builds layer by layer.",
+  "anim": [
+   "Particle ring",
+   "Badge assembly",
+   "Zoom-out to editor UI"
+  ],
+  "se": "SE Concierge booking window (menus Fleet · Dates · Route · Pickup): the race-weekend pass assembles (rings, rays, checkered band, monogram; text ring RACE WEEKEND PASS ★ THU · FRI · SAT) inside a glowing pixel ring, then zooms out to the window.",
+  "src": "sto.mp4",
+  "ss": 20.0
+ },
+ {
+  "id": 17,
+  "t0": 12.7333,
+  "t1": 13.5667,
+  "hf": "Whip pan into the editor's project panel (asset list).",
+  "anim": [
+   "Whip pan blur",
+   "File list cascade"
+  ],
+  "se": "Whip into the fleet list: Las Vegas cars from supercarexp.vip cascade in as name rows, each with an AVAILABLE tick.",
+  "src": null
+ },
+ {
+  "id": 21,
+  "t0": 13.5667,
+  "t1": 14.6333,
+  "hf": "Close-up shout, word 'route!' pops.",
+  "anim": [
+   "Word pop with shake"
+  ],
+  "se": "Rally driver selfie (slowed to half speed), ROUTE! slams in.",
+  "src": "rally1.mov",
+  "ss": 8.85,
+  "speed": 0.5
+ },
+ {
+  "id": 26,
+  "t0": 14.6333,
+  "t1": 16.6,
+  "hf": "Map with title 'SUN GATE TRAIL', pins drop, photo cards pop around, cursor clicks.",
+  "anim": [
+   "Pin drops",
+   "Photo card pops",
+   "Cursor click ripple"
+  ],
+  "se": "Map titled 'RACE WEEKEND ROUTE': pins drop, cards pop (photos for PICKUP, THE STRIP, THE SPHERE; drawn cards for RED ROCK and LAKE MEAD), cursor clicks.",
+  "src": null
+ },
+ {
+  "id": 30,
+  "t0": 16.6,
+  "t1": 20.3667,
+  "hf": "Poster: 'THE SUN GATE' types on, body copy, tags, thumbnails pop, badge stamps.",
+  "anim": [
+   "HUD tags",
+   "Type slam on the engine roar",
+   "Chequer band",
+   "Lock-on gate",
+   "Sector strip",
+   "Rev meter",
+   "Badge stamp"
+  ],
+  "se": "GT3 RS start-up: finger on the start button, SPORT on the dial, foot down and the engine fires on local frame 36 (the 30 s cut's music drop lands there too), then the car launches down the tunnel. RACE WEEKEND slams in on a black scrim with a flat chequer band, a lock-on gate closes on the car (PORSCHE 911 GT3 RS · 518 HP · 9,000 RPM), the sector strip lights S1 THU · S2 FRI · S3 SAT · RACE NIGHT, a rev meter follows the clip's own engine sound, the pass stamps.",
+  "src": "gt3_livery.mov",
+  "ss": 2.0,
+  "parts": [
+   {
+    "ss": 2.0,
+    "len": 2.0,
+    "what": "start button, SPORT dial, foot down (engine fires at src 3.20)"
+   },
+   {
+    "ss": 8.592,
+    "len": 1.7,
+    "what": "launches away down the tunnel (src cut at 8.592)"
+   }
+  ]
+ },
+ {
+  "id": 32,
+  "t0": 20.3667,
+  "t1": 21.2,
+  "hf": "Hero escapes the boulder.",
+  "anim": [
+   "Speed cut"
+  ],
+  "se": "AMG GT Black Series pulls out of the night, fast.",
+  "src": "amg.mov",
+  "ss": 0.0
+ },
+ {
+  "id": 33,
+  "t0": 21.2,
+  "t1": 23.3333,
+  "hf": "Hero catches breath; phone bubble: 'Looks great! Next brief: a safety video for the reserve.'",
+  "anim": [
+   "Message bubble pop"
+  ],
+  "se": "GT3 RS in the garage (livery clip, slowed to 0.55×), slow push. Bubble: 'Looks perfect! Booked. Next: the whole crew for the rally.'",
+  "src": "gt3_livery.mov",
+  "ss": 12.05,
+  "speed": 0.55
+ },
+ {
+  "id": 34,
+  "t0": 23.3333,
+  "t1": 25.9,
+  "hf": "Hero walks off, mascot hops along. CTA line: 'Try Higgsfield MCP for motion design…'",
+  "anim": [
+   "Mascot hop",
+   "CTA line fade"
+  ],
+  "se": "STO under the lights, REV hops along. CTA: 'TEXT OR DM TO BOOK · (725) 425-3583 · SUPERCAREXP.VIP'",
+  "src": "sto.mp4",
+  "ss": 19.8
+ },
+ {
+  "id": 35,
+  "t0": 25.9,
+  "t1": 30.0,
+  "hf": "End card: Instagram glyph + @HIGGSFIELD.AI, glyph color-shifts.",
+  "anim": [
+   "Glyph gradient shift",
+   "Fade to black"
+  ],
+  "se": "End card: SE logo + @supercar_experience_, logo shimmer, 21+ line.",
+  "src": null
+ }
+]

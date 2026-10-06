@@ -39,11 +39,11 @@ export const GlowReveal: React.FC = () => {
 export const Poster: React.FC<{dur: number}> = ({dur}) => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const words = ['THE', 'GT3 RS'];
-  let budget = Math.floor(lin(f, 2, 22, 0, 9, (t) => t));
+  const words = ['RACE', 'WEEKEND'];
+  let budget = Math.floor(lin(f, 2, 22, 0, 11, (t) => t));
   const caret = Math.floor(f / 6) % 2;
   const body = lin(f, 22, 34);
-  const tags = ['518 HP', '9,000 RPM', 'TRACK-BRED', 'F1 WEEKEND'];
+  const tags = ['THU · FRI · SAT', 'RACE NIGHT', '518 HP', '9,000 RPM'];
   const thumbs = ['gt3_crest', 'gt3_front', 'gt3_tunnel'];
   const stamp = spring({frame: f - 78, fps, config: {damping: 10, stiffness: 260}});
   return (
@@ -61,9 +61,9 @@ export const Poster: React.FC<{dur: number}> = ({dur}) => {
         </div>
       </div>
       {/* pin label on photo */}
-      <div style={{position: 'absolute', left: 560, top: 1170, display: 'flex', alignItems: 'center', gap: 10, background: C.asphalt, padding: '12px 22px 12px 14px', borderRadius: 40, opacity: lin(f, 30, 38), transform: `scale(${lin(f, 30, 40, 0.6, 1)})`}}>
+      <div style={{position: 'absolute', right: 80, top: 1170, display: 'flex', alignItems: 'center', gap: 10, background: C.asphalt, padding: '12px 22px 12px 14px', borderRadius: 40, opacity: lin(f, 30, 38), transform: `scale(${lin(f, 30, 40, 0.6, 1)})`, transformOrigin: '100% 50%'}}>
         <div style={{width: 28, height: 28, borderRadius: 14, background: C.red, border: `4px solid ${C.chalk}`}} />
-        <div style={{fontFamily: F.ui, fontWeight: 800, fontSize: 24, color: C.chalk}}>AVAILABLE · LAS VEGAS</div>
+        <div style={{fontFamily: F.ui, fontWeight: 800, fontSize: 24, color: C.chalk}}>PORSCHE 911 GT3 RS · AVAILABLE IN LAS VEGAS</div>
       </div>
       {/* big type */}
       <div style={{position: 'absolute', left: 50, top: 230, fontFamily: F.display, fontSize: 176, lineHeight: 0.86, color: C.asphalt, letterSpacing: -4}}>
@@ -117,13 +117,13 @@ export const Poster: React.FC<{dur: number}> = ({dur}) => {
 export const TitleLockup: React.FC = () => {
   const f = useCurrentFrame();
   const {fps} = useVideoConfig();
-  const l1 = lin(f, 0, 12);
-  const big = spring({frame: f - 6, fps, config: {damping: 14, stiffness: 140}});
-  const pill = spring({frame: f - 16, fps, config: {damping: 12, stiffness: 200}});
+  // frame 0 is the Instagram cover, so every word reads from the first frame; only the scale settles
+  const big = spring({frame: f, fps, config: {damping: 14, stiffness: 140}});
+  const pill = spring({frame: f - 6, fps, config: {damping: 12, stiffness: 200}});
   const streak = interpolate(f, [2, 26], [-600, 1700], clamp);
   return (
     <AbsoluteFill style={{alignItems: 'center', justifyContent: 'center'}}>
-      <div style={{position: 'absolute', top: 680, display: 'flex', alignItems: 'center', gap: 24, opacity: l1, filter: `blur(${(1 - l1) * 12}px)`}}>
+      <div style={{position: 'absolute', top: 600, display: 'flex', alignItems: 'center', gap: 24}}>
         <Img src={staticFile('brand/logo.svg')} style={{height: 64}} />
         <div style={{fontFamily: F.ui, fontWeight: 400, fontSize: 40, color: C.chalk}}>×</div>
         <div style={{fontFamily: F.pixel, fontWeight: 700, fontSize: 38, color: C.yellow}}>REV</div>
@@ -131,26 +131,27 @@ export const TitleLockup: React.FC = () => {
       <div
         style={{
           position: 'absolute',
-          top: 790,
+          top: 710,
           fontFamily: F.display,
-          fontSize: 140,
+          fontSize: 150,
           letterSpacing: -4,
-          lineHeight: 1,
+          lineHeight: 0.94,
+          textAlign: 'center',
           backgroundImage: 'linear-gradient(180deg, #ffffff 0%, #f5f3ee 45%, #b9b5aa 52%, #ffffff 100%)',
           WebkitBackgroundClip: 'text',
           color: 'transparent',
-          transform: `scale(${0.8 + big * 0.2})`,
-          opacity: big,
+          transform: `scale(${1.06 - big * 0.06})`,
           filter: 'drop-shadow(0 12px 40px rgba(0,0,0,0.6))',
           whiteSpace: 'nowrap',
         }}
       >
-        F1 WEEKEND
+        RENT A<br />SUPERCAR
       </div>
-      <div style={{position: 'absolute', top: 1010, transform: `scale(${pill})`, background: C.yellow, color: C.asphalt, fontFamily: F.ui, fontWeight: 800, fontSize: 40, padding: '12px 34px', borderRadius: 14}}>for Las Vegas</div>
+      <div style={{position: 'absolute', top: 1040, transform: `scale(${0.9 + pill * 0.1})`, background: C.yellow, color: C.asphalt, fontFamily: F.ui, fontWeight: 800, fontSize: 40, padding: '12px 34px', borderRadius: 14}}>for F1 Weekend</div>
+      <div style={{position: 'absolute', top: 1140, fontFamily: F.ui, fontWeight: 800, fontSize: 34, letterSpacing: 6, color: C.chalk, textShadow: '0 2px 16px rgba(0,0,0,0.8)'}}>LAS VEGAS · NOV 19–21</div>
       {/* light streak */}
-      <div style={{position: 'absolute', top: 760, left: streak, width: 420, height: 260, background: 'linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0))', mixBlendMode: 'overlay', transform: 'skewX(-24deg)'}} />
-      <div style={{position: 'absolute', top: 1110, left: 140, right: 140, height: 3, background: `linear-gradient(90deg, transparent, ${C.yellow}, transparent)`, transform: `scaleX(${lin(f, 10, 30)})`}} />
+      <div style={{position: 'absolute', top: 700, left: streak, width: 420, height: 320, background: 'linear-gradient(90deg, rgba(255,255,255,0), rgba(255,255,255,0.75), rgba(255,255,255,0))', mixBlendMode: 'overlay', transform: 'skewX(-24deg)'}} />
+      <div style={{position: 'absolute', top: 1210, left: 140, right: 140, height: 3, background: `linear-gradient(90deg, transparent, ${C.yellow}, transparent)`, transform: `scaleX(${lin(f, 10, 30)})`}} />
     </AbsoluteFill>
   );
 };
@@ -183,7 +184,8 @@ export const EndCard: React.FC<{dur: number}> = ({dur}) => {
         <div style={{fontFamily: F.display, fontSize: 64, color: C.yellow}}>TEXT OR DM TO BOOK</div>
         <div style={{fontFamily: F.display, fontSize: 52, color: C.chalk, marginTop: 6}}>(725) 425-3583</div>
         <div style={{fontFamily: F.ui, fontWeight: 700, fontSize: 36, color: C.chalk, marginTop: 14, letterSpacing: 3}}>SUPERCAREXP.VIP</div>
-        <div style={{fontFamily: F.ui, fontWeight: 500, fontSize: 24, color: C.mute, marginTop: 26, letterSpacing: 3}}>21+ · VALID DRIVER'S LICENSE · INSURANCE</div>
+        <div style={{fontFamily: F.ui, fontWeight: 500, fontSize: 24, color: C.mute, marginTop: 26, letterSpacing: 3}}>RENTERS 25+ · AGES 21–24 WITH $299 UNDERAGE FEE</div>
+        <div style={{fontFamily: F.ui, fontWeight: 500, fontSize: 24, color: C.mute, marginTop: 8, letterSpacing: 3}}>VALID DRIVER'S LICENSE · INSURANCE</div>
       </div>
     </AbsoluteFill>
   );

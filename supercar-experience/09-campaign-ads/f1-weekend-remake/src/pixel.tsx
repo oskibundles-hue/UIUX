@@ -2,6 +2,8 @@ import React from 'react';
 import {spring, useCurrentFrame, useVideoConfig} from 'remotion';
 import {noise3D} from '@remotion/noise';
 import {C, F, lin, rnd} from './theme';
+import {DRIVER, DRIVER_PAL} from './driver_grids';
+import {CAR_GRIDS, CAR_PAL} from './car_grids';
 
 // REV — original pixel mascot: a tiny supercar seen head-on, headlights for eyes.
 const PAL: Record<string, string> = {
@@ -69,7 +71,7 @@ const WEDGE = [
   '................',
 ];
 
-export const Sprite: React.FC<{grid: string[]; px: number; mix?: {grid: string[]; t: number; seed?: number}}> = ({grid, px, mix}) => {
+export const Sprite: React.FC<{grid: string[]; px: number; mix?: {grid: string[]; t: number; seed?: number}; pal?: Record<string, string>; shadow?: boolean}> = ({grid, px, mix, pal = PAL, shadow = true}) => {
   const rows = grid.length;
   const cols = grid[0].length;
   const rects: React.ReactNode[] = [];
@@ -81,10 +83,10 @@ export const Sprite: React.FC<{grid: string[]; px: number; mix?: {grid: string[]
         if (th < mix.t) ch = mix.grid[y]?.[x] ?? '.';
       }
       if (ch === '.') continue;
-      rects.push(<rect key={x + '-' + y} x={x * px} y={y * px} width={px + 0.5} height={px + 0.5} fill={PAL[ch] ?? ch} />);
+      rects.push(<rect key={x + '-' + y} x={x * px} y={y * px} width={px + 0.5} height={px + 0.5} fill={pal[ch] ?? ch} />);
     }
   return (
-    <svg width={cols * px} height={rows * px} shapeRendering="crispEdges" style={{overflow: 'visible', filter: 'drop-shadow(0 10px 18px rgba(0,0,0,0.45))'}}>
+    <svg width={cols * px} height={rows * px} shapeRendering="crispEdges" style={{overflow: 'visible', filter: shadow ? 'drop-shadow(0 10px 18px rgba(0,0,0,0.45))' : undefined}}>
       {rects}
     </svg>
   );
@@ -135,6 +137,95 @@ export const Rev: React.FC<{at: number; x: number; y: number; px?: number; morph
     >
       <Sprite grid={grid} px={px} mix={mix} />
     </div>
+  );
+};
+
+// the Supercar Experience driver (helmet on), grids from tools/driver_sprite.py
+export type DriverPose = 'idle' | 'thumb' | 'happy' | 'wave' | 'think' | 'jump';
+// side views of two real Las Vegas fleet cars, grids from tools/car_sprites.py
+type CarKey = keyof typeof CAR_LABEL;
+const CAR_LABEL = {evo: 'LAMBORGHINI HURACÁN EVO', m750: 'MCLAREN 750S'};
+
+// thought cloud with a pixel car inside; cars dissolve into each other like REV's morph did
+const ThoughtCar: React.FC<{seq: {car: CarKey; at: number}[]; x: number; y: number}> = ({seq, x, y}) => {
+  const f = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  if (!seq.length || f < seq[0].at - 4) return null;
+  const sp = spring({frame: f - seq[0].at + 4, fps, config: {damping: 11, stiffness: 220}});
+  let grid = CAR_GRIDS[seq[0].car];
+  let label = CAR_LABEL[seq[0].car];
+  let mix: {grid: string[]; t: number; seed: number} | undefined;
+  for (let i = 1; i < seq.length; i++) {
+    if (f < seq[i].at) break;
+    const t = lin(f, seq[i].at, seq[i].at + 9);
+    mix = t < 1 ? {grid: CAR_GRIDS[seq[i].car], t, seed: seq[i].at} : undefined;
+    grid = t < 1 ? CAR_GRIDS[seq[i - 1].car] : CAR_GRIDS[seq[i].car];
+    label = t < 0.5 ? CAR_LABEL[seq[i - 1].car] : CAR_LABEL[seq[i].car];
+  }
+  const dot = (d: number, l: number, t: number) => (
+    <div style={{position: 'absolute', left: l, top: t, width: d, height: d, borderRadius: '50%', background: C.chalk, border: `5px solid ${C.asphalt}`, opacity: lin(f, seq[0].at - 4 + (d < 30 ? 0 : 2), seq[0].at + (d < 30 ? 0 : 2))}} />
+  );
+  return (
+    <div style={{position: 'absolute', left: x, top: y}}>
+      {dot(22, -40, 250)}
+      {dot(36, -6, 200)}
+      <div style={{position: 'absolute', left: 30, top: -30, width: 540, height: 260, borderRadius: 130, background: C.chalk, border: `6px solid ${C.asphalt}`, boxShadow: '8px 8px 0 #0b0b0c', transform: `scale(${sp})`, transformOrigin: '0% 100%', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', gap: 10}}>
+        <Sprite grid={grid} px={7} mix={mix} pal={CAR_PAL} shadow={false} />
+        <div style={{fontFamily: F.pixel, fontSize: 21, letterSpacing: 1, color: C.asphalt}}>{label}</div>
+      </div>
+    </div>
+  );
+};
+
+export const Driver: React.FC<{
+  at: number;
+  x: number;
+  y: number;
+  px?: number;
+  pose?: DriverPose;
+  poses?: {at: number; pose: DriverPose}[];
+  think?: {car: CarKey; at: number}[];
+  exitAt?: number;
+  hop?: boolean;
+}> = ({at, x, y, px = 14, pose = 'idle', poses = [], think, exitAt, hop}) => {
+  const f = useCurrentFrame();
+  const {fps} = useVideoConfig();
+  if (f < at) return null;
+  const sp = spring({frame: f - at, fps, config: {damping: 9, stiffness: 200}});
+  let cur = pose;
+  let changed = at;
+  for (const p of poses)
+    if (f >= p.at) {
+      cur = p.pose;
+      changed = p.at;
+    }
+  const since = f - changed;
+  const kick = changed > at && since < 10 ? (1 - since / 10) * 0.14 * Math.sin(since * 1.4) : 0;
+  const squash = 1 + (1 - sp) * 0.35 * Math.sin((f - at) * 0.9) + kick;
+  const air = hop ? Math.abs(Math.sin((f - at) * 0.22)) : 0;
+  const bob = hop ? -air * 46 : Math.sin((f - at) * 0.16) * 8;
+  const land = hop && air < 0.25 ? (0.25 - air) * 0.5 : 0;
+  let key: string = cur;
+  if (cur === 'wave') key = Math.floor((f - at) / 5) % 2 ? 'wave_b' : 'wave_a';
+  if (cur === 'idle' && (f - at) % 70 > 64) key = 'blink';
+  if (hop && air > 0.45) key = 'jump';
+  const out = exitAt !== undefined ? lin(f, exitAt, exitAt + 8) : 0;
+  const s = sp * (1 - out);
+  return (
+    <>
+      <div
+        style={{
+          position: 'absolute',
+          left: x,
+          top: y + bob,
+          transformOrigin: '50% 100%',
+          transform: `scale(${s * (squash + land)}, ${s / (squash + land)})`,
+        }}
+      >
+        <Sprite grid={DRIVER[key]} px={px} pal={DRIVER_PAL} />
+      </div>
+      {think && <ThoughtCar seq={think} x={x + px * 26} y={y - px * 14} />}
+    </>
   );
 };
 

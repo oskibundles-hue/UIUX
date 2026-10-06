@@ -1,0 +1,403 @@
+{
+ "cut": "76",
+ "music": "public/audio/music_roar.wav",
+ "music_gain": 0.55,
+ "music_lufs": -15.0,
+ "car_stem_lufs": -22.1,
+ "bed_peak_dbfs": -2.2,
+ "shots": [
+  {
+   "shot": 1,
+   "t": 0.0,
+   "role": "none",
+   "why": "graphics or title shot"
+  },
+  {
+   "shot": 2,
+   "t": 2.3,
+   "role": "under",
+   "src": "amg.mov",
+   "ss": 15.0,
+   "speed": 1,
+   "clip_lufs": -14.3,
+   "gain_db": -13.7,
+   "target_lufs": -28.0,
+   "capped": false,
+   "duck_db": 0.0,
+   "tail_s": 0.03,
+   "why": "Sphere establishing: AMG idle under the push-in"
+  },
+  {
+   "shot": 3,
+   "t": 4.0,
+   "role": "under",
+   "src": "sto.mp4",
+   "ss": 11.0,
+   "speed": 1,
+   "clip_lufs": -12.4,
+   "gain_db": -15.6,
+   "target_lufs": -28.0,
+   "capped": false,
+   "duck_db": 0.0,
+   "tail_s": 0.03,
+   "why": "STO cruising the Strip"
+  },
+  {
+   "shot": 4,
+   "t": 8.0,
+   "role": "feature",
+   "src": "mcl750.mov",
+   "ss": 16.2,
+   "speed": 0.45,
+   "clip_lufs": -12.9,
+   "gain_db": -8.1,
+   "target_lufs": -21.0,
+   "capped": false,
+   "duck_db": -3.0,
+   "tail_s": 0.03,
+   "why": "McLaren POV, slowed 0.45x: a low drone under the text bubble"
+  },
+  {
+   "shot": 5,
+   "t": 11.6,
+   "role": "feature",
+   "src": "sto.mp4",
+   "ss": 1.0,
+   "speed": 1,
+   "clip_lufs": -13.9,
+   "gain_db": -7.1,
+   "target_lufs": -21.0,
+   "capped": false,
+   "duck_db": -3.0,
+   "tail_s": 0.03,
+   "why": "STO start button: the click and the start"
+  },
+  {
+   "shot": 6,
+   "t": 12.7,
+   "role": "under",
+   "src": "sf90.mov",
+   "ss": 6.6,
+   "speed": 1,
+   "clip_lufs": -9.7,
+   "gain_db": -18.3,
+   "target_lufs": -28.0,
+   "capped": false,
+   "duck_db": 0.0,
+   "tail_s": 0.03,
+   "why": "SF90 under REV"
+  },
+  {
+   "shot": 7,
+   "t": 15.0,
+   "role": "under",
+   "src": "sf90.mov",
+   "ss": 10.5,
+   "speed": 1,
+   "clip_lufs": -10.6,
+   "gain_db": -17.4,
+   "target_lufs": -28.0,
+   "capped": false,
+   "duck_db": 0.0,
+   "tail_s": 0.03,
+   "why": "SF90 under the thought bubble"
+  },
+  {
+   "shot": 8,
+   "t": 16.7,
+   "role": "feature",
+   "src": "amg.mov",
+   "ss": 8.5,
+   "speed": 1,
+   "clip_lufs": -12.9,
+   "gain_db": -8.1,
+   "target_lufs": -21.0,
+   "capped": false,
+   "duck_db": -3.0,
+   "tail_s": 0.03,
+   "why": "\"Launch?\": AMG pulls hard under the flames"
+  },
+  {
+   "shot": 9,
+   "t": 17.6,
+   "role": "under",
+   "src": "sf90.mov",
+   "ss": 12.2,
+   "speed": 1,
+   "clip_lufs": -10.4,
+   "gain_db": -17.6,
+   "target_lufs": -28.0,
+   "capped": false,
+   "duck_db": 0.0,
+   "tail_s": 0.03,
+   "why": "SF90 under the pixel code"
+  },
+  {
+   "shot": 10,
+   "t": 19.0,
+   "role": "under",
+   "src": "sf90.mov",
+   "ss": 13.6,
+   "speed": 1,
+   "clip_lufs": -9.6,
+   "gain_db": -18.4,
+   "target_lufs": -28.0,
+   "capped": false,
+   "duck_db": 0.0,
+   "tail_s": 0.3,
+   "why": "SF90 under \"Let me book it\""
+  },
+  {
+   "shot": 11,
+   "t": 22.0,
+   "role": "none",
+   "why": "graphics or title shot"
+  },
+  {
+   "shot": 12,
+   "t": 23.3,
+   "role": "none",
+   "why": "graphics shot, speech (21) or the clip is silent here (12, 14, 34)"
+  },
+  {
+   "shot": 13,
+   "t": 26.0,
+   "role": "none",
+   "why": "graphics or title shot"
+  },
+  {
+   "shot": 14,
+   "t": 27.0,
+   "role": "none",
+   "why": "graphics shot, speech (21) or the clip is silent here (12, 14, 34)"
+  },
+  {
+   "shot": 15,
+   "t": 28.3,
+   "role": "under",
+   "src": "mcl750.mov",
+   "ss": 3.0,
+   "speed": 1,
+   "clip_lufs": -9.9,
+   "gain_db": -18.1,
+   "target_lufs": -28.0,
+   "capped": false,
+   "duck_db": 0.0,
+   "tail_s": 0.3,
+   "why": "750S in the desert"
+  },
+  {
+   "shot": 16,
+   "t": 31.0,
+   "role": "none",
+   "why": "graphics or title shot"
+  },
+  {
+   "shot": 17,
+   "t": 32.4,
+   "role": "none",
+   "why": "graphics or title shot"
+  },
+  {
+   "shot": 18,
+   "t": 33.2,
+   "role": "none",
+   "why": "graphics or title shot"
+  },
+  {
+   "shot": 19,
+   "t": 34.5,
+   "role": "none",
+   "why": "graphics or title shot"
+  },
+  {
+   "shot": 20,
+   "t": 37.0,
+   "role": "under",
+   "src": "urus.mp4",
+   "ss": 0.0,
+   "speed": 1,
+   "clip_lufs": -10.0,
+   "gain_db": -18.0,
+   "target_lufs": -28.0,
+   "capped": false,
+   "duck_db": 0.0,
+   "tail_s": 0.3,
+   "why": "Urus on the desert road"
+  },
+  {
+   "shot": 21,
+   "t": 40.0,
+   "role": "none",
+   "why": "graphics shot, speech (21) or the clip is silent here (12, 14, 34)"
+  },
+  {
+   "shot": 22,
+   "t": 41.2,
+   "role": "under",
+   "src": "mcl750.mov",
+   "ss": 6.5,
+   "speed": 1,
+   "clip_lufs": -12.8,
+   "gain_db": -15.2,
+   "target_lufs": -28.0,
+   "capped": false,
+   "duck_db": 0.0,
+   "tail_s": 0.3,
+   "why": "wheel on the road line"
+  },
+  {
+   "shot": 23,
+   "t": 42.0,
+   "role": "none",
+   "why": "graphics or title shot"
+  },
+  {
+   "shot": 24,
+   "t": 43.2,
+   "role": "none",
+   "why": "graphics or title shot"
+  },
+  {
+   "shot": 25,
+   "t": 45.4,
+   "role": "none",
+   "why": "graphics or title shot"
+  },
+  {
+   "shot": 26,
+   "t": 46.7,
+   "role": "none",
+   "why": "graphics or title shot"
+  },
+  {
+   "shot": 27,
+   "t": 49.6,
+   "role": "feature",
+   "src": "gt3_white.mov",
+   "ss": 25.0,
+   "speed": 1,
+   "clip_lufs": -12.1,
+   "gain_db": -8.9,
+   "target_lufs": -21.0,
+   "capped": false,
+   "duck_db": -3.0,
+   "tail_s": 0.03,
+   "why": "the semi whips past the GT3 RS"
+  },
+  {
+   "shot": 28,
+   "t": 50.8,
+   "role": "under",
+   "src": "gt3_white.mov",
+   "ss": 13.0,
+   "speed": 1,
+   "clip_lufs": -12.6,
+   "gain_db": -15.4,
+   "target_lufs": -28.0,
+   "capped": false,
+   "duck_db": 0.0,
+   "tail_s": 0.3,
+   "why": "GT3 RS tracking shot"
+  },
+  {
+   "shot": 29,
+   "t": 55.0,
+   "role": "none",
+   "why": "graphics or title shot"
+  },
+  {
+   "shot": 30,
+   "t": 56.3,
+   "role": "hero",
+   "src": "gt3_livery.mov",
+   "ss": 2.0,
+   "speed": 1,
+   "clip_lufs": -8.7,
+   "gain_db": -6.3,
+   "target_lufs": -15.0,
+   "capped": false,
+   "duck_db": [
+    [
+     0.0,
+     -3
+    ],
+    [
+     1.1,
+     -3
+    ],
+    [
+     1.2,
+     -9
+    ],
+    [
+     2.0,
+     -9
+    ],
+    [
+     2.6,
+     -3
+    ]
+   ],
+   "tail_s": 0.03,
+   "why": "GT3 RS start-up: button, SPORT, foot down, the engine fires (frame 36), the launch"
+  },
+  {
+   "shot": 31,
+   "t": 60.0,
+   "role": "feature",
+   "src": "gt3_white.mov",
+   "ss": 23.5,
+   "speed": 1,
+   "clip_lufs": -11.5,
+   "gain_db": -9.5,
+   "target_lufs": -21.0,
+   "capped": false,
+   "duck_db": -3.0,
+   "tail_s": 0.03,
+   "why": "GT3 RS revs build under the riser"
+  },
+  {
+   "shot": 32,
+   "t": 63.5,
+   "role": "hero",
+   "src": "amg.mov",
+   "ss": 0.0,
+   "speed": 1,
+   "clip_lufs": -10.3,
+   "gain_db": -4.7,
+   "target_lufs": -15.0,
+   "capped": false,
+   "duck_db": -6.0,
+   "tail_s": 0.03,
+   "why": "AMG pulls out of the night"
+  },
+  {
+   "shot": 33,
+   "t": 64.5,
+   "role": "under",
+   "src": "gt3_livery.mov",
+   "ss": 12.05,
+   "speed": 0.55,
+   "clip_lufs": -14.7,
+   "gain_db": -13.3,
+   "target_lufs": -28.0,
+   "capped": false,
+   "duck_db": 0.0,
+   "tail_s": 0.3,
+   "why": "GT3 RS in the garage, slowed 0.55x"
+  },
+  {
+   "shot": 34,
+   "t": 68.0,
+   "role": "none",
+   "why": "graphics shot, speech (21) or the clip is silent here (12, 14, 34)"
+  },
+  {
+   "shot": 35,
+   "t": 72.5,
+   "role": "none",
+   "why": "graphics or title shot"
+  }
+ ]
+}
