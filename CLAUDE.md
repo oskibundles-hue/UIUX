@@ -110,6 +110,13 @@ The `plate` class is switched off, so it has no agent.
   300k auto-compact, the agents and this file at the user level from the default branch. The setup line and the
   check are in `.claude/cloud/README.md`.
 
+## The task list on the side (mandatory, every session)
+
+Omarie, 2026-10-06: "wheres my mandatory task list on the side". On any job with three or more steps, the lead
+creates the task list (TaskCreate) before starting work, sets each task to in progress when it starts and to
+completed when it is done (TaskUpdate), and adds new tasks as they turn up. That list is the panel he watches beside
+the chat, so a session with no list looks idle to him. Agents don't keep it; the lead does.
+
 ## Show what you're working on (the Working-now card)
 
 Omarie, 2026-09-30. On any job past a couple of minutes the lead (never an agent) keeps a card on the
