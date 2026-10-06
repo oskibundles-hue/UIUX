@@ -49,6 +49,13 @@ Brand values: `supercar-experience/01-brand-core/brand-tokens.json`.
 - Copy you write goes through SlopMonster:
   `python3 <repo>/.claude/skills/slopmonster/tools/deslop.py --text "..."` — ship at 5/5.
 - Verify a composited still before rendering.
+- **Vlogs: frame gate before the full render** (added 2026-10-06). The chain is build → contact sheets →
+  `nq-check` on the sheets → full render → `nq-check` on the render. The builder makes sheets of every
+  driving shot and every replacement shot, a frame about every 0.3 s at 640 px tiles (command in
+  `nq-build`). Why: both of "One-way ticket" Part 2's fix rounds (a 16:9 fill bug; hands, speedo-box
+  placement and lip sync) were picture problems the full render exposed, at about $4–5 a re-render.
+- **Hands rule** (Omarie, 2026-10-06): one hand on the wheel while he talks is fine. A phone or camera
+  in hand, or both hands off the wheel, while moving or stopped in traffic means a cutaway.
 
 ## Hand-back extras
 
