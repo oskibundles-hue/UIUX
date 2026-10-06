@@ -5,7 +5,7 @@ before dawn on Sat Sep 26, picks up the black McLaren 600LT with the red interio
 Part 1 runs from the 04:37 Uber at home to the 16:47 fuel stop in Oregon and ends on a tease for Part 2 (the night drive).
 Style named by the lead from Omarie's pick (6 Oct): **the Sep 15 rally v2 build (the SE vlog standard) + the dark-glass
 one-strip HUD, with SE orange #FF4F16 everywhere** ("go ahead build part 1 keep the orange and its a mclaren 600 lt").
-His own talk carries the story. **Status: not reviewed yet.**
+His own talk carries the story. **Status: delivered 6 Oct (Video Drop), facts panel cleared (nq-facts and nq-second); Omarie has not listened yet.**
 
 Every technique is the rally v2's (`../../2026-09-15-rally-v2/`): the same build, caching, gates, capture, mix and QA. This
 folder is a copy of that build with this vlog's cut, config and the changes listed under "Where this differs from rally v2".
@@ -15,7 +15,7 @@ folder is a copy of that build with this vlog's cut, config and the changes list
 | File | What |
 |---|---|
 | `… - 1080x1920.mp4` | **the master.** H.264 High, yuv420p bt709, 1080x1920, 29.97 fps, x264 medium CRF 17.3 (VBV 16M / 22M), AAC-LC 48 kHz 256k, +faststart: **314.6 MB (300.0 MiB), 13.97 Mb/s**. 5401 frames = 180.21 s. Loudness on the mp4 (ffmpeg loudnorm): **-14.11 LUFS integrated, -1.79 dBTP true peak**, LRA 4.0; the last 102 ms are digital silence |
-| `… - 1080x1920_DELIVERY.mp4` | the master re-encoded two-pass at 11.1 Mb/s video (the build makes it whenever the master is over 11.5 Mb/s, the Instagram delivery rate), same audio: 244.9 MiB (256,852,775 bytes, 11.40 Mb/s overall), -14.11 LUFS, -1.79 dBTP. **Upload this one** |
+| `… - 1080x1920_DELIVERY.mp4` | the master re-encoded two-pass at 11.1 Mb/s video (the build makes it whenever the master is over 11.5 Mb/s, the Instagram delivery rate), same audio: 244.9 MiB (256,870,221 bytes, sha256 b2eae6fa…92df, 11.40 Mb/s overall), -14.11 LUFS, -1.79 dBTP. **Upload this one** |
 | `… - NO MUSIC - 1080x1920.mp4` | the same video stream with dialog + nat + SFX only: 298.7 MiB, -14.04 LUFS, -1.92 dBTP |
 | `… - PREVIEW 720x1280.mp4` | phone preview, two-pass 1.1 Mb/s from the master (the single-pass CRF preview came out at 38.8 MiB): **27.4 MiB** (< 30 MiB), -14.63 LUFS, -1.98 dBTP |
 | `… - music-stem.wav` | the music alone, as it sits in the master |
@@ -182,7 +182,7 @@ zeros. On the delivered master: -14.11 LUFS integrated, -1.69 dBTP true peak.
 3. **Side G is off both strips** (6 Oct): see "HEADING and SIDE G".
 4. **Held lines** (lead, 6 Oct): the fuel-stop "I don't think I'm going to go to sleep, I'm just gonna run it the whole
    way" (reads as a drowsy-driving boast), the shop's name, the gas price, the miles and the "12 hours" lines.
-5. **Phone in hand while driving** in 0094 176-232 s, 0096 41.8-47 s and 0094 5.6-7.5 s (the junction, under "you feel me" / "we gon' catch the vibes") is out (config `forbidden`); 112.8-116.0 s is a cutaway to the road (0095 21.2-24.4 s, round 5: both hands on the wheel, car rolling through forest, speedometer blurred; the span is used nowhere else in the cut, so no gesture repeats) over his hands-off-the-wheel gesture (0094 2.2-5.4 s), and 116.0-118.2 s is a cutaway to the road (0095 33.9-36.1 s, both hands on the wheel, speedometer blurred) with his audio and captions running on; STRIP-1 now sits on 0096 32.6-40.6 s and the hook's 0096 frames on 39.0-40.8 s (both hands on the wheel, checked frame by frame; every other cabin-cam shot was swept for a held phone: none); a water bottle in hand shows briefly in a
+5. **Phone in hand while driving** in 0094 176-232 s, 0096 41.8-47 s and 0094 5.6-7.5 s (the junction, under "you feel me" / "we gon' catch the vibes") is out (config `forbidden`); 112.8-116.0 s is a cutaway to the road (0095 21.2-24.4 s, round 5: both hands on the wheel, car rolling through forest, speedometer blurred; the span is used nowhere else in the cut, so no gesture repeats) over his hands-off-the-wheel gesture (0094 2.2-5.4 s), and 116.0-118.2 s is a cutaway to the road (0095 33.9-36.1 s, both hands on the wheel, speedometer blurred) with his audio and captions running on; STRIP-1 now sits on 0096 32.6-40.6 s and the hook's 0096 frames on 39.0-40.8 s (left hand on the wheel; the right drifts to the console and lap, no device. The hook's first shot, 0097 10.4-12.6 s at 0-2.2 s, shows a lit phone lying on his lap with his right hand resting by it, not held: both facts voters noted it, neither blocked; left to Omarie, checked frame by frame; every other cabin-cam shot was swept for a held phone: none); a water bottle in hand shows briefly in a
    few driving frames elsewhere and was avoided where the footage allowed.
 6. **The index missed one speed line** (0093 1:55.8-2:00.2, "speed limit 35 we're going 45"): not in the cut, and added to
    config `forbidden`.
