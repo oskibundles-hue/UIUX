@@ -33,6 +33,7 @@ PRICES = {
     "claude-haiku-4":   (1.0, 5.0, 0.10, 1.25, 2.0),
 }
 DEFAULT_PRICE = PRICES["claude-opus-5-5"]
+HEREDOC = re.compile(r"<<-?\s*['\"]?(\w+)['\"]?[^\n]*\n.*?\n\s*\1\s*(?:\n|$)", re.S)   # file text written by a heredoc isn't a command
 BIG_CONTEXT = 300_000          # the live guard warns past this
 POLL_RE = re.compile(r"\b(while|until)\b[^\n]*\b(sleep|pgrep)\b|\bsleep\s+([6-9]\d|\d{3,})\b|\bwatch\s+-n")
 
@@ -122,7 +123,7 @@ def drains(streams):
     for s in streams:
         seen = Counter()
         for name, inp in s.tools:
-            if name == "Bash" and POLL_RE.search(inp.get("command", "")):
+            if name == "Bash" and POLL_RE.search(HEREDOC.sub("\n", inp.get("command", ""))):
                 found.append(f"{s.name}: wait/poll loop: {inp.get('command', '')[:90]!r}")
             key = inp.get("file_path") or inp.get("url") or inp.get("video_id") or inp.get("id")
             if key and (name in ("Read", "WebFetch") or "video_transcript" in name or "frames" in name):

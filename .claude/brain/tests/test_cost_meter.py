@@ -25,7 +25,8 @@ recs = [
     call("a1", 100_000, 10_000, 500),             # last record for a1 wins
     call("a2", 400_000, 20_000, 1000, tools=[("Bash", {"command": 'until ! pgrep -f "vlog.py"; do sleep 30; done'}),
                                               ("WebFetch", {"url": "https://x/frames"})]),
-    call("a3", 500_000, 0, 1000, tools=[("WebFetch", {"url": "https://x/frames"})]),
+    call("a3", 500_000, 0, 1000, tools=[("WebFetch", {"url": "https://x/frames"}),
+                                        ("Bash", {"command": "cat > t.py <<'E'\nwhile x: sleep 99\nE"})]),
     {"type": "system", "subtype": "compact_boundary"},
 ]
 with open(path, "w") as fh:
@@ -45,7 +46,7 @@ CHECKS = [
     ("context per call: max, median, now", (lead["ctx_max"], lead["ctx_median"], lead["ctx_now"]) == (500_000, 420_000, 500_000)),
     ("calls over 300k", lead["calls_over_300k"] == 2),
     ("compaction counted", r["compactions"] == 1),
-    ("poll loop flagged", any("poll" in d for d in r["drains"])),
+    ("poll loop flagged, heredoc text not", sum("poll" in d for d in r["drains"]) == 1),
     ("same fetch twice flagged", any("2x WebFetch" in d for d in r["drains"])),
     ("cost share adds to ~100", 98 <= sum(r["cost_share_pct"].values()) <= 102),
     ("opus-5-5 not priced as opus-5", cost_meter.price("claude-opus-5-5")[2] == 0.20 and cost_meter.price("claude-opus-5")[2] == 0.50),

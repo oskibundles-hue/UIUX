@@ -20,6 +20,7 @@ HANDOFF = int(os.environ.get("NQOS_GUARD_HANDOFF", 500_000))
 AGENTS = int(os.environ.get("NQOS_GUARD_AGENTS", 3))
 STATE = os.environ.get("NQOS_GUARD_STATE") or os.path.join(tempfile.gettempdir(), "nqos-cost-guard")
 
+HEREDOC = re.compile(r"<<-?\s*['\"]?(\w+)['\"]?[^\n]*\n.*?\n\s*\1\s*(?:\n|$)", re.S)   # file text written by a heredoc isn't a command
 LOOP = re.compile(r"\b(while|until)\b.*\b(sleep|pgrep|pidof|ps\b)", re.S)
 LONG_SLEEP = re.compile(r"\bsleep\s+(\d+)")
 WATCH = re.compile(r"\bwatch\s+(-n|--interval)")
@@ -71,6 +72,7 @@ def once(session, key):
 
 
 def poll_warning(cmd):
+    cmd = HEREDOC.sub("\n", cmd)
     if PGREP_SELF.search(cmd) and LOOP.search(cmd):
         return ("This wait loop uses `pgrep -f`, which also matches the loop's own command line, so it may never "
                 "end. Wait on the PID (`wait $pid`), a marker file the job writes when done, or use the "
