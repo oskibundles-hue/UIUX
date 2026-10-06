@@ -36,6 +36,17 @@ DEFAULT_PRICE = PRICES["claude-opus-5-5"]
 HEREDOC = re.compile(r"<<-?\s*['\"]?(\w+)['\"]?[^\n]*\n.*?\n\s*\1\s*(?:\n|$)", re.S)   # file text written by a heredoc isn't a command
 BIG_CONTEXT = 300_000          # the live guard warns past this
 POLL_RE = re.compile(r"\b(while|until)\b[^\n]*\b(sleep|pgrep)\b|\bsleep\s+([6-9]\d|\d{3,})\b|\bwatch\s+-n")
+# A wait done the approved way (Omarie, 2026-10-06) isn't a drain: a hard timeout (`timeout N ...`, or a
+# SECONDS / end bound) AND a wait on a PID (`kill -0`) or a marker file, with no pgrep in it.
+BOUND_RE = re.compile(r"\bg?timeout\s+(?:-\S+\s+)*\d|\bSECONDS\b|\bend\s*=|\$\{?end\b")
+TARGET_RE = re.compile(r"\bkill\s+-0\b|(?:\[\[?|\btest)\s+!?\s*-[efs]\s")
+
+
+def is_poll(cmd):
+    cmd = HEREDOC.sub("\n", cmd)
+    if not POLL_RE.search(cmd):
+        return False
+    return not (BOUND_RE.search(cmd) and TARGET_RE.search(cmd) and "pgrep" not in cmd)
 
 
 def price(model):
@@ -123,7 +134,7 @@ def drains(streams):
     for s in streams:
         seen = Counter()
         for name, inp in s.tools:
-            if name == "Bash" and POLL_RE.search(HEREDOC.sub("\n", inp.get("command", ""))):
+            if name == "Bash" and is_poll(inp.get("command", "")):
                 found.append(f"{s.name}: wait/poll loop: {inp.get('command', '')[:90]!r}")
             key = inp.get("file_path") or inp.get("url") or inp.get("video_id") or inp.get("id")
             if key and (name in ("Read", "WebFetch") or "video_transcript" in name or "frames" in name):
