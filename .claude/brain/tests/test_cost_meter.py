@@ -60,6 +60,21 @@ CHECKS += [
     ("review proposes the handoff rule", "hand off" in rev),
     ("review proposes the wait rule", "marker file" in rev),
 ]
+WAITS = [   # (command, flagged?)
+    ('until ! pgrep -f "vlog.py"; do sleep 30; done', True),                          # unbounded pgrep loop
+    ('timeout 600 bash -c \'until ! pgrep -f render; do sleep 5; done\'', True),        # bounded, still pgrep
+    ("sleep 120", True),                                                              # bare sleep check
+    ("sleep 90 && tail -3 render.log", True),
+    ("while true; do sleep 10; ls out/; done", True),                                 # no bound, no target
+    ("timeout 900 bash -c 'while kill -0 4242; do sleep 10; done'", False),          # timeout + PID
+    ("timeout -k 5 1800 bash -c 'until [ -f out/DONE ]; do sleep 15; done'", False),  # timeout + marker
+    ("end=$((SECONDS+3600)); while [ ! -f render.done ] && [ $SECONDS -lt $end ]; do sleep 60; done", False),
+    ("while kill -0 $pid 2>/dev/null && (( SECONDS < 1200 )); do sleep 20; done", False),
+    ("while kill -0 $pid; do sleep 20; done", True),                                  # PID but no bound
+    ("ffmpeg -i a.mp4 -t 10 b.mp4", False),                                           # not a wait at all
+]
+CHECKS += [(f"wait {'flagged' if want else 'allowed'}: {cmd[:60]}", cost_meter.is_poll(cmd) == want)
+           for cmd, want in WAITS]
 cli = subprocess.run([sys.executable, os.path.join(HERE, "cost_meter.py"), path], capture_output=True, text=True)
 CHECKS.append(("CLI text runs", cli.returncode == 0 and "possible drains" in cli.stdout))
 
