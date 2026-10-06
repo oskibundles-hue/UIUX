@@ -104,6 +104,10 @@ The `plate` class is switched off, so it has no agent.
   2026-10-06; Monday's review checks it). The cache goes cold after an idle gap, so each wake of a big session
   pays to write its whole context again.
 - **The cost guard** (`.claude/hooks/cost_guard.py`) warns, and only blocks repeat frame reads.
+- **In every session, not just this repo's** (Omarie, 2026-10-06: "it should work in every session thats the
+  point"): the cloud environment's setup script runs `.claude/cloud/install.py`, which installs these hooks, the
+  300k auto-compact, the agents and this file at the user level from the default branch. The setup line and the
+  check are in `.claude/cloud/README.md`.
 
 ## Show what you're working on (the Working-now card)
 
