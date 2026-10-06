@@ -63,6 +63,19 @@ CHECKS += [
 cli = subprocess.run([sys.executable, os.path.join(HERE, "cost_meter.py"), path], capture_output=True, text=True)
 CHECKS.append(("CLI text runs", cli.returncode == 0 and "possible drains" in cli.stdout))
 
+home = os.path.join(TMP, "home")                    # live_card finds the newest transcript under ~/.claude/projects
+os.makedirs(os.path.join(home, ".claude", "projects", "x"))
+with open(path) as src, open(os.path.join(home, ".claude", "projects", "x", "cardtest.jsonl"), "w") as dst:
+    dst.write(src.read())
+env = dict(os.environ, HOME=home)
+lc = [sys.executable, os.path.join(HERE, "live_card.py")]
+subprocess.run(lc + ["step", "midway"], capture_output=True, text=True, env=env, cwd=TMP)
+done = subprocess.run(lc + ["done", "card test shipped"], capture_output=True, text=True, env=env, cwd=TMP)
+logged = [json.loads(x) for x in open(os.environ["NQOS_COSTLOG"]) if '"cardtest"' in x]
+CHECKS.append(("done logs the job once, step does not",
+               done.returncode == 0 and len(logged) == 1 and logged[0]["job"] == "card test shipped"
+               and "cost" in json.loads(done.stdout)["data"]))
+
 bad = 0
 for label, ok in CHECKS:
     bad += not ok

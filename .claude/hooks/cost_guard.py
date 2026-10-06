@@ -8,7 +8,9 @@ Warns (to Omarie as a system message, and to Claude as added context) when:
     own command line and never ends (the Oct 5 vlog.py loop ran 28 min after the job finished);
   - a fourth agent is about to start in one session, or any Workflow (ultracode) call.
 Context and compaction warnings fire once per session and level; loop and agent warnings every time.
-It never prints a permission decision, so the regret gate's ask/deny stays in charge.
+One block, approved by Omarie on 2026-10-06: in the lead, a second Read of the same image file is denied
+(frames go to nq-check / nq-label as one contact sheet; re-reading them re-writes the cache).
+Apart from that it never prints a permission decision, so the regret gate's ask/deny stays in charge.
 Reads the tail of the transcript only; about 20 ms. Fails open: any error means no warning.
 Thresholds: NQOS_GUARD_CTX (300000), NQOS_GUARD_HANDOFF (500000), NQOS_GUARD_AGENTS (3).
 Tests: python3 .claude/hooks/test_cost_guard.py
@@ -84,6 +86,25 @@ def poll_warning(cmd):
     return None
 
 
+IMAGE = re.compile(r"\.(png|jpe?g|webp|gif|bmp|tiff?)$", re.I)
+
+
+def repeat_frame(hook):
+    """True if the lead already Read this image file earlier in the session."""
+    inp, path = hook.get("tool_input") or {}, hook.get("transcript_path", "")
+    fp = inp.get("file_path", "")
+    if (hook.get("tool_name") != "Read" or hook.get("agent_id") or not IMAGE.search(fp)
+            or not path or not os.path.isfile(path)):
+        return False
+    needle = json.dumps({"file_path": fp})[1:-1]          # "file_path": "<path>" as the transcript escapes it
+    me = hook.get("tool_use_id") or "\0"
+    with open(path, errors="replace") as fh:
+        for line in fh:
+            if '"name":"Read"' in line and (needle in line or needle.replace(": ", ":") in line) and me not in line:
+                return True
+    return False
+
+
 def warnings(hook):
     tool, inp = hook.get("tool_name", ""), hook.get("tool_input") or {}
     session, path = hook.get("session_id", ""), hook.get("transcript_path", "")
@@ -118,6 +139,12 @@ def warnings(hook):
 def main():
     try:
         hook = json.load(sys.stdin)
+        if repeat_frame(hook):
+            reason = ("Cost guard: this frame was already viewed in this session. Re-reading it re-writes the cache. "
+                      "Use your earlier look, or send frames to nq-check / nq-label as one contact sheet.")
+            print(json.dumps({"hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny",
+                                                     "permissionDecisionReason": reason}}))
+            return
         found = warnings(hook)
     except Exception:
         return

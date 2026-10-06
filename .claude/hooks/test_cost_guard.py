@@ -30,6 +30,12 @@ SMALL = transcript("small", 40_000)
 BIG = transcript("big", 320_000)
 HUGE = transcript("huge", 640_000)
 COMPACTED = transcript("compacted", 90_000, [{"type": "system", "subtype": "compact_boundary"}])
+def read_use(fp, tid="toolu_old"):
+    return {"type": "assistant", "message": {"content": [{"type": "tool_use", "id": tid, "name": "Read",
+                                                          "input": {"file_path": fp}}]}}
+
+
+FRAMES = transcript("frames", 50_000, [read_use("/w/look/96.jpg"), read_use("/w/look/99.jpg", "toolu_now")])
 AGENTS3 = transcript("agents3", 50_000, [agent_use(), agent_use(), agent_use()])
 
 
@@ -41,7 +47,9 @@ def run(tool, inp, path=SMALL, session="s1", **extra):
     if not p.stdout.strip():
         return ""
     out = json.loads(p.stdout)
-    assert "permissionDecision" not in out.get("hookSpecificOutput", {}), "guard must never decide"
+    if out.get("hookSpecificOutput", {}).get("permissionDecision") == "deny":
+        return "DENY " + out["hookSpecificOutput"]["permissionDecisionReason"]
+    assert "permissionDecision" not in out.get("hookSpecificOutput", {}), "guard decides only on repeat frames"
     assert out["systemMessage"] == out["hookSpecificOutput"]["additionalContext"]
     return out["systemMessage"]
 
@@ -72,6 +80,13 @@ CASES = [
     ("inside an agent: no lead context check", lambda: run("Read", {}, HUGE, "s-sub", agent_id="a1"), ""),
     ("inside an agent: poll still warns",
      lambda: run("Bash", {"command": "while true; do sleep 5; done"}, HUGE, "s-sub", agent_id="a1"), "wait/poll"),
+    ("second read of the same frame is denied", lambda: run("Read", {"file_path": "/w/look/96.jpg"}, FRAMES, "s-f",
+                                                              tool_use_id="toolu_new"), "DENY"),
+    ("the current call's own record doesn't count", lambda: run("Read", {"file_path": "/w/look/99.jpg"}, FRAMES, "s-f",
+                                                                tool_use_id="toolu_now"), ""),
+    ("first read of a new frame is fine", lambda: run("Read", {"file_path": "/w/look/100.jpg"}, FRAMES, "s-f"), ""),
+    ("re-reading a source file is fine", lambda: run("Read", {"file_path": "/w/story.html"}, FRAMES, "s-f"), ""),
+    ("agents may re-read frames", lambda: run("Read", {"file_path": "/w/look/96.jpg"}, FRAMES, "s-f", agent_id="a1"), ""),
     ("missing transcript fails open", lambda: run("Read", {}, "/nonexistent.jsonl"), ""),
 ]
 

@@ -5,6 +5,7 @@ tools: Read, Write, Edit, Grep, Glob, Bash, WebFetch, WebSearch
 model: opus
 effort: medium
 memory: project
+maxTurns: 100
 ---
 
 You are the `build` class of Omarie's NQ OS team (agentmesh cloud v1.3; the table and the reasons are in
