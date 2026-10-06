@@ -94,6 +94,32 @@ CASES = [
     ("missing transcript fails open", lambda: run("Read", {}, "/nonexistent.jsonl"), ""),
 ]
 
+TIMED = [   # the approved waits: no warning
+    ("timed wait on a PID", "timeout 900 bash -c 'while kill -0 4242; do sleep 10; done'"),
+    ("timed wait on a marker file", "timeout -k 5 1800 bash -c 'until [ -f out/DONE ]; do sleep 15; done'"),
+    ("SECONDS-bounded wait on a marker", "end=$((SECONDS+3600)); while [ ! -f render.done ] && [ $SECONDS -lt $end ]; do sleep 60; done"),
+    ("SECONDS-bounded wait on a PID", "while kill -0 $pid 2>/dev/null && (( SECONDS < 1200 )); do sleep 20; done"),
+]
+STILL = [   # still warn
+    ("PID wait with no bound", "while kill -0 $pid; do sleep 20; done", "wait/poll loop"),
+    ("pgrep -f loop even with a timeout", "timeout 600 bash -c 'until ! pgrep -f render; do sleep 5; done'",
+     "matches the loop's own"),
+    ("bare long sleep check", "sleep 120 && tail -3 render.log", "wait/poll loop"),
+]
+CASES += [(label, (lambda c=cmd: run("Bash", {"command": c})), "") for label, cmd in TIMED]
+CASES += [(label, (lambda c=cmd: run("Bash", {"command": c})), want) for label, cmd, want in STILL]
+
+
+def agrees_with_meter():
+    """The guard and the meter use one rule: the guard is quiet exactly where the meter doesn't flag a wait."""
+    brain = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "brain")
+    if not os.path.isfile(os.path.join(brain, "cost_meter.py")):
+        return True                       # installed copy without the meter beside it: nothing to compare
+    sys.path[:0] = [brain, os.path.dirname(GUARD)]
+    import cost_meter, cost_guard
+    cmds = [c for _, c in TIMED] + [c for _, c, _ in STILL] + ['until ! pgrep -f "vlog.py"; do sleep 30; done']
+    return all((cost_guard.poll_warning(c) is None) == (not cost_meter.is_poll(c)) for c in cmds)
+
 
 def main():
     bad = 0
@@ -106,7 +132,10 @@ def main():
     ok = p.returncode == 0 and not p.stdout.strip()
     bad += not ok
     print(("ok  " if ok else "FAIL") + "  bad payload fails open")
-    print(f"\n{len(CASES) + 1 - bad}/{len(CASES) + 1} passed")
+    ok = agrees_with_meter()
+    bad += not ok
+    print(("ok  " if ok else "FAIL") + "  guard and meter agree on which waits are fine")
+    print(f"\n{len(CASES) + 2 - bad}/{len(CASES) + 2} passed")
     sys.exit(1 if bad else 0)
 
 

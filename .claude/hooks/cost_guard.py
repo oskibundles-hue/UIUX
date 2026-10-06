@@ -4,7 +4,7 @@
 Warns (to Omarie as a system message, and to Claude as added context) when:
   - the conversation passes 300k tokens of context (again at 500k: hand off now);
   - a compaction has happened (a compacted session keeps re-reading a big summary: hand off);
-  - a Bash call is a wait/poll loop, and harder when it is `pgrep -f` in a loop, which matches its
+  - a Bash call is a wait/poll loop (not a timed wait on a PID or marker file), and harder when it is `pgrep -f` in a loop, which matches its
     own command line and never ends (the Oct 5 vlog.py loop ran 28 min after the job finished);
   - a fourth agent is about to start in one session, or any Workflow (ultracode) call.
 Context and compaction warnings fire once per session and level; loop and agent warnings every time.
@@ -27,6 +27,11 @@ LOOP = re.compile(r"\b(while|until)\b.*\b(sleep|pgrep|pidof|ps\b)", re.S)
 LONG_SLEEP = re.compile(r"\bsleep\s+(\d+)")
 WATCH = re.compile(r"\bwatch\s+(-n|--interval)")
 PGREP_SELF = re.compile(r"pgrep\s+-\w*f\w*\s+['\"]?(?![\['\"])")   # pgrep -f "x" without the [x] trick
+# The approved wait (Omarie, 2026-10-06) gets no warning: a hard bound (`timeout N`, or a SECONDS / end bound) AND
+# a wait on a PID (`kill -0`) or a marker file, with no pgrep. Same rule as is_poll in .claude/brain/cost_meter.py;
+# test_cost_guard.py checks the two agree.
+BOUND = re.compile(r"\bg?timeout\s+(?:-\S+\s+)*\d|\bSECONDS\b|\bend\s*=|\$\{?end\b")
+TARGET = re.compile(r"\bkill\s+-0\b|(?:\[\[?|\btest)\s+!?\s*-[efs]\s")
 HANDOFF_HOW = ("Hand off: write a short handoff (goal, state, next step, file paths) and continue in a fresh "
                "session. Every call here re-reads the whole conversation.")
 
@@ -86,6 +91,8 @@ def once(session, key):
 
 def poll_warning(cmd):
     cmd = HEREDOC.sub("\n", cmd)
+    if BOUND.search(cmd) and TARGET.search(cmd) and "pgrep" not in cmd:
+        return None
     if PGREP_SELF.search(cmd) and LOOP.search(cmd):
         return ("This wait loop uses `pgrep -f`, which also matches the loop's own command line, so it may never "
                 "end. Wait on the PID (`wait $pid`), a marker file the job writes when done, or use the "
