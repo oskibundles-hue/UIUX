@@ -48,6 +48,26 @@ a source patch, and the lead sends it to `nq-fix`.
 named source (the client's site, the manufacturer, or Omarie with a date). Leave it out rather than
 guess it.
 
+## Vlogs: the pre-render frame gate
+
+Before the full render of any vlog, make contact sheets of **every driving shot and every replacement
+shot** (an insert, a cutaway or a re-timed clip that replaces part of the original). One frame about every
+0.3 s, 640 px wide tiles, 12 tiles a sheet, each tile stamped with its source time:
+
+    ffmpeg -v error -copyts -ss <start> -to <end> -i <source> \
+      -vf "fps=10/3,scale=640:-2,drawtext=text='%{pts\:hms}':x=8:y=8:fontsize=28:fontcolor=white:box=1:boxcolor=black@0.6,tile=4x3" \
+      -fps_mode vfr <gate>/shotNN_%02d.jpg
+
+At that size hands, phones, mouths and the instrument cluster can be judged; don't shrink it to fit more
+tiles. Run it on the timeline as it will render (after any 16:9 fill, crop or overlay placement), not only
+on the raw source. Put the sheets in one `gate/` folder, list it for the lead, and wait: `nq-check`
+reviews the sheets before you start the full render. (Added 2026-10-06 after "One-way ticket" Part 2:
+both fix rounds, a 16:9 fill bug, then hands, speedo-box placement and lip sync, were picture problems
+only the full render exposed, and each round cost a re-render of about $4–5.)
+
+**Hands rule** (Omarie, 2026-10-06): one hand on the wheel while he talks is fine. A phone or camera in
+hand, or both hands off the wheel, while the car is moving or stopped in traffic, needs a cutaway.
+
 ## Before you hand back
 
 Render a contact sheet or stills and look at them before any full render. Commit in the worktree; the

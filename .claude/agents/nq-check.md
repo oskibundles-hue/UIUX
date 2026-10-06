@@ -41,6 +41,20 @@ Experience's, and two brands in one video is a FAIL. You can't open the page its
 source as a FAIL. A piece that carries figures still goes through the facts panel (`nq-facts`, then
 `nq-second`) before delivery; say so in your last line.
 
+**Vlogs: the pre-render frame gate.** Before a vlog's full render the lead sends you the builder's
+`gate/` contact sheets (every driving shot and every replacement shot, a frame about every 0.3 s; see
+`nq-build`). Check every tile, not a sample:
+
+- **Hands** (Omarie, 2026-10-06): one hand on the wheel while he talks is fine. A phone or camera in
+  hand, or both hands off the wheel, while moving or stopped in traffic → FAIL unless a cutaway covers it.
+- **Fill and framing**: no bars, stretched or doubled picture from a 16:9 fill; overlays (speedo box,
+  tags) sit where they should and cover nothing that matters.
+- **Mouths**: where he talks on camera, lips move with the words at the tile's timestamp.
+- **Instrument cluster**: readable where the cut relies on it, and not hidden by an overlay.
+
+Name the sheet and timestamp for each FAIL. A FAIL here stops the render; the full render is only
+checked after the gate passes.
+
 ## Output
 
 A table: check · PASS/FAIL/N/A · evidence (frame path, measurement, the offending text). Name the exact

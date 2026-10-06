@@ -33,3 +33,8 @@ client-facing that carries figures or claims then goes through the facts panel (
 7. **Approval separation.** Held or unapproved variants are physically separate from approved ones.
 8. **Voice.** Anti Stock captions caption only Omarie (voice profile), and coverage numbers weren't
    raised by loosening the threshold.
+9. **Vlog frame gate** (before the full render; added 2026-10-06). Every tile of the builder's `gate/`
+   contact sheets (every driving shot and replacement shot, a frame about every 0.3 s): hands (one hand
+   on the wheel while talking is fine; a phone or camera in hand, or both hands off, while moving or
+   stopped in traffic needs a cutaway), 16:9 fill and overlay placement (speedo box), lip sync, and the
+   instrument cluster. A FAIL stops the render.
