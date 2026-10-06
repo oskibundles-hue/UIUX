@@ -22,8 +22,9 @@ def transcript(name, ctx, extra=()):
     return path
 
 
-def agent_use():
-    return {"type": "assistant", "message": {"content": [{"type": "tool_use", "name": "Agent", "input": {}}]}}
+def agent_use(tid=None):
+    return {"type": "assistant", "message": {"content": [{"type": "tool_use", "id": tid or os.urandom(4).hex(),
+                                                          "name": "Agent", "input": {}}]}}
 
 
 SMALL = transcript("small", 40_000)
@@ -37,6 +38,8 @@ def read_use(fp, tid="toolu_old"):
 
 FRAMES = transcript("frames", 50_000, [read_use("/w/look/96.jpg"), read_use("/w/look/99.jpg", "toolu_now")])
 AGENTS3 = transcript("agents3", 50_000, [agent_use(), agent_use(), agent_use()])
+LISTED = transcript("listed", 50_000, [{"type": "attachment", "tools": [{"name": "Agent"}] * 4},
+                                       agent_use("same"), agent_use("same")])   # tool list + a re-written record
 
 
 def run(tool, inp, path=SMALL, session="s1", **extra):
@@ -75,6 +78,7 @@ CASES = [
     ("past 500k once", lambda: run("Read", {"file_path": "x"}, HUGE, "s-huge"), ""),
     ("compacted session", lambda: run("Grep", {"pattern": "x"}, COMPACTED, "s-c"), "compacted"),
     ("first agents are fine", lambda: run("Agent", {"prompt": "x"}), ""),
+    ("tool lists and repeated records aren't agents", lambda: run("Agent", {"prompt": "x"}, LISTED, "s-l"), ""),
     ("fourth agent warns", lambda: run("Agent", {"prompt": "x"}, AGENTS3, "s-a"), "agent number 4"),
     ("workflow always warns", lambda: run("Workflow", {"script": "x"}), "ultracode"),
     ("inside an agent: no lead context check", lambda: run("Read", {}, HUGE, "s-sub", agent_id="a1"), ""),

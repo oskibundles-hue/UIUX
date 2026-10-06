@@ -48,6 +48,17 @@ def last_context(path):
     return 0
 
 
+AGENT_USE = re.compile(rb'"type":"tool_use","id":"([^"]+)","name":"(?:Agent|Task)"')
+
+
+def agents_started(path):
+    """Distinct Agent/Task tool calls; the tool list and agent listings also carry "name":"Agent"."""
+    if not os.path.getsize(path):
+        return 0
+    with open(path, "rb") as fh, mmap.mmap(fh.fileno(), 0, access=mmap.ACCESS_READ) as mm:
+        return len(set(AGENT_USE.findall(mm)))
+
+
 def count(path, needle):
     if not os.path.getsize(path):
         return 0
@@ -119,7 +130,7 @@ def warnings(hook):
     if hook.get("agent_id") or not path or not os.path.isfile(path):
         return out                     # inside an agent the transcript is the lead's; skip lead-only checks
     if tool in ("Agent", "Task"):
-        n = count(path, b'"name":"Agent"') + count(path, b'"name":"Task"')
+        n = agents_started(path)
         if n >= AGENTS:
             out.append(f"This would be agent number {n + 1} in this session. Each costs about 55k tokens to "
                        "start. Could the lead do this in a few commands, or one agent take it as a list?")
