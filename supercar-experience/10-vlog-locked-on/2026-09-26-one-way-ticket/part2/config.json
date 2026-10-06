@@ -8,7 +8,8 @@
   "captions": "data/captions.json",
   "sparse": "/tmp/claude-0/p2day/fetch/sparse",
   "sfx": "../../../10-motion-sfx/locked-on-sfx",
-  "transcripts": "/tmp/claude-0/p2day/tr"
+  "transcripts": "/tmp/claude-0/p2day/tr",
+  "aud": "/tmp/claude-0/p2day/aud"
  },
  "name": "2026-09-26 One-way ticket Part 2 - SE LOCKED-ON vlog",
  "forbidden": [
@@ -230,26 +231,14 @@
   "0": {
    "look": "cabin"
   },
-  "20": {
-   "look": "cabin"
+  "1": {
+   "look": "day"
   },
-  "21": {
-   "look": "cabin"
+  "2": {
+   "look": "day"
   },
-  "22": {
-   "look": "cabin"
-  },
-  "23": {
-   "look": "cabin"
-  },
-  "24": {
-   "look": "cabin"
-  },
-  "25": {
-   "look": "cabin"
-  },
-  "26": {
-   "look": "cabin"
+  "3": {
+   "look": "day"
   },
   "4": {
    "look": "night"
@@ -273,51 +262,129 @@
    "look": "night"
   },
   "11": {
-   "look": "night"
+   "look": "night",
+   "s0": 1.8,
+   "s1": 1.8,
+   "_why": "0113 is a 16:9 source: a 1080x1920 window needs s >= 1.78"
   },
   "12": {
-   "look": "night"
+   "look": "night",
+   "s0": 1.8,
+   "s1": 1.8,
+   "_why": "0113 is a 16:9 source: a 1080x1920 window needs s >= 1.78"
   },
   "13": {
-   "look": "night"
+   "look": "night",
+   "s0": 1.8,
+   "s1": 1.8,
+   "_why": "0113 is a 16:9 source: a 1080x1920 window needs s >= 1.78"
   },
   "14": {
-   "look": "night"
+   "look": "night",
+   "s0": 1.8,
+   "s1": 1.8,
+   "_why": "0113 is a 16:9 source: a 1080x1920 window needs s >= 1.78"
   },
   "15": {
    "look": "night",
    "s0": 1.8,
    "s1": 1.8,
-   "_why": "0114 is a 3840x2160 source: a 1080x1920 window needs s >= 1.78"
+   "_why": "0114 is a 16:9 source: a 1080x1920 window needs s >= 1.78"
   },
   "16": {
    "look": "night",
    "s0": 1.8,
    "s1": 1.8,
-   "_why": "0114 is a 3840x2160 source: a 1080x1920 window needs s >= 1.78"
+   "_why": "0114 is a 16:9 source: a 1080x1920 window needs s >= 1.78"
   },
   "17": {
    "look": "night",
    "s0": 1.8,
    "s1": 1.8,
-   "_why": "0114 is a 3840x2160 source: a 1080x1920 window needs s >= 1.78"
+   "_why": "0114 is a 16:9 source: a 1080x1920 window needs s >= 1.78"
   },
   "18": {
    "look": "night",
    "s0": 1.8,
    "s1": 1.8,
-   "_why": "0114 is a 3840x2160 source: a 1080x1920 window needs s >= 1.78"
+   "_why": "0114 is a 16:9 source: a 1080x1920 window needs s >= 1.78"
   },
   "19": {
-   "look": "night"
+   "look": "night",
+   "s0": 1.8,
+   "s1": 1.8,
+   "_why": "0115 is a 16:9 source: a 1080x1920 window needs s >= 1.78"
+  },
+  "20": {
+   "look": "cabin"
+  },
+  "21": {
+   "look": "cabin"
+  },
+  "22": {
+   "look": "day"
+  },
+  "23": {
+   "look": "day"
+  },
+  "24": {
+   "look": "day"
+  },
+  "25": {
+   "look": "day"
+  },
+  "26": {
+   "look": "cabin"
+  },
+  "27": {
+   "look": "day"
+  },
+  "28": {
+   "look": "day"
+  },
+  "29": {
+   "look": "day"
+  },
+  "30": {
+   "look": "day",
+   "s1": 1.0
+  },
+  "31": {
+   "look": "day"
   },
   "32": {
+   "look": "day"
+  },
+  "33": {
+   "look": "day"
+  },
+  "34": {
+   "look": "day"
+  },
+  "35": {
+   "look": "day"
+  },
+  "36": {
+   "look": "day"
+  },
+  "37": {
+   "look": "day"
+  },
+  "38": {
    "look": "day",
    "s1": 1.0
   },
   "39": {
-   "look": "day",
-   "s1": 1.0
+   "look": "day"
+  },
+  "40": {
+   "look": "interior"
+  },
+  "41": {
+   "look": "day"
+  },
+  "42": {
+   "look": "day"
   }
  },
  "slips": {
@@ -348,27 +415,27 @@
   {
    "into": 20,
    "type": "sweep",
-   "t0": 57.0,
+   "t0": 56.1,
    "dur": 0.36
   },
   {
-   "into": 28,
+   "into": 27,
    "type": "impact",
    "strength": 0.45
   },
   {
-   "into": 31,
+   "into": 29,
    "type": "sweep",
-   "t0": 108.2,
+   "t0": 88.2,
    "dur": 0.36
   },
   {
-   "into": 34,
+   "into": 32,
    "type": "whip",
    "dir": "left"
   },
   {
-   "into": 35,
+   "into": 33,
    "type": "whip",
    "dir": "right"
   }
@@ -379,11 +446,11 @@
    "title": "NIGHT SHIFT"
   },
   {
-   "t": 57.2,
+   "t": 56.3,
    "title": "FIRST LIGHT"
   },
   {
-   "t": 108.4,
+   "t": 88.4,
    "title": "HOME STRETCH"
   }
  ],
@@ -436,14 +503,14 @@
     "code": "A2",
     "type": "bannerTab",
     "t0": 1.62,
-    "t1": 160.3,
+    "t1": 139.725,
     "p": {
      "name": "SUPERCAR EXPERIENCE",
      "label": "ONE-WAY TICKET · PART 2",
      "enter": "slide",
      "progress": [
       1.62,
-      160.3
+      139.725
      ]
     }
    },
@@ -463,8 +530,8 @@
    {
     "code": "G1-02",
     "type": "chapterSlam",
-    "t0": 57.2,
-    "t1": 59.15,
+    "t0": 56.3,
+    "t1": 58.25,
     "p": {
      "tag": "06:26 · CH 02 / 03",
      "title": "FIRST LIGHT",
@@ -476,8 +543,8 @@
    {
     "code": "G1-03",
     "type": "chapterSlam",
-    "t0": 108.4,
-    "t1": 110.35,
+    "t0": 88.4,
+    "t1": 90.35,
     "p": {
      "tag": "07:32 · CH 03 / 03",
      "title": "HOME STRETCH",
@@ -499,8 +566,8 @@
    {
     "code": "I1",
     "type": "sweep",
-    "t0": 57.0,
-    "t1": 57.36,
+    "t0": 56.1,
+    "t1": 56.46,
     "p": {
      "angle": 16,
      "width": 360
@@ -509,8 +576,8 @@
    {
     "code": "I1",
     "type": "sweep",
-    "t0": 108.2,
-    "t1": 108.56,
+    "t0": 88.2,
+    "t1": 88.56,
     "p": {
      "angle": 16,
      "width": 360
@@ -531,8 +598,8 @@
    {
     "code": "D1-NAP",
     "type": "clockStamp",
-    "t0": 41.7,
-    "t1": 45.3,
+    "t0": 38.7,
+    "t1": 42.3,
     "p": {
      "x": 54,
      "y": 300,
@@ -545,58 +612,58 @@
    {
     "code": "LOCK",
     "type": "v2lock",
-    "t0": 95.0,
-    "t1": 96.6,
+    "t0": 79.8,
+    "t1": 81.4,
     "p": {
      "track": "mclaren",
      "kicker": "LOCKED ON",
      "name": "MCLAREN 600LT",
-     "acquire": 95.05,
-     "exit": 96.25,
+     "acquire": 79.85,
+     "exit": 81.05,
      "side": "above"
     }
    },
    {
     "code": "STRIP-1",
     "type": "driveStrip",
-    "t0": 111.8,
-    "t1": 119.4,
+    "t0": 91.8,
+    "t1": 99.4,
     "p": {
      "start": "00:00:00",
      "place": "SOMEWHERE IN NEVADA",
      "heading": 0,
      "route_text": "SEATTLE → VEGAS",
      "range": [
-      111.8,
-      119.4
+      91.8,
+      99.4
      ],
-     "exit": 118.95,
+     "exit": 98.95,
      "hide_g": true
     }
    },
    {
     "code": "STRIP-2",
     "type": "driveStrip",
-    "t0": 137.6,
-    "t1": 145.2,
+    "t0": 116.32,
+    "t1": 123.92,
     "p": {
      "start": "00:00:00",
      "place": "INTO LAS VEGAS",
      "heading": 0,
      "route_text": "SEATTLE → VEGAS",
      "range": [
-      137.6,
-      145.2
+      116.32,
+      123.92
      ],
-     "exit": 144.75,
+     "exit": 123.47,
      "hide_g": true
     }
    },
    {
     "code": "PLACE-2",
     "type": "v2place",
-    "t0": 145.6,
-    "t1": 148.6,
+    "t0": 124.32,
+    "t1": 127.32,
     "p": {
      "x": 54,
      "y": 300,
@@ -607,8 +674,8 @@
    {
     "code": "END",
     "type": "v2end",
-    "t0": 160.3,
-    "t1": 165.7,
+    "t0": 139.725,
+    "t1": 145.125,
     "p": {
      "tagline": "A RIDE OF A LIFETIME.",
      "cta": "TEXT OR DM TO BOOK",
@@ -641,35 +708,35 @@
  "tracks": {
   "_about": "lock-on targets: shot, output frame range f0-f1, anchor frame (sharp, mid-shot) and the box x,y,w,h on it (output px). Tracked with lib/track_mid.py both ways from the anchor.",
   "mclaren": {
-   "_todo": "phase B: anchor frame and box from the mezzanine (shot 28, 0119 64.5-68.1, doors up)",
-   "shot": 28,
-   "f0": 2847,
-   "f1": 2895,
-   "anchor": 2865,
+   "shot": 27,
+   "f0": 2392,
+   "f1": 2440,
+   "anchor": 2410,
    "box": [
-    400,
-    700,
-    320,
-    260
-   ]
+    60,
+    950,
+    600,
+    680
+   ],
+   "_why": "anchor 0119 77.0 s: the McLaren behind him at the pump, doors up"
   }
  },
  "music": {
-  "_about": "THE MUSIC. The bed is ORIGINAL (lib/music.py, synthesised here, re-timed to this cut) unless a track is dropped at audio/music.wav. To switch music OFF: set music.enabled to false here, or run MUSIC=0 ./render.sh. The no-music master is exported every time anyway. To use another track: put it at audio/music.wav (48 kHz stereo), set bpm / downbeat0 / offset; the mixer ducks it under speech and tape-stops it at tapeStop before the end card hit. The placeholder bed: 104.73 BPM, first downbeat 0.633 s, drop 119.8 s, end card 174.8 s.",
+  "_about": "THE MUSIC. The bed is ORIGINAL (lib/music.py, synthesised here, re-timed to this cut) unless a track is dropped at audio/music.wav. To switch music OFF: set music.enabled to false here, or run MUSIC=0 ./render.sh. The no-music master is exported every time anyway. To use another track: put it at audio/music.wav (48 kHz stereo), set bpm / downbeat0 / offset; the mixer ducks it under speech and tape-stops it at tapeStop before the end card hit. The placeholder bed: Part 1's tempo 104.73 BPM (kept for the series), first downbeat 2.225 s, drop 91.6 s (STRIP-1), end card 139.725 s (21 bars after the drop).",
   "file": "audio/music.wav",
-  "bpm": 103.4908,
-  "downbeat0": 0.2857,
+  "bpm": 104.7273,
+  "downbeat0": 2.225,
   "offset": 0.0,
   "tapeStop": [
-   159.14,
-   159.72
+   138.579,
+   139.152
   ],
   "lufs": -20.0,
-  "duckDb": -11.0,
+  "duckDb": -14.0,
   "enabled": true
  },
  "audio": {
-  "dialogFilter": "highpass=f=80:poles=2,afftdn=nr=8:nf=-45:tn=1,acompressor=threshold=-26dB:ratio=2:attack=12:release=180:makeup=1",
+  "dialogFilter": "highpass=f=90:poles=2,afftdn=nr=10:nf=-42:tn=1,equalizer=f=300:t=q:w=1.2:g=-2,equalizer=f=3500:t=q:w=1.0:g=2.5,deesser=i=0.4:m=0.5:f=0.5,acompressor=threshold=-24dB:ratio=3:attack=10:release=150:makeup=2",
   "dialogLufs": -16.0,
   "edgeFade": 0.012,
   "trims": {
@@ -677,55 +744,47 @@
   },
   "extraDialog": [],
   "natLufs": -24.0,
-  "natDuckDb": -10.0,
+  "natDuckDb": -12.0,
   "nat": [
-   {
-    "src": "0119",
-    "a": 64.5,
-    "b": 68.1,
-    "t": 94.6,
-    "lufs": -24,
-    "why": "the McLaren at the pump, doors up (lock-on); no transcribed speech 59-70 s"
-   },
    {
     "src": "0121",
     "a": 120.0,
     "b": 128.0,
-    "t": 111.6,
+    "t": 91.6,
     "lufs": -20,
     "why": "rear-deck cam: the engine; 0121 has no transcribed speech or lyrics after 32.6 s"
    },
    {
     "src": "0121",
-    "a": 40.0,
-    "b": 43.0,
-    "t": 119.6,
+    "a": 88.0,
+    "b": 91.0,
+    "t": 99.6,
     "lufs": -26,
-    "why": "rear-deck cam, under his VO"
+    "why": "rear-deck cam on the road, under his VO"
    },
    {
     "src": "0121",
     "a": 150.0,
-    "b": 153.0,
-    "t": 122.6,
+    "b": 152.5,
+    "t": 102.6,
     "lufs": -26,
-    "why": "rear-deck cam, under his VO"
+    "why": "rear-deck cam on the road, under his VO"
    },
    {
     "src": "0121",
     "a": 180.0,
-    "b": 183.0,
-    "t": 125.6,
+    "b": 182.5,
+    "t": 105.1,
     "lufs": -26,
-    "why": "rear-deck cam, under his VO"
+    "why": "rear-deck cam on the road, under his VO"
    },
    {
     "src": "0121",
-    "a": 60.0,
-    "b": 63.0,
-    "t": 128.6,
+    "a": 192.0,
+    "b": 194.5,
+    "t": 107.6,
     "lufs": -26,
-    "why": "rear-deck cam, under his VO"
+    "why": "rear-deck cam on the road, under his VO"
    }
   ],
   "sfx": {
@@ -737,7 +796,11 @@
    "attack": 0.06,
    "release": 0.4,
    "bridge": 0.6
-  }
+  },
+  "edgeFadeOut": 0.1,
+  "minVoiceOverBedDb": 10.0,
+  "dialogFilterPart1": "highpass=f=80:poles=2,afftdn=nr=8:nf=-45:tn=1,acompressor=threshold=-26dB:ratio=2:attack=12:release=180:makeup=1",
+  "_aboutDialogFilter": "fix B (Omarie, 6 Oct): high-pass 90 Hz, gentle FFT noise reduction (nr 10 dB), -2 dB at 300 Hz, +2.5 dB at 3.5 kHz, de-esser, 3:1 compressor; then each piece is levelled to dialogLufs. dialogFilterPart1 is the old chain (kept for the before/after numbers). edgeFadeOut: the voice fades over 100 ms at the end of its >= 350 ms tail (fix A)."
  },
  "sfx": {
   "files": {
@@ -768,6 +831,127 @@
   ]
  },
  "blurs": [],
- "speedo": [],
+ "speedo": [
+  {
+   "shot": 0,
+   "box": [
+    290,
+    940,
+    220,
+    170
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0116 cluster behind the wheel"
+  },
+  {
+   "shot": 9,
+   "box": [
+    180,
+    980,
+    200,
+    170
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0112 cluster (parked)"
+  },
+  {
+   "shot": 10,
+   "box": [
+    180,
+    980,
+    200,
+    170
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0112 cluster (parked)"
+  },
+  {
+   "shot": 11,
+   "box": [
+    650,
+    850,
+    330,
+    260
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0113 night cluster"
+  },
+  {
+   "shot": 12,
+   "box": [
+    650,
+    850,
+    330,
+    260
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0113 night cluster"
+  },
+  {
+   "shot": 13,
+   "box": [
+    650,
+    850,
+    330,
+    260
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0113 night cluster"
+  },
+  {
+   "shot": 14,
+   "box": [
+    650,
+    850,
+    330,
+    260
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0113 night cluster"
+  },
+  {
+   "shot": 20,
+   "box": [
+    290,
+    940,
+    220,
+    170
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0116 cluster behind the wheel"
+  },
+  {
+   "shot": 21,
+   "box": [
+    290,
+    940,
+    220,
+    170
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0116 cluster behind the wheel"
+  },
+  {
+   "shot": 26,
+   "box": [
+    40,
+    1090,
+    230,
+    170
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0119 cluster, digits readable"
+  }
+ ],
  "_aboutSpeedo": "speedo: the McLaren's own speedometer on every cabin-cam shot (its digits are readable at phone size), blurred in a static feathered box per shot (no speed on screen). blurs: licence plates are not blurred in this vlog (Omarie, 6 Oct). PART 2: filled in phase B from the mezzanines (every cabin-cam shot)."
 }

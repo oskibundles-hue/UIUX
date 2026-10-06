@@ -17,7 +17,8 @@ FIX = {
     '0105': [(['it.', 'To', 'In', '-N', '-Out.'], ['it', 'to', 'In-N-Out.'], 'medium.en: "We finally made it to In-N-Out." (one sentence; the restaurant\'s spelling)')],
     '0118': [(['Wow,'], [], 'medium.en does not hear "Wow" ("It\'s been pretty fire, really nice scenery"): not captioned'),
              (['trip'], ['Trip'], 'sentence start')],
-    '0112': [(['We', 'are', 'gassed', 'up,'], ['We', 'are', 'gassed', 'up,'], 'both models')],
+    '0112': [(['We', 'are', 'gassed', 'up,'], ['We', 'are', 'gassed', 'up,'], 'both models'),
+             (['here,', 'and'], ['here.'], 'fix A tail: medium.en does not hear the trailing "and" (a breath): not captioned')],
     '0111': [(['It\'s', 'a', 'McLaren'], ['It\'s', 'a', 'McLaren.'], 'punctuation'),
              (['like', 'that\'s'], ['like,', 'that\'s'], 'punctuation')],
 }   # PART2_FIX: every piece in the cut was re-run with medium.en (beam 5); only pieces whose words both models share are in the cut
@@ -76,7 +77,8 @@ def main():
             used.append(dict(clip=d['src'], at=ov[0][0], whisper='(piece rewritten)', shown=' '.join(w[2] for w in ov),
                              why='wording settled by the lead (6 Oct); timings from medium.en / small.en, see OVERRIDE'))
         else:
-            ws = apply_fix(d['src'], words_of(d['src'], a, d['out']), used)
+            # fix A: the out-point sits >= 350 ms after the last word; captions stop at that word (make_edl.py tail)
+            ws = apply_fix(d['src'], words_of(d['src'], a, d.get('last_word_end', d['out']) + 0.01), used)
             pin = PIN.get((d['src'], d['in']))
             if pin:
                 ws[0][0], ws[0][1] = pin

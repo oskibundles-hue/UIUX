@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 """
-part2 copy (One-way ticket, Part 2): re-timed again, see the constants below (part2). part1 copy (One-way ticket, Part 1): the same bed re-timed to this cut. CH1 9.6, the plane 43.4-48.4 (no kick, the
+part2 copy (One-way ticket, Part 2): Part 1's tempo (104.727 BPM) kept for the series; the cut is re-timed to it (constants below, part2). part1 copy (One-way ticket, Part 1): the same bed re-timed to this cut. CH1 9.6, the plane 43.4-48.4 (no kick, the
 engines breathe), CH2 53.8, the car arrives 78.9 (lift), the build from 104.6, the DROP on the vibes montage 119.8
 through both HUD strips, the breakdown from 146.9 (Oregon, the fuel stop), tape stop, end card 174.8. DROP and END are
 24 bars apart (104.73 BPM), so both land on a downbeat. The rally notes below describe the original timing.
@@ -37,24 +37,28 @@ sys.path.insert(0, HERE)
 import synth as S  # noqa: E402
 from synth import SR, n_of, midi, db  # noqa: E402
 
-DROP, END = 111.6, 160.3             # part2: the DROP on STRIP-1 (rear-deck cam, the engine), END = end card
-BAR = (END - DROP) / 21.0            # part2: 2.3190 s (103.49 BPM), 21 bars
-BPM = 240.0 / BAR                    # 105.11
+BAR = 55.0 / 24.0                    # Part 1's tempo, kept for the series (Omarie, 6 Oct): 2.29167 s, 104.727 BPM
+DROP = 91.6                          # part2: the DROP on STRIP-1 (rear-deck cam, the engine); the cut is timed to the bar
+END = DROP + 21 * BAR                # part2: end card, 21 bars after the drop (the cut is re-timed so it lands here)
+import json as _json                 # part2: the cut and the bed must agree (tools/make_edl.py writes edl.music)
+_M = _json.load(open(os.path.join(os.path.dirname(HERE), 'data', 'edl.json')))['music']
+assert abs(_M['drop'] - DROP) < 1e-3 and abs(_M['end'] - END) < 2e-3 and abs(_M['bar'] - BAR) < 1e-9, (_M, DROP, END)
+BPM = 240.0 / BAR                    # 104.727 (Part 1)
 BEAT = BAR / 4
 STEP = BEAT / 4
-G0 = DROP - 48 * BAR                 # part2: first downbeat (bar 0) = 0.286 s
+G0 = DROP - 39 * BAR                 # part2: first downbeat (bar 0) = 2.225 s
 TS0 = END - 0.5 * BAR                # tape stop 168.878 -> 169.449
 TS1 = END - 0.25 * BAR
 SWING = 0.11 * STEP                  # off-16ths land 11 % of a 16th late (~16 ms): a light shuffle
 CH1 = 7.8                            # part2
-CHAPTERS = (7.8, 57.0, 108.2)        # part2: risers / swells into every chapter change
-AIR = (37.3, 41.5)                   # part2: the night road (no kick: a breath before the 01:29 stamp)
-LIFT = (90.1, 98.2)                 # part2: the gas station in sight, the lock-on
-SOFT = (98.2, 98.2)
-BUILD0 = 98.2                       # part2: "the last bit of the drive" -> camera on the rear deck
-BREAK = 145.4                        # part2: arrival at Supercar Experience
-LATE = 146.5
-KICKBACK = 154.8
+CHAPTERS = (7.8, 56.1, 88.2)        # part2: risers / swells into every chapter change
+AIR = (34.3, 38.5)                   # part2: the night road (no kick: a breath before the 01:29 stamp)
+LIFT = (73.5, 81.6)                  # part2: the gas station in sight, the lock-on
+SOFT = (81.6, 81.6)
+BUILD0 = 81.6                       # part2: "the last bit of the drive" -> camera on the rear deck
+BREAK = 124.12                       # part2: arrival at Supercar Experience
+LATE = 125.2
+KICKBACK = 134.2
 GAP_OPEN = (CH1 - STEP, CH1)         # 1/16 silence before CH1
 GAP_DROP = (DROP - 0.5 * BEAT, DROP) # 1/8-bar silence before the drop
 
@@ -203,7 +207,7 @@ def build(dur, seed=23):
             sec = section(t)
             if sec not in ('open', 'lift', 'drop', 'verdict', 'verse'):
                 continue
-            if sec == 'verse' and not (57.0 <= t < LIFT[0]):   # part2: from CH2
+            if sec == 'verse' and not (56.1 <= t < LIFT[0]):   # part2: from CH2
                 continue
             if sec == 'verdict' and k % 2:
                 continue
@@ -218,8 +222,8 @@ def build(dur, seed=23):
     MOTIF = [72, None, 68, None, 67, 65, None, None, 68, None, 65, None, 63, None, 60, None]
     def lead_where(t):
         if t < CH1: return 0.20
-        if 57.0 <= t < 67.2: return 0.11           # part2: first light (under dialog, ducked)
-        if 94.6 <= t < 98.2: return 0.18          # part2: the lock-on at the pump
+        if 56.1 <= t < 64.9: return 0.11           # part2: first light (under dialog, ducked)
+        if 78.0 <= t < 81.6: return 0.18          # part2: the lock-on at the pump
         if DROP <= t < BREAK: return 0.26          # the drop: the hook, answered an octave up on the second pass
         if LATE <= t < TS0: return 0.14            # the last line
         return 0.0

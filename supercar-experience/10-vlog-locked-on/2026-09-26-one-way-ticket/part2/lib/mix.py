@@ -3,8 +3,8 @@
 mix.py -- the sound of the rally vlog v2: dialog + nat + music + Locked-On SFX -> -14 LUFS masters.
 
 Buses (48 kHz stereo float):
-  dialog  every EDL dialog piece from the mezzanine audio: ffmpeg highpass 80 Hz -> afftdn (gentle, noise
-          tracking) -> acompressor (2:1, slow) on the piece with 0.6 s of padding, then cut to the piece, summed
+  dialog  every EDL dialog piece from the mezzanine audio through config `audio.dialogFilter` (part2, fix B: highpass
+          90 Hz -> afftdn (gentle) -> -2 dB at 300 Hz -> +2.5 dB at 3.5 kHz -> de-esser -> 3:1 compressor) on the piece with 0.6 s of padding, then cut to the piece, summed
           to mono (centred), levelled per piece to config `audio.dialogLufs` (BS.1770 integrated, measured
           here), 12 ms edge fades. Per-piece trims: config `audio.trims`.
   nat     the EDL's nat/extra audio and the B-roll shots' own sound (config `audio.nat`), each levelled to its
@@ -133,6 +133,11 @@ def mezz_audio(src, a, b, af=None):
             m = re.match(r'^(\w+?)_(?:audio_)?([\d.]+)-([\d.]+)\.(mov|wav)$', fn)
             if m and m.group(1) == src and float(m.group(2)) - 0.03 <= a and b <= float(m.group(3)) + 0.03:
                 cands.append((os.path.join(d, fn), float(m.group(2))))
+    # part2: fall back to the camera's own AAC stream (paths.aud/<clip>.m4a, copied by the engine's ingest, the same audio
+    # the mezzanines carry) so a dialog tail can run past the fetched picture span (fix A L-cuts)
+    aud = os.path.join(P.get('aud', ''), f'{src}.m4a')
+    if not cands and P.get('aud') and os.path.exists(aud):
+        cands.append((aud, 0.0))
     if not cands:
         raise SystemExit(f'no audio for {src} {a}-{b}')
     path, t0 = cands[0]
@@ -202,7 +207,8 @@ def build_dialog(report):
         L = lufs(np.stack([m, m], 1))                  # loudness of the piece as placed (centred mono, L = R = m)
         tgt = A['dialogLufs'] + tr.get('gainDb', 0.0) + d.get('gainDb', 0.0)
         g = float(np.clip(tgt - L, -12, 18))
-        m = fades(m * 10 ** (g / 20), tr.get('fin', A['edgeFade']), tr.get('fout', A['edgeFade']))
+        # part2 (fix A): the voice fades out over `edgeFadeOut` (80-120 ms) after a tail of >= 350 ms past the last word
+        m = fades(m * 10 ** (g / 20), tr.get('fin', A['edgeFade']), tr.get('fout', A.get('edgeFadeOut', A['edgeFade'])))
         st = np.stack([m, m], 1)
         place(bus, st, t)
         spans.append([t, t + (b - a)])
@@ -406,7 +412,7 @@ def main():
     def _dialog():
         r = {'dialog': []}; d, sp = build_dialog(r)
         return d, dict(spans=sp, dialog=r['dialog'])
-    dialog, ex, hit = cached_bus('dialog', [EDL['dialog'], A.get('extraDialog', []), A['trims'], A['dialogFilter'], A['dialogLufs'], A['edgeFade']], _dialog)
+    dialog, ex, hit = cached_bus('dialog', [EDL['dialog'], A.get('extraDialog', []), A['trims'], A['dialogFilter'], A['dialogLufs'], A['edgeFade'], A.get('edgeFadeOut')], _dialog)
     spans = [tuple(x) for x in ex['spans']]; spans = [list(x) for x in spans]; rep['dialog'] = ex['dialog']
     T['dialog'] = f'{time.time() - t0:.1f}s' + (' (cached)' if hit else ''); t0 = time.time()
     dk = A['duck']
@@ -450,9 +456,13 @@ def main():
         dm = 20 * math.log10(span_rms(dialog, i0, i1) + 1e-9)
         mu = 20 * math.log10(span_rms(music, i0, i1) + 1e-9)
         un = 20 * math.log10(span_rms(music_raw, i0, i1) + 1e-9)
+        bd = 20 * math.log10(span_rms(music + nat, i0, i1) + 1e-9)
         chk.append(dict(i=d['i'], t=d['t'], dialog_db=round(dm, 1), music_db=round(mu, 1), music_unducked_db=round(un, 1),
-                        duck_db=round(mu - un, 1), dialog_over_music_db=round(dm - mu, 1)))
+                        duck_db=round(mu - un, 1), dialog_over_music_db=round(dm - mu, 1), dialog_over_bed_db=round(dm - bd, 1)))
     rep['duck_check'] = chk
+    # part2 (fix B): the voice must sit >= audio.minVoiceOverBedDb above music + nat during speech (checked by the gates)
+    rep['voice_over_bed'] = dict(min_music=min(c['dialog_over_music_db'] for c in chk), min_bed=min(c['dialog_over_bed_db'] for c in chk),
+                                 median_music=float(np.median([c['dialog_over_music_db'] for c in chk])), need=A.get('minVoiceOverBedDb', 10.0))
     for nm, x in (('stem_nat', nat), ('stem_music', music), ('stem_sfx', sfx)):
         write_wav24(os.path.join(WORK, nm + '.wav'), x * 0.5)
     # meter data for the quote card (Omarie's pick)

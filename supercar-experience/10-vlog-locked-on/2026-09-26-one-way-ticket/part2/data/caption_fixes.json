@@ -28,6 +28,13 @@
   "why": "both models"
  },
  {
+  "clip": "0112",
+  "at": 58.02,
+  "whisper": "here, and",
+  "shown": "here.",
+  "why": "fix A tail: medium.en does not hear the trailing \"and\" (a breath): not captioned"
+ },
+ {
   "clip": "0118",
   "at": 61.92,
   "whisper": "trip",

@@ -408,6 +408,14 @@ def st_gates(A):
         m = json.load(open(mj))['master']
         out += G.loud_gate('mix', m['lufs'], m['true_peak_db'], tp_max=-1.9)       # the limiter ceiling is -2.0 before AAC
         out += G.loud_gate('mix (no music)', m['nomusic_lufs'], m['nomusic_true_peak_db'], tp_max=-1.9)
+        vob = json.load(open(mj)).get('voice_over_bed')     # part2 (fix B): voice >= 10 dB over music + nat in speech
+        if vob and vob['min_bed'] < vob['need']:
+            out.append(dict(level='error', code='VOICE', what=f"voice over music+nat {vob['min_bed']} dB < {vob['need']} dB under a dialog piece (.work/mix.json duck_check)"))
+        elif vob:
+            out.append(dict(level='check', code='VOICE', what=f"voice over music: min {vob['min_music']} dB, median {vob['median_music']:.1f} dB; over music+nat: min {vob['min_bed']} dB"))
+    sys.path.insert(0, os.path.join(ROOT, 'tools'))           # part2 (fix A): every dialog out-point >= 300 ms after its last word
+    import tail_check
+    out += tail_check.gate_items()
     scene = json.loads(open(os.path.join(WORK, 'scene.js')).read()[len('window.SCENE='):-2])
     out += G.quote_gate(scene['comps'], CAPS)
     json.dump(out, open(os.path.join(WORK, 'gates.json'), 'w'), indent=1)
