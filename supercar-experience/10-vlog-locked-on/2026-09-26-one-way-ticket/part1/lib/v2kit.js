@@ -1,5 +1,5 @@
 /* v2kit.js -- this vlog's own components, built with the vlog kit's helpers (lib/sekit.js, SEK.helpers) in the
- * same Locked-On language: black plates with the horizontal 78/22 stripe cap, gold #FBD101 as the only accent,
+ * same Locked-On language: black plates with the horizontal 78/22 stripe cap, gold #FF4F16 as the only accent,
  * Bebas + Michroma, glyph-level kinetic type, pure functions of t (no timers, no CSS animation, no randomness).
  *
  *   SEK.v2hook      frame-0 hook panel (eyebrow, big title, sub line, SE lockup), masked exit
@@ -19,7 +19,7 @@
           padRect, pingSet, pingDraw, routeGeom, f2, px, GOLD, SAFE, fitSize, sigSvg, liveDot, liveDotAt } = H_;
   const E = KT.ease, P = KT.p, cl = KT.cl, lerp = KT.lerp;
   const FPS = 30000 / 1001;
-  const LOGO = '../../02-logos/png/';
+  const LOGO = '../../../02-logos/png/';
   const centreX = (fam, size, text, cx, ls) => cx - ink(fam, size, text, ls).w / 2;
   let CTX = null;
   SEK.v2init = ctx => { CTX = ctx; };
@@ -33,7 +33,7 @@
     el('div', 'a', clip, `width:${p.w}px;height:${p.h}px;background:#000`);
     const inner = el('div', 'a', clip, `width:${p.w}px;height:${p.h}px`);
     const stripe = el('div', 'a stripe', root, `left:${p.x}px;top:${p.y}px;width:${p.w}px;height:8px`);
-    const redge = el('div', 'a', root, `left:${p.x}px;top:0;width:${p.w}px;height:3px;background:${GOLD};box-shadow:0 0 14px 3px rgba(251,209,1,.55);opacity:0`);
+    const redge = el('div', 'a', root, `left:${p.x}px;top:0;width:${p.w}px;height:3px;background:${GOLD};box-shadow:0 0 14px 3px rgba(255,79,22,.55);opacity:0`);
     const sweep = el('div', 'a', root, `left:${p.x}px;top:${p.y}px;width:${p.w}px;height:8px;overflow:hidden`);
     const sweepBar = el('div', 'a', sweep, 'width:120px;height:8px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.95),rgba(255,255,255,0))');
     const X = 36;
@@ -52,9 +52,9 @@
     clip.style.height = px(H); clip.firstChild.style.height = px(H); inner.style.height = px(H);
     return { code: cfg.code, H, render(t) {
       const on = t >= cfg.t0 && t < p.exit + 0.42; show(root, on); if (!on) return;
-      const g1 = KT.glint(l1.g, t, { start: 0.28, dur: 0.5, base: '#FFFFFF', warm: '#FFF2B0', hot: GOLD, width: 0.2 * l1.g.W, angle: 106 });
-      l1.w.style.filter = g1 > 0 ? `drop-shadow(0 0 ${(10 * g1).toFixed(2)}px rgba(251,209,1,${(.35 * g1).toFixed(3)}))` : 'none';
-      glint(l2, t, 0.85, 0.45, { base: GOLD, warm: '#FFE866', hot: '#FFFFFF', w: 0.18, glow: 8 });
+      const g1 = KT.glint(l1.g, t, { start: 0.28, dur: 0.5, base: '#FFFFFF', warm: '#FFD9C9', hot: GOLD, width: 0.2 * l1.g.W, angle: 106 });
+      l1.w.style.filter = g1 > 0 ? `drop-shadow(0 0 ${(10 * g1).toFixed(2)}px rgba(255,79,22,${(.35 * g1).toFixed(3)}))` : 'none';
+      glint(l2, t, 0.85, 0.45, { base: GOLD, warm: '#FFB08F', hot: '#FFFFFF', w: 0.18, glow: 8 });
       const qs = P(t, 1.0, 1.4), sw = qs > 0 && qs < 1;
       sweepBar.style.display = sw ? 'block' : 'none';
       sweepBar.style.transform = `translateX(${(-120 + (p.w + 240) * E.inOutCubic(qs)).toFixed(2)}px)`;
@@ -106,7 +106,7 @@
     const mask = el('div', 'a', holder, `left:0;top:${p.y - 40}px;width:1080px;height:${cap + 80}px;overflow:hidden`);
     const w = line(mask, 'Bebas', S, p.word, cx - tw / 2, 40, p.color);
     const stripe = el('div', 'a stripe', root, `left:${cx - tw / 2}px;top:${p.y + cap + 28}px;width:${tw}px;height:12px`);
-    const flash = el('div', 'a', root, `left:${cx - tw / 2 - 60}px;top:${p.y - 60}px;width:${tw + 120}px;height:${cap + 120}px;background:radial-gradient(ellipse at center,rgba(255,246,200,.6) 0%,rgba(251,209,1,.2) 40%,rgba(251,209,1,0) 70%);opacity:0`);
+    const flash = el('div', 'a', root, `left:${cx - tw / 2 - 60}px;top:${p.y - 60}px;width:${tw + 120}px;height:${cap + 120}px;background:radial-gradient(ellipse at center,rgba(255,224,210,.6) 0%,rgba(255,79,22,.2) 40%,rgba(255,79,22,0) 70%);opacity:0`);
     return { code: cfg.code, render(t) {
       const on = t >= cfg.t0 && t < p.exit + 0.3; show(root, on); if (!on) return;
       const t0 = cfg.t0, th = t0 + 0.12;
@@ -292,7 +292,7 @@
       const bar = el('div', 'a', wrap, `left:0;top:0;width:6px;height:${rowH}px;background:${GOLD}`);
       const ix = line(wrap, 'Michroma', 16, idx, 22, (rowH - ink('Michroma', 16, 'H').aA) / 2, GOLD, { split: false });
       const tx = line(wrap, 'Bebas', p.size, it.w, 58, 22, '#fff');
-      const fl = el('div', 'a', wrap, `width:${W}px;height:${rowH}px;background:linear-gradient(90deg,rgba(255,246,200,.75),rgba(251,209,1,.35) 40%,rgba(251,209,1,0));opacity:0`);
+      const fl = el('div', 'a', wrap, `width:${W}px;height:${rowH}px;background:linear-gradient(90deg,rgba(255,224,210,.75),rgba(255,79,22,.35) 40%,rgba(255,79,22,0));opacity:0`);
       return { wrap, bg, tx, fl, t: it.t, W };
     });
     return { code: cfg.code, render(t) {
@@ -372,7 +372,7 @@
     const e = cfg.p, WIPE = 0.118;
     const root = el('div', 'a', stageEl(), 'width:1080px;height:1920px');
     const pnl = el('div', 'a', root, 'width:1080px;height:1920px;background:#000');
-    const wipeStripe = el('div', 'a', root, 'width:1080px;height:160px;background:linear-gradient(180deg,rgba(251,209,1,.34) 0,rgba(251,209,1,.10) 30%,rgba(251,209,1,0) 100%);opacity:0');
+    const wipeStripe = el('div', 'a', root, 'width:1080px;height:160px;background:linear-gradient(180deg,rgba(255,79,22,.34) 0,rgba(255,79,22,.10) 30%,rgba(255,79,22,0) 100%);opacity:0');
     const body = el('div', 'a', root, 'width:1080px;height:1920px;transform-origin:540px 900px');
     const lw = 400, lh = lw * 683 / 1148;
     const logoW = el('div', 'a', body, `left:${540 - lw / 2}px;top:352px;width:${lw}px;height:${lh.toFixed(2)}px`);

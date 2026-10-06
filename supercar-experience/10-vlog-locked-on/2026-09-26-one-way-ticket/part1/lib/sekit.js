@@ -14,7 +14,7 @@
  * at t (clip mapping + Ken Burns applied) or null; CTX.clip(t) -> source clip seconds (or null on a non-clip plate);
  * CTX.data(name) -> a data table (meter envelopes); CTX.dur -> scene length.
  *
- * Look: gold #FBD101 is the only accent; black plates, white type; the 78/22 gold/white stripe is ALWAYS
+ * Look: gold #FF4F16 is the only accent; black plates, white type; the 78/22 gold/white stripe is ALWAYS
  * horizontal; Bebas (display) + Michroma (labels). Text stays inside the 9:16 safe area
  * (x 54-907, y 269-1536) except the SE banner, which lives on the right edge between y 269 and 1056.
  */
@@ -25,10 +25,10 @@
   // rally-v2 copy: the nominal frame a (sub-frame, motion-blur) sample belongs to. Discrete state (which caption page,
   // which label text) is decided on this, so every sample of a frame agrees and a swap is a hard cut on a frame boundary.
   const frameN = t => Math.round(t * FPS + 1e-9), frameT = t => frameN(t) / FPS;
-  const GOLD = '#FBD101';
+  const GOLD = '#FF4F16';
   const SAFE = { x0: 54, y0: 269, x1: 907, y1: 1536 };
   const BANNER = { y0: 269, y1: 1056 };
-  const LOGO = '../../02-logos/png/';
+  const LOGO = '../../../02-logos/png/';
   // CSS masks need CORS, which file:// pages do not have: build.py passes the two logo PNGs as data URIs
   const maskUrl = f => ((window.KITDATA || {}).logos || {})[f] || (LOGO + f);
   let stage = null, CTX = null;
@@ -86,9 +86,9 @@
   // gold glint painted into glyphs + a warm bloom (strength returned)
   function glint(ln, t, start, dur = 0.5, o = {}) {
     if (!ln.g) return 0;
-    const g = KT.glint(ln.g, t, { start, dur, base: o.base || '#FFFFFF', warm: o.warm || '#FFF2B0', hot: o.hot || GOLD,
+    const g = KT.glint(ln.g, t, { start, dur, base: o.base || '#FFFFFF', warm: o.warm || '#FFD9C9', hot: o.hot || GOLD,
       width: (o.w || 0.22) * ln.g.W, angle: 106 });
-    ln.w.style.filter = g > 0 ? `drop-shadow(0 0 ${(o.glow || 9) * g}px rgba(251,209,1,${(.32 * g).toFixed(3)}))` : 'none';
+    ln.w.style.filter = g > 0 ? `drop-shadow(0 0 ${(o.glow || 9) * g}px rgba(255,79,22,${(.32 * g).toFixed(3)}))` : 'none';
     return g;
   }
   // mask-rise a whole line (the text slides up inside its mask)
@@ -115,7 +115,7 @@
     const sh = o.stripe ?? 6;
     const stripe = el('div', 'a stripe', root, `left:${x}px;top:${y}px;width:${w}px;height:${sh}px`);
     const edge = el('div', 'a edge', root, `left:${x}px;top:${y - 7}px;height:${sh + 14}px;opacity:0`);
-    const redge = el('div', 'a', root, `left:${x}px;top:0;width:${w}px;height:3px;background:${GOLD};box-shadow:0 0 12px 3px rgba(251,209,1,.5);opacity:0`);
+    const redge = el('div', 'a', root, `left:${x}px;top:0;width:${w}px;height:3px;background:${GOLD};box-shadow:0 0 12px 3px rgba(255,79,22,.5);opacity:0`);
     return { root, shadow, clip, bg, inner, stripe, edge, redge, x, y, w, h, fromRight: !!o.fromRight };
   }
   function panelAt(pn, t, ts, tx, o = {}) {
@@ -142,7 +142,7 @@
   // pulsing live dot with a ripple ring (period T)
   function liveDot(parent, cx, cy, r = 6) {
     const ring = el('div', 'a', parent, `left:${cx - r}px;top:${cy - r}px;width:${2 * r}px;height:${2 * r}px;border-radius:50%;border:2px solid ${GOLD};box-sizing:border-box`);
-    const dot = el('div', 'a', parent, `left:${cx - r}px;top:${cy - r}px;width:${2 * r}px;height:${2 * r}px;border-radius:50%;background:${GOLD};box-shadow:0 0 8px rgba(251,209,1,.7)`);
+    const dot = el('div', 'a', parent, `left:${cx - r}px;top:${cy - r}px;width:${2 * r}px;height:${2 * r}px;border-radius:50%;background:${GOLD};box-shadow:0 0 8px rgba(255,79,22,.7)`);
     return { ring, dot };
   }
   function liveDotAt(d, t, t0, T = 1.2, amp = 1) {
@@ -236,7 +236,7 @@
       if (gq > 0 && gq < 1) {
         const gx = -60 + (lw + 120) * E.inOutCubic(gq);
         gl.style.opacity = 1;
-        gl.style.background = `linear-gradient(106deg, rgba(251,209,1,0) ${gx - 46}px, rgba(255,242,176,.95) ${gx - 12}px, #FFFFFF ${gx}px, rgba(251,209,1,.95) ${gx + 14}px, rgba(251,209,1,0) ${gx + 48}px)`;
+        gl.style.background = `linear-gradient(106deg, rgba(255,79,22,0) ${gx - 46}px, rgba(255,217,201,.95) ${gx - 12}px, #FFFFFF ${gx}px, rgba(255,79,22,.95) ${gx + 14}px, rgba(255,79,22,0) ${gx + 48}px)`;
       } else gl.style.opacity = 0;
       liveDotAt(dot, t, cfg.t0 + 0.2, 1.2);
       tile.style.opacity = 0;
@@ -265,10 +265,10 @@
     // progress rail on the inner (left) edge
     const r0 = 24 + ih + 48, r1 = p.h - 18;
     const rail = el('div', 'a', inner, `left:12px;top:${r0}px;width:2px;height:${r1 - r0}px;background:rgba(255,255,255,.22)`);
-    const fill = el('div', 'a', inner, `left:12px;top:${r0}px;width:2px;height:${r1 - r0}px;background:${GOLD};transform-origin:50% 0;box-shadow:0 0 6px rgba(251,209,1,.6)`);
+    const fill = el('div', 'a', inner, `left:12px;top:${r0}px;width:2px;height:${r1 - r0}px;background:${GOLD};transform-origin:50% 0;box-shadow:0 0 6px rgba(255,79,22,.6)`);
     const ticks = [];
     for (let yy = r0; yy <= r1; yy += 40) ticks.push(el('div', 'a', inner, `left:14px;top:${yy}px;width:6px;height:2px;background:rgba(255,255,255,.35)`));
-    const head = el('div', 'a', inner, `left:9px;top:${r0 - 4}px;width:8px;height:8px;background:${GOLD};box-shadow:0 0 10px rgba(251,209,1,.8)`);
+    const head = el('div', 'a', inner, `left:9px;top:${r0 - 4}px;width:8px;height:8px;background:${GOLD};box-shadow:0 0 10px rgba(255,79,22,.8)`);
     return { code: cfg.code, render(t) {
       const on = t >= cfg.t0 && t < cfg.t1; show(root, on); if (!on) return;
       const slide = p.enter === 'slide';
@@ -344,7 +344,7 @@
       // idle: gold glint across the mark every 4.5 s
       const ph = phase(t, cfg.t0 + 0.9, 4.5), gq = ph >= 0 ? P(ph * 4.5, 0, 0.55) : 0;
       if (gq > 0 && gq < 1) { const gx = -30 + (iw + 60) * E.inOutCubic(gq); igl.style.opacity = 1;
-        igl.style.background = `linear-gradient(106deg, rgba(251,209,1,0) ${gx - 26}px, #FFF2B0 ${gx - 8}px, #FFFFFF ${gx}px, ${GOLD} ${gx + 8}px, rgba(251,209,1,0) ${gx + 28}px)`; }
+        igl.style.background = `linear-gradient(106deg, rgba(255,79,22,0) ${gx - 26}px, #FFD9C9 ${gx - 8}px, #FFFFFF ${gx}px, ${GOLD} ${gx + 8}px, rgba(255,79,22,0) ${gx + 28}px)`; }
       else igl.style.opacity = 0;
     } };
   };
@@ -493,7 +493,7 @@
     const root = el('div', 'a', stage, 'width:1080px;height:1920px');
     const svg = svgRoot(root);
     const B = bracketSet(svg), pings = pingSet(svg);
-    const scanU = svgEl('path', { stroke: 'rgba(251,209,1,.25)', 'stroke-width': 18, fill: 'none' }, svg), scan = svgEl('path', { stroke: '#FFF6C8', 'stroke-width': 2.5, fill: 'none' }, svg);
+    const scanU = svgEl('path', { stroke: 'rgba(255,79,22,.25)', 'stroke-width': 18, fill: 'none' }, svg), scan = svgEl('path', { stroke: '#FFE0D2', 'stroke-width': 2.5, fill: 'none' }, svg);
     const lu = svgEl('path', { fill: 'none', stroke: 'rgba(0,0,0,.45)', 'stroke-width': 8 }, svg), lo = svgEl('path', { fill: 'none', stroke: GOLD, 'stroke-width': 3 }, svg);
     const T = nameTag(root, p.name, p.kicker, { bigSize: 64, smallSize: 17, pad: 26 });
     return { code: cfg.code, render(t) {
@@ -620,7 +620,7 @@
       r = grow(r, (1 + 0.06 * pl) * (1 - 0.5 * qx));
       const pp = bracketDraw(B, r, { maxL: 46 });
       const lostNow = s.mode === 'relock' && t < tsn;
-      B.bo.setAttribute('stroke', lostNow ? `rgba(251,209,1,${(1 - 0.3 * lostK).toFixed(3)})` : pl > 0.05 ? `rgb(255,${Math.round(209 + 46 * pl)},${Math.round(1 + 200 * pl)})` : GOLD);
+      B.bo.setAttribute('stroke', lostNow ? `rgba(255,79,22,${(1 - 0.3 * lostK).toFixed(3)})` : pl > 0.05 ? `rgb(255,${Math.round(209 + 46 * pl)},${Math.round(1 + 200 * pl)})` : GOLD);
       B.tu.setAttribute('opacity', lostNow ? 0 : 1); B.to.setAttribute('opacity', lostNow ? 0 : 1);
       if (!lostNow) pingDraw(pings, tgt, t, tl); else pingDraw(pings, tgt, -1, 0);
       svg.style.opacity = (parseFloat(svg.style.opacity || 1) * (1 - E.inCubic(P(t, p.exit + 0.1, p.exit + 0.26)))).toFixed(4);
@@ -753,7 +753,7 @@
     const p = Object.assign({ targets: [], ts: cfg.t0, sweep: 0.7, x0: 60, x1: 900, title: 'LINEUP SCAN', px: 54, py: 640, exit: cfg.t1 - 0.3 }, cfg.p);
     const root = el('div', 'a', stage, 'width:1080px;height:1920px');
     const svg = svgRoot(root);
-    const beamG = svgEl('rect', { fill: 'rgba(251,209,1,.18)', width: 60, height: 1 }, svg), beam = svgEl('rect', { fill: '#FFF3B8', width: 3, height: 1 }, svg);
+    const beamG = svgEl('rect', { fill: 'rgba(255,79,22,.18)', width: 60, height: 1 }, svg), beam = svgEl('rect', { fill: '#FFDCCB', width: 3, height: 1 }, svg);
     const tg = p.targets.map(() => ({ B: bracketSet(svg, { under: 7, over: 3 }), chip: null }));
     const n2 = n => String(n).padStart(2, '0');
     tg.forEach((g, k) => {
@@ -921,7 +921,7 @@
       });
       const landed = t >= lands[3] + 0.15;
       const hit = lands.reduce((a, tl) => a + (t >= tl ? Math.exp(-(t - tl - 0.03) * 10) * (t - tl < 0.03 ? (t - tl) / 0.03 : 1) : 0), 0);
-      body.style.filter = hit > 0.02 ? `drop-shadow(0 0 ${(18 * Math.min(1, hit)).toFixed(2)}px rgba(251,209,1,${(0.4 * Math.min(1, hit)).toFixed(3)}))` : 'none';
+      body.style.filter = hit > 0.02 ? `drop-shadow(0 0 ${(18 * Math.min(1, hit)).toFixed(2)}px rgba(255,79,22,${(0.4 * Math.min(1, hit)).toFixed(3)}))` : 'none';
       KT.track(dl.g, t, { start: lands[3] + 0.05, dur: 0.32, spread: 1.8 });
       KT.track(pl.g, t, { start: lands[3] + 0.12, dur: 0.34, spread: 1.7 });
       KT.track(dt.g, t, { start: lands[3] + 0.2, dur: 0.34, spread: 1.7 });
@@ -953,7 +953,7 @@
     const base = svgEl('path', { d, fill: 'none', stroke: 'rgba(255,255,255,.34)', 'stroke-width': o.sw * 0.5, 'stroke-dasharray': `${o.sw * 1.2} ${o.sw * 1.1}` }, svg);
     const under = svgEl('path', { d, fill: 'none', stroke: 'rgba(0,0,0,.45)', 'stroke-width': o.sw + 6, 'stroke-linejoin': 'round' }, svg);
     const done = svgEl('path', { d, fill: 'none', stroke: GOLD, 'stroke-width': o.sw, 'stroke-linejoin': 'round', 'stroke-linecap': 'round' }, svg);
-    const trail = svgEl('path', { d, fill: 'none', stroke: '#FFF6C8', 'stroke-width': o.sw * 0.7, 'stroke-linecap': 'round' }, svg);
+    const trail = svgEl('path', { d, fill: 'none', stroke: '#FFE0D2', 'stroke-width': o.sw * 0.7, 'stroke-linecap': 'round' }, svg);
     const nodes = R.nodes.map(n => {
       const [x, y] = R.pts[n.i];
       return { n, x, y, s: g.L[n.i],
@@ -962,7 +962,7 @@
         core: svgEl('circle', { cx: x, cy: y, r: o.nr * 0.55, fill: GOLD, opacity: 0 }, svg) };
     });
     const comet = svgEl('circle', { r: o.nr * 0.6, fill: '#FFFFFF', opacity: 0 }, svg);
-    const cometG = svgEl('circle', { r: o.nr * 1.6, fill: 'rgba(251,209,1,.35)', opacity: 0 }, svg);
+    const cometG = svgEl('circle', { r: o.nr * 1.6, fill: 'rgba(255,79,22,.35)', opacity: 0 }, svg);
     const labels = nodes.map(N => {
       const ln = line(parent, 'Bebas', o.ls, N.n.label, N.x + (N.n.lx ?? o.lx), N.y + (N.n.ly ?? 0) - ink('Bebas', o.ls, 'H').aA / 2, '#fff', { mask: true });
       const ul = el('div', 'a', parent, `left:${N.x + (N.n.lx ?? o.lx)}px;top:${N.y + (N.n.ly ?? 0) + ink('Bebas', o.ls, 'H').aA / 2 + 8}px;width:${ln.m.w}px;height:3px;background:${GOLD};transform-origin:0 50%;transform:scaleX(0)`);
@@ -1172,7 +1172,7 @@
     const p = Object.assign({ q: 'HOW WAS IT?', host: 'OMARIE', handle: '@NQ.YOUNG', a: '[GUEST ANSWER]', label: 'RALLY GUEST', qt: cfg.t0 + 0.4, at: cfg.t0 + 1.7, wordGap: 0.2, meter: 'meter', seam: 960, exit: cfg.t1 - 0.4 }, cfg.p);
     const root = el('div', 'a', stage, 'width:1080px;height:1920px');
     const seam = el('div', 'a stripe', root, `left:0;top:${p.seam - 5}px;width:1080px;height:10px`);
-    const seamGlow = el('div', 'a', root, `left:0;top:${p.seam - 1}px;width:1080px;height:2px;box-shadow:0 0 22px 6px rgba(251,209,1,.45)`);
+    const seamGlow = el('div', 'a', root, `left:0;top:${p.seam - 1}px;width:1080px;height:2px;box-shadow:0 0 22px 6px rgba(255,79,22,.45)`);
     // top: host tag + question
     const T = nameTag(root, p.host, p.handle, { bigSize: 52, smallSize: 16, pad: 22 });
     const qTag = line(root, 'Michroma', 16, 'Q', 60, 0, '#000', { split: false });
@@ -1234,7 +1234,7 @@
     const ti = line(mask, 'Bebas', S, p.title, 540 - tw / 2, 30, '#fff');
     const stripe = el('div', 'a stripe', root, `left:${540 - tw / 2}px;top:${p.y + cap + 26}px;width:${tw}px;height:12px`);
     const edge = el('div', 'a edge', root, `left:${540 - tw / 2}px;top:${p.y + cap + 16}px;height:32px;opacity:0`);
-    const flash = el('div', 'a', root, `left:${540 - tw / 2 - 40}px;top:${p.y - 40}px;width:${tw + 80}px;height:${cap + 80}px;background:radial-gradient(ellipse at center,rgba(255,246,200,.55) 0%,rgba(251,209,1,.18) 40%,rgba(251,209,1,0) 70%);opacity:0`);
+    const flash = el('div', 'a', root, `left:${540 - tw / 2 - 40}px;top:${p.y - 40}px;width:${tw + 80}px;height:${cap + 80}px;background:radial-gradient(ellipse at center,rgba(255,224,210,.55) 0%,rgba(255,79,22,.18) 40%,rgba(255,79,22,0) 70%);opacity:0`);
     return { code: cfg.code, render(t) {
       const on = t >= cfg.t0 && t < cfg.t1; show(root, on); if (!on) return;
       const t0 = cfg.t0, th = t0 + 0.16;           // impact time
@@ -1248,7 +1248,7 @@
       ti.w.style.opacity = cl(P(t, t0, t0 + 0.06)).toFixed(3);
       const hit = t >= th ? Math.exp(-(t - th) * 7) : 0;
       flash.style.opacity = (0.45 * hit).toFixed(3);
-      ti.t.style.textShadow = hit > 0.03 ? `0 0 ${(12 * hit).toFixed(1)}px rgba(255,236,150,${(0.4 * hit).toFixed(3)})` : 'none';
+      ti.t.style.textShadow = hit > 0.03 ? `0 0 ${(12 * hit).toFixed(1)}px rgba(255,170,130,${(0.4 * hit).toFixed(3)})` : 'none';
       const qst = E.outExpo(P(t, th, th + 0.34)), qsto = E.inExpo(P(t, p.exit, p.exit + 0.3));
       stripe.style.transformOrigin = qsto > 0 ? 'right center' : 'left center';
       stripe.style.transform = `scaleX(${(qsto > 0 ? 1 - qsto : qst).toFixed(5)})`;
@@ -1305,8 +1305,13 @@
   // ------------------------------------------------------------------ H. CAPTIONS
   // words: [[t0, t1, word] ...] on the scene clock. Pages: consecutive words that fit maxLines x maxW.
   function capPages(words, size, maxW, maxLines) {
-    const pages = []; let cur = null;
+    const pages = []; let cur = null, lastB = -1e9;
     words.forEach(([a, b, w]) => {
+      // part1 copy: a pause of 0.45 s or more (a new dialog piece) also closes the page, so one page never joins two pieces
+      // and a word marked U+2063 by build.py (the first word of a dialog piece) always starts a page
+      const brk = w.startsWith('\u2063'); if (brk) w = w.slice(1);
+      if (cur && (brk || a - lastB >= 0.45)) { pages.push(cur); cur = null; }
+      lastB = b;
       const W = ink('Bebas', size, w.toUpperCase()).adv;
       if (!cur) cur = { lines: [[]], widths: [0] };
       let L = cur.lines.length - 1, sp = cur.lines[L].length ? ink('Bebas', size, ' ').adv : 0;
@@ -1430,7 +1435,7 @@
     const k = Math.tan(p.angle * Math.PI / 180);
     const band = el('div', 'a', root, `left:0;top:-200px;width:${p.width * 2}px;height:2320px;transform-origin:0 0`);
     const W = p.width;
-    band.style.background = `linear-gradient(90deg, rgba(251,209,1,0) 0px, rgba(251,209,1,.06) ${W - 240}px, rgba(251,209,1,.18) ${W - 120}px, rgba(251,209,1,.52) ${W - 36}px, rgba(255,248,214,.95) ${W - 8}px, #FFFFFF ${W}px, rgba(255,248,214,.9) ${W + 8}px, rgba(251,209,1,.42) ${W + 30}px, rgba(251,209,1,.12) ${W + 90}px, rgba(251,209,1,0) ${W + 170}px)`;
+    band.style.background = `linear-gradient(90deg, rgba(255,79,22,0) 0px, rgba(255,79,22,.06) ${W - 240}px, rgba(255,79,22,.18) ${W - 120}px, rgba(255,79,22,.52) ${W - 36}px, rgba(255,230,218,.95) ${W - 8}px, #FFFFFF ${W}px, rgba(255,230,218,.9) ${W + 8}px, rgba(255,79,22,.42) ${W + 30}px, rgba(255,79,22,.12) ${W + 90}px, rgba(255,79,22,0) ${W + 170}px)`;
     return { code: cfg.code, render(t) {
       const on = t >= cfg.t0 && t < cfg.t1; show(root, on); if (!on) return;
       const q = E.inOutCubic(P(t, cfg.t0, cfg.t1));
@@ -1449,7 +1454,7 @@
       const cw = ink('Michroma', 20, it.codes, 0.1).w, nw = ink('Michroma', 13, it.name, 0.14).w;
       const W = Math.ceil(Math.max(cw, nw) + 88);
       el('div', 'a', w, `width:${W}px;height:74px;background:rgba(0,0,0,.62);border:1px solid rgba(255,255,255,.35);box-sizing:border-box`);
-      el('div', 'a', w, `left:12px;top:12px;width:34px;height:50px;border:1.5px dashed rgba(251,209,1,.9);box-sizing:border-box`);
+      el('div', 'a', w, `left:12px;top:12px;width:34px;height:50px;border:1.5px dashed rgba(255,79,22,.9);box-sizing:border-box`);
       line(w, 'Michroma', 11, 'KIT', 17, 31, GOLD, { split: false, ls: 0.1 });
       line(w, 'Michroma', 20, it.codes, 60, 16, '#fff', { split: false, ls: 0.1 });
       line(w, 'Michroma', 13, it.name, 61, 48, 'rgba(255,255,255,.72)', { split: false, ls: 0.14 });
@@ -1503,6 +1508,7 @@
   // lib/v2kit.js can build this vlog's own components in the same language (no kit behaviour changes)
   SEK.helpers = { ink, line, el, panel, panelAt, place, show, svgEl, svgRoot, glint, riseLine, phase, liveDot, liveDotAt,
     bracketPaths, bracketSet, bracketDraw, grow, lerpRect, padRect, pingSet, pingDraw, routeGeom, routeBuild, routeAt,
-    meter, meterAt, quoteBuild, quoteAt, nameTag, nameTagAt, capPages, fitSize, sigSvg, f2, px, GOLD, SAFE };
+    meter, meterAt, quoteBuild, quoteAt, nameTag, nameTagAt, capPages, fitSize, sigSvg, f2, px, GOLD, SAFE,
+    maskUrl };   // part1 copy: maskUrl for lib/drive_strip.js (the STRIP's SE mark)
   window.SEK = SEK;
 })();

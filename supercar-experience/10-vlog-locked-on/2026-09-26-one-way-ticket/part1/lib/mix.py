@@ -446,8 +446,11 @@ def main():
     for nm, x in (('stem_nat', nat), ('stem_music', music), ('stem_sfx', sfx)):
         write_wav24(os.path.join(WORK, nm + '.wav'), x * 0.5)
     # meter data for the quote card (Omarie's pick)
-    tc = CFG['layer']['testimonial']
-    json.dump(meter_table(dialog, tc['t0'], tc['t1']), open(os.path.join(WORK, 'meter.json'), 'w'))
+    tc = CFG['layer'].get('testimonial')          # part1: no quote card in this vlog
+    if tc:
+        json.dump(meter_table(dialog, tc['t0'], tc['t1']), open(os.path.join(WORK, 'meter.json'), 'w'))
+    else:
+        json.dump({}, open(os.path.join(WORK, 'meter.json'), 'w'))
     rep['master'] = dict(lufs=round(L1, 2), true_peak_db=round(tp1, 2), nomusic_lufs=round(L2, 2), nomusic_true_peak_db=round(tp2, 2),
                          music_unducked_lufs=CFG['music']['lufs'], dialog_spans=len(merged), samples=NS, seconds=round(NS / SR, 4))
     json.dump(rep, open(os.path.join(WORK, 'mix.json'), 'w'), indent=1)

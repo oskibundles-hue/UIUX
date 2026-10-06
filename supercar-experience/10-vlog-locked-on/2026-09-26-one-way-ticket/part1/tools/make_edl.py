@@ -41,11 +41,11 @@ beat('CH1', '"This is our Supercar Experience vlog. We usually transport our veh
 beat('CH1', 'MetaMuse weather: "it says Seattle\'s treating you well today" / "it says no rain, good day to pick up your McLaren"', [
     ('0077', 57.8, 1.7, 1.0, 'SYNC: reading his phone'),
     ('0077', 67.7, 3.0, 1.0, 'SYNC'),
-], [('0077', 57.90, 59.38, ('sync', 0)), ('0077', 67.82, 70.44, ('sync', 1))])
+], [('0077', 57.90, 59.38, ('sync', 0)), ('0077', 67.64, 70.44, ('sync', 1))])
 beat('CH1', '"I\'m gonna try to put some animations in this ... make like a flying animation"', [
     ('0079', 51.4, 2.1, 1.0, 'SYNC: at the gate'),
     ('0078', 30.0, 4.6, 1.0, 'the gate area'),
-], [('0079', 51.56, 53.34, ('sync', 0)), ('0079', 58.62, 62.96, ('at', 2.2))])
+], [('0079', 51.56, 53.34, ('sync', 0)), ('0079', 57.84, 62.96, ('at', 2.3))])
 beat('CH1', '"I\'m finally getting on the plane."', [
     ('0081', 1.6, 3.4, 1.0, 'SYNC: the jet bridge'),
 ], [('0081', 2.90, 4.66, ('sync', 0))])

@@ -97,12 +97,13 @@ def caption_words():
     fix = C['captions'].get('fix', {})
     out = []
     for piece in CAPS + C['captions'].get('extra', []):
-        for a, b, w in piece['words']:
+        for j, (a, b, w) in enumerate(piece['words']):
             if any(h[0] <= a < h[1] for h in hide):
                 continue
             for k, v in fix.items():
                 w = re.sub(r'\b' + re.escape(k) + r'\b', v, w)
-            out.append([round(a, 3), round(b, 3), w])
+            # part1: the first word of every dialog piece carries U+2063 so lib/sekit.js capPages starts a new page there
+            out.append([round(a, 3), round(b, 3), ('\u2063' + w) if j == 0 else w])
     return sorted(out)
 
 
@@ -237,6 +238,29 @@ def sfx_cues(scene):
     return cues
 
 
+def layer_data():
+    """window.LAYERDATA: the speech meter (quote cards) and, part1, every STRIP's side-G series on the timeline (30 per
+    second, index = round(t * 30)) from the camera's own accelerometer (hud-layouts/tools/side_g.py on the fetched source
+    span; config `sideG`: file, the source second its series starts at, and the shot the strip sits on)."""
+    out = {}
+    mp = os.path.join(WORK, 'meter.json')
+    if os.path.exists(mp):
+        out['meter'] = json.load(open(mp))
+    import plate as PL
+    for code, g in C.get('sideG', {}).items():
+        if code.startswith('_'):
+            continue
+        ser = json.load(open(os.path.join(ROOT, g['file'])))
+        sh_ = PL.SHOTS[g['shot']]
+        lat = []
+        for n in range(int(DUR * 30) + 2):
+            src = sh_['in'] + (n / 30 - sh_['t']) * sh_['speed']
+            j = int(round((src - g['start']) * 30))
+            lat.append(ser[min(max(j, 0), len(ser) - 1)] if 0 <= n / 30 - sh_['t'] <= sh_['dur'] + 0.5 else 0.0)
+        out['lat_' + code] = lat
+    return out
+
+
 def st_prep(A):
     os.makedirs(WORK, exist_ok=True)
     scene = build_scene()
@@ -245,9 +269,7 @@ def st_prep(A):
     tp = os.path.join(LIB, 'data', 'tracks.json')
     T = json.load(open(tp)) if os.path.exists(tp) else {}
     open(os.path.join(WORK, 'tracks.js'), 'w').write('window.TRACKS=' + json.dumps(T) + ';\n')
-    mp = os.path.join(WORK, 'meter.json')
-    ld = {'meter': json.load(open(mp))} if os.path.exists(mp) else {}
-    open(os.path.join(WORK, 'layerdata.js'), 'w').write('window.LAYERDATA=' + json.dumps(ld) + ';\n')
+    open(os.path.join(WORK, 'layerdata.js'), 'w').write('window.LAYERDATA=' + json.dumps(layer_data()) + ';\n')
     log(f'prep: {len(scene["comps"])} components, {len(scene["plan"]["spans"])} fast spans')
 
 
@@ -277,7 +299,8 @@ def join_sig():
     T = json.load(open(tp)) if os.path.exists(tp) else {}
     bt = {b['track']: T.get(b['track'], {}).get('frames') for b in C.get('blurs', [])}
     blob = json.dumps([[_shot_sig(k) for k, _, _ in PL.FR if PL.SHOTS[k]['src'] != 'card'], C['transitions'], C.get('slams'), C['endCard'],
-                       C.get('blurs', []), bt, EDL['duration'], [(s['src'], s['t'], s['dur']) for s in PL.SHOTS]], sort_keys=True)
+                       C.get('blurs', []), bt, EDL['duration'], [(s['src'], s['t'], s['dur']) for s in PL.SHOTS],
+                       [c for c in C['layer']['comps'] if c['type'] == 'driveStrip'], C.get('speedo', [])], sort_keys=True)   # part1: the strip glass
     return _hash(os.path.join(LIB, 'plate.py'), os.path.join(LIB, 'fx.py'), extra=blob)
 
 
@@ -311,8 +334,7 @@ def st_audio(A):
         _done('audio', sig)
     else:
         log('audio: mix unchanged (cached)'); TIMES['audio'] = dict(cached=True)
-    mp = os.path.join(WORK, 'meter.json')
-    ld = 'window.LAYERDATA=' + json.dumps({'meter': json.load(open(mp))}) + ';\n'
+    ld = 'window.LAYERDATA=' + json.dumps(layer_data()) + ';\n'
     lp = os.path.join(WORK, 'layerdata.js')
     if not os.path.exists(lp) or open(lp).read() != ld:
         open(lp, 'w').write(ld)
@@ -426,8 +448,8 @@ def _files_sig(paths):
 
 def capture_salt():
     """what can change a layer frame's pixels without changing its DOM state: the capture code, the fonts, the logos."""
-    return _files_sig([os.path.join(LIB, 'kcap2.js'), os.path.join(LIB, 'accum2.py'), os.path.join(ROOT, '..', '..', '07-fonts'),
-                       os.path.join(ROOT, '..', '..', '02-logos', 'png')])
+    return _files_sig([os.path.join(LIB, 'kcap2.js'), os.path.join(LIB, 'accum2.py'), os.path.join(ROOT, '..', '..', '..', '07-fonts'),
+                       os.path.join(ROOT, '..', '..', '..', '02-logos', 'png')])
 
 
 def _chunks(seq, n):
@@ -713,7 +735,7 @@ def st_compose(A):
     a_n = aac(os.path.join(WORK, 'mix_nomusic.wav'), os.path.join(WORK, 'aac_nomusic.m4a'), '256k')
     # the preview's audio: the same mix 0.5 dB lower, so the 160k AAC still holds -1.5 dBTP
     a_p = aac(os.path.join(WORK, 'mix.wav'), os.path.join(WORK, 'aac_preview.m4a'), '160k', af='volume=-0.5dB')
-    title = 'Rally day (Egnyte) - Supercar Experience vlog v2'
+    title = 'One-way ticket, Part 1 - Supercar Experience vlog'
     concat_mux(mparts, a_m, master, title)
     concat_mux(mparts, a_n, nomus, title + ' (no music)')
     concat_mux(pparts, a_p, prev, title + ' (preview)')

@@ -145,7 +145,7 @@
   // ---- glint: a hot band painted into the glyphs (background-clip:text), continuous across glyphs --
   // Uses each glyph's measured offset so one band crosses the whole word. base = letter colour.
   KT.glint = function (glyphs, t, o = {}) {
-    const st = o.start || 0, d = o.dur ?? .6, base = o.base || '#FBD101', hot = o.hot || '#FFFFFF';
+    const st = o.start || 0, d = o.dur ?? .6, base = o.base || '#FF4F16', hot = o.hot || '#FFFFFF';
     const bw = o.width ?? 90, ang = o.angle ?? 104, W = glyphs.W || 800, H = glyphs.H || 300;
     const q = p(t, st, st + d); const x = -bw * 2 + (W + bw * 4) * (o.ease || E.inOutCubic)(q);
     const on = q > 0 && q < 1;
@@ -163,7 +163,7 @@
   };
 
   // ---- stripe ------------------------------------------------------------------------------------
-  KT.stripe = el => { el.style.background = 'linear-gradient(90deg,#FBD101 0 78%,#fff 78% 100%)'; el.style.transformOrigin = 'left center'; return el; };
+  KT.stripe = el => { el.style.background = 'linear-gradient(90deg,#FF4F16 0 78%,#fff 78% 100%)'; el.style.transformOrigin = 'left center'; return el; };
   KT.drawStripe = (el, t, o = {}) => { const q = (o.ease || E.outExpo)(p(t, o.start || 0, (o.start || 0) + (o.dur ?? .45))); el.style.transform = `scaleX(${q})`; el.style.opacity = q > 0 ? 1 : 0; return q; };
 
   // ---- whip exit ---------------------------------------------------------------------------------

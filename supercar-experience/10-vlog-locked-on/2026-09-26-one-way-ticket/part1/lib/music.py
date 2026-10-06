@@ -1,5 +1,10 @@
 #!/usr/bin/env python3
 """
+part1 copy (One-way ticket, Part 1): the same bed re-timed to this cut. CH1 9.6, the plane 43.4-48.4 (no kick, the
+engines breathe), CH2 53.8, the car arrives 78.9 (lift), the build from 104.6, the DROP on the vibes montage 119.8
+through both HUD strips, the breakdown from 146.9 (Oregon, the fuel stop), tape stop, end card 174.8. DROP and END are
+24 bars apart (104.73 BPM), so both land on a downbeat. The rally notes below describe the original timing.
+
 music.py -- the ORIGINAL placeholder music bed for the rally vlog v2 (dark, driving, F minor, 105.11 BPM).
 
 The raw footage has no music and Omarie has not chosen a track yet, so this is a swappable placeholder:
@@ -32,16 +37,25 @@ sys.path.insert(0, HERE)
 import synth as S  # noqa: E402
 from synth import SR, n_of, midi, db  # noqa: E402
 
-DROP, END = 135.77, 170.02
-BAR = (END - DROP) / 15.0            # 2.28333 s
+DROP, END = 119.8, 174.8             # part1
+BAR = (END - DROP) / 24.0            # part1: 2.29167 s
 BPM = 240.0 / BAR                    # 105.11
 BEAT = BAR / 4
 STEP = BEAT / 4
-G0 = DROP - 59 * BAR                 # first downbeat (bar 0) = 1.0533 s
+G0 = DROP - 52 * BAR                 # part1: first downbeat (bar 0) = 0.633 s
 TS0 = END - 0.5 * BAR                # tape stop 168.878 -> 169.449
 TS1 = END - 0.25 * BAR
 SWING = 0.11 * STEP                  # off-16ths land 11 % of a 16th late (~16 ms): a light shuffle
-GAP_OPEN = (7.0 - STEP, 7.0)         # 1/16 silence before CH1
+CH1 = 9.6                            # part1
+CHAPTERS = (9.6, 53.8, 112.8)        # part1: risers / swells into every chapter change
+AIR = (43.4, 48.4)                   # part1: in the air (no kick: the plane breathes)
+LIFT = (78.9, 93.5)                  # part1: the car arrives, the first sit
+SOFT = (93.5, 104.6)
+BUILD0 = 104.6
+BREAK = 146.9                        # part1: Oregon, the pull-over, the fuel stop
+LATE = 161.0
+KICKBACK = 169.3
+GAP_OPEN = (CH1 - STEP, CH1)         # 1/16 silence before CH1
 GAP_DROP = (DROP - 0.5 * BEAT, DROP) # 1/8-bar silence before the drop
 
 # i - VI - III - VII in F minor: (808 root midi, pad voicing)
@@ -55,13 +69,14 @@ def T(b):
     return G0 + b * BAR
 
 
-def section(t):
-    if t < 7.0: return 'open'
-    if t < 78.84: return 'verse'
-    if t < 87.54: return 'lift'
-    if t < 116.61: return 'dinner'
+def section(t):                      # part1 timing
+    if t < CH1: return 'open'
+    if AIR[0] <= t < AIR[1]: return 'dinner'
+    if t < LIFT[0]: return 'verse'
+    if t < LIFT[1]: return 'lift'
+    if t < BUILD0: return 'dinner'
     if t < DROP: return 'build'
-    if t < 147.77: return 'drop'
+    if t < BREAK: return 'drop'
     if t < TS0: return 'verdict'
     return 'end'
 
@@ -113,7 +128,7 @@ def build(dur, seed=23):
         elif sec == 'lift':
             kicks = [0, 7, 10]; clapstep = 8; hatdiv = 1; hatv = 0.5
         elif sec == 'dinner':
-            montage = 94.25 <= t < 101.75
+            montage = AIR[0] <= t < AIR[1]
             kicks = [] if montage else [0]
             clapstep = None if montage else 8
             hatdiv = 4 if montage else 2; hatv = 0.3
@@ -129,9 +144,9 @@ def build(dur, seed=23):
         elif sec == 'drop':
             kicks = [0, 7, 10] if barno % 2 else [0, 3, 10]; clapstep = 8; hatdiv = 1; hatv = 0.58
         elif sec == 'verdict':
-            late = t >= 161.52
-            kicks = ([0, 10] if t >= 166.52 else [0]) if late else []
-            clapstep = 8 if t >= 166.52 else None
+            late = t >= LATE
+            kicks = ([0, 10] if t >= KICKBACK else [0]) if late else []
+            clapstep = 8 if t >= KICKBACK else None
             hatdiv = 2 if late else 4; hatv = 0.26
         if st in kicks:
             S.place(bus['drums'], K if sec not in ('build', 'verdict') else Ksoft, t, 1.1)
@@ -149,8 +164,8 @@ def build(dur, seed=23):
         if sec in ('drop', 'lift') and st == 6:
             S.place(bus['drums'], OH, t, 0.28)
         # --- 808
-        if sec in ('open', 'verse', 'lift', 'drop') or (sec == 'dinner' and not (94.25 <= t < 101.75)) or \
-                (sec == 'verdict' and t >= 161.52):
+        if sec in ('open', 'verse', 'lift', 'drop') or (sec == 'dinner' and not (AIR[0] <= t < AIR[1])) or \
+                (sec == 'verdict' and t >= LATE):
             if st == 0:
                 S.place(bus['bass'], S.e808(rng, midi(root), 9 * STEP), t, 1.0)
             elif st == 10:
@@ -188,7 +203,7 @@ def build(dur, seed=23):
             sec = section(t)
             if sec not in ('open', 'lift', 'drop', 'verdict', 'verse'):
                 continue
-            if sec == 'verse' and not (54.09 <= t < 78.84):
+            if sec == 'verse' and not (53.8 <= t < LIFT[0]):
                 continue
             if sec == 'verdict' and k % 2:
                 continue
@@ -202,11 +217,11 @@ def build(dur, seed=23):
     # C5 Ab4 G4 F4 | Ab4 F4 Eb4 C4, on a bright double pluck through a short room; answered an octave up in the drop
     MOTIF = [72, None, 68, None, 67, 65, None, None, 68, None, 65, None, 63, None, 60, None]
     def lead_where(t):
-        if t < 7.0: return 0.20
-        if 25.88 <= t < 41.1: return 0.11          # the lineup (under dialog, ducked)
-        if 78.84 <= t < 82.84: return 0.18         # roll out
-        if DROP <= t < 147.77: return 0.26         # the drop: the hook, answered an octave up on the second pass
-        if 161.52 <= t < TS0: return 0.14          # the last line
+        if t < CH1: return 0.20
+        if 53.8 <= t < 66.5: return 0.11           # part1: the pickup (under dialog, ducked)
+        if 78.9 <= t < 84.5: return 0.18           # part1: the car arrives
+        if DROP <= t < BREAK: return 0.26          # the drop: the hook, answered an octave up on the second pass
+        if LATE <= t < TS0: return 0.14            # the last line
         return 0.0
     for barno in range(b0, b1, 2):
         for k, m in enumerate(MOTIF):
@@ -216,22 +231,22 @@ def build(dur, seed=23):
             lvl = lead_where(t)
             if t < 0 or lvl <= 0 or gapped(t):
                 continue
-            if DROP <= t < 147.77 and (barno // 2) % 2 == 1:
+            if DROP <= t < BREAK and (barno // 2) % 2 == 1:
                 m += 12
             f = midi(m)
             v = S.pluck(rng, f, 0.55, bright=1.6) * 0.7 + S.pluck(rng, f * 1.004, 0.55, bright=1.2) * 0.5
             v = S.fft_filter(v, lo=180, hi=7000, slope=2)
             S.place(bus['music'], S.reverb(S.pan(v, 0.12 if k % 4 else -0.12), ir_room, wet=0.3), t, lvl)
     # ---------------------------------------------------------------- risers into every chapter change (one bar, soft)
-    for tc in (25.88, 54.09, 78.84, 87.54, 116.61, 147.77):
+    for tc in CHAPTERS + (LIFT[0], BREAK):
         rz = S.riser(rng, BAR)
         S.place(bus['fx'], rz * np.linspace(0.3, 1, len(rz))[:, None], tc - BAR, 0.28)
     # ---------------------------------------------------------------- fx inside the music (musical ones only)
-    S.place(bus['fx'], S.riser(rng, 7.0 - STEP - 5.9), 5.9, 0.9)                       # into CH1
+    S.place(bus['fx'], S.riser(rng, CH1 - STEP - (CH1 - 1.1)), CH1 - 1.1, 0.9)          # into CH1
     S.place(bus['fx'], S.riser(rng, GAP_DROP[0] - (DROP - 4 * BAR)), DROP - 4 * BAR, 0.75)  # into the drop
     S.place(bus['fx'], S.braam(rng, midi(41), 2.2), DROP, 0.42)
     S.place(bus['fx'], S.impact(rng, ir_hall, size=0.9), DROP, 1.3); ev['hits'].append(DROP)
-    for tc in (25.88, 54.09, 78.84, 87.54, 116.61, 147.77):                               # chapter swells
+    for tc in CHAPTERS + (LIFT[0], BREAK):                                                # chapter swells
         sw = S.reverse_swell(rng, ir_hall, 0.9)
         S.place(bus['fx'], sw, tc - len(sw) / SR, 0.55)
 
@@ -249,7 +264,7 @@ def build(dur, seed=23):
     stems['bass'] *= (0.4 + 0.6 * duck)[:, None]
     mix = sum(stems.values())
     # section levels (dB), 0.4 s crossfades: the drop is the loudest part of the bed, the verdict the quietest
-    SEC = [(0, 1.0), (7.0, 0.0), (78.84, 0.5), (87.54, -0.5), (94.25, 2.5), (101.75, -0.5), (116.61, -1.0), (DROP, 3.5), (147.77, 2.0), (161.52, 1.5), (TS0, 1.0)]
+    SEC = [(0, 1.0), (CH1, 0.0), (AIR[0], 2.5), (AIR[1], 0.0), (LIFT[0], 0.5), (LIFT[1], -0.5), (BUILD0, -1.0), (DROP, 3.5), (BREAK, 2.0), (LATE, 1.5), (TS0, 1.0)]
     gdb = np.zeros(pad_n)
     for (a, v), nxt in zip(SEC, SEC[1:] + [(pad_n / SR + 1, SEC[-1][1])]):
         gdb[n_of(a):n_of(nxt[0])] = v

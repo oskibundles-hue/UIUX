@@ -1,6 +1,6 @@
 <!doctype html>
 <!--
-  story.html -- the Locked-On motion layer of the Sep 15 rally vlog v2 (Egnyte rally day). Transparent 1080x1920.
+  story.html -- the Locked-On motion layer of One-way ticket, Part 1 (from the Sep 15 rally vlog v2; SE orange). Transparent 1080x1920.
   window.renderAt(t) is a pure function of t (seconds on the 30000/1001 fps timeline of the cut): no CSS animation,
   no timers, no clock, no randomness. lib/kcapture.js samples it several times per frame (true motion blur);
   build.py composites it over the plate with ffmpeg.
@@ -11,23 +11,24 @@
   Loads (written by build.py --stage prep): .work/scene.js (window.SCENE), .work/tracks.js (window.TRACKS: tracked
   boxes in OUTPUT pixels, keyed by output frame), .work/clock.js (window.CLOCK: the camera clock of every output
   frame, seconds of the day, from the file names), .work/layerdata.js (window.LAYERDATA: the speech meter for the quote card).
-  Fonts ../../07-fonts, logos ../../02-logos/png.
+  Fonts ../../../07-fonts, logos ../../02-logos/png.
     story.html#only=A2,G1   only those codes (preview)
 -->
-<html><head><meta charset="utf-8"><title>Rally Vlog v2 Layer</title>
+<html><head><meta charset="utf-8"><title>One-way ticket Part 1 Layer</title>
 <style>
-@font-face{font-family:Bebas;src:url('../../07-fonts/BebasNeue-Regular.ttf')}
-@font-face{font-family:Michroma;src:url('../../07-fonts/Michroma-Regular.ttf')}
-:root{--gold:#FBD101;--white:#FFFFFF;--black:#000000}
+@font-face{font-family:Bebas;src:url('../../../07-fonts/BebasNeue-Regular.ttf')}
+@font-face{font-family:Michroma;src:url('../../../07-fonts/Michroma-Regular.ttf')}
+:root{--gold:#FF4F16;--white:#FFFFFF;--black:#000000}
 html,body{margin:0;padding:0;background:transparent;width:1080px;height:1920px;overflow:hidden}
 *{box-sizing:border-box}
 .a{position:absolute;left:0;top:0}
 .beb{font-family:Bebas;letter-spacing:0;line-height:1;white-space:pre}
 .mic{font-family:Michroma;letter-spacing:.08em;line-height:1;white-space:pre}
-.stripe{background:linear-gradient(90deg,#FBD101 0 78%,#fff 78% 100%);transform-origin:left center}
+.stripe{background:linear-gradient(90deg,#FF4F16 0 78%,#fff 78% 100%);transform-origin:left center}
 .mask{overflow:hidden;padding:6px 24px 6px 0;margin:-6px 0 0 0}
 .edge{width:4px;margin-left:-2px;background:#fff;box-shadow:0 0 26px 9px rgba(255,255,255,.42),0 0 7px 2px rgba(255,255,255,.8);border-radius:2px}
 </style>
+<script>window.THEME = { accent: '#FF4F16', glow: '255,79,22' };   // part1: SE orange for lib/drive_strip.js</script>
 <script src=".work/scene.js"></script>
 <script src=".work/tracks.js"></script>
 <script src=".work/clock.js"></script>
@@ -35,6 +36,7 @@ html,body{margin:0;padding:0;background:transparent;width:1080px;height:1920px;o
 <script src="lib/kinetic.js"></script>
 <script src="lib/sekit.js"></script>
 <script src="lib/v2kit.js"></script>
+<script src="lib/drive_strip.js"></script>
 </head><body>
 <div id="stage" class="a" style="width:1080px;height:1920px"></div>
 <script>

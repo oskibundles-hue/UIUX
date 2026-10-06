@@ -304,9 +304,12 @@ def write_cube(g, path, n=33):
 class Reader:
     """Sequential RGB frames of a mezzanine from source frame index j0 (crop applied, optional LUT)."""
 
-    def __init__(self, m, j0, count, crop, lut=None):
+    def __init__(self, m, j0, count, crop, lut=None, rot=0):
         x, y, w, h = crop
-        vf = [f'crop={w}:{h}:{x}:{y}', 'scale=in_color_matrix=bt709:in_range=tv:out_range=pc:flags=bicubic', 'format=rgb48le']
+        # part1: `rot` (config shots.N.rot, degrees clockwise) turns a camera that was mounted on its side / upside down
+        # upright before the crop (square open-gate sources, so the frame size does not change)
+        vf = {90: ['transpose=clock'], -90: ['transpose=cclock'], 270: ['transpose=cclock'], 180: ['hflip,vflip']}.get(rot, [])
+        vf += [f'crop={w}:{h}:{x}:{y}', 'scale=in_color_matrix=bt709:in_range=tv:out_range=pc:flags=bicubic', 'format=rgb48le']
         if lut:
             vf.append(f"lut3d=file='{lut}':interp=tetrahedral")
         vf.append('format=rgb24')
@@ -392,7 +395,7 @@ def sample_frames(k, pl, count=5):
     out = []
     for jf in idx:
         j = int(round(jf))
-        r = Reader(m, j, 1, pl['crop'])
+        r = Reader(m, j, 1, pl['crop'], rot=scfg(k).get('rot', 0))
         out.append(r.get(j).copy()); r.close()
     return out
 
@@ -424,7 +427,7 @@ def render_shot(k, force=False):
     j_first = int(math.floor(min(jf - (na - 1) / 2 for jf, na in pl['picks'])))
     j_last = int(math.ceil(max(jf + (na - 1) / 2 for jf, na in pl['picks']))) + 1
     j_first = max(0, j_first)
-    r = Reader(m, j_first, j_last - j_first + 1, pl['crop'], lut)
+    r = Reader(m, j_first, j_last - j_first + 1, pl['crop'], lut, rot=scfg(k).get('rot', 0))
     enc = subprocess.Popen([FF, '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}', '-r', '30000/1001', '-i', '-',
                             '-vf', 'scale=out_color_matrix=bt709:out_range=tv,format=yuv444p', '-c:v', 'libx264', '-preset', 'veryfast',
                             '-crf', '10', '-colorspace', 'bt709', '-color_primaries', 'bt709', '-color_trc', 'bt709', out],
@@ -520,6 +523,45 @@ def join():
             if b.get('f0', -1) <= fr['f'] <= b.get('f1', 10 ** 9):
                 BL.setdefault(fr['f'], []).append((fr, b.get('pad', 10), b.get('radius', 14)))
 
+    # part1: static boxes (config `speedo`: `box` [x,y,w,h] and a `shot`, or output frames f0-f1): the car's own
+    # speedometer on the cabin-cam shots (no speed on screen). Licence plates are NOT blurred in this vlog (Omarie,
+    # 6 Oct: "we dont need plate blur"), so config `blurs` stays empty.
+    for b in CFG.get('blurs', []) + CFG.get('speedo', []):
+        if 'box' not in b:
+            continue
+        if 'shot' in b:
+            _, a_, b_ = FR[b['shot']]
+            f0_, f1_ = a_, b_ - 1
+        else:
+            f0_, f1_ = b['f0'], b['f1']
+        x_, y_, w_, h_ = b['box']
+        for f in range(f0_, f1_ + 1):
+            BL.setdefault(f, []).append((dict(x=x_, y=y_, w=w_, h=h_), b.get('pad', 10), b.get('radius', 14)))
+    GL = glass_rects()
+
+    def glass(img, i):
+        """part1: the HUD strip's frosted glass (themes/glass-orange.json: backdrop-filter blur(22px) saturate(1.3)):
+        the plate inside the strip panel's visible rect is blurred and saturated here; the layer draws the tint on top."""
+        from PIL import ImageFilter
+        if i not in GL:
+            return img
+        img = img.copy()
+        for (x, y, w, h) in GL[i]:
+            x0, y0, x1, y1 = int(round(x)), int(round(y)), int(round(x + w)), int(round(y + h))
+            if x1 - x0 < 2 or y1 - y0 < 1:
+                continue
+            m = 66
+            X0, Y0, X1, Y1 = max(0, x0 - m), max(0, y0 - m), min(W, x1 + m), min(H, y1 + m)
+            reg = Image.fromarray(img[Y0:Y1, X0:X1]).filter(ImageFilter.GaussianBlur(22))
+            f = np.asarray(reg, np.float32)[y0 - Y0:y1 - Y0, x0 - X0:x1 - X0] / 255
+            sat = 1.3                                   # CSS saturate() matrix
+            M = np.array([[0.213 + 0.787 * sat, 0.715 - 0.715 * sat, 0.072 - 0.072 * sat],
+                          [0.213 - 0.213 * sat, 0.715 + 0.285 * sat, 0.072 - 0.072 * sat],
+                          [0.213 - 0.213 * sat, 0.715 - 0.715 * sat, 0.072 + 0.928 * sat]], np.float32)
+            f = np.clip(f @ M.T, 0, 1)
+            img[y0:y1, x0:x1] = (f * 255 + 0.5).astype(np.uint8)
+        return img
+
     def blur_plates(img, i):
         from PIL import ImageFilter
         if i not in BL:
@@ -544,6 +586,7 @@ def join():
         nonlocal written
         assert i == written, (i, written)
         img = blur_plates(img, i)
+        img = glass(img, i)
         t = i / FPS
         pk = punch_at(t)
         if pk:
@@ -610,6 +653,34 @@ def join():
     enc.stdin.close(); enc.wait()
     assert written == NF, (written, NF)
     log(f'join: {written} frames -> {out} in {time.time() - t_start:.0f}s')
+    return out
+
+
+def glass_rects():
+    """{output frame: [(x, y, w, visible h)]} for every STRIP (driveStrip) in config layer.comps: the panel's clip-path
+    as lib/sekit.js panelAt draws it (unroll: outExpo over ts+0.02..ts+0.34; retract: inOutCubic over tx..tx+0.245)."""
+    def P(t, a, b):
+        return min(max((t - a) / (b - a), 0.0), 1.0)
+    def out_expo(x):
+        return 1.0 if x >= 1 else 1 - 2 ** (-10 * x)
+    def in_out_cubic(x):
+        return 4 * x ** 3 if x < 0.5 else 1 - (-2 * x + 2) ** 3 / 2
+    out = {}
+    for c in CFG['layer']['comps']:
+        if c['type'] != 'driveStrip':
+            continue
+        p = dict(x=54, y=292, w=853, h=140, exit=None); p.update(c['p'])
+        ts, tx = c['t0'], p.get('exit')
+        for f in range(int(math.floor(c['t0'] * FPS)), int(math.ceil(c['t1'] * FPS)) + 1):
+            t = f / FPS
+            if not (c['t0'] <= t < c['t1']):
+                continue
+            qr = out_expo(P(t, ts + 0.02, ts + 0.26 + 0.08))
+            qc = in_out_cubic(P(t, tx, tx + 0.34 * 0.72)) if tx is not None else 0.0
+            bottom = qc if qc > 0 else 1 - qr
+            vh = p['h'] * (1 - bottom)
+            if vh > 0.5:
+                out.setdefault(f, []).append((p['x'], p['y'], p['w'], vh))
     return out
 
 
