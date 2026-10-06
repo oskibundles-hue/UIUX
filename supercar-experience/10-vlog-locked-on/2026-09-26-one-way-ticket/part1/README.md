@@ -66,7 +66,7 @@ Every in / out time: `cue.md` (generated). All copy lives in `config.json` (`lay
 | JUST GOT INTO · OREGON | his words in 0100 ("we just got into Oregon", "We're in Oregon!") and 0102 ("we are in Oregon") |
 | TO BE CONTINUED · PART 2: THE NIGHT | the approved storyboard (Part 2 is the night drive, README one level up) |
 | Captions | his own words, `data/captions.json` (word timings from the day index, small.en; every piece re-checked with medium.en; the 11 readings that differ are in `data/caption_fixes.json`) |
-| End card: A RIDE OF A LIFETIME. · TEXT OR DM TO BOOK · (725) 425-3583 · SUPERCAREXP.VIP · @SUPERCAR_EXPERIENCE_ · LAS VEGAS · SCOTTSDALE · BOISE · RENTERS 25+ · AGES 21–24 WITH $299 UNDERAGE FEE · FILMED BY @NQ.YOUNG | the approved rally layer's end card, copy byte-identical (`build`: asserted against the rally v2 config); sources in `../../2026-09-15-rally/README.md` |
+| End card: A RIDE OF A LIFETIME. · TEXT OR DM TO BOOK · (725) 425-3583 · SUPERCAREXP.VIP · @SUPERCAR_EXPERIENCE_ · LAS VEGAS · SCOTTSDALE · BOISE · RENTERS 25+ · AGES 21–24 WITH UNDERAGE FEE · FILMED BY @NQ.YOUNG | the approved rally layer's end card, copy byte-identical (`build`: asserted against the rally v2 config); sources in `../../2026-09-15-rally/README.md` |
 
 Places only where he says them or a sign shows them: Seattle (Washington), Vegas / Las Vegas, Oregon, Supercar Experience
 are in his captions; the pickup shop is not named (its name in 0087 is unclear by ear). No speeds, prices, distances or
