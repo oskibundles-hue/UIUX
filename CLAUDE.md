@@ -88,6 +88,12 @@ The `plate` class is switched off, so it has no agent.
 
 - **Hand off after each job:** write a short handoff and start the next job in a fresh session, and also when
   the cost guard warns at 300k or after any compaction, because every call re-reads the whole conversation.
+- **Sessions start on the latest default branch** (added 2026-10-06): a SessionStart hook
+  (`.claude/hooks/session_refresh.py`) fast-forwards a clean checkout to `origin/claude/new-session-mucc2q` when
+  it's behind, and tells the session when it can't (uncommitted changes or its own commits). If it says settings,
+  hooks, agents or this file changed, restart the session. Why: the "One-way ticket" Part 2 session started 10
+  commits behind, so the 300k auto-compact and the `nq-*` agents never loaded. Test:
+  `python3 .claude/hooks/test_session_refresh.py`.
 - **Auto-compact is set at 300k** (`CLAUDE_CODE_AUTO_COMPACT_WINDOW` in `.claude/settings.json`).
 - **Change effort, not the model, mid-session,** because a model switch re-writes the whole cache.
 - **Start a fresh agent from a summary rather than resuming one** past about 150k or idle more than 5 minutes,
