@@ -112,6 +112,15 @@ control room's **Working now** block (https://claude.ai/artifact/JdMaXgCuUu7XHQ3
 `python3 .claude/brain/live_card.py start|step|done|blocked|waiting`, updating at least every 15 minutes
 and never stopping on `working`, because a stale card shows as quiet. Steps: `.claude/playbooks/lead.md`.
 
+## Organize long messages first (the prompt tool)
+
+Omarie, 2026-10-06: "we should create a prompt tool that makes my prompts sound much better and organized once i send
+one". He picked auto-organize. When his message is long or carries several asks, open the reply with it as a short
+brief, in his words where you can: what he wants (numbered, most important first), what he has already decided, and
+the open questions. Then ask one click ("Is this brief right?", plus up to three open questions, recommendation first)
+and start once he answers. `.claude/hooks/prompt_brief.py` spots these messages and adds the reminder; test it with
+`python3 .claude/hooks/test_prompt_brief.py`. Use the same brief as the prompt when a job goes to a new session.
+
 ## Prompting Claude 5 models
 
 Brief agents with the whole job, the why, and what done looks like; write rules as "do Y, because Z"; ask
