@@ -3,10 +3,13 @@ import {AbsoluteFill, Audio, Img, Sequence, interpolate, spring, staticFile, use
 import {noise2D} from '@remotion/noise';
 import {C, F, clamp, lin, s2f} from './theme';
 import {Bokeh, Finish, Flash, FloatWords, HandleBug, Plate, PromptBar, StatusCard, TextBubble} from './core';
-import {PixelCode, PixelFire, Rev, Sparks} from './pixel';
-import {AssetBoard, Badge, EditorChrome, KeyframeStreak, LayerStack, ProjectPanel} from './editor';
+import {Driver, PixelCode, PixelFire, Sparks} from './pixel';
+import {AssetBoard, Badge, EditorChrome, FleetPanel} from './editor';
+import {DayTimeline, ScrubTimeline} from './timeline';
 import {MapBuild, MapFull} from './map';
-import {EndCard, GlowReveal, Poster, TitleLockup} from './poster';
+import {EndCard, GlowReveal, TitleLockup} from './poster';
+import {Ignition} from './ignition';
+import cut30 from './cut30.json';
 
 // shot timings (seconds) matched 1:1 to the Higgsfield reel
 export const T: [number, number][] = [
@@ -16,8 +19,6 @@ export const T: [number, number][] = [
   [60.0, 63.5], [63.5, 64.5], [64.5, 68.0], [68.0, 72.5], [72.5, 76.5],
 ];
 export const TOTAL = s2f(76.5);
-const from = (n: number) => s2f(T[n - 1][0]);
-const len = (n: number) => s2f(T[n - 1][1]) - s2f(T[n - 1][0]);
 
 // ---------- small shot-specific pieces ----------
 const Slam: React.FC<{text: string; at: number}> = ({text, at}) => {
@@ -85,7 +86,7 @@ const BadgeBuild: React.FC<{dur: number}> = ({dur}) => {
   const scale = 1 + z * 0.9;
   return (
     <AbsoluteFill style={{transform: `scale(${scale})`, transformOrigin: '50% 37%'}}>
-      <EditorChrome comp="Race_Badge.comp" viewerH={1100} playhead={lin(f, 0, dur)}>
+      <EditorChrome comp="Race_Weekend_Pass" viewerH={1100} playhead={lin(f, 0, dur)}>
         <div style={{position: 'absolute', inset: 0, opacity: lin(f, 30, 50)}}>
           <Plate id={12} len={dur} push={[1.05, 1.1]} dim={0.35} />
         </div>
@@ -109,216 +110,302 @@ const CtaLine: React.FC<{at: number}> = ({at}) => {
 };
 
 // ---------- sound design ----------
-type Cue = [string, number, number?]; // file, absolute frame, volume
-const cues: Cue[] = [];
-const at = (shot: number, local: number, file: string, vol = 0.8) => cues.push([file, from(shot) + local, vol]);
-const ticks = (shot: number, a: number, b: number, step = 3) => {
-  for (let x = a; x < b; x += step) at(shot, x, 'tick', 0.35);
-};
-at(1, 0, 'whoosh_long', 0.7); at(1, 6, 'impact', 0.8);
-at(3, 0, 'whoosh', 0.4);
-at(4, 2, 'tick', 0.3); at(4, 14, 'message', 0.9);
-at(6, 4, 'pop', 0.9); at(6, 22, 'blip', 0.4); at(6, 28, 'blip', 0.4); at(6, 34, 'blip', 0.4);
-at(7, 4, 'blip', 0.7); at(7, 26, 'blip', 0.7);
-at(8, 0, 'blip', 0.5); at(8, 12, 'boom', 1);
-ticks(9, 2, 30, 2);
-at(10, 0, 'pop', 0.8); at(10, 4, 'blip', 0.5); at(10, 12, 'blip', 0.5); at(10, 20, 'blip', 0.5);
-ticks(10, 30, 60); at(10, 82, 'send', 0.8);
-at(11, 0, 'chime', 0.6);
-at(12, 0, 'whoosh', 0.5); at(12, 8, 'pop', 0.7); at(12, 14, 'pop', 0.6); at(12, 38, 'stamp', 0.7); at(12, 46, 'whoosh_long', 0.5);
-for (let i = 0; i < 7; i++) at(13, i * 2.5 | 0, 'tick', 0.45);
-at(14, 0, 'pop', 0.7); at(14, 6, 'blip', 0.6);
-ticks(15, 8, 33); at(15, 66, 'send', 0.8);
-at(16, 0, 'chime', 0.6);
-at(17, 0, 'whoosh', 0.8);
-for (let i = 0; i < 6; i++) at(18, i * 3, 'pop', 0.55);
-at(19, 0, 'whoosh_long', 0.6);
-ticks(20, 6, 31); at(20, 76, 'send', 0.8);
-at(21, 4, 'impact', 1);
-at(22, 0, 'whoosh', 0.4);
-at(23, 0, 'chime', 0.6);
-at(24, 0, 'whoosh', 0.6); for (let i = 0; i < 5; i++) at(24, 14 + i * 3, 'pop', 0.4); at(24, 28, 'whoosh_long', 0.35);
-at(25, 0, 'chime', 0.6);
-for (let i = 0; i < 5; i++) at(26, 6 + i * 5, 'pop', 0.6);
-for (let i = 0; i < 5; i++) at(26, 20 + i * 5, 'blip', 0.3);
-at(26, 62, 'tick', 0.9);
-at(27, 0, 'whoosh_long', 1);
-ticks(28, 10, 37); at(28, 100, 'send', 0.8);
-at(29, 0, 'whoosh', 0.6); at(29, 10, 'chime', 0.5);
-for (let i = 0; i < 8; i++) at(30, 2 + i * 2.5 | 0, 'tick', 0.7);
-for (let i = 0; i < 4; i++) at(30, 34 + i * 4, 'pop', 0.5);
-for (let i = 0; i < 3; i++) at(30, 52 + i * 6, 'pop', 0.5);
-at(30, 78, 'stamp', 1);
-ticks(31, 8, 37); at(31, 80, 'send', 0.9);
-at(32, 0, 'whoosh_long', 0.9);
-at(33, 4, 'tick', 0.3); at(33, 16, 'message', 0.9);
-for (let i = 0; i < 6; i++) at(34, 10 + i * 14, 'blip', 0.25);
-at(35, 0, 'impact', 0.7); at(35, 16, 'chime', 0.5);
+// Music + every SFX is one mixed file made by the SFX engine (npm run sfx): it reads sfx/events.json
+// (what happens on screen, frame-exact), picks the sound, places its hit on the frame and sets its level
+// over the music. The cue sheet with the reason for every sound and every skip is sfx/cuesheet.md.
 
-export const Ad: React.FC = () => {
+// one shot's picture and graphics for L frames; `short` = the 30 s cut's tighter timings
+const shot = (n: number, L: number, short: boolean): React.ReactNode => {
+  switch (n) {
+    case 1:
+      return (
+        <>
+          <Plate id={1} len={L} push={[1.18, 1.06]} dim={0.45} grade="night" />
+          <Bokeh n={18} speed={2} />
+          <TitleLockup />
+        </>
+      );
+    case 2:
+      return (
+        <>
+          <Plate id={2} len={L} push={[1.0, 1.16]} grade="night" />
+        </>
+      );
+    case 3:
+      return (
+        <>
+          <Plate id={3} len={L} push={[1.08, 1.0]} drift={[-30, 30]} grade="night" />
+        </>
+      );
+    case 4:
+      return (
+        <>
+          <Plate id={4} len={L} push={[1.05, 1.12]} />
+          <AbsoluteFill style={{background: 'linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0) 50%)'}} />
+          <TextBubble at={14} typingFrom={2} text="Need a supercar for F1 weekend. ASAP." y={560} />
+        </>
+      );
+    case 5:
+      return (
+        <>
+          <Plate id={5} len={L} push={[1.1, 1.2]} grade="night" />
+        </>
+      );
+    case 6:
+      return (
+        <>
+          <Plate id={6} len={L} push={[1.04, 1.08]} dim={0.1} />
+          <Driver at={4} x={60} y={554} px={14} poses={[{at: 10, pose: 'wave'}, {at: 30, pose: 'idle'}]} />
+          <FloatWords words={[{t: 'What', at: short ? 6 : 22, x: 640, y: 640, rot: -4}, {t: 'is it', at: short ? 11 : 28, x: 600, y: 720, rot: 3}, {t: 'this time?', at: short ? 16 : 34, x: 560, y: 800, rot: -2}]} />
+        </>
+      );
+    case 7:
+      return (
+        <>
+          <Plate id={7} len={L} push={[1.04, 1.08]} dim={0.1} />
+          <Driver at={-20} x={60} y={554} px={14} pose="think" think={[{car: 'evo', at: 2}, {car: 'm750', at: 26}]} />
+          <FloatWords words={[{t: 'Coupe?', at: 4, x: 640, y: 660, rot: -3}]} out={24} />
+          <FloatWords words={[{t: 'Spyder?', at: 28, x: 640, y: 660, rot: 3}]} />
+        </>
+      );
+    case 8:
+      return (
+        <>
+          <Plate id={8} len={L} push={[1.06, 1.14]} grade="hot" shake={8} />
+          <PixelFire at={0} x={460} y={1160} burst={12} />
+          <Sparks at={12} x={460} y={980} n={60} spread={1400} />
+          <FloatWords words={[{t: 'Launch?', at: 2, x: 640, y: 600, rot: -5}]} />
+          <Flash at={12} color="#FFB040" peak={0.7} len={8} />
+        </>
+      );
+    case 9:
+      return (
+        <>
+          <Plate id={9} len={L} push={[1.04, 1.1]} dim={0.2} />
+          <Sparks at={0} x={300} y={1300} n={30} spread={700} />
+          <PixelCode lines={['rpm * 9000', 'launch(3.0)']} at={2} x={70} y={700} cps={1.5} />
+          <FloatWords words={[{t: 'Specs?', at: 20, x: 700, y: 560, rot: 4}]} />
+        </>
+      );
+    case 10:
+      return (
+        <>
+          <Plate id={10} len={L} push={[1.03, 1.1]} dim={0.15} />
+          <Driver at={0} x={60} y={514} px={14} poses={[{at: 4, pose: 'think'}, {at: short ? 16 : 20, pose: 'thumb'}]} />
+          <Stack x={560} y={560} items={[{t: 'Wait', at: 4}, {t: 'No', at: short ? 10 : 12}, {t: 'Let me book it', at: short ? 16 : 20}]} />
+          {!short && <PromptBar text="I need a car for F1 weekend. Fast. No mistakes." typeAt={30} cps={1.6} sendAt={82} />}
+        </>
+      );
+    case 11:
+      return (
+        <>
+          <StatusCard lines={['Booking request received.', 'Checking the fleet for race weekend.']} dur={L} />
+        </>
+      );
+    case 12:
+      return (
+        <>
+          <BadgeBuild dur={L} />
+        </>
+      );
+    case 13:
+      return (
+        <>
+          <DayTimeline />
+        </>
+      );
+    case 14:
+      return (
+        <>
+          <EditorChrome comp="Race_Weekend_Pass" viewerH={1100} playhead={0.6}>
+            <Plate id={14} len={L} push={[1.08, 1.12]} dim={0.2} />
+            <div style={{position: 'absolute', left: 40, top: 60}}>
+              <Badge at={-200} size={360} full />
+            </div>
+            <SpeechBubble at={4} x={360} y={130} />
+            <Driver at={6} x={414} y={657} px={7} pose="wave" />
+          </EditorChrome>
+        </>
+      );
+    case 15:
+      return (
+        <>
+          <Plate id={15} len={L} push={[1.0, 1.08]} drift={[20, -20]} />
+          <PromptBar text="Pull the fleet for race weekend." typeAt={8} cps={1.4} sendAt={66} />
+        </>
+      );
+    case 16:
+      return (
+        <>
+          <StatusCard lines={['Pulling cars, dates, and pickup times…']} chip="Building cards for the Las Vegas fleet." dur={L} />
+        </>
+      );
+    case 17:
+      return (
+        <>
+          <FleetPanel />
+        </>
+      );
+    case 18:
+      return (
+        <>
+          <AssetBoard />
+        </>
+      );
+    case 19:
+      return (
+        <>
+          <ScrubTimeline dur={L} />
+        </>
+      );
+    case 20:
+      return (
+        <>
+          <Plate id={20} len={L} push={[1.0, 1.1]} />
+          <PromptBar text="Map the drive from pickup to the Strip." typeAt={6} cps={1.6} sendAt={76} />
+        </>
+      );
+    case 21:
+      return (
+        <>
+          <Plate id={21} len={L} push={[1.1, 1.2]} shake={14} />
+          <Slam text="ROUTE!" at={4} />
+        </>
+      );
+    case 22:
+      return (
+        <>
+          <Plate id={22} len={L} push={[1.1, 1.18]} />
+        </>
+      );
+    case 23:
+      return (
+        <>
+          <StatusCard lines={['Mapped.', 'Five stops. One route.']} dur={L} />
+        </>
+      );
+    case 24:
+      return (
+        <>
+          <MapBuild />
+        </>
+      );
+    case 25:
+      return (
+        <>
+          <StatusCard lines={['Pulling every stop…']} chip="Pulling frames from the fleet footage." dur={L} />
+        </>
+      );
+    case 26:
+      return (
+        <>
+          <MapFull dur={L} />
+        </>
+      );
+    case 27:
+      return (
+        <>
+          <Plate id={27} len={L} push={[1.0, 1.12]} drift={[0, -80]} />
+        </>
+      );
+    case 28:
+      return (
+        <>
+          <Plate id={28} len={L} push={[1.04, 1.1]} />
+          <PromptBar text="Hold the GT3 RS for race weekend." typeAt={10} cps={1.3} sendAt={100} />
+        </>
+      );
+    case 29:
+      return (
+        <>
+          <GlowReveal />
+        </>
+      );
+    case 30:
+      return (
+        <>
+          <Ignition dur={L} />
+        </>
+      );
+    case 31:
+      return (
+        <>
+          <Plate id={31} len={L} push={[1.0, 1.16]} shake={4} />
+          <PromptBar text="Lock it in and send the confirmation!" typeAt={8} cps={1.5} sendAt={80} />
+        </>
+      );
+    case 32:
+      return (
+        <>
+          <Plate id={32} len={L} push={[1.12, 1.0]} grade="night" />
+        </>
+      );
+    case 33:
+      return (
+        <>
+          <Plate id={33} len={L} push={[1.0, 1.06]} />
+          <AbsoluteFill style={{background: 'linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0) 45%)'}} />
+          <TextBubble at={16} typingFrom={4} text={short ? 'Looks perfect! Booked.' : 'Looks perfect! Booked. Next: the whole crew for the rally.'} y={520} />
+        </>
+      );
+    case 34:
+      return (
+        <>
+          <Plate id={34} len={L} push={[1.0, 1.1]} dim={0.25} grade="night" />
+          <Driver at={10} x={656} y={1113} px={8} pose="happy" hop />
+          <CtaLine at={20} />
+        </>
+      );
+    case 35:
+      return (
+        <>
+          <EndCard dur={L} />
+        </>
+      );
+    default:
+      return null;
+  }
+};
+
+// ---------- the cuts: the 76 s reference (T) and the 30 s ad (src/cut30.json) ----------
+type Cut = {id: number; from: number; len: number}[];
+const CUT76: Cut = T.map(([a, b], i) => ({id: i + 1, from: s2f(a), len: s2f(b) - s2f(a)}));
+export const CUT30: Cut = (cut30.shots as [number, number][]).reduce<Cut>((acc, [id, n]) => {
+  const prev = acc[acc.length - 1];
+  return [...acc, {id, from: prev ? prev.from + prev.len : 0, len: n}];
+}, []);
+export const TOTAL30 = CUT30[CUT30.length - 1].from + CUT30[CUT30.length - 1].len;
+
+const Cutdown: React.FC<{cut: Cut; audio: string; short?: boolean}> = ({cut, audio, short = false}) => {
   const f = useCurrentFrame();
-  const white = [11, 16, 23, 25].some((n) => f >= from(n) && f < from(n) + len(n));
-  const hideBug = f >= from(35) || f < from(1) + 20;
+  const at = (n: number) => cut.find((c) => c.id === n);
+  const inShot = (n: number) => {
+    const c = at(n);
+    return !!c && f >= c.from && f < c.from + c.len;
+  };
+  const white = [11, 16, 23, 25].some(inShot);
+  const hideBug = f >= at(35)!.from || f < cut[0].from + 20;
+  // hard-cut punch flashes on a few cuts, like the reference
+  const flashes: [number, number, number][] = short ? [[12, 0.25, 4], [21, 0.5, 5], [30, 0.3, 4]] : [[3, 0.35, 4], [12, 0.25, 4], [21, 0.5, 5]];
   return (
     <AbsoluteFill style={{background: C.asphalt}}>
-      {/* 1 title */}
-      <Sequence from={from(1)} durationInFrames={len(1)}>
-        <Plate id={1} len={len(1)} push={[1.18, 1.06]} dim={0.45} grade="night" />
-        <Bokeh n={18} speed={2} />
-        <TitleLockup />
-      </Sequence>
-      <Sequence from={from(2)} durationInFrames={len(2)}>
-        <Plate id={2} len={len(2)} push={[1.0, 1.16]} grade="night" />
-      </Sequence>
-      <Sequence from={from(3)} durationInFrames={len(3)}>
-        <Plate id={3} len={len(3)} push={[1.08, 1.0]} drift={[-30, 30]} grade="night" />
-      </Sequence>
-      <Sequence from={from(4)} durationInFrames={len(4)}>
-        <Plate id={4} len={len(4)} push={[1.05, 1.12]} />
-        <AbsoluteFill style={{background: 'linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0) 50%)'}} />
-        <TextBubble at={14} typingFrom={2} text="Need a supercar for F1 weekend. ASAP." y={560} />
-      </Sequence>
-      <Sequence from={from(5)} durationInFrames={len(5)}>
-        <Plate id={5} len={len(5)} push={[1.1, 1.2]} grade="night" />
-      </Sequence>
-      <Sequence from={from(6)} durationInFrames={len(6)}>
-        <Plate id={6} len={len(6)} push={[1.04, 1.08]} dim={0.1} />
-        <Rev at={4} x={300} y={760} px={24} />
-        <FloatWords words={[{t: 'What', at: 22, x: 640, y: 640, rot: -4}, {t: 'is it', at: 28, x: 600, y: 720, rot: 3}, {t: 'this time?', at: 34, x: 560, y: 800, rot: -2}]} />
-      </Sequence>
-      <Sequence from={from(7)} durationInFrames={len(7)}>
-        <Plate id={7} len={len(7)} push={[1.04, 1.08]} dim={0.1} />
-        <Rev at={-20} x={300} y={760} px={24} morph={[{to: 'coupe', at: 2}, {from: 'coupe', to: 'wedge', at: 26}]} />
-        <FloatWords words={[{t: 'Coupe?', at: 4, x: 640, y: 660, rot: -3}]} out={24} />
-        <FloatWords words={[{t: 'Spider?', at: 28, x: 640, y: 660, rot: 3}]} />
-      </Sequence>
-      <Sequence from={from(8)} durationInFrames={len(8)}>
-        <Plate id={8} len={len(8)} push={[1.06, 1.14]} grade="hot" shake={8} />
-        <PixelFire at={0} x={460} y={1160} burst={12} />
-        <Sparks at={12} x={460} y={980} n={60} spread={1400} />
-        <FloatWords words={[{t: 'Launch?', at: 2, x: 640, y: 600, rot: -5}]} />
-        <Flash at={12} color="#FFB040" peak={0.7} len={8} />
-      </Sequence>
-      <Sequence from={from(9)} durationInFrames={len(9)}>
-        <Plate id={9} len={len(9)} push={[1.04, 1.1]} dim={0.2} />
-        <Sparks at={0} x={300} y={1300} n={30} spread={700} />
-        <PixelCode lines={['rpm * 9000', 'launch(3.0)']} at={2} x={70} y={700} cps={1.5} />
-        <FloatWords words={[{t: 'Specs?', at: 20, x: 700, y: 560, rot: 4}]} />
-      </Sequence>
-      <Sequence from={from(10)} durationInFrames={len(10)}>
-        <Plate id={10} len={len(10)} push={[1.03, 1.1]} dim={0.15} />
-        <Rev at={0} x={120} y={720} px={24} />
-        <Stack x={560} y={560} items={[{t: 'Wait', at: 4}, {t: 'No', at: 12}, {t: 'Let me book it', at: 20}]} />
-        <PromptBar text="I need a car for F1 weekend. Fast. No mistakes." typeAt={30} cps={1.6} sendAt={82} />
-      </Sequence>
-      <Sequence from={from(11)} durationInFrames={len(11)}>
-        <StatusCard lines={['Booking request received.', 'Starting with the race-weekend badge.']} dur={len(11)} />
-      </Sequence>
-      <Sequence from={from(12)} durationInFrames={len(12)}>
-        <BadgeBuild dur={len(12)} />
-      </Sequence>
-      <Sequence from={from(13)} durationInFrames={len(13)}>
-        <LayerStack />
-      </Sequence>
-      <Sequence from={from(14)} durationInFrames={len(14)}>
-        <EditorChrome comp="Race_Badge.comp" viewerH={1100} playhead={0.6}>
-          <Plate id={14} len={len(14)} push={[1.08, 1.12]} dim={0.2} />
-          <div style={{position: 'absolute', left: 40, top: 60}}>
-            <Badge at={-200} size={360} full />
-          </div>
-          <SpeechBubble at={4} x={360} y={130} />
-          <Rev at={6} x={430} y={760} px={12} />
-        </EditorChrome>
-      </Sequence>
-      <Sequence from={from(15)} durationInFrames={len(15)}>
-        <Plate id={15} len={len(15)} push={[1.0, 1.08]} drift={[20, -20]} />
-        <PromptBar text="Pull the fleet for race weekend." typeAt={8} cps={1.4} sendAt={66} />
-      </Sequence>
-      <Sequence from={from(16)} durationInFrames={len(16)}>
-        <StatusCard lines={['Pulling cars, specs, and rates…']} chip="Building cards for the Las Vegas fleet." dur={len(16)} />
-      </Sequence>
-      <Sequence from={from(17)} durationInFrames={len(17)}>
-        <ProjectPanel />
-      </Sequence>
-      <Sequence from={from(18)} durationInFrames={len(18)}>
-        <AssetBoard />
-      </Sequence>
-      <Sequence from={from(19)} durationInFrames={len(19)}>
-        <KeyframeStreak dur={len(19)} />
-      </Sequence>
-      <Sequence from={from(20)} durationInFrames={len(20)}>
-        <Plate id={20} len={len(20)} push={[1.0, 1.1]} />
-        <PromptBar text="Map the drive from pickup to the Strip." typeAt={6} cps={1.6} sendAt={76} />
-      </Sequence>
-      <Sequence from={from(21)} durationInFrames={len(21)}>
-        <Plate id={21} len={len(21)} push={[1.1, 1.2]} shake={14} />
-        <Slam text="ROUTE!" at={4} />
-      </Sequence>
-      <Sequence from={from(22)} durationInFrames={len(22)}>
-        <Plate id={22} len={len(22)} push={[1.1, 1.18]} />
-      </Sequence>
-      <Sequence from={from(23)} durationInFrames={len(23)}>
-        <StatusCard lines={['Mapped.', 'Five stops. One route. Drive times included.']} dur={len(23)} />
-      </Sequence>
-      <Sequence from={from(24)} durationInFrames={len(24)}>
-        <MapBuild />
-      </Sequence>
-      <Sequence from={from(25)} durationInFrames={len(25)}>
-        <StatusCard lines={['Adding a photo to every stop…']} chip="Pulling frames from the fleet footage." dur={len(25)} />
-      </Sequence>
-      <Sequence from={from(26)} durationInFrames={len(26)}>
-        <MapFull dur={len(26)} />
-      </Sequence>
-      <Sequence from={from(27)} durationInFrames={len(27)}>
-        <Plate id={27} len={len(27)} push={[1.0, 1.12]} drift={[0, -80]} />
-      </Sequence>
-      <Sequence from={from(28)} durationInFrames={len(28)}>
-        <Plate id={28} len={len(28)} push={[1.04, 1.1]} />
-        <PromptBar text="Create a hero poster of the GT3 RS." typeAt={10} cps={1.3} sendAt={100} />
-      </Sequence>
-      <Sequence from={from(29)} durationInFrames={len(29)}>
-        <GlowReveal />
-      </Sequence>
-      <Sequence from={from(30)} durationInFrames={len(30)}>
-        <Poster dur={len(30)} />
-      </Sequence>
-      <Sequence from={from(31)} durationInFrames={len(31)}>
-        <Plate id={31} len={len(31)} push={[1.0, 1.16]} shake={4} />
-        <PromptBar text="Render the final and send it to the client!" typeAt={8} cps={1.5} sendAt={80} />
-      </Sequence>
-      <Sequence from={from(32)} durationInFrames={len(32)}>
-        <Plate id={32} len={len(32)} push={[1.12, 1.0]} grade="night" />
-      </Sequence>
-      <Sequence from={from(33)} durationInFrames={len(33)}>
-        <Plate id={33} len={len(33)} push={[1.0, 1.06]} />
-        <AbsoluteFill style={{background: 'linear-gradient(180deg, rgba(0,0,0,0.4), rgba(0,0,0,0) 45%)'}} />
-        <TextBubble at={16} typingFrom={4} text="Looks perfect! Booked. Next: the whole crew for the rally." y={520} />
-      </Sequence>
-      <Sequence from={from(34)} durationInFrames={len(34)}>
-        <Plate id={34} len={len(34)} push={[1.0, 1.1]} dim={0.25} grade="night" />
-        <Rev at={10} x={680} y={1240} px={13} hop />
-        <CtaLine at={20} />
-      </Sequence>
-      <Sequence from={from(35)} durationInFrames={len(35)}>
-        <EndCard dur={len(35)} />
-      </Sequence>
+      {cut.map((c) => (
+        <Sequence key={c.id} from={c.from} durationInFrames={c.len}>
+          {shot(c.id, c.len, short)}
+        </Sequence>
+      ))}
 
       {/* global overlays */}
       {!hideBug && <HandleBug dark={white} opacity={0.9} />}
       <Finish vignette={!white} />
-      {/* hard-cut punch flashes on a few cuts, like the reference */}
-      <Flash at={from(3)} peak={0.35} len={4} />
-      <Flash at={from(12)} peak={0.25} len={4} />
-      <Flash at={from(21)} peak={0.5} len={5} />
-      <Flash at={from(29)} color={C.yellow} peak={0.4} len={5} />
+      {flashes.map(([n, peak, l]) => at(n) && <Flash key={n} at={at(n)!.from} peak={peak} len={l} />)}
+      {at(29) && <Flash at={at(29)!.from} color={C.yellow} peak={0.4} len={5} />}
 
       {/* sound */}
-      <Audio src={staticFile('audio/music.wav')} volume={0.55} />
-      {cues.map(([file, fr, vol], i) => (
-        <Sequence key={i} from={Math.max(0, Math.round(fr))} durationInFrames={60}>
-          <Audio src={staticFile(`audio/${file}.wav`)} volume={vol ?? 0.8} />
-        </Sequence>
-      ))}
+      <Audio src={staticFile(audio)} />
     </AbsoluteFill>
   );
 };
+
+export const Ad: React.FC = () => <Cutdown cut={CUT76} audio="audio/soundtrack.wav" />;
+export const Ad30: React.FC = () => <Cutdown cut={CUT30} audio="audio/soundtrack30.wav" short />;

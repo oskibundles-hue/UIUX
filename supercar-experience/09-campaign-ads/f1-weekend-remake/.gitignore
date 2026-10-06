@@ -4,3 +4,8 @@ out/
 build/
 public/plates/
 public/audio/
+sfx/*.wav
+sfx/*.npz
+sfx/*.mp4
+sfx/*.log
+sfx/verify.json

@@ -1,7 +1,10 @@
 import React from 'react';
-import {AbsoluteFill, Img, OffthreadVideo, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
+import {AbsoluteFill, Img, OffthreadVideo, getInputProps, interpolate, spring, staticFile, useCurrentFrame, useVideoConfig} from 'remotion';
 import {noise2D} from '@remotion/noise';
 import {C, F, clamp, lin, rnd} from './theme';
+
+// --props='{"gfxOnly":true}' blanks footage and grain: the SFX engine's spotting render sees only the graphics
+export const GFX_ONLY = Boolean((getInputProps() as {gfxOnly?: boolean}).gfxOnly);
 
 // ---------- footage plate with camera move + grade ----------
 export const Plate: React.FC<{
@@ -27,6 +30,7 @@ export const Plate: React.FC<{
         : grade === 'cool'
           ? 'saturate(0.9) hue-rotate(8deg) contrast(1.05)'
           : 'contrast(1.04)';
+  if (GFX_ONLY) return <AbsoluteFill style={{background: C.asphalt}} />;
   return (
     <AbsoluteFill style={{background: C.asphalt, overflow: 'hidden'}}>
       <AbsoluteFill style={{transform: `translate(${dx + sx}px, ${sy}px) scale(${sc})`}}>
@@ -45,6 +49,7 @@ export const Still: React.FC<{src: string; style?: React.CSSProperties}> = ({src
 // ---------- film grain + vignette ----------
 export const Finish: React.FC<{vignette?: boolean}> = ({vignette = true}) => {
   const f = useCurrentFrame();
+  if (GFX_ONLY) return null;
   return (
     <>
       {vignette && <AbsoluteFill style={{background: 'radial-gradient(ellipse at 50% 48%, rgba(0,0,0,0) 52%, rgba(0,0,0,0.55) 100%)'}} />}

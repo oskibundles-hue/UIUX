@@ -5,7 +5,8 @@ Usage:
 
 `--raw` is a folder holding the source clips under the short names in RAW below
 (copy them out of Dropbox; never move them). Plates land in public/plates/sNN.mp4,
-1080x1920, 30 fps, no audio. Timings come from shots.json.
+1080x1920, 30 fps, no audio. Timings come from shots.json. A shot with "parts" (shot 30) is cut from
+several source ranges and joined into one plate.
 """
 import argparse, json, os, subprocess, sys
 
@@ -42,7 +43,7 @@ def main():
             print(f'  {m}  <-  {RAW[m]}')
         sys.exit(1)
     for s in shots:
-        if not s.get('src') or s['id'] in (29, 30):
+        if not s.get('src') or s['id'] == 29:
             continue
         if a.only and s['id'] not in a.only:
             continue
@@ -51,6 +52,19 @@ def main():
         in_dur = dur * speed
         vf = (f'setpts=PTS/{speed},' if speed != 1 else '') + VF
         dst = os.path.join(out, f"s{s['id']:02d}.mp4")
+        src = os.path.join(a.raw, s['src'])
+        if s.get('parts'):
+            ins, fc = [], ''
+            for i, pt in enumerate(s['parts']):
+                ln = pt['len'] + (0.25 if i == len(s['parts']) - 1 else 0)
+                ins += ['-ss', str(pt['ss']), '-t', f'{ln:.3f}', '-i', src]
+                fc += f'[{i}:v]{VF}[v{i}];'
+            fc += ''.join(f'[v{i}]' for i in range(len(s['parts']))) + f"concat=n={len(s['parts'])}:v=1:a=0[v]"
+            cmd = ['ffmpeg', '-v', 'error', '-y', *ins, '-filter_complex', fc, '-map', '[v]',
+                   '-c:v', 'libx264', '-crf', '17', '-preset', 'fast', '-pix_fmt', 'yuv420p', dst]
+            subprocess.run(cmd, check=True)
+            print('cut', os.path.basename(dst), f"({len(s['parts'])} parts)")
+            continue
         cmd = ['ffmpeg', '-v', 'error', '-y', '-ss', str(s['ss']), '-t', f'{in_dur:.3f}', '-i', os.path.join(a.raw, s['src']),
                '-an', '-vf', vf, '-c:v', 'libx264', '-crf', '17', '-preset', 'fast', '-pix_fmt', 'yuv420p', dst]
         subprocess.run(cmd, check=True)
