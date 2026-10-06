@@ -100,6 +100,9 @@ The `plate` class is switched off, so it has no agent.
 - **The meter:** `python3 .claude/brain/cost_meter.py` meters a session; `live_card.py done` logs the job's cost
   line; `python3 .claude/brain/post_mortem.py review` is the weekly review, and its proposals go to Omarie as a
   click or a PR before any rule changes.
+- **Finish or hand off before going idle, and point reminders and check-ins at a small session** (added
+  2026-10-06; Monday's review checks it). The cache goes cold after an idle gap, so each wake of a big session
+  pays to write its whole context again.
 - **The cost guard** (`.claude/hooks/cost_guard.py`) warns, and only blocks repeat frame reads.
 
 ## Show what you're working on (the Working-now card)
