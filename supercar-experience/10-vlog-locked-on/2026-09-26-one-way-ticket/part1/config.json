@@ -696,7 +696,9 @@
   "dialogFilterV1": "highpass=f=80:poles=2,afftdn=nr=8:nf=-45:tn=1,acompressor=threshold=-26dB:ratio=2:attack=12:release=180:makeup=1",
   "_aboutDialogFilter": "fix B (Omarie, 6 Oct; the part2 chain): high-pass 90 Hz, gentle FFT noise reduction (nr 10 dB), -2 dB at 300 Hz, +2.5 dB at 3.5 kHz, de-esser, 3:1 compressor; then each piece is levelled to dialogLufs. dialogFilterV1 is the v1 chain (kept for the before/after numbers). edgeFadeOut: the voice fades over 100 ms at the end of its >= 350 ms tail (fix A). Dialog and bed audio are read from paths.aud (the camera AAC, full length; sample-aligned with the mezzanines, checked 6 Oct), so a tail can run past a mezzanine.",
   "edgeFadeOut": 0.1,
-  "minVoiceOverBedDb": 10.0
+  "minVoiceOverBedDb": 10.0,
+  "dialogLatency": 0.025,
+  "_aboutDialogLatency": "part1 v2: the fix B chain delays the voice by 25.0 ms (measured 6 Oct: stem vs the raw clip audio, cross-correlation, 9 pieces, every one 24.9-25.0 ms); mix.py reads 25 ms further in so the voice stays on the lips"
  },
  "sfx": {
   "files": {

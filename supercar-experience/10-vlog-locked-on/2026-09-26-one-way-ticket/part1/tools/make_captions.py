@@ -59,6 +59,13 @@ LEAD = {('0093', 4.42): 3.86}
 # pause before "It is beautiful": the day index stretches "It" over the pause (3.89-4.41); medium.en and small.en both put
 # it at 4.56-4.58, so the caption shows it from 4.56
 PIN = {('0093', 4.42): (4.56, 4.70)}
+# part1 v2 (as part2's SHIFT): pieces moved later by the build's own caption-sync measure (build.py caption_sync, best
+# lag of the word mask against the voice-band energy of the dialog stem), less the 25 ms the fix B chain used to add
+# (now compensated in mix.py). Timing only: the words are unchanged. Clamped to the piece's end.
+# 0081 2.9 is NOT shifted: the gate says +230 ms, but its jet-bridge noise leaves the measure flat (it stayed at +220 with a
+# 0.2 s shift), and the voice-band envelope of the clip shows his voice ending at 4.62-4.68 s, where "plane." ends (4.63).
+SHIFT = {('0076', 14.38): +0.205, ('0084', 89.04): +0.275, ('0089', 140.55): +0.275,
+         ('0090', 114.66): +0.255, ('0092', 7.93): +0.255, ('0102', 81.74): +0.225}
 
 
 def words_of(clip, a, b):
@@ -121,8 +128,10 @@ def main():
             if pin:
                 ws[0][0], ws[0][1] = pin
                 ws[1][0] = max(ws[1][0], pin[1])
+        sh = SHIFT.get((d['src'], round(d['in'], 2)), 0.0)
+        end = d['t'] + d['out'] - d['in']
         caps.append(dict(src=d['src'], **{'in': d['in']}, out=d['out'], t=d['t'],
-                         words=[[round(d['t'] + w[0] - d['in'], 3), round(d['t'] + w[1] - d['in'], 3), w[2]] for w in ws]))
+                         words=[[round(min(end - 0.05, d['t'] + w[0] + sh - d['in']), 3), round(min(end, d['t'] + w[1] + sh - d['in']), 3), w[2]] for w in ws]))
     json.dump(caps, open(os.path.join(ROOT, 'data', 'captions.json'), 'w'), indent=1)
     json.dump(used, open(os.path.join(ROOT, 'data', 'caption_fixes.json'), 'w'), indent=1)
     for c in caps:

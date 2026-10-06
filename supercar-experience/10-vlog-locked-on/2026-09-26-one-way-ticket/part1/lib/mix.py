@@ -117,14 +117,41 @@ def lufs(x, gate=True):
     return float(-0.691 + 10 * np.log10(z2.mean())) if len(z2) else -70.0
 
 
+def os_peaks(x, os_=4, chunk=1 << 19, pad=8192):
+    """per-sample 4x-oversampled peak (max over channels and the os_ sub-samples), FFT-upsampled in padded chunks so the
+    186 s master never needs a whole-length 4x array (that ran a worker out of memory, 6 Oct)."""
+    n = x.shape[0]
+    x2 = x if x.ndim == 2 else x[:, None]
+    out = np.empty(n)
+    for i0 in range(0, n, chunk):
+        i1 = min(n, i0 + chunk)
+        a, b = max(0, i0 - pad), min(n, i1 + pad)
+        seg = x2[a:b]
+        up = np.fft.irfft(np.fft.rfft(seg, axis=0), seg.shape[0] * os_, axis=0) * os_
+        pk = np.abs(up).max(1).reshape(seg.shape[0], os_).max(1)
+        out[i0:i1] = pk[i0 - a:i1 - a]
+    return out
+
+
 def true_peak_db(x):
-    X = np.fft.rfft(x, axis=0)
-    up = np.fft.irfft(X, x.shape[0] * 4, axis=0) * 4
-    return float(20 * np.log10(np.abs(up).max() + 1e-12))
+    return float(20 * np.log10(os_peaks(x).max() + 1e-12))
+
+
+def _limiter(x, ceiling_db=-2.0, look=0.0015, release=0.012):
+    """synth.limiter with the chunked peak detector (same gain curve: moving-min then moving-average)."""
+    c = 10 ** (ceiling_db / 20)
+    n = x.shape[0]
+    need = np.minimum(1, c / np.maximum(os_peaks(x), 1e-9))
+    L = int(round((look + release) * SR))
+    padded = np.concatenate([need, np.ones(L)])
+    mm = np.lib.stride_tricks.sliding_window_view(padded, L).min(1)[:n]
+    g = np.convolve(np.concatenate([np.ones(L - 1), mm]), np.ones(L) / L, mode='valid')
+    g = np.minimum(g, 1)
+    return x * g[:, None] if x.ndim == 2 else x * g
 
 
 # ------------------------------------------------------------------------------ io
-def aud_audio(src, a, b, af=None):
+def aud_audio(src, a, b, af=None, latency=0.0):
     """source seconds [a, b] of clip src from paths.aud/<src>.m4a (the camera AAC, full length), float64 stereo; the
     filter runs on 0.6 s of padding either side."""
     pad0 = min(0.6, max(0.0, a))
@@ -134,7 +161,7 @@ def aud_audio(src, a, b, af=None):
     cmd += ['-f', 'f32le', '-ac', '2', '-ar', str(SR), '-']
     raw = subprocess.run(cmd, capture_output=True, check=True).stdout
     x = np.frombuffer(raw, '<f4').reshape(-1, 2).astype(np.float64)
-    i0 = int(round(pad0 * SR))
+    i0 = int(round((pad0 + latency) * SR))    # latency: the filter chain's own delay, read past so the voice stays on the picture
     n = int(round((b - a) * SR))
     out = x[i0:i0 + n]
     if len(out) < n:
@@ -187,7 +214,7 @@ def build_dialog(report):
         a = d['in'] + tr.get('in', 0.0)
         b = d['out'] + tr.get('out', 0.0)
         t = d['t'] + tr.get('in', 0.0) + d.get('shift', 0.0)
-        x = aud_audio(d['src'], a, b, DIALOG_AF)
+        x = aud_audio(d['src'], a, b, DIALOG_AF, latency=A.get('dialogLatency', 0.0))
         m = x.mean(1)
         L = lufs(np.stack([m, m], 1))                  # loudness of the piece as placed (centred mono, L = R = m)
         tgt = A['dialogLufs'] + tr.get('gainDb', 0.0) + d.get('gainDb', 0.0)
@@ -325,7 +352,7 @@ def master(x, target, ceiling):
     gain = 1.0
     done = False
     for it in range(4):
-        y = S.limiter(x * gain, ceiling_db=ceiling)
+        y = _limiter(x * gain, ceiling_db=ceiling)
         L = lufs(y)
         if abs(L - target) < 0.05:
             done = True
@@ -333,7 +360,7 @@ def master(x, target, ceiling):
         gain *= 10 ** ((target - L) / 20)
     master.gain = gain
     if not done:            # (on a break, y is already the limiter output at this exact gain: same numbers, one pass fewer)
-        y = S.limiter(x * gain, ceiling_db=ceiling)
+        y = _limiter(x * gain, ceiling_db=ceiling)
     tail = int(0.06 * SR)
     y[-tail:] = 0
     fl = int(0.25 * SR)
@@ -348,12 +375,9 @@ def _master_job(args):
 
 
 def masters_parallel(xs, target, ceiling):
-    import multiprocessing as mp
-    try:
-        with mp.get_context('fork').Pool(len(xs)) as pool:
-            return pool.map(_master_job, [(x, target, ceiling) for x in xs])
-    except (OSError, ValueError):
-        return [_master_job((x, target, ceiling)) for x in xs]
+    # part1 v2: one after the other. The forked pool hung on this 15 GB machine (a worker lost mid-FFT on the 186 s,
+    # 4x-oversampled stereo master leaves Pool.map waiting forever), and the two masters take well under a minute in turn.
+    return [_master_job((x, target, ceiling)) for x in xs]
 
 
 def meter_table(dialog, t0, t1, bands=14):
@@ -388,7 +412,7 @@ def main():
         r = {'dialog': []}; d, sp = build_dialog(r)
         return d, dict(spans=sp, dialog=r['dialog'])
     dialog, ex, hit = cached_bus('dialog', [EDL['dialog'], A.get('extraDialog', []), A['trims'], A['dialogFilter'], A['dialogLufs'],
-                                            A['edgeFade'], A.get('edgeFadeOut'), P['aud']], _dialog)
+                                            A['edgeFade'], A.get('edgeFadeOut'), A.get('dialogLatency', 0.0), P['aud']], _dialog)
     spans = [list(x) for x in ex['spans']]; rep['dialog'] = ex['dialog']
     T['dialog'] = f'{time.time() - t0:.1f}s' + (' (cached)' if hit else ''); t0 = time.time()
     dk = A['duck']
