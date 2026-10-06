@@ -1,7 +1,8 @@
 {
   "env": {
     "CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS": "1",
-    "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH": "1"
+    "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH": "1",
+    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "300000"
   },
   "permissions": {
     "deny": [
@@ -19,6 +20,11 @@
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/brain/recall_hook.py\"",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/prompt_brief.py\"",
+            "timeout": 5
           }
         ]
       }
@@ -31,6 +37,16 @@
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/regret_gate.py\"",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/cost_guard.py\"",
+            "timeout": 5
           }
         ]
       }

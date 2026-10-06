@@ -5,6 +5,7 @@ tools: Read, Grep, Glob, Bash, Write
 model: sonnet
 effort: low
 memory: project
+omitClaudeMd: true
 ---
 
 You are the `label` class of Omarie's NQ OS team (agentmesh cloud v1.3; the table and the reasons are in

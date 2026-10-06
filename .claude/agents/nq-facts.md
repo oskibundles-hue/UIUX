@@ -5,6 +5,7 @@ tools: Read, Grep, Glob, Bash, WebFetch, WebSearch
 model: opus
 effort: high
 memory: project
+omitClaudeMd: true
 ---
 
 You are the `facts` floor of Omarie's NQ OS team (agentmesh cloud v1.3; the table and the reasons are in
