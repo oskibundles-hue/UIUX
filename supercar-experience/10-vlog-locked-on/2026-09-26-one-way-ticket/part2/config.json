@@ -1,0 +1,773 @@
+{
+ "_about": "One-way ticket, Part 2 (Sep 26-27 2026): the night drive to the arrival at Supercar Experience Las Vegas. The SE vlog standard (rally v2) re-built for this trip from the Part 1 folder, SE orange #FF4F16 for every accent, the dark-glass one-strip HUD (no side G). Every line's source: README.md.",
+ "paths": {
+  "scratch": "/tmp/claude-0/-home-user/cd4f9292-b6c7-5cfb-950d-955794577354/scratchpad",
+  "ffmpeg": "/usr/local/lib/python3.13/dist-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2",
+  "mezz": "/tmp/claude-0/p2day/mezz",
+  "edl": "data/edl.json",
+  "captions": "data/captions.json",
+  "sparse": "/tmp/claude-0/p2day/fetch/sparse",
+  "sfx": "../../../10-motion-sfx/locked-on-sfx",
+  "transcripts": "/tmp/claude-0/p2day/tr"
+ },
+ "name": "2026-09-26 One-way ticket Part 2 - SE LOCKED-ON vlog",
+ "forbidden": [
+  {
+   "src": "0116",
+   "a": 43.0,
+   "b": 56.0,
+   "why": "hours-to-go and miles-to-home figures"
+  },
+  {
+   "src": "0116",
+   "a": 76.0,
+   "b": 96.0,
+   "why": "hours-of-driving figures, traffic / construction / accidents, profanity"
+  },
+  {
+   "src": "0116",
+   "a": 106.9,
+   "b": 120.0,
+   "why": "hours-of-driving figure and the gas-dollar figure"
+  },
+  {
+   "src": "0116",
+   "a": 137.0,
+   "b": 140.0,
+   "why": "two-hour drive figure"
+  },
+  {
+   "src": "0117",
+   "a": 20.0,
+   "b": 44.0,
+   "why": "miles figures and 'go faster' (speed talk)"
+  },
+  {
+   "src": "0117",
+   "a": 57.0,
+   "b": 72.0,
+   "why": "'I'm gonna go fast', cruise figure (speed talk)"
+  },
+  {
+   "src": "0117",
+   "a": 77.5,
+   "b": 82.0,
+   "why": "crows 'about to get obliterated'"
+  },
+  {
+   "src": "0118",
+   "a": 12.0,
+   "b": 40.0,
+   "why": "miles figures and 'at the rate we're going' (speed talk)"
+  },
+  {
+   "src": "0118",
+   "a": 83.0,
+   "b": 86.5,
+   "why": "'no hotel, no nothing' (drowsy-driving read, held like Part 1's fuel-stop line)"
+  },
+  {
+   "src": "0119",
+   "a": 15.0,
+   "b": 17.0,
+   "why": "gas price"
+  },
+  {
+   "src": "0119",
+   "a": 115.0,
+   "b": 175.0,
+   "why": "pump-dollar figures, hours / miles to go"
+  },
+  {
+   "src": "0106",
+   "a": 79.0,
+   "b": 93.0,
+   "why": "'they stole our car' (claim about a third party)"
+  },
+  {
+   "src": "0122",
+   "a": 43.0,
+   "b": 47.5,
+   "why": "minutes-out figure"
+  },
+  {
+   "src": "0123",
+   "a": 7.0,
+   "b": 13.0,
+   "why": "names of people"
+  },
+  {
+   "src": "0123",
+   "a": 46.0,
+   "b": 51.0,
+   "why": "hours figure"
+  }
+ ],
+ "timelapseShutter": 1.0,
+ "looks": {
+  "night": {
+   "mid": 0.18,
+   "contrast": 0.5,
+   "sat": 0.84,
+   "warm_sat": 1.08,
+   "shadow_tint": [
+    -0.01,
+    0.002,
+    0.014
+   ],
+   "hi_tint": [
+    0.012,
+    0.004,
+    -0.012
+   ]
+  },
+  "face": {
+   "mid": 0.2,
+   "contrast": 0.42,
+   "sat": 0.9,
+   "warm_sat": 1.02,
+   "shadow_tint": [
+    -0.006,
+    0.001,
+    0.008
+   ],
+   "hi_tint": [
+    0.01,
+    0.004,
+    -0.008
+   ]
+  },
+  "interior": {
+   "mid": 0.2,
+   "contrast": 0.42,
+   "sat": 0.88,
+   "warm_sat": 1.02,
+   "shadow_tint": [
+    -0.006,
+    0.001,
+    0.009
+   ],
+   "hi_tint": [
+    0.012,
+    0.005,
+    -0.01
+   ]
+  },
+  "day": {
+   "mid": 0.3,
+   "contrast": 0.35,
+   "sat": 0.9,
+   "warm_sat": 1.04,
+   "shadow_tint": [
+    -0.006,
+    0.002,
+    0.01
+   ],
+   "hi_tint": [
+    0.008,
+    0.003,
+    -0.008
+   ],
+   "gmin": 0.7
+  },
+  "garage": {
+   "mid": 0.22,
+   "contrast": 0.42,
+   "sat": 0.86,
+   "warm_sat": 1.06,
+   "shadow_tint": [
+    -0.008,
+    0.002,
+    0.011
+   ],
+   "hi_tint": [
+    0.01,
+    0.004,
+    -0.01
+   ]
+  },
+  "terminal": {
+   "mid": 0.24,
+   "contrast": 0.4,
+   "sat": 0.92,
+   "warm_sat": 1.02,
+   "shadow_tint": [
+    -0.004,
+    0.001,
+    0.006
+   ],
+   "hi_tint": [
+    0.008,
+    0.003,
+    -0.006
+   ],
+   "gmin": 0.65
+  },
+  "cabin": {
+   "mid": 0.3,
+   "contrast": 0.36,
+   "sat": 0.94,
+   "warm_sat": 1.04,
+   "shadow_tint": [
+    -0.004,
+    0.002,
+    0.008
+   ],
+   "hi_tint": [
+    0.006,
+    0.002,
+    -0.006
+   ],
+   "gmin": 0.7
+  }
+ },
+ "shotDefaults": {
+  "look": "day",
+  "s0": 1.0,
+  "s1": 1.04
+ },
+ "shots": {
+  "0": {
+   "look": "cabin"
+  },
+  "20": {
+   "look": "cabin"
+  },
+  "21": {
+   "look": "cabin"
+  },
+  "22": {
+   "look": "cabin"
+  },
+  "23": {
+   "look": "cabin"
+  },
+  "24": {
+   "look": "cabin"
+  },
+  "25": {
+   "look": "cabin"
+  },
+  "26": {
+   "look": "cabin"
+  },
+  "4": {
+   "look": "night"
+  },
+  "5": {
+   "look": "night"
+  },
+  "6": {
+   "look": "night"
+  },
+  "7": {
+   "look": "night"
+  },
+  "8": {
+   "look": "night"
+  },
+  "9": {
+   "look": "night"
+  },
+  "10": {
+   "look": "night"
+  },
+  "11": {
+   "look": "night"
+  },
+  "12": {
+   "look": "night"
+  },
+  "13": {
+   "look": "night"
+  },
+  "14": {
+   "look": "night"
+  },
+  "15": {
+   "look": "night",
+   "s0": 1.8,
+   "s1": 1.8,
+   "_why": "0114 is a 3840x2160 source: a 1080x1920 window needs s >= 1.78"
+  },
+  "16": {
+   "look": "night",
+   "s0": 1.8,
+   "s1": 1.8,
+   "_why": "0114 is a 3840x2160 source: a 1080x1920 window needs s >= 1.78"
+  },
+  "17": {
+   "look": "night",
+   "s0": 1.8,
+   "s1": 1.8,
+   "_why": "0114 is a 3840x2160 source: a 1080x1920 window needs s >= 1.78"
+  },
+  "18": {
+   "look": "night",
+   "s0": 1.8,
+   "s1": 1.8,
+   "_why": "0114 is a 3840x2160 source: a 1080x1920 window needs s >= 1.78"
+  },
+  "19": {
+   "look": "night"
+  },
+  "32": {
+   "look": "day",
+   "s1": 1.0
+  },
+  "39": {
+   "look": "day",
+   "s1": 1.0
+  }
+ },
+ "slips": {
+  "_about": "per-shot source slips over the EDL (applied by lib/plate.py when it loads the EDL): in/speed replace the EDL values, out = in + dur * speed"
+ },
+ "transitions": [
+  {
+   "into": 1,
+   "type": "whip",
+   "dir": "left"
+  },
+  {
+   "into": 2,
+   "type": "whip",
+   "dir": "right"
+  },
+  {
+   "into": 3,
+   "type": "whip",
+   "dir": "left"
+  },
+  {
+   "into": 4,
+   "type": "sweep",
+   "t0": 7.8,
+   "dur": 0.36
+  },
+  {
+   "into": 20,
+   "type": "sweep",
+   "t0": 57.0,
+   "dur": 0.36
+  },
+  {
+   "into": 28,
+   "type": "impact",
+   "strength": 0.45
+  },
+  {
+   "into": 31,
+   "type": "sweep",
+   "t0": 108.2,
+   "dur": 0.36
+  },
+  {
+   "into": 34,
+   "type": "whip",
+   "dir": "left"
+  },
+  {
+   "into": 35,
+   "type": "whip",
+   "dir": "right"
+  }
+ ],
+ "slams": [
+  {
+   "t": 8.0,
+   "title": "NIGHT SHIFT"
+  },
+  {
+   "t": 57.2,
+   "title": "FIRST LIGHT"
+  },
+  {
+   "t": 108.4,
+   "title": "HOME STRETCH"
+  }
+ ],
+ "endCard": {
+  "plateRun": 0.35
+ },
+ "clockStarts": {
+  "_about": "camera clock at source second 0 of each clip: the DJI file names (DJI_2026092[67]HHMMSS_NNNN_D.MP4, local time). Chapter stamps = this + the chapter first shot in-point.",
+  "0103": "19:23:30",
+  "0104": "19:27:08",
+  "0105": "19:32:24",
+  "0106": "19:39:39",
+  "0107": "19:52:01",
+  "0108": "20:00:06",
+  "0109": "20:00:51",
+  "0110": "20:06:05",
+  "0111": "20:07:35",
+  "0112": "20:16:11",
+  "0113": "20:18:48",
+  "0114": "01:29:01",
+  "0115": "02:46:01",
+  "0116": "06:24:37",
+  "0117": "07:09:46",
+  "0118": "07:12:54",
+  "0119": "07:24:55",
+  "0120": "07:31:51",
+  "0121": "07:32:14",
+  "0122": "08:57:04",
+  "0123": "09:10:12"
+ },
+ "layer": {
+  "_about": "every on-screen element: code, kit/v2 component type, in/out on the timeline (s), params. Sources for every line: README.md. Captions are built from captions.json (config `captions`).",
+  "comps": [
+   {
+    "code": "HOOK",
+    "type": "v2hook",
+    "t0": 0,
+    "t1": 2.0,
+    "p": {
+     "eyebrow": "SUPERCAR EXPERIENCE · ROAD TRIP",
+     "line1": "ONE-WAY TICKET",
+     "line2": "PART 2 · SEP 26–27 2026",
+     "x": 54,
+     "y": 330,
+     "w": 853,
+     "exit": 1.42
+    }
+   },
+   {
+    "code": "A2",
+    "type": "bannerTab",
+    "t0": 1.62,
+    "t1": 160.3,
+    "p": {
+     "name": "SUPERCAR EXPERIENCE",
+     "label": "ONE-WAY TICKET · PART 2",
+     "enter": "slide",
+     "progress": [
+      1.62,
+      160.3
+     ]
+    }
+   },
+   {
+    "code": "G1-01",
+    "type": "chapterSlam",
+    "t0": 8.0,
+    "t1": 9.95,
+    "p": {
+     "tag": "19:32 · CH 01 / 03",
+     "title": "NIGHT SHIFT",
+     "y": 350,
+     "maxW": 700,
+     "maxS": 215
+    }
+   },
+   {
+    "code": "G1-02",
+    "type": "chapterSlam",
+    "t0": 57.2,
+    "t1": 59.15,
+    "p": {
+     "tag": "06:26 · CH 02 / 03",
+     "title": "FIRST LIGHT",
+     "y": 350,
+     "maxW": 700,
+     "maxS": 215
+    }
+   },
+   {
+    "code": "G1-03",
+    "type": "chapterSlam",
+    "t0": 108.4,
+    "t1": 110.35,
+    "p": {
+     "tag": "07:32 · CH 03 / 03",
+     "title": "HOME STRETCH",
+     "y": 350,
+     "maxW": 700,
+     "maxS": 215
+    }
+   },
+   {
+    "code": "I1",
+    "type": "sweep",
+    "t0": 7.8,
+    "t1": 8.16,
+    "p": {
+     "angle": 16,
+     "width": 360
+    }
+   },
+   {
+    "code": "I1",
+    "type": "sweep",
+    "t0": 57.0,
+    "t1": 57.36,
+    "p": {
+     "angle": 16,
+     "width": 360
+    }
+   },
+   {
+    "code": "I1",
+    "type": "sweep",
+    "t0": 108.2,
+    "t1": 108.56,
+    "p": {
+     "angle": 16,
+     "width": 360
+    }
+   },
+   {
+    "code": "PLACE-1",
+    "type": "v2place",
+    "t0": 10.1,
+    "t1": 12.3,
+    "p": {
+     "x": 54,
+     "y": 300,
+     "kicker": "PIT STOP",
+     "name": "IN-N-OUT"
+    }
+   },
+   {
+    "code": "D1-NAP",
+    "type": "clockStamp",
+    "t0": 41.7,
+    "t1": 45.3,
+    "p": {
+     "x": 54,
+     "y": 300,
+     "start": "00:00:00",
+     "place": "AFTER THE NAP",
+     "date": "SEP 27 2026",
+     "built": false
+    }
+   },
+   {
+    "code": "LOCK",
+    "type": "v2lock",
+    "t0": 95.0,
+    "t1": 96.6,
+    "p": {
+     "track": "mclaren",
+     "kicker": "LOCKED ON",
+     "name": "MCLAREN 600LT",
+     "acquire": 95.05,
+     "exit": 96.25,
+     "side": "above"
+    }
+   },
+   {
+    "code": "STRIP-1",
+    "type": "driveStrip",
+    "t0": 111.8,
+    "t1": 119.4,
+    "p": {
+     "start": "00:00:00",
+     "place": "SOMEWHERE IN NEVADA",
+     "heading": 0,
+     "route_text": "SEATTLE → VEGAS",
+     "range": [
+      111.8,
+      119.4
+     ],
+     "exit": 118.95,
+     "hide_g": true
+    }
+   },
+   {
+    "code": "STRIP-2",
+    "type": "driveStrip",
+    "t0": 137.6,
+    "t1": 145.2,
+    "p": {
+     "start": "00:00:00",
+     "place": "INTO LAS VEGAS",
+     "heading": 0,
+     "route_text": "SEATTLE → VEGAS",
+     "range": [
+      137.6,
+      145.2
+     ],
+     "exit": 144.75,
+     "hide_g": true
+    }
+   },
+   {
+    "code": "PLACE-2",
+    "type": "v2place",
+    "t0": 145.6,
+    "t1": 148.6,
+    "p": {
+     "x": 54,
+     "y": 300,
+     "kicker": "09:10 · ARRIVED",
+     "name": "SUPERCAR EXPERIENCE"
+    }
+   },
+   {
+    "code": "END",
+    "type": "v2end",
+    "t0": 160.3,
+    "t1": 165.7,
+    "p": {
+     "tagline": "A RIDE OF A LIFETIME.",
+     "cta": "TEXT OR DM TO BOOK",
+     "phone": "(725) 425-3583",
+     "url": "SUPERCAREXP.VIP",
+     "handle": "@SUPERCAR_EXPERIENCE_",
+     "locations": "LAS VEGAS · SCOTTSDALE · BOISE",
+     "requirement": "RENTERS 25+ · AGES 21–24 WITH $299 UNDERAGE FEE",
+     "credit": "FILMED BY @NQ.YOUNG"
+    }
+   }
+  ],
+  "captions": {
+   "t0": 2.0,
+   "t1": 160.3,
+   "p": {
+    "size": 68,
+    "yBottom": 1372,
+    "maxLines": 2,
+    "maxW": 700,
+    "cx": 480
+   }
+  }
+ },
+ "captions": {
+  "hide": [],
+  "fix": {},
+  "extra": []
+ },
+ "tracks": {
+  "_about": "lock-on targets: shot, output frame range f0-f1, anchor frame (sharp, mid-shot) and the box x,y,w,h on it (output px). Tracked with lib/track_mid.py both ways from the anchor.",
+  "mclaren": {
+   "_todo": "phase B: anchor frame and box from the mezzanine (shot 28, 0119 64.5-68.1, doors up)",
+   "shot": 28,
+   "f0": 2847,
+   "f1": 2895,
+   "anchor": 2865,
+   "box": [
+    400,
+    700,
+    320,
+    260
+   ]
+  }
+ },
+ "music": {
+  "_about": "THE MUSIC. The bed is ORIGINAL (lib/music.py, synthesised here, re-timed to this cut) unless a track is dropped at audio/music.wav. To switch music OFF: set music.enabled to false here, or run MUSIC=0 ./render.sh. The no-music master is exported every time anyway. To use another track: put it at audio/music.wav (48 kHz stereo), set bpm / downbeat0 / offset; the mixer ducks it under speech and tape-stops it at tapeStop before the end card hit. The placeholder bed: 104.73 BPM, first downbeat 0.633 s, drop 119.8 s, end card 174.8 s.",
+  "file": "audio/music.wav",
+  "bpm": 103.4908,
+  "downbeat0": 0.2857,
+  "offset": 0.0,
+  "tapeStop": [
+   159.14,
+   159.72
+  ],
+  "lufs": -20.0,
+  "duckDb": -11.0,
+  "enabled": true
+ },
+ "audio": {
+  "dialogFilter": "highpass=f=80:poles=2,afftdn=nr=8:nf=-45:tn=1,acompressor=threshold=-26dB:ratio=2:attack=12:release=180:makeup=1",
+  "dialogLufs": -16.0,
+  "edgeFade": 0.012,
+  "trims": {
+   "_about": "per-piece edge trims (s, source) found on the audio envelope where a neighbouring word crosses the EDL edge (build notes in cue.md)"
+  },
+  "extraDialog": [],
+  "natLufs": -24.0,
+  "natDuckDb": -10.0,
+  "nat": [
+   {
+    "src": "0119",
+    "a": 64.5,
+    "b": 68.1,
+    "t": 94.6,
+    "lufs": -24,
+    "why": "the McLaren at the pump, doors up (lock-on); no transcribed speech 59-70 s"
+   },
+   {
+    "src": "0121",
+    "a": 120.0,
+    "b": 128.0,
+    "t": 111.6,
+    "lufs": -20,
+    "why": "rear-deck cam: the engine; 0121 has no transcribed speech or lyrics after 32.6 s"
+   },
+   {
+    "src": "0121",
+    "a": 40.0,
+    "b": 43.0,
+    "t": 119.6,
+    "lufs": -26,
+    "why": "rear-deck cam, under his VO"
+   },
+   {
+    "src": "0121",
+    "a": 150.0,
+    "b": 153.0,
+    "t": 122.6,
+    "lufs": -26,
+    "why": "rear-deck cam, under his VO"
+   },
+   {
+    "src": "0121",
+    "a": 180.0,
+    "b": 183.0,
+    "t": 125.6,
+    "lufs": -26,
+    "why": "rear-deck cam, under his VO"
+   },
+   {
+    "src": "0121",
+    "a": 60.0,
+    "b": 63.0,
+    "t": 128.6,
+    "lufs": -26,
+    "why": "rear-deck cam, under his VO"
+   }
+  ],
+  "sfx": {
+   "ratio": 0.45,
+   "duckDb": -6.0
+  },
+  "duck": {
+   "_about": "music sidechain: every dialog piece plus every nat clip with transcribed speech; raised-cosine attack before the words and release after them; gaps under `bridge` s are held down (no pumping between sentences)",
+   "attack": 0.06,
+   "release": 0.4,
+   "bridge": 0.6
+  }
+ },
+ "sfx": {
+  "files": {
+   "hitOpen": "SE-LO_01_hit_open.wav",
+   "hitDrop": "SE-LO_02_hit_drop.wav",
+   "hitEnd": "SE-LO_03_hit_endcard.wav",
+   "whooshLR": "SE-LO_04_whoosh_left_to_right.wav",
+   "whooshRL": "SE-LO_05_whoosh_right_to_left.wav",
+   "tickAcquire": "SE-LO_10_tick_acquire.wav",
+   "tickLock": "SE-LO_11_tick_lock.wav",
+   "tickReel": "SE-LO_12_tick_reel_lands.wav",
+   "riser": "SE-LO_06_riser_noise_1.5s.wav"
+  },
+  "align": {
+   "whooshLR": 0.62,
+   "whooshRL": 0.62
+  },
+  "extra": []
+ },
+ "master": {
+  "lufs": -14.0,
+  "ceiling": -2.0
+ },
+ "qa": {
+  "moments": {},
+  "bannerCodes": [
+   "A2"
+  ]
+ },
+ "blurs": [],
+ "speedo": [],
+ "_aboutSpeedo": "speedo: the McLaren's own speedometer on every cabin-cam shot (its digits are readable at phone size), blurred in a static feathered box per shot (no speed on screen). blurs: licence plates are not blurred in this vlog (Omarie, 6 Oct). PART 2: filled in phase B from the mezzanines (every cabin-cam shot)."
+}

@@ -1,0 +1,44 @@
+[
+ {
+  "clip": "0105",
+  "at": 5.86,
+  "whisper": "it. To In -N -Out.",
+  "shown": "it to In-N-Out.",
+  "why": "medium.en: \"We finally made it to In-N-Out.\" (one sentence; the restaurant's spelling)"
+ },
+ {
+  "clip": "0111",
+  "at": 47.32,
+  "whisper": "It's a McLaren",
+  "shown": "It's a McLaren.",
+  "why": "punctuation"
+ },
+ {
+  "clip": "0111",
+  "at": 54.98,
+  "whisper": "like that's",
+  "shown": "like, that's",
+  "why": "punctuation"
+ },
+ {
+  "clip": "0112",
+  "at": 17.31,
+  "whisper": "We are gassed up,",
+  "shown": "We are gassed up,",
+  "why": "both models"
+ },
+ {
+  "clip": "0118",
+  "at": 61.92,
+  "whisper": "trip",
+  "shown": "Trip",
+  "why": "sentence start"
+ },
+ {
+  "clip": "0118",
+  "at": 70.78,
+  "whisper": "Wow,",
+  "shown": "(dropped)",
+  "why": "medium.en does not hear \"Wow\" (\"It's been pretty fire, really nice scenery\"): not captioned"
+ }
+]
