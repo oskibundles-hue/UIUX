@@ -33,6 +33,16 @@
             "timeout": 10
           }
         ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/cost_guard.py\"",
+            "timeout": 5
+          }
+        ]
       }
     ]
   }

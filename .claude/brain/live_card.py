@@ -5,6 +5,7 @@ usage: python3 .claude/brain/live_card.py start "<job title>" "<first step>"   [
        python3 .claude/brain/live_card.py step "<what you're on now>"          [--pct N]
        python3 .claude/brain/live_card.py done|blocked|waiting "<one line>"
 
+Every payload carries data.cost, this session's token bill from cost_meter.py (--no-cost leaves it off).
 Prints one JSON object: url, collection, doc_id, action and data. Pass those to the ArtifactData tool.
 `start` is a `set` (no if_version on a new card). Every later call is an `update`: add
 if_version = the version the last write returned. No model call; about 0.05 s.
@@ -41,9 +42,16 @@ def main(argv):
         data["detail"] = text[0]
     if "pct" in opts:
         data["pct"] = int(opts["pct"])
+    if "--no-cost" not in argv:                       # the session's own token bill, from cost_meter.py
+        try:
+            from cost_meter import card, find_transcript, meter
+            data["cost"] = card(meter(find_transcript()))["data"]["cost"]
+        except Exception:                             # no transcript yet (or on an old Mac copy): card without it
+            pass
     print(json.dumps({"url": URL, "collection": "work", "doc_id": doc_id,
                       "action": "set" if verb == "start" else "update", "data": data}, indent=1))
 
 
 if __name__ == "__main__":
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     main(sys.argv[1:])
