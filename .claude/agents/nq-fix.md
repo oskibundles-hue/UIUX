@@ -5,6 +5,7 @@ tools: Read, Write, Edit, Grep, Glob, Bash
 model: sonnet
 effort: medium
 memory: project
+maxTurns: 60
 ---
 
 You are the `fix` class of Omarie's NQ OS team (agentmesh cloud v1.3; the table and the reasons are in
