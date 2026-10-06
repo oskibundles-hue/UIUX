@@ -86,8 +86,9 @@ D1 with no `date`) is on file but not used.
    (square 3840 Osmo footage: crop 2160x3840 first, e.g. `crop=2160:3840:360:0` on the Oct 3 clip). Apply the speedometer blur here.
 3. **Track** the driver or the car ahead (`tools/track_csrt.py base.mov x,y,w,h tracks.json car [frames]`, the box on
    the first frame); **blur plates** with `tools/plate_blur.py`. Arizona cars often have no front plate; check at 3x anyway.
-4. **Side G**: `tools/side_g.py clip.mp4 <in> <len> side_g.json [--turn a,b,right|left --level]` (needs `pip install
-   pyosmogps`). `--level` re-zeroes the straight driving outside the turn; use it when the turn fills much of the cut.
+4. **Side G**: `tools/side_g.py clip.mp4 <in> <len> side_g.json [--turn a,b,right|left --level | --zero a,b]` (needs
+   `pip install pyosmogps`). `--zero a,b` sets zero where the car stands still (best when there is one); otherwise
+   `--level` re-zeroes the straight driving outside the turn.
 5. **Layer page**: `python3 build_hud.py --scene <your scene>.json --tracks tracks.json --side-g side_g.json --name <name>`
    then `cd ../vlog-kit && node lib/kcapture.js "file://$PWD/.hud_<name>.html" <outDir> seq 30000/1001 <len> --workers 3`
    (needs Pillow for `lib/accum.py`). About 45-65 s for 12 s on a cloud box. **Glass themes (HUD-2):** first
@@ -118,3 +119,18 @@ Experience lounge in Scottsdale, camera on the roof looking back over the engine
 | Real data | camera clock; street signs in shot (Indian School Rd at 899 s, Scottsdale Rd through the turn); Old Town (the Sugar Bowl at 911 s); the drive ends at the SE Scottsdale lounge (clip 0167, about 80 s in); side G with `--turn 7,11.5,left --level`, peak 0.31 g in the left turn |
 | Estimated | heading: south on Scottsdale Rd, then east after the left turn. With the camera looking back, the facades it sees are lit, so the sun (azimuth 133 degrees at 10:00 MST) is behind the camera |
 | Redacted | nothing: the following car has no front plate and the other plates are unreadable at 3x |
+
+### HUD-2, the next stretch: `examples/2026-10-04-indian-school/`
+
+"put HUD-2 on the next drive clip" (6 Oct), built with the one-strip recipe as it stands. No newer footage than Oct 4,
+and Oct 3's other clips have no road-facing camera (cabin cam in the afternoon, a camera facing Omarie at night), so
+this is the next stretch of the same R8 drive.
+
+| | |
+|---|---|
+| Source | `NQ Studio/raw footage/2026-10-04/DJI_20261004094505_0165_D.MP4`, 985.0-997.0 s (crop `2160:3840:840:0`) |
+| Clock | 10:01:30 (file 09:45:05 + 985 s) |
+| Real data | camera clock; waiting at the red light, then the left turn through the Indian School Rd junction (sign in shot at 989 s); side G with `--turn 3.5,7.7,left --zero 0,2.5` (zero at the red light, peak 0.22 g) |
+| Estimated | heading: east, then north after the left turn (the picture swings right through 988.5-992.7 s; after the turn the sun sits upper left in the camera looking back) |
+| Redacted | the grey Civic's rear plate, 9.5-12 s, tracked on the plate itself (`plate_track.json`, `plate_blur.py --rel 0.5,0.5,1.4,1.6`) |
+| Left out | the car lock: nothing follows on this stretch |

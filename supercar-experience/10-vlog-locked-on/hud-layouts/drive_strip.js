@@ -60,7 +60,7 @@ SEK.driveStrip = function (cfg) {
     // heading (estimate) and side G (camera sensor)
     let base = p.heading;
     if (p.hdgKeys) { const K = p.hdgKeys; base = K[0][1]; for (let j = 1; j < K.length; j++) { if (t >= K[j - 1][0]) { const u = E.inOutCubic(P(t, K[j - 1][0], K[j][0])); base = K[j - 1][1] + (K[j][1] - K[j - 1][1]) * u; } } }
-    const hd = base + 1.6 * Math.sin(t * 0.55) + 0.7 * Math.sin(t * 1.7), hr = Math.round(((hd % 360) + 360) % 360);
+    const hd = base + 1.6 * Math.sin(t * 0.55) + 0.7 * Math.sin(t * 1.7), hr = Math.round(((hd % 360) + 360) % 360) % 360;
     hv.t.textContent = card(hr) + ' ' + String(hr).padStart(3, '0');
     const g = LAT.length ? LAT[Math.max(0, Math.min(LAT.length - 1, Math.round(t * 30)))] : 0;
     gv.t.textContent = Math.abs(g).toFixed(2) + ' G';

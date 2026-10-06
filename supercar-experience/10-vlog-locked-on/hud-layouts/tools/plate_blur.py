@@ -13,6 +13,12 @@ clip, tracks, name, out = sys.argv[1:5]
 rel = [float(v) for v in sys.argv[sys.argv.index('--rel') + 1].split(',')] if '--rel' in sys.argv else [0.53, 0.55, 0.30, 0.22]
 fr = json.load(open(tracks))[name]['frames']
 md = out + '.masks'; os.makedirs(md, exist_ok=True)
+# one mask per frame of the clip: blank where the car isn't tracked (it can enter late or leave early)
+n = int(subprocess.run(['ffprobe', '-v', 'error', '-count_frames', '-select_streams', 'v:0', '-show_entries', 'stream=nb_read_frames',
+                        '-of', 'csv=p=0', clip], capture_output=True, text=True).stdout.strip())
+blank = Image.new('L', (1080, 1920), 0)
+for i in set(range(n)) - {f['f'] for f in fr}:
+    blank.save(f'{md}/{i:04d}.png')
 for f in fr:
     cx, cy = f['x'] + rel[0] * f['w'], f['y'] + rel[1] * f['h']; pw, ph = max(30, rel[2] * f['w']), max(20, rel[3] * f['h'])
     m = Image.new('L', (1080, 1920), 0)
