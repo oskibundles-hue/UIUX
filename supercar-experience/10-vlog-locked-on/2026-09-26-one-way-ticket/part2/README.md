@@ -51,3 +51,11 @@ car reads MCLAREN 600LT. The full README (every element, every line's source, so
   (sheet `exports/qa/round2-ch2-slam-sync.jpg`). Clock 06:24:37 + 103.6 = 06:26, unchanged. Dialog and captions unchanged.
 - Master 9.78 Mb/s (under 11.5, so build.py makes no re-encoded _DELIVERY); the _DELIVERY path holds a copy of the master.
 
+
+## Delivered (6 Oct 2026)
+
+- Video Drop card `se-one-way-ticket-p2` (page version 11), 9 parts. The rejoined file's SHA-256 matches the master: 57bc6ae1526bcca8a432fef144cbaa4214b4b23b51d2ac1808e8d8c47b72efc5, 177,192,792 bytes, 2:25.1, 9.77 Mb/s, −14.1 LUFS, −1.6 dBTP.
+- Dropbox folder: `Supercar Experience / 05 Vlogs / 2026-09-26 One-way ticket Part 2`.
+- Checks: nq-check needed two fix rounds (16:9 fill bug in `lib/plate.py`, hands and phone cutaways, speedo box placement, then lip sync at 56 s). nq-facts and nq-second both voted CLEAR.
+- **Hands rule, clarified by Omarie (6 Oct, a click):** one hand on the wheel while he talks is fine. A phone or camera in hand, or both hands off the wheel, while moving or stopped in traffic means a cutaway.
+- Noted on the card: the shop's own banner at about 2:10 shows a different phone number (888-678-…, cropped). It's in the footage, not an overlay.
