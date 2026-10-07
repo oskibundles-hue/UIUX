@@ -173,8 +173,8 @@ beat('CH3', 'CH3 slam; "I like it. I want y\'all to get the vibe. So you feel me
     ('0094', 7.6, 1.6, 1.0, 'SYNC: back to him, hand off the phone'),
 ], [('0094', 2.34, 9.06, ('at', 0.14))])
 beat('CH3', 'the vibes: forest montage (music up, nat under)', [
-    ('0095', 47.0, 1.5, 1.0, 'forest (nq-check, 7 Oct: starts at 47.0, after the red/magenta white-balance flash at 0095 46.70-46.97)'),
-    ('0095', 51.8, 1.8, 1.0, 'forest, the road opens (7 Oct: 0.2 s earlier, to keep the montage length)'),
+    ('0095', 47.2, 1.3, 1.0, 'forest (nq-check, 7 Oct: starts at 47.2, after the red/magenta white-balance flash at 0095 46.70-46.97 and its pink tail on the cap at 47.05-47.12, measured on the chroma V average and checked by eye)'),
+    ('0095', 52.4, 2.0, 1.0, 'forest, the road opens (7 Oct: moved from 51.8 past a second, smaller pink frame at 0095 52.03-52.13; 2.0 s keeps the montage at 3.3 s; the mezzanine ends at 54.4)'),
 ])
 beat('CH3', '"Man, I miss trees and nature. Good lord. I just know they got some fire hiking trails out here."', [
     ('0095', 28.0, 5.8, 1.0, 'forest road (his line from 0094 over it: hands on the wheel here)'),
