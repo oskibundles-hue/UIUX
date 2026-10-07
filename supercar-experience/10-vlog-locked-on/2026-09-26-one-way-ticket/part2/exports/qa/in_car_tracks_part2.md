@@ -1,4 +1,4 @@
-# In-car tracks heard in 2026-09-26 One-way ticket Part 2 - SE LOCKED-ON vlog
+# In-car tracks heard in 2026-09-26 One-way ticket Part 2 v2 - SE LOCKED-ON vlog
 
 For Omarie to check before posting (commercial tracks can get a business-page post muted). Episode timecodes are
 m:ss.ss in the v2 cut. Source: Shazam on the exact clip span of every music bed segment and cabin dialog piece
@@ -14,5 +14,5 @@ m:ss.ss in the v2 cut. Source: Shazam on the exact clip span of every music bed 
 
 Dialog pieces from the cabin clips with no song recognised on their exact span (30): 0116 at 0:02.00, 0105 at 0:08.60, 0106 at 0:14.20, 0111 at 0:25.85, 0111 at 0:27.60, 0112 at 0:30.10, 0112 at 0:33.05, 0114 at 0:45.10, 0114 at 0:49.30, 0114 at 0:52.87, 0114 at 0:55.65, 0115 at 0:58.45, 0116 at 1:03.90, 0116 at 1:06.45, 0116 at 1:11.95, 0116 at 1:16.82, 0117 at 1:27.20, 0117 at 1:28.90, 0117 at 1:31.25, 0119 at 1:33.85, 0119 at 1:41.95, 0121 at 1:48.55, 0121 at 1:52.21, 0118 at 2:08.25, 0118 at 2:10.45, 0118 at 2:15.35, 0123 at 2:30.70, 0123 at 2:32.75, 0123 at 2:36.00, 0123 at 2:41.95. A stereo may still be faintly audible under the voice there.
 
-**NO MUSIC version:** the music bed segments (0:00.00, 0:37.40, 2:18.55) are swapped for road/exhaust nat from clip 0095. The dialog pieces keep their own cabin audio, so any faint stereo
+**NO MUSIC version:** the music bed segments (0:00.00, 0:37.40, 2:18.55) are swapped for road/exhaust nat from clip 0121. The dialog pieces keep their own cabin audio, so any faint stereo
 under his voice in the pieces listed above stays in the NO MUSIC version too.

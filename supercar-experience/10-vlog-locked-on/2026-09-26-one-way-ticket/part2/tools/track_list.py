@@ -82,7 +82,7 @@ for i, r in enumerate(rows, 1):
 L += ['', f'Dialog pieces from the cabin clips with no song recognised on their exact span ({len(quiet)}): ' +
       ', '.join(f"{p['src']} at {tc(p['t'])}" for p in quiet) + '. A stereo may still be faintly audible under the voice there.']
 L += ['', '**NO MUSIC version:** the music bed segments (' + ', '.join(f"{tc(s['t'])}" for s in nomusic_bed) +
-      ') are swapped for road/exhaust nat from clip 0095. The dialog pieces keep their own cabin audio, so any faint stereo',
+      ') are swapped for road/exhaust nat from clip ' + ', '.join(sorted({s['sub']['src'] for s in nomusic_bed if s.get('sub')})) + '. The dialog pieces keep their own cabin audio, so any faint stereo',
       'under his voice in the pieces listed above stays in the NO MUSIC version too.', '']
 open(os.path.join(QA, 'in_car_tracks_part2.md'), 'w').write('\n'.join(L))
 for r in rows:
