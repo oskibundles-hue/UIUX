@@ -1,5 +1,5 @@
 {
- "NF": 5588,
+ "NF": 5345,
  "bad": [],
  "swaps": [
   {
@@ -189,302 +189,278 @@
    ]
   },
   {
-   "n": 2054,
-   "t": 68.535,
+   "n": 2058,
+   "t": 68.669,
    "k": 1,
-   "pages": [
-    "ITHINKYOUGUYSJUSTPUTABRANDNEWENGINEINIT."
-   ]
+   "pages": []
   },
   {
-   "n": 2145,
-   "t": 71.572,
+   "n": 2067,
+   "t": 68.969,
    "k": 1,
    "pages": [
     "IGOTTADRIVEITALLTHEWAYBACKTOVEGAS."
    ]
   },
   {
-   "n": 2212,
-   "t": 73.807,
-   "k": 1,
-   "pages": [
-    "SOTHEYGOTONEMOREHOURUNTILTHEY'REDONEWITH"
-   ]
-  },
-  {
-   "n": 2348,
-   "t": 78.345,
-   "k": 1,
-   "pages": [
-    "CAR."
-   ]
-  },
-  {
-   "n": 2374,
-   "t": 79.212,
-   "k": 1,
-   "pages": []
-  },
-  {
-   "n": 2378,
-   "t": 79.346,
+   "n": 2135,
+   "t": 71.238,
    "k": 1,
    "pages": [
     "SORIGHTNOWHE'SGONNAGOGRABTHE600LTFROMTHE"
    ]
   },
   {
-   "n": 2571,
-   "t": 85.786,
+   "n": 2328,
+   "t": 77.678,
    "k": 1,
    "pages": [
     "WAREHOUSE"
    ]
   },
   {
-   "n": 2605,
-   "t": 86.92,
+   "n": 2362,
+   "t": 78.812,
    "k": 10,
    "pages": []
   },
   {
-   "n": 2749,
-   "t": 91.725,
+   "n": 2506,
+   "t": 83.617,
    "k": 1,
    "pages": [
     "BUTWEHAVETHE600LTTHATWEWILLBEDRIVINGFROM"
    ]
   },
   {
-   "n": 2875,
-   "t": 95.929,
+   "n": 2632,
+   "t": 87.821,
    "k": 1,
    "pages": [
     "TOVEGAS."
    ]
   },
   {
-   "n": 2931,
-   "t": 97.798,
+   "n": 2688,
+   "t": 89.69,
    "k": 1,
    "pages": []
   },
   {
-   "n": 2937,
-   "t": 97.998,
+   "n": 2694,
+   "t": 89.89,
    "k": 1,
    "pages": [
     "THISISTHEINTERIORCHAT."
    ]
   },
   {
-   "n": 2999,
-   "t": 100.067,
+   "n": 2756,
+   "t": 91.959,
    "k": 1,
    "pages": []
   },
   {
-   "n": 3033,
-   "t": 101.201,
+   "n": 2790,
+   "t": 93.093,
    "k": 1,
    "pages": [
     "WEAREINTHE600LT"
    ]
   },
   {
-   "n": 3143,
-   "t": 104.871,
+   "n": 2900,
+   "t": 96.763,
    "k": 1,
    "pages": []
   },
   {
-   "n": 3158,
-   "t": 105.372,
+   "n": 2915,
+   "t": 97.264,
    "k": 1,
    "pages": [
     "LET'SMAKESURETHISTOPWORK"
    ]
   },
   {
-   "n": 3218,
-   "t": 107.374,
+   "n": 2975,
+   "t": 99.266,
    "k": 1,
    "pages": []
   },
   {
-   "n": 3310,
-   "t": 110.444,
+   "n": 3067,
+   "t": 102.336,
    "k": 1,
    "pages": [
     "ITISBEAUTIFULOUTHERE,LIKEGORGEOUS."
    ]
   },
   {
-   "n": 3436,
-   "t": 114.648,
+   "n": 3193,
+   "t": 106.54,
    "k": 1,
    "pages": [
     "LIKEI'MTALKINGGORGEOUS."
    ]
   },
   {
-   "n": 3547,
-   "t": 118.352,
+   "n": 3304,
+   "t": 110.243,
    "k": 12,
    "pages": [
     "ILIKEIT."
    ]
   },
   {
-   "n": 3584,
-   "t": 119.586,
+   "n": 3341,
+   "t": 111.478,
    "k": 1,
    "pages": [
     "IWANTY'ALLTO,YOUKNOWWHATI'MSAYING,GETTHE"
    ]
   },
   {
-   "n": 3648,
-   "t": 121.722,
+   "n": 3405,
+   "t": 113.614,
    "k": 1,
    "pages": [
     "YOUFEELME."
    ]
   },
   {
-   "n": 3676,
-   "t": 122.656,
+   "n": 3433,
+   "t": 114.548,
    "k": 1,
    "pages": [
     "WEGON'CATCHTHEVIBESRIGHTNOW."
    ]
   },
   {
-   "n": 3767,
-   "t": 125.692,
+   "n": 3524,
+   "t": 117.584,
    "k": 1,
    "pages": []
   },
   {
-   "n": 3858,
-   "t": 128.729,
+   "n": 3615,
+   "t": 120.621,
    "k": 1,
    "pages": [
     "MAN,IMISSTREESANDNATURE."
    ]
   },
   {
-   "n": 3927,
-   "t": 131.031,
+   "n": 3684,
+   "t": 122.923,
    "k": 1,
    "pages": [
     "GOODLORD."
    ]
   },
   {
-   "n": 3938,
-   "t": 131.398,
+   "n": 3695,
+   "t": 123.29,
    "k": 1,
    "pages": [
     "IJUSTKNOWTHEYGOTSOMEFIREHIKINGTRAILSOUTH"
    ]
   },
   {
-   "n": 4038,
-   "t": 134.735,
+   "n": 3795,
+   "t": 126.627,
    "k": 10,
    "pages": []
   },
   {
-   "n": 4609,
-   "t": 153.787,
+   "n": 4366,
+   "t": 145.679,
    "k": 8,
    "pages": [
     "IJUSTWANTEDTOLETYOUGUYSKNOW."
    ]
   },
   {
-   "n": 4659,
-   "t": 155.455,
+   "n": 4416,
+   "t": 147.347,
    "k": 1,
    "pages": [
     "WE'REINOREGON!"
    ]
   },
   {
-   "n": 4701,
-   "t": 156.857,
+   "n": 4458,
+   "t": 148.749,
    "k": 1,
    "pages": [
     "IJUSTPULLEDOVERSOICANPUTTHETOPDOWNIMEANT"
    ]
   },
   {
-   "n": 4787,
-   "t": 159.726,
+   "n": 4544,
+   "t": 151.618,
    "k": 1,
    "pages": [
     "BACKUPCUZMYEARSARERINGING"
    ]
   },
   {
-   "n": 4881,
-   "t": 162.863,
+   "n": 4638,
+   "t": 154.755,
    "k": 1,
    "pages": [
     "GASSINGUPTHEMCLAREN600LTRIGHTNOW"
    ]
   },
   {
-   "n": 5004,
-   "t": 166.967,
+   "n": 4761,
+   "t": 158.859,
    "k": 1,
    "pages": [
     "ASYOUCANSEEIGOTMYREDBULLANDMYSNACKSBECAU"
    ]
   },
   {
-   "n": 5129,
-   "t": 171.138,
+   "n": 4886,
+   "t": 163.03,
    "k": 1,
    "pages": [
     "WEAREGOINGTOSTARVEOURSELVESUNTILWECANGET"
    ]
   },
   {
-   "n": 5208,
-   "t": 173.774,
+   "n": 4965,
+   "t": 165.666,
    "k": 1,
    "pages": [
     "IN-N-OUTTHAT'STHEGOAL."
    ]
   },
   {
-   "n": 5264,
-   "t": 175.642,
+   "n": 5021,
+   "t": 167.534,
    "k": 1,
    "pages": []
   },
   {
-   "n": 5269,
-   "t": 175.809,
+   "n": 5026,
+   "t": 167.701,
    "k": 1,
    "pages": [
     "ALLRIGHTCHATSOWEAREABOUTTOKEEPONGOINGWIT"
    ]
   },
   {
-   "n": 5423,
-   "t": 180.947,
+   "n": 5180,
+   "t": 172.839,
    "k": 8,
    "pages": [
     "DRIVE."
    ]
   },
   {
-   "n": 5426,
-   "t": 181.048,
+   "n": 5183,
+   "t": 172.939,
    "k": 32,
    "pages": []
   }
