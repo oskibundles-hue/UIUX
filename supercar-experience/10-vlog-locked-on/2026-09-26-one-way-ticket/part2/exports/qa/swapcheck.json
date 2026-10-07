@@ -1,0 +1,566 @@
+{
+ "NF": 5146,
+ "bad": [],
+ "swaps": [
+  {
+   "n": 61,
+   "t": 2.035,
+   "k": 10,
+   "pages": [
+    "SOWEARECURRENTLYINSOMEWHEREINNEVADA."
+   ]
+  },
+  {
+   "n": 141,
+   "t": 4.705,
+   "k": 1,
+   "pages": [
+    "IDON'TKNOWWHERE."
+   ]
+  },
+  {
+   "n": 197,
+   "t": 6.573,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 260,
+   "t": 8.675,
+   "k": 1,
+   "pages": [
+    "WEFINALLYMADEITTOIN-N-OUT."
+   ]
+  },
+  {
+   "n": 368,
+   "t": 12.279,
+   "k": 8,
+   "pages": [
+    "APPRECIATEYOU."
+   ]
+  },
+  {
+   "n": 390,
+   "t": 13.013,
+   "k": 1,
+   "pages": [
+    "THANKYOU."
+   ]
+  },
+  {
+   "n": 426,
+   "t": 14.214,
+   "k": 1,
+   "pages": [
+    "YEAH,IJUSTCAMEFROMSEATTLE."
+   ]
+  },
+  {
+   "n": 501,
+   "t": 16.717,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 518,
+   "t": 17.284,
+   "k": 1,
+   "pages": [
+    "IAIN'TGONNALIE,NOTHINGLIKEDOOM-SCROLLING"
+   ]
+  },
+  {
+   "n": 665,
+   "t": 22.189,
+   "k": 1,
+   "pages": [
+    "NOCAP."
+   ]
+  },
+  {
+   "n": 696,
+   "t": 23.223,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 776,
+   "t": 25.893,
+   "k": 1,
+   "pages": [
+    "IT'SAMCLAREN."
+   ]
+  },
+  {
+   "n": 827,
+   "t": 27.594,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 834,
+   "t": 27.828,
+   "k": 1,
+   "pages": [
+    "IWASLIKE,THAT'SNOTACORVETTE."
+   ]
+  },
+  {
+   "n": 903,
+   "t": 30.13,
+   "k": 1,
+   "pages": [
+    "WEAREGASSEDUP,WEAREREADYTOLEAVE."
+   ]
+  },
+  {
+   "n": 987,
+   "t": 32.933,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 991,
+   "t": 33.066,
+   "k": 1,
+   "pages": [
+    "LET'SPLAYSOMETUNESANDGETUPOUTOFHERE."
+   ]
+  },
+  {
+   "n": 1144,
+   "t": 38.171,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 1353,
+   "t": 45.145,
+   "k": 8,
+   "pages": [
+    "IDEFINITELYDIDTAKEANICEMCLARENNAP."
+   ]
+  },
+  {
+   "n": 1479,
+   "t": 49.349,
+   "k": 1,
+   "pages": [
+    "PRETTYNICEPARKINGLOT."
+   ]
+  },
+  {
+   "n": 1534,
+   "t": 51.184,
+   "k": 1,
+   "pages": [
+    "REMINDSMEOFVEGAS."
+   ]
+  },
+  {
+   "n": 1581,
+   "t": 52.753,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 1585,
+   "t": 52.886,
+   "k": 1,
+   "pages": [
+    "IFEELREFRESHED."
+   ]
+  },
+  {
+   "n": 1625,
+   "t": 54.221,
+   "k": 1,
+   "pages": [
+    "I'MPARCHED."
+   ]
+  },
+  {
+   "n": 1665,
+   "t": 55.556,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 1669,
+   "t": 55.689,
+   "k": 1,
+   "pages": [
+    "WEBACKINBUSINESS,BABY!"
+   ]
+  },
+  {
+   "n": 1744,
+   "t": 58.191,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 1764,
+   "t": 58.859,
+   "k": 1,
+   "pages": [
+    "GASSINGUP,DUDE,ITISFREEZING."
+   ]
+  },
+  {
+   "n": 1912,
+   "t": 63.797,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 1917,
+   "t": 63.964,
+   "k": 1,
+   "pages": [
+    "ITWASACTUALLYPERFECTWEATHERTHISTIME."
+   ]
+  },
+  {
+   "n": 1995,
+   "t": 66.567,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 2005,
+   "t": 66.9,
+   "k": 1,
+   "pages": [
+    "WEGOTTHEBEAUTIFULVIEWTOUSRIGHTHERE."
+   ]
+  },
+  {
+   "n": 2098,
+   "t": 70.003,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 2157,
+   "t": 71.972,
+   "k": 1,
+   "pages": [
+    "IWISHITWASLIKEMORELIKE,YOUFEELME,"
+   ]
+  },
+  {
+   "n": 2239,
+   "t": 74.708,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 2243,
+   "t": 74.841,
+   "k": 1,
+   "pages": [
+    "SIDEMISSIONSWECOULDHAVEDONE,"
+   ]
+  },
+  {
+   "n": 2300,
+   "t": 76.743,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 2306,
+   "t": 76.944,
+   "k": 1,
+   "pages": [
+    "BUTYEAH,SOAPPRECIATEY'ALLHANGINGOUT,HOPE"
+   ]
+  },
+  {
+   "n": 2452,
+   "t": 81.815,
+   "k": 1,
+   "pages": [
+    "ENJOYTHECONTENT."
+   ]
+  },
+  {
+   "n": 2481,
+   "t": 82.783,
+   "k": 1,
+   "pages": [
+    "ANDYEAH."
+   ]
+  },
+  {
+   "n": 2533,
+   "t": 84.518,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 2614,
+   "t": 87.22,
+   "k": 1,
+   "pages": [
+    "THERE'SNOTHINGOUTHERE."
+   ]
+  },
+  {
+   "n": 2665,
+   "t": 88.922,
+   "k": 1,
+   "pages": [
+    "ASYOUCANSEE,IT'SJUSTALLFIELD."
+   ]
+  },
+  {
+   "n": 2732,
+   "t": 91.158,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 2743,
+   "t": 91.525,
+   "k": 1,
+   "pages": [
+    "NOCELLSERVICE."
+   ]
+  },
+  {
+   "n": 2792,
+   "t": 93.16,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 2814,
+   "t": 93.894,
+   "k": 1,
+   "pages": [
+    "I'MLOOKINGATTHEGASSTATION."
+   ]
+  },
+  {
+   "n": 2878,
+   "t": 96.029,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 2898,
+   "t": 96.697,
+   "k": 1,
+   "pages": [
+    "OH,THANKTHELORD."
+   ]
+  },
+  {
+   "n": 2956,
+   "t": 98.632,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 3058,
+   "t": 102.035,
+   "k": 1,
+   "pages": [
+    "MAN,SOITHINKFORTHELASTBITOFTHEDRIVE,I'MG"
+   ]
+  },
+  {
+   "n": 3181,
+   "t": 106.139,
+   "k": 1,
+   "pages": [
+    "YOUGUYSLIKEINTHEBACK."
+   ]
+  },
+  {
+   "n": 3255,
+   "t": 108.609,
+   "k": 12,
+   "pages": [
+    "HOPEFULLYTHISDON'TFLYOFF."
+   ]
+  },
+  {
+   "n": 3319,
+   "t": 110.744,
+   "k": 1,
+   "pages": [
+    "GOODLORD."
+   ]
+  },
+  {
+   "n": 3362,
+   "t": 112.179,
+   "k": 1,
+   "pages": [
+    "YOUGUYSCANHEARME,GUYSYOUCANHEARTHECAR,YO"
+   ]
+  },
+  {
+   "n": 3448,
+   "t": 115.048,
+   "k": 1,
+   "pages": [
+    "HEAREVERYTHING."
+   ]
+  },
+  {
+   "n": 3491,
+   "t": 116.483,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 3844,
+   "t": 128.261,
+   "k": 1,
+   "pages": [
+    "TRIPHASBEENCOOL."
+   ]
+  },
+  {
+   "n": 3902,
+   "t": 130.197,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 3910,
+   "t": 130.464,
+   "k": 1,
+   "pages": [
+    "IT'SBEENPRETTYFIRE,"
+   ]
+  },
+  {
+   "n": 3968,
+   "t": 132.399,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 3995,
+   "t": 133.3,
+   "k": 1,
+   "pages": [
+    "REALLYNICESCENERY."
+   ]
+  },
+  {
+   "n": 4047,
+   "t": 135.035,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 4058,
+   "t": 135.402,
+   "k": 1,
+   "pages": [
+    "ICAN'TBELIEVEIJUSTDIDTHEWHOLETHING."
+   ]
+  },
+  {
+   "n": 4134,
+   "t": 137.938,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 4516,
+   "t": 150.684,
+   "k": 1,
+   "pages": [
+    "WEJUSTGOTBACKTOTHESHOP."
+   ]
+  },
+  {
+   "n": 4577,
+   "t": 152.719,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 4581,
+   "t": 152.853,
+   "k": 1,
+   "pages": [
+    "YEAH,LETMETAKEMYSTUFFOUTOFHERE."
+   ]
+  },
+  {
+   "n": 4677,
+   "t": 156.056,
+   "k": 1,
+   "pages": [
+    "SOTHATCONCLUDESTODAY'SEPISODE."
+   ]
+  },
+  {
+   "n": 4746,
+   "t": 158.358,
+   "k": 1,
+   "pages": [
+    "WEDROPPEDITOFFHEREATSUPERCAREXPERIENCEAT"
+   ]
+  },
+  {
+   "n": 4816,
+   "t": 160.694,
+   "k": 1,
+   "pages": [
+    "HEADQUARTERS."
+   ]
+  },
+  {
+   "n": 4850,
+   "t": 161.828,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 4855,
+   "t": 161.995,
+   "k": 1,
+   "pages": [
+    "SOIHOPEYOUGUYSENJOYEDTHAT."
+   ]
+  },
+  {
+   "n": 4919,
+   "t": 164.131,
+   "k": 1,
+   "pages": []
+  },
+  {
+   "n": 4924,
+   "t": 164.297,
+   "k": 1,
+   "pages": [
+    "ANDUNTILNEXTTIME,"
+   ]
+  },
+  {
+   "n": 4971,
+   "t": 165.866,
+   "k": 1,
+   "pages": [
+    "PEACE."
+   ]
+  },
+  {
+   "n": 4996,
+   "t": 166.7,
+   "k": 10,
+   "pages": []
+  }
+ ]
+}

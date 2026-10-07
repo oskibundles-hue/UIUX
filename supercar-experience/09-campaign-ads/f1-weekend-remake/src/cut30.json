@@ -1,0 +1,5 @@
+{
+ "about": "The 30 s ad cut (boss request, 2026-10-05): shot ids from the 76 s reference (shots.json), each trimmed from its start to the frame count here. Cuts before the drop sit on ROAR's beats (beat 64 kick on frame 69, one beat = 12.766 frames); the drop (beat 324) lands on frame 534 = shot 30's frame 36, where the GT3 RS's engine fires. tools/cut30.py builds shots30.json and sfx/events30.json from this; src/Ad.tsx builds the Ad30 composition from it.",
+ "fps": 30,
+ "shots": [[1, 69], [2, 26], [4, 76], [6, 32], [7, 51], [8, 26], [10, 38], [12, 64], [17, 25], [21, 32], [26, 59], [30, 113], [32, 25], [33, 64], [34, 77], [35, 123]]
+}

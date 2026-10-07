@@ -1,0 +1,96 @@
+<!doctype html>
+<!--
+  mid_now-boarding.html -- the BEHIND-THE-CAR layer of the NOW BOARDING look (roof shot only, 10.731 s -> end).
+  Same contract as mid.html: build.py multiplies it by the per-frame sky matte, so the car, the stowing roof and the
+  far hills stay in front of it.
+    A giant departure board rises from behind the rear deck with blank tiles, then SPIDER clatters in, one tile at
+    a time, as the roof folds away (from beat 24, 11.192 s); the crash (12.115 s) refreshes every tile and jolts
+    the board; in the tape stop the tiles clatter back to blank and the board sinks behind the car by 13.88 s.
+    On the end-card hit (13.962 s) the FARE board rises with blank tiles and the price flips in whole (every tile at
+    once, at 14.36 s) and stays, clear of the car; it refreshes twice in the hold.
+-->
+<html><head><meta charset="utf-8"><title>NOW BOARDING mid layer</title>
+<style>
+@font-face{font-family:Bebas;src:url('../../07-fonts/BebasNeue-Regular.ttf')}
+@font-face{font-family:Michroma;src:url('../../07-fonts/Michroma-Regular.ttf')}
+html,body{margin:0;padding:0;background:transparent;width:1080px;height:1920px;overflow:hidden}
+.a{position:absolute;left:0;top:0}
+.mic{font-family:Michroma;letter-spacing:.08em;line-height:1;white-space:pre}
+.hbar{background:#FBD101;border-radius:8px;box-shadow:0 10px 26px rgba(0,0,0,.28)}
+.rail{background:rgba(7,7,7,.94);border-radius:12px;box-shadow:0 22px 48px rgba(0,0,0,.3)}
+</style>
+<script src=".work/config.js"></script>
+<script src=".work/timeline.js"></script>
+<script src="lib/kinetic.js"></script>
+<script src="lib/flap.js"></script>
+<script>
+const g = k => TL.g0 + k * TL.beat;
+window.KT_PLAN = { k: 12, shutter: 180, spans: [
+  { a: 10.90, b: 11.50, k: 16, shutter: 240 }, { a: 13.60, b: 13.92, k: 16, shutter: 240 },
+  { a: 13.94, b: 14.36, k: 16, shutter: 240 } ] };
+</script>
+</head><body>
+<div id="stage" class="a" style="width:1080px;height:1920px;transform-origin:540px 1130px"></div>
+<script>
+const C = window.CONFIG, FPS = TL.fps, E = KT.ease, P = KT.p, cl = KT.cl, lerp = KT.lerp;
+const TE = TL.tEnd, TS = TL.tStop, TC = TL.tCrash;
+const $ = id => document.getElementById(id);
+const R = {}, rng = KT.rng(1750);
+const cv = document.createElement('canvas').getContext('2d');
+function micW(size, text) { cv.font = `${size}px Michroma`; cv.letterSpacing = (0.08 * size) + 'px'; return cv.measureText(text).width; }
+function el(parent, cls, css, txt) { const d = document.createElement('div'); d.className = cls; d.style.cssText = css;
+  if (txt !== undefined) d.textContent = txt; parent.appendChild(d); return d; }
+// a sky board: a gold header bar over a rail of big tiles (x 76..884, tiles y0..y0+220). QA: at x 62..894 the
+// end-card push (1.02 about x 540) carried the gold bar to x 52, past the 54 px safe edge; 76..884 stays inside
+function skyBoard(id, left, right, text, color, y0) {
+  const w = el($('stage'), 'a', 'width:1080px;height:1920px'); w.id = id;
+  el(w, 'a rail', `left:68px;top:${y0 - 8}px;width:824px;height:236px`);
+  el(w, 'a hbar', `left:76px;top:${y0 - 60}px;width:808px;height:44px`);
+  const fs = 20, ty = y0 - 60 + (44 - fs * 0.72) / 2 - fs * 0.14;
+  el(w, 'a mic', `left:98px;top:${ty}px;font-size:${fs}px;color:#000`, left);
+  if (right) el(w, 'a mic', `left:${884 - 22 - micW(fs, right)}px;top:${ty}px;font-size:${fs}px;color:#000`, right);
+  R[id] = Flap.row(w, text, { x: 76, y: y0, cw: 128, ch: 220, gap: 8, color });
+  Flap.set(R[id], '');
+  return w;
+}
+
+(async () => {
+  await document.fonts.load('100px Bebas'); await document.fonts.load('40px Michroma'); await KT.ready();
+  // SPIDER: the board rises blank behind the deck, then the letters clatter in, one tile after another
+  skyBoard('sky', C.brand + ' ' + C.model.split(' ')[0], C.city, C.giant, '#FFFFFF', 460);
+  Flap.cascade(R.sky, g(24), { stagger: 0.07, cycle: 3, pool: Flap.LETTERS, rng });
+  Flap.all(R.sky, TC);                                                     // the crash refreshes every tile
+  Flap.cascade(R.sky, TS, { stagger: 0.03, text: ''.padEnd(R.sky.cells.length), order: 'rtl' });
+  // the price: a FARE board with blank tiles rises on the end-card hit; the figure flips in whole, then refreshes
+  skyBoard('fare', 'FARE · ' + C.hours + ' HOURS', C.city, C.price, '#FBD101', 484);   // header clear of the end-card model row
+  Flap.all(R.fare, TE + 0.40); Flap.all(R.fare, TE + 1.70); Flap.all(R.fare, TE + 3.10);
+  window.renderAt(0);
+  window.__ktReady = true;
+})();
+
+window.renderAt = function (t) {
+  const i0 = TL.beats[16][0], on = t * FPS >= i0 - 0.5;
+  $('stage').style.display = on ? 'block' : 'none';
+  if (!on) return;
+  const u = cl((t * FPS - i0) / (TL.nf - 1 - i0));
+  $('stage').style.transform = `scale(${(1 + 0.02 * (1 - (1 - u) * (1 - u))).toFixed(5)})`;
+
+  // SPIDER board: rise 10.93-11.43 (from 320 px down, behind the deck), jolt on the crash, sink 13.62-13.88
+  const up = E.outCubic(P(t, 10.93, 11.43)), down = E.inCubic(P(t, TS + 0.12, TS + 0.38));
+  const jolt = (() => { const q = (t - TC) / (5 / FPS); return q > 0 && q < 1 ? Math.sin(Math.PI * q) * (1 - q) : 0; })();
+  const skyOn = up > 0 && down < 1;
+  $('sky').style.display = skyOn ? 'block' : 'none';
+  if (skyOn) {
+    $('sky').style.transform = `translateY(${(320 * (1 - up) + 340 * down - 14 * jolt).toFixed(2)}px)`;
+    Flap.render(R.sky, t);
+  }
+  // FARE board: rises TE -> TE + 0.36, blank until the price flips in whole at TE + 0.40
+  const fu = E.outCubic(P(t, TE, TE + 0.36));
+  $('fare').style.display = fu > 0 ? 'block' : 'none';
+  if (fu > 0) {
+    $('fare').style.transform = `translateY(${(320 * (1 - fu)).toFixed(2)}px)`;
+    Flap.render(R.fare, t);
+  }
+};
+</script>
+</body></html>
