@@ -1,0 +1,4 @@
+# This branch carries the Supercar Experience site (deployed by Render), not the alienated site.
+# Tell Netlify to skip building it so its deploy previews don't fail.
+[build]
+  ignore = "exit 0"
