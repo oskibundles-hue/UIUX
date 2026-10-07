@@ -212,7 +212,10 @@ def video_filters(meta, movie, cfr=None):
     if 'arib-std-b67' in probe or (meta.get('video') or {}).get('hlg'):
         vf.append('zscale=tin=arib-std-b67:min=bt2020nc:pin=bt2020:t=linear:npl=203,format=gbrpf32le,'
                   'zscale=p=bt709,tonemap=hable:desat=0,zscale=t=bt709:m=bt709:r=tv')
-    vf.append("scale='if(gte(iw,ih),1920,-2)':'if(gte(iw,ih),-2,1920)':flags=lanczos")
+    # VLOG_MEZZ_LONG sets the long side (default 1920, the approved v2 size); 3840 keeps the full open-gate
+    # frame for a 3840x2160 master (One-way ticket YouTube, 2026-10-07).
+    long_side = int(os.environ.get('VLOG_MEZZ_LONG', '1920'))
+    vf.append(f"scale='if(gte(iw,ih),{long_side},-2)':'if(gte(iw,ih),-2,{long_side})':flags=lanczos")
     if cfr:
         vf.append(f'fps={cfr}')
     vf.append('format=yuv420p10le')
