@@ -15,8 +15,21 @@
    "ep_out": 8.3,
    "where": "bed (music)",
    "shazam_windows": 2,
-   "confidence": "high",
-   "check": "check: clip scan only"
+   "confidence": "direct match on the exact span + 2 nearby clip-scan window(s)",
+   "check": ""
+  },
+  {
+   "title": "Quebec",
+   "artist": "Drake",
+   "clip": "0107",
+   "clip_in": 14.62,
+   "clip_out": 20.44,
+   "ep_in": 17.32,
+   "ep_out": 23.14,
+   "where": "under the voice",
+   "shazam_windows": 1,
+   "confidence": "direct match on the exact span + 1 nearby clip-scan window(s)",
+   "check": "check: clip scan: 1 window(s); under the voice"
   },
   {
    "title": "Sweater Weather",
@@ -28,8 +41,8 @@
    "ep_out": 45.7,
    "where": "bed (music)",
    "shazam_windows": 2,
-   "confidence": "high",
-   "check": "check: clip scan only"
+   "confidence": "direct match on the exact span + 2 nearby clip-scan window(s)",
+   "check": ""
   },
   {
    "title": "Maverick Intro",
@@ -41,9 +54,190 @@
    "ep_out": 151.75,
    "where": "bed (music)",
    "shazam_windows": 3,
-   "confidence": "high",
-   "check": "check: clip scan only"
+   "confidence": "direct match on the exact span + 3 nearby clip-scan window(s)",
+   "check": ""
   }
  ],
- "no_song_recognised_under_voice": []
+ "no_song_recognised_under_voice": [
+  {
+   "src": "0116",
+   "a": 35.3,
+   "b": 39.66,
+   "ep": 2.0
+  },
+  {
+   "src": "0105",
+   "a": 4.8,
+   "b": 10.1,
+   "ep": 8.6
+  },
+  {
+   "src": "0106",
+   "a": 65.85,
+   "b": 68.23,
+   "ep": 14.2
+  },
+  {
+   "src": "0111",
+   "a": 47.25,
+   "b": 48.89,
+   "ep": 25.85
+  },
+  {
+   "src": "0111",
+   "a": 54.7,
+   "b": 57.11,
+   "ep": 27.6
+  },
+  {
+   "src": "0112",
+   "a": 17.25,
+   "b": 19.97,
+   "ep": 30.1
+  },
+  {
+   "src": "0112",
+   "a": 54.8,
+   "b": 59.72,
+   "ep": 33.05
+  },
+  {
+   "src": "0114",
+   "a": 7.45,
+   "b": 11.43,
+   "ep": 45.1
+  },
+  {
+   "src": "0114",
+   "a": 19.75,
+   "b": 23.22,
+   "ep": 49.3
+  },
+  {
+   "src": "0114",
+   "a": 34.92,
+   "b": 37.59,
+   "ep": 52.87
+  },
+  {
+   "src": "0114",
+   "a": 42.7,
+   "b": 45.37,
+   "ep": 55.65
+  },
+  {
+   "src": "0115",
+   "a": 10.35,
+   "b": 15.09,
+   "ep": 58.45
+  },
+  {
+   "src": "0116",
+   "a": 104.5,
+   "b": 106.89,
+   "ep": 63.9
+  },
+  {
+   "src": "0116",
+   "a": 121.25,
+   "b": 124.18,
+   "ep": 66.45
+  },
+  {
+   "src": "0116",
+   "a": 142.5,
+   "b": 147.06,
+   "ep": 71.95
+  },
+  {
+   "src": "0116",
+   "a": 153.42,
+   "b": 161.58,
+   "ep": 76.82
+  },
+  {
+   "src": "0117",
+   "a": 50.65,
+   "b": 52.06,
+   "ep": 87.2
+  },
+  {
+   "src": "0117",
+   "a": 74.85,
+   "b": 76.9,
+   "ep": 88.9
+  },
+  {
+   "src": "0117",
+   "a": 100.8,
+   "b": 103.14,
+   "ep": 91.25
+  },
+  {
+   "src": "0119",
+   "a": 3.3,
+   "b": 7.88,
+   "ep": 93.85
+  },
+  {
+   "src": "0119",
+   "a": 227.7,
+   "b": 234.17,
+   "ep": 101.95
+  },
+  {
+   "src": "0121",
+   "a": 21.0,
+   "b": 24.57,
+   "ep": 108.55
+  },
+  {
+   "src": "0121",
+   "a": 28.66,
+   "b": 32.7,
+   "ep": 112.21
+  },
+  {
+   "src": "0118",
+   "a": 61.85,
+   "b": 63.58,
+   "ep": 128.25
+  },
+  {
+   "src": "0118",
+   "a": 69.45,
+   "b": 73.82,
+   "ep": 130.45
+  },
+  {
+   "src": "0118",
+   "a": 80.7,
+   "b": 83.06,
+   "ep": 135.35
+  },
+  {
+   "src": "0123",
+   "a": 4.85,
+   "b": 6.65,
+   "ep": 150.7
+  },
+  {
+   "src": "0123",
+   "a": 13.8,
+   "b": 16.95,
+   "ep": 152.75
+  },
+  {
+   "src": "0123",
+   "a": 39.85,
+   "b": 45.68,
+   "ep": 156.0
+  },
+  {
+   "src": "0123",
+   "a": 55.25,
+   "b": 59.83,
+   "ep": 161.95
+  }
+ ]
 }
