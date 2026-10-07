@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 build.py -- ONE command for the Sep 15 rally vlog v2 (Egnyte rally day), rebuilt from the raw footage:
-picture edit + grade (lib/plate.py), sound (lib/music.py, lib/mix.py), tracking (lib/track_mid.py), the
+picture edit + grade (lib/plate.py), sound (lib/mix.py; part1 v2: the in-car bed, no synth music), tracking (lib/track_mid.py), the
 Locked-On motion layer (story.html + lib/sekit.js + lib/v2kit.js, captured by lib/kcap2.js), the
 composite, the exports and QA. Every stage is cached, so a re-run only redoes what a change touches.
 
@@ -16,7 +16,7 @@ Stages (all cached in .work/):
            -> lib/data/tracks.json (boxes in OUTPUT pixels by OUTPUT frame); only tracks whose inputs changed
   join     lib/plate.py: shots + transitions + punches + plate blurs -> .work/plate.mov; skipped when unchanged
   prep     the layer scene (.work/scene.js, after the lock-on gate), camera clock, tracks.js, SFX cues
-  audio    lib/music.py (only when no audio/music.wav is supplied) + lib/mix.py -> .work/mix.wav, mix_nomusic.wav,
+  audio    lib/mix.py (part1 v2: voice + the in-car bed + SFX; no synth music) -> .work/mix.wav, mix_nomusic.wav,
            stems, meter; skipped when its inputs are unchanged; the dialog and nat buses are cached inside mix.py
   gates    lib/gates.py + lib/swapcheck.js: swap check, black / constant / lens-blocked shots, caption sync,
            loudness, quote-card speaker check -> exports/qa/gates.md (errors stop a full render)
@@ -24,7 +24,8 @@ Stages (all cached in .work/):
            DOM at every motion-blur sample), identical frames once; order-independent pixels; NPROC processes
   compose  plate + vignette + layer -> x264 CRF 17.3 (medium, VBV 16M/22M) master in 120-frame segments (only changed
            segments are re-encoded, then joined by stream copy), the 720x1280 preview from the same pass (CRF 28.5,
-           VBV 2M), the NO MUSIC master = the same video + the no-music mix; _DELIVERY only if the master is > 11.5 Mb/s
+           VBV 2M), the NO MUSIC master = the same video + the no-music mix; exports/delivery/: the two-pass 11.1M video with
+           each mix under the final names (part1 v2)
   qa       stills, sheets, loudness, true peak, durations, safe-zone audit, caption sync, swap check (one decode)
 """
 import argparse, hashlib, json, math, os, re, shutil, struct, subprocess, sys, time
@@ -81,9 +82,13 @@ def clock_table():
         if s['src'] == 'card':
             continue
         ts = PL.src_times(k)
+        # part1 v2 (7 Oct): a cutaway under his voice carries shot config `clockAs` {src, in}: the clock reads the voice's
+        # clip (src, from `in` at the shot's first frame), so the strip clock never jumps to the road clip and back
+        ca = PL.scfg(k).get('clockAs')
         for j in range(f1 - f0):
             t, sp = ts[j]
-            tab[f0 + j] = [round(starts[s['src']] + t, 4), round(sp, 4)]
+            tab[f0 + j] = ([round(starts[ca['src']] + ca['in'] + (t - s['in']), 4), round(sp, 4)] if ca else
+                           [round(starts[s['src']] + t, 4), round(sp, 4)])
     return tab
 
 
@@ -142,6 +147,12 @@ def build_scene():
             sp(p['exit'] - 0.02, p['exit'] + 0.42, 12)
         elif ty == 'bannerTab':
             sp(t0 - 0.02, t0 + 0.7, 10); sp(t1 - 0.36, t1 + 0.02, 10)
+        elif ty == 'seStrip':                       # part1 v2: unroll, every grow / shrink, the retract
+            sp(t0 - 0.02, t0 + 0.9, 10)
+            for w in p.get('expand', []):
+                sp(w['a'] - 0.02, w['a'] + 0.42, 10); sp(w['b'] - 0.42, w['b'] + 0.02, 10)
+            if p.get('exit') is not None:
+                sp(p['exit'] - 0.02, p['exit'] + 0.36, 10)
         elif ty == 'chapterSlam':
             sp(t0 - 0.02, t0 + 0.55, 14, 270); sp(t1 - 0.4, t1 + 0.02, 10)
         elif ty == 'sweep':
@@ -188,8 +199,6 @@ def sfx_cues(scene):
         t0, t1, ty, p = c['t0'], c['t1'], c['type'], c.get('p', {})
         if ty == 'v2hook':
             cue('hitOpen', 0.0, 'hook panel, frame 0', -1)
-        elif ty == 'bannerTab':
-            cue('whooshRL', t0 + 0.15, 'SE side banner slides in', -5)
         elif ty == 'chapterSlam':
             cue('hitDrop', t0 + 0.16, f'chapter slam {p.get("title")}', -3, dur=1.6)
         elif ty == 'sweep':
@@ -300,7 +309,7 @@ def join_sig():
     bt = {b['track']: T.get(b['track'], {}).get('frames') for b in C.get('blurs', [])}
     blob = json.dumps([[_shot_sig(k) for k, _, _ in PL.FR if PL.SHOTS[k]['src'] != 'card'], C['transitions'], C.get('slams'), C['endCard'],
                        C.get('blurs', []), bt, EDL['duration'], [(s['src'], s['t'], s['dur']) for s in PL.SHOTS],
-                       [c for c in C['layer']['comps'] if c['type'] == 'driveStrip'], C.get('speedo', [])], sort_keys=True)   # part1: the strip glass
+                       [c for c in C['layer']['comps'] if c['type'] in ('driveStrip', 'seStrip')], C.get('speedo', [])], sort_keys=True)   # part1: the strip glass
     return _hash(os.path.join(LIB, 'plate.py'), os.path.join(LIB, 'fx.py'), extra=blob)
 
 
@@ -313,23 +322,19 @@ def st_join(A):
 
 
 def audio_sig():
-    slot = os.path.join(ROOT, C['music']['file'])
-    blob = json.dumps([C['audio'], C['music'], C['master'], C['sfx'], C['layer'].get('testimonial'), EDL['dialog'], EDL.get('audio_extra'),
+    # part1 v2: no synth / library music; the bed is the in-car audio (config `bed`), read from paths.aud
+    blob = json.dumps([C['audio'], C['bed'], C['master'], C['sfx'], C['layer'].get('testimonial'), EDL['dialog'], EDL.get('audio_extra'),
                        os.environ.get('MUSIC', '1'), DUR], sort_keys=True)
     cues = os.path.join(WORK, 'sfx_cues.json')
-    return _hash(os.path.join(LIB, 'mix.py'), os.path.join(LIB, 'synth.py'), os.path.join(LIB, 'music.py'), cues,
-                 extra=blob + _files_sig([slot, C['paths']['mezz'], os.path.join(WORK, 'mezz_extra'), C['paths']['transcripts'],
+    return _hash(os.path.join(LIB, 'mix.py'), os.path.join(LIB, 'synth.py'), cues,
+                 extra=blob + _files_sig([C['paths']['aud'], C['paths']['transcripts'], os.path.join(ROOT, 'data', 'words_medium.json'),
                                           os.path.join(ROOT, C['paths']['sfx'])]))
 
 
 def st_audio(A):
     sig = audio_sig()
-    outs = [os.path.join(WORK, f) for f in ('mix.wav', 'mix_nomusic.wav', 'music_stem.wav', 'stem_dialog.wav', 'meter.json', 'mix.json')]
+    outs = [os.path.join(WORK, f) for f in ('mix.wav', 'mix_nomusic.wav', 'bed_stem.wav', 'stem_dialog.wav', 'meter.json', 'mix.json')]
     if not _cached('audio', sig, outs):
-        if not os.path.exists(os.path.join(ROOT, C['music']['file'])):
-            mw = os.path.join(WORK, 'music_synth.wav')
-            if not os.path.exists(mw) or os.path.getmtime(mw) < os.path.getmtime(os.path.join(LIB, 'music.py')):
-                sh([sys.executable, os.path.join(LIB, 'music.py'), '--out', mw, '--sync', os.path.join(WORK, 'music_synth.json'), '--dur', f'{DUR:.4f}'])
         sh([sys.executable, os.path.join(LIB, 'mix.py')])
         _done('audio', sig)
     else:
@@ -408,12 +413,12 @@ def st_gates(A):
         m = json.load(open(mj))['master']
         out += G.loud_gate('mix', m['lufs'], m['true_peak_db'], tp_max=-1.9)       # the limiter ceiling is -2.0 before AAC
         out += G.loud_gate('mix (no music)', m['nomusic_lufs'], m['nomusic_true_peak_db'], tp_max=-1.9)
-        vob = json.load(open(mj)).get('voice_over_bed')     # part2 (fix B): voice >= 10 dB over music + nat in speech
+        vob = json.load(open(mj)).get('voice_over_bed')     # v2 (fix B): voice >= 10 dB over the in-car bed in speech
         if vob and vob['min_bed'] < vob['need']:
-            out.append(dict(level='error', code='VOICE', what=f"voice over music+nat {vob['min_bed']} dB < {vob['need']} dB under a dialog piece (.work/mix.json duck_check)"))
+            out.append(dict(level='error', code='VOICE', what=f"voice over the bed {vob['min_bed']} dB < {vob['need']} dB under a dialog piece (.work/mix.json duck_check)"))
         elif vob:
-            out.append(dict(level='check', code='VOICE', what=f"voice over music: min {vob['min_music']} dB, median {vob['median_music']:.1f} dB; over music+nat: min {vob['min_bed']} dB"))
-    sys.path.insert(0, os.path.join(ROOT, 'tools'))           # part2 (fix A): every dialog out-point >= 300 ms after its last word
+            out.append(dict(level='check', code='VOICE', what=f"voice over the bed: min {vob['min_bed']} dB, median {vob['median_bed']:.1f} dB (no-music mix: min {vob['min_bed_nomusic']} dB)"))
+    sys.path.insert(0, os.path.join(ROOT, 'tools'))           # fix A: every dialog out-point >= 300 ms after its last word
     import tail_check
     out += tail_check.gate_items()
     scene = json.loads(open(os.path.join(WORK, 'scene.js')).read()[len('window.SCENE='):-2])
@@ -734,8 +739,8 @@ def st_compose(A):
             old[str(i)] = segs[i][2]
         json.dump(old, open(sp, 'w'))
     t_enc = time.time() - t1
-    master = os.path.join(EXP, f'{NAME} - 1080x1920.mp4')
-    nomus = os.path.join(EXP, f'{NAME} - NO MUSIC - 1080x1920.mp4')
+    master = os.path.join(EXP, f'{NAME} - 1080x1920 (master CRF).mp4')     # 7 Oct: the delivery pair takes the plain names
+    nomus = os.path.join(EXP, f'{NAME} - 1080x1920 - NO MUSIC (master).mp4')
     prev = os.path.join(EXP, f'{NAME} - PREVIEW 720x1280.mp4')
     mparts = [os.path.join(segdir, f'm_{i:03d}.mp4') for i in range(len(segs))]
     pparts = [os.path.join(segdir, f'p_{i:03d}.mp4') for i in range(len(segs))]
@@ -748,15 +753,22 @@ def st_compose(A):
     concat_mux(mparts, a_n, nomus, title + ' (no music)')
     concat_mux(pparts, a_p, prev, title + ' (preview)')
     mbps = os.path.getsize(master) * 8 / DUR / 1e6
-    deliv = os.path.join(EXP, f'{NAME} - 1080x1920_DELIVERY.mp4')
-    if mbps > 11.5:
-        log(f'compose: master {mbps:.2f} Mb/s > 11.5 -> _DELIVERY copy')
-        plog = os.path.join(WORK, 'x264pass')
-        sh([FF, '-v', 'error', '-y', '-i', master, '-c:v', 'libx264', '-preset', 'slow', '-b:v', '11.1M', '-pass', '1', '-passlogfile', plog + 'd', '-an', '-f', 'null', '-'])
-        sh([FF, '-v', 'error', '-y', '-i', master, '-c:v', 'libx264', '-preset', 'slow', '-b:v', '11.1M', '-pass', '2', '-passlogfile', plog + 'd',
-            '-c:a', 'copy', '-movflags', '+faststart', deliv])
-    elif os.path.exists(deliv):
-        os.remove(deliv)
+    # part1 v2 delivery (lead's spec, 6 Oct): -14 LUFS / -1.5 dBTP, video under 11.5 Mb/s (two-pass 11.1M from the master), the
+    # final names in exports/delivery/: the master mix and the NO MUSIC mix on the same delivery video stream
+    DLV = EXP                                          # 7 Oct (lead's brief): the delivery pair sits in exports/ under the final names
+    deliv = os.path.join(DLV, f'{NAME} - 1080x1920.mp4')
+    deliv_n = os.path.join(DLV, f'{NAME} - 1080x1920 - NO MUSIC.mp4')
+    plog = os.path.join(WORK, 'x264pass')
+    vtmp = os.path.join(WORK, 'delivery_video.mp4')
+    sh([FF, '-v', 'error', '-y', '-i', master, '-c:v', 'libx264', '-preset', 'slow', '-b:v', '11.1M', '-maxrate', '14M', '-bufsize', '22M',
+        '-pix_fmt', 'yuv420p', '-colorspace', 'bt709', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-color_range', 'tv',
+        '-pass', '1', '-passlogfile', plog + 'd', '-an', '-f', 'null', '-'])
+    sh([FF, '-v', 'error', '-y', '-i', master, '-c:v', 'libx264', '-preset', 'slow', '-b:v', '11.1M', '-maxrate', '14M', '-bufsize', '22M',
+        '-pix_fmt', 'yuv420p', '-colorspace', 'bt709', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-color_range', 'tv',
+        '-pass', '2', '-passlogfile', plog + 'd', '-an', vtmp])
+    for a_, out_, tt in ((a_m, deliv, title), (a_n, deliv_n, title + ' (no music)')):
+        sh([FF, '-v', 'error', '-y', '-i', vtmp, '-i', a_, '-map', '0:v', '-map', '1:a', '-c', 'copy', '-movflags', '+faststart',
+            '-metadata', f'title={tt}', out_])
     pmib = os.path.getsize(prev) / 2 ** 20
     if pmib >= 29.5:                                   # safety net: the preview must stay under 30 MiB
         log(f'compose: preview {pmib:.1f} MiB >= 29.5 -> two-pass 1.1 Mb/s from the master')
@@ -765,7 +777,7 @@ def st_compose(A):
               '-pix_fmt', 'yuv420p', '-passlogfile', plog + 'p']
         sh([FF, '-v', 'error', '-y', '-i', master] + pv + ['-pass', '1', '-an', '-f', 'null', '-'])
         sh([FF, '-v', 'error', '-y', '-i', master, '-i', a_p] + pv + ['-pass', '2', '-map', '0:v', '-map', '1:a', '-c:a', 'copy', '-movflags', '+faststart', prev])
-    shutil.copyfile(os.path.join(WORK, 'music_stem.wav'), os.path.join(EXP, f'{NAME} - music-stem.wav'))
+    shutil.copyfile(os.path.join(WORK, 'bed_stem.wav'), os.path.join(EXP, f'{NAME} - in-car bed stem.wav'))
     log(f'compose: {len(stale)} of {len(segs)} segments encoded ({t_enc:.0f}s), muxed, {time.time() - t0:.0f}s in all '
         f'({mbps:.2f} Mb/s master, preview {os.path.getsize(prev) / 2 ** 20:.1f} MiB)')
     TIMES['compose'] = dict(segments_encoded=len(stale), segments=len(segs), encode_s=round(t_enc, 1), total_s=round(time.time() - t0, 1))
@@ -985,18 +997,18 @@ def write_cue():
     if os.path.exists(mj):
         M = json.load(open(mj))
         w('\n## Sound\n')
-        w(f'Music: {M["music"]["source"]} ({M["music"].get("bpm")} BPM, first downbeat {M["music"].get("downbeat0")} s), enabled: {M.get("music_enabled")}. '
+        w(f'Bed: {M["bed_source"]}. '
           f'Master {M["master"]["lufs"]} LUFS, true peak {M["master"]["true_peak_db"]} dBTP (numpy BS.1770 on the wav; the mp4 is measured in exports/qa/qa_summary.json).\n')
-        w('| dialog piece | clip | source | at | loudness in | gain | music under it (duck, dialog over music) |')
+        w('| dialog piece | clip | source | at | loudness in | gain | bed under it (duck, voice over bed; no-music mix) |')
         w('|---|---|---|---|---|---|---|')
         dc = {d['i']: d for d in M.get('duck_check', [])}
         for d in M['dialog']:
             k = dc.get(d['i'], {})
-            w(f'| {d["i"]} | {d["src"]} | {d["a"]}-{d["b"]} | {d["t"]} | {d["lufs_in"]} LUFS | {d["gain_db"]:+.1f} dB | {k.get("duck_db", "")} dB, {k.get("dialog_over_music_db", "")} dB |')
-        w('\n| nat | source | at | gain |')
-        w('|---|---|---|---|')
-        for d in M['nat']:
-            w(f'| {d["src"]} | {d["a"]}-{d["b"]} | {d["t"]} | {d["gain_db"]:+.1f} dB |')
+            w(f'| {d["i"]} | {d["src"]} | {d["a"]}-{d["b"]} | {d["t"]} | {d["lufs_in"]} LUFS | {d["gain_db"]:+.1f} dB | {k.get("duck_db", "")} dB, {k.get("dialog_over_bed_db", "")} dB; {k.get("dialog_over_bed_nomusic_db", "")} dB |')
+        w('\n| bed | kind | source | at | gain | speech muted (s) | no-music mix |')
+        w('|---|---|---|---|---|---|---|')
+        for d in M['bed']:
+            w(f'| {d["why"]} | {d["kind"]} | {d["src"]} {d["a"]}-{d["b"]} | {d["t"]} | {d["gain_db"]:+.1f} dB | {d["muted_s"]} | {d["nomusic"]} |')
         w('\n| SFX | at | why | gain (incl. dialog duck) |')
         w('|---|---|---|---|')
         for d in M['sfx']:
@@ -1007,7 +1019,7 @@ def write_cue():
 def st_qa(A):
     write_cue()
     import plate as PL
-    master = os.path.join(EXP, f'{NAME} - 1080x1920.mp4')
+    master = os.path.join(EXP, f'{NAME} - 1080x1920 (master CRF).mp4')     # 7 Oct: the delivery pair takes the plain names
     os.makedirs(QA, exist_ok=True)
     for f in os.listdir(QA):
         if f.startswith('beat_') or f.startswith('el_'):
@@ -1042,6 +1054,8 @@ def st_qa(A):
     from concurrent.futures import ThreadPoolExecutor
     ex = ThreadPoolExecutor(3)
     mp4s = sorted(fn for fn in os.listdir(EXP) if fn.endswith('.mp4'))
+    dl = os.path.join(EXP, 'delivery')                 # part1 v2: the delivery pair is measured too
+    mp4s += sorted(os.path.join('delivery', fn) for fn in (os.listdir(dl) if os.path.isdir(dl) else []) if fn.endswith('.mp4'))
     aq = {fn: ex.submit(audio_qa, os.path.join(EXP, fn)) for fn in mp4s}
     T_b, T_e, T_c, T_cap, T_s, LUM = {}, {}, {}, {}, {}, {}
     sset, cset, capset = set(sidx), set(cs), set(cidx)
@@ -1077,7 +1091,8 @@ def st_qa(A):
     for fn in mp4s:
         if fn != os.path.basename(master):
             p = os.path.join(EXP, fn)
-            others[fn] = dict(MiB=round(os.path.getsize(p) / 2 ** 20, 2), track_durations_s=mp4_track_durations(p), audio=aq[fn].result())
+            others[fn] = dict(MiB=round(os.path.getsize(p) / 2 ** 20, 2), mbps=round(os.path.getsize(p) * 8 / DUR / 1e6, 3),
+                              track_durations_s=mp4_track_durations(p), audio=aq[fn].result())
     res['other_exports'] = others
     # loudness gate on the delivered files (the AAC encode can add true peak on top of the mix's -2.0 dBTP ceiling)
     import gates as G

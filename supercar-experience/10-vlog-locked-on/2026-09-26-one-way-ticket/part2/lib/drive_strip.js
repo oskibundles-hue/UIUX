@@ -110,3 +110,96 @@ SEK.driveStrip = function (cfg) {
     }
   } };
 };
+
+/* part1 v2 (Omarie, 6 Oct: "i dont like the sidebar on both episodes ... made a new progress bar"): SEK.seStrip, the ONE
+ * progress element of the episode. The A2 side banner and its rail are gone; this dark-glass strip runs from just after
+ * the hook to the end card. Compact (hc px tall) it carries the SE mark, the camera clock (from p.clockFrom on; the
+ * hook is a flash-forward of later shots, so no clock there) and the series label; over the two HUD-1 cabin shots
+ * (p.expand windows) it grows to the full HUD-1 strip (hx px: clock + place | ROUTE). The scrubber along its bottom
+ * edge fills over p.progress the whole way. No speeds, prices or distances.
+ * p: {x, y, w, hc, hx, progress: [t0, t1], label, clockFrom, exit, route_text,
+ *     expand: [{a, b, places: [[t, 'PLACE'], ...]}]}
+ * Geometry is mirrored in lib/plate.py glass_rects (stripH / vis): keep the two in step. */
+SEK.stripH = function (p, t) {
+  const E = KT.ease, P = KT.p;
+  let ex = 0;
+  for (const w of p.expand || []) ex = Math.max(ex, E.inOutCubic(P(t, w.a, w.a + 0.4)) * (1 - E.inOutCubic(P(t, w.b - 0.4, w.b))));
+  return { ex, h: p.hc + (p.hx - p.hc) * ex };
+};
+SEK.seStrip = function (cfg) {
+  const H = SEK.helpers, TH = window.THEME || {}, ACC = TH.accent || '#FF4F16', GLOW = TH.glow || '255,79,22';
+  const E = KT.ease, P = KT.p;
+  const p = Object.assign({ x: 54, y: 292, w: 853, hc: 84, hx: 140, progress: [cfg.t0, cfg.t1], label: '', clockFrom: cfg.t0,
+    exit: null, route_text: '', expand: [] }, cfg.p);
+  const root = H.el('div', 'a', null);
+  const pn = H.panel(root, p.x, p.y, p.w, p.hx, { stripe: 5, shadow: 0.24 });
+  pn.bg.style.background = 'rgba(8,8,10,.68)';                        // the glass-orange tint; the frost is in the plate (7 Oct: .58 -> .68, dark over foliage and sky)
+  // 7 Oct (nq-check): the cap stripe is one solid SE orange the full panel width, not the house 78/22 orange/white, which
+  // read as a second, frozen progress bar; the scrubber along the bottom is the only progress element
+  pn.stripe.style.background = ACC;
+  const edgeLine = H.el('div', 'a', pn.clip, `width:${p.w}px;height:${p.hc}px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.16)`);
+  const IN = pn.inner, dim = 'rgba(255,255,255,.66)';
+  const mk = H.el('img', 'a', IN, `left:24px;top:0;width:54px`); mk.src = H.maskUrl('sce-icon-mark-only--white.png');
+  const MKH = 54 * 215 / 338;
+  const cx = 100;
+  // compact: HH:MM :SS | LABEL
+  const gC = H.el('div', 'a', IN, `width:${p.w}px;height:${p.hx}px`);
+  const CS = 52, cyC = (p.hc - 4 - H.ink('Bebas', CS, 'H').aA) / 2;
+  const hmC = H.line(gC, 'Bebas', CS, '10:00', cx, cyC, '#fff', { split: false });
+  const ssC = H.line(gC, 'Bebas', 32, ':00', cx + H.ink('Bebas', CS, '10:00').adv + 3, cyC + hmC.capH - H.ink('Bebas', 32, '0').aA, ACC, { split: false });
+  const c2C = cx + H.ink('Bebas', CS, '10:00').adv + H.ink('Bebas', 32, ':00').adv + 30;
+  const hairC = H.el('div', 'a', gC, `left:${c2C - 15}px;top:${(p.hc - 4) / 2 - 18}px;width:1px;height:36px;background:rgba(255,255,255,.18)`);
+  const LS_ = 14, lyC = (p.hc - 4 - H.ink('Michroma', LS_, 'H', 0.16).aA) / 2;
+  const lab = H.line(gC, 'Michroma', LS_, p.label, c2C, lyC, dim, { ls: 0.16, split: false, dots: ACC });
+  // expanded: the HUD-1 strip (clock + place | ROUTE)
+  const gX = H.el('div', 'a', IN, `width:${p.w}px;height:${p.hx}px`);
+  const hmX = H.line(gX, 'Bebas', 78, '10:00', cx, 20, '#fff', { split: false });
+  const ssX = H.line(gX, 'Bebas', 46, ':00', cx + H.ink('Bebas', 78, '10:00').adv + 4, 20 + hmX.capH - H.ink('Bebas', 46, '0').aA, ACC, { split: false });
+  const places = [...new Set((p.expand || []).flatMap(w => (w.places || []).map(q => q[1])))];
+  const plEls = {};
+  for (const s of places) plEls[s] = H.line(gX, 'Michroma', 15, s, cx + 1, 20 + hmX.capH + 18, dim, { ls: 0.12 });
+  const wPl = Math.max(0, ...places.map(s => H.ink('Michroma', 15, s, 0.12).w));
+  const c2 = Math.max(cx + H.ink('Bebas', 78, '10:00').adv + H.ink('Bebas', 46, ':00').adv + 34, cx + wPl + 34), c3 = p.w - 8;
+  H.el('div', 'a', gX, `left:${c2 - 16}px;top:22px;width:1px;height:${p.hx - 44}px;background:rgba(255,255,255,.18)`);
+  if (p.route_text) {
+    H.line(gX, 'Michroma', 14, 'ROUTE', c2, 24, dim, { ls: 0.16, split: false });
+    const [ra, rb] = String(p.route_text).split(/\s*(?:→|->|>)\s*/), colW = c3 - c2 - 20, gap = 12, arW = 0.5;
+    const rs = Math.min(62, 62 * (colW - 2 * gap) / (H.ink('Bebas', 62, ra).adv + H.ink('Bebas', 62, rb).adv + 62 * arW));
+    const CAP62 = H.ink('Bebas', 62, 'H').aA, rcap = H.ink('Bebas', rs, 'H').aA, aw = rs * arW;
+    H.line(gX, 'Bebas', rs, ra, c2, 50 + (CAP62 - rcap) / 2, '#fff', { split: false });
+    const ax = c2 + H.ink('Bebas', rs, ra).adv + gap;
+    H.el('div', 'a', gX, `left:${ax}px;top:${50 + CAP62 / 2 - 1.25}px;width:${aw}px;height:2.5px;background:${ACC}`);
+    H.el('div', 'a', gX, `left:${ax + aw - 9}px;top:${50 + CAP62 / 2 - 6}px;width:12px;height:12px;border-top:2.5px solid ${ACC};border-right:2.5px solid ${ACC};transform:rotate(45deg) scale(.9);transform-origin:50% 50%`);
+    H.line(gX, 'Bebas', rs, rb, ax + aw + gap, 50 + (CAP62 - rcap) / 2, '#fff', { split: false });
+  }
+  // the scrubber: the episode's one progress element
+  const sL = 24, sW = p.w - 48;
+  const rail = H.el('div', 'a', IN, `left:${sL}px;top:0;width:${sW}px;height:3px;border-radius:2px;background:rgba(255,255,255,.2)`);
+  const fill = H.el('div', 'a', IN, `left:${sL}px;top:0;width:${sW}px;height:3px;border-radius:2px;background:${ACC};transform-origin:0 50%;box-shadow:0 0 8px rgba(${GLOW},.55)`);
+  const p2 = n => String(n).padStart(2, '0');
+  return { code: cfg.code, render(t) {
+    const on = t >= cfg.t0 && t < cfg.t1; H.show(root, on); if (!on) return;
+    const { ex, h } = SEK.stripH(p, t);
+    pn.h = h;                                                          // panelAt's retract edge follows the current height
+    const st = H.panelAt(pn, t, cfg.t0, p.exit ?? null);
+    const bottomFrac = st.qc > 0 ? st.qc : 1 - st.qr;
+    const vis = h * (1 - bottomFrac);
+    pn.clip.style.clipPath = `inset(0 0 ${(p.hx - vis).toFixed(3)}px 0)`;
+    pn.shadow.style.height = h.toFixed(2) + 'px';
+    edgeLine.style.height = h.toFixed(2) + 'px';
+    mk.style.top = ((h - 4 - MKH) / 2).toFixed(2) + 'px';
+    gC.style.opacity = (1 - ex).toFixed(4); gX.style.opacity = ex.toFixed(4);
+    gC.style.display = ex >= 0.999 ? 'none' : 'block'; gX.style.display = ex <= 0.001 ? 'none' : 'block';
+    const c = CTX.clip(t), clockOn = c != null && t >= p.clockFrom;
+    const sec = clockOn ? Math.floor(c) : 0, hm = p2(Math.floor(sec / 3600) % 24) + ':' + p2(Math.floor(sec / 60) % 60), ss = ':' + p2(sec % 60);
+    hmC.t.textContent = hmX.t.textContent = hm; ssC.t.textContent = ssX.t.textContent = ss;
+    hmC.w.style.opacity = ssC.w.style.opacity = hairC.style.opacity = clockOn ? 1 : 0;
+    lab.w.style.transform = clockOn ? 'none' : `translateX(${(cx - c2C).toFixed(2)}px)`;
+    let cur = null;
+    for (const w of p.expand || []) if (t >= w.a - 0.5 && t < w.b + 0.5) for (const q of w.places || []) if (t >= q[0] || cur == null) cur = q[1];
+    for (const s of places) plEls[s].w.style.opacity = s === cur ? 1 : 0;
+    const qb = E.outCubic(P(t, cfg.t0 + 0.3, cfg.t0 + 0.9));
+    rail.style.top = fill.style.top = (h - 10).toFixed(2) + 'px';
+    fill.style.transform = `scaleX(${(P(t, p.progress[0], p.progress[1]) * qb).toFixed(5)})`;
+  } };
+};

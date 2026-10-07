@@ -9,7 +9,8 @@
   "sparse": "/tmp/claude-0/p2day/fetch/sparse",
   "sfx": "../../../10-motion-sfx/locked-on-sfx",
   "transcripts": "/tmp/claude-0/p2day/tr",
-  "aud": "/tmp/claude-0/p2day/aud"
+  "aud": "/tmp/claude-0/p2day/aud",
+  "music_tracks": "/tmp/claude-0/p2day/music/tracks.json"
  },
  "name": "2026-09-26 One-way ticket Part 2 - SE LOCKED-ON vlog",
  "forbidden": [
@@ -478,29 +479,14 @@
     }
    },
    {
-    "code": "A2",
-    "type": "bannerTab",
-    "t0": 1.62,
-    "t1": 139.725,
-    "p": {
-     "name": "SUPERCAR EXPERIENCE",
-     "label": "ONE-WAY TICKET · PART 2",
-     "enter": "slide",
-     "progress": [
-      1.62,
-      139.725
-     ]
-    }
-   },
-   {
     "code": "G1-01",
     "type": "chapterSlam",
     "t0": 8.0,
     "t1": 9.95,
     "p": {
-     "tag": "19:32 · CH 01 / 03",
+     "tag": "",
      "title": "NIGHT SHIFT",
-     "y": 350,
+     "y": 410,
      "maxW": 700,
      "maxS": 215
     }
@@ -511,9 +497,9 @@
     "t0": 56.3,
     "t1": 58.25,
     "p": {
-     "tag": "06:26 · CH 02 / 03",
+     "tag": "",
      "title": "FIRST LIGHT",
-     "y": 350,
+     "y": 410,
      "maxW": 700,
      "maxS": 215
     }
@@ -524,9 +510,9 @@
     "t0": 88.4,
     "t1": 90.35,
     "p": {
-     "tag": "07:32 · CH 03 / 03",
+     "tag": "",
      "title": "HOME STRETCH",
-     "y": 350,
+     "y": 410,
      "maxW": 700,
      "maxS": 215
     }
@@ -568,7 +554,7 @@
     "t1": 12.3,
     "p": {
      "x": 54,
-     "y": 300,
+     "y": 400,
      "kicker": "PIT STOP",
      "name": "IN-N-OUT"
     }
@@ -580,11 +566,12 @@
     "t1": 42.3,
     "p": {
      "x": 54,
-     "y": 300,
+     "y": 400,
      "start": "00:00:00",
      "place": "AFTER THE NAP",
      "date": "SEP 27 2026",
-     "built": false
+     "built": false,
+     "noClock": true
     }
    },
    {
@@ -602,40 +589,48 @@
     }
    },
    {
-    "code": "STRIP-1",
-    "type": "driveStrip",
-    "t0": 91.8,
-    "t1": 99.4,
+    "code": "STRIP",
+    "type": "seStrip",
+    "t0": 1.9,
+    "t1": 139.725,
     "p": {
-     "start": "00:00:00",
-     "place": "SOMEWHERE IN NEVADA",
-     "heading": 0,
-     "route_text": "SEATTLE → VEGAS",
-     "range": [
-      91.8,
-      99.4
+     "x": 54,
+     "y": 292,
+     "w": 853,
+     "hc": 84,
+     "hx": 140,
+     "progress": [
+      1.9,
+      139.725
      ],
-     "exit": 98.95,
-     "hide_g": true
-    }
-   },
-   {
-    "code": "STRIP-2",
-    "type": "driveStrip",
-    "t0": 116.32,
-    "t1": 123.92,
-    "p": {
-     "start": "00:00:00",
-     "place": "INTO LAS VEGAS",
-     "heading": 0,
+     "label": "ONE-WAY TICKET · PART 2",
+     "clockFrom": 7.8,
+     "exit": 139.325,
      "route_text": "SEATTLE → VEGAS",
-     "range": [
-      116.32,
-      123.92
-     ],
-     "exit": 123.47,
-     "hide_g": true
-    }
+     "expand": [
+      {
+       "a": 91.8,
+       "b": 99.4,
+       "places": [
+        [
+         91.8,
+         "SOMEWHERE IN NEVADA"
+        ]
+       ]
+      },
+      {
+       "a": 116.32,
+       "b": 123.92,
+       "places": [
+        [
+         116.32,
+         "INTO LAS VEGAS"
+        ]
+       ]
+      }
+     ]
+    },
+    "_todo": "part2 v2 port (7 Oct): times are the v1 cut's (A2 start, STRIP-1/2 spans, end card); re-time after the recut. clockFrom just before the CH 01 slam, as Part 1 (12.5 s before its 12.7 s slam)."
    },
    {
     "code": "PLACE-2",
@@ -644,7 +639,7 @@
     "t1": 127.32,
     "p": {
      "x": 54,
-     "y": 300,
+     "y": 400,
      "kicker": "09:10 · ARRIVED",
      "name": "SUPERCAR EXPERIENCE"
     }
@@ -700,18 +695,8 @@
   }
  },
  "music": {
-  "_about": "THE MUSIC. The bed is ORIGINAL (lib/music.py, synthesised here, re-timed to this cut) unless a track is dropped at audio/music.wav. To switch music OFF: set music.enabled to false here, or run MUSIC=0 ./render.sh. The no-music master is exported every time anyway. To use another track: put it at audio/music.wav (48 kHz stereo), set bpm / downbeat0 / offset; the mixer ducks it under speech and tape-stops it at tapeStop before the end card hit. The placeholder bed: Part 1's tempo 104.73 BPM (kept for the series), first downbeat 2.225 s, drop 91.6 s (STRIP-1), end card 139.725 s (21 bars after the drop).",
-  "file": "audio/music.wav",
-  "bpm": 104.7273,
-  "downbeat0": 2.225,
-  "offset": 0.0,
-  "tapeStop": [
-   138.579,
-   139.152
-  ],
-  "lufs": -20.0,
-  "duckDb": -14.0,
-  "enabled": true
+  "_about": "RETIRED in v2 (Omarie, 6 Oct): no synth or library music. lib/music.py is gone; the bed is the in-car stereo and exhaust from the clips themselves (config `bed`). The NO MUSIC master swaps every in-car song for road/exhaust nat (bed segs `sub`).",
+  "enabled": false
  },
  "audio": {
   "dialogFilter": "highpass=f=90:poles=2,afftdn=nr=10:nf=-42:tn=1,equalizer=f=300:t=q:w=1.2:g=-2,equalizer=f=3500:t=q:w=1.0:g=2.5,deesser=i=0.4:m=0.5:f=0.5,acompressor=threshold=-24dB:ratio=3:attack=10:release=150:makeup=2",
@@ -723,7 +708,22 @@
   "extraDialog": [],
   "natLufs": -24.0,
   "natDuckDb": -12.0,
-  "nat": [
+  "nat": null,
+  "sfx": {
+   "ratio": 0.45,
+   "duckDb": -6.0
+  },
+  "duck": {
+   "_about": "bed sidechain: every dialog piece; raised-cosine attack before the words and release after them; gaps under `bridge` s are held down (no pumping between sentences). Bed music ducks bed.duckDb.music, exhaust and nat duck audio.natDuckDb",
+   "attack": 0.06,
+   "release": 0.4,
+   "bridge": 0.6
+  },
+  "edgeFadeOut": 0.1,
+  "minVoiceOverBedDb": 10.0,
+  "dialogFilterPart1": "highpass=f=80:poles=2,afftdn=nr=8:nf=-45:tn=1,acompressor=threshold=-26dB:ratio=2:attack=12:release=180:makeup=1",
+  "_aboutDialogFilter": "fix B (Omarie, 6 Oct): high-pass 90 Hz, gentle FFT noise reduction (nr 10 dB), -2 dB at 300 Hz, +2.5 dB at 3.5 kHz, de-esser, 3:1 compressor; then each piece is levelled to dialogLufs. dialogFilterPart1 is the old chain (kept for the before/after numbers). edgeFadeOut: the voice fades over 100 ms at the end of its >= 350 ms tail (fix A).",
+  "_natV1": [
    {
     "src": "0121",
     "a": 120.0,
@@ -765,20 +765,8 @@
     "why": "rear-deck cam on the road, under his VO"
    }
   ],
-  "sfx": {
-   "ratio": 0.45,
-   "duckDb": -6.0
-  },
-  "duck": {
-   "_about": "music sidechain: every dialog piece plus every nat clip with transcribed speech; raised-cosine attack before the words and release after them; gaps under `bridge` s are held down (no pumping between sentences)",
-   "attack": 0.06,
-   "release": 0.4,
-   "bridge": 0.6
-  },
-  "edgeFadeOut": 0.1,
-  "minVoiceOverBedDb": 10.0,
-  "dialogFilterPart1": "highpass=f=80:poles=2,afftdn=nr=8:nf=-45:tn=1,acompressor=threshold=-26dB:ratio=2:attack=12:release=180:makeup=1",
-  "_aboutDialogFilter": "fix B (Omarie, 6 Oct): high-pass 90 Hz, gentle FFT noise reduction (nr 10 dB), -2 dB at 300 Hz, +2.5 dB at 3.5 kHz, de-esser, 3:1 compressor; then each piece is levelled to dialogLufs. dialogFilterPart1 is the old chain (kept for the before/after numbers). edgeFadeOut: the voice fades over 100 ms at the end of its >= 350 ms tail (fix A)."
+  "dialogLatency": 0.025,
+  "_aboutDialogLatency": "part1 v2 (ported to part2 7 Oct; re-measure on part2 if the chain differs): the fix B chain delays the voice by 25.0 ms (measured 6 Oct: stem vs the raw clip audio, cross-correlation, 9 pieces, every one 24.9-25.0 ms); mix.py reads 25 ms further in so the voice stays on the lips"
  },
  "sfx": {
   "files": {
@@ -804,9 +792,7 @@
  },
  "qa": {
   "moments": {},
-  "bannerCodes": [
-   "A2"
-  ]
+  "bannerCodes": []
  },
  "blurs": [],
  "speedo": [
@@ -907,5 +893,18 @@
    "why": "0119 cluster, digits readable (round 1: moved right onto the digits)"
   }
  ],
- "_aboutSpeedo": "speedo: the McLaren's own speedometer on every cabin-cam shot (its digits are readable at phone size), blurred in a static feathered box per shot (no speed on screen). blurs: licence plates are not blurred in this vlog (Omarie, 6 Oct). PART 2: filled in phase B from the mezzanines (every cabin-cam shot)."
+ "_aboutSpeedo": "speedo: the McLaren's own speedometer on every cabin-cam shot (its digits are readable at phone size), blurred in a static feathered box per shot (no speed on screen). blurs: licence plates are not blurred in this vlog (Omarie, 6 Oct). PART 2: filled in phase B from the mezzanines (every cabin-cam shot).",
+ "bed": {
+  "_about": "v2 (Omarie, 6 Oct): the bed is the in-car stereo nat and exhaust from the clips (paths.aud), no synth or library music. Each seg: source span a-b of clip src placed at timeline t, levelled to its lufs (else the kind default), faded fin/fout (s). Every transcribed word inside a seg (the day index) is muted with 40 ms ramps, so no speech rides in the bed; `mute` adds spans. Music ducks duckDb.music under dialog, exhaust and nat duck audio.natDuckDb. The NO MUSIC master replaces each music seg by its `sub` (the same length of road/exhaust nat from a speech-free, music-free span; no song recognised by Shazam in 10 s windows every 5 s and no drums in htdemucs). Songs are listed in exports/qa/in_car_tracks_part2.md (tools/track_list.py). Forbidden spans apply to bed audio too.",
+  "lufs": {
+   "music": -21.0,
+   "exhaust": -22.0,
+   "nat": -24.0
+  },
+  "duckDb": {
+   "music": -14.0
+  },
+  "segs": [],
+  "_todoSegs": "part2 v2 (7 Oct): EMPTY until the lead picks the in-car music and exhaust spans from the survey. One seg per span: {why, kind: music|exhaust|nat, src, a, b, t, fin, fout[, lufs][, mute: [[a,b]]][, sub: {src, a, why} for every music seg (the NO MUSIC swap)]}. Part 1 example: {\"why\": \"hook: the in-car stereo under the open\", \"kind\": \"music\", \"src\": \"0097\", \"a\": 20.0, \"b\": 33.4, \"t\": 0.0, \"fin\": 0.03, \"fout\": 0.9, \"sub\": {\"src\": \"0095\", \"a\": 8.0, \"why\": \"road/exhaust nat, roof down\"}}"
+ }
 }
