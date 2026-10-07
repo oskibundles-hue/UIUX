@@ -17,19 +17,24 @@ FIXW = json.load(open(os.path.join(ROOT, 'data', 'words_small_fix.json')))   # s
 FIX = {
     '0105': [(['it.', 'To', 'In', '-N', '-Out.'], ['it', 'to', 'In-N-Out.'], 'medium.en: "We finally made it to In-N-Out." (one sentence; the restaurant\'s spelling)')],
     '0118': [(['Wow,'], [], 'medium.en does not hear "Wow" ("It\'s been pretty fire, really nice scenery"): not captioned'),
-             (['trip'], ['Trip'], 'sentence start')],
+             (['trip'], ['Trip'], 'sentence start'),
+             (['been', 'cool'], ['been', 'cool.'], 'punctuation (final render check, 7 Oct)'),
+             (['pretty', 'fire'], ['pretty', 'fire,'], 'punctuation (final render check, 7 Oct)')],
+    '0119': [(['Man', 'so'], ['Man,', 'so'], 'punctuation (final render check, 7 Oct)'),
+             (['the', 'back'], ['the', 'back.'], 'punctuation (final render check, 7 Oct)')],
     '0112': [(['We', 'are', 'gassed', 'up,'], ['We', 'are', 'gassed', 'up,'], 'both models'),
              (['here,', 'and'], ['here.'], 'fix A tail: medium.en does not hear the trailing "and" (a breath): not captioned')],
     # v2 (7 Oct) new pieces; medium.en per piece in data/words_medium.json
     '0107': [(['doom', '-scrolling'], ['doom-scrolling'], 'one word (both models: "nothing like doom-scrolling while eating, no cap")')],
     '0116': [(['y', "'all", 'being', 'in', 'the', 'mirror,'], ["y'all"],
               'medium.en (piece window) hears "being in there", small.en "being in the mirror": "being in the mirror" not captioned'),
+             (['know', 'where'], ['know', 'where.'], 'punctuation (final render check, 7 Oct)'),
              (['and', 'yeah'], ['And', 'yeah.'], 'both models (data/words_small_fix.json; medium.en "and yeah")'),
              (['out', 'you'], [], 'the models differ ("out you" / "out to" / "outchoo"): not captioned')],
     # v2 gate round (7 Oct, nq-check): punctuation; same word count, so the word timings are kept as they are
     '0115': [(['gassing', 'up', 'dude', 'it', 'is', 'freezing'], ['Gassing', 'up,', 'dude,', 'it', 'is', 'freezing.'],
               'punctuation (medium.en: "gassing up. Dude, it is freezing.")')],
-    '0121': [(['hopefully', 'this', "don't", 'fly', 'off', 'good', 'lord'], ['Hopefully', 'this', "don't", 'fly', 'off.', 'Good', 'lord'],
+    '0121': [(['hopefully', 'this', "don't", 'fly', 'off', 'good', 'lord'], ['Hopefully', 'this', "don't", 'fly', 'off.', 'Good', 'lord.'],
               'punctuation (medium.en: "Hopefully this don\'t fly off. Good lord.")')],
     '0117': [(['here'], ['here.'], 'punctuation'),
              (['service,'], ['service.'], 'punctuation (the caption ends here, see the next fix)'),
@@ -38,7 +43,8 @@ FIX = {
               'medium.en "not an SOS" (the day index\'s small.en had "SOS"): the models differ on the last word, so "not an SOS" '
               'is not captioned (the audio runs on); "I have" (both models on the piece audio, missed by the day index) is not added')],
     '0111': [(['It\'s', 'a', 'McLaren'], ['It\'s', 'a', 'McLaren.'], 'punctuation'),
-             (['like', 'that\'s'], ['like,', 'that\'s'], 'punctuation')],
+             (['like', 'that\'s'], ['like,', 'that\'s'], 'punctuation'),
+             (['a', 'Corvette'], ['a', 'Corvette.'], 'punctuation (final render check, 7 Oct)')],
 }   # PART2_FIX: every piece in the cut was re-run with medium.en (beam 5); only pieces whose words both models share are in the cut
 OVERRIDE = {}
 LEAD = {}

@@ -1,6 +1,6 @@
 # Gates (build.py, before the render)
 
-2026-10-07 06:41; errors stop a full render, the rest is for the reviewer.
+2026-10-07 07:02; errors stop a full render, the rest is for the reviewer.
 
 - **warn**  captions 27.6 s (0111): +300 ms off the speech
 - **warn**  captions 30.1 s (0112): +250 ms off the speech
