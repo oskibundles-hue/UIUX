@@ -65,7 +65,8 @@ PIN = {('0093', 4.42): (4.56, 4.70)}
 # 0081 2.9 is NOT shifted: the gate says +230 ms, but its jet-bridge noise leaves the measure flat (it stayed at +220 with a
 # 0.2 s shift), and the voice-band envelope of the clip shows his voice ending at 4.62-4.68 s, where "plane." ends (4.63).
 SHIFT = {('0076', 14.38): +0.205, ('0084', 89.04): +0.275, ('0089', 140.55): +0.275,
-         ('0090', 114.66): +0.255, ('0092', 7.93): +0.255, ('0102', 81.74): +0.225}
+         ('0090', 114.66): +0.255, ('0092', 7.93): +0.255, ('0102', 81.74): +0.225,
+         ('0087', 57.90): +0.275}   # cut 2 (7 Oct): the gate measured +300 ms; the voice-band envelope has "I gotta" from 58.40
 
 
 def words_of(clip, a, b):
