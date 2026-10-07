@@ -12,10 +12,9 @@ Done:
 
 Next:
 - Once Omarie has saved both v2 files to Dropbox (/Supercar Experience/05 Vlogs/2026-09-26 One-way ticket Part 2/), confirm the exact
-  byte sizes. Then move v1 into an _archive folder (Omarie approved on 7 Oct, after v2 is confirmed), and mark the cards saved.
+  byte sizes and mark the cards saved. Keep v1 beside v2 in that folder; don't archive it (Omarie, 7 Oct).
   Clear their parts only after asking him.
 - Open, not blocking:
   - Quebec (Drake) is faint under his voice at 0:17 in both files.
   - Two 0.7 s quiet gaps (0:16.6, 1:41.3).
   - "being in the mirror" and "not an SOS" are uncaptioned.
-  - The brain note se-standards.md still says "$299 underage fee". The 6 Oct removal is recorded in part1/README.md.
