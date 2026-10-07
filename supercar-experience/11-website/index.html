@@ -19,6 +19,10 @@
 <meta name="twitter:description" content="What it takes to put the keys in your hand. Six episodes, filmed on the day.">
 <meta name="twitter:image" content="https://supercar-experience-garage.onrender.com/media/share/series.jpg">
 <meta name="theme-color" content="#0A0A0C">
+<script type="application/ld+json">{"@context":"https://schema.org","@graph":[
+ {"@type":"AutoRental","@id":"https://www.supercarexp.vip/#business","name":"Supercar Experience","url":"https://www.supercarexp.vip/","telephone":"+1-725-425-3583","areaServed":{"@type":"City","name":"Las Vegas"},"sameAs":["https://www.instagram.com/supercar_experience_/"]},
+ {"@type":"WebSite","@id":"https://supercar-experience-garage.onrender.com/#site","name":"Behind the Wheel","url":"https://supercar-experience-garage.onrender.com/","publisher":{"@id":"https://www.supercarexp.vip/#business"}}
+]}</script>
 <script>document.documentElement.classList.add("js")</script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1348,7 +1352,8 @@ function renderGarage(){
   list.forEach((c,n)=>{
     const el=document.createElement("article");el.className="car rv";el.style.transitionDelay=(n%4)*60+"ms";
     const vk=c.vids.find(v=>!v[1].startsWith("photo:"));
-    const pic=c.photo?`<img class="bg" src="${M}${c.photo}" alt="" loading="lazy"><img class="fg" src="${M}${c.photo}" alt="" loading="lazy">`:`<img src="${M}stills/${c.id}.jpg" alt="" loading="lazy">`;
+    const alt=`${c.yr} ${c.make} ${c.name}`;
+    const pic=c.photo?`<img class="bg" src="${M}${c.photo}" alt="" loading="lazy"><img class="fg" src="${M}${c.photo}" alt="${alt}" loading="lazy">`:`<img src="${M}stills/${c.id}.jpg" alt="${alt}" loading="lazy">`;
     el.innerHTML=`<div class="cm"><div class="clip${c.photo?" ph":""}">${pic}${vk?`<video muted playsinline preload="none" src="${M}${vk[1]}.mp4#t=${c.s0??S0}"></video>`:""}</div>
       <div class="lk"><i></i><i></i><i></i><i></i></div>
       <div class="cchips"><span class="chip-p"><span data-reel="${money(c.day)}">${money(c.day)}</span><small>/day</small></span>${c.five?`<span class="chip-p">${money(c.five)}<small>/5 hrs</small></span>`:""}</div>

@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Only pages that stay put. The ep/<k>/ share pages send visitors straight on to /#watch-<k>,
+     so search engines treat them as redirects and they are left out. Add each approved post here. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://supercar-experience-garage.onrender.com/</loc>
+    <lastmod>2026-10-06</lastmod>
+  </url>
+</urlset>
