@@ -89,6 +89,19 @@ def clock_table():
             t, sp = ts[j]
             tab[f0 + j] = ([round(starts[ca['src']] + ca['in'] + (t - s['in']), 4), round(sp, 4)] if ca else
                            [round(starts[s['src']] + t, 4), round(sp, 4)])
+    # part2 v2 gate fix (7 Oct): during a gold light sweep the old shot still fills most of the frame (its post-roll), so the
+    # clock holds the old shot's time (running on) until the sweep ends, instead of showing the new shot's time over the
+    # old picture (1:03.10: 06:26 over the night gas station)
+    for tr in C['transitions']:
+        if tr['type'] != 'sweep':
+            continue
+        _, f0, _ = PL.FR[tr['into']]
+        fe = int(math.ceil((tr['t0'] + tr['dur']) * FPS - 1e-6))
+        if f0 < 1 or tab[f0 - 1] is None:
+            continue
+        last = tab[f0 - 1]
+        for f in range(f0, min(fe, NF)):
+            tab[f] = [round(last[0] + (f - f0 + 1) / FPS, 4), last[1]]
     return tab
 
 

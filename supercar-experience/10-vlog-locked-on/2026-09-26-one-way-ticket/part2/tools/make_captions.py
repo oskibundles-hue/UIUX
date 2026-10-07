@@ -26,6 +26,17 @@ FIX = {
               'medium.en (piece window) hears "being in there", small.en "being in the mirror": "being in the mirror" not captioned'),
              (['and', 'yeah'], ['And', 'yeah.'], 'both models (data/words_small_fix.json; medium.en "and yeah")'),
              (['out', 'you'], [], 'the models differ ("out you" / "out to" / "outchoo"): not captioned')],
+    # v2 gate round (7 Oct, nq-check): punctuation; same word count, so the word timings are kept as they are
+    '0115': [(['gassing', 'up', 'dude', 'it', 'is', 'freezing'], ['Gassing', 'up,', 'dude,', 'it', 'is', 'freezing.'],
+              'punctuation (medium.en: "gassing up. Dude, it is freezing.")')],
+    '0121': [(['hopefully', 'this', "don't", 'fly', 'off', 'good', 'lord'], ['Hopefully', 'this', "don't", 'fly', 'off.', 'Good', 'lord'],
+              'punctuation (medium.en: "Hopefully this don\'t fly off. Good lord.")')],
+    '0117': [(['here'], ['here.'], 'punctuation'),
+             (['service,'], ['service.'], 'punctuation (the caption ends here, see the next fix)'),
+             (['not', 'an', 'SOS.'], [],
+              'v2 gate round (7 Oct): on the piece audio (0117 99.3-106.7 and 100.8-103.2, beam 1 and 5) small.en hears "not an SLS", '
+              'medium.en "not an SOS" (the day index\'s small.en had "SOS"): the models differ on the last word, so "not an SOS" '
+              'is not captioned (the audio runs on); "I have" (both models on the piece audio, missed by the day index) is not added')],
     '0111': [(['It\'s', 'a', 'McLaren'], ['It\'s', 'a', 'McLaren.'], 'punctuation'),
              (['like', 'that\'s'], ['like,', 'that\'s'], 'punctuation')],
 }   # PART2_FIX: every piece in the cut was re-run with medium.en (beam 5); only pieces whose words both models share are in the cut
@@ -67,7 +78,8 @@ def apply_fix(clip, ws, used):
                     used.append(dict(clip=clip, at=round(a, 2), whisper=' '.join(src), shown='(dropped)', why=why))
                     continue
                 step = (b - a) / len(dst)
-                new = [[round(a + k * step, 3), round(a + (k + 1) * step, 3), d] for k, d in enumerate(dst)]
+                new = ([[w[0], w[1], d] for w, d in zip(ws[i:i + n], dst)] if len(dst) == n else
+                       [[round(a + k * step, 3), round(a + (k + 1) * step, 3), d] for k, d in enumerate(dst)])
                 ws[i:i + n] = new
                 used.append(dict(clip=clip, at=round(a, 2), whisper=' '.join(src), shown=' '.join(dst), why=why))
                 i += len(dst)

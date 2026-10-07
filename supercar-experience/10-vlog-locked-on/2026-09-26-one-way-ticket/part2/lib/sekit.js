@@ -1370,10 +1370,14 @@
         const qi = i === 0 && pg.a <= cfg.t0 + 0.01 ? 1 : E.outExpo(P(t, pg.a - 0.06, pg.a + 0.14));
         pg.root.style.transform = `translateY(${(14 * (1 - qi)).toFixed(2)}px)`; pg.root.style.opacity = cl(qi * 1.4).toFixed(3);
         let k = -1; all.forEach((w, j) => { if (t >= w.a) k = j; });
-        all.forEach((w, j) => { w.el.t.style.color = j === k ? '#000' : j < k ? '#fff' : 'rgba(255,255,255,.5)'; });
-        if (k < 0) { pg.gold.style.opacity = 0; return; }
+        if (k < 0) { all.forEach(w => { w.el.t.style.color = 'rgba(255,255,255,.5)'; }); pg.gold.style.opacity = 0; return; }
         const w = all[k], pw = k > 0 ? all[k - 1] : w;
         const q = E.outCubic(P(t, w.a, w.a + 0.09)), sameRow = pw.y === w.y;
+        // part2 v2 gate round (7 Oct): while the box glides onto the active word (about 3 frames) the word stays white, and
+        // turns black only once the box covers it; black from the first frame left the uncovered letters black on the black
+        // plate ("LIKE MOR LIKE", "GASSING ▢ DUDE" on the gate sheets)
+        const covered = !sameRow || pw === w || q >= 0.97;
+        all.forEach((x, j) => { x.el.t.style.color = j === k ? (covered ? '#000' : '#fff') : j < k ? '#fff' : 'rgba(255,255,255,.5)'; });
         const gx = sameRow ? lerp(pw.x, w.x, q) : w.x, gw = sameRow ? lerp(pw.W, w.W, q) : w.W;
         pg.gold.style.opacity = 1;
         pg.gold.style.left = px(gx - 8); pg.gold.style.width = px(gw + 16); pg.gold.style.top = px(w.y + 4);

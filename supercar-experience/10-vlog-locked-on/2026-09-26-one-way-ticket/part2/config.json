@@ -12,7 +12,7 @@
   "aud": "/tmp/claude-0/p2day/aud",
   "music_tracks": "/tmp/claude-0/p2day/music/tracks.json"
  },
- "name": "2026-09-26 One-way ticket Part 2 - SE LOCKED-ON vlog",
+ "name": "2026-09-26 One-way ticket Part 2 v2 - SE LOCKED-ON vlog",
  "forbidden": [
   {
    "src": "0116",
@@ -271,7 +271,11 @@
    "look": "night"
   },
   "12": {
-   "look": "night"
+   "look": "night",
+   "c0": [1330, 1180],
+   "s0": 1.3,
+   "s1": 1.34,
+   "_why": "v2 gate fix 7 Oct (nq-check): the phone is in his left hand for the whole shot (parked at the pump). Same span, same time (clock and his line unchanged), reframed onto his right hand on the touchscreen putting the music on, under 'Let's play some tunes'; the left hand, the phone and his mouth are out of frame"
   },
   "13": {
    "look": "night"
@@ -859,14 +863,14 @@
   {
    "shot": 12,
    "box": [
-    640,
-    960,
-    160,
-    150
+    196,
+    680,
+    180,
+    170
    ],
    "pad": 16,
    "radius": 16,
-   "why": "0112 cluster behind the wheel (parked; round 1: was on his face)"
+   "why": "0112 cluster behind the wheel (parked); v2 7 Oct: moved with the shot's reframe onto the touchscreen"
   },
   {
    "shot": 13,

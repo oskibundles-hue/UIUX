@@ -42,6 +42,13 @@
   "why": "fix A tail: medium.en does not hear the trailing \"and\" (a breath): not captioned"
  },
  {
+  "clip": "0115",
+  "at": 10.41,
+  "whisper": "gassing up dude it is freezing",
+  "shown": "Gassing up, dude, it is freezing.",
+  "why": "punctuation (medium.en: \"gassing up. Dude, it is freezing.\")"
+ },
+ {
   "clip": "0116",
   "at": 156.34,
   "whisper": "y 'all being in the mirror,",
@@ -61,6 +68,34 @@
   "whisper": "out you",
   "shown": "(dropped)",
   "why": "the models differ (\"out you\" / \"out to\" / \"outchoo\"): not captioned"
+ },
+ {
+  "clip": "0117",
+  "at": 51.46,
+  "whisper": "here",
+  "shown": "here.",
+  "why": "punctuation"
+ },
+ {
+  "clip": "0117",
+  "at": 101.48,
+  "whisper": "service,",
+  "shown": "service.",
+  "why": "punctuation (the caption ends here, see the next fix)"
+ },
+ {
+  "clip": "0117",
+  "at": 102.18,
+  "whisper": "not an SOS.",
+  "shown": "(dropped)",
+  "why": "v2 gate round (7 Oct): on the piece audio (0117 99.3-106.7 and 100.8-103.2, beam 1 and 5) small.en hears \"not an SLS\", medium.en \"not an SOS\" (the day index's small.en had \"SOS\"): the models differ on the last word, so \"not an SOS\" is not captioned (the audio runs on); \"I have\" (both models on the piece audio, missed by the day index) is not added"
+ },
+ {
+  "clip": "0121",
+  "at": 21.09,
+  "whisper": "hopefully this don't fly off good lord",
+  "shown": "Hopefully this don't fly off. Good lord",
+  "why": "punctuation (medium.en: \"Hopefully this don't fly off. Good lord.\")"
  },
  {
   "clip": "0118",

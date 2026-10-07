@@ -540,6 +540,11 @@ def join():
         if 'shot' in b:
             _, a_, b_ = FR[b['shot']]
             f0_, f1_ = a_, b_ - 1
+            # part2 v2 gate fix (7 Oct): a box on a shot entered by a gold light sweep starts when the sweep ends; before
+            # that the old shot's post-roll still covers the box's area (1:03.10: shot 23's box sat on a gas pump)
+            trs = [t_ for t_ in CFG['transitions'] if t_['into'] == b['shot'] and t_['type'] == 'sweep']
+            if trs:
+                f0_ = max(f0_, int(math.ceil((trs[0]['t0'] + trs[0]['dur']) * FPS - 1e-6)))
         else:
             f0_, f1_ = b['f0'], b['f1']
         x_, y_, w_, h_ = b['box']
@@ -629,7 +634,9 @@ def join():
             i = f0 + j
             if tr and tr['type'] == 'sweep':
                 t = i / FPS
-                if tr['t0'] <= t < tr['t0'] + tr['dur'] and j < len(post_prev):
+                # part2 v2 (7 Oct): also the frames before t0 (the shot's first frame can start a fraction of a frame
+                # before the sweep): the mask is 0 there, so the old shot holds instead of a one-frame flash of the new one
+                if t < tr['t0'] + tr['dur'] and j < len(post_prev):
                     m = sweep_mask(t, tr)
                     img = (img.astype(np.float32) * m + post_prev[j].astype(np.float32) * (1 - m) + 0.5).astype(np.uint8)
             if tr and tr['type'] == 'impact' and j < 14:
