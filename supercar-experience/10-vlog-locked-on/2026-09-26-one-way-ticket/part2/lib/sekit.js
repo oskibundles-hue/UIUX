@@ -823,12 +823,14 @@
     const s0 = parseT(p.start);
     const hmW = ink('Bebas', 104, '22:49').w, colW = ink('Bebas', 56, ':').adv, dW = ink('Bebas', 56, '0').adv + 1;
     const plW = ink('Michroma', 19, p.place, 0.1).w, dtW = ink('Michroma', 15, p.date, 0.14).w;
-    const W = Math.ceil(Math.max(hmW + 14 + colW + 2 * dW + 10, plW + 8, dtW + 30) + 52), H = 196;
+    // part1 v2 (nq-check, 7 Oct): p.noClock drops the HH:MM:SS (the strip already carries the clock): place + date only
+    const capH0 = ink('Bebas', 104, '22:49').aA, NC = !!p.noClock, yo = NC ? -(capH0 + 26) + 4 : 0;
+    const W = Math.ceil(Math.max(NC ? 0 : hmW + 14 + colW + 2 * dW + 10, plW + 8, dtW + 30) + 52), H = 196 + yo;
     const pn = panel(root, p.x, p.y, W, H, { stripe: 5 });
     const hm = line(pn.inner, 'Bebas', 104, '22:49', 26, 26, '#fff');
     const capH = hm.capH, sCap = ink('Bebas', 56, '0').aA;
     const sx = 26 + hmW + 12, sy = 26 + capH - sCap;
-    line(pn.inner, 'Bebas', 56, ':', sx, sy, GOLD, { split: false });
+    const colon = line(pn.inner, 'Bebas', 56, ':', sx, sy, GOLD, { split: false });
     const cols = [0, 1].map(k => {
       const w = el('div', 'a', pn.inner, `left:${sx + colW + 2 + k * dW}px;top:${sy - 8}px;width:${dW}px;height:${sCap + 16}px;overflow:hidden`);
       const inner = el('div', 'a', w, 'left:0;top:0');
@@ -836,9 +838,10 @@
       return { w, inner, a, b, H: sCap + 16 };
     });
     const tick = el('div', 'a', pn.inner, `left:${sx + colW + 2 + 2 * dW + 8}px;top:${sy + 2}px;width:8px;height:8px;border-radius:50%;background:${GOLD}`);
-    const pl = line(pn.inner, 'Michroma', 19, p.place, 27, 26 + capH + 26, '#fff', { ls: 0.1 });
-    const dt = line(pn.inner, 'Michroma', 15, p.date, 44, 26 + capH + 62, 'rgba(255,255,255,.72)', { ls: 0.14 });
-    el('div', 'a', pn.inner, `left:27px;top:${26 + capH + 64}px;width:9px;height:9px;background:${GOLD}`);
+    const pl = line(pn.inner, 'Michroma', 19, p.place, 27, 26 + capH + 26 + yo, '#fff', { ls: 0.1 });
+    const dt = line(pn.inner, 'Michroma', 15, p.date, 44, 26 + capH + 62 + yo, 'rgba(255,255,255,.72)', { ls: 0.14 });
+    el('div', 'a', pn.inner, `left:27px;top:${26 + capH + 64 + yo}px;width:9px;height:9px;background:${GOLD}`);
+    if (NC) [hm.w, colon.w, tick, ...cols.map(c => c.w)].forEach(e => { e.style.display = 'none'; });
     return { code: cfg.code, render(t) {
       const on = t >= cfg.t0 && t < cfg.t1; show(root, on); if (!on) return;
       const ts = p.built ? null : cfg.t0;
@@ -860,10 +863,10 @@
       if (p.handoff != null) { const qh = t >= p.handoff ? 1 : 0; hm.w.style.opacity = qh; }
       tick.style.opacity = fr < 0.5 ? 1 : 0.25;
       if (ts != null) {
-        if (p.handoff == null) KT.flip(hm.g, t, { start: ts + 0.08, stagger: 0.03, dur: 0.36, from: -90 });
+        if (p.handoff == null && !NC) KT.flip(hm.g, t, { start: ts + 0.08, stagger: 0.03, dur: 0.36, from: -90 });
         KT.track(pl.g, t, { start: ts + 0.2, dur: 0.34, spread: 1.6 }); KT.track(dt.g, t, { start: ts + 0.26, dur: 0.34, spread: 1.6 });
       }
-      glint(hm, t, cfg.t0 + (p.built ? 1.0 : 0.9), 0.55, { w: 0.3 });
+      glint(NC ? pl : hm, t, cfg.t0 + (p.built ? 1.0 : 0.9), 0.55, { w: 0.3 });
     } };
   };
 

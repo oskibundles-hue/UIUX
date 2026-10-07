@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""tail_check.py -- fix A (Omarie, 6 Oct): every dialog out-point against the end of its last word.
+"""tail_check.py (ported from part2 for Part 1 v2, 6 Oct) -- fix A (Omarie, 6 Oct): every dialog out-point against the end of its last word.
 
 For each EDL dialog piece (with config `audio.trims` applied) the last word's end is small.en's (the day index in
 paths.transcripts, the captions' timing source); the next word's start is the later of small.en's and medium.en's (beam 5,
@@ -24,6 +24,17 @@ def words(src, med, tr_dir):
     return sm, med
 
 
+def small_words(src, C, fix):
+    """small.en words of a clip: the day index, with data/words_small_fix.json windows (re-runs) laid over it."""
+    t = json.load(open(os.path.join(C['paths']['transcripts'], f'{src}.json')))
+    sm = [[w[0], w[1], w[2].strip()] for s in t['segments'] for w in s['words']]
+    fx = fix.get(src, [])
+    if fx:
+        a, b = fx[0][0], fx[-1][1]
+        sm = sorted([w for w in sm if not (a - 0.01 <= w[0] <= b)] + [list(w) for w in fx])
+    return sm
+
+
 def inside(w, a, b):
     return min(w[1], b) - max(w[0], a) >= 0.15 or (a - 1e-6 <= w[0] < b - 0.1)
 
@@ -31,14 +42,16 @@ def inside(w, a, b):
 def rows():
     C = _cfg()
     edl = json.load(open(os.path.join(ROOT, C['paths']['edl'])))
-    med = json.load(open(os.path.join(ROOT, 'data', 'words_medium.json')))
+    mp = os.path.join(ROOT, 'data', 'words_medium.json')     # part1 v2: medium.en words per piece (tools/words_medium.py)
+    med = json.load(open(mp)) if os.path.exists(mp) else {}
     trims = C['audio'].get('trims', {})
+    fp = os.path.join(ROOT, 'data', 'words_small_fix.json')
+    fix = json.load(open(fp)) if os.path.exists(fp) else {}
     out = []
     for i, d in enumerate(edl['dialog']):
         tr = trims.get(str(i), {})
         a, b = d['in'] + tr.get('in', 0.0), d['out'] + tr.get('out', 0.0)
-        t = json.load(open(os.path.join(C['paths']['transcripts'], f"{d['src']}.json")))
-        sm = [[w[0], w[1], w[2].strip()] for s in t['segments'] for w in s['words']]
+        sm = small_words(d['src'], C, fix)
         md = [[w[0], w[1], w[2].strip()] for w in med.get(f"{d['src']}:{d['in']:.2f}", [])]
         # the piece's words: inside [in, out - TAIL] (the tail itself holds no word by construction)
         lim = d.get('last_word_end', b) + 0.01
@@ -47,7 +60,12 @@ def rows():
         pm = [w for w in md if inside(w, a, lim)]
         nxt = [n[0][0] for n in ([w for w in m if w[0] > q[-1][0] + 0.01 and not inside(w, a, lim)] for m, q in ((sm, p), (md, pm)) if q) if n]
         no = max(nxt) if nxt else 1e9           # the next word's start: the later of the two models' (whisper stretches a
-        cut_word = [] if b <= no - 0.02 else ['next word starts at %.2f' % no]   # word over the pause before it)
+        if d.get('next_onset_measured'):        # word over the pause before it), or the onset measured on the voice-band
+            no = max(no, d['next_onset_measured'])   # envelope where make_edl.py NEXT_ONSET lists one
+        cut_word = [] if b <= no - 0.02 else ['next word starts at %.2f' % no]
+        ve = d.get('voice_end')
+        if ve is not None and le < ve <= le + 0.40:  # the end of voice measured on the envelope (make_edl.py), if later
+            le = ve
         out.append(dict(i=i, src=d['src'], out=round(b, 3), last_word_end=round(le, 3), gap=round(b - le, 3),
                         gap_medium=round(b - pm[-1][1], 3) if pm else None,
                         t0=round(d['t'], 3), t1=round(d['t'] + b - a, 3), cut_word=cut_word, extended=bool(d.get('extended'))))

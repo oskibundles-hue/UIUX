@@ -1,23 +1,24 @@
 #!/usr/bin/env python3
 """
-mix.py -- the sound of the rally vlog v2: dialog + nat + music + Locked-On SFX -> -14 LUFS masters.
+mix.py -- the sound of the Part 2 vlog (v2, ported from Part 1 v2 7 Oct): dialog + the in-car bed + Locked-On SFX -> -14 LUFS masters.
 
-Buses (48 kHz stereo float):
-  dialog  every EDL dialog piece from the mezzanine audio through config `audio.dialogFilter` (part2, fix B: highpass
-          90 Hz -> afftdn (gentle) -> -2 dB at 300 Hz -> +2.5 dB at 3.5 kHz -> de-esser -> 3:1 compressor) on the piece with 0.6 s of padding, then cut to the piece, summed
-          to mono (centred), levelled per piece to config `audio.dialogLufs` (BS.1770 integrated, measured
-          here), 12 ms edge fades. Per-piece trims: config `audio.trims`.
-  nat     the EDL's nat/extra audio and the B-roll shots' own sound (config `audio.nat`), each levelled to its
-          own target, 150 ms fades, ducked `audio.natDuckDb` under dialog.
-  music   `audio/music.wav` when it exists (the swappable slot, config `music`), else the original synth bed
-          (lib/music.py). Levelled so the unducked bed is `music.lufs`, ducked `music.duckDb` under dialog
-          (attack 120 ms before a piece, release 350 ms after, gaps < 0.6 s bridged).
-  sfx     the Locked-On pack (10-motion-sfx/locked-on-sfx), cue list from build.py (.work/sfx_cues.json). Each
-          accent is set to `sfx.ratio` (45 %) of the UNDUCKED music RMS over the accent's own energetic span,
-          then ducked a further `sfx.duckDb` under dialog, so ticks stay audible without stepping on words.
+Buses (48 kHz stereo float); all camera audio is read from paths.aud/<clip>.m4a (the camera's AAC, full length,
+sample-aligned with the mezzanines), so a fix-A tail can run past a mezzanine's end:
+  dialog  every EDL dialog piece: the fix-B chain (config `audio.dialogFilter`: HP 90 Hz, afftdn nr 10, -2 dB @300 Hz,
+          +2.5 dB @3.5 kHz, de-esser, 3:1) on the piece with 0.6 s of padding, then cut to the piece, summed to mono
+          (centred), levelled per piece to `audio.dialogLufs` (BS.1770 integrated, measured here), 12 ms fade in, 100 ms
+          fade out (`audio.edgeFadeOut`, at the end of the >= 350 ms tail). Per-piece trims: `audio.trims`.
+  bed     config `bed.segs`: the in-car stereo (kind music), exhaust and nat, each from its own clip, levelled to its own
+          target, faded, with every transcribed word inside it muted (40 ms ramps: no third-party speech in the bed).
+          Music ducks `bed.duckDb.music` (-14 dB) under dialog, exhaust and nat duck `audio.natDuckDb` (-12 dB)
+          (attack before a piece, release after it, gaps < `duck.bridge` held down). No synth or library music.
+  sfx     the Locked-On pack, cue list from build.py (.work/sfx_cues.json). Each accent is set to `sfx.ratio` of the
+          UNDUCKED bed RMS over the accent's own energetic span (floor: 35 % of the median), then ducked `sfx.duckDb`
+          under dialog.
 Master: sum -> 30 Hz high-pass -> 4x true-peak limiter at `master.ceiling` -> gain iterated (numpy BS.1770) to
-`master.lufs`, re-limited; the last 60 ms are exact zeros. The no-music master is the same without the music bus.
-Every level is reported in .work/mix.json.
+`master.lufs`, re-limited; the last 60 ms are exact zeros. The NO MUSIC master is the same with every music seg swapped
+for its `sub` (road/exhaust nat of the same length). Every level is reported in .work/mix.json, with the voice over the
+bed (music + exhaust + nat) for every dialog piece (fix B: >= audio.minVoiceOverBedDb).
 """
 import argparse, json, math, os, re, subprocess, sys, wave
 import numpy as np
@@ -116,40 +117,51 @@ def lufs(x, gate=True):
     return float(-0.691 + 10 * np.log10(z2.mean())) if len(z2) else -70.0
 
 
+def os_peaks(x, os_=4, chunk=1 << 19, pad=8192):
+    """per-sample 4x-oversampled peak (max over channels and the os_ sub-samples), FFT-upsampled in padded chunks so the
+    186 s master never needs a whole-length 4x array (that ran a worker out of memory, 6 Oct)."""
+    n = x.shape[0]
+    x2 = x if x.ndim == 2 else x[:, None]
+    out = np.empty(n)
+    for i0 in range(0, n, chunk):
+        i1 = min(n, i0 + chunk)
+        a, b = max(0, i0 - pad), min(n, i1 + pad)
+        seg = x2[a:b]
+        up = np.fft.irfft(np.fft.rfft(seg, axis=0), seg.shape[0] * os_, axis=0) * os_
+        pk = np.abs(up).max(1).reshape(seg.shape[0], os_).max(1)
+        out[i0:i1] = pk[i0 - a:i1 - a]
+    return out
+
+
 def true_peak_db(x):
-    X = np.fft.rfft(x, axis=0)
-    up = np.fft.irfft(X, x.shape[0] * 4, axis=0) * 4
-    return float(20 * np.log10(np.abs(up).max() + 1e-12))
+    return float(20 * np.log10(os_peaks(x).max() + 1e-12))
+
+
+def _limiter(x, ceiling_db=-2.0, look=0.0015, release=0.012):
+    """synth.limiter with the chunked peak detector (same gain curve: moving-min then moving-average)."""
+    c = 10 ** (ceiling_db / 20)
+    n = x.shape[0]
+    need = np.minimum(1, c / np.maximum(os_peaks(x), 1e-9))
+    L = int(round((look + release) * SR))
+    padded = np.concatenate([need, np.ones(L)])
+    mm = np.lib.stride_tricks.sliding_window_view(padded, L).min(1)[:n]
+    g = np.convolve(np.concatenate([np.ones(L - 1), mm]), np.ones(L) / L, mode='valid')
+    g = np.minimum(g, 1)
+    return x * g[:, None] if x.ndim == 2 else x * g
 
 
 # ------------------------------------------------------------------------------ io
-def mezz_audio(src, a, b, af=None):
-    """source seconds [a, b] of clip src from the mezzanine (or .work/mezz_extra), float64 stereo."""
-    cands = []
-    for d in (P['mezz'], os.path.join(WORK, 'mezz_extra')):
-        if not os.path.isdir(d):
-            continue
-        for fn in os.listdir(d):
-            m = re.match(r'^(\w+?)_(?:audio_)?([\d.]+)-([\d.]+)\.(mov|wav)$', fn)
-            if m and m.group(1) == src and float(m.group(2)) - 0.03 <= a and b <= float(m.group(3)) + 0.03:
-                cands.append((os.path.join(d, fn), float(m.group(2))))
-    # part2: fall back to the camera's own AAC stream (paths.aud/<clip>.m4a, copied by the engine's ingest, the same audio
-    # the mezzanines carry) so a dialog tail can run past the fetched picture span (fix A L-cuts)
-    aud = os.path.join(P.get('aud', ''), f'{src}.m4a')
-    if not cands and P.get('aud') and os.path.exists(aud):
-        cands.append((aud, 0.0))
-    if not cands:
-        raise SystemExit(f'no audio for {src} {a}-{b}')
-    path, t0 = cands[0]
-    ss = a - t0
-    pad0 = min(0.6, max(0.0, ss))
-    cmd = [FF, '-v', 'error', '-ss', f'{ss - pad0:.6f}', '-i', path, '-t', f'{b - a + pad0 + 0.6:.6f}', '-map', '0:a:0']
+def aud_audio(src, a, b, af=None, latency=0.0):
+    """source seconds [a, b] of clip src from paths.aud/<src>.m4a (the camera AAC, full length), float64 stereo; the
+    filter runs on 0.6 s of padding either side."""
+    pad0 = min(0.6, max(0.0, a))
+    cmd = [FF, '-v', 'error', '-ss', f'{a - pad0:.6f}', '-i', os.path.join(P['aud'], f'{src}.m4a'), '-t', f'{b - a + pad0 + 0.6:.6f}', '-map', '0:a:0']
     if af:
         cmd += ['-af', af]
     cmd += ['-f', 'f32le', '-ac', '2', '-ar', str(SR), '-']
     raw = subprocess.run(cmd, capture_output=True, check=True).stdout
     x = np.frombuffer(raw, '<f4').reshape(-1, 2).astype(np.float64)
-    i0 = int(round(pad0 * SR))
+    i0 = int(round((pad0 + latency) * SR))    # latency: the filter chain's own delay, read past so the voice stays on the picture
     n = int(round((b - a) * SR))
     out = x[i0:i0 + n]
     if len(out) < n:
@@ -202,12 +214,12 @@ def build_dialog(report):
         a = d['in'] + tr.get('in', 0.0)
         b = d['out'] + tr.get('out', 0.0)
         t = d['t'] + tr.get('in', 0.0) + d.get('shift', 0.0)
-        x = mezz_audio(d['src'], a, b, DIALOG_AF)
+        x = aud_audio(d['src'], a, b, DIALOG_AF, latency=A.get('dialogLatency', 0.0))
         m = x.mean(1)
         L = lufs(np.stack([m, m], 1))                  # loudness of the piece as placed (centred mono, L = R = m)
         tgt = A['dialogLufs'] + tr.get('gainDb', 0.0) + d.get('gainDb', 0.0)
         g = float(np.clip(tgt - L, -12, 18))
-        # part2 (fix A): the voice fades out over `edgeFadeOut` (80-120 ms) after a tail of >= 350 ms past the last word
+        # fix A: the voice fades out over `edgeFadeOut` (100 ms) at the end of its >= 350 ms tail
         m = fades(m * 10 ** (g / 20), tr.get('fin', A['edgeFade']), tr.get('fout', A.get('edgeFadeOut', A['edgeFade'])))
         st = np.stack([m, m], 1)
         place(bus, st, t)
@@ -240,69 +252,59 @@ def activity(spans, pre=0.12, post=0.35, bridge=0.6):
     return out, merged
 
 
-def nat_speech_spans():
-    """timeline spans of transcribed words inside each nat clip (someone talking in the nat -> the music ducks too)."""
-    out = []
-    for e in A['nat']:
-        p = os.path.join(P['transcripts'], f"{e['src']}.json")
-        if not os.path.exists(p):
-            continue
-        tr = json.load(open(p))
-        for sg in tr['segments']:
-            for w in sg['words']:
-                if w[0] < e['b'] and w[1] > e['a']:
-                    out.append([e['t'] + max(w[0], e['a']) - e['a'], e['t'] + min(w[1], e['b']) - e['a']])
-    return out
+BED = CFG['bed']
 
 
-def build_nat(act, report):
-    return build_nat_raw(report) * (10 ** (A['natDuckDb'] * act / 20))[:, None]
+def clip_words(src):
+    p = os.path.join(P['transcripts'], f'{src}.json')
+    if not os.path.exists(p):
+        return []
+    return [w for sg in json.load(open(p))['segments'] for w in sg['words']]
 
 
-def build_nat_raw(report):
-    bus = np.zeros((NS, 2))
-    for e in A['nat']:
-        x = mezz_audio(e['src'], e['a'], e['b'], 'highpass=f=40')
-        L = lufs(x)
-        g = float(np.clip(e.get('lufs', A['natLufs']) - L, -20, 20))
-        x = x * 10 ** (g / 20)
-        # part1: `mute` = [[src a, src b], ...] third-party speech in the bed (6 Oct): silenced with 40 ms ramps, level of the rest unchanged
-        for ma, mb in e.get('mute', []):
-            i0, i1 = max(0, int(round((ma - e['a']) * SR))), min(len(x), int(round((mb - e['a']) * SR)))
-            if i1 > i0:
-                k = min(int(0.04 * SR), (i1 - i0) // 2)
-                w = np.zeros(i1 - i0)
+def bed_seg(e, nomusic=False):
+    """one bed seg (or, in the no-music bed, its `sub`), levelled, speech-muted and faded; returns (x, info)."""
+    kind = e['kind']
+    src, a, b = e['src'], e['a'], e['b']
+    if nomusic and kind == 'music':
+        sb = e['sub']
+        src, a, b, kind = sb['src'], sb['a'], sb['a'] + (e['b'] - e['a']), 'exhaust'
+    x = aud_audio(src, a, b, 'highpass=f=30')
+    mutes = [list(m) for m in (e.get('mute', []) if src == e['src'] else [])]
+    mutes += [[w[0] - 0.05, w[1] + 0.05] for w in clip_words(src) if w[0] < b and w[1] > a]
+    muted = 0.0
+    for ma, mb in mutes:
+        i0, i1 = max(0, int(round((ma - a) * SR))), min(len(x), int(round((mb - a) * SR)))
+        if i1 > i0:
+            k = min(int(0.04 * SR), (i1 - i0) // 2)
+            w = np.zeros(i1 - i0)
+            if k:
                 w[:k] = 0.5 + 0.5 * np.cos(np.pi * np.arange(k) / k)
                 w[i1 - i0 - k:] = 0.5 - 0.5 * np.cos(np.pi * np.arange(k) / k)
-                x[i0:i1] *= (w if x.ndim == 1 else w[:, None])
-        x = fades(x, e.get('fin', 0.15), e.get('fout', 0.15))
-        place(bus, x, e['t'])
-        report['nat'].append(dict(src=e['src'], a=e['a'], b=e['b'], t=e['t'], lufs_in=round(L, 2), gain_db=round(g, 2)))
-    return bus
+            x[i0:i1] *= w[:, None]
+            muted += (i1 - i0) / SR
+    L = lufs(x)
+    tgt = e.get('lufs', BED['lufs'][kind]) if src == e['src'] else BED['lufs'][kind]
+    g = float(np.clip(tgt - L, -24, 24))
+    x = fades(x * 10 ** (g / 20), e.get('fin', 0.15), e.get('fout', 0.15))
+    return x, kind, dict(why=e['why'], kind=kind, src=src, a=round(a, 3), b=round(b, 3), t=e['t'], lufs_in=round(L, 2),
+                         gain_db=round(g, 2), muted_s=round(muted, 2))
 
 
-def load_music(report):
-    mc = CFG['music']
-    slot = os.path.join(ROOT, mc['file'])
-    if os.path.exists(slot):
-        x = read_wav(slot)
-        report['music'] = dict(source=mc['file'], bpm=mc.get('bpm'), downbeat0=mc.get('downbeat0'))
-        x = x[int(mc.get('offset', 0.0) * SR):]
-    else:
-        path = os.path.join(WORK, 'music_synth.wav')
-        x = read_wav(path)
-        sync = json.load(open(os.path.join(WORK, 'music_synth.json')))
-        report['music'] = dict(source='original synth bed (lib/music.py), no music.wav supplied', bpm=sync['bpm'], downbeat0=sync['downbeat0'])
-    if len(x) < NS:
-        x = np.concatenate([x, np.zeros((NS - len(x), 2))])
-    x = x[:NS].copy()
-    if os.path.exists(slot) and mc.get('tapeStop'):
-        # a supplied track is stopped here on its own (varispeed), then silent until the end card hit
-        t0, t1 = [int(v * SR) for v in mc['tapeStop']]
-        u = np.arange(t1 - t0) / (t1 - t0)
-        x[t0:t1] = S.varispeed(x[t0:t1], (1 - u) ** 1.3) * np.minimum(1, (t1 - t0 - np.arange(t1 - t0)) / (0.02 * SR))[:, None]
-        x[t1:] = 0
-    return x
+def build_bed(act, nomusic, report):
+    """the bed raw (unducked) and ducked, as summed stereo buses."""
+    raw, ducked = np.zeros((NS, 2)), np.zeros((NS, 2))
+    duck = {'music': BED['duckDb']['music'], 'exhaust': A['natDuckDb'], 'nat': A['natDuckDb']}
+    for e in BED['segs']:
+        x, kind, info = bed_seg(e, nomusic)
+        s0 = int(round(e['t'] * SR))
+        n = min(len(x), NS - s0)
+        x = x[:n]
+        place(raw, x, e['t'])
+        g = 10 ** (duck[kind] * act[s0:s0 + n] / 20)
+        place(ducked, x * g[:, None], e['t'])
+        report.append(info)
+    return raw, ducked
 
 
 def span_rms(x, i0, i1):
@@ -320,11 +322,11 @@ def energetic_span(y):
     return max(0, mid - half), min(len(e), mid + half)
 
 
-def build_sfx(music_raw, act, report):
+def build_sfx(bed_raw, act, report):
     bus = np.zeros((NS, 2))
     cues = json.load(open(os.path.join(WORK, 'sfx_cues.json')))
     lib = {}
-    ref = float(np.median([span_rms(music_raw, i, i + SR) for i in range(0, NS - SR, SR)]))
+    ref = float(np.median([span_rms(bed_raw, i, i + SR) for i in range(0, NS - SR, SR)]))
     for c in cues:
         f = c['file']
         if f not in lib:
@@ -336,7 +338,7 @@ def build_sfx(music_raw, act, report):
         t = c['t'] - c.get('align', 0.0) * len(y) / SR
         a, b = energetic_span(y)
         i0 = int(t * SR) + a
-        mus = max(span_rms(music_raw, i0, int(t * SR) + b), 0.35 * ref)
+        mus = max(span_rms(bed_raw, i0, int(t * SR) + b), 0.35 * ref)
         own = span_rms(y, a, b)
         g = A['sfx']['ratio'] * mus / own * 10 ** (c.get('db', 0.0) / 20)
         d = 10 ** (A['sfx']['duckDb'] * float(act[min(NS - 1, max(0, i0))]) / 20)
@@ -350,7 +352,7 @@ def master(x, target, ceiling):
     gain = 1.0
     done = False
     for it in range(4):
-        y = S.limiter(x * gain, ceiling_db=ceiling)
+        y = _limiter(x * gain, ceiling_db=ceiling)
         L = lufs(y)
         if abs(L - target) < 0.05:
             done = True
@@ -358,7 +360,7 @@ def master(x, target, ceiling):
         gain *= 10 ** ((target - L) / 20)
     master.gain = gain
     if not done:            # (on a break, y is already the limiter output at this exact gain: same numbers, one pass fewer)
-        y = S.limiter(x * gain, ceiling_db=ceiling)
+        y = _limiter(x * gain, ceiling_db=ceiling)
     tail = int(0.06 * SR)
     y[-tail:] = 0
     fl = int(0.25 * SR)
@@ -373,12 +375,9 @@ def _master_job(args):
 
 
 def masters_parallel(xs, target, ceiling):
-    import multiprocessing as mp
-    try:
-        with mp.get_context('fork').Pool(len(xs)) as pool:
-            return pool.map(_master_job, [(x, target, ceiling) for x in xs])
-    except (OSError, ValueError):
-        return [_master_job((x, target, ceiling)) for x in xs]
+    # part1 v2: one after the other. The forked pool hung on this 15 GB machine (a worker lost mid-FFT on the 186 s,
+    # 4x-oversampled stereo master leaves Pool.map waiting forever), and the two masters take well under a minute in turn.
+    return [_master_job((x, target, ceiling)) for x in xs]
 
 
 def meter_table(dialog, t0, t1, bands=14):
@@ -407,75 +406,71 @@ def main():
     ap.add_argument('--out-nomusic', default=os.path.join(WORK, 'mix_nomusic.wav'))
     ap.add_argument('--dialog-only', action='store_true')
     a = ap.parse_args()
-    rep = {'dialog': [], 'nat': [], 'sfx': []}
+    rep = {'dialog': [], 'bed': [], 'sfx': []}
     T = {}; t0 = time.time()
     def _dialog():
         r = {'dialog': []}; d, sp = build_dialog(r)
         return d, dict(spans=sp, dialog=r['dialog'])
-    dialog, ex, hit = cached_bus('dialog', [EDL['dialog'], A.get('extraDialog', []), A['trims'], A['dialogFilter'], A['dialogLufs'], A['edgeFade'], A.get('edgeFadeOut')], _dialog)
-    spans = [tuple(x) for x in ex['spans']]; spans = [list(x) for x in spans]; rep['dialog'] = ex['dialog']
+    dialog, ex, hit = cached_bus('dialog', [EDL['dialog'], A.get('extraDialog', []), A['trims'], A['dialogFilter'], A['dialogLufs'],
+                                            A['edgeFade'], A.get('edgeFadeOut'), A.get('dialogLatency', 0.0), P['aud']], _dialog)
+    spans = [list(x) for x in ex['spans']]; rep['dialog'] = ex['dialog']
     T['dialog'] = f'{time.time() - t0:.1f}s' + (' (cached)' if hit else ''); t0 = time.time()
     dk = A['duck']
-    nsp = nat_speech_spans()
-    act, merged = activity(spans + nsp, pre=dk['attack'], post=dk['release'], bridge=dk['bridge'])
-    rep['nat_speech_spans'] = [[round(a, 3), round(b, 3)] for a, b in nsp]
+    act, merged = activity(spans, pre=dk['attack'], post=dk['release'], bridge=dk['bridge'])
     write_wav24(os.path.join(WORK, 'stem_dialog.wav'), dialog * 0.5)
     if a.dialog_only:
         json.dump(rep, open(os.path.join(WORK, 'mix.json'), 'w'), indent=1)
         return
-    def _nat():
-        r = {'nat': []}; bus = build_nat_raw(r)
-        return bus, dict(nat=r['nat'])
-    nat_raw, ex, hit = cached_bus('nat', [A['nat'], A['natLufs']], _nat)
-    rep['nat'] = ex['nat']
-    nat = nat_raw * (10 ** (A['natDuckDb'] * act / 20))[:, None]
-    T['nat'] = f'{time.time() - t0:.1f}s' + (' (cached)' if hit else ''); t0 = time.time()
-    music_raw = load_music(rep)
-    Lm = lufs(music_raw)
-    music_raw *= 10 ** ((CFG['music']['lufs'] - Lm) / 20)
-    music = music_raw * (10 ** (CFG['music']['duckDb'] * act / 20))[:, None]
-    sfx = build_sfx(music_raw, act, rep)
+    def _bed(nm):
+        def f():
+            r = []; raw, d = build_bed(act, nm, r)
+            return np.stack([raw, d]), dict(bed=r)
+        return f
+    key = [BED, A['natDuckDb'], dk, spans, P['aud']]
+    (bed_raw, bed), ex, hit1 = cached_bus('bed', key, _bed(False))
+    rep['bed'] = ex['bed']
+    (bed_raw_n, bed_n), ex_n, hit2 = cached_bus('bed_nomusic', key, _bed(True))
+    for d, dn in zip(rep['bed'], ex_n['bed']):
+        d['nomusic'] = 'same' if d['kind'] != 'music' else f"swapped for {dn['src']} {dn['a']}-{dn['b']} (road/exhaust nat)"
+    rep['bed_source'] = ('the in-car stereo and exhaust/road nat from the clips themselves (config bed.segs, paths.aud); no synth or '
+                         'library music; the NO MUSIC mix swaps each in-car song for road/exhaust nat of the same length')
+    T['bed'] = f'{time.time() - t0:.1f}s' + (' (cached)' if hit1 and hit2 else ''); t0 = time.time()
+    sfx = build_sfx(bed_raw, act, rep)
+    sfx_n = build_sfx(bed_raw_n, act, {'sfx': []})
     mc = CFG['master']
-    on = CFG['music'].get('enabled', True) and os.environ.get('MUSIC', '1') not in ('0', 'false', 'off')
-    T['music+sfx'] = f'{time.time() - t0:.1f}s'; t0 = time.time()
-    # the two masters are independent: computed in two processes at once (same code, same numbers, half the wait)
-    (full, L1, tp1, g_full), (nomus, L2, tp2, _) = masters_parallel([dialog + nat + (music if on else 0) + sfx, dialog + nat + sfx],
-                                                                      mc['lufs'], mc['ceiling'])
+    (full, L1, tp1, g_full), (nomus, L2, tp2, _) = masters_parallel([dialog + bed + sfx, dialog + bed_n + sfx_n], mc['lufs'], mc['ceiling'])
     T['masters'] = f'{time.time() - t0:.1f}s'; t0 = time.time()
     write_wav24(a.out, full)
     write_wav24(a.out_nomusic, nomus)
-    # the music stem exactly as it sits in the master (ducked, at the master's gain, before the limiter)
-    stem = S.fft_filter(music, lo=30, slope=2) * g_full
-    fl = int(0.25 * SR); stem[-int(0.06 * SR):] = 0
-    write_wav24(os.path.join(WORK, 'music_stem.wav'), stem)
-    rep['music_enabled'] = bool(on)
-    # verification: music level under every dialog piece vs the piece itself (RMS over the piece, dB)
+    # the bed stem exactly as it sits in the master (ducked, at the master's gain, before the limiter)
+    stem = S.fft_filter(bed, lo=30, slope=2) * g_full
+    stem[-int(0.06 * SR):] = 0
+    write_wav24(os.path.join(WORK, 'bed_stem.wav'), stem)
+    # fix B check: the voice over the bed (music + exhaust + nat, ducked) under every dialog piece (RMS over the piece, dB)
     chk = []
     for d in rep['dialog']:
         i0, i1 = int(d['t'] * SR), int((d['t'] + d['b'] - d['a']) * SR)
         dm = 20 * math.log10(span_rms(dialog, i0, i1) + 1e-9)
-        mu = 20 * math.log10(span_rms(music, i0, i1) + 1e-9)
-        un = 20 * math.log10(span_rms(music_raw, i0, i1) + 1e-9)
-        bd = 20 * math.log10(span_rms(music + nat, i0, i1) + 1e-9)
-        chk.append(dict(i=d['i'], t=d['t'], dialog_db=round(dm, 1), music_db=round(mu, 1), music_unducked_db=round(un, 1),
-                        duck_db=round(mu - un, 1), dialog_over_music_db=round(dm - mu, 1), dialog_over_bed_db=round(dm - bd, 1)))
+        bd = 20 * math.log10(span_rms(bed, i0, i1) + 1e-9)
+        un = 20 * math.log10(span_rms(bed_raw, i0, i1) + 1e-9)
+        bn = 20 * math.log10(span_rms(bed_n, i0, i1) + 1e-9)
+        chk.append(dict(i=d['i'], t=d['t'], dialog_db=round(dm, 1), bed_db=round(bd, 1), bed_unducked_db=round(un, 1),
+                        duck_db=round(bd - un, 1) if un > -150 else 0.0, dialog_over_bed_db=round(dm - bd, 1),
+                        dialog_over_bed_nomusic_db=round(dm - bn, 1)))
     rep['duck_check'] = chk
-    # part2 (fix B): the voice must sit >= audio.minVoiceOverBedDb above music + nat during speech (checked by the gates)
-    rep['voice_over_bed'] = dict(min_music=min(c['dialog_over_music_db'] for c in chk), min_bed=min(c['dialog_over_bed_db'] for c in chk),
-                                 median_music=float(np.median([c['dialog_over_music_db'] for c in chk])), need=A.get('minVoiceOverBedDb', 10.0))
-    for nm, x in (('stem_nat', nat), ('stem_music', music), ('stem_sfx', sfx)):
+    rep['voice_over_bed'] = dict(min_bed=min(c['dialog_over_bed_db'] for c in chk),
+                                 median_bed=float(np.median([c['dialog_over_bed_db'] for c in chk])),
+                                 min_bed_nomusic=min(c['dialog_over_bed_nomusic_db'] for c in chk), need=A.get('minVoiceOverBedDb', 10.0))
+    for nm, x in (('stem_bed', bed), ('stem_bed_nomusic', bed_n), ('stem_sfx', sfx)):
         write_wav24(os.path.join(WORK, nm + '.wav'), x * 0.5)
-    # meter data for the quote card (Omarie's pick)
-    tc = CFG['layer'].get('testimonial')          # part1: no quote card in this vlog
-    if tc:
-        json.dump(meter_table(dialog, tc['t0'], tc['t1']), open(os.path.join(WORK, 'meter.json'), 'w'))
-    else:
-        json.dump({}, open(os.path.join(WORK, 'meter.json'), 'w'))
+    json.dump({}, open(os.path.join(WORK, 'meter.json'), 'w'))      # part1: no quote card in this vlog
     rep['master'] = dict(lufs=round(L1, 2), true_peak_db=round(tp1, 2), nomusic_lufs=round(L2, 2), nomusic_true_peak_db=round(tp2, 2),
-                         music_unducked_lufs=CFG['music']['lufs'], dialog_spans=len(merged), samples=NS, seconds=round(NS / SR, 4))
+                         dialog_spans=len(merged), samples=NS, seconds=round(NS / SR, 4))
     json.dump(rep, open(os.path.join(WORK, 'mix.json'), 'w'), indent=1)
     T['stems+report'] = f'{time.time() - t0:.1f}s'
-    log(f'mix: {L1:.2f} LUFS TP {tp1:.2f} | no-music {L2:.2f} LUFS TP {tp2:.2f} | music: {rep["music"]["source"]} | ' + ', '.join(f'{k} {v}' for k, v in T.items()))
+    v = rep['voice_over_bed']
+    log(f"mix: {L1:.2f} LUFS TP {tp1:.2f} | no-music {L2:.2f} LUFS TP {tp2:.2f} | voice over bed min {v['min_bed']} dB "
+        f"(no-music {v['min_bed_nomusic']}) | " + ', '.join(f'{k} {v_}' for k, v_ in T.items()))
 
 
 if __name__ == '__main__':
