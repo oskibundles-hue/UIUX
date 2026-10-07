@@ -305,12 +305,22 @@
   },
   {
    "beat": 15,
-   "src": "0093",
-   "in": 4.1,
-   "out": 12.3,
+   "src": "0095",
+   "in": 24.4,
+   "out": 27.97,
    "speed": 1.0,
    "t": 110.03,
-   "dur": 8.2,
+   "dur": 3.57,
+   "note": "CUTAWAY over 110.03-113.6 (nq-check, 7 Oct; lead: cut away): 0093 4.1-7.67 shows his open palm with the wheel out of frame, so the picture is the road (0095 24.4-27.97: both hands on the wheel, forest road; used nowhere else in the cut); his 0093 audio and captions run on"
+  },
+  {
+   "beat": 15,
+   "src": "0093",
+   "in": 7.67,
+   "out": 12.3,
+   "speed": 1.0,
+   "t": 113.6,
+   "dur": 4.63,
    "note": "SYNC: driving, passenger-side cam"
   },
   {
@@ -346,22 +356,22 @@
   {
    "beat": 17,
    "src": "0095",
-   "in": 46.0,
-   "out": 47.7,
+   "in": 47.0,
+   "out": 48.5,
    "speed": 1.0,
    "t": 125.23,
-   "dur": 1.7,
-   "note": "forest"
+   "dur": 1.5,
+   "note": "forest (nq-check, 7 Oct: starts at 47.0, after the red/magenta white-balance flash at 0095 46.70-46.97)"
   },
   {
    "beat": 17,
    "src": "0095",
-   "in": 52.0,
+   "in": 51.8,
    "out": 53.6,
    "speed": 1.0,
-   "t": 126.93,
-   "dur": 1.6,
-   "note": "forest, the road opens"
+   "t": 126.73,
+   "dur": 1.8,
+   "note": "forest, the road opens (7 Oct: 0.2 s earlier, to keep the montage length)"
   },
   {
    "beat": 18,
@@ -405,13 +415,13 @@
   },
   {
    "beat": 22,
-   "src": "0100",
-   "in": 33.0,
-   "out": 37.4,
+   "src": "0099",
+   "in": 158.2,
+   "out": 162.6,
    "speed": 1.0,
    "t": 152.33,
    "dur": 4.4,
-   "note": "SYNC: cabin cam"
+   "note": "CUTAWAY over the whole 0100 shot (nq-check, 7 Oct; lead: cut away): 0100 33.0-37.4 has him turned round to the camera at speed, left hand not visible, so the picture is the road (0099 158.2-162.6: both hands on the wheel, open plains, a truck passes; used nowhere else in the cut); his 0100 audio and captions run on, at the same timeline place"
   },
   {
    "beat": 23,

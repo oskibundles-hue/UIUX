@@ -82,9 +82,13 @@ def clock_table():
         if s['src'] == 'card':
             continue
         ts = PL.src_times(k)
+        # part1 v2 (7 Oct): a cutaway under his voice carries shot config `clockAs` {src, in}: the clock reads the voice's
+        # clip (src, from `in` at the shot's first frame), so the strip clock never jumps to the road clip and back
+        ca = PL.scfg(k).get('clockAs')
         for j in range(f1 - f0):
             t, sp = ts[j]
-            tab[f0 + j] = [round(starts[s['src']] + t, 4), round(sp, 4)]
+            tab[f0 + j] = ([round(starts[ca['src']] + ca['in'] + (t - s['in']), 4), round(sp, 4)] if ca else
+                           [round(starts[s['src']] + t, 4), round(sp, 4)])
     return tab
 
 
@@ -735,7 +739,7 @@ def st_compose(A):
             old[str(i)] = segs[i][2]
         json.dump(old, open(sp, 'w'))
     t_enc = time.time() - t1
-    master = os.path.join(EXP, f'{NAME} - 1080x1920.mp4')
+    master = os.path.join(EXP, f'{NAME} - 1080x1920 (master CRF).mp4')     # 7 Oct: the delivery pair takes the plain names
     nomus = os.path.join(EXP, f'{NAME} - 1080x1920 - NO MUSIC (master).mp4')
     prev = os.path.join(EXP, f'{NAME} - PREVIEW 720x1280.mp4')
     mparts = [os.path.join(segdir, f'm_{i:03d}.mp4') for i in range(len(segs))]
@@ -751,7 +755,7 @@ def st_compose(A):
     mbps = os.path.getsize(master) * 8 / DUR / 1e6
     # part1 v2 delivery (lead's spec, 6 Oct): -14 LUFS / -1.5 dBTP, video under 11.5 Mb/s (two-pass 11.1M from the master), the
     # final names in exports/delivery/: the master mix and the NO MUSIC mix on the same delivery video stream
-    DLV = os.path.join(EXP, 'delivery'); os.makedirs(DLV, exist_ok=True)
+    DLV = EXP                                          # 7 Oct (lead's brief): the delivery pair sits in exports/ under the final names
     deliv = os.path.join(DLV, f'{NAME} - 1080x1920.mp4')
     deliv_n = os.path.join(DLV, f'{NAME} - 1080x1920 - NO MUSIC.mp4')
     plog = os.path.join(WORK, 'x264pass')
@@ -1015,7 +1019,7 @@ def write_cue():
 def st_qa(A):
     write_cue()
     import plate as PL
-    master = os.path.join(EXP, f'{NAME} - 1080x1920.mp4')
+    master = os.path.join(EXP, f'{NAME} - 1080x1920 (master CRF).mp4')     # 7 Oct: the delivery pair takes the plain names
     os.makedirs(QA, exist_ok=True)
     for f in os.listdir(QA):
         if f.startswith('beat_') or f.startswith('el_'):

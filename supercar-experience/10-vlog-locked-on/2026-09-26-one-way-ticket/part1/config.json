@@ -272,18 +272,23 @@
    ]
   },
   "28": {
-   "look": "cabin"
+   "look": "cabin",
+   "clockAs": {
+    "src": "0093",
+    "in": 4.1,
+    "_why": "cutaway under his 0093 line: the strip clock reads the moment he speaks (12:01)"
+   }
   },
   "29": {
-   "look": "cabin",
-   "s1": 1.0
+   "look": "cabin"
   },
   "30": {
    "look": "cabin",
    "s1": 1.0
   },
   "31": {
-   "look": "cabin"
+   "look": "cabin",
+   "s1": 1.0
   },
   "32": {
    "look": "cabin"
@@ -295,20 +300,28 @@
    "look": "cabin"
   },
   "35": {
-   "look": "cabin",
-   "s1": 1.0
+   "look": "cabin"
   },
   "36": {
-   "look": "cabin"
-  },
-  "37": {
    "look": "cabin",
    "s1": 1.0
   },
-  "38": {
+  "37": {
    "look": "cabin"
   },
+  "38": {
+   "look": "cabin",
+   "s1": 1.0
+  },
   "39": {
+   "look": "cabin",
+   "clockAs": {
+    "src": "0100",
+    "in": 33.0,
+    "_why": "cutaway under his 0100 line: the strip clock reads the moment he speaks (16:06), not the 15:42 road picture, so it never runs backwards"
+   }
+  },
+  "40": {
    "look": "cabin"
   }
  },
@@ -349,30 +362,36 @@
    "dur": 0.36
   },
   {
-   "into": 29,
+   "into": 30,
    "type": "sweep",
    "t0": 118.23,
    "dur": 0.36
   },
   {
-   "into": 32,
+   "into": 33,
    "type": "whip",
    "dir": "left"
   },
   {
-   "into": 33,
-   "type": "whip",
-   "dir": "right"
-  },
-  {
-   "into": 36,
+   "into": 34,
    "type": "whip",
    "dir": "right"
   },
   {
    "into": 37,
    "type": "whip",
+   "dir": "right"
+  },
+  {
+   "into": 38,
+   "type": "whip",
    "dir": "left"
+  },
+  {
+   "into": 39,
+   "type": "whip",
+   "dir": "right",
+   "_why": "7 Oct: the 0099 cutaway follows the 0099 HUD-1 shot from the same mount; the whip hides the jump"
   }
  ],
  "slams": [
@@ -442,7 +461,7 @@
     "t0": 12.7,
     "t1": 14.65,
     "p": {
-     "tag": "04:57 · CH 01 / 03",
+     "tag": "",
      "title": "ONE-WAY TICKET",
      "y": 410,
      "maxW": 700,
@@ -455,7 +474,7 @@
     "t0": 60.21,
     "t1": 62.16,
     "p": {
-     "tag": "10:14 · CH 02 / 03",
+     "tag": "",
      "title": "THE PICKUP",
      "y": 410,
      "maxW": 700,
@@ -468,7 +487,7 @@
     "t0": 118.43,
     "t1": 120.38,
     "p": {
-     "tag": "12:17 · CH 03 / 03",
+     "tag": "",
      "title": "HIT THE ROAD",
      "y": 410,
      "maxW": 700,
@@ -530,7 +549,8 @@
      "start": "00:00:00",
      "place": "IN THE AIR",
      "date": "SEP 26 2026",
-     "built": false
+     "built": false,
+     "noClock": true
     }
    },
    {
@@ -789,7 +809,19 @@
    "why": "0097 speedometer (v2 hook shot 5, 0097 4.6-7.8; box from shot 0, same camera mount)"
   },
   {
-   "shot": 29,
+   "shot": 28,
+   "box": [
+    290,
+    985,
+    270,
+    115
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0095 speedometer (cutaway 110.03-113.6, 0095 24.4-27.97; box from the 0095 21.2-24.4 cutaway, same mount)"
+  },
+  {
+   "shot": 30,
    "box": [
     290,
     985,
@@ -801,7 +833,7 @@
    "why": "0095 speedometer (cutaway 112.8-116.0, 0095 21.2-24.4; cluster drifts left late in the span, box widened 40 px left)"
   },
   {
-   "shot": 30,
+   "shot": 31,
    "box": [
     280,
     1000,
@@ -813,7 +845,7 @@
    "why": "0095 speedometer (cutaway)"
   },
   {
-   "shot": 31,
+   "shot": 32,
    "box": [
     280,
     975,
@@ -825,7 +857,7 @@
    "why": "0094 speedometer (shot 31, 0094 7.6-9.2, frames 3542-3589; was f0 3501-3589, which overlapped cutaway shot 30)"
   },
   {
-   "shot": 32,
+   "shot": 33,
    "box": [
     280,
     940,
@@ -837,7 +869,7 @@
    "why": "0095 speedometer"
   },
   {
-   "shot": 33,
+   "shot": 34,
    "box": [
     340,
     970,
@@ -849,7 +881,7 @@
    "why": "0095 speedometer"
   },
   {
-   "shot": 34,
+   "shot": 35,
    "box": [
     330,
     985,
@@ -861,7 +893,7 @@
    "why": "0095 speedometer"
   },
   {
-   "shot": 35,
+   "shot": 36,
    "box": [
     290,
     990,
@@ -873,7 +905,7 @@
    "why": "0096 speedometer"
   },
   {
-   "shot": 36,
+   "shot": 37,
    "box": [
     300,
     985,
@@ -885,7 +917,7 @@
    "why": "0097 speedometer"
   },
   {
-   "shot": 37,
+   "shot": 38,
    "box": [
     260,
     990,
@@ -897,16 +929,16 @@
    "why": "0099 speedometer"
   },
   {
-   "shot": 38,
+   "shot": 39,
    "box": [
-    340,
-    1050,
-    180,
+    260,
+    990,
+    210,
     110
    ],
    "pad": 16,
    "radius": 16,
-   "why": "0100 speedometer"
+   "why": "0099 speedometer (cutaway 152.33-156.73, 0099 158.2-162.6; box from the 0099 HUD-1 shot, same mount)"
   }
  ],
  "_aboutSpeedo": "speedo: the McLaren's own speedometer on every cabin-cam shot (its digits are readable at phone size), blurred in a static feathered box per shot (no speed on screen). blurs: licence plates are not blurred in this vlog (Omarie, 6 Oct).",

@@ -162,8 +162,9 @@ beat('CH2', '"Let\'s make sure this top work" -> the roof goes down', [
     ('0092', 7.8, 5.0, 'ramp', 'SYNC then the roof opening at speed'),
 ], [('0092', 7.93, 9.30, ('sync', 0))])
 beat('CH2', '"It is beautiful out here, like gorgeous. Like I\'m talking gorgeous." / "we\'re on our way ... to Las Vegas"', [
-    ('0093', 4.1, 8.2, 1.0, 'SYNC: driving, passenger-side cam'),
-], [('0093', 4.42, 11.72, ('sync', 0))])
+    ('0095', 24.4, 3.57, 1.0, 'CUTAWAY over 110.03-113.6 (nq-check, 7 Oct; lead: cut away): 0093 4.1-7.67 shows his open palm with the wheel out of frame, so the picture is the road (0095 24.4-27.97: both hands on the wheel, forest road; used nowhere else in the cut); his 0093 audio and captions run on'),
+    ('0093', 7.67, 4.63, 1.0, 'SYNC: driving, passenger-side cam'),
+], [('0093', 4.42, 11.72, ('sync', 1))])
 
 # ---------------------------------------------------------------- CH3 HIT THE ROAD (12:10)
 beat('CH3', 'CH3 slam; "I like it. I want y\'all to get the vibe. So you feel me? We gonna get the vibes right now."', [
@@ -172,8 +173,8 @@ beat('CH3', 'CH3 slam; "I like it. I want y\'all to get the vibe. So you feel me
     ('0094', 7.6, 1.6, 1.0, 'SYNC: back to him, hand off the phone'),
 ], [('0094', 2.34, 9.06, ('at', 0.14))])
 beat('CH3', 'the vibes: forest montage (music up, nat under)', [
-    ('0095', 46.0, 1.7, 1.0, 'forest'),
-    ('0095', 52.0, 1.6, 1.0, 'forest, the road opens'),
+    ('0095', 47.0, 1.5, 1.0, 'forest (nq-check, 7 Oct: starts at 47.0, after the red/magenta white-balance flash at 0095 46.70-46.97)'),
+    ('0095', 51.8, 1.8, 1.0, 'forest, the road opens (7 Oct: 0.2 s earlier, to keep the montage length)'),
 ])
 beat('CH3', '"Man, I miss trees and nature. Good lord. I just know they got some fire hiking trails out here."', [
     ('0095', 28.0, 5.8, 1.0, 'forest road (his line from 0094 over it: hands on the wheel here)'),
@@ -188,8 +189,8 @@ beat('CH3', 'HUD-1 STRIP: open road (15:42)', [
     ('0099', 166.0, 8.0, 1.0, 'HUD-1: open plains'),
 ])
 beat('CH3', '"I just wanted to let you guys know. We\'re in Oregon!" PLACE: JUST GOT INTO OREGON', [
-    ('0100', 33.0, 4.4, 1.0, 'SYNC: cabin cam'),
-], [('0100', 34.46, 36.96, ('sync', 0))])
+    ('0099', 158.2, 4.4, 1.0, 'CUTAWAY over the whole 0100 shot (nq-check, 7 Oct; lead: cut away): 0100 33.0-37.4 has him turned round to the camera at speed, left hand not visible, so the picture is the road (0099 158.2-162.6: both hands on the wheel, open plains, a truck passes; used nowhere else in the cut); his 0100 audio and captions run on, at the same timeline place'),
+], [('0100', 34.46, 36.96, ('at', 1.46))])
 beat('CH3', '"I just pulled over so I can put the top down, I mean the top back up cuz my ears are ringing"', [
     ('0101', 2.6, 6.05, 1.0, 'SYNC: pulled over (v2 fix A: longer for the tail)'),
 ], [('0101', 2.74, 8.26, ('sync', 0))])

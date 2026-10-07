@@ -133,7 +133,10 @@ SEK.seStrip = function (cfg) {
     exit: null, route_text: '', expand: [] }, cfg.p);
   const root = H.el('div', 'a', null);
   const pn = H.panel(root, p.x, p.y, p.w, p.hx, { stripe: 5, shadow: 0.24 });
-  pn.bg.style.background = 'rgba(8,8,10,.58)';                        // the glass-orange tint; the frost is in the plate
+  pn.bg.style.background = 'rgba(8,8,10,.68)';                        // the glass-orange tint; the frost is in the plate (7 Oct: .58 -> .68, dark over foliage and sky)
+  // 7 Oct (nq-check): the cap stripe is one solid SE orange the full panel width, not the house 78/22 orange/white, which
+  // read as a second, frozen progress bar; the scrubber along the bottom is the only progress element
+  pn.stripe.style.background = ACC;
   const edgeLine = H.el('div', 'a', pn.clip, `width:${p.w}px;height:${p.hc}px;box-shadow:inset 0 0 0 1px rgba(255,255,255,.16)`);
   const IN = pn.inner, dim = 'rgba(255,255,255,.66)';
   const mk = H.el('img', 'a', IN, `left:24px;top:0;width:54px`); mk.src = H.maskUrl('sce-icon-mark-only--white.png');
