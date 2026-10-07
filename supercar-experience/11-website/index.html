@@ -1024,13 +1024,13 @@ const EP=[
 ];
 EP.forEach((e,i)=>e.n=i+1);
 const LATEST=EP[EP.length-1];
-/* Rates: every Las Vegas listing on supercarexp.vip/cars (27 cars, the rally listing left out), day and 5-hour,
-   checked 28-29 Sept 2026. The first 7 have our approved ads. The rest use supercarexp.vip's own photo (photo:),
+/* Rates: every Las Vegas listing on supercarexp.vip/cars (26 cars, the rally listing left out), day and 5-hour,
+   checked 28-29 Sept 2026 and again 7 Oct 2026 (750S Spider no longer listed, so it is out of Rentals but its ad
+   stays in the ads row; Brabus G63, S580 Maybach and AMG GT 43 rates updated). The first 6 have our approved ads. The rest use supercarexp.vip's own photo (photo:),
    and its own video where that video shows the same car (Mansory Urus, 911 Pure 800). No vlog footage here, by
    Omarie's rule (29 Sept). s0/s1/rate = the loop a card plays on hover; d2full = no half-price 2nd day. */
 const cars=[
  {id:"gt3",yr:2025,make:"Porsche",name:"911 GT3 RS",type:"Exotic",day:1799,five:1299,vids:[["Experience ad","gt3"],["Locked-On showcase","gt3_locked"]],flash:"5 hours · $1,200 flash special"},
- {id:"750s",yr:2026,make:"McLaren",name:"750S Spider",type:"Exotic",day:1799,five:1299,vids:[["Experience ad","750s"]]},
  {id:"sto",yr:2023,make:"Lamborghini",name:"Huracán STO",type:"Exotic",day:1599,five:1099,vids:[["Experience ad","sto"],["HUD flash special","sto_hud"]],flash:"2-hour flash special, 11AM–1PM"},
  {id:"f8",yr:2022,make:"Ferrari",name:"F8 Tributo",type:"Exotic",day:1599,five:1099,vids:[["Experience ad","f8"]]},
  {id:"amg",yr:2021,make:"Mercedes-AMG",name:"GT Black Series",type:"Exotic",day:1099,five:799,vids:[["Experience ad","amg"]],flash:"5 hours · $800 flash special"},
@@ -1051,11 +1051,11 @@ const cars=[
  {id:"escalade",yr:2026,make:"Cadillac",name:"Escalade",type:"SUV",day:649,five:449,deal:"Rent 2 days, get the 3rd day free",d2full:true,photo:"cars/escalade.jpg",vids:[["Photo","photo:cars/escalade.jpg"]]},
  {id:"gls600",yr:2024,make:"Mercedes",name:"GLS600 Maybach",type:"SUV",day:649,five:449,photo:"cars/gls600.jpg",vids:[["Photo","photo:cars/gls600.jpg"]]},
  {id:"s680",yr:2024,make:"Mercedes",name:"S680 Maybach",type:"Luxury",day:649,five:449,photo:"cars/s680.jpg",vids:[["Photo","photo:cars/s680.jpg"]]},
- {id:"brabus",yr:2025,make:"Brabus",name:"G63 G-Wagon",type:"SUV",day:599,five:399,photo:"cars/brabus.jpg",vids:[["Photo","photo:cars/brabus.jpg"]]},
+ {id:"brabus",yr:2025,make:"Brabus",name:"G63 G-Wagon",type:"SUV",day:499,five:349,photo:"cars/brabus.jpg",vids:[["Photo","photo:cars/brabus.jpg"]]},
  {id:"corvette",yr:2023,make:"Chevrolet",name:"Corvette",type:"Exotic",day:599,five:449,photo:"cars/corvette.jpg",vids:[["Photo","photo:cars/corvette.jpg"]]},
- {id:"s580",yr:2024,make:"Mercedes",name:"S580 Maybach",type:"Luxury",day:449,five:349,photo:"cars/s580.jpg",vids:[["Photo","photo:cars/s580.jpg"]]},
+ {id:"s580",yr:2024,make:"Mercedes",name:"S580 Maybach",type:"Luxury",day:499,five:349,photo:"cars/s580.jpg",vids:[["Photo","photo:cars/s580.jpg"]]},
  {id:"c8",yr:2021,make:"Chevrolet",name:"C8",type:"Exotic",day:299,five:null,photo:"cars/c8.jpg",vids:[["Photo","photo:cars/c8.jpg"]]},
- {id:"amggt43",yr:2021,make:"Mercedes",name:"AMG GT 43",type:"Luxury",day:279,five:null,photo:"cars/amggt43.jpg",vids:[["Photo","photo:cars/amggt43.jpg"]]}
+ {id:"amggt43",yr:2021,make:"Mercedes",name:"AMG GT 43",type:"Luxury",day:249,five:null,photo:"cars/amggt43.jpg",vids:[["Photo","photo:cars/amggt43.jpg"]]}
 ];
 const CARS_STILL=cars.filter(c=>!c.photo).map(c=>c.id);
 const twoDays=c=>c.d2full?c.day*2:c.day*1.5;
