@@ -35,6 +35,10 @@ for d in EDL['dialog']:
     placed.append(dict(where='under the voice', src=d['src'], a=d['in'], b=d['out'], t=d['t'], under_voice=True))
 
 DIRECT = json.load(open(os.path.join(ROOT, 'data', 'shazam_spans.json')))
+# matches confirmed by the facts panel: no "check" flag (the clip-scan window count no longer decides)
+CONFIRMED = {
+    '0096:31.4:41.7': 'confirmed by nq-facts, 7 Oct: exact-span Shazam match, key 820481582',   # Off The Meter
+}
 rows, quiet = [], []
 for p in placed:
     key = f"{p['src']}:{p['a']}:{p['b']}"
@@ -44,13 +48,13 @@ for p in placed:
             scan = [x for x in TR if x['clip'] == p['src'] and x['title'] == hit[0] and x['clip_from'] < p['b'] + 15 and x['clip_to'] > p['a'] - 15]
             n = max([x['n'] for x in scan] or [0])
             check = []
-            if n <= 1:
+            if n <= 1 and key not in CONFIRMED:
                 check.append(f'clip scan: {n} window(s)')
             if p['under_voice']:
                 check.append('under the voice')
             rows.append(dict(title=hit[0], artist=hit[1], clip=p['src'], clip_in=p['a'], clip_out=p['b'], ep_in=round(p['t'], 2),
                              ep_out=round(p['t'] + p['b'] - p['a'], 2), where=p['where'], shazam_windows=n,
-                             confidence='direct match on the exact span' + (f' + {n} nearby clip-scan window(s)' if n else ''),
+                             confidence='direct match on the exact span' + (f' + {n} nearby clip-scan window(s)' if n else '') + (f'; {CONFIRMED[key]}' if key in CONFIRMED else ''),
                              check='check: ' + '; '.join(check) if check else ''))
         elif p['under_voice']:
             quiet.append(p)
