@@ -20,10 +20,13 @@ in Dropbox itself, deliver it through the **Video Drop** page: https://claude.ai
      plus a path read: each returns the whole page (in Part 2 the double read pushed the lead past 300k for
      9 calls).
   4. Test that the rejoined file's SHA-256 matches the master: check that the local parts `cat` to the master's
-     hash, then match each part's SHA-256 against the one `list` with `scope: "assets"` prints for its asset id
-     (one or two calls for all the parts). Omarie, 7 Oct: Part 2 v2 checked 26 parts this way, where reading
-     each back with its own `path` would have taken 26 calls; a multi-`paths` read of asset ids failed in Part 2.
-  5. Once he has saved it, confirm the file in Dropbox at the exact size.
+     hash, then go down the card's parts in order and match each one's SHA-256 against the one `list` with
+     `scope: "assets"` prints for its asset id, so a part out of place on the card is caught (one or two calls
+     for all the parts). Omarie, 7 Oct: Part 2 v2 checked 26 parts this way, where reading each back with its
+     own `path` would have taken 26 calls; a multi-`paths` read of asset ids failed in Part 2.
+  5. Once he has saved it, confirm the file in Dropbox at the exact size and the master's SHA-256 (`shasum -a 256`
+     on the Dropbox copy, a few seconds). That checks the whole file end to end, whatever the listing's hash is
+     based on.
 - The page holds 1 GiB. Clear older cards only once they're confirmed in Dropbox, and ask him first.
 
 ## The Working-now card: step detail
