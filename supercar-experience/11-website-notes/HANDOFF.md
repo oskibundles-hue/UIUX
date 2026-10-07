@@ -1,5 +1,8 @@
 # HANDOFF — Supercar Experience site (from claude.ai chat, 28 Sept 2026; vlog-first version live 29 Sept)
 
+> Moved here from `11-website/` on 6 Oct 2026, so it isn't served on the live site. Everything in `11-website/` is public at supercar-experience-garage.onrender.com, so keep notes like this one outside that folder.
+
+
 Pick up here in Claude Code. Branch: `claude/se-website-render` (never push to main).
 
 ## What this is
