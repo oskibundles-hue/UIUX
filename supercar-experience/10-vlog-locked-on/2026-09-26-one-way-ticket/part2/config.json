@@ -938,7 +938,7 @@
    ],
    "pad": 16,
    "radius": 16,
-   "why": "v2: 0116 talk-to-camera, cluster right of the wheel (same mount as the 0116 103.6 shot); check on the gate sheet"
+   "why": "v2: 0116 talk-to-camera, measured 7 Oct on the rendered shot (142.8-161.3): the lit cluster sits at x 960-1020, y 1000-1085 right of the wheel rim (static mount), inside the box at every sampled frame"
   },
   {
    "shot": 27,
@@ -950,7 +950,7 @@
    ],
    "pad": 16,
    "radius": 16,
-   "why": "v2: 0116 talk-to-camera, cluster right of the wheel (same mount as the 0116 103.6 shot); check on the gate sheet"
+   "why": "v2: 0116 talk-to-camera, measured 7 Oct on the rendered shot (142.8-161.3): the lit cluster sits at x 960-1020, y 1000-1085 right of the wheel rim (static mount), inside the box at every sampled frame"
   },
   {
    "shot": 31,
@@ -965,7 +965,7 @@
    "why": "0119 cluster, digits readable (round 1: moved right onto the digits)"
   }
  ],
- "_aboutSpeedo": "speedo: the McLaren's own speedometer on every cabin-cam shot (its digits are readable at phone size), blurred in a static feathered box per shot (no speed on screen). blurs: licence plates are not blurred in this vlog (Omarie, 6 Oct). PART 2: filled in phase B from the mezzanines (every cabin-cam shot).",
+ "_aboutSpeedo": "speedo: the McLaren's own speedometer on every cabin-cam shot (its digits are readable at phone size), blurred in a static feathered box per shot (no speed on screen). blurs: licence plates are not blurred in this vlog (Omarie, 6 Oct). PART 2: filled in phase B from the mezzanines (every cabin-cam shot). v2 (7 Oct) measured on the rendered shots (output px, 50 px grid crops): 11-12 0112, 13-16 0113 night (motion-blurred, no digits), 23 / 26 / 27 0116 (cluster x 960-1020, y 1000-1085), 31 0119 (digits at x 290-325, y 1155-1180). No box needed: 17-20 0114 and 45 0123 (parked, cluster dark, no digits); 5 / 7 / 21 / 33 and the 0121 / 0122 deck cams show no cluster.",
  "bed": {
   "_about": "v2 (Omarie, 6 Oct): the bed is the in-car stereo nat and exhaust from the clips (paths.aud), no synth or library music. Each seg: source span a-b of clip src placed at timeline t, levelled to its lufs (else the kind default), faded fin/fout (s). Every transcribed word inside a seg (the day index) is muted with 40 ms ramps, so no speech rides in the bed; `mute` adds spans. Music ducks duckDb.music under dialog, exhaust and nat duck audio.natDuckDb. The NO MUSIC master replaces each music seg by its `sub` (the same length of road/exhaust nat from a speech-free, music-free span; no song recognised by Shazam in 10 s windows every 5 s and no drums in htdemucs). Songs are listed in exports/qa/in_car_tracks_part2.md (tools/track_list.py). Forbidden spans apply to bed audio too.",
   "lufs": {
