@@ -351,7 +351,7 @@ h1,h2,h3{font-family:var(--f);font-weight:800;text-transform:uppercase;letter-sp
 .resume{font:600 12px/1 var(--mono);letter-spacing:.08em;text-transform:uppercase;color:var(--orange)}
 .acts{display:flex;gap:10px;flex-wrap:wrap}
 .queue{margin-top:6px;border-top:1px solid var(--d-line)}
-.queue h4{margin:18px 0 10px;font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--d-mute)}
+.queue h3{margin:18px 0 10px;font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--d-mute)}
 .q{display:grid;grid-template-columns:44px 1fr auto;gap:14px;align-items:center;width:100%;padding:10px;margin:0 -10px;border:0;border-radius:12px;background:transparent;text-align:left;color:#fff;transition:background .2s}
 .q:hover{background:rgba(255,255,255,.06)}
 .q[aria-current="true"]{background:rgba(255,79,22,.12)}
@@ -368,7 +368,7 @@ h1,h2,h3{font-family:var(--f);font-weight:800;text-transform:uppercase;letter-sp
 .tip .chn{font:700 11px/1.2 var(--mono);letter-spacing:.08em;text-transform:uppercase;background:var(--orange);color:var(--ink);padding:4px 6px;border-radius:4px;white-space:nowrap}
 .tip .chn:empty{display:none}
 .chaps{border-top:1px solid var(--d-line)}
-.chaps h4{margin:18px 0 8px;font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--d-mute)}
+.chaps h3{margin:18px 0 8px;font:600 11px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--d-mute)}
 .chl{display:grid;gap:2px}
 .chr{display:grid;gap:6px}
 .ch{position:relative;display:grid;grid-template-columns:30px minmax(0,1fr) auto;gap:4px 12px;align-items:center;width:100%;padding:9px 10px;margin:0 -10px;border:0;border-radius:10px;background:transparent;color:#fff;text-align:left;cursor:pointer;transition:background .2s}
@@ -690,6 +690,10 @@ footer nav a:hover{color:#fff}
 .gt3-prog i{position:absolute;left:0;right:0;top:0;height:calc(var(--p,0)*100%);background:var(--orange)}
 .gt3-hint{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom,0px));font:600 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--d-mute);transition:opacity .3s}
 @media (prefers-reduced-motion:reduce){.gt3-ph,.gt3-hint{transition:none}}
+/* Phone label floor, finished (6 Oct): the 30 Sept iPhone pass promised every label at least 11.5px on phones,
+   but about 150 labels set later or in the 620px block were still 10-11px. Last in the sheet so it wins.
+   .gt3-fine is left at 11px: at 11.5px it wraps to two lines in the GT3 booking card. */
+@media (max-width:760px){.tag,.util .new b,.rt-legs .tm,.rt-legs .pl,.rt-key,.tile .tn,.stats small,.showing .cap small,.scroll-cue,.mq-track li b,.epc .d,.phud,.tip span,.queue h3,.q small,.q .len,.tip .chn,.chaps h3,.ch .n,.ch .t,.rent,.mo .dt,.bts-dots,.reel-c .cap small,.yr,.bk,.deal,.tray-cars span+span::before,.bay-vid .hud button,.rates small,.cmp-t td:first-child,.field>label,.lbl,.gauge small,.count small,.cmp,.phud .rec,.gt3-rates small,.gt3-hint{font-size:11.5px}}
 </style>
 </head>
 <body>
@@ -806,8 +810,8 @@ footer nav a:hover{color:#fff}
         <button class="btn ghost" type="button" id="th-share">Copy link<span class="ar" aria-hidden="true"><svg class="i" viewBox="0 0 16 16"><path d="M6.5 9.5l3-3M7 4.5l1.3-1.3a2.5 2.5 0 0 1 3.5 3.5L10.5 8M9 11.5l-1.3 1.3a2.5 2.5 0 0 1-3.5-3.5L5.5 8"/></svg></span></button>
       </div>
       <div class="copied" id="th-copied" aria-live="polite"></div>
-      <div class="chaps" id="chaps"><h4>Chapters</h4><div class="chl" id="chl"></div></div>
-      <div class="queue"><h4>All episodes</h4><div id="queue"></div></div>
+      <div class="chaps" id="chaps"><h3>Chapters</h3><div class="chl" id="chl"></div></div>
+      <div class="queue"><h3>All episodes</h3><div id="queue"></div></div>
     </div>
   </div>
 </section>
