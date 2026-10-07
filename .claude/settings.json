@@ -1,4 +1,9 @@
 {
+  "env": {
+    "CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS": "1",
+    "CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH": "1",
+    "CLAUDE_CODE_AUTO_COMPACT_WINDOW": "300000"
+  },
   "permissions": {
     "deny": [
       "Bash(git push origin main)",
@@ -8,6 +13,18 @@
     ]
   },
   "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup|resume|clear",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/session_refresh.py\"",
+            "timeout": 40
+          }
+        ]
+      }
+    ],
     "UserPromptSubmit": [
       {
         "hooks": [
@@ -15,18 +32,33 @@
             "type": "command",
             "command": "f=\"$CLAUDE_PROJECT_DIR/.claude/brain/recall_hook.py\"; [ -f \"$f\" ] || f=\"$(git rev-parse --show-toplevel 2>/dev/null)/.claude/brain/recall_hook.py\"; [ -f \"$f\" ] && python3 \"$f\" || true",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/prompt_brief.py\"",
+            "timeout": 5
           }
         ]
       }
     ],
     "PreToolUse": [
       {
-        "matcher": "Bash|mcp__(Higgsfield|Dropbox|Windsor_ai|vidIQ|Vertiso_Memory)__.*",
+        "matcher": "Bash|mcp__(Higgsfield|Dropbox|Windsor_ai|vidIQ|Vertiso_Memory|github)__.*",
         "hooks": [
           {
             "type": "command",
             "command": "f=\"$CLAUDE_PROJECT_DIR/.claude/hooks/regret_gate.py\"; [ -f \"$f\" ] || f=\"$(git rev-parse --show-toplevel 2>/dev/null)/.claude/hooks/regret_gate.py\"; python3 \"$f\"",
             "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/cost_guard.py\"",
+            "timeout": 5
           }
         ]
       }

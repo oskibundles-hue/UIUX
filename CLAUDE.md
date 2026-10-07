@@ -31,126 +31,125 @@ style should be used."
 2. **Then build that style all the way**: its techniques, process and quality bar, in the workstream's own brand. The
    page's gold on black is Supercar Experience's; Formula Dynamics keeps FD red and Bebas Neue, Anti Stock keeps its
    own look, and two brands never share a video.
-3. **Specialist agents never ask Omarie themselves.** The lead asks, then names the style in the brief. An agent
+3. **Agents never ask Omarie themselves.** The lead asks, then names the style in the brief. An agent
    whose brief names no style stops and asks the lead.
 
 The rules and the feedback log are in `supercar-experience/09-campaign-ads/HOUSE-STYLE.md` on the SE branch
 (`claude/supercar-rental-ad-graphics-o64vo3`).
 
-## Specialist agents (lead, specialists, reviewer)
+## Delivering finished videos: Dropbox, through Video Drop when needed
 
-The main session is the **lead**. It talks to Omarie, plans, delivers and pushes. The specialists in
-`.claude/agents/` each do one job, look facts up in the second brain first, and hand back to the lead,
-never straight to Omarie.
+Omarie, 2026-09-28. Finished videos go into his Dropbox (the notes' `deliver-to-dropbox` has the folders and
+naming). When a session can't put the file there itself (the connector can't upload video; chat attachments stop
+at 30 MiB), deliver through the one **Video Drop** page, https://claude.ai/artifact/5pW7z8z8fqRa35vMjNUYYP, and
+never make a second one. Clear older cards only once they're confirmed in Dropbox, and ask him first. The
+split/upload/SHA-256/confirm steps are in `.claude/playbooks/lead.md` (Video Drop steps).
 
-| agent | job | model |
-|---|---|---|
-| `researcher` | watch videos, research tools and trends; sourced reports (skill `watch`) | sonnet |
-| `anti-stock-editor` | personal-channel reels via `creator-kit/` (Anti Stock branch) | sonnet |
-| `fd-ads` | Formula Dynamics builds, in a worktree of the FD branch | opus, high effort |
-| `se-ads` | Supercar Experience builds, in a worktree of an SE branch | opus, high effort |
-| `reviewer` | read-only check before delivery: figures, brand, layout, frames, copy (skill `slopmonster`), loudness | opus |
+## The NQ OS team (the main team in every session)
 
-The usual run is **build → reviewer → lead delivers**: a chain of one agent at a time, not a fan-out. The
-builders work in worktrees of their workstream's branch, because this default branch doesn't carry
-`creator-kit/`, `formula-dynamics/` or `supercar-experience/`.
+Omarie, 2026-09-30. The agents in `.claude/agents/` are the NQ OS agentmesh classes; each job goes to a
+class, and the class decides the model and effort. Policy and reasons: `.claude/agentmesh/MESH.md`
+(cloud v1.3); background, briefing and enforcement detail: `.claude/playbooks/lead.md`.
 
-**The regret-list gate is on** (Omarie, 2026-09-27). `.claude/hooks/regret_gate.py` runs before every Bash
-and connector call (wired in `.claude/settings.json`). It **asks** before any paid Higgsfield call (quote the
-cost first), anything that publishes or changes a live account, Dropbox moves or deletes, Windsor.ai write
-actions, memory-store writes, force pushes, `git reset --hard`, `git clean -f` and recursive deletes outside
-`/tmp`. It **refuses** any push to `main`. An "ask" waits for Omarie's click, so an unattended routine that hits
-one stops there until he answers.
+The main session is the **lead**. It talks to Omarie, plans, briefs one agent at a time, delivers and
+pushes. Every agent looks facts up in the second brain first and hands back to the lead, never
+straight to Omarie.
 
-## Project Overview
+| agent | class | model/effort | job |
+|---|---|---|---|
+| `nq-run` | run | sonnet/low | run a script or read a file; report the lines word for word |
+| `nq-label` | label | sonnet/low | tags, captions, sorting, contact-sheet calls; never a verdict |
+| `nq-build` | build | opus/medium | build the piece or write the step and run it, including sourced research reports |
+| `nq-fix` | fix | sonnet/medium | debug a failing chain and patch the source |
+| `nq-check` | check | opus/medium | read-only quality pass before delivery: style, brand, layout, frames, copy, loudness |
+| `nq-story` | story | opus/high | the big creative call: options with a recommendation, for the lead to put to Omarie |
+| `nq-facts` | facts (floor) | opus/high | every figure and claim in the delivered file traced to a named source |
+| `nq-second` | second (floor) | sonnet/high | independent voter on a different model; may only add a block |
 
-Antigravity Kit is an AI-powered design intelligence toolkit providing searchable databases of UI styles, color palettes, font pairings, chart types, and UX guidelines. It works as a skill/workflow for AI coding assistants (Claude Code, Windsurf, Cursor, etc.).
+The `plate` class is switched off, so it has no agent.
 
-## Search Command
+- **Brief with the class, the playbook** (`.claude/playbooks/`; `vlog-lifestyle.md` for spotting and tagging the
+  moments that carry a personal, YouTube-style vlog in any workstream) **and the style.** Builders work in
+  worktrees of their workstream's branch, because this default branch doesn't carry the workstream folders.
+- **The usual chain** is `nq-build` → `nq-check` → lead delivers. Figures, specs, prices, names or
+  "we did X" claims go through `nq-facts`, then `nq-second`, independently; either can block.
+- **A failed step goes sideways, not up.** `run`, `build` and `fix` retry once, then report; the lead
+  sends a failure to `nq-fix`, because a bigger model fails at a broken flag the same way.
+- **Fewer agents is the saving.** An agent costs about 55k tokens of start-up context, so a job the lead
+  can do in a few commands stays with the lead. Settings cap subagents at one at a time, depth 1.
+- **The regret gate** (`.claude/hooks/regret_gate.py`, 2026-09-27) **refuses** any push to `main`,
+  `master` or the default branch `claude/new-session-mucc2q` (also via `git -C`, `sudo`, `env`, `bash -c`)
+  and GitHub-connector file writes to them, because those change only through a PR. It **asks** before
+  paid Higgsfield calls, publishing, Dropbox moves/deletes, force pushes, `reset --hard`, `clean -f` and
+  recursive deletes outside `/tmp`; full list in `.claude/playbooks/lead.md`. Test:
+  `python3 .claude/hooks/test_regret_gate.py`.
 
-```bash
-python3 src/ui-ux-pro-max/scripts/search.py "<query>" --domain <domain> [-n <max_results>]
-```
+## Token cost rules (Omarie, 2026-10-06)
 
-**Domain search:**
-- `product` - Product type recommendations (SaaS, e-commerce, portfolio)
-- `style` - UI styles (glassmorphism, minimalism, brutalism) + AI prompts and CSS keywords
-- `typography` - Font pairings with Google Fonts imports
-- `color` - Color palettes by product type
-- `landing` - Page structure and CTA strategies
-- `chart` - Chart types and library recommendations
-- `ux` - Best practices and anti-patterns
+- **Hand off after each job:** write a short handoff and start the next job in a fresh session, and also when
+  the cost guard warns at 300k or after any compaction, because every call re-reads the whole conversation.
+- **Sessions start on the latest default branch** (added 2026-10-06): a SessionStart hook
+  (`.claude/hooks/session_refresh.py`) fast-forwards a clean checkout to `origin/claude/new-session-mucc2q` when
+  it's behind, and tells the session when it can't (uncommitted changes or its own commits). If it says settings,
+  hooks, agents or this file changed, restart the session. Why: the "One-way ticket" Part 2 session started 10
+  commits behind, so the 300k auto-compact and the `nq-*` agents never loaded. Test:
+  `python3 .claude/hooks/test_session_refresh.py`.
+- **Auto-compact is set at 300k** (`CLAUDE_CODE_AUTO_COMPACT_WINDOW` in `.claude/settings.json`).
+- **Change effort, not the model, mid-session,** because a model switch re-writes the whole cache.
+- **Start a fresh agent from a summary rather than resuming one** past about 150k or idle more than 5 minutes,
+  because its cache has gone cold.
+- **Keep frames out of the lead:** send them to `nq-check` or `nq-label` as one contact sheet. The cost guard
+  denies a second Read of the same image in the lead.
+- **Wait on a PID, a marker file or `run_in_background`, with a hard timeout,** never a `pgrep -f` loop,
+  because that loop matches itself and never ends.
+- **Read a page by file only:** before republishing an artifact, read it once with `path: "index.html"`, never
+  a plain read plus a path read, because each returns the whole page ("One-way ticket" Part 2: the double read
+  kept the lead over 300k for 9 calls). Asset read-backs for the SHA-256 test take one `path` per call.
+- **Filter render, ffmpeg and ingest logs through `tail` or `grep`** before they reach the context.
+- **Lean agents:** run, label, facts and second skip CLAUDE.md (`omitClaudeMd`); build and fix have `maxTurns` caps.
+- **The meter:** `python3 .claude/brain/cost_meter.py` meters a session; `live_card.py done` logs the job's cost
+  line; `python3 .claude/brain/post_mortem.py review` is the weekly review, and its proposals go to Omarie as a
+  click or a PR before any rule changes.
+- **Finish or hand off before going idle, and point reminders and check-ins at a small session** (added
+  2026-10-06; Monday's review checks it). The cache goes cold after an idle gap, so each wake of a big session
+  pays to write its whole context again.
+- **The cost guard** (`.claude/hooks/cost_guard.py`) warns, and only blocks repeat frame reads.
+- **In every session, not just this repo's** (Omarie, 2026-10-06: "it should work in every session thats the
+  point"): the cloud environment's setup script runs `.claude/cloud/install.py`, which installs these hooks, the
+  300k auto-compact, the agents and this file at the user level from the default branch. The setup line and the
+  check are in `.claude/cloud/README.md`.
 
-**Stack search:**
-```bash
-python3 src/ui-ux-pro-max/scripts/search.py "<query>" --stack <stack>
-```
-Available stacks: `html-tailwind` (default), `react`, `nextjs`, `astro`, `vue`, `nuxtjs`, `nuxt-ui`, `svelte`, `swiftui`, `react-native`, `flutter`, `shadcn`, `jetpack-compose`
+## Show what you're working on (the Working-now card)
 
-## Architecture
+Omarie, 2026-09-30. On any job past a couple of minutes the lead (never an agent) keeps a card on the
+control room's **Working now** block (https://claude.ai/artifact/JdMaXgCuUu7XHQ3yRhEYFy) with
+`python3 .claude/brain/live_card.py start|step|done|blocked|waiting`, updating at least every 15 minutes
+and never stopping on `working`, because a stale card shows as quiet. Steps: `.claude/playbooks/lead.md`.
 
-```
-src/ui-ux-pro-max/                # Source of Truth
-├── data/                         # Canonical CSV databases
-│   ├── products.csv, styles.csv, colors.csv, typography.csv, ...
-│   └── stacks/                   # Stack-specific guidelines
-├── scripts/
-│   ├── search.py                 # CLI entry point
-│   ├── core.py                   # BM25 + regex hybrid search engine
-│   └── design_system.py          # Design system generation
-└── templates/
-    ├── base/                     # Base templates (skill-content.md, quick-reference.md)
-    └── platforms/                # Platform configs (claude.json, cursor.json, ...)
+## Organize long messages first (the prompt tool)
 
-cli/                              # CLI installer (uipro-cli on npm)
-├── src/
-│   ├── commands/init.ts          # Install command with template generation
-│   └── utils/template.ts         # Template rendering engine
-└── assets/                       # Bundled assets (~564KB)
-    ├── data/                     # Copy of src/ui-ux-pro-max/data/
-    ├── scripts/                  # Copy of src/ui-ux-pro-max/scripts/
-    └── templates/                # Copy of src/ui-ux-pro-max/templates/
+Omarie, 2026-10-06: "we should create a prompt tool that makes my prompts sound much better and organized once i send
+one". He picked auto-organize. When his message is long or carries several asks, open the reply with it as a short
+brief, in his words where you can: what he wants (numbered, most important first), what he has already decided, and
+the open questions. Then ask one click ("Is this brief right?", plus up to three open questions, recommendation first)
+and start once he answers. `.claude/hooks/prompt_brief.py` spots these messages and adds the reminder; test it with
+`python3 .claude/hooks/test_prompt_brief.py`. Use the same brief as the prompt when a job goes to a new session.
 
-.claude/skills/ui-ux-pro-max/     # Claude Code skill (symlinks to src/)
-.factory/skills/ui-ux-pro-max/   # Droid (Factory) skill (symlinks to src/)
-.shared/ui-ux-pro-max/            # Symlink to src/ui-ux-pro-max/
-.claude-plugin/                   # Claude Marketplace publishing
-```
+## Prompting Claude 5 models
 
-The search engine uses BM25 ranking combined with regex matching. Domain auto-detection is available when `--domain` is omitted.
+Brief agents with the whole job, the why, and what done looks like; write rules as "do Y, because Z"; ask
+`nq-check` for a second look rather than asking an agent to double-check itself. Sourced guidance
+(Ben AI, 2026-09-28), not Omarie's own rule; the full six points are in `.claude/playbooks/lead.md`.
 
-## Sync Rules
+## This repo's code (Antigravity Kit)
 
-**Source of Truth:** `src/ui-ux-pro-max/`
-
-When modifying files:
-
-1. **Data & Scripts** - Edit in `src/ui-ux-pro-max/`:
-   - `data/*.csv` and `data/stacks/*.csv`
-   - `scripts/*.py`
-   - Changes automatically available via symlinks in `.claude/`, `.factory/`, `.shared/`
-
-2. **Templates** - Edit in `src/ui-ux-pro-max/templates/`:
-   - `base/skill-content.md` - Common SKILL.md content
-   - `base/quick-reference.md` - Quick reference section (Claude only)
-   - `platforms/*.json` - Platform-specific configs
-
-3. **CLI Assets** - Run sync before publishing:
-   ```bash
-   cp -r src/ui-ux-pro-max/data/* cli/assets/data/
-   cp -r src/ui-ux-pro-max/scripts/* cli/assets/scripts/
-   cp -r src/ui-ux-pro-max/templates/* cli/assets/templates/
-   ```
-
-4. **Reference Folders** - No manual sync needed. The CLI generates these from templates during `uipro init`.
-
-## Prerequisites
-
-Python 3.x (no external dependencies required)
+A searchable UI/UX design database (`python3 src/ui-ux-pro-max/scripts/search.py "<query>" --domain <domain>`).
+Source of truth is `src/ui-ux-pro-max/`; copy into `cli/assets/` before publishing. Architecture, domains,
+stacks and sync rules: `.claude/playbooks/antigravity-kit.md`.
 
 ## Git Workflow
 
-Never push directly to `main`. Always:
+Never push directly to `main` or the default branch (`claude/new-session-mucc2q`); the regret gate refuses both. Always:
 
 1. Create a new branch: `git checkout -b feat/...` or `fix/...`
 2. Commit changes

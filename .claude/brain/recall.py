@@ -22,6 +22,12 @@ SYN = {
     "morning": ["report", "daily", "day"], "voice": ["speak", "speech", "jarvis"], "fast": ["speed", "latency", "second"],
     "script": ["tool", "gate", "py"], "horsepower": ["hp", "output"], "font": ["type", "typeface", "archivo"], "zone": ["timezone", "pacific", "pdt", "pst"], "time": ["pm", "am", "schedule", "nightly"], "check": ["verify", "gate", "confirm"],
 }
+# phrases that mean one note even though their words alone are ambiguous ("waiting" alone is the token policy's
+# "waiting is free"; "waiting on me" is the handoff list)
+PHRASES = [(r"\bwait\w*\s+(?:on|for)\s+(?:me|us|omarie|him)\b", ["handoff"]),
+           (r"\bpending\s+(?:decisions?|questions?|items?\s+for\s+me)\b", ["handoff"]),
+           # "NQ OS team" is the agent team, not the control-room dashboard that "os" alone points at
+           (r"\b(?:nq\s*os|agent)\s+team\b|\bteam\s+of\s+agents\b", ["repo", "agents"])]
 def stem(w):
     for suf, rep in (("ies", "y"), ("ing", ""), ("ed", ""), ("es", ""), ("ly", ""), ("s", "")):
         if len(w) > len(suf) + 2 and w.endswith(suf): w = w[: -len(suf)] + rep; break
@@ -40,6 +46,8 @@ def qterms(q):
         for k, vs in SYN.items():
             sk = stem(k)
             if w == sk or w in (stem(v) for v in vs): out |= {sk, *(stem(v) for v in vs)}
+    for pat, extra in PHRASES:
+        if re.search(pat, q.lower()): out |= {stem(x) for x in extra}
     return out
 def split_units(body):
     """Paragraphs, with bullet lists split into one unit per bullet (continuation lines stay with their bullet)."""
