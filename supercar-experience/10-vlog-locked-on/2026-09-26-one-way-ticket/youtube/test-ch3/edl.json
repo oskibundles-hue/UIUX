@@ -226,25 +226,15 @@
   {
    "beat": 21,
    "src": "0092",
-   "in": 126.5,
-   "out": 129.5,
-   "speed": 1.0,
+   "in": 139.95,
+   "out": 143.75,
+   "speed": 0.6333,
    "t": 148.51,
-   "dur": 3.0,
-   "note": "CUTAWAY DRIVE (picture only; stereo risk on this audio): top down, moving, hand on the wheel"
+   "dur": 6.0,
+   "note": "CUTAWAY DRIVE (picture only), 0.633x: top down, moving, a hand on the wheel in every frame"
   },
   {
    "beat": 22,
-   "src": "0092",
-   "in": 140.0,
-   "out": 143.0,
-   "speed": 1.0,
-   "t": 151.51,
-   "dur": 3.0,
-   "note": "CUTAWAY DRIVE (picture only): top down, moving, right hand on the wheel"
-  },
-  {
-   "beat": 23,
    "src": "0092",
    "in": 88.5,
    "out": 93.02,
@@ -494,7 +484,7 @@
    "text": "literally a long drive so and do we have We don't have lift on this car. Oh, we do have"
   },
   {
-   "beat": 23,
+   "beat": 22,
    "src": "0092",
    "in": 88.62,
    "out": 93.02,

@@ -64,8 +64,10 @@ SHOTS = [
     ('0092', 1.3, None, 1.0, '"Finding out how to use Bluetooth was crazy" (x2)', (1.3, 5.1)),
     ('0092', 7.52, None, 1.0, 'FIRST, top down (parked): "Let\'s make sure this top work ... it\'s gonna be a long drive"', (7.52, 22.4)),
     ('0092', 26.5, None, 1.0, 'JUMP: "literally a long drive ... We don\'t have lift on this car. Oh we do have lift on this car. Alright cool." (medium.en; small.en stopped at "have")', (26.5, 36.95)),
-    ('0092', 126.5, 3.0, 1.0, 'CUTAWAY DRIVE (picture only; stereo risk on this audio): top down, moving, hand on the wheel', None),
-    ('0092', 140.0, 3.0, 1.0, 'CUTAWAY DRIVE (picture only): top down, moving, right hand on the wheel', None),
+    # nq-check gate, 2026-10-07: 126.5-129.5 failed (both hands off the wheel at 128.6). Only 139.95-143.75 has a hand on
+    # the wheel in every frame among the fetched drive spans (the links had expired, so no new span), so the 6 s gap is
+    # that one run at 0.633x (0092 is 59.94 fps: real slow motion), over the same room tone.
+    ('0092', 139.95, 6.0, 0.6333, 'CUTAWAY DRIVE (picture only), 0.633x: top down, moving, a hand on the wheel in every frame', None),
     ('0092', 88.5, None, 1.0, 'PAYOFF (end; the stereo song Phantom (Shazam 84-88 s) stops at 88.75 on the <150 Hz band, his "We" starts 88.65: dialog from 88.62, nat from 88.8): "We out here in Seattle, Washington in a [bleep] 600 LT." (hands check at the gate)', (88.62, 92.6)),
 ]
 MUTE = [('0090', 1.40, 2.85, 'OTHER: "Hear the car"'), ('0090', 10.40, 12.30, 'OTHER: "Fire", "Oh" (under the 0.5x)')]

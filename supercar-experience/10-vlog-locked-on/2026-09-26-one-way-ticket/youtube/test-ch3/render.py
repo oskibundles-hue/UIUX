@@ -87,7 +87,11 @@ def shot_filter(i, s, W, H):
             bxe = f'clip({lin(1)},0,{W - bw})'; bye = f'clip({lin(2)},0,{H - bh})'
             t0, t1 = ks[0][0], ks[-1][0]
             r = max(2, min(bw, bh) // 4)
-            g += (f";[b{k}]split[m{k}][c{k}];[c{k}]crop={bw}:{bh}:'{bxe}':'{bye}',boxblur={r}:3[z{k}];"
+            # shape 'round': a rounded (superellipse) patch whose edge feathers out over the outer 30 %, not a hard box
+            feather = (",format=yuva444p,geq=lum='lum(X,Y)':cb='cb(X,Y)':cr='cr(X,Y)':"
+                       "a='255*clip((1-pow(pow(abs(2*X/W-1),4)+pow(abs(2*Y/H-1),4),0.25))/0.3,0,1)'"
+                       if bl.get('shape') == 'round' else '')
+            g += (f";[b{k}]split[m{k}][c{k}];[c{k}]crop={bw}:{bh}:'{bxe}':'{bye}',boxblur={r}:3{feather}[z{k}];"
                   f"[m{k}][z{k}]overlay='{bxe}':'{bye}':enable='between(t,{t0},{t1})'[b{k + 1}]")
             continue
         x, y, w, h = bl['box']

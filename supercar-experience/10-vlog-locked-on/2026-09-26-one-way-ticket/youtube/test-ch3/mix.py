@@ -33,7 +33,8 @@ NF = int(round(EDL['duration'] * FPS))
 DUR = NF / FPS
 NS = int(round(DUR * SR))
 DIALOG_LUFS, NAT_LUFS, NAT_ARRIVAL_LUFS = -16.0, -24.0, -19.0
-BED_TALK, BED_GAP = -38.0, -21.0
+BED_TALK, BED_GAP = -39.5, -21.0
+EXTRA_DUCK = [(87.4, 91.8, 3.0)]
 TARGET, CEIL = -14.0, -1.5
 
 
@@ -280,6 +281,13 @@ def main():
     bed *= 10 ** ((BED_GAP - lufs(bed)) / 20)
     duck = 10 ** ((BED_TALK - BED_GAP) / 20)
     g = 1 - act * (1 - duck)
+    # extra duck where the voice is quiet against the bed (nq-check gate, 2026-10-07: 50 ms voiced frames at 7.1 dB in
+    # 1:27.4-1:31.8): EXTRA_DUCK dB more, with 0.3 s ramps
+    for a, b, db in EXTRA_DUCK:
+        x = np.ones(NS); ia, ib, rr = int(a * SR), int(b * SR), int(0.3 * SR)
+        x[ia:ib] = 10 ** (-db / 20)
+        x[ia - rr:ia] = np.linspace(1, 10 ** (-db / 20), rr); x[ib:ib + rr] = np.linspace(10 ** (-db / 20), 1, rr)
+        g = g * x
     on = np.ones(NS)
     s0 = [s for s in EDL['shots'] if s['src'] == '0090']
     off0 = s0[0]['t']; on1 = next(s['t'] for s in s0 if s['in'] > 100)
