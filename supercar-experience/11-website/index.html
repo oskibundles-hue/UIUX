@@ -561,6 +561,7 @@ h1,h2,h3{font-family:var(--f);font-weight:800;text-transform:uppercase;letter-sp
 .book a.dm{font-weight:700;text-decoration:underline;text-underline-offset:3px}
 .book p.guide{margin-top:18px}
 .book p.guide a{color:inherit;font-weight:700;text-decoration:underline;text-underline-offset:3px}
+.num a{color:inherit;text-decoration:none}
 .num{font:900 clamp(2.6rem,6vw,5.2rem)/1 var(--f);letter-spacing:-.03em;font-variant-numeric:tabular-nums;white-space:nowrap}
 .plate{display:grid;gap:18px;justify-items:start}
 .fine{display:flex;gap:8px;flex-wrap:wrap;margin-top:22px}
@@ -900,6 +901,7 @@ footer nav a:hover{color:#fff}
         <div class="eyebrow rv">[ Rentals <b>·</b> Las Vegas ]</div>
         <h2 class="h-lg kin">Want the <span class="o">keys?</span></h2>
         <p class="lede rv">Hourly and daily rentals out of Las Vegas. Tap a car for its video or photo and the rates, or price a drive below and text to book.</p>
+        <p class="rv" style="margin:14px 0 0"><span class="deal" id="deal-all"></span></p>
       </div>
       <div class="filters rv" role="group" aria-label="Filter the cars">
         <button class="pill" type="button" data-g="all" aria-pressed="true">All</button>
@@ -950,7 +952,7 @@ footer nav a:hover{color:#fff}
         <div class="rv">
           <div class="count" id="count" role="timer" aria-label="Countdown to the rally"><div><b>—</b><small>Days</small></div><div><b>—</b><small>Hrs</small></div><div><b>—</b><small>Min</small></div><div><b>—</b><small>Sec</small></div></div>
           <p class="lede" style="margin-bottom:22px">Three days in the convoy and two hotel nights. Bring your copilot. Watch episode 6 to see how the last one went.</p>
-          <div class="acts"><a class="btn" href="#book">Book the Fall Rally seat<span class="ar" aria-hidden="true"><svg class="i" viewBox="0 0 16 16"><path d="M4 12 12 4M5.5 4H12v6.5"/></svg></span></a><a class="btn ghost" href="#watch" data-ep="rally">Watch episode 6<span class="ar" aria-hidden="true"><svg class="i" viewBox="0 0 16 16" style="fill:currentColor;stroke:none"><path d="M5 3.2v9.6L13 8z"/></svg></span></a></div>
+          <div class="acts"><a class="btn" href="#book">Book your rally seat<span class="ar" aria-hidden="true"><svg class="i" viewBox="0 0 16 16"><path d="M4 12 12 4M5.5 4H12v6.5"/></svg></span></a><a class="btn ghost" href="#watch" data-ep="rally">Watch episode 6<span class="ar" aria-hidden="true"><svg class="i" viewBox="0 0 16 16" style="fill:currentColor;stroke:none"><path d="M5 3.2v9.6L13 8z"/></svg></span></a></div>
         </div>
       </div>
     </div>
@@ -969,7 +971,7 @@ footer nav a:hover{color:#fff}
     </div>
     <div class="plate">
       <div class="eyebrow">Text or DM to book</div>
-      <div class="num" id="num">(725) 425-3583</div>
+      <div class="num" id="num"><a href="sms:+17254253583">(725) 425-3583</a></div>
       <button class="btn dark" id="copy" type="button">Copy number<span class="ar" aria-hidden="true"><svg class="i" viewBox="0 0 16 16"><path d="M4 12 12 4M5.5 4H12v6.5"/></svg></span></button>
       <div id="copied" aria-live="polite" style="font-weight:700;min-height:1.4em"></div>
     </div>
@@ -1105,6 +1107,11 @@ const SMALL=innerWidth<560||matchMedia("(pointer:coarse)").matches;
    iPhone Safari allows only a few live video players, and paused loops kept theirs, which left the full
    episode black (30 Sept). The poster or the image under each loop shows meanwhile. */
 const TOUCH=matchMedia("(pointer:coarse)").matches;
+/* One-tap text to book on phones (6 Oct, Impeccable critique): the "Text" links open Messages instead of jumping
+   to the booking block. Desktop keeps the jump and the Copy number button. The deal shows once above the grid. */
+const SMS="sms:+17254253583";
+if(TOUCH) document.querySelectorAll('.util a[href="#book"],.gt3-fine a[href="#book"],#gt3 a.btn[href="#book"],#side').forEach(a=>a.href=SMS);
+document.getElementById("deal-all").textContent=DEAL;
 const LOOPS=new Set();
 function sleepV(v){v.pause();if(TOUCH&&v.getAttribute("src")){v.dataset.src=v.getAttribute("src");v.removeAttribute("src");v.load()}}
 function wakeV(v){if(v.dataset.src&&!v.getAttribute("src"))v.src=v.dataset.src;if(v.preload==="none")v.preload="auto";v.play().catch(()=>{})}
@@ -1366,7 +1373,7 @@ function renderGarage(){
       <div class="cchips"><span class="chip-p"><span data-reel="${money(c.day)}">${money(c.day)}</span><small>/day</small></span>${c.five?`<span class="chip-p">${money(c.five)}<small>/5 hrs</small></span>`:""}</div>
       <span class="tag dim cls">${c.type==="SUV"?"Super SUV":c.type}</span></div>
       <div class="cbx"><div><div class="yr">${c.yr} · ${c.make}</div><h3>${c.name}</h3></div><span class="bk" aria-hidden="true">Book${ARW}</span></div>
-      <div class="cf"><span class="deal">${c.deal||DEAL}</span><label class="cmp"><input type="checkbox" ${picked.has(c.id)?"checked":""}> Compare</label></div>
+      <div class="cf">${c.deal?`<span class="deal">${c.deal}</span>`:""}<label class="cmp"><input type="checkbox" ${picked.has(c.id)?"checked":""}> Compare</label></div>
       <button class="open" type="button" aria-label="Open ${c.yr} ${c.make} ${c.name}: ${money(c.day)} a day${c.five?", "+money(c.five)+" for 5 hours":""}"></button>`;
     const v=el.querySelector("video"),s0=c.s0??S0,s1=c.s1??S1,rt=c.rate??RATE;
     if(v)v.addEventListener("timeupdate",()=>{if(v.currentTime>=s1||v.currentTime<s0-.2)v.currentTime=s0});
@@ -1404,7 +1411,7 @@ function openBay(id,id2){
       <table class="cmp-t"><tr><th></th><th>${a.name}</th><th>${b.name}</th></tr>
       ${row("Year",c=>c.yr)}${row("Class",c=>c.type==="SUV"?"Super SUV":c.type)}${row("Per day",c=>c.day,1)}${row("5 hours",c=>c.five||"—",1)}${row("2 days",c=>twoDays(c),1)}${row("3 days",c=>c.day*2,1)}${row("Videos on file",c=>c.vids.filter(v=>!v[1].startsWith("photo:")).length)}</table>
       <p class="note" style="margin:0">Multi-day uses the advertised 2nd day half off or 3rd day free. Lower price in orange. Estimates before tax and deposit.</p>
-      <div class="bay-actions"><a class="btn" href="#book" id="bay-book">Text to book${ARW}</a></div>`;
+      <div class="bay-actions"><a class="btn" href="${TOUCH?SMS:'#book'}" id="bay-book">Text to book${ARW}</a></div>`;
   }else{
     const c=cars.find(x=>x.id===id);setVid(c.vids[0][1]);
     $("#vtabs").innerHTML=c.vids.map((v,i)=>`<button type="button" aria-pressed="${i===0}" data-v="${v[1]}">${v[0]}</button>`).join("");
@@ -1412,7 +1419,7 @@ function openBay(id,id2){
       <div class="rates"><div><b id="r-day"></b><small>Per day</small></div><div><b id="r-five"></b><small>5 hours</small></div><div><b id="r-two"></b><small>2 days</small></div></div>
       <span class="deal" style="justify-self:start">${c.deal||DEAL}</span>
       ${c.flash?`<div class="flash"><div class="eyebrow"><b>●</b> Flash special on file</div><strong>${c.flash}</strong><div class="note">Flash specials drop without notice. Follow along to catch the next one.</div></div>`:""}
-      <div class="bay-actions"><button class="btn" type="button" id="bay-build">Price a drive${ARW}</button><a class="btn ghost" href="#book" id="bay-book">Text to book${ARW}</a></div>
+      <div class="bay-actions"><button class="btn" type="button" id="bay-build">Price a drive${ARW}</button><a class="btn ghost" href="${TOUCH?SMS:'#book'}" id="bay-book">Text to book${ARW}</a></div>
       <p class="note" style="margin:0">Rates before tax and deposit. Text to confirm availability and today's price.</p>`;
     splitKin($("#bay-title"));void $("#bay-title").offsetWidth;$("#bay-title").classList.add("in");
     reel($("#r-day"),money(c.day),.2);reel($("#r-five"),c.five?money(c.five):"—",.3);reel($("#r-two"),money(twoDays(c)),.4);
@@ -1468,6 +1475,7 @@ function calc(){
 }
 $("#b-car").onchange=calc;$("#b-u25").onchange=calc;
 $("#b-go").onclick=()=>{const c=cars.find(x=>x.id===$("#b-car").value);const msg=`Hi! I'd like the ${c.yr} ${c.make} ${c.name} for ${$("#b-dlabel").textContent}. What dates are open?`;
+  if(TOUCH){$("#b-msg").textContent="Opening Messages. If it doesn't open, text (725) 425-3583: "+msg;location.href=SMS+"?&body="+encodeURIComponent(msg);return}
   navigator.clipboard.writeText(msg).then(()=>$("#b-msg").textContent="Message copied. Text it to (725) 425-3583.").catch(()=>$("#b-msg").textContent="Text (725) 425-3583: "+msg)};
 
 /* ---------- rally countdown (Las Vegas time) ---------- */
@@ -1567,7 +1575,7 @@ $("#th-title").classList.add("in");
   const STEPS=[0,.3009,.4514,.6082,.7335,.8746], KIN=["Open the door.","Take the wheel.","GT3 RS."];
   const track=sec.querySelector(".gt3-track"), v=sec.querySelector("video"), still=sec.querySelector(".gt3-still");
   const phs=[...sec.querySelectorAll(".gt3-ph")], kin=sec.querySelector(".gt3-kin"), hint=sec.querySelector(".gt3-hint");
-  track.style.height=Math.round(220+DUR*30)+"vh";
+  track.style.height=Math.round(130+DUR*10)+"vh";   /* 449vh. Was 220+DUR*30 = 1177vh, about 11 phone screens and a third of the page; shortened 6 Oct (Impeccable critique). Same three phases, scrubbed faster */
   /* rates come from the site's own Las Vegas listing, so they never drift from the fleet cards */
   const g=(typeof cars!=="undefined")&&cars.find(c=>c.id==="gt3");
   const usd=n=>"$"+n.toLocaleString("en-US");
