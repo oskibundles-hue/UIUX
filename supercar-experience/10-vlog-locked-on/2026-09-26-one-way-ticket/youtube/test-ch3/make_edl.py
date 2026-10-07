@@ -19,7 +19,7 @@ Changes from the PLAN spans, each for a reason:
   * 0090 102.3-118.0 -> 104.0-109.25 / 110.2-118.0: starts on "we have the 600LT ..." (102.3 starts mid-sentence on
     "gonna fix that but"), jump cut past the pause at 109.3-110.2.
   * 0091 51.8-70.1: jump cut past the 3 s pause (56.3-59.0) before "impossible".
-  * 0092 7.6-44.0 -> 7.6-24.0 / 26.5-35.65 (jump cut past the quiet 24-26.5), then his talk ends and 35.6-44.0 (both hands
+  * 0092 7.6-44.0 -> 7.52-24.0 / 26.5-37.35 (jump cut past the quiet 24-26.5), then his talk ends and 37.35-44.0 (both hands
     up on the camera, then the stereo song starts at 45.4) is replaced by two DRIVE cutaways from 0092 118-150 (top down,
     moving, one hand on the wheel and no phone in the 2 s keyframes): 126.5-129.5 and 140.0-143.0. PICTURE ONLY: 0092
     103-118 transcribes like lyrics ("somebody out there is waiting on me") and 150-162 is a flagged stereo song, so their
@@ -30,6 +30,8 @@ In-points were moved onto the measured voice-band onsets (same envelope as MEASU
 a 50 ms gap from "what you mean?"), 0090 104.0->103.72 ("But we have", no gap before "we"), 110.2->110.15, 0091
 22.1->21.9 (onset 22.0), 0092 1.2->1.3 (digital silence to 1.4), 7.6->7.52 (dip before "Let's"; 6.75-7.45 holds
 voice the ASR did not transcribe, left out).
+Stereo check (Shazam, 4-8 s windows over every used range, 7 Oct): no match anywhere used, except Phantom up to ~88.7 at
+the start of the last line (handled above); 0092 100-150 is SOMEBODY LOVES ME, so the drive cutaways stay picture only.
 Re-run: python3 make_edl.py
 """
 import json, os
@@ -49,7 +51,7 @@ SHOTS = [
     ('0087', 38.2, 2.2, 1.0, 'CUTAWAY (picture only): the white McLaren and the lot; his 0089 audio runs on', None),
     ('0089', 147.8, None, 1.0, 'SYNC back on him: "...and I\'ve been chillin out here waiting for it, but"', 'cont'),
     ('0089', 176.1, None, 1.0, '"I got a charge, I got a 12 hour drive." (spoken only; no card, no word pop)', (176.1, 178.1)),
-    ('0089', 186.5, None, 1.0, 'JUMP: "I\'ll show you when he pulls up with the car ... let\'s see what he pulls up with it and how\'s it sounding."', (186.5, 194.2)),
+    ('0089', 187.8, None, 1.0, 'JUMP (lead, 7 Oct: starts >= 0.1 s after the OTHER-scored "So I\'ll be right back"; "car" ends 187.70, "Brand" starts 187.93): "Brand new engine in it too ... let\'s see what he pulls up with it and how\'s it sounding."', (187.8, 194.2)),
     ('0090', 1.5, 6.0, 1.0, 'FIRST (rotate): hear the car; no bed; OTHER voice 1.49-2.77 muted', None),
     ('0090', 13.0, 12.0, 0.5, 'FIRST (rotate): the 600 LT rolls up, 0.5x (speed ramp in/out); nat engine in real time (audio_extra)', None),
     ('0090', 19.0, 8.9, 1.0, 'REACT (rotate): "Oh yeah ... Brand new engine" (ends 27.9: staff legs at 28.0)', (21.9, 27.9)),
@@ -61,10 +63,10 @@ SHOTS = [
     ('0091', 59.0, None, 1.0, 'JUMP: "impossible ... I don\'t know why"', (59.0, 70.1)),
     ('0092', 1.3, None, 1.0, '"Finding out how to use Bluetooth was crazy" (x2)', (1.3, 5.1)),
     ('0092', 7.52, None, 1.0, 'FIRST, top down (parked): "Let\'s make sure this top work ... it\'s gonna be a long drive"', (7.52, 22.4)),
-    ('0092', 26.5, None, 1.0, 'JUMP: "literally a long drive ... We don\'t have lift on this car. Oh, we do have"', (26.5, 35.3)),
+    ('0092', 26.5, None, 1.0, 'JUMP: "literally a long drive ... We don\'t have lift on this car. Oh we do have lift on this car. Alright cool." (medium.en; small.en stopped at "have")', (26.5, 36.95)),
     ('0092', 126.5, 3.0, 1.0, 'CUTAWAY DRIVE (picture only; stereo risk on this audio): top down, moving, hand on the wheel', None),
     ('0092', 140.0, 3.0, 1.0, 'CUTAWAY DRIVE (picture only): top down, moving, right hand on the wheel', None),
-    ('0092', 88.2, None, 1.0, 'PAYOFF (end): "We out here in Seattle, Washington in a [bleep] 600 LT." (hands check at the gate)', (88.2, 92.6)),
+    ('0092', 88.5, None, 1.0, 'PAYOFF (end; the stereo song Phantom (Shazam 84-88 s) stops at 88.75 on the <150 Hz band, his "We" starts 88.65: dialog from 88.62, nat from 88.8): "We out here in Seattle, Washington in a [bleep] 600 LT." (hands check at the gate)', (88.62, 92.6)),
 ]
 MUTE = [('0090', 1.40, 2.85, 'OTHER: "Hear the car"'), ('0090', 10.40, 12.30, 'OTHER: "Fire", "Oh" (under the 0.5x)')]
 BLEEP = [('0092', 90.81, 91.69, 'motherfucker')]
@@ -85,7 +87,7 @@ WARN = []
 # /home/user/day-owt/aud/<clip>.m4a (300-3400 Hz, 50 ms frames; measured 2026-10-07): (src, in) -> (voice_end, next_onset, out)
 MEASURED = {('0089', 140.5): (151.40, 152.60, 152.00),   # "...waiting for it, but" ends 151.4; "yeah" starts 152.6
             ('0091', 21.9): (30.15, 30.95, 30.55),       # "...making sure everything" ends 30.15; "Oh" starts 30.95
-            ('0092', 26.5): (35.30, None, 35.70)}        # "Oh, we do have" ends ~35.3; noise (camera handling) from ~35.9
+            ('0092', 26.5): (36.95, None, 37.35)}        # medium.en: "...Alright cool." ends 36.95; steady handling noise after
 
 
 def tail(src, a, b):
@@ -130,7 +132,7 @@ dur_total = round(t, 3)
 s10 = shots[10]
 extra.append(dict(beat=10, src='0090', **{'in': 7.5}, out=19.5, t=round(s10['t'], 3), kind='nat',
                   note='engine approaching, real time, under the 0.5x picture (no bed in 0090)'))
-extra.append(dict(beat=-1, src='0092', **{'in': 36.0}, out=44.6, t=0.0, kind='slack',
+extra.append(dict(beat=-1, src='0092', **{'in': 37.6}, out=43.6, t=0.0, kind='slack',
                   note='parked room tone after his talk (ends 0.8 s before the 45.4 stereo block); check it has no stereo intro'))
 extra.append(dict(beat=-1, src='0089', **{'in': 194.2}, out=195.4, t=0.0, kind='slack', note='after "how\'s it sounding"'))
 

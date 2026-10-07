@@ -4,7 +4,7 @@
   3840,
   2160
  ],
- "duration": 158.98,
+ "duration": 159.03,
  "chapters": [
   {
    "t": 0.0,
@@ -96,12 +96,12 @@
   {
    "beat": 8,
    "src": "0089",
-   "in": 186.5,
+   "in": 187.8,
    "out": 194.63,
    "speed": 1.0,
    "t": 37.02,
-   "dur": 8.13,
-   "note": "JUMP: \"I'll show you when he pulls up with the car ... let's see what he pulls up with it and how's it sounding.\""
+   "dur": 6.83,
+   "note": "JUMP (lead, 7 Oct: starts >= 0.1 s after the OTHER-scored \"So I'll be right back\"; \"car\" ends 187.70, \"Brand\" starts 187.93): \"Brand new engine in it too ... let's see what he pulls up with it and how's it sounding.\""
   },
   {
    "beat": 9,
@@ -109,7 +109,7 @@
    "in": 1.5,
    "out": 7.5,
    "speed": 1.0,
-   "t": 45.15,
+   "t": 43.85,
    "dur": 6.0,
    "note": "FIRST (rotate): hear the car; no bed; OTHER voice 1.49-2.77 muted"
   },
@@ -119,7 +119,7 @@
    "in": 13.0,
    "out": 19.0,
    "speed": 0.5,
-   "t": 51.15,
+   "t": 49.85,
    "dur": 12.0,
    "note": "FIRST (rotate): the 600 LT rolls up, 0.5x (speed ramp in/out); nat engine in real time (audio_extra)"
   },
@@ -129,7 +129,7 @@
    "in": 19.0,
    "out": 27.9,
    "speed": 1.0,
-   "t": 63.15,
+   "t": 61.85,
    "dur": 8.9,
    "note": "REACT (rotate): \"Oh yeah ... Brand new engine\" (ends 27.9: staff legs at 28.0)"
   },
@@ -139,7 +139,7 @@
    "in": 103.72,
    "out": 109.71,
    "speed": 1.0,
-   "t": 72.05,
+   "t": 70.75,
    "dur": 5.99,
    "note": "PLAN (rotate): \"But we have the 600LT that we will be driving from Seattle to Vegas.\""
   },
@@ -149,7 +149,7 @@
    "in": 110.15,
    "out": 118.35,
    "speed": 1.0,
-   "t": 78.04,
+   "t": 76.74,
    "dur": 8.2,
    "note": "FIRST (rotate; 116-118 interior: blur the cluster): \"I'm just gonna put my bag next to me. This is the interior chat. Little red gut.\""
   },
@@ -159,7 +159,7 @@
    "in": 2.1,
    "out": 10.01,
    "speed": 1.0,
-   "t": 86.24,
+   "t": 84.94,
    "dur": 7.91,
    "note": "FIRST, first sit: \"We are in the 600 LT. Spider top goes down\" (parked; phone in hand is fine here)"
   },
@@ -169,7 +169,7 @@
    "in": 21.9,
    "out": 30.55,
    "speed": 1.0,
-   "t": 94.15,
+   "t": 92.85,
    "dur": 8.65,
    "note": "\"Good 12 hours out of us, so I'm getting the car warmed up...\" (parked)"
   },
@@ -179,7 +179,7 @@
    "in": 51.8,
    "out": 56.82,
    "speed": 1.0,
-   "t": 102.8,
+   "t": 101.5,
    "dur": 5.02,
    "note": "SETBACK: \"See the thing about this car is connecting to Bluetooth is like\""
   },
@@ -189,7 +189,7 @@
    "in": 59.0,
    "out": 70.52,
    "speed": 1.0,
-   "t": 107.82,
+   "t": 106.52,
    "dur": 11.52,
    "note": "JUMP: \"impossible ... I don't know why\""
   },
@@ -199,7 +199,7 @@
    "in": 1.3,
    "out": 5.52,
    "speed": 1.0,
-   "t": 119.34,
+   "t": 118.04,
    "dur": 4.22,
    "note": "\"Finding out how to use Bluetooth was crazy\" (x2)"
   },
@@ -209,7 +209,7 @@
    "in": 7.52,
    "out": 22.92,
    "speed": 1.0,
-   "t": 123.56,
+   "t": 122.26,
    "dur": 15.4,
    "note": "FIRST, top down (parked): \"Let's make sure this top work ... it's gonna be a long drive\""
   },
@@ -217,11 +217,11 @@
    "beat": 20,
    "src": "0092",
    "in": 26.5,
-   "out": 35.7,
+   "out": 37.35,
    "speed": 1.0,
-   "t": 138.96,
-   "dur": 9.2,
-   "note": "JUMP: \"literally a long drive ... We don't have lift on this car. Oh, we do have\""
+   "t": 137.66,
+   "dur": 10.85,
+   "note": "JUMP: \"literally a long drive ... We don't have lift on this car. Oh we do have lift on this car. Alright cool.\" (medium.en; small.en stopped at \"have\")"
   },
   {
    "beat": 21,
@@ -229,7 +229,7 @@
    "in": 126.5,
    "out": 129.5,
    "speed": 1.0,
-   "t": 148.16,
+   "t": 148.51,
    "dur": 3.0,
    "note": "CUTAWAY DRIVE (picture only; stereo risk on this audio): top down, moving, hand on the wheel"
   },
@@ -239,19 +239,19 @@
    "in": 140.0,
    "out": 143.0,
    "speed": 1.0,
-   "t": 151.16,
+   "t": 151.51,
    "dur": 3.0,
    "note": "CUTAWAY DRIVE (picture only): top down, moving, right hand on the wheel"
   },
   {
    "beat": 23,
    "src": "0092",
-   "in": 88.2,
+   "in": 88.5,
    "out": 93.02,
    "speed": 1.0,
-   "t": 154.16,
-   "dur": 4.82,
-   "note": "PAYOFF (end): \"We out here in Seattle, Washington in a [bleep] 600 LT.\" (hands check at the gate)"
+   "t": 154.51,
+   "dur": 4.52,
+   "note": "PAYOFF (end; the stereo song Phantom (Shazam 84-88 s) stops at 88.75 on the <150 Hz band, his \"We\" starts 88.65: dialog from 88.62, nat from 88.8): \"We out here in Seattle, Washington in a [bleep] 600 LT.\" (hands check at the gate)"
   }
  ],
  "dialog": [
@@ -342,7 +342,7 @@
   {
    "beat": 8,
    "src": "0089",
-   "in": 186.5,
+   "in": 187.8,
    "out": 194.63,
    "t": 37.02,
    "trim_pauses": null,
@@ -351,14 +351,14 @@
    "next_onset_measured": null,
    "extended": false,
    "out_asr": 194.2,
-   "text": "I'll show you when he pulls up with the car. Brand new engine in it too. 600 LT, brand new engine. So let's see what he pulls up with it and how's it sounding."
+   "text": "Brand new engine in it too. 600 LT, brand new engine. So let's see what he pulls up with it and how's it sounding."
   },
   {
    "beat": 11,
    "src": "0090",
    "in": 21.9,
    "out": 28.07,
-   "t": 66.05,
+   "t": 64.75,
    "trim_pauses": null,
    "last_word_end": 27.67,
    "voice_end": null,
@@ -372,7 +372,7 @@
    "src": "0090",
    "in": 103.72,
    "out": 109.71,
-   "t": 72.05,
+   "t": 70.75,
    "trim_pauses": null,
    "last_word_end": 109.31,
    "voice_end": null,
@@ -386,7 +386,7 @@
    "src": "0090",
    "in": 110.15,
    "out": 118.35,
-   "t": 78.04,
+   "t": 76.74,
    "trim_pauses": null,
    "last_word_end": 117.95,
    "voice_end": null,
@@ -400,7 +400,7 @@
    "src": "0091",
    "in": 2.1,
    "out": 10.01,
-   "t": 86.24,
+   "t": 84.94,
    "trim_pauses": null,
    "last_word_end": 9.61,
    "voice_end": null,
@@ -414,7 +414,7 @@
    "src": "0091",
    "in": 21.9,
    "out": 30.55,
-   "t": 94.15,
+   "t": 92.85,
    "trim_pauses": null,
    "last_word_end": 30.0,
    "voice_end": 30.15,
@@ -428,7 +428,7 @@
    "src": "0091",
    "in": 51.8,
    "out": 56.82,
-   "t": 102.8,
+   "t": 101.5,
    "trim_pauses": null,
    "last_word_end": 56.42,
    "voice_end": null,
@@ -442,7 +442,7 @@
    "src": "0091",
    "in": 59.0,
    "out": 70.52,
-   "t": 107.82,
+   "t": 106.52,
    "trim_pauses": null,
    "last_word_end": 70.12,
    "voice_end": null,
@@ -456,7 +456,7 @@
    "src": "0092",
    "in": 1.3,
    "out": 5.52,
-   "t": 119.34,
+   "t": 118.04,
    "trim_pauses": null,
    "last_word_end": 5.12,
    "voice_end": null,
@@ -470,7 +470,7 @@
    "src": "0092",
    "in": 7.52,
    "out": 22.92,
-   "t": 123.56,
+   "t": 122.26,
    "trim_pauses": null,
    "last_word_end": 22.52,
    "voice_end": null,
@@ -483,29 +483,29 @@
    "beat": 20,
    "src": "0092",
    "in": 26.5,
-   "out": 35.7,
-   "t": 138.96,
+   "out": 37.35,
+   "t": 137.66,
    "trim_pauses": null,
-   "last_word_end": 35.22,
-   "voice_end": 35.3,
+   "last_word_end": 35.36,
+   "voice_end": 36.95,
    "next_onset_measured": null,
    "extended": false,
-   "out_asr": 35.3,
-   "text": "literally a long drive so and do we have We don't have lift on this car. Oh, we do"
+   "out_asr": 36.95,
+   "text": "literally a long drive so and do we have We don't have lift on this car. Oh, we do have"
   },
   {
    "beat": 23,
    "src": "0092",
-   "in": 88.2,
+   "in": 88.62,
    "out": 93.02,
-   "t": 154.16,
+   "t": 154.63,
    "trim_pauses": null,
    "last_word_end": 92.62,
    "voice_end": null,
    "next_onset_measured": null,
    "extended": false,
    "out_asr": 92.6,
-   "text": "We out here in Seattle, Washington in a motherfucker 600 LT."
+   "text": "out here in Seattle, Washington in a motherfucker 600 LT."
   }
  ],
  "audio_extra": [
@@ -514,15 +514,15 @@
    "src": "0090",
    "in": 7.5,
    "out": 19.5,
-   "t": 51.15,
+   "t": 49.85,
    "kind": "nat",
    "note": "engine approaching, real time, under the 0.5x picture (no bed in 0090)"
   },
   {
    "beat": -1,
    "src": "0092",
-   "in": 36.0,
-   "out": 44.6,
+   "in": 37.6,
+   "out": 43.6,
    "t": 0.0,
    "kind": "slack",
    "note": "parked room tone after his talk (ends 0.8 s before the 45.4 stereo block); check it has no stereo intro"
@@ -542,7 +542,7 @@
    "i": 0,
    "ch": "CH3",
    "t0": 0.0,
-   "t1": 158.98,
+   "t1": 159.03,
    "note": "TEST CHAPTER: Seattle, WA, the pickup -> first sit -> first drive"
   }
  ],
