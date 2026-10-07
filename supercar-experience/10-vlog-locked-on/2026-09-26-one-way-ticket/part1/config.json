@@ -247,8 +247,9 @@
   "16": {
    "look": "terminal"
   },
-  "21": {
-   "look": "terminal"
+  "22": {
+   "look": "day",
+   "rot": 90
   },
   "23": {
    "look": "day",
@@ -259,13 +260,9 @@
    "rot": 90
   },
   "25": {
-   "look": "day",
-   "rot": 90
-  },
-  "26": {
    "look": "cabin"
   },
-  "27": {
+  "26": {
    "look": "cabin",
    "ramp": [
     [
@@ -286,7 +283,7 @@
     ]
    ]
   },
-  "28": {
+  "27": {
    "look": "cabin",
    "clockAs": {
     "src": "0093",
@@ -294,10 +291,10 @@
     "_why": "cutaway under his 0093 line: the strip clock reads the moment he speaks (12:01)"
    }
   },
-  "29": {
+  "28": {
    "look": "cabin"
   },
-  "30": {
+  "29": {
    "look": "cabin",
    "s1": 1.0,
    "clockAs": {
@@ -306,7 +303,7 @@
     "_why": "7 Oct clock fix (a): cutaway under his 0094 line (0094 2.34 at 118.37): the clock reads 0094 (12:10:23), continuous with the 0094 SYNC shot at 123.63"
    }
   },
-  "31": {
+  "30": {
    "look": "cabin",
    "s1": 1.0,
    "clockAs": {
@@ -315,10 +312,10 @@
     "_why": "7 Oct clock fix (a): cutaway under his 0094 line: the clock reads 0094 (12:10:26), continuous into the 0094 SYNC shot at 123.63 (0094 7.6)"
    }
   },
-  "32": {
+  "31": {
    "look": "cabin"
   },
-  "33": {
+  "32": {
    "look": "cabin",
    "clockAs": {
     "src": "0094",
@@ -326,7 +323,7 @@
     "_why": "7 Oct clock fix (d, found by tools/clock_check.py): B-roll after the 0094 SYNC shot holds the 0094 clock (12:10:30), so the 0094 line at 128.73 (12:12:58) does not read earlier than the forest picture (12:17)"
    }
   },
-  "34": {
+  "33": {
    "look": "cabin",
    "clockAs": {
     "src": "0094",
@@ -334,7 +331,7 @@
     "_why": "7 Oct clock fix (d): holds the 0094 clock on from shot 33 (12:10:31-33)"
    }
   },
-  "35": {
+  "34": {
    "look": "cabin",
    "clockAs": {
     "src": "0094",
@@ -342,18 +339,18 @@
     "_why": "7 Oct clock fix (d): cutaway under his 0094 line (0094 156.98 at 128.73): the clock reads the moment he speaks (12:12:58), not 0095 28.0 (12:17:32), which ran back from the 12:17:58 forest shot before it"
    }
   },
-  "36": {
+  "35": {
    "look": "cabin",
    "s1": 1.0
   },
-  "37": {
+  "36": {
    "look": "cabin"
   },
-  "38": {
+  "37": {
    "look": "cabin",
    "s1": 1.0
   },
-  "39": {
+  "38": {
    "look": "cabin",
    "clockAs": {
     "src": "0100",
@@ -361,7 +358,7 @@
     "_why": "cutaway under his 0100 line: the strip clock reads the moment he speaks (16:06), not the 15:42 road picture, so it never runs backwards"
    }
   },
-  "40": {
+  "39": {
    "look": "cabin"
   }
  },
@@ -402,33 +399,33 @@
    "dur": 0.36
   },
   {
-   "into": 30,
+   "into": 29,
    "type": "sweep",
-   "t0": 118.23,
+   "t0": 110.122,
    "dur": 0.36
   },
   {
-   "into": 33,
+   "into": 32,
    "type": "whip",
    "dir": "left"
   },
   {
-   "into": 34,
+   "into": 33,
+   "type": "whip",
+   "dir": "right"
+  },
+  {
+   "into": 36,
    "type": "whip",
    "dir": "right"
   },
   {
    "into": 37,
    "type": "whip",
-   "dir": "right"
-  },
-  {
-   "into": 38,
-   "type": "whip",
    "dir": "left"
   },
   {
-   "into": 39,
+   "into": 38,
    "type": "whip",
    "dir": "right",
    "_why": "7 Oct: the 0099 cutaway follows the 0099 HUD-1 shot from the same mount; the whip hides the jump"
@@ -444,7 +441,7 @@
    "title": "THE PICKUP"
   },
   {
-   "t": 118.43,
+   "t": 110.322,
    "title": "HIT THE ROAD"
   }
  ],
@@ -524,8 +521,8 @@
    {
     "code": "G1-03",
     "type": "chapterSlam",
-    "t0": 118.43,
-    "t1": 120.38,
+    "t0": 110.322,
+    "t1": 112.272,
     "p": {
      "tag": "",
      "title": "HIT THE ROAD",
@@ -557,8 +554,8 @@
    {
     "code": "I1",
     "type": "sweep",
-    "t0": 118.23,
-    "t1": 118.59,
+    "t0": 110.122,
+    "t1": 110.482,
     "p": {
      "angle": 16,
      "width": 360
@@ -596,14 +593,14 @@
    {
     "code": "LOCK",
     "type": "v2lock",
-    "t0": 86.08,
-    "t1": 87.66,
+    "t0": 77.972,
+    "t1": 79.552,
     "p": {
      "track": "mclaren",
      "kicker": "LOCKED ON",
      "name": "MCLAREN 600LT",
-     "acquire": 86.11,
-     "exit": 87.31,
+     "acquire": 78.002,
+     "exit": 79.202,
      "side": "above"
     }
    },
@@ -611,7 +608,7 @@
     "code": "STRIP",
     "type": "seStrip",
     "t0": 1.9,
-    "t1": 181.04,
+    "t1": 172.932,
     "p": {
      "x": 54,
      "y": 292,
@@ -620,23 +617,23 @@
      "hx": 140,
      "progress": [
       1.9,
-      181.04
+      172.932
      ],
      "label": "ONE-WAY TICKET · PART 1",
      "clockFrom": 12.5,
-     "exit": 180.64,
+     "exit": 172.532,
      "route_text": "SEATTLE → VEGAS",
      "expand": [
       {
-       "a": 134.53,
-       "b": 152.33,
+       "a": 126.422,
+       "b": 144.222,
        "places": [
         [
-         134.53,
+         126.422,
          "INTO THE MOUNTAINS"
         ],
         [
-         144.33,
+         136.222,
          "OPEN ROAD"
         ]
        ]
@@ -647,8 +644,8 @@
    {
     "code": "PLACE",
     "type": "v2place",
-    "t0": 153.63,
-    "t1": 156.63,
+    "t0": 145.522,
+    "t1": 148.522,
     "p": {
      "x": 54,
      "y": 400,
@@ -659,8 +656,8 @@
    {
     "code": "TEASE",
     "type": "v2place",
-    "t0": 175.84,
-    "t1": 180.94,
+    "t0": 167.732,
+    "t1": 172.832,
     "p": {
      "x": 54,
      "y": 400,
@@ -671,8 +668,8 @@
    {
     "code": "END",
     "type": "v2end",
-    "t0": 181.04,
-    "t1": 186.44,
+    "t0": 172.932,
+    "t1": 178.332,
     "p": {
      "tagline": "A RIDE OF A LIFETIME.",
      "cta": "TEXT OR DM TO BOOK",
@@ -687,7 +684,7 @@
   ],
   "captions": {
    "t0": 2.0,
-   "t1": 181.04,
+   "t1": 172.932,
    "p": {
     "size": 68,
     "yBottom": 1372,
@@ -717,10 +714,10 @@
    ]
   },
   "mclaren": {
-   "shot": 23,
-   "f0": 2580,
-   "f1": 2619,
-   "anchor": 2595,
+   "shot": 22,
+   "f0": 2337,
+   "f1": 2376,
+   "anchor": 2352,
    "box": [
     526,
     662,
@@ -849,7 +846,7 @@
    "why": "0097 speedometer (v2 hook shot 5, 0097 4.6-7.8; box from shot 0, same camera mount)"
   },
   {
-   "shot": 28,
+   "shot": 27,
    "box": [
     290,
     985,
@@ -861,7 +858,7 @@
    "why": "0095 speedometer (cutaway 110.03-113.6, 0095 24.4-27.97; box from the 0095 21.2-24.4 cutaway, same mount)"
   },
   {
-   "shot": 30,
+   "shot": 29,
    "box": [
     290,
     985,
@@ -873,7 +870,7 @@
    "why": "0095 speedometer (cutaway 112.8-116.0, 0095 21.2-24.4; cluster drifts left late in the span, box widened 40 px left)"
   },
   {
-   "shot": 31,
+   "shot": 30,
    "box": [
     280,
     1000,
@@ -885,7 +882,7 @@
    "why": "0095 speedometer (cutaway)"
   },
   {
-   "shot": 32,
+   "shot": 31,
    "box": [
     280,
     975,
@@ -897,7 +894,7 @@
    "why": "0094 speedometer (shot 31, 0094 7.6-9.2, frames 3542-3589; was f0 3501-3589, which overlapped cutaway shot 30)"
   },
   {
-   "shot": 33,
+   "shot": 32,
    "box": [
     280,
     940,
@@ -909,7 +906,7 @@
    "why": "0095 speedometer"
   },
   {
-   "shot": 34,
+   "shot": 33,
    "box": [
     340,
     970,
@@ -921,7 +918,7 @@
    "why": "0095 speedometer"
   },
   {
-   "shot": 35,
+   "shot": 34,
    "box": [
     330,
     985,
@@ -933,7 +930,7 @@
    "why": "0095 speedometer"
   },
   {
-   "shot": 36,
+   "shot": 35,
    "box": [
     290,
     990,
@@ -945,7 +942,7 @@
    "why": "0096 speedometer"
   },
   {
-   "shot": 37,
+   "shot": 36,
    "box": [
     300,
     985,
@@ -957,7 +954,7 @@
    "why": "0097 speedometer"
   },
   {
-   "shot": 38,
+   "shot": 37,
    "box": [
     260,
     990,
@@ -969,7 +966,7 @@
    "why": "0099 speedometer"
   },
   {
-   "shot": 39,
+   "shot": 38,
    "box": [
     260,
     990,
@@ -1085,7 +1082,7 @@
     "src": "0090",
     "a": 15.0,
     "b": 20.6,
-    "t": 86.06,
+    "t": 77.952,
     "lufs": -20
    },
    {
@@ -1094,7 +1091,7 @@
     "src": "0090",
     "a": 116.55,
     "b": 118.0,
-    "t": 99.63,
+    "t": 91.522,
     "lufs": -30,
     "fin": 0.05,
     "fout": 0.3
@@ -1105,7 +1102,7 @@
     "src": "0095",
     "a": 2.0,
     "b": 6.8,
-    "t": 106.4,
+    "t": 98.292,
     "fin": 0.5,
     "fout": 0.9
    },
@@ -1115,7 +1112,7 @@
     "src": "0094",
     "a": 233.0,
     "b": 242.8,
-    "t": 124.9,
+    "t": 116.792,
     "fin": 0.3,
     "fout": 0.5,
     "sub": {
@@ -1130,7 +1127,7 @@
     "src": "0096",
     "a": 31.4,
     "b": 41.7,
-    "t": 134.33,
+    "t": 126.222,
     "fin": 0.3,
     "fout": 0.5,
     "sub": {
@@ -1145,7 +1142,7 @@
     "src": "0099",
     "a": 165.7,
     "b": 174.9,
-    "t": 144.03,
+    "t": 135.922,
     "fin": 0.5,
     "fout": 1.2,
     "sub": {
@@ -1160,10 +1157,11 @@
     "src": "0094",
     "a": 112.0,
     "b": 116.4,
-    "t": 182.0,
+    "t": 173.892,
     "fin": 0.8,
     "fout": 2.4
    }
   ]
- }
+ },
+ "_remapped_cut2": "v2 cut 2 (7 Oct): config times after 79.06 s moved back 243 frames (8.108 s) and shot indices after the dropped 0088 shot down by one, by tools/remap_cut2.py"
 }

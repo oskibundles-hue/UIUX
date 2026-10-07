@@ -24,8 +24,8 @@
    "clip": "0094",
    "clip_in": 233.0,
    "clip_out": 242.8,
-   "ep_in": 124.9,
-   "ep_out": 134.7,
+   "ep_in": 116.79,
+   "ep_out": 126.59,
    "where": "bed (music)",
    "shazam_windows": 2,
    "confidence": "direct match on the exact span + 2 nearby clip-scan window(s)",
@@ -37,12 +37,12 @@
    "clip": "0096",
    "clip_in": 31.4,
    "clip_out": 41.7,
-   "ep_in": 134.33,
-   "ep_out": 144.63,
+   "ep_in": 126.22,
+   "ep_out": 136.52,
    "where": "bed (music)",
    "shazam_windows": 1,
-   "confidence": "direct match on the exact span + 1 nearby clip-scan window(s)",
-   "check": "check: clip scan: 1 window(s)"
+   "confidence": "direct match on the exact span + 1 nearby clip-scan window(s); confirmed by nq-facts, 7 Oct: exact-span Shazam match, key 820481582",
+   "check": ""
   },
   {
    "title": "Shallow",
@@ -50,8 +50,8 @@
    "clip": "0099",
    "clip_in": 165.7,
    "clip_out": 174.9,
-   "ep_in": 144.03,
-   "ep_out": 153.23,
+   "ep_in": 135.92,
+   "ep_out": 145.12,
    "where": "bed (music)",
    "shazam_windows": 6,
    "confidence": "direct match on the exact span + 6 nearby clip-scan window(s)",
@@ -60,88 +60,82 @@
  ],
  "no_song_recognised_under_voice": [
   {
-   "src": "0088",
-   "a": 0.4,
-   "b": 5.59,
-   "ep": 73.81
-  },
-  {
    "src": "0089",
    "a": 140.55,
    "b": 147.94,
-   "ep": 79.11
+   "ep": 71.002
   },
   {
    "src": "0090",
    "a": 103.9,
    "b": 109.77,
-   "ep": 91.76
+   "ep": 83.652
   },
   {
    "src": "0090",
    "a": 114.66,
    "b": 116.55,
-   "ep": 97.74
+   "ep": 89.632
   },
   {
    "src": "0091",
    "a": 2.04,
    "b": 5.86,
-   "ep": 101.22
+   "ep": 93.112
   },
   {
    "src": "0092",
    "a": 7.93,
    "b": 9.68,
-   "ep": 105.16
+   "ep": 97.052
   },
   {
    "src": "0093",
    "a": 4.42,
    "b": 12.14,
-   "ep": 110.35
+   "ep": 102.242
   },
   {
    "src": "0094",
    "a": 2.34,
    "b": 9.43,
-   "ep": 118.37
+   "ep": 110.262
   },
   {
    "src": "0094",
    "a": 156.98,
    "b": 163.13,
-   "ep": 128.73
+   "ep": 120.622
   },
   {
    "src": "0100",
    "a": 34.46,
    "b": 37.32,
-   "ep": 153.79
+   "ep": 145.682
   },
   {
    "src": "0101",
    "a": 2.74,
    "b": 8.63,
-   "ep": 156.87
+   "ep": 148.762
   },
   {
    "src": "0102",
    "a": 4.5,
    "b": 8.5,
-   "ep": 162.88
+   "ep": 154.772
   },
   {
    "src": "0102",
    "a": 17.4,
    "b": 25.88,
-   "ep": 166.99
+   "ep": 158.882
   },
   {
    "src": "0102",
    "a": 81.74,
    "b": 89.32,
-   "ep": 175.58
+   "ep": 167.472
   }
  ]
 }

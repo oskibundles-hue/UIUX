@@ -15,6 +15,8 @@ FPS = 30000 / 1001
 # (chapter, note, shots [(src, in, dur, speed, note)], dialog [(src, in, out, place)], nat [(src, in, out, rel_t)])
 # place: ('at', seconds from beat start) or ('sync', shot index in this beat)
 B = []
+CUT2_FRAMES = 243                                   # v2 cut 2: frames removed at the 0087/0089 join
+CUT2_DUR = round(5.2 + 5.45 - CUT2_FRAMES / FPS, 4)  # 2.5419: 0087 57.758-60.3
 
 # part1 v2, fix A (Omarie, 6 Oct; ported from part2): every dialog piece's audio out-point is set by tail() from the word
 # timestamps, not by hand: >= 350 ms (TAIL) after the last word ends (small.en, the captions' timing source), never into
@@ -136,15 +138,17 @@ beat('CH1', '"But we finna get in the Uber and I\'m finna pick up this car"', [
 ], [('0084', 89.04, 93.94, ('sync', 0))])
 
 # ---------------------------------------------------------------- CH2 THE PICKUP (10:14)
-beat('CH2', 'CH2 slam over the red shop building; "How you doing? I\'m here to pick up the 600 LT ... from Supercar Experience. I think you guys just put a brand new engine in it. I gotta drive it all the way back to Vegas."', [
+beat('CH2', 'CH2 slam over the red shop building; "How you doing? I\'m here to pick up the 600 LT ... from Supercar Experience. I gotta drive it all the way back to Vegas." (v2 cut 2, Omarie, 7 Oct: "I think you guys just put a brand new engine in it." is out, after nq-facts blocked it under HOUSE-STYLE "never use ... fleet faults")', [
     ('0087', 4.0, 2.6, 1.0, 'the red shop building, cars out front'),
     ('0087', 44.3, 3.95, 1.0, 'SYNC: at the door (v2 fix A: longer for the tail)'),
     ('0087', 52.0, 1.85, 1.0, 'SYNC (v2 fix A: longer for the tail)'),
-    ('0087', 54.9, 5.2, 1.0, 'SYNC (v2 fix A: longer for the tail)'),
-], [('0087', 44.42, 47.80, ('sync', 1)), ('0087', 52.10, 53.52, ('sync', 2)), ('0087', 55.04, 59.74, ('sync', 3))])
-beat('CH2', '"So they got one more hour until they\'re done with the car."', [
-    ('0088', 0.2, 5.45, 1.0, 'SYNC: inside the shop (v2 fix A: longer for the tail)'),
-], [('0088', 0.40, 5.22, ('sync', 0))])
+    ('0087', 57.758, CUT2_DUR, 1.0, 'SYNC (v2 cut 2, 7 Oct: was 54.9-60.1; now opens 0.14 s before the voice-band pause ends, '
+                                     '"engine in it" ends at 57.0 on the envelope, "I gotta" starts 58.05; runs to 60.3 so the "Vegas" '
+                                     'tail clears the 0089 piece by more than 80 ms)'),
+], [('0087', 44.42, 47.80, ('sync', 1)), ('0087', 52.10, 53.52, ('sync', 2)), ('0087', 57.90, 59.74, ('sync', 3))])
+# v2 cut 2 (Omarie, 7 Oct): the 0088 beat "So they got one more hour until they're done with the car." (0088 0.2-5.65, 5.45 s)
+# is out with its shot, sound and caption. Shot 0087 57.758 above is CUT2_DUR long, so the cut is 243 frames (8.108 s)
+# shorter and every later time moves by a whole number of frames (tools/remap_cut2.py moved config.json).
 beat('CH2', '"right now he\'s gonna go grab the 600 LT from the warehouse"', [
     ('0089', 140.5, 7.0, 1.0, 'SYNC: outside the shop'),
 ], [('0089', 140.55, 147.48, ('sync', 0))])
