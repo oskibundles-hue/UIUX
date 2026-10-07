@@ -2,7 +2,8 @@ import React from "react";
 import type { BrandTitleFields } from "../types";
 import { C, HZ, L, Lamp, SHADOW, SPACE, ScaleRule, Stripe, T, TM, TypeOn, W4, easeIn, fitSize, font, hazeAround, Haze, linear, ramp, ts, tw, up, useClock, withSize } from "./kit";
 
-export type FdTitleSpec = { eyebrow: string; line1: string; line2: string; until: number } & BrandTitleFields;
+/** `split`: opt-in split-letter reveal for line 1 and line 2 (not job rows). Off by default; the clip-up reveal is unchanged. */
+export type FdTitleSpec = { eyebrow: string; line1: string; line2: string; until: number; split?: boolean } & BrandTitleFields;
 
 const TL = L.title;
 const KICK = ts(T.titleKicker, 0.16);
@@ -10,6 +11,22 @@ const LINE = ts(T.titleLine, 0.01);
 const IDX = ts(T.rowIndex, 0.04);
 const CAR = ts(T.rowCar, 0.03);
 const JOB = ts(T.rowJob, 0.1);
+
+/** Split-letter reveal (batch4 row 40, approved as an option 2026-10-06): each glyph rises out of its own mask,
+ *  SPLIT_ST frames apart, SPLIT_DUR frames each. Line 1 from f4, line 2 from f16 (same starts as the clip-up). */
+const SPLIT_ST = 0.5, SPLIT_DUR = 7;
+const Split: React.FC<{ text: string; start: number; frame: number }> = ({ text, start, frame }) => (
+  <>
+    {Array.from(text).map((ch, i) => {
+      const k = ramp(frame, start + i * SPLIT_ST, start + i * SPLIT_ST + SPLIT_DUR);
+      return (
+        <span key={i} style={{ display: "inline-block", overflow: "hidden", verticalAlign: "top", padding: "0.1em 0", margin: "-0.1em 0" }}>
+          <span style={{ display: "inline-block", transform: `translateY(${(1 - k) * 110}%)` }}>{ch === " " ? " " : ch}</span>
+        </span>
+      );
+    })}
+  </>
+);
 
 /** Split line 2 into [before, red, after]. Default red part: the last word, plus the word before it when the last is a number (3+ words). */
 export const redSplit = (line2: string, redWord?: string): [string, string, string] => {
@@ -96,7 +113,9 @@ export const FdJobSheet: React.FC<{ t: FdTitleSpec }> = ({ t }) => {
         <div style={{ display: "flex", alignItems: "center", gap: TL.lampGap, height: T.titleKicker, ...font(kickSt), lineHeight: 1, textShadow: SHADOW }}>
           <Lamp on={lampOn} /><span><TypeOn text={kicker} k={kickK} /></span>
         </div>
-        <div style={{ ...font(lineSt), lineHeight: 0.82, marginTop: TL.line1Gap, textShadow: SHADOW, ...reveal(l1K) }}>{line1}</div>
+        <div style={{ ...font(lineSt), lineHeight: 0.82, marginTop: TL.line1Gap, textShadow: SHADOW, ...(t.split ? {} : reveal(l1K)) }}>
+          {t.split ? <Split text={line1} start={4} frame={frame} /> : line1}
+        </div>
         <Stripe w={TL.stripeW} h={TL.stripeH} k={stripeK} style={{ marginTop: TL.stripeGap }} />
         {rows.length ? (
           <div style={{ marginTop: TL.rowsGap, borderTop: `${TL.hair}px solid ${C.hair}`, width: sheetW }}>
@@ -122,8 +141,16 @@ export const FdJobSheet: React.FC<{ t: FdTitleSpec }> = ({ t }) => {
             })}
           </div>
         ) : line2.trim() ? (
-          <div style={{ ...font(lineSt), lineHeight: 0.82, marginTop: TL.line2Gap, textShadow: SHADOW, ...reveal(l2K) }}>
-            {a}{red ? <span style={{ color: C.red }}>{red}</span> : null}{b}
+          <div style={{ ...font(lineSt), lineHeight: 0.82, marginTop: TL.line2Gap, textShadow: SHADOW, ...(t.split ? {} : reveal(l2K)) }}>
+            {t.split ? (
+              <>
+                <Split text={a} start={16} frame={frame} />
+                {red ? <span style={{ color: C.red }}><Split text={red} start={16 + a.length * SPLIT_ST} frame={frame} /></span> : null}
+                <Split text={b} start={16 + (a.length + red.length) * SPLIT_ST} frame={frame} />
+              </>
+            ) : (
+              <>{a}{red ? <span style={{ color: C.red }}>{red}</span> : null}{b}</>
+            )}
           </div>
         ) : null}
         <ScaleRule w={sheetW} h={TL.ruleH} minor={TL.minor} red={1 / 3} draw={ruleK} style={{ marginTop: TL.ruleGap }} />
