@@ -7,8 +7,8 @@ Timeline: 5588 frames at 30000/1001 fps = 186.453 s. Frame n is shown at n x 100
 | # | t (s) | frames | clip | source in-out | look | reframe | into it |
 |---|---|---|---|---|---|---|---|
 | 0 | 0.00 | 0-65 | 0097 | 10.40-12.57 (1x) | cabin | c centre s 1.0-1.04 |  |
-| 1 | 2.20 | 66-119 | 0095 | 36.00-37.77 (1x) | cabin | c centre s 1.0-1.04 | whip left |
-| 2 | 4.00 | 120-173 | 0096 | 39.40-41.17 (1x) | cabin | c centre s 1.0-1.0 | whip right |
+| 1 | 2.20 | 66-111 | 0095 | 36.00-37.50 (1x) | cabin | c centre s 1.0-1.04 | whip left |
+| 2 | 3.73 | 112-173 | 0096 | 39.40-41.44 (1x) | cabin | c centre s 1.0-1.0 | whip right |
 | 3 | 5.80 | 174-227 | 0099 | 175.01-176.77 (1x) | cabin | c centre s 1.0-1.0 | whip left |
 | 4 | 7.60 | 228-278 | 0102 | 15.61-17.28 (1x) | day | c centre s 1.0-1.04 | impact |
 | 5 | 9.30 | 279-374 | 0097 | 4.61-7.78 (1x) | cabin | c centre s 1.0-1.04 |  |
@@ -133,7 +133,7 @@ Bed: the in-car stereo and exhaust/road nat from the clips themselves (config be
 |---|---|---|---|
 | SE-LO_01_hit_open.wav | 0.0 | hook panel, frame 0 | -15.5 dB (+0.0) |
 | SE-LO_04_whoosh_left_to_right.wav | 2.2 | whip into shot 1 | -22.6 dB (-6.0) |
-| SE-LO_05_whoosh_right_to_left.wav | 4.0 | whip into shot 2 | -23.4 dB (-6.0) |
+| SE-LO_05_whoosh_right_to_left.wav | 3.733 | whip into shot 2 | -22.7 dB (-6.0) |
 | SE-LO_04_whoosh_left_to_right.wav | 5.8 | whip into shot 3 | -22.6 dB (-6.0) |
 | SE-LO_01_hit_open.wav | 7.6 | impact cut into shot 4 | -24.8 dB (-6.0) |
 | SE-LO_04_whoosh_left_to_right.wav | 12.68 | gold light sweep | -23.0 dB (-6.0) |
