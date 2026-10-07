@@ -72,7 +72,7 @@ os.makedirs(QA, exist_ok=True)
 json.dump(dict(source=[os.path.basename(tp), 'data/shazam_spans.json'], episode=C['name'], tracks=rows, no_song_recognised_under_voice=[dict(src=p['src'], a=p['a'], b=p['b'], ep=p['t']) for p in quiet]), open(os.path.join(QA, 'in_car_tracks_part2.json'), 'w'), indent=1)
 L = [f"# In-car tracks heard in {C['name']}\n",
      'For Omarie to check before posting (commercial tracks can get a business-page post muted). Episode timecodes are',
-     'm:ss.ss in the v2 cut. Source: Shazam on the exact clip span of every music bed segment and cabin dialog piece',
+     'm:ss.ss in the v2 cut. Source: Shazam on the exact clip span of every music bed segment, cabin dialog piece and NO MUSIC substitute span',
      '(data/shazam_spans.json), cross-checked with the full-clip scan (one 10 s window every 30 s, ../in_car_tracks.json).',
      '"check" = at most one nearby clip-scan window (within 15 s) agrees with the direct match.\n',
      '| # | Title | Artist | Episode in -> out | Clip (s) | Where | Confidence |', '|---|---|---|---|---|---|---|']
@@ -82,8 +82,12 @@ for i, r in enumerate(rows, 1):
 L += ['', f'Dialog pieces from the cabin clips with no song recognised on their exact span ({len(quiet)}): ' +
       ', '.join(f"{p['src']} at {tc(p['t'])}" for p in quiet) + '. A stereo may still be faintly audible under the voice there.']
 L += ['', '**NO MUSIC version:** the music bed segments (' + ', '.join(f"{tc(s['t'])}" for s in nomusic_bed) +
-      ') are swapped for road/exhaust nat from clip ' + ', '.join(sorted({s['sub']['src'] for s in nomusic_bed if s.get('sub')})) + '. The dialog pieces keep their own cabin audio, so any faint stereo',
-      'under his voice in the pieces listed above stays in the NO MUSIC version too.', '']
+      ') are swapped for road/exhaust nat from clip ' + ', '.join(sorted({s['sub']['src'] for s in nomusic_bed if s.get('sub')})) +
+      ' (' + ', '.join(f"{s['sub']['src']} {s['sub']['a']}-{round(s['sub']['a'] + s['b'] - s['a'], 2)}" for s in nomusic_bed if s.get('sub')) +
+      '; Shazam on each whole span and in 10 s windows every 5 s: no song recognised, data/shazam_spans.json).',
+      'The dialog pieces keep their own cabin audio in both versions, so every song listed above as "under the voice" '
+      + '(' + ', '.join(f"{r['title']} at {tc(r['ep_in'])}" for r in rows if 'voice' in r['where']) + ')',
+      'also plays in the NO MUSIC version, as does any faint stereo under his voice in the pieces listed above.', '']
 open(os.path.join(QA, 'in_car_tracks_part2.md'), 'w').write('\n'.join(L))
 for r in rows:
     print(f"{tc(r['ep_in'])}-{tc(r['ep_out'])}  {r['title']} / {r['artist']}  [{r['where']}] {r['check']}")
