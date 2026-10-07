@@ -205,10 +205,20 @@
    "look": "cabin"
   },
   "6": {
-   "look": "terminal"
+   "look": "terminal",
+   "clockAs": {
+    "src": "0076",
+    "in": 13.88,
+    "_why": "7 Oct clock fix (b): cutaway under his 0076 line (0076 14.38 at 13.0): the strip clock reads the moment he speaks (04:56:26), so it runs forward into the 0077 escalator insert and the 0076 terminal-doors SYNC shot (04:56:52)"
+   }
   },
   "7": {
-   "look": "terminal"
+   "look": "terminal",
+   "clockAs": {
+    "src": "0076",
+    "in": 24.65,
+    "_why": "7 Oct clock fix (b): the 0077 escalator insert sits under his 0076 line (0076 25.25 at 17.3): the clock reads 0076 (04:56:37-41), not the escalator's 05:10, so it never jumps back at 21.06"
+   }
   },
   "8": {
    "look": "terminal"
@@ -224,7 +234,12 @@
    "rot": 180
   },
   "12": {
-   "look": "terminal"
+   "look": "terminal",
+   "clockAs": {
+    "src": "0079",
+    "in": 57.34,
+    "_why": "7 Oct clock fix (c): the 0078 gate-area insert sits under his 0079 line (0079 57.84 at 41.01): the clock reads 0079 (05:23:51), continuing the 0079 gate SYNC shot before it, not the 0078 05:14"
+   }
   },
   "13": {
    "look": "terminal"
@@ -284,23 +299,48 @@
   },
   "30": {
    "look": "cabin",
-   "s1": 1.0
+   "s1": 1.0,
+   "clockAs": {
+    "src": "0094",
+    "in": 2.2,
+    "_why": "7 Oct clock fix (a): cutaway under his 0094 line (0094 2.34 at 118.37): the clock reads 0094 (12:10:23), continuous with the 0094 SYNC shot at 123.63"
+   }
   },
   "31": {
    "look": "cabin",
-   "s1": 1.0
+   "s1": 1.0,
+   "clockAs": {
+    "src": "0094",
+    "in": 5.4,
+    "_why": "7 Oct clock fix (a): cutaway under his 0094 line: the clock reads 0094 (12:10:26), continuous into the 0094 SYNC shot at 123.63 (0094 7.6)"
+   }
   },
   "32": {
    "look": "cabin"
   },
   "33": {
-   "look": "cabin"
+   "look": "cabin",
+   "clockAs": {
+    "src": "0094",
+    "in": 9.2,
+    "_why": "7 Oct clock fix (d, found by tools/clock_check.py): B-roll after the 0094 SYNC shot holds the 0094 clock (12:10:30), so the 0094 line at 128.73 (12:12:58) does not read earlier than the forest picture (12:17)"
+   }
   },
   "34": {
-   "look": "cabin"
+   "look": "cabin",
+   "clockAs": {
+    "src": "0094",
+    "in": 10.5,
+    "_why": "7 Oct clock fix (d): holds the 0094 clock on from shot 33 (12:10:31-33)"
+   }
   },
   "35": {
-   "look": "cabin"
+   "look": "cabin",
+   "clockAs": {
+    "src": "0094",
+    "in": 156.78,
+    "_why": "7 Oct clock fix (d): cutaway under his 0094 line (0094 156.98 at 128.73): the clock reads the moment he speaks (12:12:58), not 0095 28.0 (12:17:32), which ran back from the 12:17:58 forest shot before it"
+   }
   },
   "36": {
    "look": "cabin",

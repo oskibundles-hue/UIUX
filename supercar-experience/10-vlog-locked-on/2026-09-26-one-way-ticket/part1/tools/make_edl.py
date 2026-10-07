@@ -101,8 +101,8 @@ def beat(ch, note, shots, dialog=(), tail=0.0):
 # ---------------------------------------------------------------- OPEN: the hook, his own line over the drive
 beat('OPEN', 'hook panel on frame 0; VO 0075 (04:38, leaving home): "So we are heading to Seattle Washington to go pick up a McLaren 600 LT"', [
     ('0097', 10.4, 2.2, 1.0, 'hook frame: snow peaks ahead, cabin cam'),
-    ('0095', 36.0, 1.8, 1.0, 'forest road'),
-    ('0096', 39.4, 1.8, 1.0, 'mountains open up (hands on the wheel; v2: was 39.0, inside the CH3 HUD shot, which now starts at 31.4)'),
+    ('0095', 36.0, 1.533, 1.0, 'forest road (nq-check, 7 Oct: ends 7 frames early, at 37.533, before the red-pink pop on the cap at 0095 37.53-37.74; the whip into the next shot moves to 3.733)'),
+    ('0096', 39.4, 2.067, 1.0, 'mountains open up (hands on the wheel; v2: was 39.0, inside the CH3 HUD shot, which now starts at 31.4; 7 Oct: starts 7 frames earlier on the timeline, same in-point, runs on to 41.467 so the next cut stays at 5.8; 39.17-39.4 is the HUD shot, so the in-point cannot move back)'),
     ('0099', 175.0, 1.8, 1.0, 'open plains (v2: was 172.0, inside the CH3 HUD shot 166-174)'),
     ('0102', 15.6, 1.7, 1.0, 'the McLaren at the pump, on "McLaren 600 LT" (v2: ends 17.3, where the TEASE shot starts)'),
     ('0097', 4.6, 3.2, 1.0, 'v2: snow road, cabin cam, under "... or Supercar Experience" (the line now runs to its end)'),
