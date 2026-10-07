@@ -39,10 +39,10 @@ outside the shop (0089) at 70.95.
 
 | File | What |
 |---|---|
-| `… - 1080x1920.mp4` | **delivery, upload this one.** The master's picture re-encoded two-pass at 11.1 Mb/s (under the 11.5 Mb/s spec), the master mix (in-car bed). EXPORT_MAIN |
-| `… - 1080x1920 - NO MUSIC.mp4` | **delivery, for a trending sound.** The same video stream; every in-car song swapped for road/exhaust nat of the same length. EXPORT_NOMUS |
+| `… - 1080x1920.mp4` | **delivery, upload this one.** The master's picture re-encoded two-pass at 11.1 Mb/s (under the 11.5 Mb/s spec), the master mix (in-car bed). 251,976,333 bytes, 11.05 Mb/s video, 178.345 s (5,345 frames), -14.10 LUFS, -1.90 dBTP |
+| `… - 1080x1920 - NO MUSIC.mp4` | **delivery, for a trending sound.** The same video stream; every in-car song swapped for road/exhaust nat of the same length. 251,941,774 bytes, 11.05 Mb/s video, 178.345 s, -14.11 LUFS, -1.92 dBTP |
 | `… - 1080x1920 (master CRF).mp4`, `… - NO MUSIC (master).mp4` | the CRF 17.3 masters the delivery pair is encoded from |
-| `… - PREVIEW 720x1280.mp4` | phone preview, under 30 MiB |
+| `… - PREVIEW 720x1280.mp4` | phone preview, two-pass 1.1 Mb/s: 28,186,258 bytes (26.9 MiB), -14.61 LUFS, -2.00 dBTP |
 | `… - in-car bed stem.wav` | the bed as it sits in the master |
 | `poster.jpg`, `contact-sheet.jpg` | frame 0 and one frame every 2 s |
 | `qa/` | first / middle / last frame of every beat and every graphic, the sheets, `gates.md`, `qa_summary.json`, `in_car_tracks_part1.md`, `v2-cut-sheet.jpg` (cut 2: the join, OREGON, the ROUTE strip, the end card) |
@@ -98,7 +98,9 @@ car ("brand new engine").
 - **NO MUSIC version**, exported every time: each music segment is swapped for road/exhaust nat of the same length from a
   speech-free, song-free span of 0095. The dialog keeps its own cabin audio, so a faint stereo under the voice stays.
 - **In-car songs** (Shazam on the exact placed spans, `tools/track_list.py` → `exports/qa/in_car_tracks_part1.md`):
-  TRACKLIST
+  Dreams and Nightmares (Meek Mill) 0:00.00-0:13.40, Way Too Self Aware (Remix) (Ian Asher) 1:56.79-2:06.59, Off The Meter
+  (Ken Carson, Playboi Carti & Destroy Lonely) 2:06.22-2:16.52 (confirmed by nq-facts, 7 Oct: exact-span Shazam match, key
+  820481582), Shallow (Magnolia Park) 2:15.92-2:25.12. Voice over the bed: min 17.9 dB (NO MUSIC 15.8 dB), need 10.
 - **Dialog**: 25 pieces, the fix-B chain (HP 90 Hz, afftdn, -2 dB at 300 Hz, +2.5 dB at 3.5 kHz, de-esser, 3:1), each
   levelled to -16 LUFS; every out-point at least 350 ms after the last word (here 400 ms, `tools/make_edl.py` `tail`) with a
   100 ms fade, running on under the next shot where the picture cuts first (L-cut), never into the next voice
