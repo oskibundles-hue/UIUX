@@ -11,6 +11,7 @@ import argparse, json, os
 
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 TR = '/tmp/claude-0/p2day/tr'
+FIXW = json.load(open(os.path.join(ROOT, 'data', 'words_small_fix.json')))   # small.en re-runs where the index missed words
 
 # (clip, words as whisper small.en wrote them) -> words to show; times are re-spread over the matched span
 FIX = {
@@ -19,6 +20,12 @@ FIX = {
              (['trip'], ['Trip'], 'sentence start')],
     '0112': [(['We', 'are', 'gassed', 'up,'], ['We', 'are', 'gassed', 'up,'], 'both models'),
              (['here,', 'and'], ['here.'], 'fix A tail: medium.en does not hear the trailing "and" (a breath): not captioned')],
+    # v2 (7 Oct) new pieces; medium.en per piece in data/words_medium.json
+    '0107': [(['doom', '-scrolling'], ['doom-scrolling'], 'one word (both models: "nothing like doom-scrolling while eating, no cap")')],
+    '0116': [(['y', "'all", 'being', 'in', 'the', 'mirror,'], ["y'all"],
+              'medium.en (piece window) hears "being in there", small.en "being in the mirror": "being in the mirror" not captioned'),
+             (['and', 'yeah'], ['And', 'yeah.'], 'both models (data/words_small_fix.json; medium.en "and yeah")'),
+             (['out', 'you'], [], 'the models differ ("out you" / "out to" / "outchoo"): not captioned')],
     '0111': [(['It\'s', 'a', 'McLaren'], ['It\'s', 'a', 'McLaren.'], 'punctuation'),
              (['like', 'that\'s'], ['like,', 'that\'s'], 'punctuation')],
 }   # PART2_FIX: every piece in the cut was re-run with medium.en (beam 5); only pieces whose words both models share are in the cut
@@ -33,9 +40,13 @@ SHIFT = {('0111', 54.70): +0.22, ('0115', 10.35): +0.40, ('0116', 121.25): +0.40
 
 def words_of(clip, a, b):
     t = json.load(open(os.path.join(TR, f'{clip}.json')))
+    sm = [w for s in t['segments'] for w in s['words']]
+    fx = FIXW.get(clip, [])
+    if fx:
+        sm = sorted([w for w in sm if not (fx[0][0] - 0.01 <= w[0] <= fx[-1][1])] + fx, key=lambda w: w[0])
     out = []
-    for s in t['segments']:
-        for w in s['words']:
+    for w in sm:
+        if True:
             # a word is shown when at least 0.15 s of it is inside the piece (whisper stretches a word over the pause
             # before it, so a start slightly before `in` is normal), or it starts inside and not in the last 0.1 s
             ov = min(w[1], b) - max(w[0], a)

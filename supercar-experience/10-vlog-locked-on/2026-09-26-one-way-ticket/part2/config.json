@@ -1,7 +1,7 @@
 {
  "_about": "One-way ticket, Part 2 (Sep 26-27 2026): the night drive to the arrival at Supercar Experience Las Vegas. The SE vlog standard (rally v2) re-built for this trip from the Part 1 folder, SE orange #FF4F16 for every accent, the dark-glass one-strip HUD (no side G). Every line's source: README.md.",
  "paths": {
-  "scratch": "/tmp/claude-0/-home-user/cd4f9292-b6c7-5cfb-950d-955794577354/scratchpad",
+  "scratch": "/tmp/claude-0/p2day/scratch",
   "ffmpeg": "/usr/local/lib/python3.13/dist-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2",
   "mezz": "/tmp/claude-0/p2day/mezz",
   "edl": "data/edl.json",
@@ -242,7 +242,12 @@
    "look": "day"
   },
   "4": {
-   "look": "night"
+   "look": "night",
+   "clockAs": {
+    "src": "0105",
+    "in": 4.0,
+    "_why": "v2 7 Oct: cutaway under his 0105 line (0105 4.80 at 8.6): the strip clock reads the line (19:32:28), so it runs on into the 0105 6.0 SYNC cut-in instead of 19:32:44 then back"
+   }
   },
   "5": {
    "look": "night"
@@ -290,43 +295,67 @@
    "look": "night"
   },
   "20": {
+   "look": "night"
+  },
+  "21": {
+   "look": "night"
+  },
+  "22": {
    "look": "night",
    "rot": 90,
    "_why": "0115 21.2 was shot with the phone on its side: turned upright (round 1)"
   },
-  "21": {
+  "23": {
    "look": "cabin"
   },
-  "22": {
-   "look": "day"
-  },
-  "23": {
-   "look": "day"
-  },
   "24": {
-   "look": "day"
+   "look": "day",
+   "clockAs": {
+    "src": "0116",
+    "in": 121.1,
+    "_why": "v2 7 Oct: cutaway under his 0116 line (0116 121.25 at 66.45): the clock reads 0116 (06:26:38), not the road clip's 07:34, so it never runs back into the 06:27 talk-to-camera"
+   }
   },
   "25": {
-   "look": "day"
+   "look": "day",
+   "clockAs": {
+    "src": "0116",
+    "in": 124.1,
+    "_why": "v2 7 Oct: continues the 0116 clock under the second cutaway (06:26:41)"
+   }
   },
   "26": {
-   "look": "day"
+   "look": "cabin"
   },
   "27": {
    "look": "cabin"
   },
   "28": {
-   "look": "day"
+   "look": "day",
+   "clockAs": {
+    "src": "0117",
+    "in": 48.6,
+    "_why": "v2 7 Oct: cutaway under his 0117 line (0117 50.65 at 87.2): the clock reads 0117 (07:10:34), not 07:33, so it runs on into 0119 (07:24)"
+   }
   },
   "29": {
-   "look": "day"
+   "look": "day",
+   "clockAs": {
+    "src": "0117",
+    "in": 74.7,
+    "_why": "v2 7 Oct: cutaway under his 0117 line (0117 74.85 at 88.9): 07:11:00"
+   }
   },
   "30": {
-   "look": "day"
+   "look": "day",
+   "clockAs": {
+    "src": "0117",
+    "in": 100.7,
+    "_why": "v2 7 Oct: cutaway under his 0117 line (0117 100.80 at 91.25): 07:11:26"
+   }
   },
   "31": {
-   "look": "day",
-   "s1": 1.0
+   "look": "cabin"
   },
   "32": {
    "look": "day"
@@ -341,28 +370,46 @@
    "look": "day"
   },
   "36": {
-   "look": "day"
+   "look": "day",
+   "s1": 1.0
   },
   "37": {
-   "look": "day"
+   "look": "day",
+   "clockAs": {
+    "src": "0121",
+    "in": 128.0,
+    "_why": "v2 7 Oct: rear-deck shot after STRIP-1 (0121 120-128, 07:34:14-22): the clock continues from STRIP-1 (07:34:22) instead of 0121 88.0 (07:33:42), so it never runs back; the next shot (0121 150.0, 07:34:44) is later on its own"
+   }
   },
   "38": {
    "look": "day"
   },
   "39": {
-   "look": "day",
-   "s1": 1.0
+   "look": "day"
   },
   "40": {
    "look": "day"
   },
   "41": {
-   "look": "interior"
+   "look": "day"
   },
   "42": {
    "look": "day"
   },
   "43": {
+   "look": "day",
+   "s1": 1.0
+  },
+  "44": {
+   "look": "day"
+  },
+  "45": {
+   "look": "interior"
+  },
+  "46": {
+   "look": "day"
+  },
+  "47": {
    "look": "day"
   }
  },
@@ -392,29 +439,29 @@
    "dur": 0.36
   },
   {
-   "into": 21,
+   "into": 23,
    "type": "sweep",
-   "t0": 56.1,
+   "t0": 63.0,
    "dur": 0.36
   },
   {
-   "into": 28,
+   "into": 32,
    "type": "impact",
    "strength": 0.45
   },
   {
-   "into": 30,
+   "into": 34,
    "type": "sweep",
-   "t0": 88.2,
+   "t0": 108.45,
    "dur": 0.36
   },
   {
-   "into": 33,
+   "into": 38,
    "type": "whip",
    "dir": "left"
   },
   {
-   "into": 34,
+   "into": 39,
    "type": "whip",
    "dir": "right"
   }
@@ -425,11 +472,11 @@
    "title": "NIGHT SHIFT"
   },
   {
-   "t": 56.3,
+   "t": 63.2,
    "title": "FIRST LIGHT"
   },
   {
-   "t": 88.4,
+   "t": 108.65,
    "title": "HOME STRETCH"
   }
  ],
@@ -494,8 +541,8 @@
    {
     "code": "G1-02",
     "type": "chapterSlam",
-    "t0": 56.3,
-    "t1": 58.25,
+    "t0": 63.2,
+    "t1": 65.15,
     "p": {
      "tag": "",
      "title": "FIRST LIGHT",
@@ -507,8 +554,8 @@
    {
     "code": "G1-03",
     "type": "chapterSlam",
-    "t0": 88.4,
-    "t1": 90.35,
+    "t0": 108.65,
+    "t1": 110.6,
     "p": {
      "tag": "",
      "title": "HOME STRETCH",
@@ -530,8 +577,8 @@
    {
     "code": "I1",
     "type": "sweep",
-    "t0": 56.1,
-    "t1": 56.46,
+    "t0": 63.0,
+    "t1": 63.36,
     "p": {
      "angle": 16,
      "width": 360
@@ -540,8 +587,8 @@
    {
     "code": "I1",
     "type": "sweep",
-    "t0": 88.2,
-    "t1": 88.56,
+    "t0": 108.45,
+    "t1": 108.81,
     "p": {
      "angle": 16,
      "width": 360
@@ -562,8 +609,8 @@
    {
     "code": "D1-NAP",
     "type": "clockStamp",
-    "t0": 38.7,
-    "t1": 42.3,
+    "t0": 45.15,
+    "t1": 48.75,
     "p": {
      "x": 54,
      "y": 400,
@@ -577,14 +624,14 @@
    {
     "code": "LOCK",
     "type": "v2lock",
-    "t0": 79.8,
-    "t1": 81.4,
+    "t0": 100.05,
+    "t1": 101.65,
     "p": {
      "track": "mclaren",
      "kicker": "LOCKED ON",
      "name": "MCLAREN 600LT",
-     "acquire": 79.85,
-     "exit": 81.05,
+     "acquire": 100.1,
+     "exit": 101.3,
      "side": "above"
     }
    },
@@ -592,7 +639,7 @@
     "code": "STRIP",
     "type": "seStrip",
     "t0": 1.9,
-    "t1": 139.725,
+    "t1": 166.3,
     "p": {
      "x": 54,
      "y": 292,
@@ -601,42 +648,42 @@
      "hx": 140,
      "progress": [
       1.9,
-      139.725
+      166.3
      ],
      "label": "ONE-WAY TICKET · PART 2",
      "clockFrom": 7.8,
-     "exit": 139.325,
+     "exit": 165.9,
      "route_text": "SEATTLE → VEGAS",
      "expand": [
       {
-       "a": 91.8,
-       "b": 99.4,
+       "a": 120.25,
+       "b": 127.85,
        "places": [
         [
-         91.8,
+         120.25,
          "SOMEWHERE IN NEVADA"
         ]
        ]
       },
       {
-       "a": 116.32,
-       "b": 123.92,
+       "a": 142.745,
+       "b": 150.345,
        "places": [
         [
-         116.32,
+         142.745,
          "INTO LAS VEGAS"
         ]
        ]
       }
      ]
     },
-    "_todo": "part2 v2 port (7 Oct): times are the v1 cut's (A2 start, STRIP-1/2 spans, end card); re-time after the recut. clockFrom just before the CH 01 slam, as Part 1 (12.5 s before its 12.7 s slam)."
+    "_v2": "re-timed 7 Oct to the v2 cut (171.7 s): 1.9 -> the end card, expand windows on STRIP-1 / STRIP-2 at the same offsets as v1 (+0.2 / +0.195 s into the beat, 7.6 s each); clockFrom 7.8, the CH 01 cut, unchanged"
    },
    {
     "code": "PLACE-2",
     "type": "v2place",
-    "t0": 124.32,
-    "t1": 127.32,
+    "t0": 150.745,
+    "t1": 153.745,
     "p": {
      "x": 54,
      "y": 400,
@@ -647,8 +694,8 @@
    {
     "code": "END",
     "type": "v2end",
-    "t0": 139.725,
-    "t1": 145.125,
+    "t0": 166.3,
+    "t1": 171.7,
     "p": {
      "tagline": "A RIDE OF A LIFETIME.",
      "cta": "TEXT OR DM TO BOOK",
@@ -663,7 +710,7 @@
   ],
   "captions": {
    "t0": 2.0,
-   "t1": 160.3,
+   "t1": 171.7,
    "p": {
     "size": 68,
     "yBottom": 1372,
@@ -681,10 +728,10 @@
  "tracks": {
   "_about": "lock-on targets: shot, output frame range f0-f1, anchor frame (sharp, mid-shot) and the box x,y,w,h on it (output px). Tracked with lib/track_mid.py both ways from the anchor.",
   "mclaren": {
-   "shot": 28,
-   "f0": 2392,
-   "f1": 2440,
-   "anchor": 2410,
+   "shot": 32,
+   "f0": 2999,
+   "f1": 3047,
+   "anchor": 3017,
    "box": [
     60,
     950,
@@ -766,7 +813,8 @@
    }
   ],
   "dialogLatency": 0.025,
-  "_aboutDialogLatency": "part1 v2 (ported to part2 7 Oct; re-measure on part2 if the chain differs): the fix B chain delays the voice by 25.0 ms (measured 6 Oct: stem vs the raw clip audio, cross-correlation, 9 pieces, every one 24.9-25.0 ms); mix.py reads 25 ms further in so the voice stays on the lips"
+  "_aboutDialogLatency": "part1 v2 (ported to part2 7 Oct; re-measure on part2 if the chain differs): the fix B chain delays the voice by 25.0 ms (measured 6 Oct: stem vs the raw clip audio, cross-correlation, 9 pieces, every one 24.9-25.0 ms); mix.py reads 25 ms further in so the voice stays on the lips",
+  "_natV1_note": "v1 cut positions (t) for reference only; v2 places these spans through bed.segs"
  },
  "sfx": {
   "files": {
@@ -797,52 +845,28 @@
  "blurs": [],
  "speedo": [
   {
-   "shot": 9,
-   "box": [
-    640,
-    960,
-    160,
-    150
-   ],
-   "pad": 16,
-   "radius": 16,
-   "why": "0112 cluster behind the wheel (parked; round 1: was on his face)"
-  },
-  {
-   "shot": 10,
-   "box": [
-    640,
-    960,
-    160,
-    150
-   ],
-   "pad": 16,
-   "radius": 16,
-   "why": "0112 cluster behind the wheel (parked; round 1: was on his face)"
-  },
-  {
    "shot": 11,
    "box": [
-    650,
-    850,
-    330,
-    260
+    640,
+    960,
+    160,
+    150
    ],
    "pad": 16,
    "radius": 16,
-   "why": "0113 night cluster"
+   "why": "0112 cluster behind the wheel (parked; round 1: was on his face)"
   },
   {
    "shot": 12,
    "box": [
-    650,
-    850,
-    330,
-    260
+    640,
+    960,
+    160,
+    150
    ],
    "pad": 16,
    "radius": 16,
-   "why": "0113 night cluster"
+   "why": "0112 cluster behind the wheel (parked; round 1: was on his face)"
   },
   {
    "shot": 13,
@@ -869,7 +893,31 @@
    "why": "0113 night cluster"
   },
   {
-   "shot": 21,
+   "shot": 15,
+   "box": [
+    650,
+    850,
+    330,
+    260
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0113 night cluster"
+  },
+  {
+   "shot": 16,
+   "box": [
+    650,
+    850,
+    330,
+    260
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0113 night cluster"
+  },
+  {
+   "shot": 23,
    "box": [
     880,
     980,
@@ -881,7 +929,31 @@
    "why": "0116 cluster right of the wheel (round 1: was on his mouth / beard)"
   },
   {
+   "shot": 26,
+   "box": [
+    880,
+    980,
+    190,
+    140
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "v2: 0116 talk-to-camera, cluster right of the wheel (same mount as the 0116 103.6 shot); check on the gate sheet"
+  },
+  {
    "shot": 27,
+   "box": [
+    880,
+    980,
+    190,
+    140
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "v2: 0116 talk-to-camera, cluster right of the wheel (same mount as the 0116 103.6 shot); check on the gate sheet"
+  },
+  {
+   "shot": 31,
    "box": [
     180,
     1090,
@@ -904,7 +976,220 @@
   "duckDb": {
    "music": -14.0
   },
-  "segs": [],
-  "_todoSegs": "part2 v2 (7 Oct): EMPTY until the lead picks the in-car music and exhaust spans from the survey. One seg per span: {why, kind: music|exhaust|nat, src, a, b, t, fin, fout[, lufs][, mute: [[a,b]]][, sub: {src, a, why} for every music seg (the NO MUSIC swap)]}. Part 1 example: {\"why\": \"hook: the in-car stereo under the open\", \"kind\": \"music\", \"src\": \"0097\", \"a\": 20.0, \"b\": 33.4, \"t\": 0.0, \"fin\": 0.03, \"fout\": 0.9, \"sub\": {\"src\": \"0095\", \"a\": 8.0, \"why\": \"road/exhaust nat, roof down\"}}"
+  "segs": [
+   {
+    "why": "OPEN: the in-car stereo under the hook (\"Say It Was\", Lil Uzi Vert; clip scan 0122 90-132, high), ducked under his line",
+    "kind": "music",
+    "src": "0122",
+    "a": 96.0,
+    "b": 104.3,
+    "t": 0.0,
+    "fin": 0.03,
+    "fout": 0.9,
+    "sub": {
+     "src": "0121",
+     "a": 160.0,
+     "why": "road/exhaust nat, rear-deck cam (0121: no song in the clip scan, no speech after 32.6)"
+    }
+   },
+   {
+    "why": "In-N-Out lot under the CH1 slam, in sync with the exterior shot",
+    "kind": "nat",
+    "src": "0105",
+    "a": 19.8,
+    "b": 21.8,
+    "t": 7.8,
+    "lufs": -30,
+    "fin": 0.1,
+    "fout": 0.4
+   },
+   {
+    "why": "gas station, in sync",
+    "kind": "nat",
+    "src": "0111",
+    "a": 23.0,
+    "b": 25.6,
+    "t": 23.0,
+    "lufs": -28,
+    "fin": 0.15,
+    "fout": 0.2
+   },
+   {
+    "why": "night road on the in-car stereo, after \"Let's play some tunes\" (\"Sweater Weather\", The Neighbourhood; clip scan 0113 120-162, high)",
+    "kind": "music",
+    "src": "0113",
+    "a": 121.0,
+    "b": 129.3,
+    "t": 37.4,
+    "fin": 0.8,
+    "fout": 0.8,
+    "sub": {
+     "src": "0121",
+     "a": 210.0,
+     "why": "road/exhaust nat, rear-deck cam"
+    }
+   },
+   {
+    "why": "CH2 cabin room tone under the slam, in sync",
+    "kind": "nat",
+    "src": "0116",
+    "a": 103.6,
+    "b": 106.9,
+    "t": 63.0,
+    "lufs": -30,
+    "fin": 0.1,
+    "fout": 0.2
+   },
+   {
+    "why": "first light: road nat under \"beautiful view\", in sync with the cutaway",
+    "kind": "nat",
+    "src": "0121",
+    "a": 155.0,
+    "b": 158.0,
+    "t": 66.3,
+    "lufs": -26,
+    "fin": 0.2,
+    "fout": 0.2
+   },
+   {
+    "why": "the road, exhaust up between his lines, in sync",
+    "kind": "exhaust",
+    "src": "0121",
+    "a": 110.0,
+    "b": 112.5,
+    "t": 69.3,
+    "fin": 0.2,
+    "fout": 0.4
+   },
+   {
+    "why": "the desert: road nat under his 0117 lines, in sync with the cutaways",
+    "kind": "nat",
+    "src": "0121",
+    "a": 104.0,
+    "b": 107.6,
+    "t": 85.15,
+    "lufs": -26,
+    "fin": 0.2,
+    "fout": 0.15
+   },
+   {
+    "why": "the desert: road nat, in sync",
+    "kind": "nat",
+    "src": "0121",
+    "a": 132.0,
+    "b": 134.4,
+    "t": 88.75,
+    "lufs": -26,
+    "fin": 0.15,
+    "fout": 0.15
+   },
+   {
+    "why": "the desert: road nat, in sync",
+    "kind": "nat",
+    "src": "0121",
+    "a": 140.0,
+    "b": 142.6,
+    "t": 91.15,
+    "lufs": -26,
+    "fin": 0.15,
+    "fout": 0.3
+   },
+   {
+    "why": "LOCK-ON at the pump: pump nat, in sync",
+    "kind": "nat",
+    "src": "0119",
+    "a": 74.6,
+    "b": 78.2,
+    "t": 98.25,
+    "lufs": -28,
+    "fin": 0.15,
+    "fout": 0.3
+   },
+   {
+    "why": "\"you guys can hear the car\": the engine fires (~34.8) and idles, parked, in sync (Omarie, 6 Oct: \"some driving with the exhaust sound\")",
+    "kind": "exhaust",
+    "src": "0121",
+    "a": 32.6,
+    "b": 36.5,
+    "t": 116.15,
+    "lufs": -20,
+    "fin": 0.05,
+    "fout": 0.3
+   },
+   {
+    "why": "STRIP-1: the engine on the road, in sync (v1 audio._natV1)",
+    "kind": "exhaust",
+    "src": "0121",
+    "a": 120.0,
+    "b": 128.0,
+    "t": 120.05,
+    "lufs": -20,
+    "fin": 0.25,
+    "fout": 0.3
+   },
+   {
+    "why": "rear-deck cam on the road under his 0118 VO, in sync (v1 audio._natV1)",
+    "kind": "nat",
+    "src": "0121",
+    "a": 88.0,
+    "b": 91.0,
+    "t": 128.05,
+    "lufs": -26
+   },
+   {
+    "why": "rear-deck cam under his VO, in sync (v1 audio._natV1)",
+    "kind": "nat",
+    "src": "0121",
+    "a": 150.0,
+    "b": 152.5,
+    "t": 131.05,
+    "lufs": -26
+   },
+   {
+    "why": "rear-deck cam under his VO, in sync (v1 audio._natV1)",
+    "kind": "nat",
+    "src": "0121",
+    "a": 180.0,
+    "b": 182.5,
+    "t": 133.55,
+    "lufs": -26
+   },
+   {
+    "why": "rear-deck cam on the road, in sync (v1 audio._natV1)",
+    "kind": "nat",
+    "src": "0121",
+    "a": 192.0,
+    "b": 194.5,
+    "t": 136.05,
+    "lufs": -26,
+    "fout": 0.3
+   },
+   {
+    "why": "the freeway into Las Vegas on the in-car stereo, in sync with STRIP-2 (0122 451.0 at 142.55) (\"Maverick Intro\", Lil Uzi Vert; clip scan 0122 420-492, high); fades under the shop",
+    "kind": "music",
+    "src": "0122",
+    "a": 447.0,
+    "b": 460.2,
+    "t": 138.55,
+    "fin": 0.4,
+    "fout": 1.2,
+    "sub": {
+     "src": "0121",
+     "a": 230.0,
+     "why": "road/exhaust nat, rear-deck cam"
+    }
+   },
+   {
+    "why": "outro: road/exhaust nat fading under the end card",
+    "kind": "exhaust",
+    "src": "0121",
+    "a": 200.0,
+    "b": 206.0,
+    "t": 165.7,
+    "fin": 0.8,
+    "fout": 2.4
+   }
+  ],
+  "_v2": "filled 7 Oct for the v2 cut (171.7 s): 3 in-car songs (music, each with a `sub` for NO MUSIC), 4 exhaust stretches (incl. 0121 32.6 the engine start after \"you guys can hear the car\"), nat in sync under picture-only stretches (none under the 0107 food shot: his words cover it, the seg was fully muted). Songs heard: exports/qa/in_car_tracks_part2.md (tools/track_list.py)."
  }
 }

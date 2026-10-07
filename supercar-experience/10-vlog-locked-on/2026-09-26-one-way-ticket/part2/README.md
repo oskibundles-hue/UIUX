@@ -1,8 +1,43 @@
 # One-way ticket, Part 2 (Sep 26–27 2026): SE vlog, rally v2 standard + the HUD strip, SE orange
 
-**Status: round 1 fixes rendered 6 Oct, awaiting nq-check's re-look and the facts panel.** DELIVERY (render host, git-ignored): `exports/2026-09-26 One-way ticket Part 2 - SE LOCKED-ON vlog - 1080x1920_DELIVERY.mp4` (a copy of the master, under 11.5 Mb/s), 2:25.1, 9.77 Mb/s, -14.15 LUFS, -1.63 dBTP. Built from `../part1/` (same build, kit, gates, mix, DELIVERY at
-11.1M). Style named by the lead from Omarie's pick (6 Oct): rally v2 + the dark-glass one-strip HUD, SE orange #FF4F16, the
+**Status (v2, 7 Oct): recut done, no render yet.** v2 cut 2:51.7 (171.7 s), 48 shots + end card, 31 dialog pieces; in-car stereo bed filled; strip re-timed. Next: fetch the mezzanines (`/tmp/claude-0/p2day/fetch/request.json`), the frame gate sheets for nq-check, then the render. v1 (delivered 6 Oct, 2:25.1) is described below the v2 section.
+v1 was built from `../part1/` (same build, kit, gates, mix, DELIVERY at 11.1M). Style named by the lead from Omarie's pick (6 Oct): rally v2 + the dark-glass one-strip HUD, SE orange #FF4F16, the
 car reads MCLAREN 600LT. The full README (every element, every line's source, sound, picture) is written after the render.
+
+
+## v2 recut (7 Oct): Omarie's v2 notes (`../HANDOFF-v2-both.md`)
+
+Style unchanged: rally v2 + the dark-glass one-strip HUD, SE orange #FF4F16, MCLAREN 600LT. `tools/make_edl.py` -> `data/edl.json`.
+
+- **New moments** (programme time): food break, the In-N-Out cut-in 0105 6.0-10.2 in sync under "...to In-N-Out. Appreciate
+  you, thank you." (0:09.8), then 0107 14.5-20.3, eating at the car, "I ain't gonna lie, nothing like doom-scrolling while
+  eating. No cap." (0:17.2, 19:52, after the 0106 beat in day order); talk-to-camera 0116 142.35-147.25 + 153.3-161.75 (jump
+  cut), "I wish it was like more like, you feel me, side missions we could have done," / "But yeah, so appreciate y'all being
+  in the mirror, hanging out, hope you guys enjoy the content. And yeah, ..." (1:11.8-1:25.15); 0121 28.5-36.5, "You guys can
+  hear me, you guys can hear the car, you guys can hear everything." then the engine fires (~34.8 s) and idles (1:52.05-2:00.05),
+  into STRIP-1.
+- **Out:** 0105 10.6-13.8 "We finally gonna eat ..." (the profanity at 11.9-12.3 has a 280 ms gap after it, no clean cut;
+  the models differ on its first words); 0116 147.25-153.3 (the models differ: "but shout out to God" / "but you got what you
+  got"); 0122 322.0 (the freeway beat was timed to the retired music's bars).
+- **Fix A:** `tail()` is Part 1's (measured end of voice, `NEXT_ONSET`); seven v1 shots are 0.1-0.25 s longer so no two voices
+  overlap. `tools/tail_check.py`: 31 pieces, min gap 350 ms. `data/words_small_fix.json`: small.en beam 5 re-runs where the day
+  index missed words (0116 after "content.", 0121 28.66-32.3: the index's "let's hear the car" was a beam-1 miss; both models
+  on the window hear "you guys can hear the car").
+- **Captions** (two-model rule): not captioned where the models differ: "being in the mirror" (medium.en on the piece:
+  "being in there"), the last word of the 0116 sign-off ("out you" / "out to").
+- **Clock:** `clockAs` on 7 cutaways (config `shots`); `tools/clock_check.py` (ported from Part 1, overnight wrap allowed):
+  PASS, the strip clock never decreases from 0:07.8.
+- **Bed** (config `bed.segs`, no library music): 3 in-car songs, each with a NO MUSIC `sub` from 0121 road/exhaust nat (no song
+  in its clip scan, no speech after 32.6 s); exhaust 0121 32.6-36.5 (the engine start), STRIP-1 0121 120-128, 0121 110-112.5 and
+  an outro under the end card; nat in sync elsewhere. Songs: `exports/qa/in_car_tracks_part2.md` (`tools/track_list.py`; clip
+  scan only until Shazam runs on the placed spans, `data/shazam_spans.json`). Mix (prep + audio stages): -14.05 LUFS, TP -2.0,
+  voice over bed min 19.5 dB (NO MUSIC 17.8).
+- **Strip:** STRIP 1.9 -> 166.3 (end card), expand SOMEWHERE IN NEVADA 120.25-127.85, INTO LAS VEGAS 142.745-150.345.
+- **Speedo:** boxes on the two 0116 talk shots at the same place as the 0116 103.6 shot (same mount): check on the gate sheet.
+- **Held out:** unchanged (the list below and `config.json` `forbidden`). The end card reads RENTERS 25+ · AGES 21–24 WITH
+  UNDERAGE FEE; no "$" anywhere.
+
+## v1 (6 Oct)
 
 - **The cut:** `tools/make_edl.py` -> `data/edl.json`: 44 shots + end card, 37 dialog pieces, 165.7 s (2:45.7).
   OPEN (hook, "somewhere in Nevada") · CH1 NIGHT SHIFT 19:32 (In-N-Out, Nampa, the Corvette joke, gassed up, the 01:29 nap
