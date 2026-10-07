@@ -37,21 +37,21 @@
    "beat": 0,
    "src": "0095",
    "in": 36.0,
-   "out": 37.8,
+   "out": 37.533,
    "speed": 1.0,
    "t": 2.2,
-   "dur": 1.8,
-   "note": "forest road"
+   "dur": 1.533,
+   "note": "forest road (nq-check, 7 Oct: ends 7 frames early, at 37.533, before the red-pink pop on the cap at 0095 37.53-37.74; the whip into the next shot moves to 3.733)"
   },
   {
    "beat": 0,
    "src": "0096",
    "in": 39.4,
-   "out": 41.2,
+   "out": 41.467,
    "speed": 1.0,
-   "t": 4.0,
-   "dur": 1.8,
-   "note": "mountains open up (hands on the wheel; v2: was 39.0, inside the CH3 HUD shot, which now starts at 31.4)"
+   "t": 3.733,
+   "dur": 2.067,
+   "note": "mountains open up (hands on the wheel; v2: was 39.0, inside the CH3 HUD shot, which now starts at 31.4; 7 Oct: starts 7 frames earlier on the timeline, same in-point, runs on to 41.467 so the next cut stays at 5.8; 39.17-39.4 is the HUD shot, so the in-point cannot move back)"
   },
   {
    "beat": 0,
