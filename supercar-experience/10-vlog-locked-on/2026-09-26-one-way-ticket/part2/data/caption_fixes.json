@@ -7,6 +7,13 @@
   "why": "medium.en: \"We finally made it to In-N-Out.\" (one sentence; the restaurant's spelling)"
  },
  {
+  "clip": "0107",
+  "at": 16.98,
+  "whisper": "doom -scrolling",
+  "shown": "doom-scrolling",
+  "why": "one word (both models: \"nothing like doom-scrolling while eating, no cap\")"
+ },
+ {
   "clip": "0111",
   "at": 47.32,
   "whisper": "It's a McLaren",
@@ -33,6 +40,27 @@
   "whisper": "here, and",
   "shown": "here.",
   "why": "fix A tail: medium.en does not hear the trailing \"and\" (a breath): not captioned"
+ },
+ {
+  "clip": "0116",
+  "at": 156.34,
+  "whisper": "y 'all being in the mirror,",
+  "shown": "y'all",
+  "why": "medium.en (piece window) hears \"being in there\", small.en \"being in the mirror\": \"being in the mirror\" not captioned"
+ },
+ {
+  "clip": "0116",
+  "at": 159.42,
+  "whisper": "and yeah",
+  "shown": "And yeah.",
+  "why": "both models (data/words_small_fix.json; medium.en \"and yeah\")"
+ },
+ {
+  "clip": "0116",
+  "at": 160.5,
+  "whisper": "out you",
+  "shown": "(dropped)",
+  "why": "the models differ (\"out you\" / \"out to\" / \"outchoo\"): not captioned"
  },
  {
   "clip": "0118",

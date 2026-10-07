@@ -1,0 +1,49 @@
+{
+ "source": [
+  "in_car_tracks.json",
+  "data/shazam_spans.json"
+ ],
+ "episode": "2026-09-26 One-way ticket Part 2 - SE LOCKED-ON vlog",
+ "tracks": [
+  {
+   "title": "Say It Was",
+   "artist": "Lil Uzi Vert",
+   "clip": "0122",
+   "clip_in": 96.0,
+   "clip_out": 104.3,
+   "ep_in": 0.0,
+   "ep_out": 8.3,
+   "where": "bed (music)",
+   "shazam_windows": 2,
+   "confidence": "high",
+   "check": "check: clip scan only"
+  },
+  {
+   "title": "Sweater Weather",
+   "artist": "The Neighbourhood",
+   "clip": "0113",
+   "clip_in": 121.0,
+   "clip_out": 129.3,
+   "ep_in": 37.4,
+   "ep_out": 45.7,
+   "where": "bed (music)",
+   "shazam_windows": 2,
+   "confidence": "high",
+   "check": "check: clip scan only"
+  },
+  {
+   "title": "Maverick Intro",
+   "artist": "Lil Uzi Vert",
+   "clip": "0122",
+   "clip_in": 447.0,
+   "clip_out": 460.2,
+   "ep_in": 138.55,
+   "ep_out": 151.75,
+   "where": "bed (music)",
+   "shazam_windows": 3,
+   "confidence": "high",
+   "check": "check: clip scan only"
+  }
+ ],
+ "no_song_recognised_under_voice": []
+}
