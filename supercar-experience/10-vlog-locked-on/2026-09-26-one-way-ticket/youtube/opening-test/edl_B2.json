@@ -1,0 +1,440 @@
+{
+ "name": "B2",
+ "fps": "30000/1001",
+ "size": [
+  1280,
+  720
+ ],
+ "duration": 53.3392,
+ "montage_t": 16.69,
+ "beat": 0.7692307692307693,
+ "v2": true,
+ "montage_duck": true,
+ "shots": [
+  {
+   "beat": 0,
+   "src": "0121",
+   "in": 152.0,
+   "out": 154.27,
+   "speed": 1.0,
+   "t": 0.0,
+   "dur": 2.27,
+   "kind": "cutaway",
+   "nat": null,
+   "note": "CUTAWAY over HOOK 1 (0117 phone in hand while moving): rear camera, desert highway"
+  },
+  {
+   "beat": 1,
+   "src": "0121",
+   "in": 199.6,
+   "out": 201.82,
+   "speed": 1.0,
+   "t": 2.27,
+   "dur": 2.22,
+   "kind": "cutaway",
+   "nat": null,
+   "note": "CUTAWAY over HOOK 2 (0117 phone in hand while moving): desert road, rear camera (v2: replaces the sky-heavy 0099 176.3)"
+  },
+  {
+   "beat": 2,
+   "src": "0075",
+   "in": 56.45,
+   "out": 60.95,
+   "speed": 1.0,
+   "t": 4.49,
+   "dur": 4.5,
+   "kind": "talk",
+   "nat": -24.0,
+   "note": "HOOK 3 (rotate): \"It's 4:30 in the morning. I got my Uber coming right now.\""
+  },
+  {
+   "beat": 3,
+   "src": "0075",
+   "in": 69.32,
+   "out": 77.02,
+   "speed": 1.0,
+   "t": 8.99,
+   "dur": 7.7,
+   "kind": "talk",
+   "nat": -24.0,
+   "note": "HOOK 4 (rotate), jump cut: \"So we are heading to Seattle, Washington to go pick up a McLaren 600 LT.\""
+  },
+  {
+   "beat": 4,
+   "src": "0091",
+   "in": 7.3,
+   "out": 9.6077,
+   "speed": 1.0,
+   "t": 16.69,
+   "dur": 2.3077,
+   "kind": "montage",
+   "nat": -30.0,
+   "note": "Seattle, in the parked car at the shop - \"Spider top goes down\""
+  },
+  {
+   "beat": 5,
+   "src": "0093",
+   "in": 4.85,
+   "out": 7.9269,
+   "speed": 1.0,
+   "t": 18.9977,
+   "dur": 3.0769,
+   "kind": "montage",
+   "nat": -30.0,
+   "note": "top down through the trees (moving; one hand on the wheel while he talks) - \"beautiful out here, like gorgeous\""
+  },
+  {
+   "beat": 6,
+   "src": "0102",
+   "in": 18.7,
+   "out": 21.0077,
+   "speed": 1.0,
+   "t": 22.0746,
+   "dur": 2.3077,
+   "kind": "montage",
+   "nat": -30.0,
+   "note": "first gas run, Oregon (parked at the pump; the car through the window) - \"I got my Red Bull and my snacks\""
+  },
+  {
+   "beat": 7,
+   "src": "0105",
+   "in": 4.85,
+   "out": 6.3885,
+   "speed": 1.0,
+   "t": 24.3823,
+   "dur": 1.5385,
+   "kind": "montage",
+   "nat": -30.0,
+   "note": "In-N-Out lot at night (on foot) - \"We finally made it.\""
+  },
+  {
+   "beat": 8,
+   "src": "0105",
+   "in": 7.3,
+   "out": 8.8385,
+   "speed": 1.0,
+   "t": 25.9208,
+   "dur": 1.5385,
+   "kind": "montage",
+   "nat": -30.0,
+   "note": "jump cut, the In-N-Out sign behind him - \"To In-N-Out.\""
+  },
+  {
+   "beat": 9,
+   "src": "0107",
+   "in": 256.4,
+   "out": 258.7077,
+   "speed": 1.0,
+   "t": 27.4592,
+   "dur": 2.3077,
+   "kind": "montage",
+   "nat": null,
+   "note": "the oil scare: on his phone looking up the oil cap, leaning on the parked car. VOICE from 0106 (its picture is near-black): \"Where the [bleep] is the oil in this [bleep]?\""
+  },
+  {
+   "beat": 10,
+   "src": "0111",
+   "in": 47.4,
+   "out": 51.2462,
+   "speed": 1.0,
+   "t": 29.7669,
+   "dur": 3.8462,
+   "kind": "montage",
+   "nat": null,
+   "note": "gas-station counter, him laughing (strangers out of frame; their voices muted) - \"It's a McLaren.\" / \"Everyone keeps saying I'm Corvettes.\""
+  },
+  {
+   "beat": 11,
+   "src": "0112",
+   "in": 13.55,
+   "out": 15.8577,
+   "speed": 1.0,
+   "t": 33.6131,
+   "dur": 2.3077,
+   "kind": "montage",
+   "nat": -30.0,
+   "note": "second gas run, in the parked car at the pump - \"We gassed up, shawty!\""
+  },
+  {
+   "beat": 12,
+   "src": "0114",
+   "in": 8.9,
+   "out": 11.2077,
+   "speed": 1.0,
+   "t": 35.9208,
+   "dur": 2.3077,
+   "kind": "montage",
+   "nat": -30.0,
+   "note": "the night nap, parked - \"a nice McLaren nap\""
+  },
+  {
+   "beat": 13,
+   "src": "0114",
+   "in": 42.65,
+   "out": 44.9577,
+   "speed": 1.0,
+   "t": 38.2285,
+   "dur": 2.3077,
+   "kind": "montage",
+   "nat": -30.0,
+   "note": "awake, parked - \"We back in business, baby!\""
+  },
+  {
+   "beat": 14,
+   "src": "0115",
+   "in": 12.65,
+   "out": 14.9577,
+   "speed": 1.0,
+   "t": 40.5362,
+   "dur": 2.3077,
+   "kind": "montage",
+   "nat": -30.0,
+   "note": "night gas run, standing at the pump - \"dude, it is freezing\""
+  },
+  {
+   "beat": 15,
+   "src": "0118",
+   "in": 83.85,
+   "out": 86.1577,
+   "speed": 1.0,
+   "t": 42.8438,
+   "dur": 2.3077,
+   "kind": "montage",
+   "nat": -30.0,
+   "note": "morning drive, cabin camera (moving; left hand on the wheel) - \"No hotel, no nothing.\""
+  },
+  {
+   "beat": 16,
+   "src": "0118",
+   "in": 90.05,
+   "out": 91.5885,
+   "speed": 1.0,
+   "t": 45.1515,
+   "dur": 1.5385,
+   "kind": "montage",
+   "nat": -30.0,
+   "note": "jump cut - \"But you know, we thug it out.\""
+  },
+  {
+   "beat": 17,
+   "src": "0122",
+   "in": 583.4,
+   "out": 585.7077,
+   "speed": 1.0,
+   "t": 46.69,
+   "dur": 2.3077,
+   "kind": "montage",
+   "nat": null,
+   "note": "Las Vegas skyline, rear camera (last; bed only: stereo, Shazam)"
+  },
+  {
+   "beat": 18,
+   "src": "0075",
+   "in": 82.0385,
+   "out": 86.38,
+   "speed": 1.0,
+   "t": 48.9977,
+   "dur": 4.3415,
+   "kind": "talk",
+   "nat": -24.0,
+   "note": "CH1 START (rotate), subject lift, picture from 82.04 under the J-cut voice"
+  }
+ ],
+ "dialog": [
+  {
+   "beat": 0,
+   "src": "0117",
+   "in": 100.85,
+   "out": 103.12,
+   "t": 0.0,
+   "text": "HOOK 1: \"(I have) no cell service, not an SOS.\"",
+   "tail": 0.04
+  },
+  {
+   "beat": 1,
+   "src": "0117",
+   "in": 111.4,
+   "out": 113.62,
+   "t": 2.27,
+   "text": "HOOK 2: \"We're gonna have to make it, we don't have a choice.\""
+  },
+  {
+   "beat": 2,
+   "src": "0075",
+   "in": 56.45,
+   "out": 60.95,
+   "t": 4.49,
+   "text": ""
+  },
+  {
+   "beat": 3,
+   "src": "0075",
+   "in": 69.32,
+   "out": 77.02,
+   "t": 8.99,
+   "text": ""
+  },
+  {
+   "beat": 4,
+   "src": "0091",
+   "in": 7.3,
+   "out": 9.66,
+   "t": 16.69,
+   "text": ""
+  },
+  {
+   "beat": 5,
+   "src": "0093",
+   "in": 4.9,
+   "out": 8.25,
+   "t": 19.0477,
+   "text": ""
+  },
+  {
+   "beat": 6,
+   "src": "0102",
+   "in": 18.74,
+   "out": 21.0,
+   "t": 22.1146,
+   "text": ""
+  },
+  {
+   "beat": 7,
+   "src": "0105",
+   "in": 4.88,
+   "out": 6.4,
+   "t": 24.4123,
+   "text": ""
+  },
+  {
+   "beat": 8,
+   "src": "0105",
+   "in": 7.32,
+   "out": 8.4,
+   "t": 25.9408,
+   "text": ""
+  },
+  {
+   "beat": 9,
+   "src": "0106",
+   "in": 182.05,
+   "out": 184.35,
+   "t": 27.5592,
+   "text": ""
+  },
+  {
+   "beat": 10,
+   "src": "0111",
+   "in": 47.45,
+   "out": 48.45,
+   "t": 29.8169,
+   "text": ""
+  },
+  {
+   "beat": 10,
+   "src": "0111",
+   "in": 49.62,
+   "out": 51.27,
+   "t": 31.9869,
+   "text": ""
+  },
+  {
+   "beat": 11,
+   "src": "0112",
+   "in": 13.7,
+   "out": 15.75,
+   "t": 33.7631,
+   "text": ""
+  },
+  {
+   "beat": 12,
+   "src": "0114",
+   "in": 9.12,
+   "out": 11.18,
+   "t": 36.1408,
+   "text": ""
+  },
+  {
+   "beat": 13,
+   "src": "0114",
+   "in": 42.7,
+   "out": 44.75,
+   "t": 38.2785,
+   "text": ""
+  },
+  {
+   "beat": 14,
+   "src": "0115",
+   "in": 12.66,
+   "out": 14.8,
+   "t": 40.5462,
+   "text": ""
+  },
+  {
+   "beat": 15,
+   "src": "0118",
+   "in": 83.88,
+   "out": 86.05,
+   "t": 42.8738,
+   "text": ""
+  },
+  {
+   "beat": 16,
+   "src": "0118",
+   "in": 90.08,
+   "out": 91.35,
+   "t": 45.1815,
+   "text": ""
+  },
+  {
+   "beat": 18,
+   "src": "0075",
+   "in": 80.5,
+   "out": 86.38,
+   "t": 47.4592,
+   "text": "CH1: \"So let's head up out of here. Alright famo.\" (J-cut 1.54 s)"
+  }
+ ],
+ "audio_extra": [
+  {
+   "beat": 0,
+   "src": "0117",
+   "in": 100.85,
+   "out": 103.12,
+   "t": 0.0,
+   "kind": "nat",
+   "lufs": -24.0,
+   "tail": 0.04
+  },
+  {
+   "beat": 1,
+   "src": "0117",
+   "in": 111.4,
+   "out": 113.62,
+   "t": 2.27,
+   "kind": "nat",
+   "lufs": -24.0,
+   "tail": 0.0
+  }
+ ],
+ "mute": [],
+ "bleeps": [
+  {
+   "src": "0106",
+   "in": 182.6,
+   "out": 182.92,
+   "word": "fuck"
+  },
+  {
+   "src": "0106",
+   "in": 183.66,
+   "out": 184.32,
+   "word": "bitch"
+  }
+ ],
+ "rotate": {
+  "0075": "cw",
+  "0090": "cw",
+  "0115": "cw"
+ }
+}

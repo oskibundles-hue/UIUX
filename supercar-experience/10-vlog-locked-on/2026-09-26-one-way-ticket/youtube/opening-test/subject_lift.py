@@ -5,12 +5,12 @@
           CSRT-tracks his face through the shot from four hand-set anchors (720p px, read off a gridded sheet of the
           un-lifted graded shot) -> lift_track_0075_80.5.json (a face box per frame) + a check sheet in WORK.
   apply   used by render.py (look.json "subject_lift"): the shot's frames come in as 1280x720 yuv444p16le (after the
-          grade and scale), and each frame gets a SHADOWS-ONLY lift inside a soft ellipse around the tracked face:
-              v' = v + A * v * exp(-v / 0.12)        (v = luma 0..1; the curve peaks at v 0.12 and is ~0 above 0.5)
-          blended by a gaussian-feathered ellipse (1.0 on the face, falling to 0 over about one face width), so the
-          lit ceiling and walls around him (mid-tones) are not moved and no halo forms. A is solved per frame so the
-          face-box median reaches TARGET (the hook's face luma, 44-49 on the 0-255 scale), then smoothed over 0.5 s;
-          frames already at or above TARGET get no lift.
+          grade, a mild hqdn3d and the scale), and each frame gets a GAMMA lift of a lightly smoothed luma, with the
+          chroma scaled alongside (skin keeps its colour), weighted by  w = soft ellipse around the tracked face (gaussian falloff) x soft luma key (only
+          pixels darker than 0.08-0.16 of the range on a blurred copy: his silhouette, never the lit ceiling around
+          his head, so no halo). The gain is solved per frame so the face-core median reaches TARGET (the hook's face
+          luma, 44-49 on the 0-255 scale), capped at GAMMA_MAX, then smoothed over 0.5 s; frames at or above TARGET get
+          none.
   measure python3 subject_lift.py measure <video> <t0_in_video> [track.json]   face-box median luma every 0.5 s.
 """
 import json, os, subprocess, sys
@@ -21,7 +21,9 @@ WORK = '/home/user/day-owt/openwork/v2'
 TRACK = os.path.join(HERE, 'lift_track_0075_80.5.json')
 FPS = 30000 / 1001
 TARGET = 47.0
-S_CURVE = 0.12
+GAMMA_MAX = 2.4            # beyond this the near-black face is mostly noise
+CHROMA_MAX = 4.0
+KEY_LO, KEY_HI = 0.08, 0.16
 # (time in source s, face box x, y, w, h in 720p px) read off the gridded sheet of the un-lifted shot
 ANCHORS = [(80.6, 610, 250, 150, 190), (82.5, 575, 250, 190, 210), (84.0, 680, 215, 200, 160), (85.5, 620, 190, 200, 160)]
 SEGS = [(80.5, 81.6), (81.6, 83.3), (83.3, 84.8), (84.8, 86.4)]
@@ -90,8 +92,9 @@ def to255(Yraw):   # limited-range 16-bit luma -> 0..255 display luma
 
 
 class Lifter:
-    def __init__(self, n_frames):
+    def __init__(self, n_frames, off=0):
         T = json.load(open(TRACK))
+        self.off = off            # the shot's first frame is track frame `off` (B2's CH1 starts later, under the J-cut)
         self.B = np.array(T['boxes'])
         self.n = n_frames
         self.W, self.H = T['size']
@@ -100,7 +103,7 @@ class Lifter:
         self.A = None
 
     def box(self, i):
-        return self.B[min(i, len(self.B) - 1)]
+        return self.B[min(i + self.off, len(self.B) - 1)]
 
     def mask(self, i):
         x, y, w, h = self.box(i)
@@ -109,50 +112,91 @@ class Lifter:
         d = np.sqrt(((self.xx - cx) / rx) ** 2 + ((self.yy - cy) / ry) ** 2)
         return np.clip(np.exp(-np.maximum(0, d - 1) ** 2 / (2 * 0.55 ** 2)), 0, 1)   # 1 inside, gaussian falloff outside
 
+    def weight(self, i, v):
+        """where the lift acts: the soft tracked ellipse x a soft luma key (only pixels darker than about 0.08-0.16 of
+        the range, judged on a blurred copy), so the lit ceiling and walls around his head are never lifted (no halo)."""
+        import cv2
+        kv = cv2.GaussianBlur(v, (0, 0), 4)
+        key = np.clip((KEY_HI - kv) / (KEY_HI - KEY_LO), 0, 1).astype(np.float32)
+        # v4: close the key's holes (brighter skin, eyes, teeth) so the whole face gets one even weight (no blotches),
+        # then erode so the soft edge sits INSIDE his silhouette and never reaches the wall (no rim halo)
+        key = cv2.morphologyEx(key, cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (41, 41)))
+        key = cv2.erode(key, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (15, 15)))
+        key = cv2.GaussianBlur(key, (0, 0), 5)
+        return self.mask(i) * key
+
     @staticmethod
-    def curve(v, A):
-        return v + A * v * np.exp(-v / S_CURVE)
+    def lifted(v, g):
+        """a power (gamma) lift of a lightly smoothed luma: it digs into near-black, where a plain gain only scales noise."""
+        import cv2
+        vs = cv2.GaussianBlur(v, (0, 0), 1.2)
+        return np.power(np.maximum(vs, 0), 1.0 / g)
+
+    def blend(self, v, w, g):
+        return v + w * (self.lifted(v, g) - v)
+
+    def solve_frame(self, i, v):
+        w = self.weight(i, v)
+        x, y, bw, bh = self.box(i)
+        sl = (slice(max(0, int(y + 0.2 * bh)), int(y + 0.8 * bh)), slice(max(0, int(x + 0.2 * bw)), int(x + 0.8 * bw)))
+        cv = v[sl]
+        if float(np.median(cv)) * 255 >= TARGET:
+            return 1.0
+        # solve on the face crop only (with a margin for the blur)
+        pad = 8
+        sl2 = (slice(max(0, sl[0].start - pad), sl[0].stop + pad), slice(max(0, sl[1].start - pad), sl[1].stop + pad))
+        vv, ww = v[sl2], w[sl2]
+        inner = (slice(sl[0].start - sl2[0].start, sl[0].stop - sl2[0].start), slice(sl[1].start - sl2[1].start, sl[1].stop - sl2[1].start))
+        med = lambda g: float(np.median(self.blend(vv, ww, g)[inner])) * 255
+        lo, hi = 1.0, GAMMA_MAX
+        if med(hi) < TARGET:
+            return hi
+        for _ in range(20):
+            m = (lo + hi) / 2
+            if med(m) < TARGET:
+                lo = m
+            else:
+                hi = m
+        return hi
 
     def solve(self, Ys):
-        """per-frame A so the face-core median reaches TARGET (0..255 scale), then a 0.5 s moving average."""
-        A = []
-        for i, Yraw in enumerate(Ys):
-            med = float(np.median(to255(face_core(Yraw, self.box(i)))))
-            if med >= TARGET:
-                A.append(0.0); continue
-            v0, vt = (med / 255.0), TARGET / 255.0
-            lo, hi = 0.0, 6.0
-            for _ in range(40):
-                m = (lo + hi) / 2
-                if self.curve(v0, m) < vt:
-                    lo = m
-                else:
-                    hi = m
-            A.append(hi)
-        A = np.array(A); k = int(round(0.5 * FPS)) | 1
-        pad = np.pad(A, (k // 2, k // 2), mode='edge')
-        self.A = np.array([pad[i:i + k].mean() for i in range(len(A))])
+        """per-frame gamma so the face-core median reaches TARGET (0..255), capped at GAMMA_MAX, then a 0.5 s moving average."""
+        G = np.array([self.solve_frame(i, self.norm(Y)) for i, Y in enumerate(Ys)])
+        k = int(round(0.5 * FPS)) | 1
+        pad = np.pad(G, (k // 2, k // 2), mode='edge')
+        self.A = np.array([pad[i:i + k].mean() for i in range(len(G))])
         return self.A
 
-    def apply(self, i, Yraw):
-        v = np.clip((Yraw / 256.0 - 16) / 219, 0, 1)
-        m = self.mask(i)
-        v2 = v + m * (self.curve(v, self.A[i]) - v)
-        return np.clip((v2 * 219 + 16) * 256, 0, 65535).astype(np.uint16)
+    @staticmethod
+    def norm(Yraw):
+        return np.clip((Yraw.astype(np.float32) / 256.0 - 16) / 219, 0, 1)
+
+    def apply(self, i, f):
+        """f = (3, H, W) uint16 yuv444p16le. Chroma is scaled with the luma (capped at 4x), so his skin keeps its colour
+        (a luma-only lift turns a dark face grey)."""
+        v = self.norm(f[0])
+        w = self.weight(i, v)
+        out_v = self.blend(v, w, self.A[i])
+        gm = np.clip(out_v / np.maximum(v, 0.004), 1, CHROMA_MAX)
+        gm = 1 + (gm - 1) * w
+        out = np.empty_like(f)
+        out[0] = np.clip((out_v * 219 + 16) * 256, 0, 65535).astype(np.uint16)
+        for c in (1, 2):
+            out[c] = np.clip(32768 + (f[c].astype(np.float32) - 32768) * gm, 0, 65535).astype(np.uint16)
+        return out
 
 
-def lift_pipe(dec_cmd, enc_cmd, n_frames, W=1280, H=720):
+def lift_pipe(dec_cmd, enc_cmd, n_frames, t_in, W=1280, H=720):
     """decode (yuv444p16le raw on stdout) -> lift -> encode (raw on stdin). Two passes over the decode: measure, apply."""
     fs = W * H * 2 * 3
     raw = subprocess.run(dec_cmd, capture_output=True, check=True).stdout
     nf = min(n_frames, len(raw) // fs)
     frames = [np.frombuffer(raw, '<u2', count=W * H * 3, offset=i * fs).reshape(3, H, W) for i in range(nf)]
-    L = Lifter(nf)
+    L = Lifter(nf, int(round((t_in - IN) * FPS)))
     A = L.solve([f[0] for f in frames])
     p = subprocess.Popen(enc_cmd, stdin=subprocess.PIPE)
     for i, f in enumerate(frames):
-        out = f.copy(); out[0] = L.apply(i, f[0].astype(np.float32))
-        p.stdin.write(out.tobytes())
+        p.stdin.write(L.apply(i, f).tobytes())
     p.stdin.close(); p.wait()
     if p.returncode:
         raise SystemExit('encode failed')

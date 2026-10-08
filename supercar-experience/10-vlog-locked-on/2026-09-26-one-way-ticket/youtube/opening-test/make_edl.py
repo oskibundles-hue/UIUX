@@ -107,3 +107,104 @@ def build(rows, name):
 
 build(HOOK + CH1, 'A')
 build(HOOK + MONTAGE + CH1, 'B')
+
+
+# ======================================================================================================== v2 (8 Oct)
+# Omarie on B: "the montage could be more dramatic but its good its just full of shots of me driving no critical moments
+# interactions breaks, gas runs, etc". B2's montage is a SOUND-BITE TRAILER of the trip, in trip order, cut on the bed's
+# beat, the music up between his lines and ducked under them. Two fixes he chose apply to A2 and B2:
+#   1. HOOK 2's cutaway is a desert road (0121 rear camera, 199.6) instead of the sky-heavy 0099 176.3.
+#   2. CH1's dark tail lifts only him (subject_lift.py, look_v2.json), not the room; v1's whole-frame gamma ramp is gone.
+# B2 also J-cuts CH1's "So let's head up out of here" under the last two montage beats (into the dark hallway).
+# Word edges: words_medium_B2.json (medium.en) and /home/user/day-owt/tr (small.en); speakers.json for HOST/OTHER.
+# The empty-tank hook is not resolved in the montage (no 0119 "Yes Lord", no gas-light payoff).
+HOOK_V2 = [HOOK[0],
+           ('0121', 199.60, H2[2] - H2[1], 'cutaway', 'CUTAWAY over HOOK 2 (0117 phone in hand while moving): desert road, rear camera (v2: replaces the sky-heavy 0099 176.3)', H2, None),
+           HOOK[2], HOOK[3]]
+
+# montage v2 rows: (src, in, beats, note, [(dialog src, in, out, offset of the dialog from the shot start)], nat)
+#   offset None = lip sync (dialog in - picture in). nat None = source sound muted (stereo, strangers, or a borrowed picture).
+MONT2 = [
+    # 0090 21.8 "Oh yeah!" DROPPED at the frame gate: a whip pan, and the car's rear plate (and a red car's) in frame.
+    ('0091', 7.30, 3, 'Seattle, in the parked car at the shop - "Spider top goes down"', [('0091', 7.30, 9.66, None)], NAT_MONT),
+    ('0093', 4.85, 4, 'top down through the trees (moving; one hand on the wheel while he talks) - "beautiful out here, like gorgeous"',
+     [('0093', 4.90, 8.25, None)], NAT_MONT),
+    ('0102', 18.70, 3, 'first gas run, Oregon (parked at the pump; the car through the window) - "I got my Red Bull and my snacks"',
+     [('0102', 18.74, 21.00, None)], NAT_MONT),
+    ('0105', 4.85, 2, 'In-N-Out lot at night (on foot) - "We finally made it."', [('0105', 4.88, 6.40, None)], NAT_MONT),
+    ('0105', 7.30, 2, 'jump cut, the In-N-Out sign behind him - "To In-N-Out."', [('0105', 7.32, 8.40, None)], NAT_MONT),
+    ('0107', 256.40, 3, 'the oil scare: on his phone looking up the oil cap, leaning on the parked car. VOICE from 0106 (its picture is '
+     'near-black): "Where the [bleep] is the oil in this [bleep]?"', [('0106', 182.05, 184.35, 0.10)], None),
+    ('0111', 47.40, 5, 'gas-station counter, him laughing (strangers out of frame; their voices muted) - "It\'s a McLaren." / '
+     '"Everyone keeps saying I\'m Corvettes."', [('0111', 47.45, 48.45, None), ('0111', 49.62, 51.27, None)], None),
+    ('0112', 13.55, 3, 'second gas run, in the parked car at the pump - "We gassed up, shawty!"', [('0112', 13.70, 15.75, None)], NAT_MONT),
+    ('0114', 8.90, 3, 'the night nap, parked - "a nice McLaren nap"', [('0114', 9.12, 11.18, None)], NAT_MONT),
+    ('0114', 42.65, 3, 'awake, parked - "We back in business, baby!"', [('0114', 42.70, 44.75, None)], NAT_MONT),
+    ('0115', 12.65, 3, 'night gas run, standing at the pump - "dude, it is freezing"', [('0115', 12.66, 14.80, None)], NAT_MONT),
+    ('0118', 83.85, 3, 'morning drive, cabin camera (moving; left hand on the wheel) - "No hotel, no nothing."',
+     [('0118', 83.88, 86.05, None)], NAT_MONT),
+    ('0118', 90.05, 2, 'jump cut - "But you know, we thug it out."', [('0118', 90.08, 91.35, None)], NAT_MONT),
+    ('0122', 583.40, 3, 'Las Vegas skyline, rear camera (last; bed only: stereo, Shazam)', [], None),
+]
+BLEEPS2 = [dict(src='0106', **{'in': 182.60}, out=182.92, word='fuck'), dict(src='0106', **{'in': 183.66}, out=184.32, word='bitch')]
+J_CH1 = 2 * BEAT     # B2: CH1's first line starts under the last two montage beats
+# picture-only allowances against flags.json blocks, each checked at the frame gate
+ALLOW2 = {('0111', 'stranger'): 'picture 47.40-51.25 shows only him (clerks out of frame, gate-checked); nat muted, dialog is his words only'}
+
+
+def build_v2(name, montage):
+    shots, dialog = [], []
+    t = 0.0
+    mt = None
+    rows = [(s, a, d, k, n, dl, nat) for (s, a, d, k, n, dl, nat) in HOOK_V2]
+    for i, (src, a, dur, kind, note, dl, nat) in enumerate(rows):
+        dialog.append(dict(beat=i, src=dl[0], **{'in': dl[1]}, out=dl[2], t=round(t, 4), text=dl[3] if len(dl) > 3 else ''))
+        shots.append(dict(beat=i, src=src, **{'in': round(a, 4)}, out=round(a + dur, 4), speed=1.0, t=round(t, 4),
+                          dur=round(dur, 4), kind=kind, nat=nat, note=note))
+        t += dur
+    if montage:
+        mt = round(t, 4)
+        for src, a, beats, note, dls, nat in MONT2:
+            dur = beats * BEAT
+            for ds, di, do, off in dls:
+                off = (di - a) if off is None else off
+                dialog.append(dict(beat=len(shots), src=ds, **{'in': di}, out=do, t=round(t + off, 4), text=''))
+            shots.append(dict(beat=len(shots), src=src, **{'in': round(a, 4)}, out=round(a + dur, 4), speed=1.0, t=round(t, 4),
+                              dur=round(dur, 4), kind='montage', nat=nat, note=note))
+            t += dur
+    j = J_CH1 if montage else 0.0
+    pin = 80.50 + j
+    dialog.append(dict(beat=len(shots), src='0075', **{'in': 80.50}, out=86.38, t=round(t - j, 4),
+                       text='CH1: "So let\'s head up out of here. Alright famo."' + (' (J-cut %.2f s)' % j if j else '')))
+    shots.append(dict(beat=len(shots), src='0075', **{'in': round(pin, 4)}, out=86.38, speed=1.0, t=round(t, 4),
+                      dur=round(86.38 - pin, 4), kind='talk', nat=NAT_TALK,
+                      note='CH1 START (rotate), subject lift' + (', picture from %.2f under the J-cut voice' % pin if j else '')))
+    t += 86.38 - pin
+    for a, b in zip(dialog, dialog[1:]):
+        if a['src'] == b['src'] == '0117' and abs(a['t'] + a['out'] - a['in'] - b['t']) < 1e-3:
+            a['tail'] = 0.04
+    extra = [dict(beat=d['beat'], src=d['src'], **{'in': d['in']}, out=d['out'], t=d['t'], kind='nat', lufs=NAT_TALK, tail=d.get('tail', 0.0))
+             for d in dialog if d['src'] == '0117']
+    flags = [f for f in json.load(open('/home/user/day-owt/flags.json')) if f.get('severity') == 'block']
+    for s in shots:
+        for f in flags:
+            if f['clip'] == s['src'] and s['in'] < f['t1'] and f['t0'] < s['out']:
+                if f['category'] == 'music' and s['nat'] is None:
+                    continue
+                if (f['clip'], f['category']) in ALLOW2:
+                    continue
+                raise SystemExit(f'BLOCK FLAG {f["clip"]} {f["t0"]}-{f["t1"]} {f["category"]} under {s["src"]} {s["in"]}-{s["out"]}')
+    for d in dialog:
+        for f in flags:
+            if f['clip'] == d['src'] and d['in'] < f['t1'] and f['t0'] < d['out'] and f['category'] == 'music':
+                raise SystemExit(f'MUSIC FLAG under dialog {d}')
+    edl = dict(name=name, fps='30000/1001', size=[1280, 720], duration=round(t, 4), montage_t=mt, beat=BEAT, v2=True,
+               montage_duck=True, shots=shots, dialog=sorted(dialog, key=lambda d: d['t']), audio_extra=extra, mute=[],
+               bleeps=BLEEPS2 if montage else [], rotate={'0075': 'cw', '0090': 'cw', '0115': 'cw'})
+    json.dump(edl, open(os.path.join(HERE, f'edl_{name}.json'), 'w'), indent=1)
+    print(f'{name}: shots {len(shots)}  dialog {len(dialog)}  runtime {t:.2f} s  montage_t {mt}' +
+          (f'  montage {sum(s["dur"] for s in shots if s["kind"] == "montage"):.2f} s' if montage else ''))
+
+
+build_v2('A2', False)
+build_v2('B2', True)

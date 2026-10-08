@@ -20,8 +20,10 @@ R = importlib.util.module_from_spec(spec)
 _cwd = os.getcwd(); os.chdir(CH3); spec.loader.exec_module(R); os.chdir(_cwd)
 FF, GRADE, FPS = R.FF, R.GRADE, R.FPS
 WORK = '/home/user/day-owt/openwork'
-MEZZ = ['/home/user/day-owt/mezz_open', '/home/user/day-owt/mezz']
+MEZZ = ['/home/user/day-owt/mezz_open', '/home/user/day-owt/mezz_open2', '/home/user/day-owt/mezz']
 LOOK = json.load(open(os.path.join(HERE, 'look.json')))
+LOOK2 = json.load(open(os.path.join(HERE, 'look_v2.json')))   # v2 (A2/B2): overrides look.json; v1 (A/B) never reads it
+V2 = len(sys.argv) > 2 and sys.argv[2].endswith('2')
 W, H = 1280, 720
 GFF = 'ffmpeg'   # the gate sheets need drawtext, which the imageio build lacks
 
@@ -104,8 +106,18 @@ def key(s):
     return f"{s['src']}:{s['in']:g}"
 
 
+def look_of(s):
+    k = key(s)
+    if V2:
+        if s['src'] == '0075' and s['in'] >= 80.5 - 1e-6:
+            return LOOK2['0075:ch1']          # the CH1 tail, wherever B2's J-cut puts its in-point
+        if k in LOOK2:
+            return LOOK2[k]
+    return LOOK.get(k, {})
+
+
 def render_shots(edl):
-    d = f'{WORK}/shots'
+    d = f'{WORK}/shots2' if V2 else f'{WORK}/shots'
     os.makedirs(d, exist_ok=True)
     parts = []
     for s in edl['shots']:
@@ -113,12 +125,25 @@ def render_shots(edl):
         p, t0 = mezz_for(s['src'], s['in'], s['in'] + s['dur'])
         out = f"{d}/{k.replace(':', '_')}_{s['dur']:.3f}.mp4"
         parts.append(out)
-        sig = json.dumps([p, s['in'], s['dur'], LOOK.get(k), GRADE, FILTER_VERSION])
+        lk = look_of(s)
+        sig = json.dumps([p, s['in'], s['dur'], lk, GRADE, FILTER_VERSION])
         if os.path.exists(out + '.sig') and open(out + '.sig').read() == sig:
             continue
         nfr = round(s['dur'] * 30000 / 1001)
+        if 'subject_lift' in lk:
+            import subject_lift as SL
+            g = shot_filter(s, W, H, lk).replace('format=yuv420p[v]', f"hqdn3d={lk['subject_lift'].get('denoise', '3:2:6:5')},format=yuv444p16le[v]")
+            dec = [FF, '-v', 'error', '-ss', f"{s['in'] - t0:.4f}", '-t', f"{s['dur'] + 0.2:.4f}", '-i', p,
+                   '-filter_complex', g, '-map', '[v]', '-frames:v', str(nfr), '-an', '-f', 'rawvideo', '-pix_fmt', 'yuv444p16le', '-']
+            enc = [FF, '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'yuv444p16le', '-s', f'{W}x{H}', '-r', '30000/1001', '-i', '-',
+                   '-vf', 'format=yuv420p', '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '14', '-threads', '8', out]
+            A = SL.lift_pipe(dec, enc, nfr, s['in'])
+            open(out + '.lift.json', 'w').write(json.dumps([round(float(a), 3) for a in A]))
+            open(out + '.sig', 'w').write(sig)
+            print('shot', k, s['dur'], 'subject lift A max', round(float(max(A)), 2), flush=True)
+            continue
         R.sh([FF, '-v', 'error', '-y', '-ss', f"{s['in'] - t0:.4f}", '-t', f"{s['dur'] + 0.2:.4f}", '-i', p,
-              '-filter_complex', shot_filter(s, W, H, LOOK.get(k, {})), '-map', '[v]', '-frames:v', str(nfr), '-an',
+              '-filter_complex', shot_filter(s, W, H, lk), '-map', '[v]', '-frames:v', str(nfr), '-an',
               '-c:v', 'libx264', '-preset', 'veryfast', '-crf', '14', '-threads', '8', out])
         open(out + '.sig', 'w').write(sig)
         print('shot', k, s['dur'], flush=True)
@@ -140,8 +165,10 @@ def gate(name):
     g = os.path.join(HERE, 'gate'); os.makedirs(g, exist_ok=True)
     # 1) the lead's sheet: in / mid / out of every shot, one PNG (3 columns of 640 = 1920 px wide)
     tiles = []
+    tl_dur = float(subprocess.run(['ffprobe', '-v', 'error', '-show_entries', 'format=duration', '-of', 'csv=p=0', tl],
+                                  capture_output=True, text=True).stdout)
     for i, s in enumerate(edl['shots']):
-        for lab, tt in (('in', s['t'] + 0.05), ('mid', s['t'] + s['dur'] / 2), ('out', s['t'] + s['dur'] - 0.08)):
+        for lab, tt in (('in', s['t'] + 0.05), ('mid', s['t'] + s['dur'] / 2), ('out', min(s['t'] + s['dur'] - 0.08, tl_dur - 0.12))):
             f = f'{WORK}/gt_{name}_{i:02d}_{lab}.png'
             src_t = s['in'] + (tt - s['t'])
             txt = f"{name}{i:02d} {s['kind']} {s['src']} {src_t:.2f} ({lab}) tl {tt:.2f}"

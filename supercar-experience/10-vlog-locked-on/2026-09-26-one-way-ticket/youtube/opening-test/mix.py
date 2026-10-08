@@ -34,6 +34,7 @@ NS = int(round(NF / FPS * SR))
 DIALOG_LUFS = -16.0
 BED_TALK, BED_GAP = -39.5, -21.0
 MONT_ST = -17.0
+MONT_BED_V2, MONT_DUCK = -19.0, -23.0   # v2 sound-bite montage: bed level between lines, and its duck under his lines (dB)
 
 
 def activity(spans, attack=0.06, release=0.4, bridge=0.6):
@@ -74,7 +75,17 @@ def main():
     dia = np.zeros((NS, 2)); spans = []
     for d in EDL['dialog']:
         x = M.aud(d['src'], d['in'], d['out'] + d.get('tail', 0.0), M.CHAIN)
-        m = x.mean(1); x = np.stack([m, m], 1)
+        m = x.mean(1)
+        for bl in EDL.get('bleeps', []):      # v2: a 1 kHz tone over the word, as ../test-ch3/mix.py
+            if bl['src'] == d['src'] and d['in'] < bl['out'] and bl['in'] < d['out']:
+                i0 = int((max(bl['in'], d['in']) - d['in']) * SR); i1 = int((min(bl['out'], d['out']) - d['in']) * SR)
+                rms = np.sqrt((m[max(0, i0 - SR // 2):i1 + SR // 2] ** 2).mean())
+                tone = np.sin(2 * np.pi * 1000 * np.arange(i1 - i0) / SR) * rms * 1.2
+                r = int(0.005 * SR)
+                tone[:r] *= M.ramp(r); tone[-r:] *= M.ramp(r, False)
+                m[i0:i1] = tone
+                rep.setdefault('bleeps', []).append(dict(src=d['src'], word=bl.get('word'), t=round(d['t'] + i0 / SR, 2)))
+        x = np.stack([m, m], 1)
         g = 10 ** ((DIALOG_LUFS - M.lufs(x)) / 20)
         M.place(dia, M.fades(x * g, 0.012, 0.1), d['t'])
         spans.append((d['t'], d['t'] + d['out'] - d['in']))
@@ -82,9 +93,10 @@ def main():
     mt = EDL.get('montage_t')
     mont = [s for s in EDL['shots'] if s['kind'] == 'montage']
     m0, m1 = (mt, mont[-1]['t'] + mont[-1]['dur']) if mont else (None, None)
-    act = activity(spans)
-    if mont:
-        act[int(m0 * SR):int(m1 * SR) - int(0.06 * SR)] = 0      # no duck inside the montage
+    act = activity(spans, attack=0.15) if EDL.get('montage_duck') else activity(spans)   # v2: duck lands before each bite
+    V2 = EDL.get('montage_duck', False)
+    if mont and not V2:
+        act[int(m0 * SR):int(m1 * SR) - int(0.06 * SR)] = 0      # no duck inside the montage (v1); v2 ducks under his lines
     nat = np.zeros((NS, 2)); natm = np.zeros((NS, 2))
     segs = [(s['src'], s['in'], s['out'], s['t'], s['nat'], s['kind']) for s in EDL['shots'] if s['nat'] is not None]
     segs += [(e['src'], e['in'], e['out'] + e.get('tail', 0.0), e['t'], e['lufs'], 'talk') for e in EDL['audio_extra'] if e['kind'] == 'nat']
@@ -96,6 +108,10 @@ def main():
     bed, off = build_bed(mt)
     bed *= 10 ** ((BED_GAP - M.lufs(bed)) / 20)
     g = 1 - act * (1 - 10 ** ((BED_TALK - BED_GAP) / 20))
+    if mont and V2:     # v2 montage: the bed is up between lines and ducks only MONT_DUCK under them (a trailer keeps the music)
+        menv = np.zeros(NS); menv[int(m0 * SR):int(m1 * SR)] = 1
+        gm = 1 - act * (1 - 10 ** (MONT_DUCK / 20))
+        g = g * (1 - menv) + gm * menv
     e = int(1.2 * SR); g[NS - e:] *= M.ramp(e, False)
     bed_d = bed * g[:, None]
 
@@ -108,7 +124,9 @@ def main():
         return dia + nat + b, b
 
     mg = 0.0
-    for _ in range(4):
+    if V2:
+        mg = MONT_BED_V2 - BED_GAP     # fixed: the montage bed sits at MONT_BED_V2 (pre-master) between lines
+    for _ in range(0 if V2 else 4):
         mix, b = assemble(mg)
         y, L, tp = M.master(mix)
         if not mont:
@@ -118,6 +136,9 @@ def main():
         if abs(cur - MONT_ST) < 0.3:
             break
         mg += MONT_ST - cur
+    if V2:
+        mix, b = assemble(mg)
+        y, L, tp = M.master(mix)
     rep['bed'] = dict(source='../test-ch3/music.py (original, synthesized here), 78 BPM', talk_lufs=BED_TALK, gap_lufs=BED_GAP,
                       offset_s=round(off, 3), montage=[m0, m1], montage_boost_db=round(mg, 2))
     if mont:

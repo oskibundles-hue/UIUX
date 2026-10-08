@@ -1,0 +1,25 @@
+# shz.py (Shazam), 2026-10-08 01:03 UTC, every range used in A2/B2 (dialog, nat and picture-only), windows of up to 8 s every 4 s
+0091 7.0 10.0 no match   (added 2026-10-08 after 0091 replaced 0090; 0090 dropped, its check removed)
+0093 4.5 8.5 no match
+0102 18.4 21.3 no match
+0105 4.5 8.7 no match
+0106 181.8 184.6 no match
+0107 256.0 259.5 no match
+0111 47.0 51.6 no match
+0112 13.4 16.2 no match
+0114 7.8 11.6 no match
+0114 42.4 45.3 no match
+0115 12.4 15.2 no match
+0118 83.5 86.4 no match
+0118 89.8 91.9 no match
+0121 199.5 202.5 no match
+0117 100.8 103.2 no match
+0117 111.3 113.7 no match
+0075 56.4 61.0 no match
+0075 69.3 77.1 no match
+0075 73.3 77.1 no match
+0075 80.5 86.4 no match
+0075 84.5 86.4 no match
+0122 583.0 588.5 COMË N GO - Yeat
+0122 587.0 588.5 no match
+# 0122 583-588.5 is picture plus bed only: its nat is muted (EDL nat None), so the Yeat track is not heard.

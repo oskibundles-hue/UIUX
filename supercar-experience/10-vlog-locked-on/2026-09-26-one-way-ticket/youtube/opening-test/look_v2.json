@@ -1,0 +1,93 @@
+{
+ "_note": "v2 (A2/B2) framing; overrides look.json for these keys. Keys <src>:<in>; '0075:ch1' is the CH1 tail at any in-point >= 80.5.",
+ "0121:199.6": {
+  "cy": 0.6,
+  "zoom": 1.2,
+  "why": "HOOK 2 cutaway (v2): desert road behind the car, rear camera; horizon a third down, no mirror, no hands, no plate"
+ },
+ "0075:ch1": {
+  "rot": "cw",
+  "cy": 0.5,
+  "subject_lift": {
+   "track": "lift_track_0075_80.5.json",
+   "target": 47,
+   "gamma_max": 2.4,
+   "key": [
+    0.08,
+    0.16
+   ],
+   "denoise": "3:2:6:5",
+   "v": 4
+  },
+  "why": "v2: shadows-only lift inside a soft tracked ellipse on his face (subject_lift.py); v1's whole-frame gamma ramp dropped"
+ },
+ "0093:4.85": {
+  "cy": 0.5
+ },
+ "0102:18.7": {
+  "cy": 0.5
+ },
+ "0105:4.85": {
+  "cy": 0.45
+ },
+ "0105:7.3": {
+  "cy": 0.5
+ },
+ "0107:256.4": {
+  "cy": 0.45
+ },
+ "0111:47.4": {
+  "cy": 0.5
+ },
+ "0112:13.55": {
+  "cy": 0.5,
+  "blur": [
+   {
+    "box": [
+     0.0,
+     0.1,
+     0.13,
+     0.27
+    ],
+    "why": "fuel pump face at the left edge (grade/price panel); camera fixed in the cabin"
+   }
+  ]
+ },
+ "0114:8.9": {},
+ "0114:42.65": {},
+ "0115:12.65": {
+  "rot": "cw",
+  "cy": 0.5
+ },
+ "0118:83.85": {
+  "cy": 0.62,
+  "blur": [
+   {
+    "box": [
+     0.297,
+     0.396,
+     0.129,
+     0.111
+    ],
+    "why": "digital instrument cluster (speed readout) behind the wheel; camera fixed in the cabin"
+   }
+  ]
+ },
+ "0118:90.05": {
+  "cy": 0.62,
+  "blur": [
+   {
+    "box": [
+     0.297,
+     0.396,
+     0.129,
+     0.111
+    ],
+    "why": "digital instrument cluster (speed readout) behind the wheel; camera fixed in the cabin"
+   }
+  ]
+ },
+ "0091:7.3": {
+  "cy": 0.55
+ }
+}

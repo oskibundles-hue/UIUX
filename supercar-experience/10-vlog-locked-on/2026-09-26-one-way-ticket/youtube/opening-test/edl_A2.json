@@ -1,0 +1,147 @@
+{
+ "name": "A2",
+ "fps": "30000/1001",
+ "size": [
+  1280,
+  720
+ ],
+ "duration": 22.57,
+ "montage_t": null,
+ "beat": 0.7692307692307693,
+ "v2": true,
+ "montage_duck": true,
+ "shots": [
+  {
+   "beat": 0,
+   "src": "0121",
+   "in": 152.0,
+   "out": 154.27,
+   "speed": 1.0,
+   "t": 0.0,
+   "dur": 2.27,
+   "kind": "cutaway",
+   "nat": null,
+   "note": "CUTAWAY over HOOK 1 (0117 phone in hand while moving): rear camera, desert highway"
+  },
+  {
+   "beat": 1,
+   "src": "0121",
+   "in": 199.6,
+   "out": 201.82,
+   "speed": 1.0,
+   "t": 2.27,
+   "dur": 2.22,
+   "kind": "cutaway",
+   "nat": null,
+   "note": "CUTAWAY over HOOK 2 (0117 phone in hand while moving): desert road, rear camera (v2: replaces the sky-heavy 0099 176.3)"
+  },
+  {
+   "beat": 2,
+   "src": "0075",
+   "in": 56.45,
+   "out": 60.95,
+   "speed": 1.0,
+   "t": 4.49,
+   "dur": 4.5,
+   "kind": "talk",
+   "nat": -24.0,
+   "note": "HOOK 3 (rotate): \"It's 4:30 in the morning. I got my Uber coming right now.\""
+  },
+  {
+   "beat": 3,
+   "src": "0075",
+   "in": 69.32,
+   "out": 77.02,
+   "speed": 1.0,
+   "t": 8.99,
+   "dur": 7.7,
+   "kind": "talk",
+   "nat": -24.0,
+   "note": "HOOK 4 (rotate), jump cut: \"So we are heading to Seattle, Washington to go pick up a McLaren 600 LT.\""
+  },
+  {
+   "beat": 4,
+   "src": "0075",
+   "in": 80.5,
+   "out": 86.38,
+   "speed": 1.0,
+   "t": 16.69,
+   "dur": 5.88,
+   "kind": "talk",
+   "nat": -24.0,
+   "note": "CH1 START (rotate), subject lift"
+  }
+ ],
+ "dialog": [
+  {
+   "beat": 0,
+   "src": "0117",
+   "in": 100.85,
+   "out": 103.12,
+   "t": 0.0,
+   "text": "HOOK 1: \"(I have) no cell service, not an SOS.\"",
+   "tail": 0.04
+  },
+  {
+   "beat": 1,
+   "src": "0117",
+   "in": 111.4,
+   "out": 113.62,
+   "t": 2.27,
+   "text": "HOOK 2: \"We're gonna have to make it, we don't have a choice.\""
+  },
+  {
+   "beat": 2,
+   "src": "0075",
+   "in": 56.45,
+   "out": 60.95,
+   "t": 4.49,
+   "text": ""
+  },
+  {
+   "beat": 3,
+   "src": "0075",
+   "in": 69.32,
+   "out": 77.02,
+   "t": 8.99,
+   "text": ""
+  },
+  {
+   "beat": 4,
+   "src": "0075",
+   "in": 80.5,
+   "out": 86.38,
+   "t": 16.69,
+   "text": "CH1: \"So let's head up out of here. Alright famo.\""
+  }
+ ],
+ "audio_extra": [
+  {
+   "beat": 0,
+   "src": "0117",
+   "in": 100.85,
+   "out": 103.12,
+   "t": 0.0,
+   "kind": "nat",
+   "lufs": -24.0,
+   "tail": 0.04
+  },
+  {
+   "beat": 1,
+   "src": "0117",
+   "in": 111.4,
+   "out": 113.62,
+   "t": 2.27,
+   "kind": "nat",
+   "lufs": -24.0,
+   "tail": 0.0
+  }
+ ],
+ "mute": [],
+ "bleeps": [],
+ "rotate": {
+  "0075": "cw",
+  "0090": "cw",
+  "0115": "cw"
+ }
+}
