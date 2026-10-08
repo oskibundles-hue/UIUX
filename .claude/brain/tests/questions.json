@@ -26,5 +26,10 @@
   {"q": "how do long renders stay safe on the mac", "key": ["render-pipeline-safety.md", "long-jobs-safety.md"]},
   {"q": "where is the index of delivered work", "key": ["artifact-indexes.md"]},
   {"q": "what's waiting on omarie right now", "key": ["handoff.md"]},
-  {"q": "how many tokens does the second brain save", "key": ["memory-lookup-tools.md"]}
+  {"q": "how many tokens does the second brain save", "key": ["memory-lookup-tools.md"]},
+  {"q": "what is waiting on me", "key": ["handoff.md"]},
+  {"q": "is waiting free", "key": ["token-policy.md"]},
+  {"q": "what is the nq os team", "key": ["repo-agents.md"]},
+  {"q": "which agent builds formula dynamics ads", "key": ["repo-agents.md"]},
+  {"q": "which agent checks work before delivery", "key": ["repo-agents.md"]}
 ]
