@@ -1,0 +1,307 @@
+{
+ "fps": "30000/1001",
+ "size": [
+  3840,
+  2160
+ ],
+ "duration": 54.01,
+ "chapters": [
+  {
+   "t": 0.0,
+   "title": "4:30 a.m.",
+   "clock": ""
+  }
+ ],
+ "shots": [
+  {
+   "beat": 0,
+   "src": "0076",
+   "in": 21.15,
+   "out": 23.05,
+   "speed": 1.0,
+   "t": 0.0,
+   "dur": 1.9,
+   "note": "ESTABLISH (picture + nat only): the airport kerb at night; the \"4:30 a.m.\" chapter title"
+  },
+  {
+   "beat": 1,
+   "src": "0076",
+   "in": 24.9,
+   "out": 34.84,
+   "speed": 1.0,
+   "t": 1.9,
+   "dur": 9.94,
+   "note": "\"That's a little tired, but we up now. Wish this thing did better no light, but we're gonna work on what we got.\""
+  },
+  {
+   "beat": 2,
+   "src": "0076",
+   "in": 89.2,
+   "out": 90.3,
+   "speed": 1.0,
+   "t": 11.84,
+   "dur": 1.1,
+   "note": "terminal: \"So I\""
+  },
+  {
+   "beat": 3,
+   "src": "0076",
+   "in": 91.15,
+   "out": 93.45,
+   "speed": 1.0,
+   "t": 12.94,
+   "dur": 2.3,
+   "note": "JUMP: \"have Muse make me like a route\""
+  },
+  {
+   "beat": 4,
+   "src": "0076",
+   "in": 113.1,
+   "out": 124.8,
+   "speed": 1.0,
+   "t": 15.24,
+   "dur": 11.7,
+   "note": "JUMP: \"we're going to be doing straight from Seattle Tacoma to Sandy Utah, which is like 830 miles, 12 hours, and then we're gonna be doing Sandy to,\" (figures spoken only)"
+  },
+  {
+   "beat": 5,
+   "src": "0076",
+   "in": 125.65,
+   "out": 127.85,
+   "speed": 1.0,
+   "t": 26.94,
+   "dur": 2.2,
+   "note": "JUMP (past the OTHER \"oh,\"): \"420 miles, six hours.\""
+  },
+  {
+   "beat": 6,
+   "src": "0076",
+   "in": 132.4,
+   "out": 135.95,
+   "speed": 1.0,
+   "t": 29.14,
+   "dur": 3.55,
+   "note": "JUMP: \"It's looking like a 18 hour drive, Chad. I ain't gonna lie.\""
+  },
+  {
+   "beat": 7,
+   "src": "0077",
+   "in": 78.3,
+   "out": 81.0,
+   "speed": 1.0,
+   "t": 32.69,
+   "dur": 2.7,
+   "note": "THE TRAM: \"I'm gonna miss this little tram. Oh my God.\""
+  },
+  {
+   "beat": 8,
+   "src": "0077",
+   "in": 82.35,
+   "out": 88.15,
+   "speed": 1.0,
+   "t": 35.39,
+   "dur": 5.8,
+   "note": "JUMP: \"Should I run? Nope, not doing it. It's already closing.\""
+  },
+  {
+   "beat": 9,
+   "src": "0077",
+   "in": 91.4,
+   "out": 93.72,
+   "speed": 1.0,
+   "t": 41.19,
+   "dur": 2.32,
+   "note": "JUMP (past the OTHER \"Yep.\"): \"I think it's gonna close on her.\""
+  },
+  {
+   "beat": 10,
+   "src": "0080",
+   "in": 49.1,
+   "out": 54.46,
+   "speed": 1.0,
+   "t": 43.51,
+   "dur": 5.36,
+   "note": "THE BAGEL: \"It's a little lopsided but I got it with the cream cheese, never tried that\""
+  },
+  {
+   "beat": 11,
+   "src": "0081",
+   "in": 2.85,
+   "out": 7.99,
+   "speed": 1.0,
+   "t": 48.87,
+   "dur": 5.14,
+   "note": "END: \"I'm finally getting on the plane. Damn, my thing dying already is crazy.\""
+  }
+ ],
+ "dialog": [
+  {
+   "beat": 1,
+   "src": "0076",
+   "in": 24.9,
+   "out": 34.84,
+   "t": 1.9,
+   "trim_pauses": null,
+   "last_word_end": 34.44,
+   "voice_end": null,
+   "next_onset_measured": null,
+   "extended": false,
+   "out_asr": 34.44,
+   "text": "That's a little tired, but we up now Wish this thing did better no light, but we're gonna work on what we got"
+  },
+  {
+   "beat": 2,
+   "src": "0076",
+   "in": 89.2,
+   "out": 90.3,
+   "t": 11.84,
+   "trim_pauses": null,
+   "last_word_end": 91.43,
+   "voice_end": 89.6,
+   "next_onset_measured": 91.3,
+   "extended": false,
+   "out_asr": 89.6,
+   "text": "So I"
+  },
+  {
+   "beat": 3,
+   "src": "0076",
+   "in": 91.15,
+   "out": 93.45,
+   "t": 12.94,
+   "trim_pauses": null,
+   "last_word_end": 93.33,
+   "voice_end": 93.35,
+   "next_onset_measured": 94.45,
+   "extended": false,
+   "out_asr": 93.33,
+   "text": "I have Muse make me like a route"
+  },
+  {
+   "beat": 4,
+   "src": "0076",
+   "in": 113.1,
+   "out": 124.8,
+   "t": 15.24,
+   "trim_pauses": null,
+   "last_word_end": 124.63,
+   "voice_end": 124.75,
+   "next_onset_measured": 125.15,
+   "extended": false,
+   "out_asr": 123.9,
+   "text": "we're going to be doing straight from Seattle Tacoma to Sandy Utah, which is like 830 miles, 12 hours, and then we're gonna be doing Sandy to,"
+  },
+  {
+   "beat": 5,
+   "src": "0076",
+   "in": 125.65,
+   "out": 127.85,
+   "t": 26.94,
+   "trim_pauses": null,
+   "last_word_end": 127.53,
+   "voice_end": 127.6,
+   "next_onset_measured": 128.0,
+   "extended": false,
+   "out_asr": 127.53,
+   "text": "420 miles, six hours."
+  },
+  {
+   "beat": 6,
+   "src": "0076",
+   "in": 132.4,
+   "out": 135.95,
+   "t": 29.14,
+   "trim_pauses": null,
+   "last_word_end": 135.27,
+   "voice_end": 135.6,
+   "next_onset_measured": 136.55,
+   "extended": false,
+   "out_asr": 135.27,
+   "text": "It's looking like a 18 hour drive, Chad. I ain't gonna lie."
+  },
+  {
+   "beat": 7,
+   "src": "0077",
+   "in": 78.3,
+   "out": 81.0,
+   "t": 32.69,
+   "trim_pauses": null,
+   "last_word_end": 80.6,
+   "voice_end": 80.6,
+   "next_onset_measured": 82.7,
+   "extended": false,
+   "out_asr": 80.6,
+   "text": "I'm gonna miss this little tram. Oh my God."
+  },
+  {
+   "beat": 8,
+   "src": "0077",
+   "in": 82.35,
+   "out": 88.15,
+   "t": 35.39,
+   "trim_pauses": null,
+   "last_word_end": 87.8,
+   "voice_end": 87.75,
+   "next_onset_measured": 89.5,
+   "extended": false,
+   "out_asr": 87.8,
+   "text": "Should I run? Nope, not doing it. It's already closing."
+  },
+  {
+   "beat": 9,
+   "src": "0077",
+   "in": 91.4,
+   "out": 93.72,
+   "t": 41.19,
+   "trim_pauses": null,
+   "last_word_end": 93.32,
+   "voice_end": null,
+   "next_onset_measured": null,
+   "extended": false,
+   "out_asr": 93.32,
+   "text": "I think it's gonna close on her."
+  },
+  {
+   "beat": 10,
+   "src": "0080",
+   "in": 49.1,
+   "out": 54.46,
+   "t": 43.51,
+   "trim_pauses": null,
+   "last_word_end": 54.06,
+   "voice_end": null,
+   "next_onset_measured": null,
+   "extended": false,
+   "out_asr": 54.06,
+   "text": "It's a little lopsided but I got it with the cream cheese, never tried that"
+  },
+  {
+   "beat": 11,
+   "src": "0081",
+   "in": 2.85,
+   "out": 7.99,
+   "t": 48.87,
+   "trim_pauses": null,
+   "last_word_end": 7.59,
+   "voice_end": null,
+   "next_onset_measured": null,
+   "extended": false,
+   "out_asr": 7.59,
+   "text": "I'm finally getting on the plane. Damn, my thing dying already is crazy."
+  }
+ ],
+ "audio_extra": [],
+ "beats": [
+  {
+   "i": 0,
+   "ch": "CH1",
+   "t0": 0.0,
+   "t1": 54.01,
+   "note": "CH1 4:30 a.m.: Las Vegas airport before dawn -> the route -> the tram -> the bagel -> boarding"
+  }
+ ],
+ "mute": [],
+ "bleeps": [],
+ "rotate": {},
+ "warnings": []
+}
