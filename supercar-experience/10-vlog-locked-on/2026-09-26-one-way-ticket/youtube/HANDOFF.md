@@ -51,11 +51,10 @@ Shorts candidates: the first sight and sound (0090), "No cell service…" (0117)
 the 1:29 a.m. setback (0114/0115), and the B2 montage recut to 9:16.
 
 ## Survey data the next session needs
-The survey data (word transcripts `tr/`, `flags.json`, `moments.md`, `day.md`, `clips.json`) lives only in this
-container at `/home/user/day-owt/`. Copying it into this public repo was refused by the session's permission
-check, so it is **not** carried over yet. Omarie decides: carry it in the private repo
-`oskibundles-hue/nq-agent-channel`, or the next session re-surveys (engine `ingest` + `transcribe`, slow).
-`tags.md` here already holds the survey tags.
+The survey data (word transcripts `tr/`, `flags.json`, `moments.*`, `day.md`, `clips.*`, `speakers.json`, `shz.py`)
+is in the private repo `oskibundles-hue/nq-agent-channel`, branch `data/one-way-ticket-survey`, folder
+`handoff/2026-09-26-one-way-ticket/` (Omarie, 2026-10-08). Attach that repo and copy the folder to
+`/home/user/day-owt/`. `tags.md` here holds the survey tags.
 
 ## Lessons for the next session (token rules)
 - Give builders a lean brief and a turn budget that fits; the montage builder hit 100 turns once and grew to
