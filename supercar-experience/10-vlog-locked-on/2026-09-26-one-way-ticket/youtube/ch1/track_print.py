@@ -21,7 +21,10 @@ import cv2, json, os, sys
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 RAW = '/home/user/day-owt/ch1work/raw_shots'
-REL = {'hh': (-0.45, 0.6, 2.3, 1.9), 'hr': (0.8, -1.0, 1.6, 2.6)}
+# v2 (2026-10-08 gate check): the v1 boxes stopped above the bottom line of the print ("EXPERIENCE" showed under the
+# patch in 0076 92.6-93.4, 113-116 and 0080); measured on a full-res 0076 93.2 frame, the SE logo spans 1.36-1.9
+# Hidden-Hills-with-CLUB heights below the script top (about 2.5 script-only anchor heights), so the box now runs to 3.2
+REL = {'hh': (-0.6, 0.5, 2.7, 2.7), 'hr': (0.7, -1.1, 1.9, 2.9)}
 # anchors per shot (gate shot index from edl.json), measured on gate frames 2026-10-08
 ANCHORS = {
     1: [[0.2, 291, 284, 87, 36, 'hr'], [0.5, 284, 287, 58, 29, 'hr'], [1.1, 298, 262, 66, 36, 'hr'], [1.7, 349, 287, 87, 37, 'hr'],

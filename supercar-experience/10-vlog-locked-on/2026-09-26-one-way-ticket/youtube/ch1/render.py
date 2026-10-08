@@ -72,37 +72,60 @@ def shot_filter(i, s, W, H):
     chain = ','.join(f)
     blurs = lk.get('blur', [])
     if not blurs:
-        return f'[0:v]{chain},format=yuv420p[v]'
-    g = f'[0:v]{chain}[b0]'
+        return f'[0:v]{chain},format=yuv420p[v]', []
+    # pad the frame by P on every side before the blurs, so a box at the frame edge (the print at the bottom of a
+    # selfie frame) is not pushed back inside the frame into its own feathered rim; cropped back after the blurs
+    P = (H // 4) // 2 * 2
+    g = f'[0:v]{chain},pad={W + 2 * P}:{H + 2 * P}:{P}:{P}:black[b0]'
+    masks = []
     for k, bl in enumerate(blurs):
         if 'keys' in bl:
-            # a moving box (a tracked plate): keys [[t, x, y, w, h], ...] in fractions, linear between keys; the box
-            # size is the largest over the keys, centred on the tracked centre
+            # a moving box (a tracked plate/print): keys [[t, x, y, w, h], ...] in fractions, linear between keys; the
+            # box size is the largest over the keys, centred on the tracked centre
             ks = bl['keys']
             bw = max(2, int(max(q[3] for q in ks) * W) // 2 * 2); bh = max(2, int(max(q[4] for q in ks) * H) // 2 * 2)
-            cxs = [(q[0], (q[1] + q[3] / 2) * W - bw / 2, (q[2] + q[4] / 2) * H - bh / 2) for q in ks]
+            cxs = [(q[0], (q[1] + q[3] / 2) * W - bw / 2 + P, (q[2] + q[4] / 2) * H - bh / 2 + P) for q in ks]
             def lin(j):
                 e = f'{cxs[-1][j]:.1f}'
                 for (ta, *a), (tb, *b) in reversed(list(zip(cxs, cxs[1:]))):
                     e = f'if(lt(t,{tb}),{a[j - 1]:.1f}+({b[j - 1] - a[j - 1]:.1f})*(t-{ta})/{tb - ta:.4f},{e})'
                 return e
-            bxe = f'clip({lin(1)},0,{W - bw})'; bye = f'clip({lin(2)},0,{H - bh})'
+            bxe = f'clip({lin(1)},0,{W + 2 * P - bw})'; bye = f'clip({lin(2)},0,{H + 2 * P - bh})'
             t0, t1 = ks[0][0], ks[-1][0]
             r = max(2, min(bw, bh) // 4)
-            # shape 'round': a rounded (superellipse) patch whose edge feathers out over the outer 30 %, not a hard box
-            feather = (",format=yuva444p,geq=lum='lum(X,Y)':cb='cb(X,Y)':cr='cr(X,Y)':"
-                       "a='255*clip((1-pow(pow(abs(2*X/W-1),4)+pow(abs(2*Y/H-1),4),0.25))/0.3,0,1)'"
-                       if bl.get('shape') == 'round' else '')
-            g += (f";[b{k}]split[m{k}][c{k}];[c{k}]crop={bw}:{bh}:'{bxe}':'{bye}',boxblur={r}:3{feather}[z{k}];"
-                  f"[m{k}][z{k}]overlay='{bxe}':'{bye}':enable='between(t,{t0},{t1})'[b{k + 1}]")
+            if bl.get('shape') == 'round':
+                # a rounded (superellipse) patch whose edge feathers out over the outer 30 %: a static alpha mask
+                # (input 1+k), merged onto the blurred crop
+                masks.append(mask_png(bw, bh))
+                g += (f";[b{k}]split[m{k}][c{k}];[c{k}]crop={bw}:{bh}:'{bxe}':'{bye}',boxblur={r}:3,format=yuva420p[zc{k}];"
+                      f"[{len(masks)}:v]format=gray[mk{k}];[zc{k}][mk{k}]alphamerge[z{k}];"
+                      f"[m{k}][z{k}]overlay='{bxe}':'{bye}':enable='between(t,{t0},{t1})'[b{k + 1}]")
+            else:
+                g += (f";[b{k}]split[m{k}][c{k}];[c{k}]crop={bw}:{bh}:'{bxe}':'{bye}',boxblur={r}:3[z{k}];"
+                      f"[m{k}][z{k}]overlay='{bxe}':'{bye}':enable='between(t,{t0},{t1})'[b{k + 1}]")
             continue
         x, y, w, h = bl['box']
         t0, t1 = bl.get('t', [0, 999])
-        bx, by, bw, bh = int(x * W) // 2 * 2, int(y * H) // 2 * 2, max(2, int(w * W) // 2 * 2), max(2, int(h * H) // 2 * 2)
+        bx, by, bw, bh = int(x * W) // 2 * 2 + P, int(y * H) // 2 * 2 + P, max(2, int(w * W) // 2 * 2), max(2, int(h * H) // 2 * 2)
         r = max(2, min(bw, bh) // 4)
         g += (f';[b{k}]split[m{k}][c{k}];[c{k}]crop={bw}:{bh}:{bx}:{by},boxblur={r}:3[z{k}];'
               f"[m{k}][z{k}]overlay={bx}:{by}:enable='between(t,{t0},{t1})'[b{k + 1}]")
-    return g + f';[b{len(blurs)}]format=yuv420p[v]'
+    return g + f';[b{len(blurs)}]crop={W}:{H}:{P}:{P},format=yuv420p[v]', masks
+
+
+def mask_png(bw, bh):
+    """The 'round' patch alpha: superellipse, opaque core, edge feathered over the outer 30 % (cached PNG)."""
+    path = f'{WORK}/masks/m{bw}x{bh}.png'
+    if not os.path.exists(path):
+        os.makedirs(os.path.dirname(path), exist_ok=True)
+        im = Image.new('L', (bw, bh))
+        px = im.load()
+        for yy in range(bh):
+            for xx in range(bw):
+                d = (abs(2 * xx / bw - 1) ** 4 + abs(2 * yy / bh - 1) ** 4) ** 0.25
+                px[xx, yy] = int(255 * min(1, max(0, (1 - d) / 0.3)))
+        im.save(path)
+    return path
 
 
 def render_shots(W, H, outdir, crf, preset):
@@ -113,12 +136,14 @@ def render_shots(W, H, outdir, crf, preset):
         p, t0 = mezz_for(s['src'], s['in'], s['in'] + src_len)
         out = f'{outdir}/s{i:02d}.mp4'
         parts.append(out)
-        sig = json.dumps([p, s, LOOK.get(str(i)), GRADE, W, crf])
+        graph, masks = shot_filter(i, s, W, H)
+        sig = json.dumps(['pad+mask v2', p, s, LOOK.get(str(i)), GRADE, W, crf])
         if os.path.exists(out) and open(out + '.sig').read() == sig if os.path.exists(out + '.sig') else False:
             continue
         nfr = round(s['dur'] * 30000 / 1001)
-        sh([FF, '-v', 'error', '-y', '-ss', f"{s['in'] - t0:.4f}", '-t', f'{src_len + 0.2:.4f}', '-i', p,
-            '-filter_complex', shot_filter(i, s, W, H), '-map', '[v]', '-frames:v', str(nfr), '-an',
+        mk = sum([['-loop', '1', '-framerate', FPS, '-i', m] for m in masks], [])
+        sh([FF, '-v', 'error', '-y', '-ss', f"{s['in'] - t0:.4f}", '-t', f'{src_len + 0.2:.4f}', '-i', p, *mk,
+            '-filter_complex', graph, '-map', '[v]', '-frames:v', str(nfr), '-an',
             '-c:v', 'libx264', '-preset', preset, '-crf', str(crf), '-threads', '4', out])
         open(out + '.sig', 'w').write(sig)
         print(f'shot {i:02d} {s["src"]} {s["in"]} {s["dur"]}s', flush=True)
@@ -230,7 +255,10 @@ def master():
     b = f'{WORK}/ch1_master_NOMUSIC.mp4'
     mux(v, f'{WORK}/mix.wav', a)
     mux(v, f'{WORK}/nomusic.wav', b)
-    for p in (a, b):
+    pv = f'{WORK}/ch1_preview_720p.mp4'   # same preview encode as test-ch3
+    sh([FF, '-v', 'error', '-y', '-i', a, '-vf', 'scale=1280:720:flags=lanczos', '-c:v', 'libx264', '-preset', 'slow',
+        '-b:v', '1150k', '-maxrate', '1500k', '-bufsize', '3000k', '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart', pv])
+    for p in (a, b, pv):
         print(p, os.path.getsize(p))
 
 
