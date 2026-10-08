@@ -112,7 +112,7 @@ ranges is Omarie's (speakers.json scores all HOST), so nothing is muted for stra
 Nothing is drawn. Spoken lines carry "4:30 in the morning", "McLaren 600 LT" and "Seattle, Washington", in his own
 voice from the day's footage. The Rio billboard in the last shot shows "OCTOBER 10" (third-party signage, unblurred).
 
-## v2 (8 Oct): A2 and B2 (v2.1, re-cut after nq-check)
+## v2 (8 Oct): A2 and B2 (v2.2: re-cut after nq-check, then Omarie's two touch-ups on B2)
 
 Omarie picked montage B, with the note "the montage could be more dramatic but its good its just full of shots of me
 driving no critical moments interactions breaks, gas runs, etc". So B2 is a sound-bite trailer: real turning points cut
@@ -123,7 +123,7 @@ files are unchanged.
 | file | what |
 |---|---|
 | `opening_A2_preview_720p.mp4` | 1280x720 29.97p H.264 + AAC, 22.56 s, 9.79 MiB, -14.1 LUFS, -2.2 dBTP (measured on the AAC) |
-| `opening_B2_preview_720p.mp4` | 1280x720 29.97p H.264 + AAC, 52.59 s, 24.77 MiB, -14.1 LUFS, -2.1 dBTP (measured on the AAC) |
+| `opening_B2_preview_720p.mp4` | 1280x720 29.97p H.264 + AAC, 51.42 s, 24.14 MiB, -14.1 LUFS, -2.1 dBTP (measured on the AAC); Omarie's pick for the full cut |
 | `edl_A2.json`, `edl_B2.json`, `mix_A2.json`, `mix_B2.json` | timelines and mix reports. Smallest voice-over-music margin: A2 12.7 dB, B2 12.5 dB |
 | `look_v2.json` | v2 framing, blurs (a blur may carry `from`, the shot second it starts) and the CH1 `subject_lift` |
 | `subject_lift.py`, `lift_track_0075_80.5.json` | the CH1 face lift and its CSRT face track |
@@ -141,7 +141,7 @@ Rebuild:
 
 ### B2 shot list
 
-P means parked or on foot; M means moving. Cuts land on the beat grid, in whole or half beats (1 beat = 0.769 s).
+P means parked or on foot; M means moving. Cuts land on the beat grid, in whole, half or quarter beats (1 beat = 0.769 s).
 
 | at | source (picture) | dur | heard | P/M |
 |---|---|---|---|---|
@@ -149,7 +149,7 @@ P means parked or on foot; M means moving. Cuts land on the beat grid, in whole 
 | 0:02.27 | **0121 199.60 desert road** | 2.22 | HOOK 2 (0117) "We're gonna have to make it, we don't have a choice" | M |
 | 0:04.49 | 0075 56.45 | 4.50 | talk (as in v1) | P |
 | 0:08.99 | 0075 69.32 | 7.70 | talk (as in v1) | P |
-| 0:16.69 | 0091 7.30 | 2.31 | "(Spider) top goes down"; SE chest wordmark blurred | P |
+| 0:16.69 | 0091 7.30 | 2.31 | "(Spider) top goes down"; SE chest wordmark blurred (box extended 25 px down in v2.2) | P |
 | 0:19.00 | 0093 6.20 | 2.31 | "out here, like gorgeous" | M, top down, one hand on the wheel |
 | 0:21.31 | 0102 19.45 | 1.54 | "Red Bull and my snacks" | P, gas stop |
 | 0:22.84 | 0105 7.30 | 1.54 | "To In-N-Out." | P |
@@ -159,12 +159,12 @@ P means parked or on foot; M means moving. Cuts land on the beat grid, in whole 
 | 0:33.23 | 0114 8.70 | 2.69 | "take a nice McLaren nap" (hoodie print and the lit TFT blurred) | P |
 | 0:35.92 | 0114 42.65 | 3.08 | "We back in business, baby" (hoodie print and the lit TFT blurred) | P |
 | 0:39.00 | 0115 12.75 | 2.31 | "It is freezing." (SE bolt logo blurred from +1.25 s) | P, on foot |
-| 0:41.31 | 0118 83.60 | 3.08 | "No hotel, no nothing." (cluster blurred) | M, left hand on the wheel |
-| 0:44.38 | 0118 90.05 | 1.92 | "But you know, we dug it out" (cluster blurred) | M, left hand on the wheel |
-| 0:46.31 | 0122 583.40 rear cam | 1.92 | bed only (plate and LED billboard blurred) | M |
-| 0:48.23 | 0075 82.04 | 4.34 | CH1 "So let's head up out of here. Alright famo." (J-cut: the line starts 1.54 s early, under 0122) | P |
+| 0:41.31 | 0118 83.60 | 2.50 | "No hotel, no nothing." (cluster blurred) | M, left hand on the wheel |
+| 0:43.81 | 0118 90.05 | 1.35 | "But you know, we dug it out" (cluster blurred) | M, left hand on the wheel |
+| 0:45.15 | 0122 583.40 rear cam | 1.92 | bed only (plate and LED billboard blurred) | M |
+| 0:47.07 | 0075 82.04 | 4.34 | CH1 "So let's head up out of here. Alright famo." (J-cut: the line starts 1.54 s early, under 0122) | P |
 
-The montage runs 0:16.69-0:48.23: 14 shots, 41 beats, 31.54 s. Quick cuts (1.5-1.9 s) run through the gas and food run;
+The montage runs 0:16.69-0:47.07: 14 shots, 39.5 beats, 30.38 s. In v2.2 the 0118 night drive was trimmed from 5.0 to 3.85 s (3.25 + 1.75 beats), with both bites whole. Quick cuts (1.5-1.9 s) run through the gas and food run;
 the oil scare, the counter, the nap, "back in business" and the night trouble get longer holds (2.7-3.9 s). A2 is the v1 A
 with the new HOOK 2 cutaway and the lifted CH1 tail.
 
