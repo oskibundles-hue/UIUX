@@ -60,6 +60,9 @@ Brand values: `supercar-experience/01-brand-core/brand-tokens.json`.
 
 ## Rules
 
+- **Motion layouts from the layout engine (2026-10-04).** A variation of an approved SE motion layout (race-weekend Night v5) (new car, new offer,
+  A/B/C looks on one step) is built from a recipe, not by hand: read `~/.claude/skills/layout-engine/SKILL.md`
+  and follow it. The engine is private and local; never copy any of it into this repo.
 - An ad is a `cue.json` plus variants under `variants/`, built by `09-campaign-ads/build_ad.py`.
   Deliverable sets come from `09-campaign-ads/build_deliverables.py` — the reference implementation of
   the "Delivering Video Sets" rule (renamed for a human, numbered folders, README.txt, `zip -0`,

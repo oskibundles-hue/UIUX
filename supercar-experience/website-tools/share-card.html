@@ -1,0 +1,66 @@
+<!doctype html>
+<html><head><meta charset="utf-8">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@500;700;800;900&family=JetBrains+Mono:wght@600;700&display=swap">
+<style>
+/* Made by make_episode_pages.py. 1200x630 share card, Locked-On in SE's orange/black/white. Rendered by headless Chrome, saved as JPG. */
+:root{--o:#FF4F16;--ink:#0A0A0C;--mute:rgba(255,255,255,.68);--f:"Hanken Grotesk",Arial,sans-serif;--mono:"JetBrains Mono",Menlo,monospace}
+html,body{margin:0;width:1200px;height:630px;overflow:hidden;background:var(--ink);color:#fff;font-family:var(--f)}
+.bg{position:absolute;inset:-60px;background-size:cover;background-position:center;filter:blur(34px) brightness(.38) saturate(1.1)}
+.shade{position:absolute;inset:0;background:linear-gradient(90deg,rgba(10,10,12,.96) 0%,rgba(10,10,12,.82) 48%,rgba(10,10,12,.2) 100%)}
+.grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.035) 1px,transparent 1px);background-size:60px 60px}
+.left{position:absolute;left:64px;top:56px;bottom:56px;width:700px;display:flex;flex-direction:column}
+.logo{height:34px;width:auto;align-self:flex-start}
+.lab{margin-top:auto;font:700 17px var(--mono);letter-spacing:.16em;color:var(--o);text-transform:uppercase;display:flex;align-items:center;gap:12px}
+.lab i{display:inline-block;width:10px;height:10px;background:var(--o);border-radius:50%;box-shadow:0 0 14px var(--o)}
+h1{margin:14px 0 0;font-weight:900;font-size:86px;line-height:.93;letter-spacing:-.035em;text-wrap:balance}
+h1 .o{color:var(--o)}
+.meta{margin-top:22px;font:600 19px var(--mono);letter-spacing:.06em;color:var(--mute)}
+.cta{margin-top:30px;display:inline-flex;align-items:center;gap:12px;align-self:flex-start;background:var(--o);color:#0A0A0C;font-weight:800;font-size:22px;padding:14px 22px 14px 18px;border-radius:999px}
+.cta svg{width:20px;height:20px}
+.frame{position:absolute;top:50px;right:92px;width:298px;height:530px}
+.frame img{width:100%;height:100%;object-fit:cover;border-radius:14px;box-shadow:0 30px 60px -20px rgba(0,0,0,.9)}
+.frame .lk{position:absolute;inset:-16px}
+.lk i{position:absolute;width:34px;height:34px;border:4px solid var(--o)}
+.lk i:nth-child(1){left:0;top:0;border-right:0;border-bottom:0}.lk i:nth-child(2){right:0;top:0;border-left:0;border-bottom:0}
+.lk i:nth-child(3){left:0;bottom:0;border-right:0;border-top:0}.lk i:nth-child(4){right:0;bottom:0;border-left:0;border-top:0}
+.tag{position:absolute;font:700 14px var(--mono);letter-spacing:.08em;background:rgba(10,10,12,.72);padding:6px 9px;border-radius:6px}
+.tag.tl{left:12px;top:12px}.tag.br{right:12px;bottom:12px}
+.fan{position:absolute;right:70px;top:48px;width:470px;height:540px}
+.fan img{position:absolute;top:0;width:250px;height:444px;object-fit:cover;border-radius:14px;box-shadow:0 30px 60px -20px rgba(0,0,0,.95);border:2px solid rgba(255,255,255,.1)}
+.fan img:nth-child(1){left:0;top:70px;transform:rotate(-8deg);filter:brightness(.7)}
+.fan img:nth-child(2){left:220px;top:70px;transform:rotate(8deg);filter:brightness(.7)}
+.fan img:nth-child(3){left:110px;top:20px;z-index:2}
+.fan .lk{position:absolute;left:94px;top:4px;width:282px;height:476px;z-index:3}
+</style></head>
+<body>
+<div class="bg" id="bg"></div><div class="grid"></div><div class="shade"></div>
+<div class="left">
+  <img class="logo" id="logo" alt="">
+  <div class="lab"><i></i><span id="lab"></span></div>
+  <h1 id="t"></h1>
+  <div class="meta" id="meta"></div>
+  <div class="cta"><svg viewBox="0 0 16 16" fill="currentColor"><path d="M4 2.5v11L13.5 8z"/></svg><span id="cta"></span></div>
+</div>
+<div id="right"></div>
+<script>
+const P=new URLSearchParams(location.search), M=P.get("m");
+document.getElementById("logo").src=M+"brand/sce-primary-horizontal--white.png";
+const k=P.get("k"), lk='<div class="lk"><i></i><i></i><i></i><i></i></div>';
+if(k==="series"){
+  document.getElementById("bg").style.backgroundImage=`url(${M}ep/rally.jpg)`;
+  document.getElementById("lab").textContent=`The vlog series · ${P.get("count")} episodes`;
+  document.getElementById("t").innerHTML='Behind the<br><span class="o">Wheel</span>';document.querySelector(".left").style.width="560px";
+  document.getElementById("meta").textContent="What it takes to put the keys in your hand.";
+  document.getElementById("cta").textContent="Watch the full episodes";
+  document.getElementById("right").innerHTML=`<div class="fan"><img src="${M}ep/flat.jpg"><img src="${M}ep/hybrid.jpg"><img src="${M}ep/rally.jpg">${lk}</div>`;
+}else{
+  const e=[P.get("n"),P.get("d"),P.get("t"),P.get("len"),P.get("where")];
+  document.getElementById("bg").style.backgroundImage=`url(${M}ep/${k}.jpg)`;
+  document.getElementById("lab").textContent=`Behind the Wheel · Episode ${e[0]}`;
+  document.getElementById("t").innerHTML=e[2].replace(/(\S+)$/,'<span class="o">$1</span>');
+  document.getElementById("meta").textContent=`${e[1]}, 2026 · ${e[3]} · ${e[4]}`;
+  document.getElementById("cta").textContent="Watch the full episode";
+  document.getElementById("right").innerHTML=`<div class="frame"><img src="${M}ep/${k}.jpg">${lk}<span class="tag tl">EP ${e[0]} · ${e[1].toUpperCase()}</span><span class="tag br">${e[3]}</span></div>`;
+}
+</script>
+</body></html>

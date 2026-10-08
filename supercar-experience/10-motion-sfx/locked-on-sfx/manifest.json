@@ -1,0 +1,209 @@
+[
+ {
+  "n": 1,
+  "file": "SE-LO_01_hit_open.wav",
+  "category": "Hits",
+  "seconds": 3.49,
+  "what": "Cold-open hit: sub drop, body thud, noise crack and a metal ring into a hall.",
+  "heard": "frame 0, under the hook panel",
+  "audition_at": 0.0
+ },
+ {
+  "n": 2,
+  "file": "SE-LO_02_hit_drop.wav",
+  "category": "Hits",
+  "seconds": 3.5,
+  "what": "The drop hit, bigger body. Pair with a 1/8-bar silence right before it.",
+  "heard": "8.57 s, price reel after the black gap",
+  "audition_at": 3.94
+ },
+ {
+  "n": 3,
+  "file": "SE-LO_03_hit_endcard.wav",
+  "category": "Hits",
+  "seconds": 3.3,
+  "what": "End-card hit with a long hall tail.",
+  "heard": "14.57 s, end card lands",
+  "audition_at": 7.89
+ },
+ {
+  "n": 4,
+  "file": "SE-LO_04_whoosh_left_to_right.wav",
+  "category": "Transitions",
+  "seconds": 0.7,
+  "what": "Air past camera, pans left to right. Its peak is at 62% of its length: line that up with the cut.",
+  "heard": "whips at 1.71, 5.57, 12.86 s",
+  "audition_at": 11.64
+ },
+ {
+  "n": 5,
+  "file": "SE-LO_05_whoosh_right_to_left.wav",
+  "category": "Transitions",
+  "seconds": 0.7,
+  "what": "The same whoosh panned right to left, for alternating whips.",
+  "heard": "whips at 3.43, 10.71 s",
+  "audition_at": 12.79
+ },
+ {
+  "n": 6,
+  "file": "SE-LO_06_riser_noise_1.5s.wav",
+  "category": "Transitions",
+  "seconds": 1.5,
+  "what": "Band-noise riser, 1.5 s, no pitch, so it sits under any music.",
+  "heard": "6.86 to 8.36 s, into the black gap",
+  "audition_at": 13.94
+ },
+ {
+  "n": 7,
+  "file": "SE-LO_07_riser_full_2s.wav",
+  "category": "Transitions",
+  "seconds": 2.0,
+  "what": "Full riser: noise sweep plus saw stack and an accelerating snare roll (F minor).",
+  "heard": "first cut (synthetic bed)",
+  "audition_at": 15.89
+ },
+ {
+  "n": 8,
+  "file": "SE-LO_08_swell_cymbal_reverse.wav",
+  "category": "Transitions",
+  "seconds": 0.89,
+  "what": "Reversed open-cymbal bloom that sucks into the next hit.",
+  "heard": "14.14 to 14.57 s, into the end card",
+  "audition_at": 18.34
+ },
+ {
+  "n": 9,
+  "file": "SE-LO_09_swell_chord_reverse.wav",
+  "category": "Transitions",
+  "seconds": 0.99,
+  "what": "Reversed F-minor chord bloom. Musical, so use it on the synthetic beat, not over other music.",
+  "heard": "first cut (synthetic bed)",
+  "audition_at": 19.68
+ },
+ {
+  "n": 10,
+  "file": "SE-LO_10_tick_acquire.wav",
+  "category": "Lock-on UI",
+  "seconds": 0.05,
+  "what": "Bracket acquire tick: noise click plus a short inharmonic metal ping with no pitch.",
+  "heard": "3.84 s, door-script brackets",
+  "audition_at": 21.11
+ },
+ {
+  "n": 11,
+  "file": "SE-LO_11_tick_lock.wav",
+  "category": "Lock-on UI",
+  "seconds": 0.05,
+  "what": "Bracket lock tick, the harder one.",
+  "heard": "4.02 s door lock, 6.69 s crest lock",
+  "audition_at": 21.61
+ },
+ {
+  "n": 12,
+  "file": "SE-LO_12_tick_reel_lands.wav",
+  "category": "Lock-on UI",
+  "seconds": 0.48,
+  "what": "Four ticks as slot-reel digits land (three quick, one final).",
+  "heard": "9.00 to 9.43 s, $1,200 lands",
+  "audition_at": 22.11
+ },
+ {
+  "n": 13,
+  "file": "SE-LO_13_engine_flat6_blip_blip_rev.wav",
+  "category": "Engines",
+  "seconds": 3.8,
+  "what": "Synthesised flat-six (GT3 RS character): two throttle blips, then a full rev into the 9,000 rpm limiter.",
+  "heard": "first cut, cold open",
+  "audition_at": 23.04
+ },
+ {
+  "n": 14,
+  "file": "SE-LO_14_engine_v8_burble_upshift.wav",
+  "category": "Engines",
+  "seconds": 2.6,
+  "what": "Synthesised cross-plane V8 (AMG burble): overrun pops, two blips, pull, upshift, lift-off pops.",
+  "heard": "versus concept (AMG GT Black Series)",
+  "audition_at": 27.29
+ },
+ {
+  "n": 15,
+  "file": "SE-LO_15_kick.wav",
+  "category": "Beat kit",
+  "seconds": 0.55,
+  "what": "Trap kick, tight punch.",
+  "heard": "first cut groove",
+  "audition_at": 30.34
+ },
+ {
+  "n": 16,
+  "file": "SE-LO_16_808_F1.wav",
+  "category": "Beat kit",
+  "seconds": 1.4,
+  "what": "808 on F1 (43.7 Hz), saturated.",
+  "heard": "first cut, end card low end",
+  "audition_at": 31.34
+ },
+ {
+  "n": 17,
+  "file": "SE-LO_17_clap_room.wav",
+  "category": "Beat kit",
+  "seconds": 1.02,
+  "what": "Layered clap in a small room.",
+  "heard": "first cut groove, beat 3",
+  "audition_at": 33.19
+ },
+ {
+  "n": 18,
+  "file": "SE-LO_18_hat_closed.wav",
+  "category": "Beat kit",
+  "seconds": 0.07,
+  "what": "Closed hat.",
+  "heard": "first cut groove",
+  "audition_at": 34.66
+ },
+ {
+  "n": 19,
+  "file": "SE-LO_19_hat_open.wav",
+  "category": "Beat kit",
+  "seconds": 0.35,
+  "what": "Open hat.",
+  "heard": "first cut groove",
+  "audition_at": 35.18
+ },
+ {
+  "n": 20,
+  "file": "SE-LO_20_braam_F.wav",
+  "category": "Stings",
+  "seconds": 2.2,
+  "what": "Trailer braam on F2.",
+  "heard": "first cut, drop and end card",
+  "audition_at": 35.98
+ },
+ {
+  "n": 21,
+  "file": "SE-LO_21_logo_sting_bells_F.wav",
+  "category": "Stings",
+  "seconds": 2.6,
+  "what": "FM-bell logo sting, F5 Ab5 C6 F6, panned left to right.",
+  "heard": "first cut, end card",
+  "audition_at": 38.63
+ },
+ {
+  "n": 22,
+  "file": "SE-LO_22_tapestop_on_beat.wav",
+  "category": "FX",
+  "seconds": 2.0,
+  "what": "The tape stop: 1.2 s of the synthetic beat, then the whole mix varispeeds to a halt over 0.8 s. In the final cut the same effect runs on the clip music.",
+  "heard": "13.71 to 14.14 s (effect)",
+  "audition_at": 41.68
+ },
+ {
+  "n": 23,
+  "file": "SE-LO_23_bed_locked_on_140bpm_18s.wav",
+  "category": "Beds",
+  "seconds": 18.0,
+  "what": "The whole synthetic Locked-On bed from the first cut: F-minor trap/cinematic at 140 BPM, 18 s, with its own tape stop and end card. Already -14 LUFS, left as is.",
+  "heard": "first cut (replaced by the clip music in the final)",
+  "audition_at": 44.13
+ }
+]

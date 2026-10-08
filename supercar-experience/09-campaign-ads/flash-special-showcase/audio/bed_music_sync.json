@@ -1,0 +1,64 @@
+{
+ "source": "GT3RS_livery.mov audio (the clip's own music), extended by one phrase",
+ "option": "b: beat-matched loop extension (white.mov is a different track; no time-stretch)",
+ "white_xcorr": "max |NCC| 0.10-0.11 of 2 s livery windows against GT3RS_white.mov",
+ "edit": {
+  "head_orig_sec": 0.976,
+  "splice_orig_B": 6.476396,
+  "splice_orig_A": 0.985,
+  "lag_sec": 5.491396,
+  "lag_samples": 263587,
+  "crossfade_ms": 12.0,
+  "splice_out_sec": 5.500395833333333,
+  "orig_end_used_sec": 13.502604166666666,
+  "stretch_pct": 0.0
+ },
+ "alignment": {
+  "drop 8.571": "orig 4.056 transient",
+  "endcard 14.571": "orig 10.041 kick (15 ms early)",
+  "splice 5.500": "whip 5.571"
+ },
+ "accents_gain_db": {
+  "impact_open": -8.18,
+  "whoosh_1.714": -2.14,
+  "whoosh_3.429": -2.29,
+  "whoosh_5.571": -0.11,
+  "whoosh_10.714": -2.68,
+  "whoosh_12.857": -5.37,
+  "tick_3.840": -2.58,
+  "tick_4.020": -2.89,
+  "tick_6.690": -6.7,
+  "tick_9.000": -1.77,
+  "tick_9.107": -0.47,
+  "tick_9.214": -3.42,
+  "tick_9.429": -1.21,
+  "riser": 0.02,
+  "impact_drop": -7.95,
+  "impact_2": -14.83,
+  "tapestop": -0.67,
+  "swell": -73.22,
+  "impact_3": -9.81
+ },
+ "accent_ratio": 0.45,
+ "removed": [
+  "pad",
+  "808",
+  "kick/clap/hat pattern",
+  "pluck arp",
+  "braams",
+  "bells",
+  "riser saw stack",
+  "swell chord",
+  "synthetic flat-six engines"
+ ],
+ "master": {
+  "gain_db": -5.64,
+  "I": "-14.00",
+  "TP": "-2.00",
+  "LRA": "2.10",
+  "mono_fold_minus3dB_tp_dbfs": -2.0,
+  "last_50ms_peak": 0.0
+ },
+ "samples": 864864,
+ "seconds": 18.018
+}
