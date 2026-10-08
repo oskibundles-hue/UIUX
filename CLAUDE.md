@@ -98,6 +98,14 @@ The `plate` class is switched off, so it has no agent.
 - **Change effort, not the model, mid-session,** because a model switch re-writes the whole cache.
 - **Start a fresh agent from a summary rather than resuming one** past about 150k or idle more than 5 minutes,
   because its cache has gone cold.
+- **Builders work one chapter or section at a time** (added 2026-10-08). Each build is a fresh `nq-build` started
+  from a short summary, with a turn budget that fits the piece. Don't keep one builder going across the whole
+  job. Why: on "One-way ticket" the two montage builders grew to about 224k context over 150-180 calls and cost over
+  half the job.
+- **A big footage job starts in a fresh container** (added 2026-10-08). A long-form cut or anything else that pulls
+  a lot of 4K footage starts in a new session, briefed from the handoff, rather than continuing in a session that
+  already holds earlier footage. Why: on "One-way ticket" the container had about 2.5 GB of disk left after the
+  opening, and the lead had already compacted once.
 - **Keep frames out of the lead:** send them to `nq-check` or `nq-label` as one contact sheet. The cost guard
   denies a second Read of the same image in the lead.
 - **Wait on a PID, a marker file or `run_in_background`, with a hard timeout,** never a `pgrep -f` loop,
