@@ -262,6 +262,18 @@ def master():
         print(p, os.path.getsize(p))
 
 
+def remux():
+    """Audio-only change (mix.py re-run): reuse master_video.mp4, same mux and preview encode as master()."""
+    v = f'{WORK}/master_video.mp4'
+    a, b, pv = f'{WORK}/ch1_master.mp4', f'{WORK}/ch1_master_NOMUSIC.mp4', f'{WORK}/ch1_preview_720p.mp4'
+    mux(v, f'{WORK}/mix.wav', a)
+    mux(v, f'{WORK}/nomusic.wav', b)
+    sh([FF, '-v', 'error', '-y', '-i', a, '-vf', 'scale=1280:720:flags=lanczos', '-c:v', 'libx264', '-preset', 'slow',
+        '-b:v', '1150k', '-maxrate', '1500k', '-bufsize', '3000k', '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart', pv])
+    for p in (a, b, pv):
+        print(p, os.path.getsize(p))
+
+
 def sheets():
     """The pre-render frame gate on the gate timeline (graded, cropped, blurred, titled as it will render): one frame
     every 0.3 s, 640 px tiles, 12 a sheet, each tile stamped with timeline time and source clip:time."""
@@ -277,4 +289,4 @@ def sheets():
 
 
 if __name__ == '__main__':
-    {'gate': gate, 'master': master, 'sheets': sheets}[sys.argv[1]]()
+    {'gate': gate, 'master': master, 'remux': remux, 'sheets': sheets}[sys.argv[1]]()

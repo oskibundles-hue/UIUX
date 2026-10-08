@@ -10,7 +10,7 @@ Buses (48 kHz stereo float), every camera sound read from /home/user/day-owt/aud
           -24 LUFS per segment (the 0090 arrival -19: the engine is the moment), ducked 10 dB under dialog.
   bed     bed.wav (music.py, original; Ch1's own key). On for the whole chapter (0.8 s fade in, 1.2 s fade out).
           -39.5 LUFS under talk, -21 in the gaps (attack 60 ms, release 400 ms, gaps < 0.6 s held).
-Master: sum -> 30 Hz high-pass -> true-peak limiter (-1.5 dBTP) -> gain iterated to -14.0 LUFS (BS.1770, gated).
+Master: sum -> 30 Hz high-pass -> true-peak limiter (-1.8 dBTP, so the AAC masters measure <= -1.5) -> gain iterated to -14.0 LUFS (BS.1770, gated).
 Report (mix.json): LUFS, true peak, and the voice-over-music margin on every voiced 50 ms frame of the dialog (dialog bus vs bed bus
 after ducking; must be >= 10 dB).
     python3 mix.py WORKDIR
@@ -26,6 +26,9 @@ AUD = '/home/user/day-owt/aud'
 TRD = '/home/user/day-owt/tr'
 CHAIN = ('highpass=f=90:poles=2,afftdn=nr=10:nf=-42:tn=1,equalizer=f=300:t=q:w=1.2:g=-2,equalizer=f=3500:t=q:w=1.0:g=2.5,'
          'deesser=i=0.4:m=0.5:f=0.5,acompressor=threshold=-24dB:ratio=3:attack=10:release=150:makeup=2')
+# 0081 carries a steady near-pure tone at 2.72-2.74 kHz (as loud as his voice; measured drifting 2722-2736 Hz over 2.85-7.99,
+# peak 2729): three narrow band-rejects, on both the dialog and the nat read of that clip (nq-check 2026-10-08).
+NOTCH = {'0081': 'bandreject=f=2723:width_type=q:w=30,bandreject=f=2729:width_type=q:w=30,bandreject=f=2735:width_type=q:w=30'}
 EDL = json.load(open(os.path.join(HERE, 'edl.json')))
 FPS = 30000 / 1001
 NF = int(round(EDL['duration'] * FPS))
@@ -33,8 +36,10 @@ DUR = NF / FPS
 NS = int(round(DUR * SR))
 DIALOG_LUFS, NAT_LUFS, NAT_ARRIVAL_LUFS = -16.0, -24.0, -19.0
 BED_TALK, BED_GAP = -39.5, -21.0
-EXTRA_DUCK = []
-TARGET, CEIL = -14.0, -1.5
+# 0081 5.25 (chapter 51.27): with the 2.73 kHz tone notched out and the voice re-levelled, that frame's real margin is 9.2 dB (the tone had
+# been inflating it); 3 dB more bed duck over 51.1-51.5 brings it back over 10
+EXTRA_DUCK = [(51.1, 51.5, 3.0)]
+TARGET, CEIL = -14.0, -1.8   # CEIL is the WAV's true-peak limit; the AAC 320k encode adds up to ~0.2 dB, so the muxed masters land <= -1.5 dBTP
 
 
 # ---------------------------------------------------------------- BS.1770 / true peak (from part2/lib/mix.py)
@@ -174,7 +179,7 @@ def words(src):
 def build_dialog(rep):
     bus = np.zeros((NS, 2)); spans = []
     for d in EDL['dialog']:
-        x = aud(d['src'], d['in'], d['out'], CHAIN)
+        x = aud(d['src'], d['in'], d['out'], (NOTCH[d['src']] + ',' if d['src'] in NOTCH else '') + CHAIN)
         m = x.mean(1)
         for bl in EDL.get('bleeps', []):
             if bl['src'] == d['src'] and d['in'] < bl['out'] and bl['in'] < d['out']:
@@ -215,7 +220,7 @@ def nat_segments():
 
 
 def nat_seg(src, a, b, lv):
-    x = aud(src, a, b)
+    x = aud(src, a, b, NOTCH.get(src))
     W = words(src)
     lo = lp(x, 250)
     for w0, w1, _ in W:

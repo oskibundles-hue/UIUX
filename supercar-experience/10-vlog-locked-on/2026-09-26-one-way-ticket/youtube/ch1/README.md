@@ -8,7 +8,7 @@ the 0075 80.7-85.6 line; this chapter starts at 0076.
 
 | file | what |
 |---|---|
-| `ch1_master.mp4` | 3840x2160 29.97p H.264 (encode identical to test-ch3 `render.py master`), cut from the full open-gate frame; AAC 320k, -14 LUFS integrated, -1.5 dBTP |
+| `ch1_master.mp4` | 3840x2160 29.97p H.264 (encode identical to test-ch3 `render.py master`), cut from the full open-gate frame; AAC 320k, -14 LUFS integrated, <= -1.5 dBTP (measured -1.7) |
 | `ch1_master_NOMUSIC.mp4` | the same picture, dialog + natural sound only, -14 LUFS, -1.5 dBTP |
 | `ch1_preview_720p.mp4` | 1280x720 review copy, under 29 MiB |
 | `mix.wav`, `nomusic.wav` | the two mixes (48 kHz stereo) |
@@ -26,6 +26,7 @@ the 0075 80.7-85.6 line; this chapter starts at 0076.
     PYTHONPATH=/home/user/day-owt/pycv python3 track_print.py   # hoodie-print blur keys -> look.json
     python3 render.py gate && python3 render.py sheets   # 640x360 timeline + frame-gate sheets
     python3 render.py master                             # 4K masters + ch1_preview_720p.mp4
+    python3 render.py remux                              # audio-only change (mix.py re-run): re-mux both masters + preview onto the existing master_video.mp4
 
 `look.json` holds the per-shot blurs (no rotation or crop offsets in Ch1). `track_print.py` tracks the hoodie print
 with OpenCV CSRT (from opencv-contrib in `/home/user/day-owt/pycv`), following the "Hidden Hills" script or, in the dark
@@ -44,7 +45,7 @@ superellipse mask.
 | 4 | 0076:113.10-124.80 | 0:15.24-0:26.94 | "...straight from Seattle Tacoma to Sandy Utah, which is like 830 miles, 12 hours..." |
 | 5 | 0076:125.65-127.85 | 0:26.94-0:29.14 | "420 miles, six hours." |
 | 6 | 0076:132.40-135.95 | 0:29.14-0:32.69 | "It's looking like a 18 hour drive, Chad. I ain't gonna lie." |
-| 7 | 0077:78.30-81.00 | 0:32.69-0:35.39 | the tram: "I'm gonna miss this little tram. Oh my God." |
+| 7 | 0077:78.30-81.00 | 0:32.69-0:35.39 | the tram: "I'm gonna miss this little tram. Oh my God." (picture in 78.30; dialog in 77.90, J-cut from 0:32.29) |
 | 8 | 0077:82.35-88.15 | 0:35.39-0:41.19 | "Should I run? Nope, not doing it. It's already closing." |
 | 9 | 0077:91.40-93.72 | 0:41.19-0:43.51 | "I think it's gonna close on her." |
 | 10 | 0080:49.10-54.46 | 0:43.51-0:48.87 | the bagel: "It's a little lopsided but I got it with the cream cheese..." |
@@ -65,9 +66,24 @@ tram ends at 93.72. No car-stereo, venue or PA music is used.
 Voice over music: at least 14.4 dB per word (129 words), and at least 10.5 dB on every voiced 50 ms frame
 (test-ch3: 12.0 and 10.4).
 
-**Loudness** (ffmpeg ebur128, measured on the files): `mix.wav` -14.0 LUFS integrated, -1.5 dBTP, LRA 4.0 LU;
-`nomusic.wav` -14.0 LUFS integrated, -1.5 dBTP, LRA 4.1 LU. After the AAC 320k encode both masters measure
--14.0 LUFS and -1.4 dBTP (the codec adds about 0.1 dB of inter-sample peak; the mux step is test-ch3's, unchanged).
+**Loudness** (ffmpeg ebur128, measured on the files): `mix.wav` -14.04 LUFS integrated, -1.8 dBTP; `nomusic.wav` -14.03 LUFS,
+-1.8 dBTP. The WAV limiter ceiling is -1.8 dBTP (`CEIL` in `mix.py`) because the AAC 320k encode adds up to ~0.2 dB of
+inter-sample peak: the muxed masters measure -14.1 / -14.0 LUFS and -1.7 dBTP (nq-check 2026-10-08 wanted <= -1.5; the old
+-1.5 ceiling gave -1.4 after AAC). Voice over music after the 2026-10-08 fixes: at least 15.3 dB per word, at least
+10.5 dB on every voiced 50 ms frame.
+
+## Audio fixes (nq-check, 2026-10-08)
+
+- **2.73 kHz tone in 0081** (shot 11, chapter 48.87-54.01): a steady near-pure tone, as loud as his voice, in the camera sound,
+  drifting 2722-2736 Hz (peak 2729). `mix.py` `NOTCH` puts three `bandreject` (2723, 2729, 2735 Hz, Q 30) on both the dialog
+  and the nat read of 0081; the dialog is re-levelled to -16 LUFS on his voice (gain -1.3 -> +2.1 dB). Tone energy share
+  (+-15 Hz around 2729 Hz, of all energy above 80 Hz, chapter 48.87-54.01): 44.3% before, 0.0% after. With the tone gone the
+  frame at 0081 5.25 measured 9.2 dB over the bed (the tone had been inflating it), so `EXTRA_DUCK` takes the bed 3 dB lower
+  over 51.1-51.5.
+- **"I'm" at the 32.69 cut**: the 0077 dialog piece now starts at 77.90 (`NUDGE` in `make_edl.py`), 0.40 s before the picture
+  cut, so "I'm" (burst at 77.95-78.10) plays under the end of shot 6 (J-cut). The picture is unchanged, so `master_video.mp4`
+  was reused (`render.py remux`).
+- **Optional nudges, audio only:** the 0076 89.20 dialog in is 89.12; the 124.80 dialog out is 124.85 (both in room tone).
 
 ## On screen
 
@@ -110,7 +126,7 @@ at the 0076 kerb are distant and unreadable) and no cluster or speedometer: Ch1 
   "Jason recommended..." aside and a false start (93.45-113.1), the other "oh," (124.8-125.65) and "So it's about a
   18." (said again next). The last piece runs 1.5 s past the PLAN end to finish "I ain't gonna lie"; the speaker model
   scores that phrase OTHER 0.63 but it runs on without a gap, so nq-check should listen to it.
-- **0077:78.4-98** becomes 78.3-81.0, 82.35-88.15 and 91.4-93.72. It ends on "...close on her." because 96.47-98.03 is
+- **0077:78.4-98** becomes 78.3-81.0 (picture; the dialog starts at 77.90 so "I'm" is whole), 82.35-88.15 and 91.4-93.72. It ends on "...close on her." because 96.47-98.03 is
   a stranger and 98.11 is the airport PA.
 - **0080:51.7-54.1** becomes 49.1-54.46, so the line starts on its own beginning.
 - **0081:2.9-7.6** becomes 2.85-7.99, so the last word isn't clipped (next voice is a stranger at 9.03).

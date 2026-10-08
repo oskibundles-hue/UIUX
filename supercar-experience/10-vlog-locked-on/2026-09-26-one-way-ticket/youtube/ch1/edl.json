@@ -152,16 +152,17 @@
   {
    "beat": 2,
    "src": "0076",
-   "in": 89.2,
+   "in": 89.12,
    "out": 90.3,
-   "t": 11.84,
+   "t": 11.76,
    "trim_pauses": null,
    "last_word_end": 91.43,
    "voice_end": 89.6,
    "next_onset_measured": 91.3,
    "extended": false,
    "out_asr": 89.6,
-   "text": "So I"
+   "text": "So I",
+   "nudged": true
   },
   {
    "beat": 3,
@@ -181,7 +182,7 @@
    "beat": 4,
    "src": "0076",
    "in": 113.1,
-   "out": 124.8,
+   "out": 124.85,
    "t": 15.24,
    "trim_pauses": null,
    "last_word_end": 124.63,
@@ -189,7 +190,8 @@
    "next_onset_measured": 125.15,
    "extended": false,
    "out_asr": 123.9,
-   "text": "we're going to be doing straight from Seattle Tacoma to Sandy Utah, which is like 830 miles, 12 hours, and then we're gonna be doing Sandy to,"
+   "text": "we're going to be doing straight from Seattle Tacoma to Sandy Utah, which is like 830 miles, 12 hours, and then we're gonna be doing Sandy to,",
+   "nudged": true
   },
   {
    "beat": 5,
@@ -222,16 +224,17 @@
   {
    "beat": 7,
    "src": "0077",
-   "in": 78.3,
+   "in": 77.9,
    "out": 81.0,
-   "t": 32.69,
+   "t": 32.29,
    "trim_pauses": null,
    "last_word_end": 80.6,
    "voice_end": 80.6,
    "next_onset_measured": 82.7,
    "extended": false,
    "out_asr": 80.6,
-   "text": "I'm gonna miss this little tram. Oh my God."
+   "text": "I'm gonna miss this little tram. Oh my God.",
+   "nudged": true
   },
   {
    "beat": 8,

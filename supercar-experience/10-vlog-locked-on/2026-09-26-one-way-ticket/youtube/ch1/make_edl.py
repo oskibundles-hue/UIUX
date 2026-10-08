@@ -114,6 +114,21 @@ for i, (src, a, dur, sp, note, dl) in enumerate(SHOTS):
     t += dur
 dur_total = round(t, 3)
 
+# Audio-only nudges (nq-check 2026-10-08): the dialog piece moves, the picture cut stays, so the 4K picture is not re-rendered.
+#   beat 7: "I'm" (source ~77.96-78.54) was clipped by the cut at 0077 78.30 ("...gonna miss this little tram"). The 0077 dialog now
+#           comes in at 77.90 (voice-band envelope -44 dB there, "I'm" burst at 77.95-78.10), 0.40 s ahead of the picture cut at
+#           32.69: a J-cut under the silent tail of shot 6 (its voice ends at 0076 135.60 = chapter 32.34).
+#   beat 2: dialog in 89.20 -> 89.12 (room tone only; the voice starts 89.30);  beat 4: dialog out 124.80 -> 124.85 (voice ended 124.75).
+NUDGE = {2: dict(din=89.12), 4: dict(dout=124.85), 7: dict(din=77.90)}
+for d in dialog:
+    n = NUDGE.get(d['beat'])
+    if n:
+        if 'din' in n:
+            d['t'] = round(d['t'] - (d['in'] - n['din']), 3); d['in'] = n['din']
+        if 'dout' in n:
+            d['out'] = n['dout']
+        d['nudged'] = True
+
 # room tone for the NO MUSIC mix / gaps: none needed (every shot carries its own camera sound)
 
 # assert: no shot or audio range sits on a block flag (with the 0.8 s fetch handle the render must not use)
