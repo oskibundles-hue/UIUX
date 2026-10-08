@@ -125,26 +125,32 @@ HOOK_V2 = [HOOK[0],
 # montage v2 rows: (src, in, beats, note, [(dialog src, in, out, offset of the dialog from the shot start)], nat)
 #   offset None = lip sync (dialog in - picture in). nat None = source sound muted (stereo, strangers, or a borrowed picture).
 MONT2 = [
+    # v2.1 (nq-check, 8 Oct): varied cut lengths (beats may be halves): quick cuts through the gas and food run, longer
+    # holds on the oil scare, the counter, the nap and the night trouble; montage <= 32 s. Bites trimmed to whole words.
     # 0090 21.8 "Oh yeah!" DROPPED at the frame gate: a whip pan, and the car's rear plate (and a red car's) in frame.
-    ('0091', 7.30, 3, 'Seattle, in the parked car at the shop - "Spider top goes down"', [('0091', 7.30, 9.66, None)], NAT_MONT),
-    ('0093', 4.85, 4, 'top down through the trees (moving; one hand on the wheel while he talks) - "beautiful out here, like gorgeous"',
-     [('0093', 4.90, 8.25, None)], NAT_MONT),
-    ('0102', 18.70, 3, 'first gas run, Oregon (parked at the pump; the car through the window) - "I got my Red Bull and my snacks"',
-     [('0102', 18.74, 21.00, None)], NAT_MONT),
-    ('0105', 4.85, 2, 'In-N-Out lot at night (on foot) - "We finally made it."', [('0105', 4.88, 6.40, None)], NAT_MONT),
-    ('0105', 7.30, 2, 'jump cut, the In-N-Out sign behind him - "To In-N-Out."', [('0105', 7.32, 8.40, None)], NAT_MONT),
-    ('0107', 256.40, 3, 'the oil scare: on his phone looking up the oil cap, leaning on the parked car. VOICE from 0106 (its picture is '
-     'near-black): "Where the [bleep] is the oil in this [bleep]?"', [('0106', 182.05, 184.35, 0.10)], None),
+    # 0105 4.85 "We finally made it" DROPPED (nq-check): its picture is near-black; straight to the In-N-Out sign.
+    ('0091', 7.30, 3, 'Seattle, in the parked car at the shop - "Spider top goes down" (hoodie chest print blurred)',
+     [('0091', 7.30, 9.66, None)], NAT_MONT),
+    ('0093', 6.20, 3, 'top down through the trees (moving; one hand on the wheel while he talks) - "out here, like gorgeous"',
+     [('0093', 6.25, 8.38, None)], NAT_MONT),
+    ('0102', 19.45, 2, 'first gas run, Oregon (parked at the pump) - "Red Bull and my snacks"', [('0102', 19.48, 21.04, None)], NAT_MONT),
+    ('0105', 7.30, 2, 'In-N-Out at night, the sign behind him (on foot) - "To In-N-Out."', [('0105', 7.32, 8.40, None)], NAT_MONT),
+    ('0107', 254.75, 4, 'the oil scare: parked at In-N-Out, him gesturing then down at his phone looking up the oil cap. VOICE from '
+     '0106 (its picture is near-black): "Where the [bleep] is the oil in this [bleep]?", held a beat after the line',
+     [('0106', 182.05, 184.35, 0.10)], None),
     ('0111', 47.40, 5, 'gas-station counter, him laughing (strangers out of frame; their voices muted) - "It\'s a McLaren." / '
-     '"Everyone keeps saying I\'m Corvettes."', [('0111', 47.45, 48.45, None), ('0111', 49.62, 51.27, None)], None),
-    ('0112', 13.55, 3, 'second gas run, in the parked car at the pump - "We gassed up, shawty!"', [('0112', 13.70, 15.75, None)], NAT_MONT),
-    ('0114', 8.90, 3, 'the night nap, parked - "a nice McLaren nap"', [('0114', 9.12, 11.18, None)], NAT_MONT),
-    ('0114', 42.65, 3, 'awake, parked - "We back in business, baby!"', [('0114', 42.70, 44.75, None)], NAT_MONT),
-    ('0115', 12.65, 3, 'night gas run, standing at the pump - "dude, it is freezing"', [('0115', 12.66, 14.80, None)], NAT_MONT),
-    ('0118', 83.85, 3, 'morning drive, cabin camera (moving; left hand on the wheel) - "No hotel, no nothing."',
-     [('0118', 83.88, 86.05, None)], NAT_MONT),
-    ('0118', 90.05, 2, 'jump cut - "But you know, we thug it out."', [('0118', 90.08, 91.35, None)], NAT_MONT),
-    ('0122', 583.40, 3, 'Las Vegas skyline, rear camera (last; bed only: stereo, Shazam)', [], None),
+     '"Everyone can say I\'m a Corvette too"', [('0111', 47.45, 48.45, None), ('0111', 49.62, 51.40, None)], None),
+    ('0112', 13.90, 2.5, 'second gas run, in the parked car at the pump - "gassed up, shawty!"', [('0112', 13.95, 15.86, None)], NAT_MONT),
+    ('0114', 8.70, 3.5, 'the night nap, parked - "take a nice McLaren nap" (hoodie print and the lit TFT blurred)',
+     [('0114', 8.85, 11.18, None)], NAT_MONT),
+    ('0114', 42.65, 4, 'awake, parked - "We back in business, baby!" (hoodie print and the lit TFT blurred)',
+     [('0114', 42.70, 44.75, None)], NAT_MONT),
+    ('0115', 12.75, 3, 'night gas run, standing at the pump - "It is freezing." (SE logo on the hoodie blurred from +1.25)',
+     [('0115', 13.20, 15.05, None)], NAT_MONT),
+    ('0118', 83.60, 4, 'morning drive, cabin camera (moving; left hand on the wheel) - "No hotel, no nothing."',
+     [('0118', 83.65, 86.10, None)], NAT_MONT),
+    ('0118', 90.05, 2.5, 'jump cut - "But you know, we dug it out."', [('0118', 90.08, 91.35, None)], NAT_MONT),
+    ('0122', 583.40, 2.5, 'Las Vegas skyline, rear camera (last; bed only: stereo, Shazam; plate and LED billboard blurred)', [], None),
 ]
 BLEEPS2 = [dict(src='0106', **{'in': 182.60}, out=182.92, word='fuck'), dict(src='0106', **{'in': 183.66}, out=184.32, word='bitch')]
 J_CH1 = 2 * BEAT     # B2: CH1's first line starts under the last two montage beats

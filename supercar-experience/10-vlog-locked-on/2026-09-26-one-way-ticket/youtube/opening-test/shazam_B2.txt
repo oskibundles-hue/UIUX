@@ -23,3 +23,12 @@
 0122 583.0 588.5 COMË N GO - Yeat
 0122 587.0 588.5 no match
 # 0122 583-588.5 is picture plus bed only: its nat is muted (EDL nat None), so the Yeat track is not heard.
+# v2.1 re-cut (8 Oct, after nq-check): the new and changed ranges, all no match
+0093 6.2 8.6 no match
+0102 19.4 21.1 no match
+0107 254.7 257.9 no match   (picture only; nat muted)
+0111 47.4 51.5 no match
+0112 13.9 15.9 no match
+0114 8.7 11.4 no match
+0115 12.8 15.1 no match
+0118 83.6 86.7 no match

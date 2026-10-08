@@ -97,7 +97,8 @@ def shot_filter(s, W, H, lk):
     g = f'[0:v]{chain}[b0]'
     for k, bl in enumerate(blurs):
         x, y, w, h = bl['box']
-        g += _patch(g, k, W, H, int(round(x * W)), int(round(y * H)), int(round(w * W)), int(round(h * H)))
+        en = f"gte(t,{bl['from']})" if 'from' in bl else None     # v2.1: a blur that starts part-way through the shot
+        g += _patch(g, k, W, H, int(round(x * W)), int(round(y * H)), int(round(w * W)), int(round(h * H)), enable=en)
     return g + f';[b{len(blurs)}]format=yuv420p[v]'
 
 

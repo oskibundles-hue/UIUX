@@ -24,6 +24,7 @@ TARGET = 47.0
 GAMMA_MAX = 2.4            # beyond this the near-black face is mostly noise
 CHROMA_MAX = 4.0
 KEY_LO, KEY_HI = 0.08, 0.16
+LIFT_END = (82.5, 83.0)
 # (time in source s, face box x, y, w, h in 720p px) read off the gridded sheet of the un-lifted shot
 ANCHORS = [(80.6, 610, 250, 150, 190), (82.5, 575, 250, 190, 210), (84.0, 680, 215, 200, 160), (85.5, 620, 190, 200, 160)]
 SEGS = [(80.5, 81.6), (81.6, 83.3), (83.3, 84.8), (84.8, 86.4)]
@@ -165,6 +166,11 @@ class Lifter:
         k = int(round(0.5 * FPS)) | 1
         pad = np.pad(G, (k // 2, k // 2), mode='edge')
         self.A = np.array([pad[i:i + k].mean() for i in range(len(G))])
+        # v5 (nq-check, 8 Oct): lift only up to source LIFT_END[1]; ease the gamma to 1 over LIFT_END, then none, so the
+        # tail falls to his natural silhouette (no flat cutout, no wall glow)
+        t = IN + (np.arange(len(G)) + self.off) / FPS
+        r = np.clip((LIFT_END[1] - t) / (LIFT_END[1] - LIFT_END[0]), 0, 1)
+        self.A = 1 + (self.A - 1) * r
         return self.A
 
     @staticmethod
@@ -174,6 +180,8 @@ class Lifter:
     def apply(self, i, f):
         """f = (3, H, W) uint16 yuv444p16le. Chroma is scaled with the luma (capped at 4x), so his skin keeps its colour
         (a luma-only lift turns a dark face grey)."""
+        if self.A[i] <= 1.0005:
+            return f                     # no lift: the frame passes untouched
         v = self.norm(f[0])
         w = self.weight(i, v)
         out_v = self.blend(v, w, self.A[i])
