@@ -125,6 +125,7 @@ HOOK_V2 = [HOOK[0],
 # montage v2 rows: (src, in, beats, note, [(dialog src, in, out, offset of the dialog from the shot start)], nat)
 #   offset None = lip sync (dialog in - picture in). nat None = source sound muted (stereo, strangers, or a borrowed picture).
 MONT2 = [
+    # v2.2 (8 Oct, Omarie picked B2): the 0118 night drive trimmed 5.0 -> 3.85 s (3.25 + 1.75 beats), both bites whole.
     # v2.1 (nq-check, 8 Oct): varied cut lengths (beats may be halves): quick cuts through the gas and food run, longer
     # holds on the oil scare, the counter, the nap and the night trouble; montage <= 32 s. Bites trimmed to whole words.
     # 0090 21.8 "Oh yeah!" DROPPED at the frame gate: a whip pan, and the car's rear plate (and a red car's) in frame.
@@ -147,9 +148,9 @@ MONT2 = [
      [('0114', 42.70, 44.75, None)], NAT_MONT),
     ('0115', 12.75, 3, 'night gas run, standing at the pump - "It is freezing." (SE logo on the hoodie blurred from +1.25)',
      [('0115', 13.20, 15.05, None)], NAT_MONT),
-    ('0118', 83.60, 4, 'morning drive, cabin camera (moving; left hand on the wheel) - "No hotel, no nothing."',
+    ('0118', 83.60, 3.25, 'morning drive, cabin camera (moving; left hand on the wheel) - "No hotel, no nothing."',
      [('0118', 83.65, 86.10, None)], NAT_MONT),
-    ('0118', 90.05, 2.5, 'jump cut - "But you know, we dug it out."', [('0118', 90.08, 91.35, None)], NAT_MONT),
+    ('0118', 90.05, 1.75, 'jump cut - "But you know, we dug it out."', [('0118', 90.08, 91.35, None)], NAT_MONT),
     ('0122', 583.40, 2.5, 'Las Vegas skyline, rear camera (last; bed only: stereo, Shazam; plate and LED billboard blurred)', [], None),
 ]
 BLEEPS2 = [dict(src='0106', **{'in': 182.60}, out=182.92, word='fuck'), dict(src='0106', **{'in': 183.66}, out=184.32, word='bitch')]

@@ -5,7 +5,7 @@
   1280,
   720
  ],
- "duration": 52.57,
+ "duration": 51.4162,
  "montage_t": 16.69,
  "beat": 0.7692307692307693,
  "v2": true,
@@ -183,10 +183,10 @@
    "beat": 14,
    "src": "0118",
    "in": 83.6,
-   "out": 86.6769,
+   "out": 86.1,
    "speed": 1.0,
    "t": 41.3054,
-   "dur": 3.0769,
+   "dur": 2.5,
    "kind": "montage",
    "nat": -30.0,
    "note": "morning drive, cabin camera (moving; left hand on the wheel) - \"No hotel, no nothing.\""
@@ -195,10 +195,10 @@
    "beat": 15,
    "src": "0118",
    "in": 90.05,
-   "out": 91.9731,
+   "out": 91.3962,
    "speed": 1.0,
-   "t": 44.3823,
-   "dur": 1.9231,
+   "t": 43.8054,
+   "dur": 1.3462,
    "kind": "montage",
    "nat": -30.0,
    "note": "jump cut - \"But you know, we dug it out.\""
@@ -209,7 +209,7 @@
    "in": 583.4,
    "out": 585.3231,
    "speed": 1.0,
-   "t": 46.3054,
+   "t": 45.1515,
    "dur": 1.9231,
    "kind": "montage",
    "nat": null,
@@ -221,7 +221,7 @@
    "in": 82.0385,
    "out": 86.38,
    "speed": 1.0,
-   "t": 48.2285,
+   "t": 47.0746,
    "dur": 4.3415,
    "kind": "talk",
    "nat": -24.0,
@@ -363,7 +363,7 @@
    "src": "0118",
    "in": 90.08,
    "out": 91.35,
-   "t": 44.4123,
+   "t": 43.8354,
    "text": ""
   },
   {
@@ -371,7 +371,7 @@
    "src": "0075",
    "in": 80.5,
    "out": 86.38,
-   "t": 46.69,
+   "t": 45.5362,
    "text": "CH1: \"So let's head up out of here. Alright famo.\" (J-cut 1.54 s)"
   }
  ],
