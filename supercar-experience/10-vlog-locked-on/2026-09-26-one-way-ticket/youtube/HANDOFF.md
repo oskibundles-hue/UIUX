@@ -5,7 +5,7 @@ Lead session: session_013JoCuN8AVJiDRcQU8W2e21 (send_message it at final deliver
 
 ## Brief (Omarie's words where possible)
 Style: **Lifestyle** (proposed). Personal channel @nq.young, 16:9. Personal brand only: no SE logo, HUD, strip,
-end card, SE orange or gold, and no SE print on signs (blur it). The SE hoodie/jacket print is NOT blurred from Ch3 on (Omarie, 2026-10-09: "the jacket dont need blur"; Ch1, Ch2 and Ch4 keep their blur, his call). Never mix brands.
+end card, SE orange or gold, and no SE print on signs (blur it). The SE hoodie/jacket print is NOT blurred from Ch3 on (Omarie, 2026-10-09: "the jacket dont need blur"; Ch1, Ch2 and Ch4 keep their blur, his call). **From Ch5 on the dash is the only blur**, and only while the car is moving (Omarie, 2026-10-09: "only blur shpuld be the dash", "from now on"): no plate, print, billboard or SE-sign blurs in Ch5-8; the opening and Ch1-4 stay as built. Never mix brands.
 
 The 12 points Omarie approved (2026-10-07):
 1. Hook "Running on empty", ~15 s, no text, straight into the 4:30 a.m. Uber line.
