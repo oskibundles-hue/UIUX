@@ -8,7 +8,9 @@ placed at its source time and silence everywhere else, written as lossless ALAC 
 read the same clip times they always did. Only the ranges the EDL fetched have sound; anything outside them is
 silent, so a mix that reaches past a fetched range shows up as a hole, not as wrong audio.
 
-usage: python3 aud_from_mezz.py DAY MEZZ [clip ...]
+An existing aud/<clip>.m4a is kept as the base, so a second fetch group adds its ranges without losing the first's.
+
+usage: python3 aud_from_mezz.py DAY MEZZ [clip ...]   (FETCHPLAN=path overrides DAY/fetch/fetchplan.json)
 """
 import glob, json, os, re, subprocess, sys
 import numpy as np
@@ -24,7 +26,7 @@ def main():
     day, mezz = sys.argv[1], sys.argv[2]
     only = set(sys.argv[3:])
     exact = {}
-    fp = os.path.join(day, 'fetch', 'fetchplan.json')
+    fp = os.environ.get('FETCHPLAN') or os.path.join(day, 'fetch', 'fetchplan.json')
     if os.path.exists(fp):  # the plan's t0 has 3 decimals; the file name rounds it to 2
         exact = {j['out']: j['t0'] for j in json.load(open(fp))['jobs']}
     pieces = {}
@@ -36,6 +38,12 @@ def main():
     for cid, items in sorted(pieces.items()):
         dur = json.load(open(os.path.join(day, 'idx', cid + '.json')))['duration']
         buf = np.zeros((int(round(dur * SR)) + SR, 2), np.float32)
+        old = os.path.join(day, 'aud', cid + '.m4a')
+        if os.path.exists(old):  # keep the ranges an earlier fetch group placed
+            raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', old, '-f', 'f32le', '-ac', '2', '-ar', str(SR), '-'],
+                                 capture_output=True, check=True).stdout
+            a = np.frombuffer(raw, np.float32).reshape(-1, 2)[:len(buf)]
+            buf[:len(a)] = a
         for t0, f in items:
             raw = subprocess.run(['ffmpeg', '-v', 'error', '-i', f, '-map', '0:a:0', '-f', 'f32le', '-ac', '2',
                                   '-ar', str(SR), '-'], capture_output=True, check=True).stdout
