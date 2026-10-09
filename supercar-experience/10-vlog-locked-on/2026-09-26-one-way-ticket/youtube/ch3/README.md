@@ -115,3 +115,11 @@ measured as follows, then were deleted for disk (the final video is assembled fr
 | `ch3_master_NOMUSIC.mp4` (AAC) | -14.0 LUFS | -1.8 dBTP |
 
 The 720p preview (`ch3work/ch3_preview_720p.mp4`) is kept.
+
+### Patch after nq-check (2026-10-09)
+- Frame 1974 (65.866 s, source 0090 ~23.016) fell between the shot-11 edge box (ends 22.97) and the tracked run
+  (starts 23.00), so the plate showed for one frame. Fixed in `master_video.mp4` without a source download: only the
+  GOP 1943-2003 was re-encoded (same x264 settings) with a box blur at x 3100-3500, y 1380-1620 on frames 1973-1975,
+  and spliced back by stream copy. Every other frame is bit-identical (PSNR inf); the re-encoded GOP is 44-52 dB.
+  A source re-render must extend the edge-box entry in `look.json` to 23.05 so the gap does not come back.
+- `mix.wav`/`nomusic.wav` padded to the picture length (7,634,827 samples = 4767 frames).
