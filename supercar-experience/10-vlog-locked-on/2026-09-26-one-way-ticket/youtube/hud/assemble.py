@@ -147,7 +147,12 @@ def send():
                 '-pix_fmt', 'yuv420p', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709',
                 '-passlogfile', f'{OUT}/x264pass{k}']
         sh(base + ['-pass', '1', '-an', '-f', 'null', '-'])
-        sh(base + ['-pass', '2', '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart', out])
+        sh(base + ['-pass', '2', '-an', out + '.v.mp4'])
+        # audio from the full-mix wav (one AAC generation), 0.4 dB down so the 128k AAC keeps true peak under -1.5 dBTP
+        sh(['ffmpeg', '-v', 'error', '-y', '-i', out + '.v.mp4', '-ss', f'{a * 1001 / 30000:.6f}', '-t', f'{dur:.6f}',
+            '-i', f'{OUT}/mix_full.wav', '-map', '0:v', '-map', '1:a', '-c:v', 'copy', '-af', 'volume=-0.4dB',
+            '-c:a', 'aac', '-b:a', '128k', '-movflags', '+faststart', out])
+        os.remove(out + '.v.mp4')
         print(out, os.path.getsize(out), kbps)
 
 
