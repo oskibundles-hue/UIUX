@@ -141,7 +141,7 @@ def run_frames(hud, run, fade):
                 prev_p = p_now
                 change_t = t
             cur = s
-        clk = s['clock0'] + max(0.0, t - s['t']) * s['speed']
+        clk = s['clock_hold'] if 'clock_hold' in s else s['clock0'] + max(0.0, t - s['t']) * s['speed']
         p_target = s['p0'] + (s['p1'] - s['p0']) * max(0.0, min(1.0, (t - s['t']) / s['dur']))
         glide = 0.9 if change_t == run['t0'] else 0.5
         p_now = prev_p + (p_target - prev_p) * ease((t - change_t) / glide)

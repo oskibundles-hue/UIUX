@@ -124,92 +124,6 @@
  ],
  "runs": [
   {
-   "piece": "opening",
-   "t0": 18.9977,
-   "t1": 21.3054,
-   "g0": 18.9977,
-   "g1": 21.3054,
-   "f0": 569,
-   "f1": 639,
-   "shots": [
-    {
-     "shot": 5,
-     "clip": "0093",
-     "src_in": 6.2,
-     "t": 18.9977,
-     "dur": 2.3077,
-     "speed": 1.0,
-     "place": "WASHINGTON",
-     "why": "montage: top down through the trees, moving (0093, 4 min after the shop)",
-     "clock0": 43260.2,
-     "clock1": 43262.5077,
-     "clock": "12:01 PM",
-     "clock_end": "12:01 PM",
-     "p0": 0.0019,
-     "p1": 0.0019
-    }
-   ]
-  },
-  {
-   "piece": "opening",
-   "t0": 41.3054,
-   "t1": 47.0746,
-   "g0": 41.3054,
-   "g1": 47.0746,
-   "f0": 1238,
-   "f1": 1411,
-   "shots": [
-    {
-     "shot": 14,
-     "clip": "0118",
-     "src_in": 83.6,
-     "t": 41.3054,
-     "dur": 2.5,
-     "speed": 1.0,
-     "place": "NEVADA",
-     "why": "montage: morning drive, cabin camera, moving (0118; Ch7 \"Sunrise \u00b7 Nevada\")",
-     "clock0": 112457.6,
-     "clock1": 112460.1,
-     "clock": "7:14 AM",
-     "clock_end": "7:14 AM",
-     "p0": 0.8267,
-     "p1": 0.8268
-    },
-    {
-     "shot": 15,
-     "clip": "0118",
-     "src_in": 90.05,
-     "t": 43.8054,
-     "dur": 1.3462,
-     "speed": 1.0,
-     "place": "NEVADA",
-     "why": "montage: same take, moving (0118)",
-     "clock0": 112464.05,
-     "clock1": 112465.3962,
-     "clock": "7:14 AM",
-     "clock_end": "7:14 AM",
-     "p0": 0.8269,
-     "p1": 0.8269
-    },
-    {
-     "shot": 16,
-     "clip": "0122",
-     "src_in": 583.4,
-     "t": 45.1515,
-     "dur": 1.9231,
-     "speed": 1.0,
-     "place": "LAS VEGAS, NV",
-     "why": "montage: Las Vegas skyline from the rear deck, moving (0122; the Ch8 \"LAS VEGAS\" skyline)",
-     "clock0": 119207.4,
-     "clock1": 119209.3231,
-     "clock": "9:06 AM",
-     "clock_end": "9:06 AM",
-     "p0": 1.0,
-     "p1": 1.0
-    }
-   ]
-  },
-  {
    "piece": "ch3",
    "t0": 148.51,
    "t1": 159.03,
@@ -229,10 +143,11 @@
      "why": "drive cutaway, top down, moving, a hand on the wheel (0092; chapter place \"Seattle, WA\")",
      "clock0": 43149.95,
      "clock1": 43153.7498,
-     "clock": "11:59 AM",
-     "clock_end": "11:59 AM",
+     "clock": "11:58 AM",
+     "clock_end": "11:58 AM",
      "p0": 0.0,
-     "p1": 0.0001
+     "p1": 0.0,
+     "clock_hold": 43098.5
     },
     {
      "shot": 22,
@@ -248,7 +163,8 @@
      "clock": "11:58 AM",
      "clock_end": "11:58 AM",
      "p0": 0.0,
-     "p1": 0.0
+     "p1": 0.0,
+     "clock_hold": 43098.5
     }
    ]
   },

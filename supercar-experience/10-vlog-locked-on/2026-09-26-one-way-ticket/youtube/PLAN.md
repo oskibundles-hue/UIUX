@@ -111,3 +111,6 @@ Spans are `clip:in-out` in seconds within the clip.
   re-rendered and no footage is re-downloaded.
 - Place names and clock times go through nq-facts (camera-clock time zone); the route line needs a source for the
   route driven, or stays schematic (Seattle → Oregon → Idaho → Nevada → Las Vegas) with no distances.
+- Decided on the rough cut (Omarie, 2026-10-09, clicks): no HUD in the opening montage ("Drop it there"); where two
+  drive shots play out of clock order (end of Ch3), the clock holds the earlier time, 11:58 ("Hold 11:58"), so it never
+  steps back.

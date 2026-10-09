@@ -21,7 +21,7 @@ FPS = 30000 / 1001
 MERGE = 1.0        # merge driving shots closer than this (s)
 FADE = 0.3         # fade/slide in and out (s)
 TITLE_GAP = 0.1    # keep the HUD this far clear of a title card (s)
-OPENING_DRIVES = True   # the opening's story-montage drives (the hook stays clean: 12 points, no text in the hook)
+OPENING_DRIVES = False  # Omarie 2026-10-09: "Drop it there" (was True: the opening's story-montage drives (the hook stays clean: 12 points, no text in the hook)
 
 PIECES = [  # name, edl, frames, title window (chapter time) or None
     ('opening', 'opening-test/edl_B2.json', 1541, None),
@@ -153,6 +153,13 @@ def main():
             if r['t1'] - last['t'] < 1.0 and last['t'] > r['t0'] + 1.0:
                 r['t1'] = last['t']
             sh = [s for s in r['shots'] if s['t'] < r['t1'] and s['t'] + s['dur'] > r['t0']]
+            # a run whose shots play out of clock order holds its earliest time, so the clock never steps back
+            # (Omarie 2026-10-09, Ch3 end: "Hold 11:58")
+            if any(b['clock0'] // 60 < a['clock0'] // 60 for a, b in zip(sh, sh[1:])):   # a visible step back
+                lo = min(s['clock0'] for s in sh)
+                for s in sh:
+                    s.update(clock_hold=lo, clock=clock_str(lo), clock_end=clock_str(lo),
+                             p0=round(progress(lo), 4), p1=round(progress(lo), 4))
             out['runs'].append(dict(piece=name, t0=round(r['t0'], 4), t1=round(r['t1'], 4),
                                     g0=round(g0 + r['t0'], 4), g1=round(g0 + r['t1'], 4),
                                     f0=f0 + round(r['t0'] * FPS), f1=f0 + round(r['t1'] * FPS), shots=sh))
