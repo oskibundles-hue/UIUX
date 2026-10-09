@@ -12,15 +12,15 @@ Changes from the PLAN spans, each for a reason:
     desert hills, the valley), no talk; the bed comes up here (music comes up only in montages).
   * 0122 skyline 552-570 and 582-600: five 3 s pieces, no talk, bed up; the camera sound is MUTED under them because
     flags.json has car-stereo blocks at 510-552 and 570-582 on either side (the stereo could bleed into the edges).
-    Framed with a zoom that leaves the Rio/Starbucks digital billboard at the left edge out of frame (the "$6.99"
-    board, brief: blur; reframing is cleaner). The dump truck's front plate behind is tracked and blurred.
   * 0123 4.1-12.4 becomes 4.90-12.02: "Apparently not," answers someone off camera before the clip starts, so the
     piece starts on "we just got back to the shop"; it ends on "honestly," (the "but" at 12.05 leads nowhere).
-  * 0123 17.1-27.2 becomes 17.05-24.20: "Pretty, pretty gnarly." (25.8-27.2) repeats the line before it, under the
-    full SE banner and phone number.
+  * 0123 17.1-27.2 becomes 17.05-24.20: "Pretty, pretty gnarly." (25.8-27.2) repeats the line before it.
   * Outro 0123 39.9-59.4 as filmed (PLAN: "use what was filmed"); it names the shop out loud ("We dropped it off here
-    at Supercar Experience at headquarters"): flagged to the lead (Ch3 cut a spoken SE line, PLAN 3.2). The SE banner,
-    phone number, web address and window lettering are reframed out (the 16:9 band taken low in the square) or blurred.
+    at Supercar Experience at headquarters"): flagged to the lead (Ch3 cut a spoken SE line, PLAN 3.2).
+Blur (Omarie, 2026-10-09, overrides the brief: "only blur should be the dash"): the only blur in Ch5-8 is the dashboard
+(cluster, speedometer, centre screen) while the car is moving. Chapter 8 shows no dashboard while moving (the 0121/0122
+montage camera sits on the rear deck looking back; the 0119 and 0123 selfies are parked), so it has no blur: no plate,
+billboard, sign or phone-number blur.
 Music flags (flags.json): the only block flags on these clips are 0119 104.2-129.6 (cashier, stranger) and the 0122
 car-stereo windows (96-132, 180-192, 420-492, 510-552, 570-582): none touches a used range; the assert below checks.
 Re-run: python3 make_edl.py
