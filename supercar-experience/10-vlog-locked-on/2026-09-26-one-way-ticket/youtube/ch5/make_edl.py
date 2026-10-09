@@ -35,8 +35,8 @@ BEAT = 'CH5 Nampa, Idaho, night: snacks and the plan to run it straight -> In-N-
 # (src, in, dur, speed, note, sync-dialog (in, asr_out) or None). dur None = to the dialog out; 'REST' = picture-only
 # cutaway to the end of the previous dialog piece.
 SHOTS = [
-    ('0102', 17.40, None, 1.0, 'OREGON GAS STOP (selfie stick, parked): "As you can see I got my Red Bull and my snacks because we are going to starve ourselves until we can get to In-N-Out, that\'s the goal."', (17.40, 25.40)),
-    ('0102', 58.40, None, 1.0, 'SELFIE at the pump: "I don\'t think I\'m going to go to sleep. I think I\'m just gonna run it the whole way there."', (58.40, 62.70)),
+    ('0102', 17.50, None, 1.0, 'OREGON GAS STOP (selfie stick, parked): "As you can see I got my Red Bull and my snacks because we are going to starve ourselves until we can get to In-N-Out, that\'s the goal."', (17.50, 25.40)),
+    ('0102', 58.45, None, 1.0, 'SELFIE at the pump: "I don\'t think I\'m going to go to sleep. I think I\'m just gonna run it the whole way there."', (58.45, 62.70)),
     ('0105', 4.92, None, 1.0, 'NIGHT, In-N-Out lot (selfie), under the "NAMPA, IDAHO · NIGHT" title: "We finally made it."', (4.92, 6.20)),
     ('0105', 7.70, None, 1.0, 'JUMP: "To In-N-Out. Appreciate you. Thank you. We finally gonna eat."', (7.70, 11.40)),
     ('0105', 12.45, None, 1.0, 'JUMP (past "God damn"): "I\'ve been trying to eat all day."', (12.45, 13.82)),

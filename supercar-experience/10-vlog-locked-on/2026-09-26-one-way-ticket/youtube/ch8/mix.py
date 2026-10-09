@@ -36,8 +36,12 @@ CHAIN = ('highpass=f=90:poles=2,afftdn=nr=10:nf=-42:tn=1,equalizer=f=300:t=q:w=1
 # those two dialog pieces get a 170 Hz high-pass before the voice chain (DIALOG_PRE): the leveller then levels on
 # the voice, and the engine stays on the nat bus (which is not filtered). 0093 133.8 (832 Hz, one window) is a vowel.
 # The nat-only shots (0095/0098) hold the same engine glide (138-316 Hz): that is the scene, so no notch there.
-NOTCH = {}        # per chapter, from the tone scan (README)
-DIALOG_PRE = {}
+# Tone scan (2026-10-09, 0.5 s windows over every used range of Ch5-8, spectral peak +-2 bins vs total > 40 %): a steady
+# 56-58 Hz hum under all of 0112 23-35 (the idling car; the voice chain's 90 Hz high-pass already takes it off the dialog,
+# the notch takes it off the nat bus) and a 106-108 Hz tone in 0123 20.6-22.6 (under the dialog). The other hits are
+# gliding engine partials (0121, 0122, 0116, 0118) or single vowel windows (0115 14.3 "freezing", 0123 5.9/9.9/41-54).
+NOTCH = {'0112': 'bandreject=f=57:width_type=h:w=6', '0123': 'bandreject=f=107:width_type=h:w=6'}
+DIALOG_PRE = {'0123': 'bandreject=f=107:width_type=h:w=6'}
 EDL = json.load(open(os.path.join(HERE, 'edl.json')))
 FPS = 30000 / 1001
 NF = EDL['frames']

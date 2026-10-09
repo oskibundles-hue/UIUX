@@ -4,8 +4,8 @@
   3840,
   2160
  ],
- "duration": 57.39,
- "frames": 1720,
+ "duration": 57.24,
+ "frames": 1715,
  "chapters": [
   {
    "t": 0.0,
@@ -15,28 +15,28 @@
  ],
  "title": {
   "text": "NAMPA, IDAHO \u00b7 NIGHT",
-  "t0": 13.82,
-  "t1": 17.12
+  "t0": 13.67,
+  "t1": 16.97
  },
  "shots": [
   {
    "beat": 0,
    "src": "0102",
-   "in": 17.4,
+   "in": 17.5,
    "out": 25.9,
    "speed": 1.0,
    "t": 0.0,
-   "dur": 8.5,
+   "dur": 8.4,
    "note": "OREGON GAS STOP (selfie stick, parked): \"As you can see I got my Red Bull and my snacks because we are going to starve ourselves until we can get to In-N-Out, that's the goal.\""
   },
   {
    "beat": 1,
    "src": "0102",
-   "in": 58.4,
+   "in": 58.45,
    "out": 63.12,
    "speed": 1.0,
-   "t": 8.5,
-   "dur": 4.72,
+   "t": 8.4,
+   "dur": 4.67,
    "note": "SELFIE at the pump: \"I don't think I'm going to go to sleep. I think I'm just gonna run it the whole way there.\""
   },
   {
@@ -45,7 +45,7 @@
    "in": 4.92,
    "out": 6.78,
    "speed": 1.0,
-   "t": 13.22,
+   "t": 13.07,
    "dur": 1.86,
    "note": "NIGHT, In-N-Out lot (selfie), under the \"NAMPA, IDAHO \u00b7 NIGHT\" title: \"We finally made it.\""
   },
@@ -55,7 +55,7 @@
    "in": 7.7,
    "out": 11.82,
    "speed": 1.0,
-   "t": 15.08,
+   "t": 14.93,
    "dur": 4.12,
    "note": "JUMP: \"To In-N-Out. Appreciate you. Thank you. We finally gonna eat.\""
   },
@@ -65,7 +65,7 @@
    "in": 12.45,
    "out": 14.22,
    "speed": 1.0,
-   "t": 19.2,
+   "t": 19.05,
    "dur": 1.77,
    "note": "JUMP (past \"God damn\"): \"I've been trying to eat all day.\""
   },
@@ -75,7 +75,7 @@
    "in": 283.3,
    "out": 296.88,
    "speed": 1.0,
-   "t": 20.97,
+   "t": 20.82,
    "dur": 13.58,
    "note": "LOT (camera on the car, parked; he leans on it with his phone): \"...to let you know where I'm at, I am in Nampa, Idaho, currently at Treasure Valley Marketplace just west of Boise, looking at about 300 miles from Sandy, five hours away.\""
   },
@@ -85,7 +85,7 @@
    "in": 232.3,
    "out": 238.06,
    "speed": 1.0,
-   "t": 34.55,
+   "t": 34.4,
    "dur": 5.76,
    "note": "IN-N-OUT TABLE (static, eating): \"I gotta have to put some actual oil inside the car because like it's been like over 500 miles.\""
   },
@@ -95,7 +95,7 @@
    "in": 13.75,
    "out": 19.85,
    "speed": 1.0,
-   "t": 40.31,
+   "t": 40.16,
    "dur": 6.1,
    "note": "CABIN (parked at the pump, door up): \"We gots up, shawty! You feel me? We are gassed up, we are ready to leave.\""
   },
@@ -105,7 +105,7 @@
    "in": 23.1,
    "out": 26.45,
    "speed": 1.0,
-   "t": 46.41,
+   "t": 46.26,
    "dur": 3.35,
    "note": "JUMP: \"So, right here as you can see.\" (shows the route on his phone)"
   },
@@ -115,7 +115,7 @@
    "in": 27.95,
    "out": 35.58,
    "speed": 1.0,
-   "t": 49.76,
+   "t": 49.61,
    "dur": 7.63,
    "note": "JUMP (past \"Oh shit\"): \"We got 9 hours, 27 minutes to go. It's light work.\""
   }
@@ -124,12 +124,12 @@
   {
    "beat": 0,
    "src": "0102",
-   "in": 17.4,
+   "in": 17.5,
    "out": 25.9,
    "t": 0.0,
    "trim_pauses": null,
    "last_word_end": 25.44,
-   "onset_measured": 17.1,
+   "onset_measured": 17.2,
    "voice_end": 25.5,
    "next_onset_measured": 26.2,
    "extended": false,
@@ -139,13 +139,13 @@
   {
    "beat": 1,
    "src": "0102",
-   "in": 58.4,
+   "in": 58.45,
    "out": 63.12,
-   "t": 8.5,
+   "t": 8.4,
    "trim_pauses": null,
    "last_word_end": 62.72,
-   "onset_measured": 58.1,
-   "voice_end": 62.7,
+   "onset_measured": 58.15,
+   "voice_end": 62.65,
    "next_onset_measured": 63.7,
    "extended": false,
    "out_asr": 62.7,
@@ -156,7 +156,7 @@
    "src": "0105",
    "in": 4.92,
    "out": 6.78,
-   "t": 13.22,
+   "t": 13.07,
    "trim_pauses": null,
    "last_word_end": 6.38,
    "onset_measured": 5.3,
@@ -171,7 +171,7 @@
    "src": "0105",
    "in": 7.7,
    "out": 11.82,
-   "t": 15.08,
+   "t": 14.93,
    "trim_pauses": null,
    "last_word_end": 11.42,
    "onset_measured": 7.8,
@@ -186,7 +186,7 @@
    "src": "0105",
    "in": 12.45,
    "out": 14.22,
-   "t": 19.2,
+   "t": 19.05,
    "trim_pauses": null,
    "last_word_end": 13.82,
    "onset_measured": 12.15,
@@ -201,7 +201,7 @@
    "src": "0106",
    "in": 283.3,
    "out": 296.88,
-   "t": 20.97,
+   "t": 20.82,
    "trim_pauses": null,
    "last_word_end": 296.48,
    "onset_measured": 283.4,
@@ -216,7 +216,7 @@
    "src": "0107",
    "in": 232.3,
    "out": 238.06,
-   "t": 34.55,
+   "t": 34.4,
    "trim_pauses": null,
    "last_word_end": 237.66,
    "onset_measured": 232.7,
@@ -231,7 +231,7 @@
    "src": "0112",
    "in": 13.75,
    "out": 19.85,
-   "t": 40.31,
+   "t": 40.16,
    "trim_pauses": null,
    "last_word_end": 19.47,
    "onset_measured": 13.5,
@@ -246,7 +246,7 @@
    "src": "0112",
    "in": 23.1,
    "out": 26.45,
-   "t": 46.41,
+   "t": 46.26,
    "trim_pauses": null,
    "last_word_end": 26.05,
    "onset_measured": 23.4,
@@ -261,7 +261,7 @@
    "src": "0112",
    "in": 27.95,
    "out": 35.58,
-   "t": 49.76,
+   "t": 49.61,
    "trim_pauses": null,
    "last_word_end": 35.18,
    "onset_measured": 28.3,
@@ -278,7 +278,7 @@
    "i": 0,
    "ch": "CH5",
    "t0": 0.0,
-   "t1": 57.39,
+   "t1": 57.24,
    "note": "CH5 Nampa, Idaho, night: snacks and the plan to run it straight -> In-N-Out at last -> where we are -> oil -> gassed up, 9 h 27 m to go, light work"
   }
  ],
@@ -286,8 +286,8 @@
  "bleeps": [],
  "rotate": {},
  "warnings": [
-  "0102 17.4: voice onset 17.10 is before the in-point",
-  "0102 58.4: voice onset 58.10 is before the in-point",
+  "0102 17.5: voice onset 17.20 is before the in-point",
+  "0102 58.45: voice onset 58.15 is before the in-point",
   "0105 7.7: voice ends 11.75, next onset 11.90: tail 0.07 s",
   "0105 12.45: voice onset 12.15 is before the in-point",
   "0112 13.75: voice onset 13.50 is before the in-point",

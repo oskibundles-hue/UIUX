@@ -96,3 +96,11 @@ Spans are `clip:in-out` in seconds within the clip.
 - Clock times come from the DJI camera clock. Check the time zone.
 - The route map needs a source for the route he actually drove.
 - The spoken figures are 830 miles, 18 hours, 186 miles and 9 h 27 m. They are only spoken, and no card repeats them.
+
+## Driving HUD (Omarie, 2026-10-09: "is there no animations or hud driving?", picked "Personal HUD on drives")
+- On driving shots only, all chapters: place name, clock time, a small animated route line and a progress bar.
+- Personal brand (Anton, #DE1A22 red, #FBD101 yellow, white). Not the SE HUD. No speed numbers, no figures.
+- Added as an overlay on the assembled picture (720p rough cut first, then the 4K pass), so no chapter is
+  re-rendered and no footage is re-downloaded.
+- Place names and clock times go through nq-facts (camera-clock time zone); the route line needs a source for the
+  route driven, or stays schematic (Seattle → Oregon → Idaho → Nevada → Las Vegas) with no distances.
