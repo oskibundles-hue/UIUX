@@ -11,7 +11,7 @@ Standing rules:
 - **Brand:** personal brand only. No SE logo, HUD, strip or end card, and no SE orange or gold.
 - **Price:** no price anywhere.
 - **Music:** a temp bed plus a NO MUSIC mix. Never use car-stereo or venue music.
-- **Never on screen:** blur plates and the speedometer, and use no speed words. No hands-off-wheel or
+- **Never on screen:** blur plates, and the speedometer while the car is moving (parked: no blur; Omarie 2026-10-09), and use no speed words. The hoodie print is not blurred from Ch3 on. No hands-off-wheel or
   phone-in-hand driving shots.
 - **Strangers:** mute them.
 - **Captions:** only words two ASR models agree on.

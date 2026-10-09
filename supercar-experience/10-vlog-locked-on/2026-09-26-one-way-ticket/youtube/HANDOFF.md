@@ -5,7 +5,7 @@ Lead session: session_013JoCuN8AVJiDRcQU8W2e21 (send_message it at final deliver
 
 ## Brief (Omarie's words where possible)
 Style: **Lifestyle** (proposed). Personal channel @nq.young, 16:9. Personal brand only: no SE logo, HUD, strip,
-end card, SE orange or gold, and no SE print on clothing or signs (blur it). Never mix brands.
+end card, SE orange or gold, and no SE print on signs (blur it). The SE hoodie/jacket print is NOT blurred from Ch3 on (Omarie, 2026-10-09: "the jacket dont need blur"; Ch1, Ch2 and Ch4 keep their blur, his call). Never mix brands.
 
 The 12 points Omarie approved (2026-10-07):
 1. Hook "Running on empty", ~15 s, no text, straight into the 4:30 a.m. Uber line.
@@ -35,7 +35,8 @@ The 12 points Omarie approved (2026-10-07):
 1. Build chapters 1-8 from `PLAN.md` behind the B2 opening, to the 12 points above. Reuse test-ch3's grade, mix and
    blur code and the opening-test render (blur `from` key, subject lift). Engine: `../../engine/vlog.py`
    (plan -> Dropbox `download_link` -> fetch, `VLOG_MEZZ_LONG=3840`).
-2. Blur list already known: SE hoodie print (0091, 0114, 0115 and wherever that hoodie shows), every cluster/TFT,
+2. Blur list already known: every cluster/TFT only while the car is moving (Omarie, 2026-10-09: "speedometer only when car
+   is driving"; parked, it stays), the hoodie print NOT (see above),
    every plate, the "$6.99" billboard in 0122, the SE sign and phone number in the 0123 outro. 0116 and 0117 have
    a phone in hand in every frame: cutaway or audio only.
 3. Chain: nq-build -> nq-check -> nq-facts -> nq-second. Facts to clear: Pahranagat and "Club 93", camera-clock time
