@@ -47,6 +47,27 @@ The 12 points Omarie approved (2026-10-07):
    `NQ Studio/04 Exports/2026-09-26 One-way ticket YouTube`, v1/v2 names kept side by side. Then send_message the lead.
 5. Open a draft PR for this branch and subscribe to it.
 
+## Next job (when Omarie's usage resets): animation mockups, then 4K
+
+**State, 2026-10-09:** the full 720p rough cut is done and sent (10:32, opening + Ch1-8, with the personal driving
+HUD; `/home/user/day-owt/roughcut/`, code in `hud/`). Omarie's calls on it: no HUD in the opening montage; the Ch3 clock
+holds at 11:58; **keep the pace** (about 12 cuts a minute).
+
+**His ask:** "i need animation mockups for the vlog using the newest creations we made" ... "do this when my usage
+resets". He picked:
+- **Sources:** the Wayline HUD page (https://claude.ai/artifact/SBs8UUGUsUNMUWJWN6DdfK), the Motion Capabilities
+  page (https://claude.ai/artifact/YTujr1t1xD4wNhuNjNvXHd) and the Layout Library page
+  (https://claude.ai/artifact/TRwYtJB1eTp5GGUXHhyUK9; it includes the Locked-On ABC layout).
+- **Format:** one artifact page with live animations, each option playing over real stills from this vlog, beside what
+  the cut has now: chapter titles, the driving HUD, the word pops, chapter transitions.
+- **Brand:** his personal one (Anton, #DE1A22, #FBD101, white), never SE gold or the SE HUD.
+
+**Steps:** read each source page once with `path: "index.html"`. Pull about 8 stills from the rough cut (a title, a
+drive with the HUD, a word pop, a chapter join). Build the page and publish it, then ask him to pick, one click per
+element. Render the winners into the 4K pass: Ch5-8 4K cuts come from the sparse files in `/home/user/owt/fetchB/sparse/`,
+then `render.py master` per chapter and `hud/render_hud.py OUT 2160`. After the 4K: nq-check on the whole video,
+nq-facts, nq-second, Video Drop cards, and the one send_message to session_013JoCuN8AVJiDRcQU8W2e21.
+
 ## After that: verticals and Shorts (9:16, burned-in captions from words both ASR models agree on)
 Shorts candidates: the first sight and sound (0090), "No cell service…" (0117), "We're in Oregon!" (0100),
 the 1:29 a.m. setback (0114/0115), and the B2 montage recut to 9:16.
