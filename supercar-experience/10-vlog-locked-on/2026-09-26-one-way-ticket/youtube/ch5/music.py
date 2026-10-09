@@ -39,7 +39,7 @@ def saw(f, t, ph=0.0):
 
 def env_adsr(n, a, r):
     e = np.ones(n)
-    na, nr = int(a * SR), int(r * SR)
+    na, nr = min(n, int(a * SR)), min(n, int(r * SR))   # a last segment shorter than the attack (Ch8 length)
     e[:na] = np.linspace(0, 1, na)
     e[-nr:] *= np.linspace(1, 0, nr)
     return e

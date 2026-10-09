@@ -1,37 +1,32 @@
 #!/usr/bin/env python3
-"""track_blur.py -- Chapter 4's moving blurs, found automatically on the 640x360 raw gate shots (WORK/raw_shots/sNN.mp4:
-graded and cropped as they render, no blur) and written into look.json as render.py 'round' blur keys (fractions).
+"""track_blur.py -- Chapter 7's moving dashboard blurs (copy of ../ch4/track_blur.py, tracker unchanged), found
+automatically on the 640x360 raw shots (WORK/raw_shots/sNN.mp4: graded and cropped as they render, no blur; made with
+`python3 render.py raw`) and written into look.json as render.py 'round' blur keys (fractions, so they carry to 4K).
 
-Ch4 is mostly driving from a camera behind his left shoulder that shakes and swings with the car, so the dash moves a lot
-inside every shot. Hand-keyed boxes (test-ch3's cluster patch) would miss; this tracks them on every frame instead:
-
-  * 'tft' and 'cluster' (every rear-camera shot): multi-scale template match (OpenCV TM_CCOEFF_NORMED on the grey frame,
-    scales 0.75-1.3) of two templates cut from a reference frame (s07 at 1.05 s: the centre TFT with its bezel, and the
-    driver's cluster seen through the wheel). The cluster is searched only near where the TFT match puts it (the two sit
-    on one dash), at the same scale. Boxes are padded (TFT 30 %, cluster 60 %: the wheel rim crosses it) and a frame
-    whose match score is low holds the last good box. Every speed/gear readout and the TFT (nav, media) are covered.
-  * 'print' (the 0093 side-camera shots): the "SUPERCAR EXPERIENCE" print sits on his left chest between the HR logo and
-    the "22", mostly under the seat belt from this side. It is too small to track, so the anchor is the green sleeve
-    badge beside it (the only saturated green blob on his torso; found by colour, HSV, inside the torso window), and the
-    blur box sits up and to the left of it, generous (REL below), covering the belt, the "Hidden Hills" script, the SE
-    print and "BASED".
-Keys every 0.1 s, box size the largest over the run (render.py), so a run never shrinks.
-    PYTHONPATH=/home/user/day-owt/pycv python3 track_blur.py      # -> look.json (keeps cy and any other blur entries)
+Blur rule (Omarie, 2026-10-09, overrides the brief: "only blur should be the dash"): the only blurs in Ch5-8 are the
+dashboard (cluster, speedometer, centre screen) while the car is moving. In Ch7 that is:
+  * 'tft' and 'cluster' on the rear-camera shots, all moving: 0118 (s07-s10) and 0119 0.9-12.1 pulling in (s11):
+    multi-scale template match of the centre screen and the cluster through the wheel, cut from a reference frame per
+    camera position (REFS), followed frame by frame (ch4's method). 0119 51.9 (s12) is parked at the pump: no blur.
+  * the side camera (0116, s00 and s03): the camera is fixed to the car and the cluster is seen edge-on behind the
+    wheel, so a static 'round' box over it (STATIC below) for the whole shot.
+  * the windscreen cutaways (s01, s02, s04-s06) leave the dash below the frame: none.
+Keys every 3rd frame (at most 90 per run), box size the largest over the run (render.py), so a run never shrinks.
+    PYTHONPATH=/home/user/day-owt/pycv python3 track_blur.py      # -> look.json (keeps zoom/cy)
 """
 import cv2, json, os
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-RAW = '/home/user/day-owt/ch4work/raw_shots'
-DBG = '/home/user/day-owt/ch4work/track_dbg'
-# reference frames for the dash templates: (shot, time, TFT box, cluster box), x, y, w, h in the 640x360 frame. The
-# 0100 camera sits elsewhere (lower, more behind him), so its shots get their own templates.
-REFS = {'a': (7, 1.05, (328, 226, 46, 80), (236, 200, 66, 28)),
-        'b': (18, 1.5, (354, 220, 48, 80), (262, 198, 72, 30))}
-REAR = {i: 'a' for i in range(3, 15)} | {18: 'b', 19: 'b'}   # rear-camera shots; 2 and 15-17 (scenery crop) show no TFT
-                                                              # or cluster (the dash is below the frame), so none there
-SIDE = [0, 1]                           # 0093 side camera
-REL = (-1.9, -1.6, 2.4, 2.4)            # print box from the badge box (x, y offsets and w, h, in badge sizes)
+RAW = '/home/user/day-owt/ch7work/raw_shots'
+DBG = '/home/user/day-owt/ch7work/track_dbg'
+# reference frames for the dash templates: (shot, time, centre-screen box, cluster box), x, y, w, h in the 640x360
+# frame; 0119's camera sits a little differently from 0118's, so it gets its own templates.
+REFS = {'a': (7, 1.0, (298, 252, 40, 50), (195, 213, 62, 34)),
+        'b': (11, 5.0, (303, 262, 44, 54), (203, 228, 54, 30))}
+REAR = {7: 'a', 8: 'a', 9: 'a', 10: 'a', 11: 'b'}
+SIDE = []
+STATIC = {0: [0.68, 0.50, 0.13, 0.18], 3: [0.68, 0.50, 0.13, 0.18]}   # side-camera cluster, edge-on behind the wheel
 PAD = {'tft': 0.40, 'cluster': 0.60}
 
 
@@ -150,6 +145,10 @@ def main():
                 x, y, w, h = [int(v) for v in bx[k]]
                 cv2.rectangle(f, (x, y), (x + w, y + h), col, 2)
             cv2.imwrite(f'{DBG}/s{i:02d}_{k:04d}.jpg', f)
+    for i, box in STATIC.items():
+        lk = look.setdefault(str(i), {})
+        lk['blur'] = [b for b in lk.get('blur', []) if b.get('auto') != 'cluster'] + [
+            dict(shape='round', auto='cluster', why='driver cluster seen edge-on from the side camera (moving), static box', box=box)]
     json.dump(look, open(os.path.join(HERE, 'look.json'), 'w'), indent=1)
     print('\n'.join(report))
 

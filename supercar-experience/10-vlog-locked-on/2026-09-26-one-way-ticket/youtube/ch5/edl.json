@@ -4,8 +4,8 @@
   3840,
   2160
  ],
- "duration": 57.34,
- "frames": 1718,
+ "duration": 57.39,
+ "frames": 1720,
  "chapters": [
   {
    "t": 0.0,
@@ -92,11 +92,11 @@
   {
    "beat": 7,
    "src": "0112",
-   "in": 13.8,
+   "in": 13.75,
    "out": 19.85,
    "speed": 1.0,
    "t": 40.31,
-   "dur": 6.05,
+   "dur": 6.1,
    "note": "CABIN (parked at the pump, door up): \"We gots up, shawty! You feel me? We are gassed up, we are ready to leave.\""
   },
   {
@@ -105,7 +105,7 @@
    "in": 23.1,
    "out": 26.45,
    "speed": 1.0,
-   "t": 46.36,
+   "t": 46.41,
    "dur": 3.35,
    "note": "JUMP: \"So, right here as you can see.\" (shows the route on his phone)"
   },
@@ -115,7 +115,7 @@
    "in": 27.95,
    "out": 35.58,
    "speed": 1.0,
-   "t": 49.71,
+   "t": 49.76,
    "dur": 7.63,
    "note": "JUMP (past \"Oh shit\"): \"We got 9 hours, 27 minutes to go. It's light work.\""
   }
@@ -229,7 +229,7 @@
   {
    "beat": 7,
    "src": "0112",
-   "in": 13.8,
+   "in": 13.75,
    "out": 19.85,
    "t": 40.31,
    "trim_pauses": null,
@@ -246,7 +246,7 @@
    "src": "0112",
    "in": 23.1,
    "out": 26.45,
-   "t": 46.36,
+   "t": 46.41,
    "trim_pauses": null,
    "last_word_end": 26.05,
    "onset_measured": 23.4,
@@ -261,7 +261,7 @@
    "src": "0112",
    "in": 27.95,
    "out": 35.58,
-   "t": 49.71,
+   "t": 49.76,
    "trim_pauses": null,
    "last_word_end": 35.18,
    "onset_measured": 28.3,
@@ -278,7 +278,7 @@
    "i": 0,
    "ch": "CH5",
    "t0": 0.0,
-   "t1": 57.34,
+   "t1": 57.39,
    "note": "CH5 Nampa, Idaho, night: snacks and the plan to run it straight -> In-N-Out at last -> where we are -> oil -> gassed up, 9 h 27 m to go, light work"
   }
  ],
@@ -290,7 +290,7 @@
   "0102 58.4: voice onset 58.10 is before the in-point",
   "0105 7.7: voice ends 11.75, next onset 11.90: tail 0.07 s",
   "0105 12.45: voice onset 12.15 is before the in-point",
-  "0112 13.8: voice onset 13.50 is before the in-point",
-  "0112 13.8-19.85: speaker model says OTHER (0.33) at 16.13-16.77 \"You feel me?\""
+  "0112 13.75: voice onset 13.50 is before the in-point",
+  "0112 13.75-19.85: speaker model says OTHER (0.33) at 16.13-16.77 \"You feel me?\""
  ]
 }

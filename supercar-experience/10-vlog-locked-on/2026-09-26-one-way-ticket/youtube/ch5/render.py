@@ -173,7 +173,7 @@ def render_shots(W, H, outdir, crf, preset, mezz, noblur=False, only=None):
         if only is not None and i not in only:
             continue
         graph, masks = shot_filter(i, s, W, H, noblur)
-        sig = json.dumps(['pad+mask v3', p, s, nfr, None if noblur else LOOK.get(str(i)), EDL.get('rotate', {}).get(s['src']), GRADE, W, crf])
+        sig = json.dumps(['pad+mask v3', p, s, nfr, {k: v for k, v in LOOK.get(str(i), {}).items() if not (noblur and k == 'blur')}, EDL.get('rotate', {}).get(s['src']), GRADE, W, crf])
         if os.path.exists(out) and os.path.exists(out + '.sig') and open(out + '.sig').read() == sig:
             continue
         mk = sum([['-loop', '1', '-framerate', FPS, '-i', m] for m in masks], [])

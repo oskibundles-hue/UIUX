@@ -42,13 +42,13 @@ SHOTS = [
     ('0105', 12.45, None, 1.0, 'JUMP (past "God damn"): "I\'ve been trying to eat all day."', (12.45, 13.82)),
     ('0106', 283.30, None, 1.0, 'LOT (camera on the car, parked; he leans on it with his phone): "...to let you know where I\'m at, I am in Nampa, Idaho, currently at Treasure Valley Marketplace just west of Boise, looking at about 300 miles from Sandy, five hours away."', (283.30, 296.50)),
     ('0107', 232.30, None, 1.0, 'IN-N-OUT TABLE (static, eating): "I gotta have to put some actual oil inside the car because like it\'s been like over 500 miles."', (232.30, 237.70)),
-    ('0112', 13.80, None, 1.0, 'CABIN (parked at the pump, door up): "We gots up, shawty! You feel me? We are gassed up, we are ready to leave."', (13.80, 19.50)),
+    ('0112', 13.75, None, 1.0, 'CABIN (parked at the pump, door up): "We gots up, shawty! You feel me? We are gassed up, we are ready to leave."', (13.75, 19.50)),
     ('0112', 23.10, None, 1.0, 'JUMP: "So, right here as you can see." (shows the route on his phone)', (23.10, 26.10)),
     ('0112', 27.95, None, 1.0, 'JUMP (past "Oh shit"): "We got 9 hours, 27 minutes to go. It\'s light work."', (27.95, 35.20)),
 ]
 TITLE_AT = 2          # the title card sits on this shot (+0.6 s)
 OUT = {('0105', 7.70): 11.82,   # "eat." voiced to 11.75; "God damn" from 11.90 (cut)
-       ('0112', 13.80): 19.85}  # "leave." voiced to 19.60; a non-voice sound (door/chime) runs 20.1-22.2
+       ('0112', 13.75): 19.85}  # "leave." voiced to 19.60; a non-voice sound (door/chime) runs 20.1-22.2
 # 0102 58.40: "break." (the previous sentence) is voiced to 58.30; "I" starts 58.55
 MUTE = []
 BLEEP = []

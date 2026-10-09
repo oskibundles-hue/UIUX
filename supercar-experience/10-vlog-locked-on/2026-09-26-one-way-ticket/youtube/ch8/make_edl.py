@@ -6,12 +6,13 @@ Spans from ../PLAN.md, chapter 8, in camera-clock order (0119 Pahranagat -> 0121
 the shop). The route map is out of v1 (brief).
 
 Changes from the PLAN spans, each for a reason:
-  * 0119 227.8-245 becomes 227.80-233.75 "...I'm gonna have you guys like in the back": the rest (238.5-245) says the
+  * 0119 227.8-245 becomes 227.50-233.75 "...I'm gonna have you guys like in the back": the rest (238.5-245) says the
     same thing twice more; the line hands straight to the rear-deck camera montage.
   * 0121 80-120: a montage of six 2.4-2.6 s pieces (leaving the station, the truck stop, trees, the green road, the
     desert hills, the valley), no talk; the bed comes up here (music comes up only in montages).
   * 0122 skyline 552-570 and 582-600: five 3 s pieces, no talk, bed up; the camera sound is MUTED under them because
     flags.json has car-stereo blocks at 510-552 and 570-582 on either side (the stereo could bleed into the edges).
+  * 0122 43.3-47.4 becomes 42.40-47.77: medium.en hears "Alright, we're almost to the shop" from 42.49.
   * 0123 4.1-12.4 becomes 4.90-12.02: "Apparently not," answers someone off camera before the clip starts, so the
     piece starts on "we just got back to the shop"; it ends on "honestly," (the "but" at 12.05 leads nowhere).
   * 0123 17.1-27.2 becomes 17.05-24.20: "Pretty, pretty gnarly." (25.8-27.2) repeats the line before it.
@@ -38,15 +39,15 @@ CLOCK = '0119 Pahranagat Valley (selfie at the Shell) to 0123 the shop, DJI came
 BEAT = 'CH8 Las Vegas: an hour and some change out -> the last bit from the back -> desert road montage -> seven minutes out -> the skyline -> back at the shop -> the outro, peace'
 
 SHOTS = [
-    ('0119', 84.70, None, 1.0, 'SHELL STATION SELFIE (parked), under the "LAS VEGAS" title: "Pahranagat Valley, we are about an hour and some change from Vegas. We\'re in the final countdown."', (84.70, 91.47)),
-    ('0119', 227.80, None, 1.0, 'AT THE PUMP: "Man, so I think for the last bit of the drive, I\'m gonna have you guys like in the back"', (227.80, 233.75)),
+    ('0119', 84.60, None, 1.0, 'SHELL STATION SELFIE (parked), under the "LAS VEGAS" title: "Pahranagat Valley, we are about an hour and some change from Vegas. We\'re in the final countdown."', (84.60, 91.47)),
+    ('0119', 227.50, None, 1.0, 'AT THE PUMP: "Man, so I think for the last bit of the drive, I\'m gonna have you guys like in the back"', (227.50, 233.75)),
     ('0121', 80.0, 2.4, 1.0, 'MONTAGE rear deck: leaving the station', None),
     ('0121', 87.0, 2.4, 1.0, 'MONTAGE rear deck: the truck stop', None),
     ('0121', 93.5, 2.4, 1.0, 'MONTAGE rear deck: trees', None),
     ('0121', 99.0, 2.4, 1.0, 'MONTAGE rear deck: the green road', None),
     ('0121', 107.0, 2.4, 1.0, 'MONTAGE rear deck: the desert hills', None),
     ('0121', 115.0, 2.6, 1.0, 'MONTAGE rear deck: the valley', None),
-    ('0122', 43.25, None, 1.0, 'REAR CAMERA (sound in sync): "...to the shop. Seven minutes out."', (43.25, 47.37)),
+    ('0122', 42.40, None, 1.0, 'REAR CAMERA (sound in sync): "Alright, we\'re almost to the shop... minutes out." (the number differs between small.en and medium.en: not captioned)', (42.40, 47.37)),
     ('0122', 552.6, 3.0, 1.0, 'MONTAGE skyline: Las Vegas behind, the dump truck closing in', None),
     ('0122', 558.5, 3.0, 1.0, 'MONTAGE skyline: cars passing', None),
     ('0122', 565.0, 3.0, 1.0, 'MONTAGE skyline', None),
