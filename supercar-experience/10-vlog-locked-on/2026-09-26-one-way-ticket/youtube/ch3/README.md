@@ -103,3 +103,15 @@ here); 0091 2.1 "We are in the 600 LT. Spider" (only "Top goes down" agrees); 00
 - A 2.2 s cutaway (0087 38.2-40.4, the white McLaren) covers the 0089 line.
 - **Strangers** are muted at 0090 1.40-2.85 and 10.40-12.30. The staff member at the end of shot 11 is seen from
   behind, with no face.
+
+## 4K master (lead, 2026-10-09)
+
+Rendered with `render.py`'s master functions: `master_video.mp4` is 159.06 s and 1,163,686,711 bytes. The muxed masters
+measured as follows, then were deleted for disk (the final video is assembled from `master_video.mp4` + the wavs):
+
+| file | integrated | true peak |
+|---|---|---|
+| `ch3_master.mp4` (AAC) | -14.0 LUFS | -1.7 dBTP |
+| `ch3_master_NOMUSIC.mp4` (AAC) | -14.0 LUFS | -1.8 dBTP |
+
+The 720p preview (`ch3work/ch3_preview_720p.mp4`) is kept.
