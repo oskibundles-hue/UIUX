@@ -1,15 +1,17 @@
 #!/usr/bin/env python3
-"""words_b2.py -- medium.en word edges (faster-whisper, beam 5, int8 CPU) over the montage-v2 bite ranges of
+"""words_b2.py -- medium.en word edges (faster-whisper, beam 5, int8 CPU) over the montage-v2 bite ranges (and, for the 4K master captions, the hook and 0075 talk) of
 /home/user/day-owt/aud/<clip>.m4a -> words_medium_B2.json keyed "<clip>:<a>-<b>", word times in clip seconds.
 Only new keys are transcribed.   python3 words_b2.py
 """
 import json, os, subprocess, tempfile
 HERE = os.path.dirname(os.path.abspath(__file__))
 OUT = os.path.join(HERE, 'words_medium_B2.json')
-FF = '/usr/local/lib/python3.13/dist-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2'
+_IIO = '/usr/local/lib/python3.13/dist-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2'
+FF = _IIO if os.path.exists(_IIO) else 'ffmpeg'   # the imageio build when present, else the system ffmpeg
 RANGES = [('0090', 19, 29), ('0091', 1, 11), ('0093', 2.5, 10), ('0100', 29, 40), ('0102', 0.5, 26.5), ('0105', 3, 15),
           ('0106', 172, 186), ('0107', 253, 264), ('0111', 45, 58.5), ('0112', 12, 21), ('0114', 2.5, 46),
-          ('0115', 1.5, 38), ('0118', 68, 93), ('0123', 2, 14)]
+          ('0115', 1.5, 38), ('0118', 68, 93), ('0123', 2, 14),
+          ('0117', 99.5, 114.5), ('0075', 55.5, 87.0)]   # 4K master (9 Oct): the hook lines and the 0075 talk, for words_agree_B2.json
 db = json.load(open(OUT)) if os.path.exists(OUT) else {}
 todo = [r for r in RANGES if f'{r[0]}:{r[1]:g}-{r[2]:g}' not in db]
 if todo:

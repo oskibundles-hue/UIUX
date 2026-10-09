@@ -11,6 +11,11 @@
           his head, so no halo). The gain is solved per frame so the face-core median reaches TARGET (the hook's face
           luma, 44-49 on the 0-255 scale), capped at GAMMA_MAX, then smoothed over 0.5 s; frames at or above TARGET get
           none.
+  4K      lift_pipe_hi (render.py master): the same lift on 3840x2160 frames. The face track, the weight map and the
+          per-frame gamma stay on the 1280x720 design (solved on an area-downscaled copy of each 4K frame, so A is the
+          approved preview's), the weight map is upscaled by the one scale factor S = W / 1280, and the gamma is applied
+          to the full-resolution luma (its 1.2 px smoothing scaled by S). Streams the frames twice (solve, apply), so a
+          4K shot never sits in memory.
   measure python3 subject_lift.py measure <video> <t0_in_video> [track.json]   face-box median luma every 0.5 s.
 """
 import json, os, subprocess, sys
@@ -127,10 +132,11 @@ class Lifter:
         return self.mask(i) * key
 
     @staticmethod
-    def lifted(v, g):
-        """a power (gamma) lift of a lightly smoothed luma: it digs into near-black, where a plain gain only scales noise."""
+    def lifted(v, g, S=1):
+        """a power (gamma) lift of a lightly smoothed luma: it digs into near-black, where a plain gain only scales noise.
+        S = output width / 1280 (the smoothing is a 1.2 px blur on the 720p design)."""
         import cv2
-        vs = cv2.GaussianBlur(v, (0, 0), 1.2)
+        vs = cv2.GaussianBlur(v, (0, 0), 1.2 * S)
         return np.power(np.maximum(vs, 0), 1.0 / g)
 
     def blend(self, v, w, g):
@@ -160,9 +166,9 @@ class Lifter:
                 hi = m
         return hi
 
-    def solve(self, Ys):
+    def solve(self, Ys, normed=False):
         """per-frame gamma so the face-core median reaches TARGET (0..255), capped at GAMMA_MAX, then a 0.5 s moving average."""
-        G = np.array([self.solve_frame(i, self.norm(Y)) for i, Y in enumerate(Ys)])
+        G = np.array([self.solve_frame(i, Y if normed else self.norm(Y)) for i, Y in enumerate(Ys)])
         k = int(round(0.5 * FPS)) | 1
         pad = np.pad(G, (k // 2, k // 2), mode='edge')
         self.A = np.array([pad[i:i + k].mean() for i in range(len(G))])
@@ -205,6 +211,56 @@ def lift_pipe(dec_cmd, enc_cmd, n_frames, t_in, W=1280, H=720):
     p = subprocess.Popen(enc_cmd, stdin=subprocess.PIPE)
     for i, f in enumerate(frames):
         p.stdin.write(L.apply(i, f).tobytes())
+    p.stdin.close(); p.wait()
+    if p.returncode:
+        raise SystemExit('encode failed')
+    return A
+
+
+def apply_hi(L, i, f, v720, S):
+    """Lifter.apply on a full-resolution frame f (3, H, W) uint16: the weight map is the 720p design's (from v720, the
+    area-downscaled normalised luma of this frame), upscaled by S; the gamma A[i] is the 720p solve."""
+    import cv2
+    if L.A[i] <= 1.0005:
+        return f
+    H, W = f.shape[1:]
+    w = cv2.resize(L.weight(i, v720), (W, H), interpolation=cv2.INTER_LINEAR)
+    v = L.norm(f[0])
+    out_v = v + w * (L.lifted(v, L.A[i], S) - v)
+    gm = np.clip(out_v / np.maximum(v, 0.004), 1, CHROMA_MAX)
+    gm = 1 + (gm - 1) * w
+    out = np.empty_like(f)
+    out[0] = np.clip((out_v * 219 + 16) * 256, 0, 65535).astype(np.uint16)
+    for c in (1, 2):
+        out[c] = np.clip(32768 + (f[c].astype(np.float32) - 32768) * gm, 0, 65535).astype(np.uint16)
+    return out
+
+
+def lift_pipe_hi(dec_cmd, enc_cmd, n_frames, t_in, W, H):
+    """lift_pipe for a W x H (e.g. 3840x2160) shot, streamed: pass 1 decodes and keeps only a 1280x720 copy of each
+    luma for the solve; pass 2 decodes again and applies the lift at full size into the encoder."""
+    import cv2
+    S = W / 1280
+    fs = W * H * 2 * 3
+
+    def frames():
+        p = subprocess.Popen(dec_cmd, stdout=subprocess.PIPE)
+        for _ in range(n_frames):
+            buf = p.stdout.read(fs)
+            if len(buf) < fs:
+                break
+            yield np.frombuffer(buf, '<u2').reshape(3, H, W)
+        p.stdout.close(); p.wait()
+
+    small = [cv2.resize(Lifter.norm(f[0]), (1280, 720), interpolation=cv2.INTER_AREA) for f in frames()]
+    nf = len(small)
+    L = Lifter(nf, int(round((t_in - IN) * FPS)))
+    A = L.solve(small, normed=True)
+    p = subprocess.Popen(enc_cmd, stdin=subprocess.PIPE)
+    for i, f in enumerate(frames()):
+        if i >= nf:
+            break
+        p.stdin.write(apply_hi(L, i, f, small[i], S).tobytes())
     p.stdin.close(); p.wait()
     if p.returncode:
         raise SystemExit('encode failed')

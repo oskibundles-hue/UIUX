@@ -12,19 +12,28 @@ Same chain as ../test-ch3/mix.py (its BS.1770 meter, true-peak limiter, voice ch
           approved chapter), in gaps -21. In B's montage it is up: level set so the FINAL mix sits at MONT_ST LUFS
           short-term, aligned so the montage starts on a chord change (bar 1 of the 2-bar progression) and cuts land on
           beats; the duck is off inside the montage and snaps back (60 ms attack) for CH1.
-Master: 30 Hz high-pass, true-peak limiter at -2.3 dBTP (so the AAC file stays at or below -1.5), gain iterated to -14.0 LUFS.
-    python3 mix.py A|B
+Master: 30 Hz high-pass, true-peak limiter at -1.8 dBTP (as the chapters: the AAC 320k master lands at or under -1.5),
+gain iterated to -14.0 LUFS. `preview` keeps the v1/v2 previews' -2.3 (AAC 192k adds up to 0.5 dB).
+Also writes the NO MUSIC mix (dialog + natural sound, same dialog gains, its own -14 LUFS master) -> WORK/nomusic_<name>.wav,
+and the voice-over-music margin per word (small.en word windows from /home/user/day-owt/tr), as ../ch3/mix.py.
+    python3 mix.py A|B|A2|B2 [preview]
 """
 import importlib.util, json, math, os, subprocess, sys
 import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 CH3 = os.path.join(HERE, '..', 'test-ch3')
+_IIO = '/usr/local/lib/python3.13/dist-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2'
+if not os.path.exists(_IIO):
+    os.environ.setdefault('FFMPEG', 'ffmpeg')   # test-ch3/mix.py defaults to the imageio build; fall back to the system ffmpeg
 spec = importlib.util.spec_from_file_location('ch3mix', os.path.join(CH3, 'mix.py'))
 M = importlib.util.module_from_spec(spec)
 _cwd = os.getcwd(); os.chdir(CH3); spec.loader.exec_module(M); os.chdir(_cwd)
 SR = M.SR
-M.CEIL = -2.3   # limiter ceiling: AAC 192k adds up to about 0.5 dB of true peak (B: -1.2 dBTP at -1.5, -1.49 at -2.0)
+PREVIEW = len(sys.argv) > 2 and sys.argv[2] == 'preview'
+# limiter ceiling: the 4K master's AAC 320k adds up to ~0.2 dB (CEIL -1.8, as Ch1-Ch4); the 192k previews added up to 0.5 dB
+# (B: -1.2 dBTP at -1.5, -1.49 at -2.0), so `preview` keeps -2.3
+M.CEIL = -2.3 if PREVIEW else -1.8
 WORK = '/home/user/day-owt/openwork'
 NAME = sys.argv[1]
 EDL = json.load(open(os.path.join(HERE, f'edl_{NAME}.json')))
@@ -35,6 +44,12 @@ DIALOG_LUFS = -16.0
 BED_TALK, BED_GAP = -39.5, -21.0
 MONT_ST = -17.0
 MONT_BED_V2, MONT_DUCK = -19.0, -23.0   # v2 sound-bite montage: bed level between lines, and its duck under his lines (dB)
+
+
+def words_of(src, a, b):
+    """small.en word windows of `src` (the day index, /home/user/day-owt/tr), as ../ch3/mix.py's per-word margin."""
+    t = json.load(open(f'/home/user/day-owt/tr/{src}.json'))
+    return [(w[0], w[1], w[2].strip()) for s in t['segments'] for w in s['words']]
 
 
 def activity(spans, attack=0.06, release=0.4, bridge=0.6):
@@ -152,12 +167,31 @@ def main():
               for k in range(i0, i1 - h, h)]
         top = max(v for _, v, _ in fr)
         margins += [(round(v - m, 1), d['src'], round(d['in'] + (k - i0) / SR, 2)) for k, v, m in fr if v > top - 15 and v > -40]
+    # per word (as ../ch3/mix.py): small.en word windows; mean power of the voiced frames inside the word vs the bed
+    wm = []
+    for d in EDL['dialog']:
+        fr = [m for m in margins if m[1] == d['src'] and d['in'] - 0.01 <= m[2] <= d['out']]
+        for w0, w1, txt in words_of(d['src'], d['in'], d['out']):
+            if w0 >= d['out'] or w1 <= d['in']:
+                continue
+            ks = [int((d['t'] + m[2] - d['in']) * SR) for m in fr if w0 - 0.05 <= m[2] < w1]
+            if not ks:
+                continue
+            v = np.mean([(dia[k:k + h] ** 2).mean() for k in ks]); bb = np.mean([(b[k:k + h] ** 2).mean() for k in ks])
+            wm.append((round(10 * np.log10((v + 1e-12) / (bb + 1e-12)), 1), d['src'], round(w0, 2), txt))
+    wm.sort()
+    rep['voice_over_music_words_db'] = dict(min=wm[0][0] if wm else None, words=len(wm), under_12=[w for w in wm if w[0] < 12],
+                                            lowest5=wm[:5])
     margins.sort()
     rep['voice_over_music_db'] = dict(min=margins[0][0], frames=len(margins), under_10=[m for m in margins if m[0] < 10][:20])
     M.write_wav24(f'{WORK}/mix_{NAME}.wav', y)
-    rep['master'] = dict(lufs=round(L, 2), true_peak=round(tp, 2))
+    rep['master'] = dict(lufs=round(L, 2), true_peak=round(tp, 2), ceil=M.CEIL)
+    yn, Ln, tpn = M.master(dia + nat)      # NO MUSIC: the same dialog and natural-sound buses, no bed, its own -14 LUFS master
+    M.write_wav24(f'{WORK}/nomusic_{NAME}.wav', yn)
+    rep['nomusic'] = dict(lufs=round(Ln, 2), true_peak=round(tpn, 2), ceil=M.CEIL)
     json.dump(rep, open(f'{WORK}/mix_{NAME}.json', 'w'), indent=1)
-    print(json.dumps({'name': NAME, 'master': rep['master'], 'montage_st': rep.get('montage_short_term_lufs'),
+    print(json.dumps({'name': NAME, 'master': rep['master'], 'nomusic': rep['nomusic'],
+                      'word_min_db': rep['voice_over_music_words_db']['min'], 'words': rep['voice_over_music_words_db']['words'], 'montage_st': rep.get('montage_short_term_lufs'),
                       'boost_db': rep['bed']['montage_boost_db'], 'voice_over_music_min_db': rep['voice_over_music_db']['min'],
                       'under_10': len(rep['voice_over_music_db']['under_10'])}))
 

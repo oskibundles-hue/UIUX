@@ -204,3 +204,60 @@ bleeped in the 0106 line.
   - 0115: the lower hoodie, from +1.25 s.
 - 0122 583-588.5 matched "COMË N GO" (Yeat) on Shazam. It's picture plus bed only, with the nat muted, so it isn't heard.
   Every other range: no match.
+
+## 4K master (9 Oct)
+
+The approved B2 v2.2, unchanged in cut, framing, blurs and lift, rendered at 3840x2160 so it can sit in front of the
+chapters with a stream copy. The videos live outside git, in `/home/user/day-owt/openwork/`:
+
+| file | what |
+|---|---|
+| `master_video.mp4` | 3840x2160 H.264 High L5.1, yuv420p, 30000/1001, timebase 1/30000, bt709 tags, no audio; 1541 frames, 51.418 s, 271 MiB |
+| `mix_B2.wav` | the B2 mix, 24-bit 48 kHz, 2,468,066 samples (51.418 s), -14.0 LUFS, -1.8 dBTP |
+| `nomusic_B2.wav` | NO MUSIC: the same dialog and natural-sound buses (same gains), no bed, -14.0 LUFS, -1.8 dBTP |
+| `opening_B2_master_preview_720p.mp4` | the 720p preview, cut from the music master (`../ch3`'s preview encode) |
+| `mix_B2_master.json` (here) | the mix report: gains, margins per 50 ms frame and per word, both masters |
+
+The two muxed masters (`opening_B2_master.mp4`, `_NOMUSIC.mp4`, AAC 320k) are made by `render.py master B2` and were
+measured, then deleted for disk: -14.0 LUFS / -1.7 dBTP and -14.0 LUFS / -1.8 dBTP. Re-mux them from
+`master_video.mp4` and the two wavs with `../ch3/render.py`'s `mux()` (or re-run `render.py master B2`: it reuses
+`master_video.mp4` while `master_video.mp4.ok` exists).
+
+Rebuild:
+
+    python3 mix.py B2                  # mix_B2.wav + nomusic_B2.wav, CEIL -1.8 (`python3 mix.py B2 preview` keeps -2.3)
+    python3 render.py master B2        # 4K shots -> master_video.mp4 -> both muxed masters -> 720p preview
+
+What changed in the code:
+
+- `render.py`: a `master` mode (and `timeline`). Every pixel value (blur boxes, feathers, blur sigma) is worked out
+  on the 1280x720 design exactly as before and multiplied by one scale factor `S = W // 1280` (3 at 4K), so the
+  blurs sit where the approved ones sit. The final encode and the mux are `../ch3/render.py`'s own `assemble()` and
+  `mux()`, so the x264 options match the chapters' (checked against `ch1_master.mp4`: codec, profile, level, pix_fmt,
+  rate, timebase, colour tags, SAR and the x264 option string are identical). `MEZZ` is `/home/user/day-owt/mezz`
+  only. The per-shot intermediates are deleted once `master_video.mp4` exists. The system ffmpeg is used when the
+  imageio build is missing.
+- `subject_lift.py`: `lift_pipe_hi`. The face track, weight map and per-frame gamma are solved on a 720p area
+  downscale of each 4K frame (the approved design), the weight map is upscaled by S, and the gamma is applied to the
+  full-resolution luma. Frames are streamed twice, so a 4K shot is never held in memory. Peak gamma 1.82, as at 720p.
+- `mix.py`: CEIL -1.8 (as the chapters, for AAC 320k), the NO MUSIC mix, and the margin per word (small.en word
+  windows, as `../ch3/mix.py`).
+- `words_b2.py`: two new ranges (0117 99.5-114.5, 0075 55.5-87) for the hook and CH1 captions. **Not transcribed
+  yet**: faster-whisper 1.2.1 fails on this machine's PyAV 19.0.1 (`open() got an unexpected keyword argument
+  'metadata_errors'`). `words_agree_B2.py` writes `words_agree_B2.json` for the montage only and lists the five
+  hook/CH1 pieces under `missing`.
+
+Checks:
+
+- **Sound vs the approved mix:** bed, offset (1.772 s), natural sound and bleeps match. Dialog gains match except
+  0091 (+4.8 dB against +4.7: the system ffmpeg's denoiser). Smallest margin 12.5 dB per 50 ms frame (as approved),
+  18.1 dB per word.
+- **Picture vs the approved gate sheets** (`gate/gate_B2_NN.jpg`, rebuilt from the master at 640 px, stamp masked,
+  same colour matrix): mean PSNR 35.2 dB, SSIM 0.936 on 171 tiles. The 720p timeline from the same code scores 35.4,
+  and 4K against 720p differs by 1.1 dB at most on any tile. The weakest tiles are 0118 83.6 (41.7-43.5), at about 27 dB:
+  the new mezzanine's frame phase puts that shot one frame (33 ms) later than the preview.
+- **The end:** 1541 frames. The last frame (index 1540) is at 51.3847 s and shows 0075 86.343. The picture ends at
+  51.4180 s. The wav ends at sample 2,468,065 (51.41802 s). The last 60 ms are digital silence and the bed fades
+  out over the last 1.2 s. The AAC track in the mux reads 51.413 s. The CH1 picture starts at frame 1411 (47.0804 s).
+- **Not scaled:** the CH1 `hqdn3d=3:2:6:5` runs at 4K with the same strengths. Its spatial pass is a strength, not
+  a radius, so at 4K it is a little lighter per pixel. The temporal pass is unchanged.
