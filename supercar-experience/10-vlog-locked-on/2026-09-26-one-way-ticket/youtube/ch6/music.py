@@ -1,4 +1,10 @@
-#!/usr/bin/env python3
+"""music.py -- the TEMP BED for Chapter 6 "1:29 a.m." (the setback: darker and sparser): an original warm-synth / lo-fi pad written here in numpy (no sample, no
+library track, nothing from the footage). Copy of ../ch4/music.py with its own key, tempo, chords and seed so chapters differ
+(test-ch3: 78 BPM F/C; Ch1: 72 E-flat; Ch2: 75 D; Ch4: 82 A; Ch5: 80 G; Ch6: 66 C minor; Ch7: 84 E; Ch8: 86 B-flat):
+66 BPM, C minor, Cm9 - Abmaj7 - Fm9 - Gsus4 (two bars each), seed 61: a detuned soft-saw pad through a gentle low-pass (900 Hz),
+a sine sub, a muted Rhodes-like pluck on beat 1 of every other bar, a soft kick on beat 1 only and NO shaker (Ch6 is the low point: darker and sparser, brief).
+Placeholder until Omarie's Epidemic Sound account is set up (HANDOFF-lifestyle.md); the README records it.
+    python3 music.py OUT.wav SECONDS
 """music.py -- the TEMP BED: an original warm-synth / lo-fi pad written here in numpy (no sample, no library track, nothing
 from the footage). Chapter 4 copy of ../test-ch3/music.py with its own key and tempo so chapters differ (test-ch3: 78 BPM F/C;
 Ch1: 72 BPM E-flat; Ch2: 75 BPM D): 82 BPM, A major, Amaj9 - F#m9 - Dmaj9 - Esus2 (two bars each), seed 41: a detuned soft-saw pad through a gentle
@@ -10,11 +16,13 @@ import sys, wave
 import numpy as np
 
 SR = 48000
-BPM = 82
+BPM = 66
 BEAT = 60 / BPM
-CHORDS = [[57, 61, 64, 68, 71], [54, 57, 61, 64, 68], [50, 54, 57, 61, 64], [52, 59, 64, 66, 71]]  # Amaj9 F#m9 Dmaj9 Esus2
-BASS = [33, 30, 38, 40]
-rng = np.random.default_rng(41)
+CHORDS = [[48, 51, 55, 58, 62], [44, 48, 51, 55, 60], [41, 48, 51, 56, 60], [43, 48, 50, 55, 62]]  # Cm9 - Abmaj7 - Fm9 - Gsus4
+BASS = [36, 32, 29, 31]
+SPARSE = True
+LP = 900
+rng = np.random.default_rng(61)
 
 
 def hz(m):
@@ -61,7 +69,7 @@ def make(seconds):
         sub = np.sin(2 * np.pi * hz(BASS[k % 4]) * t) * e * 0.16
         L[s0:s1] += sub; R[s0:s1] += sub
         # Rhodes-like pluck on beats 1 and 3 of each bar
-        for b in range(0, 8, 2):
+        for b in ((0,) if SPARSE else range(0, 8, 2)):
             p0 = s0 + int(b * BEAT * SR)
             if p0 >= n:
                 break
@@ -72,17 +80,17 @@ def make(seconds):
                 v = (np.sin(2 * np.pi * hz(m + 12) * tp) + 0.25 * np.sin(2 * np.pi * hz(m + 24) * tp) * np.exp(-tp * 8)) * pe * 0.045
                 L[p0:p0 + pn] += v * 0.8; R[p0:p0 + pn] += v
         k += 1
-    pad = np.stack([lp_fft(L, 1400), lp_fft(R, 1400)], 1)
+    pad = np.stack([lp_fft(L, LP), lp_fft(R, LP)], 1)
     # drums: soft kick on 1 and 3, shaker on the 8ths (quiet)
     drums = np.zeros((n, 2))
     b = 0
     while b * BEAT < seconds:
         p0 = int(b * BEAT * SR)
-        if b % 2 == 0:
+        if (b % 4 == 0) if SPARSE else (b % 2 == 0):
             kn = min(n - p0, int(0.35 * SR)); tk = np.arange(kn) / SR
             kick = np.sin(2 * np.pi * (48 + 60 * np.exp(-tk * 30)) * tk) * np.exp(-tk * 9) * 0.2
             drums[p0:p0 + kn] += kick[:, None]
-        for h in (0, 0.5):
+        for h in (() if SPARSE else (0, 0.5)):
             q0 = p0 + int(h * BEAT * SR)
             hn = min(n - q0, int(0.06 * SR))
             if hn > 0:
