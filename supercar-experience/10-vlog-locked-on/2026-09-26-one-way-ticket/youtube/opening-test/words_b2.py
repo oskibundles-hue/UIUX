@@ -20,8 +20,13 @@ if todo:
 for src, a, b in todo:
     wav = tempfile.mktemp(suffix='.wav')
     subprocess.run([FF, '-v', 'error', '-ss', f'{a:.3f}', '-t', f'{b - a:.3f}', '-i', f'/home/user/day-owt/aud/{src}.m4a',
-                    '-ac', '1', '-ar', '16000', wav], check=True)
-    segs, _ = m.transcribe(wav, language='en', beam_size=5, word_timestamps=True, vad_filter=False)
+                    '-ac', '1', '-ar', '16000', '-c:a', 'pcm_s16le', wav], check=True)
+    # the installed PyAV no longer takes faster-whisper's metadata_errors argument, so the 16 kHz mono wav is handed
+    # over as a float32 array (as ch4/words_medium.py does)
+    import numpy as np, wave as _w
+    with _w.open(wav) as r:
+        pcm = np.frombuffer(r.readframes(r.getnframes()), '<i2').astype(np.float32) / 32768.0
+    segs, _ = m.transcribe(pcm, language='en', beam_size=5, word_timestamps=True, vad_filter=False)
     ws = [[round(a + w.start, 2), round(a + w.end, 2), w.word.strip()] for s in segs for w in (s.words or [])]
     os.remove(wav)
     db[f'{src}:{a:g}-{b:g}'] = ws
