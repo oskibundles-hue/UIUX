@@ -32,7 +32,7 @@ up only in montage shots.
 
 | # | clip:in-out | chapter time | what |
 |---|---|---|---|
-| 0 | 0119:84.60-92.00 | 0:00.00-0:07.40 | SHELL STATION SELFIE (parked), under the "LAS VEGAS" title: "Pahranagat Valley, we are about an hour and some change from Vegas. We're in the final countdown." |
+| 0 | 0119:84.60-92.00 | 0:00.00-0:07.40 | SHELL STATION SELFIE (parked): "Pahranagat Valley, we are about an hour and some change from Vegas. We're in the final countdown." |
 | 1 | 0119:227.50-234.20 | 0:07.40-0:14.10 | AT THE PUMP: "Man, so I think for the last bit of the drive, I'm gonna have you guys like in the back" |
 | 2 | 0121:80.00-82.40 | 0:14.10-0:16.50 | MONTAGE rear deck: leaving the station |
 | 3 | 0121:87.00-89.40 | 0:16.50-0:18.90 | MONTAGE rear deck: the truck stop |
@@ -41,7 +41,7 @@ up only in montage shots.
 | 6 | 0121:107.00-109.40 | 0:23.70-0:26.10 | MONTAGE rear deck: the desert hills |
 | 7 | 0121:115.00-117.60 | 0:26.10-0:28.70 | MONTAGE rear deck: the valley |
 | 8 | 0122:42.40-47.77 | 0:28.70-0:34.07 | REAR CAMERA (sound in sync): "Alright, we're almost to the shop... minutes out." (the number differs between small.en and medium.en: not captioned) |
-| 9 | 0122:552.60-555.60 | 0:34.07-0:37.07 | MONTAGE skyline: Las Vegas behind, the dump truck closing in |
+| 9 | 0122:552.60-555.60 | 0:34.07-0:37.07 | MONTAGE skyline, under the "LAS VEGAS" title (0:34.67-0:37.97): Las Vegas behind, the dump truck closing in |
 | 10 | 0122:558.50-561.50 | 0:37.07-0:40.07 | MONTAGE skyline: cars passing |
 | 11 | 0122:565.00-568.00 | 0:40.07-0:43.07 | MONTAGE skyline |
 | 12 | 0122:584.00-587.00 | 0:43.07-0:46.07 | MONTAGE skyline |
@@ -98,7 +98,7 @@ does not confirm): 31.17 (0122 44.87 "minutes"); 72.34 (0123 48.90 "and").
 
 ## For nq-facts
 
-* Title "LAS VEGAS": on the first shot, which is Pahranagat Valley "about an hour and some change from Vegas"; lead or nq-facts to decide if it should sit on the skyline (0:34.07) instead.
+* Title "LAS VEGAS": on the first shot, which is Pahranagat Valley "about an hour and some change from Vegas"; lead or nq-facts to decide if it should sit on the skyline (0:34.07) instead. **Decided (Omarie, 2026-10-09, click):** "Move to the skyline": the title now runs 0:34.67-0:37.97 on shot 9 (`TITLE_AT = 9`).
 * Spoken: "Pahranagat Valley" (small.en "Farangit", medium.en "Farragut"), "an hour and some change from Vegas", "... minutes out" (small.en "Seven", medium.en "11": not captioned), "Joey and John", "we just did our straight 15 and a half".
-* The outro names the shop out loud: "We dropped it off here at Supercar Experience at headquarters" (0123 42.3-45.1); the SE banner, phone number, web address and window lettering are in frame, unblurred per the 2026-10-09 rule. PLAN keeps the outro as filmed; Ch3 cut a spoken SE line (PLAN 3.2). Lead to decide.
+* The outro names the shop out loud: "We dropped it off here at Supercar Experience at headquarters" (0123 42.3-45.1); the SE banner, phone number, web address and window lettering are in frame, unblurred per the 2026-10-09 rule. PLAN keeps the outro as filmed; Ch3 cut a spoken SE line (PLAN 3.2). Lead to decide. **Decided (Omarie, 2026-10-09, click):** "Keep as filmed", spoken line included; the SE thank-you stays in the description.
 * Background in frame: Rio and Starbucks digital billboards (skyline), the dump truck's plate behind (not blurred, per the rule).

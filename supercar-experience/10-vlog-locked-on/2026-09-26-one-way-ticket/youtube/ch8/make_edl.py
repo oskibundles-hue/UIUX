@@ -39,7 +39,7 @@ CLOCK = '0119 Pahranagat Valley (selfie at the Shell) to 0123 the shop, DJI came
 BEAT = 'CH8 Las Vegas: an hour and some change out -> the last bit from the back -> desert road montage -> seven minutes out -> the skyline -> back at the shop -> the outro, peace'
 
 SHOTS = [
-    ('0119', 84.60, None, 1.0, 'SHELL STATION SELFIE (parked), under the "LAS VEGAS" title: "Pahranagat Valley, we are about an hour and some change from Vegas. We\'re in the final countdown."', (84.60, 91.47)),
+    ('0119', 84.60, None, 1.0, 'SHELL STATION SELFIE (parked): "Pahranagat Valley, we are about an hour and some change from Vegas. We\'re in the final countdown."', (84.60, 91.47)),
     ('0119', 227.50, None, 1.0, 'AT THE PUMP: "Man, so I think for the last bit of the drive, I\'m gonna have you guys like in the back"', (227.50, 233.75)),
     ('0121', 80.0, 2.4, 1.0, 'MONTAGE rear deck: leaving the station', None),
     ('0121', 87.0, 2.4, 1.0, 'MONTAGE rear deck: the truck stop', None),
@@ -48,7 +48,7 @@ SHOTS = [
     ('0121', 107.0, 2.4, 1.0, 'MONTAGE rear deck: the desert hills', None),
     ('0121', 115.0, 2.6, 1.0, 'MONTAGE rear deck: the valley', None),
     ('0122', 42.40, None, 1.0, 'REAR CAMERA (sound in sync): "Alright, we\'re almost to the shop... minutes out." (the number differs between small.en and medium.en: not captioned)', (42.40, 47.37)),
-    ('0122', 552.6, 3.0, 1.0, 'MONTAGE skyline: Las Vegas behind, the dump truck closing in', None),
+    ('0122', 552.6, 3.0, 1.0, 'MONTAGE skyline, under the "LAS VEGAS" title (Omarie 2026-10-09: move it to the skyline): Las Vegas behind, the dump truck closing in', None),
     ('0122', 558.5, 3.0, 1.0, 'MONTAGE skyline: cars passing', None),
     ('0122', 565.0, 3.0, 1.0, 'MONTAGE skyline', None),
     ('0122', 584.0, 3.0, 1.0, 'MONTAGE skyline', None),
@@ -57,7 +57,7 @@ SHOTS = [
     ('0123', 17.05, None, 1.0, 'JUMP: "Hopefully I got the driving part. Damn. The last little driving piece is pretty gnarly. I\'m not gonna lie."', (17.05, 23.97)),
     ('0123', 39.90, None, 1.0, 'THE OUTRO (as filmed): "So that concludes today\'s episode... And until next time, peace."', (39.90, 59.38)),
 ]
-TITLE_AT = 0
+TITLE_AT = 9   # the first skyline shot (Omarie, 2026-10-09: "Move to the skyline")
 OUT = {('0123', 4.90): 12.02, ('0123', 17.05): 24.20, ('0123', 39.90): 59.80}
 MUTE = [('0122', 552.0, 600.0, 'skyline: car-stereo blocks either side (flags.json 510-552, 570-582)')]
 BLEEP = []

@@ -97,6 +97,13 @@ Spans are `clip:in-out` in seconds within the clip.
 - The route map needs a source for the route he actually drove.
 - The spoken figures are 830 miles, 18 hours, 186 miles and 9 h 27 m. They are only spoken, and no card repeats them.
 
+## Decided on the Ch5-8 rough cut (Omarie, 2026-10-09, clicks)
+
+- Ch5: the phone's nav map in 0112 (showing "6:43 AM") stays as filmed; it is footage, not a graphic.
+- Ch6: ends on "she's still doing great" (out of clock order for that one line).
+- Ch8: the "LAS VEGAS" title sits on the first skyline shot (0:34.67-0:37.97), not on the Pahranagat selfie.
+- Ch8: the outro stays as filmed, including "Supercar Experience at headquarters"; the SE thank-you is in the description only.
+
 ## Driving HUD (Omarie, 2026-10-09: "is there no animations or hud driving?", picked "Personal HUD on drives")
 - On driving shots only, all chapters: place name, clock time, a small animated route line and a progress bar.
 - Personal brand (Anton, #DE1A22 red, #FBD101 yellow, white). Not the SE HUD. No speed numbers, no figures.

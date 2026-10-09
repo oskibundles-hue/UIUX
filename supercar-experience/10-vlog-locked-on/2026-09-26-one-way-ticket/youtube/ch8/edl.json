@@ -15,8 +15,8 @@
  ],
  "title": {
   "text": "LAS VEGAS",
-  "t0": 0.6,
-  "t1": 3.9
+  "t0": 34.67,
+  "t1": 37.97
  },
  "shots": [
   {
@@ -27,7 +27,7 @@
    "speed": 1.0,
    "t": 0.0,
    "dur": 7.4,
-   "note": "SHELL STATION SELFIE (parked), under the \"LAS VEGAS\" title: \"Pahranagat Valley, we are about an hour and some change from Vegas. We're in the final countdown.\""
+   "note": "SHELL STATION SELFIE (parked): \"Pahranagat Valley, we are about an hour and some change from Vegas. We're in the final countdown.\""
   },
   {
    "beat": 1,
@@ -117,7 +117,7 @@
    "speed": 1.0,
    "t": 34.07,
    "dur": 3.0,
-   "note": "MONTAGE skyline: Las Vegas behind, the dump truck closing in"
+   "note": "MONTAGE skyline, under the \"LAS VEGAS\" title (Omarie 2026-10-09: move it to the skyline): Las Vegas behind, the dump truck closing in"
   },
   {
    "beat": 10,

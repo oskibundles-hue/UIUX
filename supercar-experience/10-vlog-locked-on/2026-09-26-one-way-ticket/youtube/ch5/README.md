@@ -90,5 +90,5 @@ does not confirm): 40.22 (0112 13.81 "We"); 42.54 (0112 16.13 "You"); 42.54 (011
 
 * Title "NAMPA, IDAHO · NIGHT": he says "I am in Nampa, Idaho" (0106 286.8); night from the footage.
 * Spoken (stay spoken, not on screen): "Treasure Valley Marketplace just west of Boise", "about 300 miles from Sandy, five hours away" (0106), "over 500 miles" (0107), "9 hours 27 minutes to go" (0112).
-* On screen in the footage: his phone's nav map in 0112 (0:46.3-0:49.6) shows a route and an arrival time ("6:43 AM" in the frame); it is footage, not a graphic, but it is a figure on screen: lead to decide (crop, keep, or cut shot 8).
+* On screen in the footage: his phone's nav map in 0112 (0:46.3-0:49.6) shows a route and an arrival time ("6:43 AM" in the frame); it is footage, not a graphic, but it is a figure on screen: lead to decide (crop, keep, or cut shot 8). **Decided (Omarie, 2026-10-09, click):** "Keep it": the nav map stays as filmed.
 * "In-N-Out" is named (spoken and the restaurant sign in 0105).

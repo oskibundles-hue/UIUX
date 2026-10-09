@@ -48,7 +48,7 @@ up only in montage shots.
 * 0114 87.9-89 runs to 89.25 so "hurts" is whole.
 * 0115 2.3-14.7 starts at 1.78 ("Alright", medium.en from 1.96) and runs to 15.02 ("freezing" ends 15.04).
 * 0115 30.7-36.8 becomes 31.15-37.20 (the line starts at 31.2; the rotate note in PLAN is covered: the whole clip is on its side and is turned upright, transpose cw).
-* The chapter ends on 0115 15.00-22.65 "...she's still doing great": the brief's 14.7-30.7 ending, cut at "great" (22.28); 24-29.6 ("post it up at the uh, what is this, Sinclair...") is cut. It plays after 31.15-37.20, so clock order breaks for this one line (the brief asked to keep clock order; the line is the better last word for the setback). Lead to decide; swapping shots 7 and 8 restores clock order.
+* The chapter ends on 0115 15.00-22.65 "...she's still doing great": the brief's 14.7-30.7 ending, cut at "great" (22.28); 24-29.6 ("post it up at the uh, what is this, Sinclair...") is cut. It plays after 31.15-37.20, so clock order breaks for this one line (the brief asked to keep clock order; the line is the better last word for the setback). Lead to decide; swapping shots 7 and 8 restores clock order. **Decided (Omarie, 2026-10-09, click):** "Keep it": the chapter ends on "she's still doing great".
 * Runtime 0:46.1 against about 1:15.
 
 ## Music
