@@ -91,7 +91,7 @@ here); 0091 2.1 "We are in the 600 LT. Spider" (only "Top goes down" agrees); 00
   (151.4) and the next onset (152.6).
 - **0089:186.5-194.2** becomes 187.8-194.63, which starts after the other speaker's "be right back", with a gap of
   at least 0.1 s. This drops "I'll show you when he pulls up with the car."
-- **0090:102.3-118.0** is split into 103.72-109.71 and 110.15-118.35. The cluster is blurred at about 115.6-118.35.
+- **0090:102.3-118.0** is split into 103.72-109.71 and 110.15-118.35. The car is parked here, so the cluster is not blurred (Omarie 2026-10-09: speedometer only while driving).
 - **0091:22.1-30.0** ends at 30.55, on the measured voice end.
 - **0092:7.6-44.0** becomes 7.52-22.92 plus 26.5-37.35. The second piece runs on to "...lift on this car. Alright
   cool.", because medium.en shows the sentence continues. 37.6-43.6 is used as room tone.
