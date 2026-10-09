@@ -1,15 +1,10 @@
+#!/usr/bin/env python3
 """music.py -- the TEMP BED for Chapter 5 "Nampa, Idaho · night": an original warm-synth / lo-fi pad written here in numpy (no sample, no
 library track, nothing from the footage). Copy of ../ch4/music.py with its own key, tempo, chords and seed so chapters differ
 (test-ch3: 78 BPM F/C; Ch1: 72 E-flat; Ch2: 75 D; Ch4: 82 A; Ch5: 80 G; Ch6: 66 C minor; Ch7: 84 E; Ch8: 86 B-flat):
 80 BPM, G major, Gmaj9 - Em9 - Cmaj9 - Dsus2 (two bars each), seed 51: a detuned soft-saw pad through a gentle low-pass (1400 Hz),
 a sine sub, a muted Rhodes-like pluck on beats 1 and 3, a soft kick and a quiet shaker.
 Placeholder until Omarie's Epidemic Sound account is set up (HANDOFF-lifestyle.md); the README records it.
-    python3 music.py OUT.wav SECONDS
-"""music.py -- the TEMP BED: an original warm-synth / lo-fi pad written here in numpy (no sample, no library track, nothing
-from the footage). Chapter 4 copy of ../test-ch3/music.py with its own key and tempo so chapters differ (test-ch3: 78 BPM F/C;
-Ch1: 72 BPM E-flat; Ch2: 75 BPM D): 82 BPM, A major, Amaj9 - F#m9 - Dmaj9 - Esus2 (two bars each), seed 41: a detuned soft-saw pad through a gentle
-low-pass, a sine sub, a muted Rhodes-like pluck on beats 1 and 3, a soft kick and a quiet shaker. Placeholder until
-Omarie's Epidemic Sound account is set up (HANDOFF-lifestyle.md); the README records it.
     python3 music.py OUT.wav SECONDS
 """
 import sys, wave

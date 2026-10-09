@@ -1,20 +1,22 @@
 #!/usr/bin/env python3
-"""mix.py -- Chapter 4 "Into Oregon" sound (copied from ../test-ch3/mix.py; chain, levels and targets unchanged): dialog + natural sound + the temp bed -> two -14 LUFS mixes (with bed / NO MUSIC).
+"""mix.py -- Chapters 5-8 sound (one file, the same in ch5/ ch6/ ch7/ ch8/, copied from ../ch4/mix.py; voice chain, levels
+and targets unchanged): dialog + natural sound + this chapter's bed -> two -14 LUFS mixes (with bed / NO MUSIC).
 
 Buses (48 kHz stereo float), every camera sound read from /home/user/day-owt/aud/<clip>.m4a (the camera AAC, full length):
   dialog  each edl.json dialog piece through Part 2's voice chain (high-pass 90 Hz, afftdn nr 10, -2 dB @300 Hz, +2.5 dB
           @3.5 kHz, de-esser, 3:1 compressor), mono, levelled to -16 LUFS, 12 ms fade in, 100 ms fade out at the end of
-          its >= 350 ms tail. Bleeps (edl `bleeps`) are a 1 kHz tone over the word.
-  nat     each picture shot's own camera sound (Ch4: the 0095 cutaways under the 0094 line carry 0095's engine; the
-          montage shots carry their own engine sound at -22 LUFS; no stereo music in any used range: Shazam no match on
-          every 8 s window, and the steady partials are the engine's firing order gliding with road speed). Every transcribed word in it, his or anyone's, is replaced by its < 250 Hz content
-          (no intelligible speech, the engine rumble stays), so the only voice is the dialog bus and strangers are muted.
-          -24 LUFS per segment (the 0090 arrival -19: the engine is the moment), ducked 10 dB under dialog.
-  bed     bed.wav (music.py, original; Ch4's own key, A major 82 BPM). On for the whole chapter (0.8 s fade in, 1.2 s fade out).
-          -39.5 LUFS under talk, -21 in the gaps (attack 60 ms, release 400 ms, gaps < 0.6 s held).
-Master: sum -> 30 Hz high-pass -> true-peak limiter (-1.8 dBTP, so the AAC masters measure <= -1.5) -> gain iterated to -14.0 LUFS (BS.1770, gated).
-Report (mix.json): LUFS, true peak, and the voice-over-music margin on every voiced 50 ms frame of the dialog (dialog bus vs bed bus
-after ducking; must be >= 10 dB).
+          its tail. Bleeps (edl `bleeps`) are a 1 kHz tone over the word.
+  nat     each picture shot's own camera sound; every transcribed word in it, his or anyone's, is replaced by its < 250 Hz
+          content (no intelligible speech, so strangers are muted and the only voice is the dialog bus). -24 LUFS per
+          segment, montage shots -22, ducked 10 dB under dialog. edl `mute` ranges are silent (Ch8 skyline: car-stereo
+          blocks either side in flags.json).
+  bed     bed.wav (music.py, original, this chapter's key). Music comes up only in montages (brief): -39.5 LUFS
+          everywhere else (under talk and in the pauses), -21 inside the montage shots (0.5 s ramps), ducked back to
+          -39.5 wherever he talks (attack 60 ms, release 400 ms). 0.8 s fade in, 1.2 s fade out.
+Master: sum -> 30 Hz high-pass -> true-peak limiter (-1.8 dBTP) -> gain iterated to -14.0 LUFS (BS.1770, gated) -> 12 ms
+fade at the head and tail (no click at the chapter joins). Length exactly round(frames * 1001/30000 * 48000) samples, so
+the wav matches proxy_video.mp4 to the sample and the four chapters join without drift (nq-check, chapter joins).
+Report (mix.json): LUFS, true peak, and the voice-over-music margin per word (must be >= 12 dB) and per voiced 50 ms frame.
     python3 mix.py WORKDIR
 """
 import json, math, os, subprocess, sys, wave
@@ -34,13 +36,13 @@ CHAIN = ('highpass=f=90:poles=2,afftdn=nr=10:nf=-42:tn=1,equalizer=f=300:t=q:w=1
 # those two dialog pieces get a 170 Hz high-pass before the voice chain (DIALOG_PRE): the leveller then levels on
 # the voice, and the engine stays on the nat bus (which is not filtered). 0093 133.8 (832 Hz, one window) is a vowel.
 # The nat-only shots (0095/0098) hold the same engine glide (138-316 Hz): that is the scene, so no notch there.
-NOTCH = {}
-DIALOG_PRE = {'0100': 'highpass=f=170:poles=2', '0094': 'highpass=f=170:poles=2'}
+NOTCH = {}        # per chapter, from the tone scan (README)
+DIALOG_PRE = {}
 EDL = json.load(open(os.path.join(HERE, 'edl.json')))
 FPS = 30000 / 1001
-NF = int(round(EDL['duration'] * FPS))
-DUR = NF / FPS
-NS = int(round(DUR * SR))
+NF = EDL['frames']
+NS = int(round(NF * 1001 * SR / 30000))   # exact: the proxy's length in samples
+DUR = NS / SR
 DIALOG_LUFS, NAT_LUFS, NAT_ARRIVAL_LUFS = -16.0, -24.0, -19.0
 NAT_MONTAGE_LUFS = -22.0   # Ch4: the engine sits up a little under the bed in the montage (no talk)
 BED_TALK, BED_GAP = -39.5, -21.0
@@ -123,7 +125,9 @@ def master(x):
         if abs(L - TARGET) < 0.05:
             break
         gain *= 10 ** ((TARGET - L) / 20)
-    y[-int(0.06 * SR):] = 0
+    f = int(0.012 * SR)
+    y[:f] *= ramp(f)[:, None]; y[-f:] *= ramp(f, False)[:, None]
+    assert len(y) == NS
     return y, lufs(y), true_peak_db(y)
 
 
@@ -256,13 +260,27 @@ def main():
     for src, a, b, t, lv in nat_segments():
         place(nat, nat_seg(src, a, b, lv), t)
         rep['nat'].append(dict(src=src, **{'in': round(a, 3)}, out=round(b, 3), t=round(t, 3), lufs=lv))
+    for m in EDL.get('mute', []):
+        for sh_ in EDL['shots']:
+            if sh_['src'] == m['src'] and sh_['in'] < m['out'] and m['in'] < sh_['out']:
+                a = sh_['t'] + max(0, m['in'] - sh_['in']); b = sh_['t'] + min(sh_['out'], m['out']) - sh_['in']
+                nat[int(a * SR):int(b * SR)] = 0
     nat *= (1 - act * (1 - 10 ** (-10 / 20)))[:, None]
     # bed
     bed = read_wav(os.path.join(work, 'bed.wav'))[:NS]
     bed = np.concatenate([bed, np.zeros((NS - len(bed), 2))]) if len(bed) < NS else bed
     bed *= 10 ** ((BED_GAP - lufs(bed)) / 20)
     duck = 10 ** ((BED_TALK - BED_GAP) / 20)
-    g = 1 - act * (1 - duck)
+    # music up only in the montage shots (0.5 s ramps), at the talk level everywhere else
+    mon = np.zeros(NS)
+    for sh_ in EDL['shots']:
+        if sh_['note'].startswith('MONTAGE'):
+            mon[int(sh_['t'] * SR):int((sh_['t'] + sh_['dur']) * SR)] = 1
+    k = int(0.5 * SR)
+    if mon.any():
+        c = np.concatenate([[0], np.cumsum(np.concatenate([np.zeros(k // 2), mon, np.zeros(k - k // 2)]))])
+        mon = (c[k:k + NS] - c[:NS]) / k     # centred 0.5 s moving average = linear 0.5 s ramps
+    g = duck + (1 - duck) * mon * (1 - act)
     # extra duck where the voice is quiet against the bed (nq-check gate, 2026-10-07: 50 ms voiced frames at 7.1 dB in
     # 1:27.4-1:31.8): EXTRA_DUCK dB more, with 0.3 s ramps
     for a, b, db in EXTRA_DUCK:
@@ -274,7 +292,7 @@ def main():
     fi = int(0.8 * SR); on[:fi] = ramp(fi)
     e = int(1.2 * SR); on[NS - e:] *= ramp(e, False)
     bed *= (g * on)[:, None]
-    rep['bed'] = dict(source='music.py (original, synthesized here)', talk_lufs=BED_TALK, gap_lufs=BED_GAP, off=None)
+    rep['bed'] = dict(source='music.py (original, synthesized here)', talk_lufs=BED_TALK, montage_lufs=BED_GAP)
     # voice over music wherever he speaks: every 50 ms frame inside a dialog piece where the voice is up (within 15 dB of
     # the piece's loudest frame and over -40 dBFS: syllables, not the pauses whisper stretches its word times over),
     # dialog bus RMS minus bed bus RMS (after ducking) on the same frame; must be >= 10 dB everywhere.
@@ -303,7 +321,7 @@ def main():
             v = np.mean([(dia[k:k + h] ** 2).mean() for k in ks]); b = np.mean([(bed[k:k + h] ** 2).mean() for k in ks])
             wm.append((round(10 * np.log10((v + 1e-12) / (b + 1e-12)), 1), d['src'], round(w0, 2), txt))
     wm.sort()
-    rep['voice_over_music_words_db'] = dict(min=wm[0][0] if wm else None, words=len(wm), under_10=[w for w in wm if w[0] < 10], lowest5=wm[:5])
+    rep['voice_over_music_words_db'] = dict(min=wm[0][0] if wm else None, words=len(wm), under_12=[w for w in wm if w[0] < 12], lowest5=wm[:5])
     margins.sort()
     rep['voice_over_music_db'] = dict(min=margins[0][0] if margins else None, frames=len(margins),
                                       p1=margins[len(margins) // 100][0] if margins else None,
@@ -316,7 +334,7 @@ def main():
     rep['masters'] = out
     json.dump(rep, open(os.path.join(work, 'mix.json'), 'w'), indent=1)
     print(json.dumps({'masters': out, 'voice_over_music_word_min_db': rep['voice_over_music_words_db']['min'],
-                      'words_under_10': len(rep['voice_over_music_words_db']['under_10']),
+                      'words_under_12': len(rep['voice_over_music_words_db']['under_12']),
                       'voice_over_music_frame_min_db': rep['voice_over_music_db']['min'],
                       'frames': len(margins), 'under_10': len(rep['voice_over_music_db']['under_10'])}))
 
