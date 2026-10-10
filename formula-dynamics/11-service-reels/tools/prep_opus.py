@@ -22,9 +22,10 @@ PHOTO_W = 1600
 
 # Seedance multishot clips run in 3 s shots. Shots 6, 7 and 9 carry the red
 # glow and sparks the approved ads cut, and shot 5 drifts off the part's shape
-# (round, ribbed tips), so the moving slide uses shot 3 only, trimmed 0.2 s
-# inside each cut.
-CLIP_WINDOWS = [(6.2, 8.8)]
+# (round, ribbed tips), so the moving slide uses one clean shot, trimmed 0.2 s
+# inside each cut. Tan takes shot 2 (the turntable): in its shot 3 the OPUS
+# engraving slides in cut off at the right edge from about 8 s.
+CLIP_WINDOWS = {"tan": [(3.2, 5.8)], "black": [(6.2, 8.8)]}
 CLIP_FPS = 24
 
 
@@ -73,7 +74,7 @@ def main(src):
             photos[name[:-4]] = {"w": im.size[0], "h": im.size[1], "box": box}
         for old in glob.glob(os.path.join(d, "clip", "*.jpg")):
             os.remove(old)
-        sel = "+".join(f"between(t,{a},{b})" for a, b in CLIP_WINDOWS)
+        sel = "+".join(f"between(t,{a},{b})" for a, b in CLIP_WINDOWS[colour])
         subprocess.run([FFMPEG, "-v", "error", "-y",
                         "-i", os.path.join(src, "clips", f"{colour}_raw.mp4"),
                         "-vf", f"select='{sel}',scale=1080:1920:flags=lanczos,unsharp=5:5:0.5",
