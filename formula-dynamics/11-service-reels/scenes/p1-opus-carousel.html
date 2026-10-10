@@ -1,0 +1,243 @@
+<!doctype html>
+<meta charset="utf-8">
+<title>FD P1 — Opus exhaust tips carousel</title>
+<!--
+  Product carousel in the Oct 7 Brembo format: 7 slides at 4:5 plus a 9:16 video.
+  One scene, driven by the query string:
+
+    ?color=tan|black          finish (copy and photo picks follow it)
+    &fmt=4x5|9x16             4:5 = 1080x1350 carousel slide; 9:16 = 1080x1920 video,
+                              words kept inside the middle 4:5 band so the
+                              carousel crop of the video is safe
+    &slide=1..7               render one slide only (omit for the whole video)
+
+  Stills: node tools/still.js "scenes/p1-opus-carousel.html?color=tan&fmt=4x5&slide=1" out.jpg 1080 1350
+  Video:  node tools/render.js "scenes/p1-opus-carousel.html?color=tan&fmt=9x16" out.mp4 30 1080 1920
+  Media:  python3 tools/prep_opus.py <src>   (writes media/opus/, git-ignored)
+
+  Copy sources: OPUS EXHAUST TIPS / FACETED / THE FACETS / THE CAGE / THE SPLIT
+  (one inlet, two tips) / SHARP come from the FD product ads plan (Dropbox,
+  NQ Studio/06 Creator Kit/Agentic OS, modified 8 Oct). IN STOCK, AVAILABLE NOW and "not for your car, we have
+  options" are Omarie's own words for this post (10 Oct). No price, fitment or
+  performance claims. Opus appears as type only, no partner logo.
+-->
+<link rel="stylesheet" href="../brand.css">
+<script src="../engine.js"></script>
+<script src="../media/opus/manifest.js"></script>
+
+<style>
+  .slide{ position:absolute; left:0; width:1080px; height:1350px; display:none; }
+  .ph{ position:absolute; left:0; width:1080px; overflow:hidden; background:#CFCFCF; }
+  .ph img{ position:absolute; left:0; top:0; transform-origin:0 0; }
+  .ph .fade{ position:absolute; left:0; right:0; bottom:0; height:340px;
+    background:linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,.55) 45%, rgba(0,0,0,.92) 78%, #000 100%); }
+  .clipbox{ position:absolute; left:0; width:1080px; overflow:hidden; background:#000; }
+  .clipbox img{ position:absolute; left:0; width:1080px; height:1920px; transform-origin:85% 45%; }
+  .clipbox .fade{ position:absolute; left:0; right:0; bottom:0; height:62%;
+    background:linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,.6) 40%, rgba(0,0,0,.9) 70%, #000 100%); }
+
+  .badge{ position:absolute; top:40px; right:40px; width:96px; height:96px; border-radius:22px;
+    background:rgba(10,10,12,.62); backdrop-filter:blur(14px); -webkit-backdrop-filter:blur(14px);
+    display:flex; align-items:center; justify-content:center; }
+  .badge img{ width:60px; }
+  .wordmark{ position:absolute; left:50%; bottom:46px; width:220px; margin-left:-110px; }
+
+  .txt{ position:absolute; left:96px; bottom:142px; width:811px; }
+  .vrule{ position:absolute; left:-32px; top:6px; bottom:6px; width:8px; background:var(--fd-red); }
+  .k{ font-family:'BarlowC'; font-weight:700; font-size:34px; letter-spacing:7px;
+      text-transform:uppercase; color:rgba(255,255,255,.82); }
+  .hd{ font-family:'Bebas'; font-size:150px; line-height:.92; letter-spacing:2px; color:#fff;
+       white-space:nowrap; margin-top:14px; }
+  .sb{ font-family:'BarlowC'; font-weight:500; font-size:34px; letter-spacing:6px;
+       text-transform:uppercase; color:rgba(255,255,255,.72); margin-top:16px; }
+  .ctarow{ display:flex; align-items:center; gap:30px; margin-top:30px; }
+  .dm{ background:var(--fd-red); padding:16px 28px 14px; border-radius:4px;
+       font-family:'BarlowC'; font-weight:700; font-size:36px; letter-spacing:4px; color:#fff; }
+  .site{ font-family:'BarlowC'; font-weight:500; font-size:34px; letter-spacing:4px; color:rgba(255,255,255,.82); }
+
+  .end{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center;
+        justify-content:center; text-align:center; padding-bottom:40px; }
+  .end .logo{ width:520px; }
+  .end .t{ font-family:'Bebas'; font-size:110px; line-height:.92; letter-spacing:2px; margin-top:64px; }
+  .end .l{ font-family:'BarlowC'; font-weight:500; font-size:34px; letter-spacing:6px;
+           color:rgba(255,255,255,.75); margin-top:18px; }
+  .end .dm{ margin-top:52px; }
+  .end .h{ font-family:'BarlowC'; font-weight:700; font-size:34px; letter-spacing:4px; margin-top:52px; }
+  .end .w{ font-family:'BarlowC'; font-weight:500; font-size:34px; letter-spacing:4px;
+           color:rgba(255,255,255,.72); margin-top:12px; }
+</style>
+
+<div class="stage" id="stage"></div>
+
+<script>
+(async () => {
+  const Q = new URLSearchParams(location.search);
+  const COLOR = Q.get('color') === 'black' ? 'black' : 'tan';
+  const FMT = Q.get('fmt') === '4x5' ? '4x5' : '9x16';
+  const ONLY = Q.get('slide') ? +Q.get('slide') : null;
+  const H = FMT === '4x5' ? 1350 : 1920;
+  const OFF = FMT === '4x5' ? 0 : 285;          // top of the 4:5 band inside 9:16
+  const PH = 900;                               // photo depth inside the band
+  document.documentElement.style.setProperty('--H', H + 'px');
+  document.getElementById('stage').style.height = H + 'px';
+
+  const M = window.OPUS_MEDIA[COLOR];
+  const DIR = `../media/opus/${COLOR}/`;
+  const FIN = COLOR.toUpperCase();
+  const SITE = 'FORMULADYNAMICS.COM';
+  const HANDLE = '@FORMULADYNAMICSPERFORMANCE';
+
+  // Photo picks per finish, after the Opus shot list in that plan: cover three-quarter,
+  // macro along the faceted shell, head-on into the slotted cage ring, top view for
+  // the split, a second angle for the options slide.
+  const PICK = {
+    tan:   { 1: 'IMG_1564', 2: 'IMG_1577', 3: 'IMG_1563', 4: 'IMG_1560', 6: 'IMG_1569' },
+    black: { 1: 'IMG_1550', 2: 'IMG_1551', 3: 'IMG_1545', 4: 'IMG_1559', 6: 'IMG_1546' },
+  }[COLOR];
+  // The macros run off the frame on purpose, so they skip the box fit: width-filling
+  // scale, focus row (source px) on the shell, below the second tip at the top left.
+  const FOCUS = { IMG_1577: { cy: 1700 }, IMG_1551: { cy: 1620 } };
+
+  const SLIDES = [
+    { n: 1, dur: 3.0, k: 'In stock · Available now', h: 'OPUS EXHAUST TIPS', sb: `Faceted · ${FIN}`, cta: true },
+    { n: 2, dur: 2.4, k: `Opus · ${FIN}`, h: 'THE FACETS', sb: 'In stock now' },
+    { n: 3, dur: 2.4, k: `Opus · ${FIN}`, h: 'THE CAGE', sb: `${FIN} finish` },
+    { n: 4, dur: 2.4, k: `Opus · ${FIN}`, h: 'THE SPLIT', sb: 'One inlet · Two tips' },
+    { n: 5, dur: 3.2, k: `Opus · ${FIN}`, h: 'SHARP', sb: 'In stock now', clip: true },
+    { n: 6, dur: 2.8, k: 'In stock now', h: 'NOT FOR YOUR CAR?<br>WE HAVE OPTIONS.', sb: 'Tell us what you drive' },
+    { n: 7, dur: 3.2, end: true },
+  ];
+  let acc = 0;
+  for (const s of SLIDES) { s.at = acc; acc += s.dur; }
+  const LIST = ONLY ? SLIDES.filter(s => s.n === ONLY) : SLIDES;
+  const TOTAL = ONLY ? LIST[0].dur : acc;
+  if (ONLY) LIST[0].at = 0;
+  window.STILL_T = 1.6;                         // every entrance has settled by here
+
+  const stage = document.getElementById('stage');
+  const load = src => new Promise((res, rej) => {
+    const im = new Image(); im.onload = () => res(im); im.onerror = () => rej(new Error('missing ' + src)); im.src = src;
+  });
+
+  for (const s of LIST) {
+    const el = document.createElement('div');
+    el.className = 'slide'; el.style.top = OFF + 'px';
+    if (s.end) {
+      el.innerHTML = `<div class="end">
+        <img class="logo" src="../brandkit/fd-horizontal-white.png">
+        <div class="t">OPUS EXHAUST TIPS</div>
+        <div class="l">FACETED · ${FIN} · IN STOCK</div>
+        <div class="dm">DM TO ORDER</div>
+        <div class="h">${HANDLE}</div>
+        <div class="w">${SITE}</div></div>`;
+    } else {
+      const media = s.clip
+        ? `<div class="clipbox" style="top:${-OFF}px;height:${H}px"><img><div class="fade"></div></div>`
+        : `<div class="ph" style="top:${-OFF}px;height:${PH + OFF}px"><img><div class="fade"></div></div>`;
+      el.innerHTML = media + `
+        <div class="badge"><img src="../brandkit/fd-icon-white.png"></div>
+        <div class="txt"><div class="vrule"></div>
+          <div class="k">${s.k}</div><div class="hd">${s.h}</div><div class="sb">${s.sb}</div>
+          ${s.cta ? `<div class="ctarow"><div class="dm">DM TO ORDER</div><div class="site">${SITE}</div></div>` : ''}
+        </div>
+        <img class="wordmark" src="../brandkit/fd-horizontal-white.png">`;
+    }
+    stage.appendChild(el);
+    s.el = el;
+    if (s.clip) {
+      // 9:16 frames: in the 4:5 band the box is cropped top and bottom equally
+      s.clipImg = el.querySelector('.clipbox img');
+      s.clipImg.style.top = (H - 1920) / 2 + 'px';
+    } else if (!s.end) {
+      s.img = el.querySelector('.ph img');
+      s.meta = M.photos[PICK[s.n]];
+      await load(DIR + PICK[s.n] + '.jpg');
+      s.img.src = DIR + PICK[s.n] + '.jpg';
+      s.img.style.width = s.meta.w + 'px'; s.img.style.height = s.meta.h + 'px';
+    }
+  }
+  // Hidden slides don't trigger font loads, so load the faces before measuring.
+  await Promise.all(['150px Bebas', '700 34px BarlowC', '500 34px BarlowC']
+    .map(f => document.fonts.load(f)));
+  await document.fonts.ready;
+
+  // Fit each headline inside 811 px, the 9:16 right keep-out.
+  for (const s of LIST) {
+    const hd = s.el.querySelector('.hd');
+    if (!hd) continue;
+    s.el.style.display = 'block';
+    let fs = 150;
+    while (hd.scrollWidth > 811 && fs > 80) { fs -= 2; hd.style.fontSize = fs + 'px'; }
+    s.el.style.display = 'none';
+  }
+
+  // Frame the part: product box up to 78% of the band width, centred at 43% of the
+  // photo depth but held 32 px inside the band's top and sides, never leaving an
+  // uncovered edge.
+  function placePhoto(s, zoom) {
+    const { w, h, box: [x0, y0, x1, y1] } = s.meta;
+    const boxH = PH + OFF, f = FOCUS[PICK[s.n]];
+    const bw = x1 - x0, bh = y1 - y0, cx = (x0 + x1) / 2, cy = f ? f.cy : (y0 + y1) / 2;
+    let sc = f ? 0 : Math.min(0.78 * 1080 / bw, 0.60 * PH / bh);
+    sc = Math.max(sc, 1080 / w, boxH / h) * zoom;
+    let left = 540 - cx * sc, top = OFF + 0.43 * PH - cy * sc;
+    if (!f) {
+      // keep the whole part 32 px clear of the band's top and sides; the bottom runs into the fade
+      top = Math.max(top, OFF + 32 - y0 * sc);
+      left = Math.min(Math.max(left, 32 - x0 * sc), 1048 - x1 * sc);
+    }
+    left = clamp(left, 1080 - w * sc, 0);
+    top = clamp(top, boxH - h * sc, 0);
+    s.img.style.transform = `translate(${left}px, ${top}px) scale(${sc})`;
+  }
+
+  async function show(s, l) {
+    s.el.style.display = 'block';
+    if (s.end) {
+      const q = sel => s.el.querySelector(sel);
+      riseIn(q('.logo'), l, 0.08, 0.5, 30);
+      riseIn(q('.t'), l, 0.34, 0.5, 40);
+      riseIn(q('.l'), l, 0.46, 0.45, 26);
+      const u = p(l, 0.62, 0.95, E.pop);
+      set(q('.dm'), { o: p(l, 0.62, 0.75), s: lerp(0.86, 1, u) });
+      riseIn(q('.h'), l, 0.78, 0.45, 22);
+      riseIn(q('.w'), l, 0.86, 0.45, 22);
+      return;
+    }
+    const q = sel => s.el.querySelector(sel);
+    const rule = q('.vrule');
+    const ru = p(l, 0.14, 0.5);
+    rule.style.clipPath = `inset(0 0 ${(1 - ru) * 100}% 0)`;
+    riseIn(q('.k'), l, 0.18, 0.45, 28);
+    riseIn(q('.hd'), l, 0.26, 0.5, 46);
+    riseIn(q('.sb'), l, 0.40, 0.45, 28);
+    if (s.cta) riseIn(q('.ctarow'), l, 0.56, 0.45, 28);
+    if (s.clip) {
+      const box = q('.clipbox');
+      box.style.opacity = p(l, 0, 0.14);
+      // the clip ends 0.6 s before the slide does; a slow push keeps the held frame moving,
+      // anchored right so the engraved Opus mark near the right edge stays whole
+      s.clipImg.style.transform = `scale(${1 + 0.05 * (l / s.dur)})`;
+      const i = clamp(Math.floor(l * M.clip.fps), 0, M.clip.frames - 1);
+      const src = `${DIR}clip/f_${String(i + 1).padStart(4, '0')}.jpg`;
+      if (s.clipImg.dataset.src !== src) {
+        s.clipImg.dataset.src = src; s.clipImg.src = src;
+        await s.clipImg.decode();
+      }
+    } else {
+      q('.ph').style.opacity = p(l, 0, 0.14);
+      placePhoto(s, 1 + 0.06 * (l / s.dur));
+    }
+  }
+
+  defineScene({
+    duration: TOTAL,
+    frame(t) {
+      let cur = LIST[LIST.length - 1];
+      for (const s of LIST) if (t >= s.at && t < s.at + s.dur) { cur = s; break; }
+      for (const s of LIST) if (s !== cur) s.el.style.display = 'none';
+      return show(cur, t - cur.at);
+    },
+  });
+})().catch(e => { console.error('SCENE ' + e.message); });
+</script>

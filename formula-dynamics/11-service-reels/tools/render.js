@@ -7,9 +7,13 @@ const { spawn } = require('child_process');
 const path = require('path');
 const fs = require('fs');
 
-const FFMPEG = require('child_process')
-  .execSync("python3 -c \"import imageio_ffmpeg;print(imageio_ffmpeg.get_ffmpeg_exe())\"")
-  .toString().trim();
+// imageio-ffmpeg when it is installed, else the system ffmpeg.
+let FFMPEG = '/usr/bin/ffmpeg';
+try {
+  FFMPEG = require('child_process')
+    .execSync("python3 -c \"import imageio_ffmpeg;print(imageio_ffmpeg.get_ffmpeg_exe())\"", { stdio: ['ignore', 'pipe', 'ignore'] })
+    .toString().trim();
+} catch (e) { /* fall back */ }
 
 (async () => {
   const [, , scene, out, fpsArg = '30', wArg = '1080', hArg = '1920'] = process.argv;
@@ -26,14 +30,16 @@ const FFMPEG = require('child_process')
   page.on('pageerror', e => errs.push(e.message));
   page.on('console', m => { if (m.type() === 'error') errs.push(m.text()); });
 
-  await page.goto('file://' + path.resolve(scene), { waitUntil: 'networkidle' });
+  // A query string after the scene path (scene.html?color=tan&fmt=4x5) is passed through.
+  const [file, query] = scene.split('?');
+  await page.goto('file://' + path.resolve(file) + (query ? '?' + query : ''), { waitUntil: 'networkidle' });
   await page.evaluate(() => document.fonts.ready);
   await page.waitForFunction(() => window.__ready === true, { timeout: 15000 });
 
   const duration = await page.evaluate(() => window.SCENE_DURATION);
   const total = Math.round(duration * fps);
   if (errs.length) { console.error('SCENE ERRORS:', errs.slice(0, 5).join(' | ')); }
-  console.log(`${path.basename(scene)} -> ${duration}s, ${total} frames @${fps}fps`);
+  console.log(`${path.basename(file)}${query ? '?' + query : ''} -> ${duration}s, ${total} frames @${fps}fps`);
 
   const ff = spawn(FFMPEG, [
     '-y', '-f', 'image2pipe', '-vcodec', 'png', '-r', String(fps), '-i', '-',

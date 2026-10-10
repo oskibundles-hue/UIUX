@@ -8,13 +8,16 @@ licensed bed under this in Ads Manager or your editor.
 
 Output is limited to -1.5 dBTP, matching the earlier deliveries.
 """
+import json
 import os
 import subprocess
 import sys
 
-import imageio_ffmpeg
-
-FF = imageio_ffmpeg.get_ffmpeg_exe()
+try:
+    import imageio_ffmpeg
+    FF = imageio_ffmpeg.get_ffmpeg_exe()
+except ImportError:  # cloud sessions: the system ffmpeg
+    FF = "/usr/bin/ffmpeg"
 HERE = os.path.dirname(os.path.abspath(__file__))
 ROOT = os.path.dirname(HERE)
 SFX = os.path.join(ROOT, "sfx-fd")
@@ -156,8 +159,50 @@ CUES = {
 DURATION = 15.0
 
 
-def build(stem):
-    video = os.path.join(REELS, stem + ".mp4")
+# ---- P1 Opus exhaust tips carousel (scenes/p1-opus-carousel.html) ----------
+# Slide cuts in the 9:16 video: 0, 3.0, 5.4, 7.8, 10.2 (moving slide), 13.4, 16.2.
+# Headlines land ~0.35 s after each cut; the DM box pops ~0.65 s in.
+_AIR = [("air_bed", t, 0.16) for t in (0.0, 2.9, 5.8, 8.7, 11.6, 14.5, 17.4)]
+_OPUS_VIDEO = _AIR + [
+    ("riser_air",       0.00, 0.40),
+    ("k_impact_plate",  0.35, 0.62),   # OPUS EXHAUST TIPS lands
+    ("pop",             0.68, 0.45),   # DM TO ORDER
+    ("whoosh_short",    2.85, 0.50), ("k_click_tight", 3.35, 0.40),   # THE FACETS
+    ("whoosh_short",    5.25, 0.50), ("k_click_tight", 5.75, 0.40),   # THE CAGE
+    ("whoosh_short",    7.65, 0.50), ("k_click_tight", 8.15, 0.40),   # THE SPLIT
+    ("whoosh_pass",     9.95, 0.50),
+    ("fd_engine_peak", 10.30, 0.50),   # the moving slide: our own engine
+    ("sub_drop",       10.50, 0.55),   # SHARP
+    ("whoosh_short",   13.25, 0.50), ("k_impact_metal", 13.75, 0.50),  # NOT FOR YOUR CAR?
+    ("whoosh_reverse", 15.85, 0.45),
+    ("impact_low",     16.30, 0.70), ("drone_low", 16.20, 0.20),        # end card
+    ("pop",            16.88, 0.50),   # DM TO ORDER
+]
+_OPUS_MOVING = [("air_bed", 0.0, 0.16), ("air_bed", 2.9, 0.16),
+    ("fd_engine_peak", 0.10, 0.50), ("sub_drop", 0.30, 0.55), ("k_click_tight", 0.70, 0.40)]
+for _c in ("Tan", "Black"):
+    CUES[f"Opus-{_c}-08-video-9x16"] = _OPUS_VIDEO
+    CUES[f"Opus-{_c}-05-moving"] = _OPUS_MOVING
+
+# Per-stem length (the R reels are all 15 s) and loudness target. The Opus
+# cuts are normalised to the -14 LUFS the Brembo carousel video went out at.
+DURATIONS = {f"Opus-{c}-{k}": d for c in ("Tan", "Black")
+             for k, d in (("08-video-9x16", 19.4), ("05-moving", 3.2))}
+LUFS = {k: -14.0 for k in DURATIONS}
+
+
+def _loudness(path):
+    r = subprocess.run([FF, "-nostats", "-i", path, "-map", "0:a", "-af", "ebur128=peak=true",
+                        "-f", "null", "-"], capture_output=True, text=True)
+    tail = r.stderr[r.stderr.rfind("Summary"):]
+    i = float(tail.split("I:")[1].split("LUFS")[0])
+    tp = float(tail.split("Peak:")[1].split("dBFS")[0])
+    return i, tp
+
+
+def build(stem, video=None, out=None):
+    """Mux the stem's cue bed into `video` (default renders/<stem>.mp4)."""
+    video = video or os.path.join(REELS, stem + ".mp4")
     if not os.path.exists(video):
         return f"skip {stem} (no video yet)"
     cues = CUES[stem]
@@ -175,9 +220,9 @@ def build(stem):
         "".join(labels)
         + f"amix=inputs={len(cues)}:normalize=0:dropout_transition=0[mx];"
         + f"[mx]alimiter=limit=0.84:level=disabled,"
-        + f"apad,atrim=0:{DURATION},asetpts=N/SR/TB[aout]"
+        + f"apad,atrim=0:{DURATIONS.get(stem, DURATION)},asetpts=N/SR/TB[aout]"
     )
-    out = os.path.join(REELS, stem + "-SFX.mp4")
+    out = out or os.path.join(REELS, stem + "-SFX.mp4")
     cmd += [
         "-filter_complex", ";".join(parts),
         "-map", "0:v", "-map", "[aout]",
@@ -187,11 +232,36 @@ def build(stem):
     r = subprocess.run(cmd, capture_output=True, text=True)
     if r.returncode != 0:
         return f"FAIL {stem}: {r.stderr.strip().splitlines()[-1] if r.stderr else '?'}"
+    level = ""
+    if stem in LUFS:
+        # Two-pass loudnorm: measure, then normalise to the target with its
+        # true-peak limiter (4x oversampled), set 1.3 dB under the -1.5 dBTP ceiling because the AAC encode adds
+        # overs back (measured on the Opus cuts).
+        src = out + ".mix.mp4"
+        os.replace(out, src)
+        norm = f"loudnorm=I={LUFS[stem]}:TP=-2.8:LRA=11"
+        r = subprocess.run([FF, "-nostats", "-i", src, "-map", "0:a", "-af", norm + ":print_format=json",
+                            "-f", "null", "-"], capture_output=True, text=True)
+        m = json.loads(r.stderr[r.stderr.rfind("{"):r.stderr.rfind("}") + 1])
+        norm += (f":measured_I={m['input_i']}:measured_TP={m['input_tp']}:measured_LRA={m['input_lra']}"
+                 f":measured_thresh={m['input_thresh']}:offset={m['target_offset']}:linear=true")
+        r = subprocess.run([FF, "-y", "-i", src, "-map", "0:v", "-map", "0:a", "-c:v", "copy",
+                            "-af", norm + ",aresample=48000",
+                            "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-ac", "2",
+                            "-movflags", "+faststart", out], capture_output=True, text=True)
+        if r.returncode != 0:
+            return f"FAIL {stem} loudness pass"
+        os.remove(src)
+        i, tp = _loudness(out)
+        level = f", {i:.1f} LUFS, {tp:.1f} dBTP"
     mb = os.path.getsize(out) / 1048576
-    return f"ok   {stem}-SFX.mp4  ({mb:.1f} MB, {len(cues)} cues)"
+    return f"ok   {os.path.basename(out)}  ({mb:.1f} MB, {len(cues)} cues{level})"
 
 
 if __name__ == "__main__":
-    targets = sys.argv[1:] or list(CUES)
-    for stem in targets:
-        print(build(stem))
+    # stem            -> renders/<stem>.mp4 into renders/<stem>-SFX.mp4
+    # stem:in.mp4:out.mp4 -> any picture master into any output path
+    targets = sys.argv[1:] or [k for k in CUES if not k.startswith("Opus-")]
+    for arg in targets:
+        stem, *paths = arg.split(":")
+        print(build(stem, *paths))

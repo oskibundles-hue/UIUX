@@ -3,3 +3,4 @@
 # The masters are what's expensive (Chromium frame capture), so those are tracked.
 renders/*-SFX.mp4
 node_modules
+media
