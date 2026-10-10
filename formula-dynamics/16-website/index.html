@@ -489,6 +489,9 @@ section{position:relative;scroll-margin-top:110px}
 .aj-eps>small{grid-column:1/-1;font:500 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--mute);display:flex;gap:8px;align-items:center}
 
 /* ---------- service menu ---------- */
+/* a dyno-style trace behind the heading, drawn in code (no video file). It sits in its own layer, so nothing moves down */
+.dyn{position:relative;isolation:isolate}
+.dyn canvas{position:absolute;left:0;top:-34px;width:100%;height:calc(100% + 34px);z-index:-1;pointer-events:none}
 .menu-t{width:100%;border-collapse:collapse;margin-top:44px}
 .menu-t th{font:500 10.5px/1 var(--mono);letter-spacing:.14em;text-transform:uppercase;color:var(--mute);text-align:left;padding:0 12px 14px;border-bottom:2px solid #fff;font-weight:500}
 .menu-t td{padding:16px 12px;border-bottom:1px solid var(--line);vertical-align:middle}
@@ -953,7 +956,7 @@ footer ul a:hover{color:var(--red)}
 <section class="sec" id="services" data-sec="08 · Service menu">
   <div class="wrap">
     <div class="sh rv"><span class="sq"></span>08 — What we do<div class="ruler draw"></div><span class="rl">9 services · Ferrari to Audi</span></div>
-    <h2 class="kin">The service menu</h2>
+    <div class="dyn"><canvas class="rv" id="dyn" aria-hidden="true"></canvas><h2 class="kin">The service menu</h2></div>
     <p class="lede rv">Everything on the menu, the jobs you can watch, and the ads that go with them.</p>
     <table class="menu-t" id="menu-t">
       <thead><tr><th>No.</th><th>Service</th><th>What it covers</th><th>On camera</th><th>In the ads</th><th>Parts</th><th><span class="sr">Book</span></th></tr></thead>
@@ -1516,6 +1519,30 @@ if(!fromHash())openEp(LATEST.k,{quiet:true});
     <td>${s.cat?`<a class="pl" href="#parts" data-cat="${s.cat}">SEE PARTS →</a>`:s.see?`<a class="pl" href="${s.see[0]}">${esc(s.see[1])}</a>`:'<span class="nf">—</span>'}</td>
     <td><a class="bk" href="#book" data-job="${s.job}">BOOK →</a></td></tr>`).join("");
   $$("#menu-t [data-cat]").forEach(a=>a.onclick=e=>{e.preventDefault();window.filterParts(a.dataset.cat)});
+})();
+
+/* ---------- service menu: dyno trace behind the heading ----------
+   Drawn in code, so it costs no video file. One loop is 6 s = 360 frames at 60 fps. The two ripple terms run
+   1 and 2 whole cycles per loop and the red pen starts and ends off the line, so the frame after the last
+   equals the first. It only runs while it is on screen; with reduced motion it draws once and stays still.
+   cv.p pins the phase (the loop test uses it). No figures and no axes: it is a shape, not a claim. */
+(function(){
+  const cv=$("#dyn");if(!cv)return;
+  const g=cv.getContext("2d"),T=6000,TAU=Math.PI*2;let w=0,h=0,k=1,ph=0,raf=0,on=false;
+  /* height of the trace at u (0..1 across): it climbs, peaks near the right and tips over, with a small live ripple */
+  const y=(u,p)=>h-6-(h-12)*Math.sin(1.82*u**.92)+(.4+.6*u)*(1.1*Math.sin(TAU*(3*u-p))+.6*Math.sin(TAU*(7.3*u+2*p)));
+  const line=(a,b,p)=>{g.beginPath();for(let i=0,n=Math.ceil((b-a)*w/3);i<=n;i++){const u=a+(b-a)*i/n;g.lineTo(u*w,y(u,p))}g.stroke()};
+  function draw(p){ph=p;g.setTransform(k,0,0,k,0,0);g.clearRect(0,0,w,h);
+    g.lineWidth=1;g.strokeStyle="rgba(255,255,255,.3)";line(0,1,p);
+    /* the pen crosses in the first 60% of the loop, then the line rests */
+    const hd=p/.6*1.3-.02,a=Math.max(0,hd-.26),b=Math.min(1,hd);if(b<=a)return;
+    const gr=g.createLinearGradient((hd-.26)*w,0,hd*w,0);gr.addColorStop(0,"rgba(254,15,19,0)");gr.addColorStop(1,"#FE0F13");
+    g.lineWidth=1.5;g.strokeStyle=gr;line(a,b,p);
+    if(hd<=1){g.fillStyle="#FE0F13";g.fillRect(hd*w-2.5,y(hd,p)-2.5,5,5)}}
+  new ResizeObserver(()=>{k=devicePixelRatio||1;w=cv.clientWidth;h=cv.clientHeight;cv.width=w*k;cv.height=h*k;draw(ph)}).observe(cv);
+  if(RM)return;
+  const tick=t=>{raf=on?requestAnimationFrame(tick):0;draw(cv.p??t/T%1)};
+  new IntersectionObserver(es=>{on=es[0].isIntersecting;if(on&&!raf)raf=requestAnimationFrame(tick)}).observe(cv);
 })();
 
 /* ---------- the ads: rail + lightbox with sound ---------- */
