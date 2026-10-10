@@ -28,6 +28,12 @@ style should be used."
    colours, a tab bar and one search across everything. Omarie picked it on 2026-09-28 ("save this apple layout it
    looks so nice"). It lives in `design-systems/iphone-index/`, with `qa.js` to run before publishing. Skip the
    question only when he has already named the style for this piece.
+
+   To show Omarie a post before it goes out (a carousel, a feed post, a reel set), present it on the **post mockup**
+   page: the post in an Instagram phone frame beside its posting kit (versions, posting order with Save buttons,
+   caption, the 9:16 cut, notes). He approved it on 2026-10-10 ("this is a great model and way to show what it would
+   look like save this"). It lives in `design-systems/post-mockup/`, with `qa.js` to run before publishing. The
+   style question above is still asked for the post itself.
 2. **Then build that style all the way**: its techniques, process and quality bar, in the workstream's own brand. The
    page's gold on black is Supercar Experience's; Formula Dynamics keeps FD red and Bebas Neue, Anti Stock keeps its
    own look, and two brands never share a video.
