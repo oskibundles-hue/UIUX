@@ -32,7 +32,7 @@
   .ph .fade{ position:absolute; left:0; right:0; bottom:0; height:340px;
     background:linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,.55) 45%, rgba(0,0,0,.92) 78%, #000 100%); }
   .clipbox{ position:absolute; left:0; width:1080px; overflow:hidden; background:#000; }
-  .clipbox img{ position:absolute; left:0; width:1080px; height:1920px; transform-origin:50% 45%; }
+  .clipbox img{ position:absolute; left:0; width:1080px; height:1920px; transform-origin:85% 45%; }
   .clipbox .fade{ position:absolute; left:0; right:0; bottom:0; height:62%;
     background:linear-gradient(to bottom, rgba(0,0,0,0) 0%, rgba(0,0,0,.6) 40%, rgba(0,0,0,.9) 70%, #000 100%); }
 
@@ -58,8 +58,7 @@
   .end{ position:absolute; inset:0; display:flex; flex-direction:column; align-items:center;
         justify-content:center; text-align:center; padding-bottom:40px; }
   .end .logo{ width:520px; }
-  .end .rl{ width:120px; height:8px; background:var(--fd-red); margin-top:56px; }
-  .end .t{ font-family:'Bebas'; font-size:110px; line-height:.92; letter-spacing:2px; margin-top:48px; }
+  .end .t{ font-family:'Bebas'; font-size:110px; line-height:.92; letter-spacing:2px; margin-top:64px; }
   .end .l{ font-family:'BarlowC'; font-weight:500; font-size:34px; letter-spacing:6px;
            color:rgba(255,255,255,.75); margin-top:18px; }
   .end .dm{ margin-top:52px; }
@@ -92,7 +91,7 @@
   // macro along the faceted shell, head-on into the slotted cage ring, top view for
   // the split, a second angle for the options slide.
   const PICK = {
-    tan:   { 1: 'IMG_1564', 2: 'IMG_1577', 3: 'IMG_1569', 4: 'IMG_1560', 6: 'IMG_1563' },
+    tan:   { 1: 'IMG_1564', 2: 'IMG_1577', 3: 'IMG_1563', 4: 'IMG_1560', 6: 'IMG_1569' },
     black: { 1: 'IMG_1550', 2: 'IMG_1551', 3: 'IMG_1545', 4: 'IMG_1559', 6: 'IMG_1546' },
   }[COLOR];
   // The macros run off the frame on purpose, so they skip the box fit: width-filling
@@ -126,7 +125,6 @@
     if (s.end) {
       el.innerHTML = `<div class="end">
         <img class="logo" src="../brandkit/fd-horizontal-white.png">
-        <div class="rl"></div>
         <div class="t">OPUS EXHAUST TIPS</div>
         <div class="l">FACETED · ${FIN} · IN STOCK</div>
         <div class="dm">DM TO ORDER</div>
@@ -198,7 +196,6 @@
     if (s.end) {
       const q = sel => s.el.querySelector(sel);
       riseIn(q('.logo'), l, 0.08, 0.5, 30);
-      wipeIn(q('.rl'), l, 0.28, 0.4);
       riseIn(q('.t'), l, 0.34, 0.5, 40);
       riseIn(q('.l'), l, 0.46, 0.45, 26);
       const u = p(l, 0.62, 0.95, E.pop);
@@ -218,7 +215,8 @@
     if (s.clip) {
       const box = q('.clipbox');
       box.style.opacity = p(l, 0, 0.14);
-      // the clip ends 0.6 s before the slide does; a slow push keeps the held frame moving
+      // the clip ends 0.6 s before the slide does; a slow push keeps the held frame moving,
+      // anchored right so the engraved Opus mark near the right edge stays whole
       s.clipImg.style.transform = `scale(${1 + 0.05 * (l / s.dur)})`;
       const i = clamp(Math.floor(l * M.clip.fps), 0, M.clip.frames - 1);
       const src = `${DIR}clip/f_${String(i + 1).padStart(4, '0')}.jpg`;
