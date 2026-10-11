@@ -114,3 +114,25 @@ Spans are `clip:in-out` in seconds within the clip.
 - Decided on the rough cut (Omarie, 2026-10-09, clicks): no HUD in the opening montage ("Drop it there"); where two
   drive shots play out of clock order (end of Ch3), the clock holds the earlier time, 11:58 ("Hold 11:58"), so it never
   steps back.
+
+## Motion picks for the 4K pass (Omarie, 2026-10-11, clicks on https://claude.ai/artifact/7NGozrWk4eoGyEyAXj3avo)
+Built in the personal brand only (Anton, #DE1A22, #FBD101, white; Archivo for small type). No speed, no figures, no SE marks.
+- **Driving HUD: C, route rail + big place line.** Replaces the corner card on the same drive runs (`hud/hud.json`).
+  The big place name (Anton) goes top-left with the camera clock under it after a short yellow rule. A vertical rail
+  sits at the left edge with five stops (SEATTLE · OREGON · IDAHO · NEVADA · LAS VEGAS): passed stops are red, the
+  current stop pulses yellow, and the red line fills with trip progress. It clips in left to right and fades out.
+  Wayline's road cursor stays out (turned down 2026-10-05).
+- **Chapter titles: B, the slam with a light sweep, plus D, the slot-reel clock on the two time chapters.** The
+  slam is a small "CHAPTER 0n" kicker in yellow, a big Anton title that slams in (scale and blur) with one light
+  sweep, and a red and yellow stripe wipe under it. It is centre-left and replaces the red box. Ch1 "4:30 A.M." and
+  Ch6 "1:29 A.M." get the slot-reel digits rolling to the time, with the kicker under them. Titles keep their
+  current t0-t1 slots.
+- **Word pops: A, the yellow punch, unchanged.**
+- **Joins and extras: all four.**
+  - **C:** a route card of about 1 s at each chapter join. It's a black card where the route snakes on to the next
+    stop, with "NEXT · <chapter place>". It stands in for the route map left out of v1.
+  - **D:** the host tag (yellow brackets, a leader, and OMARIE over @NQ.YOUNG), once, the first time he's on camera,
+    for about 4 s.
+  - **B:** a red, yellow and white slanted light band, about 0.33 s, on each chapter join.
+  - **E:** nine top segments (opening plus 8 chapters) and a right-edge tab with the chapter number and name, for a
+    few seconds after each title.
