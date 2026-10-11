@@ -688,6 +688,9 @@ footer nav a:hover{color:#fff}
 .gt3-fine{font:500 11px/1.45 var(--mono);color:var(--d-mute);letter-spacing:.04em}
 .gt3-kin{position:absolute;left:0;right:0;top:38%;transform:translateY(-50%);text-align:center;padding:0 var(--gut);
   font:900 clamp(2.8rem,12vw,6rem)/.9 var(--f);letter-spacing:-.035em;text-shadow:0 4px 30px rgba(0,0,0,.6)}
+/* Rally film only: its aerials are bright haze where the GT3 bay is dark, so the clear band behind the line is dimmed and the line gets a tighter shadow (Omarie, 10 Oct: "fix the contrast on three days"). Measured 4.5:1 or better on every line; it was 1.6:1 at the start */
+#rally-film .gt3-shade{background:linear-gradient(180deg,rgba(10,10,12,.66) 0,rgba(10,10,12,.44) 24%,rgba(10,10,12,.44) 46%,rgba(10,10,12,.92) 100%)}
+#rally-film .gt3-kin{text-shadow:0 2px 14px rgba(0,0,0,.6),0 4px 30px rgba(0,0,0,.6)}
 .gt3-prog{position:absolute;right:clamp(8px,1.6vw,18px);top:24%;bottom:24%;width:2px;background:var(--d-line)}
 .gt3-prog i{position:absolute;left:0;right:0;top:0;height:calc(var(--p,0)*100%);background:var(--orange)}
 .gt3-hint{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom,0px));font:600 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--d-mute);transition:opacity .3s}
