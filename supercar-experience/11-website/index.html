@@ -688,9 +688,6 @@ footer nav a:hover{color:#fff}
 .gt3-fine{font:500 11px/1.45 var(--mono);color:var(--d-mute);letter-spacing:.04em}
 .gt3-kin{position:absolute;left:0;right:0;top:38%;transform:translateY(-50%);text-align:center;padding:0 var(--gut);
   font:900 clamp(2.8rem,12vw,6rem)/.9 var(--f);letter-spacing:-.035em;text-shadow:0 4px 30px rgba(0,0,0,.6)}
-/* Rally film only: its aerials are bright haze where the GT3 bay is dark, so the clear band behind the line is dimmed and the line gets a tighter shadow (Omarie, 10 Oct: "fix the contrast on three days"). Measured 4.5:1 or better on every line; it was 1.6:1 at the start */
-#rally-film .gt3-shade{background:linear-gradient(180deg,rgba(10,10,12,.66) 0,rgba(10,10,12,.44) 24%,rgba(10,10,12,.44) 46%,rgba(10,10,12,.92) 100%)}
-#rally-film .gt3-kin{text-shadow:0 2px 14px rgba(0,0,0,.6),0 4px 30px rgba(0,0,0,.6)}
 .gt3-prog{position:absolute;right:clamp(8px,1.6vw,18px);top:24%;bottom:24%;width:2px;background:var(--d-line)}
 .gt3-prog i{position:absolute;left:0;right:0;top:0;height:calc(var(--p,0)*100%);background:var(--orange)}
 .gt3-hint{position:absolute;left:50%;transform:translateX(-50%);bottom:calc(10px + env(safe-area-inset-bottom,0px));font:600 10.5px/1 var(--mono);letter-spacing:.16em;text-transform:uppercase;color:var(--d-mute);transition:opacity .3s}
@@ -938,20 +935,6 @@ footer nav a:hover{color:#fff}
           <button class="btn sm" id="b-go" type="button">Text to book this<span class="ar" aria-hidden="true"><svg class="i" viewBox="0 0 16 16"><path d="M4 12 12 4M5.5 4H12v6.5"/></svg></span></button>
           <div class="note" id="b-msg" aria-live="polite"></div></div>
       </div>
-    </div>
-  </div>
-</section>
-
-<!-- Rally film (10 Oct): rally footage moved by the scroll, same player as the GT3 RS film. Its lines repeat the paragraph in the section below, so screen readers skip it. -->
-<section class="gt3" id="rally-film" aria-hidden="true">
-  <div class="gt3-track">
-    <div class="gt3-stage">
-      <div class="gt3-bg" style="background-image:url(media/rally/rally-poster-v1-1080.jpg)"></div>
-      <img class="gt3-still" src="media/rally/rally-poster-v1-1080.jpg" alt="" loading="lazy">
-      <video muted playsinline preload="none" aria-hidden="true"></video>
-      <div class="gt3-shade"></div>
-      <div class="gt3-ph" data-from="0" data-to="1.01"><div class="gt3-kin">Three days.</div></div>
-      <div class="gt3-prog" aria-hidden="true"><i></i></div>
     </div>
   </div>
 </section>
@@ -1586,18 +1569,25 @@ openEp(EP.some(e=>e.k===deep)?deep:LATEST.k,{quiet:true});
 if(deep)setTimeout(()=>$("#watch").scrollIntoView({block:"center"}),50);
 $("#th-title").classList.add("in");
 
-/* ---------- Scroll films: one function for the GT3 RS (3 Oct) and the rally (10 Oct) ----------
-   o: dur (clip seconds), clip + clipHD, trackVh (how tall the scroll is), steps (scroll fractions) + kin (the big lines) + kinFrom
-   (the first step that changes the line), tail (seconds kept back from the clip's end), eps (how far off, in seconds, before a seek),
-   k ([start, length] of the --k slide), setup(sec), debug (the #hash that shows the readout). */
-function scrollFilm(id,o){
-  const sec=document.getElementById(id); if(!sec) return;
-  const DUR=o.dur, CLIP=o.clip, CLIP_HD=o.clipHD; /* 540p loads first so the scroll works fast; the 1080p swaps in when it arrives (Omarie, 3 Oct: "kind of blurry") */
-  const STEPS=o.steps, KIN=o.kin, KIN_FROM=o.kinFrom||0, TAIL=o.tail||.05, EPS=o.eps||1/24;
+/* ---------- GT3 RS scroll hero (3 Oct) ---------- */
+(()=>{
+  const sec=document.getElementById("gt3"); if(!sec) return;
+  const DUR=31.9, CLIP="media/gt3/gt3rs-scroll.mp4", CLIP_HD="media/gt3/gt3rs-scroll-hd.mp4"; /* 540p loads first so the scroll works fast; the 1080p (19 MB) swaps in when it arrives (Omarie, 3 Oct: "kind of blurry") */
+  const STEPS=[0,.3009,.4514,.6082,.7335,.8746], KIN=["Open the door.","Take the wheel.","GT3 RS."];
   const track=sec.querySelector(".gt3-track"), v=sec.querySelector("video"), still=sec.querySelector(".gt3-still");
   const phs=[...sec.querySelectorAll(".gt3-ph")], kin=sec.querySelector(".gt3-kin"), hint=sec.querySelector(".gt3-hint");
-  track.style.height=o.trackVh+"vh";
-  if(o.setup) o.setup(sec);
+  track.style.height=Math.round(130+DUR*10)+"vh";   /* 449vh. Was 220+DUR*30 = 1177vh, about 11 phone screens and a third of the page; shortened 6 Oct (Impeccable critique). Same three phases, scrubbed faster */
+  /* rates come from the site's own Las Vegas listing, so they never drift from the fleet cards */
+  const g=(typeof cars!=="undefined")&&cars.find(c=>c.id==="gt3");
+  const usd=n=>"$"+n.toLocaleString("en-US");
+  if(g){
+    sec.querySelectorAll('[data-r="day"]').forEach(e=>e.textContent=usd(g.day));
+    sec.querySelectorAll('[data-r="five"]').forEach(e=>e.textContent=usd(g.five));
+    const fm=(g.flash||"").match(/\$[\d,]+/);
+    sec.querySelectorAll('[data-r="flash"]').forEach(e=>e.textContent=fm?fm[0]:"");
+    if(!fm) sec.querySelectorAll('[data-r="flash"],[data-r="flashl"]').forEach(e=>e.hidden=true);
+    if(typeof DEAL!=="undefined"&&!g.d2full) sec.querySelectorAll('[data-r="deal"]').forEach(e=>e.textContent=DEAL);
+  }
   const still_only=RM||SAVER;
   let blob=null, target=0, near=false, raf=0;
   /* the one muted play a scroll video needs; if the phone wants a tap first (Low Power Mode), the next tap anywhere does it (4 Oct, same fix as the FD site) */
@@ -1612,19 +1602,19 @@ function scrollFilm(id,o){
   function update(){
     const r=track.getBoundingClientRect(), span=r.height-innerHeight, p=clamp(-r.top/span);
     sec.style.setProperty("--p",p.toFixed(4));
-    if(hint) hint.style.opacity=p>.02?0:1;
-    target=p*(DUR-TAIL);
+    hint.style.opacity=p>.02?0:1;
+    target=p*(DUR-.05);
     let k=0; STEPS.forEach((a,i)=>{if(p>=a)k=i});
     phs.forEach(el=>{const a=+el.dataset.from,b=+el.dataset.to,on=p>=a&&p<b;el.classList.toggle("on",on);el.style.setProperty("--q",clamp((p-a)/(Math.min(b,1)-a)).toFixed(3))});
-    if(o.k) sec.style.setProperty("--k",clamp((p-o.k[0])/o.k[1]).toFixed(3));
-    if(kin&&k>=KIN_FROM) kin.textContent=KIN[k-KIN_FROM];
+    sec.style.setProperty("--k",clamp((p-.33)/.12).toFixed(3));
+    if(k>=3) kin.textContent=KIN[k-3];
   }
   /* seek only once frames have loaded (a seek before that can hang in Safari), and re-ask if one hangs anyway */
   let seekAt=0;
   function tick(now){
     if(near&&v.getAttribute("src")){
       if(v.seeking){ if(now-seekAt>1500){ v.currentTime=target; seekAt=now; } }
-      else if(v.readyState>=2&&Math.abs(v.currentTime-target)>EPS){ v.currentTime=target; seekAt=now; }
+      else if(v.readyState>=2&&Math.abs(v.currentTime-target)>1/24){ v.currentTime=target; seekAt=now; }
     }
     raf=requestAnimationFrame(tick);
   }
@@ -1652,33 +1642,13 @@ function scrollFilm(id,o){
   /* Safari may refuse a play while the video is still off screen: try again once it is on screen */
   new IntersectionObserver(es=>{ if(es.some(e=>e.isIntersecting)&&v.getAttribute("src")&&v.readyState<2) primeVid(); }).observe(sec);
   addEventListener("scroll",update,{passive:true}); addEventListener("resize",update); update();
-  if(o.debug&&location.hash===o.debug){
+  if(location.hash==="#gt3-debug"){
     const d=document.createElement("div"); d.style.cssText="position:absolute;left:8px;top:calc(70px + env(safe-area-inset-top,0px));z-index:9;font:600 12px/1.3 var(--mono);background:#000;color:#fff;padding:6px 8px;border:1px solid var(--orange)";
     sec.querySelector(".gt3-stage").appendChild(d);
     setInterval(()=>{ d.textContent=still_only?"still only: "+(RM?"Reduce Motion is on":"data saver is on"):(v.videoWidth?v.videoWidth+"p-wide clip":"no clip yet")+" · ready "+v.readyState+"/4"+(needTap?" · waiting for a tap":"")+" · HD "+(hd?"ready":hdAsked?"downloading":(wantHD?"waiting":"off"))+" · dpr "+(devicePixelRatio||1); },500);
     setTimeout(()=>sec.scrollIntoView(),400);
   }
-}
-/* GT3 RS: 31.9 s clip at 12 fps, three phases, the rate card slides in from 33% */
-scrollFilm("gt3",{dur:31.9, clip:"media/gt3/gt3rs-scroll.mp4", clipHD:"media/gt3/gt3rs-scroll-hd.mp4",
-  trackVh:449,   /* 130 + 31.9 s x 10. Was 220+DUR*30 = 1177vh, about 11 phone screens and a third of the page; shortened 6 Oct (Impeccable critique). Same three phases, scrubbed faster */
-  steps:[0,.3009,.4514,.6082,.7335,.8746], kin:["Open the door.","Take the wheel.","GT3 RS."], kinFrom:3, k:[.33,.12], debug:"#gt3-debug",
-  setup(sec){
-    /* rates come from the site's own Las Vegas listing, so they never drift from the fleet cards */
-    const g=(typeof cars!=="undefined")&&cars.find(c=>c.id==="gt3");
-    const usd=n=>"$"+n.toLocaleString("en-US");
-    if(g){
-      sec.querySelectorAll('[data-r="day"]').forEach(e=>e.textContent=usd(g.day));
-      sec.querySelectorAll('[data-r="five"]').forEach(e=>e.textContent=usd(g.five));
-      const fm=(g.flash||"").match(/\$[\d,]+/);
-      sec.querySelectorAll('[data-r="flash"]').forEach(e=>e.textContent=fm?fm[0]:"");
-      if(!fm) sec.querySelectorAll('[data-r="flash"],[data-r="flashl"]').forEach(e=>e.hidden=true);
-      if(typeof DEAL!=="undefined"&&!g.d2full) sec.querySelectorAll('[data-r="deal"]').forEach(e=>e.textContent=DEAL);
-    }
-  }});
-/* Rally: 188 frames at 60 fps, every frame of three shots of rally footage; the line changes on a cut (frames 66 and 124) */
-scrollFilm("rally-film",{dur:188/60, tail:.02, eps:1/120, trackVh:300, clip:"media/rally/rally-scroll-v1.mp4", clipHD:"media/rally/rally-scroll-v1-hd.mp4",
-  steps:[0, 66, 124].map(f=>f/60/(188/60-.02)), kin:["Three days.","In the convoy.","Bring your copilot."], debug:"#rally-debug"});
+})();
 </script>
 </body>
 </html>
