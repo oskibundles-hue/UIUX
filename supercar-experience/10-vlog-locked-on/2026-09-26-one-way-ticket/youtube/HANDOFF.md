@@ -47,6 +47,46 @@ The 12 points Omarie approved (2026-10-07):
    `NQ Studio/04 Exports/2026-09-26 One-way ticket YouTube`, v1/v2 names kept side by side. Then send_message the lead.
 5. Open a draft PR for this branch and subscribe to it.
 
+## Current job (handed off 2026-10-11): the 4K master with the motion picks
+
+**Done:**
+- Mockups page: https://claude.ai/artifact/7NGozrWk4eoGyEyAXj3avo (source:
+  `/tmp/claude-0/-home-user/c4f4b4f9-4013-56af-bc05-3987372f9162/scratchpad/mock/template.html`, the exact CSS look
+  and timing).
+- Omarie's picks are in PLAN.md under "Motion picks for the 4K pass" (commit 80a0cac):
+  - HUD C, route rail;
+  - titles B, the slam, plus D, the slot-reel clock on Ch1 and Ch6;
+  - word pops unchanged;
+  - joins and extras: all four (route card, host tag, light band, chapter bar plus tab).
+- Disk: he OK'd "Delete as needed", meaning the 720p mezzanines, the 720p rough-cut mp4s and wavs, the sparse files
+  once their 4K chapter is verified, and the old titled Ch1-4 renders once the patched ones are verified.
+- Ch1-4: their 4K sources are gone (mezzA is empty) and the old red-box titles are burned in. He picked **"Patch the
+  title shots"**: fetch only the shots under the four titles, re-render them clean and splice them in at the shot cuts.
+
+**Running when handed off:** an `nq-build` agent (background, in this same container) working the brief at
+`/tmp/claude-0/-home-user/c4f4b4f9-4013-56af-bc05-3987372f9162/scratchpad/brief_4k.md`, in this order:
+1. Motion overlays and the 720p proof (`roughcut/gate/`).
+2. Ch5-8 4K masters.
+3. The Ch1-4 title-shot patches.
+4. The 4K assembly, to `/home/user/day-owt/final/one_way_ticket_4k.mp4`, `_NOMUSIC.mp4` and `chapters.txt`.
+
+Its report comes back to this session as a task notification. If the Dropbox links have expired, it stops and lists
+the clip files it needs; the lead gets fresh links with the Dropbox connector (`download_link`; links are single-use,
+don't preflight them) and sends a builder back.
+
+**Then:**
+1. Look at the proof sheets via `nq-check`, not in the lead.
+2. Run nq-check on the whole video. Have it look at Ch7 0118 at about 8:29 (a raised hand near the blurred screen).
+3. Run nq-facts on HUD places and clock times, titles, the route card's "NEXT" places and spoken figures, then
+   nq-second.
+4. Add Video Drop cards on the ONE page (https://claude.ai/artifact/5pW7z8z8fqRa35vMjNUYYP; add cards only): the 4K
+   master and the NO MUSIC master. Dropbox folder: `NQ Studio/04 Exports/2026-09-26 One-way ticket YouTube`.
+5. Send ONE send_message to `session_013JoCuN8AVJiDRcQU8W2e21` with card ids, bytes, the SHA-256 of each file, the
+   running time and what to look at.
+6. Commit the builder's code changes and push to PR #47 (CI green at 80a0cac).
+7. Mark the live card (doc `s_01UiYaS1dTJZNAkNM93Ry7uG`, now v17) done. Write only the `data` part of
+   `live_card.py`'s output (`/home/user/.nqos-system/.claude/brain/live_card.py`).
+
 ## Next job (when Omarie's usage resets): animation mockups, then 4K
 
 **State, 2026-10-09:** the full 720p rough cut is done and sent (10:32, opening + Ch1-8, with the personal driving
