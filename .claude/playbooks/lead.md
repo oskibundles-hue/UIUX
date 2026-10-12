@@ -24,9 +24,13 @@ in Dropbox itself, deliver it through the **Video Drop** page: https://claude.ai
      `scope: "assets"` prints for its asset id, so a part out of place on the card is caught (one or two calls
      for all the parts). Omarie, 7 Oct: Part 2 v2 checked 26 parts this way, where reading each back with its
      own `path` would have taken 26 calls; a multi-`paths` read of asset ids failed in Part 2.
-  5. Once he has saved it, confirm the file in Dropbox at the exact size and the master's SHA-256 (`shasum -a 256`
-     on the Dropbox copy, a few seconds). That checks the whole file end to end, whatever the listing's hash is
-     based on.
+  5. Once he has saved it, download the Dropbox copy (`download_link`, then `curl`) and check its picture and
+     sound against the master: the same video and audio stream MD5s (`ffmpeg -i f.mp4 -map 0:v -c copy -f md5 -`,
+     then `-map 0:a`), frame counts and duration. Saving through the page can add a Content Credentials (C2PA)
+     label of a few KB, which also shifts the file's chunk-offset table, so the whole file's size and SHA-256
+     differ while the picture and sound are identical (12 Oct, the showreel sound trial: 5,893 bytes more). When
+     the size does match the master exactly, check the SHA-256 too. If the file isn't in the card's folder,
+     search Dropbox for its filename: the showreel trial landed in the Dropbox root. Ask him before moving it.
 - The page holds 1 GiB. Clear older cards only once they're confirmed in Dropbox, and ask him first.
 
 ## The Working-now card: step detail
