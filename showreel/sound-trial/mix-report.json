@@ -5,7 +5,7 @@
  "target_lufs": -14,
  "master_lufs": -14.05,
  "master_true_peak_db": -2.0,
- "master_gain_db": 5.54,
+ "master_gain_db": 5.47,
  "events": [
   {
    "id": "cold-open",
@@ -1048,10 +1048,10 @@
   },
   {
    "id": "final-hit",
-   "sound": "hit/fs-592034-braams-hit-1-1+boom/fs-636624-deep-hit-2+boom/fs-201748-bass-rugged-sub-2-3",
+   "sound": "hit/fs-592034-braams-hit-1-1+boom/fs-212768-bass-drop-3+boom/fs-201748-bass-rugged-sub-2-3",
    "files": [
     "audio/kit/hit/fs-592034-braams-hit-1-1.wav",
-    "audio/kit/boom/fs-636624-deep-hit-2.wav",
+    "audio/kit/boom/fs-212768-bass-drop-3.wav",
     "audio/kit/boom/fs-201748-bass-rugged-sub-2-3.wav"
    ],
    "weight": "hero",
@@ -1059,7 +1059,7 @@
    "cue_s": 13.125,
    "peak_s": 13.125,
    "pan": 0.0,
-   "gain_db": -5.48,
+   "gain_db": -3.65,
    "limited_by": "main-band target (hero)",
    "band_hz": [
     125,

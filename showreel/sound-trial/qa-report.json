@@ -9,12 +9,12 @@
   {
    "check": "loudness",
    "status": "pass",
-   "detail": "integrated -14.10 LUFS, target -14"
+   "detail": "integrated -14.11 LUFS, target -14"
   },
   {
    "check": "true peak",
    "status": "pass",
-   "detail": "-1.53 dBTP (limit -1.0)"
+   "detail": "-1.80 dBTP (limit -1.0)"
   },
   {
    "check": "picture pop-2.344",
@@ -154,7 +154,7 @@
   {
    "check": "audible tick-3.047",
    "status": "FAIL",
-   "detail": "stands out by 0.9 dB in 2000-4000 Hz over music+voice"
+   "detail": "stands out by 0.8 dB in 2000-4000 Hz over music+voice"
   },
   {
    "check": "sync click-3.281",
@@ -274,7 +274,7 @@
   {
    "check": "audible whoosh-6.562",
    "status": "pass",
-   "detail": "stands out by 5.6 dB in 4000-8000 Hz over music+voice"
+   "detail": "stands out by 5.5 dB in 4000-8000 Hz over music+voice"
   },
   {
    "check": "audible reverse-6.984",
@@ -449,47 +449,47 @@
   {
    "check": "audible final-hit",
    "status": "pass",
-   "detail": "stands out by 3.5 dB in 125-250 Hz over music+voice"
+   "detail": "stands out by 2.5 dB in 125-250 Hz over music+voice"
   },
   {
    "check": "hero body final-hit",
-   "status": "pass",
-   "detail": "main band 125-250 Hz lifted 3.5 dB (needs 3)"
+   "status": "FAIL",
+   "detail": "main band 125-250 Hz lifted 2.5 dB (needs 3)"
   },
   {
    "check": "audible shimmer-13.125",
    "status": "pass",
-   "detail": "stands out by 4.3 dB in 125-250 Hz over music+voice"
+   "detail": "stands out by 5.6 dB in 125-250 Hz over music+voice"
   },
   {
    "check": "sync pop-13.594",
    "status": "pass",
-   "detail": "peak 0.21 frames from its cue"
+   "detail": "peak 1.64 frames from its cue"
   },
   {
    "check": "audible pop-13.594",
    "status": "pass",
-   "detail": "stands out by 2.4 dB in 1000-2000 Hz over music+voice"
+   "detail": "stands out by 3.0 dB in 1000-2000 Hz over music+voice"
   },
   {
    "check": "sync tick-13.770",
    "status": "pass",
-   "detail": "peak 0.77 frames from its cue"
+   "detail": "peak 0.70 frames from its cue"
   },
   {
    "check": "audible tick-13.770",
    "status": "pass",
-   "detail": "stands out by 4.1 dB in 125-250 Hz over music+voice"
+   "detail": "stands out by 5.4 dB in 125-250 Hz over music+voice"
   },
   {
    "check": "sync blip-14.531",
-   "status": "pass",
-   "detail": "peak 0.67 frames from its cue"
+   "status": "FAIL",
+   "detail": "peak 3.00 frames from its cue"
   },
   {
    "check": "audible blip-14.531",
    "status": "pass",
-   "detail": "stands out by 9.6 dB in 1000-2000 Hz over music+voice"
+   "detail": "stands out by 9.5 dB in 1000-2000 Hz over music+voice"
   },
   {
    "check": "music",

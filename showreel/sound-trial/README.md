@@ -15,7 +15,7 @@ The trial mp4 (13.9 MB) is delivered separately and isn't committed. Rebuild it 
 | `cues.json` | the cue sheet that was mixed: 50 cues, 4 of them heroes |
 | `mix-report.json` | the mixer's report: gain, alignment and band for every event, plus master loudness |
 | `qa-report.json`, `qa.png` | `qa.py`'s results and its picture (waveform, spectrogram and motion, with every cue marked) |
-| `CREDITS.md` | the 28 recordings the mix plays |
+| `CREDITS.md` | the 29 recordings the mix plays |
 | `LISTEN.md` | five timecodes to check by ear, and every sound left out |
 
 ## Rebuild
@@ -50,28 +50,29 @@ the drop, and round 5 made the final hit hit harder.
 | round 3 | 51 | 11 | sounds measured as buried in round 2 dropped, the cold open aligned to frame 0, a new boom under the final hit |
 | fix | 52 | 11 | a bug, not a tuning round: the per-time sound overrides also caught the swells ending at those times, so reverse-7.500 played a shimmer and the whooshes at 11.13 and 12.19 played a cork pop. Each swell now plays its own family, and reverse-8.438 (dropped after being measured on the wrong file) is back |
 | round 4 | 50 | 11 | the gap before the drop filled: the bed now keeps the synth's own swells through the score's dead stops (`--mute hits`), and the two recorded reverses that landed there (reverse-7.500 and reverse-13.125, solved at −41 and −46 dB against a silent bed) are dropped. 7.20–7.47 s now averages −24.2 dB, against −25.3 dB in the synth version and −51.5 dB before |
-| round 5 | 50 | 9 | the final hit gets a third layer, the unfold's rugged sub, under the braam and the deep hit. Six layer sets were mixed and checked (table below). Its 125–250 Hz lift goes from 2.1 to 3.5 dB, and pop-13.594, which sat under the braam's tail, now lands 0.21 frames from its cue |
+| round 5 | 50 | 11 | the final hit's layers under the braam become the bass drop and the unfold's rugged sub. Six layer sets were mixed and checked (table below), and Omarie picked this one by ear, the loudest. It's 2.9 dB louder over the hit than round 4. Its 125–250 Hz lift goes from 2.1 to 2.5 dB, still under the 3 it needs. pop-13.594, which sat under the braam's tail, now lands 1.64 frames from its cue, and blip-14.531 now lands 3.00 frames late |
 
 Final run, passing:
 - offset 0 ms
 - −14.10 LUFS
-- true peak −1.53 dBTP
+- true peak −1.80 dBTP
 - music level steady, no dips
 - no silences flagged
-- every hero's body: the cold open 3.3 dB, the unfold 3.9, the drop 3.3 and the final hit 3.5 (needs 3)
+- the cold open's, unfold's and drop's body: 3.3, 3.9 and 3.3 dB (needs 3)
 - the unfold, drop and final hit 0 frames from their cues; the cold open starts on frame 0 (start-aligned, so QA has no sync row for it)
 - the drop's picture cut on frame 450
 
-The 9 FAILs left:
+The 11 FAILs left:
 - audible, under the score in their own band (needs 1.5 dB):
-  - tick-3.047: 0.9 dB
+  - tick-3.047: 0.8 dB
   - impact-8.438: 0.7 dB
   - blip-9.609: 1.5 dB
   - whoosh-11.133: 0.8 dB
   - glitch-11.953: 1.2 dB
   - whoosh-12.188: 0.7 dB
   - key-12.188: 1.3 dB
-- sync: tick-6.357 (2.12 frames), blip-10.898 (2.85 frames)
+- sync: tick-6.357 (2.12 frames), blip-10.898 (2.85 frames), blip-14.531 (3.00 frames)
+- hero body: final-hit lifted 2.5 dB in 125–250 Hz (needs 3). This is the set Omarie picked by ear; deep hit + rugged sub passed at 3.5 dB (table below).
 
 The 5 warnings: the landing pops at 2.344, 2.578, 2.812, 2.930 and 13.594 sit where the picture's whole-frame
 motion doesn't stop. The landing dot is too small to register.
@@ -94,11 +95,11 @@ Each set was mixed into the same cue sheet, with only the final hit's sound chan
 | bass drop 3 | 2.8 dB | 13 | | | adds 2 FAILs at tick-13.770 |
 | fat sub kick | 2.1 dB | 10 | | | |
 | gloss stomp sub | 3.5 dB | 10 | | | true peak −0.97 dBTP fails (limit −1.0) |
-| **deep hit + rugged sub** | **3.5 dB** | **9** | **−11.3 dB** | **−13.8 dB** | picked |
+| deep hit + rugged sub | 3.5 dB | 9 | −11.3 dB | −13.8 dB | the checks' pick |
 | deep hit + rugged sub + fat sub kick | 2.0 dB | 10 | −12.0 dB | −14.7 dB | |
-| bass drop 3 + rugged sub | 2.5 dB | 11 | −10.2 dB | −11.9 dB | louder than the synth there, but fails 2 checks the picked set passes: its body and blip-14.531's sync (3.00 frames) |
+| **bass drop 3 + rugged sub** | **2.5 dB** | **11** | **−10.2 dB** | **−11.9 dB** | **Omarie's pick, by ear.** Louder than the synth there, but fails 2 checks the set above passes: its body and blip-14.531's sync (3.00 frames) |
 
-The picked set is 1.8 dB louder over the hit than round 4 and 3.3 dB louder through the low-pass. It's still 0.8 dB under
-the synth over the hit, and 1.5 dB under it through the low-pass. The mixer solves every hero's gain itself, from one band (here
+The set in the mix is 2.9 dB louder over the hit than round 4 and 5.2 dB louder through the low-pass. Against the
+synth it's 0.3 dB louder over the hit and 0.4 dB louder through the low-pass. The mixer solves every hero's gain itself, from one band (here
 125–250 Hz), and a cue sheet has no gain field, so without changing the scripts the weight has to come from the
 layers.

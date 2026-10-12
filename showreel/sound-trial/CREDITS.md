@@ -1,4 +1,4 @@
-# Sound credits (28 recordings)
+# Sound credits (29 recordings)
 
 These are the recordings the trial mix plays. All are CC0 (public domain) and come from the opus-sound-layer kit
 (https://github.com/Bodila51/opus-sound-layer). CC0 doesn't require credit, but it's given here. The kit's own
@@ -7,6 +7,7 @@ CREDITS.md lists all 1,139 sounds.
 - Kenney (kenney.nl), Digital Audio, CC0, https://kenney.nl/assets/digital-audio (ui/kenney-digital-high-down, ui/kenney-digital-high-up)
 - Kenney (kenney.nl), Interface Sounds, CC0, https://kenney.nl/assets/interface-sounds (click/kenney-interface-switch-001)
 - boom/fs-201748-bass-rugged-sub-2-3: "[Bass] Rugged sub 2" by waveplaySFX, CC0, https://freesound.org/people/waveplaySFX/sounds/201748
+- boom/fs-212768-bass-drop-3: "Bass Drop" by qubodup, CC0, https://freesound.org/people/qubodup/sounds/212768
 - boom/fs-223838-expriements-bass-8-mp3-2: "Expriements - bass 8 .mp3" by Wonki_B, CC0, https://freesound.org/people/Wonki_B/sounds/223838
 - boom/fs-636624-deep-hit-2: "Deep hit" by CogFireStudios, CC0, https://freesound.org/people/CogFireStudios/sounds/636624
 - click/fs-399443-mouse-clicks: "mouse clicks" by chestnutjam, CC0, https://freesound.org/people/chestnutjam/sounds/399443
