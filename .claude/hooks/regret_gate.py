@@ -11,6 +11,7 @@ import re
 import shlex
 import subprocess
 import sys
+import time
 
 # Branches that only change through a PR. UIUX's default branch is claude/new-session-mucc2q (it has
 # no main); nq-agent-channel's is main. The clone's own origin/HEAD is added when git knows it.
@@ -27,6 +28,18 @@ PUBLISH = {
     "Windsor_ai": {"execute_action"},
 }
 DROPBOX_DESTRUCTIVE = {"move", "delete"}
+# Connectors can show up under their claude.ai id instead of their name; gate both the same way.
+SERVER_IDS = {
+    "e17b92d9-8ef6-414a-9d7c-cbcd27995067": "Higgsfield",
+    "a8f752c9-094c-401f-bfd1-5765c16a1cac": "Dropbox",
+    "ce55a968-b7c0-40de-9c2e-6aca8cb8f490": "Vertiso_Memory",
+    "6887db1f-0e1a-41ac-ba4c-ce4158862ba3": "vidIQ",
+}
+# Genjutsu runner (phase 2): Omarie's Go tap on a priced ask is his OK to spend on that one job. The runner
+# checks the Go in the NQ OS db, re-prices, and only then writes a single-use ticket here. Any other paid
+# Higgsfield call keeps asking. Playbook: .claude/playbooks/genjutsu-runner.md
+GO_TICKETS = os.environ.get("GENJUTSU_GO_DIR", "/tmp/genjutsu-go")
+GENJUTSU_MODELS = {"hf_mult_replace_object", "hf_mult_motion_control"}
 MEMORY_WRITE = re.compile(r"^(remember|update_memory|archive_memory|approve_constraint|forget\w*|delete\w*)$")
 GITHUB_BRANCH_WRITE = {"push_files", "create_or_update_file", "delete_file"}
 GITHUB_MERGE = {"merge_pull_request", "enable_pr_auto_merge"}
@@ -77,8 +90,57 @@ def current_branches(cwd):
     return out - {""}
 
 
+def num(v):
+    try:
+        return float(v)
+    except (TypeError, ValueError):
+        return None
+
+
+def genjutsu_go(name, args):
+    """True when a paid Genjutsu call matches an unused, unexpired Go ticket; the ticket is used up here."""
+    params = args.get("params") if isinstance(args.get("params"), dict) else {}
+    if name == "generate_video":
+        key = params.get("model")
+        if key not in GENJUTSU_MODELS or (num(params.get("count", 1)) or 0) > 1:
+            return False
+    elif name == "execute_preset":
+        key = args.get("preset_id")
+        if not str(key or "").startswith(("genjutsu:", "genjutsu-style:")):
+            return False
+    else:
+        return False
+    try:
+        tickets = sorted(f for f in os.listdir(GO_TICKETS) if f.endswith(".json"))
+    except OSError:
+        return False
+    for f in tickets:
+        path = os.path.join(GO_TICKETS, f)
+        try:
+            with open(path) as fh:
+                t = json.load(fh)
+        except Exception:  # noqa: BLE001
+            continue
+        cost, quote, expires = num(t.get("cost")), num(t.get("quote")), num(t.get("expires"))
+        if (t.get("tool") == name and t.get("key") == key and cost is not None and quote is not None
+                and expires is not None and expires > time.time() and 0 <= quote <= cost
+                and f == f"{t.get('doc_id')}.json"):
+            try:
+                os.rename(path, path[:-5] + ".used")   # single use: a second call finds no ticket
+            except OSError:
+                return False
+            return True
+    return False
+
+
 def check_mcp(tool, args, cwd):
     _, server, name = tool.split("__", 2)
+    server = SERVER_IDS.get(server, server)
+    params = args.get("params") if isinstance(args.get("params"), dict) else {}
+    if server == "Higgsfield" and name == "generate_video" and params.get("get_cost") is True:
+        return   # a price check submits nothing
+    if server == "Higgsfield" and HIGGSFIELD_PAID.match(name) and genjutsu_go(name, args):
+        return
     if server == "Higgsfield" and HIGGSFIELD_PAID.match(name):
         decide("ask", f"Regret list: paid Higgsfield call ({name}). Quote the per-render cost "
                       "(get_cost where the model supports it, else the preset price) and confirm the "
