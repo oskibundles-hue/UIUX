@@ -1,0 +1,1212 @@
+{
+ "cues_file": "/tmp/claude-0/-home-user-UIUX/988e1416-1bc7-5813-873a-dbed814cf3f9/scratchpad/trial/audio/cues.json",
+ "fps": 60,
+ "duration_s": 15.0,
+ "target_lufs": -14,
+ "master_lufs": -14.05,
+ "master_true_peak_db": -2.0,
+ "master_gain_db": 5.6,
+ "events": [
+  {
+   "id": "cold-open",
+   "sound": "hit/fs-443494-thud2-wav-1+boom/fs-223838-expriements-bass-8-mp3-2",
+   "files": [
+    "audio/kit/hit/fs-443494-thud2-wav-1.wav",
+    "audio/kit/boom/fs-223838-expriements-bass-8-mp3-2.wav"
+   ],
+   "weight": "hero",
+   "align": "start",
+   "cue_s": 0.0,
+   "peak_s": 0.0187,
+   "pan": 0.0,
+   "gain_db": -7.78,
+   "limited_by": "main-band target (hero)",
+   "band_hz": [
+    125,
+    250
+   ],
+   "win_s": [
+    0.0087,
+    0.1687
+   ],
+   "visual": null
+  },
+  {
+   "id": "shimmer-0.000",
+   "sound": "shimmer/fs-452371-small-bell-2",
+   "files": [
+    "audio/kit/shimmer/fs-452371-small-bell-2.wav"
+   ],
+   "weight": "support",
+   "align": "start",
+   "cue_s": 0.0,
+   "peak_s": 0.056,
+   "pan": 0.0,
+   "gain_db": -37.99,
+   "limited_by": "best-band target + cluster x0.6",
+   "band_hz": [
+    8000,
+    16000
+   ],
+   "win_s": [
+    0.046,
+    0.1855
+   ],
+   "visual": null
+  },
+  {
+   "id": "impact-0.469",
+   "sound": "hit/fs-443494-thud2-wav-1+thump/fs-458877-thump-1",
+   "files": [
+    "audio/kit/hit/fs-443494-thud2-wav-1.wav",
+    "audio/kit/thump/fs-458877-thump-1.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 0.4688,
+   "peak_s": 0.4688,
+   "pan": 0.0,
+   "gain_db": -10.57,
+   "limited_by": "best-band target",
+   "band_hz": [
+    250,
+    500
+   ],
+   "win_s": [
+    0.4587,
+    0.5288
+   ],
+   "visual": null
+  },
+  {
+   "id": "swish-0.938",
+   "sound": "swish/fs-395264-sword-movement-single-3-1",
+   "files": [
+    "audio/kit/swish/fs-395264-sword-movement-single-3-1.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 0.9375,
+   "peak_s": 0.9375,
+   "pan": 0.0,
+   "gain_db": -16.58,
+   "limited_by": "best-band target",
+   "band_hz": [
+    2000,
+    4000
+   ],
+   "win_s": [
+    0.9275,
+    0.9856
+   ],
+   "visual": null
+  },
+  {
+   "id": "impact-1.406",
+   "sound": "hit/fs-243375-tire-puncture-pop-hit-punch-1",
+   "files": [
+    "audio/kit/hit/fs-243375-tire-puncture-pop-hit-punch-1.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 1.4062,
+   "peak_s": 1.4062,
+   "pan": 0.0,
+   "gain_db": -14.46,
+   "limited_by": "best-band target",
+   "band_hz": [
+    125,
+    250
+   ],
+   "win_s": [
+    1.3962,
+    1.4999
+   ],
+   "visual": null
+  },
+  {
+   "id": "pop-1.641",
+   "sound": "pop/fs-328117-pop-8-1",
+   "files": [
+    "audio/kit/pop/fs-328117-pop-8-1.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 1.6406,
+   "peak_s": 1.6406,
+   "pan": 0.0,
+   "gain_db": -17.04,
+   "limited_by": "best-band target",
+   "band_hz": [
+    1000,
+    2000
+   ],
+   "win_s": [
+    1.6306,
+    1.6806
+   ],
+   "visual": null
+  },
+  {
+   "id": "whoosh-1.875",
+   "sound": "whoosh/fs-471097-knife-sword-swing-1",
+   "files": [
+    "audio/kit/whoosh/fs-471097-knife-sword-swing-1.wav"
+   ],
+   "weight": "support",
+   "align": "end",
+   "cue_s": 1.875,
+   "peak_s": 1.7698,
+   "pan": -0.3,
+   "gain_db": -20.76,
+   "limited_by": "best-band target + cluster x0.6",
+   "band_hz": [
+    1000,
+    2000
+   ],
+   "win_s": [
+    1.7598,
+    1.8674
+   ],
+   "visual": null
+  },
+  {
+   "id": "pop-2.344",
+   "sound": "pop/fs-244652-pop-4-1",
+   "files": [
+    "audio/kit/pop/fs-244652-pop-4-1.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 2.3438,
+   "peak_s": 2.3438,
+   "pan": 0.0,
+   "gain_db": -14.29,
+   "limited_by": "best-band target",
+   "band_hz": [
+    500,
+    1000
+   ],
+   "win_s": [
+    2.3338,
+    2.3838
+   ],
+   "visual": "land"
+  },
+  {
+   "id": "pop-2.578",
+   "sound": "pop/fs-328117-pop-8-1",
+   "files": [
+    "audio/kit/pop/fs-328117-pop-8-1.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 2.5781,
+   "peak_s": 2.5781,
+   "pan": 0.0,
+   "gain_db": -21.04,
+   "limited_by": "best-band target",
+   "band_hz": [
+    500,
+    1000
+   ],
+   "win_s": [
+    2.5681,
+    2.6181
+   ],
+   "visual": "land"
+  },
+  {
+   "id": "pop-2.812",
+   "sound": "pop/fs-244652-pop-4-1",
+   "files": [
+    "audio/kit/pop/fs-244652-pop-4-1.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 2.8125,
+   "peak_s": 2.8125,
+   "pan": 0.0,
+   "gain_db": -18.29,
+   "limited_by": "best-band target",
+   "band_hz": [
+    1000,
+    2000
+   ],
+   "win_s": [
+    2.8025,
+    2.8525
+   ],
+   "visual": "land"
+  },
+  {
+   "id": "pop-2.930",
+   "sound": "pop/fs-328117-pop-8-1",
+   "files": [
+    "audio/kit/pop/fs-328117-pop-8-1.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 2.9297,
+   "peak_s": 2.9297,
+   "pan": 0.0,
+   "gain_db": -25.48,
+   "limited_by": "best-band target + cluster x0.6",
+   "band_hz": [
+    1000,
+    2000
+   ],
+   "win_s": [
+    2.9197,
+    2.9697
+   ],
+   "visual": "land"
+  },
+  {
+   "id": "tick-3.047",
+   "sound": "tick/fs-386202-ratchet-vlc-tighten-4-3",
+   "files": [
+    "audio/kit/tick/fs-386202-ratchet-vlc-tighten-4-3.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 3.0469,
+   "peak_s": 3.0469,
+   "pan": 0.0,
+   "gain_db": -29.63,
+   "limited_by": "best-band target + cluster x0.6",
+   "band_hz": [
+    2000,
+    4000
+   ],
+   "win_s": [
+    3.0369,
+    3.0869
+   ],
+   "visual": null
+  },
+  {
+   "id": "click-3.281",
+   "sound": "click/kenney-interface-switch-001",
+   "files": [
+    "audio/kit/click/kenney-interface-switch-001.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 3.2812,
+   "peak_s": 3.2812,
+   "pan": 0.0,
+   "gain_db": -20.66,
+   "limited_by": "best-band target",
+   "band_hz": [
+    4000,
+    8000
+   ],
+   "win_s": [
+    3.2713,
+    3.3213
+   ],
+   "visual": null
+  },
+  {
+   "id": "reverse-3.750",
+   "sound": "reverse/fs-503805-reverse-fx-7-wav-1",
+   "files": [
+    "audio/kit/reverse/fs-503805-reverse-fx-7-wav-1.wav"
+   ],
+   "weight": "support",
+   "align": "end",
+   "cue_s": 3.75,
+   "peak_s": 3.7188,
+   "pan": 0.0,
+   "gain_db": -19.58,
+   "limited_by": "best-band target",
+   "band_hz": [
+    125,
+    250
+   ],
+   "win_s": [
+    3.7088,
+    3.7588
+   ],
+   "visual": null
+  },
+  {
+   "id": "unfold",
+   "sound": "hit/fs-57893-dun-wav-1+boom/fs-201748-bass-rugged-sub-2-3",
+   "files": [
+    "audio/kit/hit/fs-57893-dun-wav-1.wav",
+    "audio/kit/boom/fs-201748-bass-rugged-sub-2-3.wav"
+   ],
+   "weight": "hero",
+   "align": "peak",
+   "cue_s": 3.75,
+   "peak_s": 3.75,
+   "pan": 0.0,
+   "gain_db": -6.49,
+   "limited_by": "main-band target (hero)",
+   "band_hz": [
+    125,
+    250
+   ],
+   "win_s": [
+    3.74,
+    3.9
+   ],
+   "visual": null
+  },
+  {
+   "id": "whoosh-4.102",
+   "sound": "whoosh/fs-449988-whoosh-med-high-1",
+   "files": [
+    "audio/kit/whoosh/fs-449988-whoosh-med-high-1.wav"
+   ],
+   "weight": "support",
+   "align": "end",
+   "cue_s": 4.1016,
+   "peak_s": 3.8094,
+   "pan": -0.3,
+   "gain_db": -26.98,
+   "limited_by": "best-band target + cluster x0.6",
+   "band_hz": [
+    4000,
+    8000
+   ],
+   "win_s": [
+    3.7994,
+    3.9594
+   ],
+   "visual": null
+  },
+  {
+   "id": "click-4.219",
+   "sound": "click/fs-399443-mouse-clicks",
+   "files": [
+    "audio/kit/click/fs-399443-mouse-clicks.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 4.2188,
+   "peak_s": 4.2188,
+   "pan": 0.0,
+   "gain_db": -5.82,
+   "limited_by": "best-band target",
+   "band_hz": [
+    500,
+    1000
+   ],
+   "win_s": [
+    4.2088,
+    4.2588
+   ],
+   "visual": null
+  },
+  {
+   "id": "click-4.688",
+   "sound": "click/kenney-interface-switch-001",
+   "files": [
+    "audio/kit/click/kenney-interface-switch-001.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 4.6875,
+   "peak_s": 4.6875,
+   "pan": 0.0,
+   "gain_db": -24.66,
+   "limited_by": "best-band target",
+   "band_hz": [
+    4000,
+    8000
+   ],
+   "win_s": [
+    4.6775,
+    4.7275
+   ],
+   "visual": null
+  },
+  {
+   "id": "key-5.200",
+   "sound": "key/fs-348239-mech-keyboard-01-wav-1",
+   "files": [
+    "audio/kit/key/fs-348239-mech-keyboard-01-wav-1.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 5.2,
+   "peak_s": 5.2,
+   "pan": 0.0,
+   "gain_db": -18.28,
+   "limited_by": "best-band target",
+   "band_hz": [
+    4000,
+    8000
+   ],
+   "win_s": [
+    5.19,
+    5.24
+   ],
+   "visual": null
+  },
+  {
+   "id": "click-5.625",
+   "sound": "click/fs-399443-mouse-clicks",
+   "files": [
+    "audio/kit/click/fs-399443-mouse-clicks.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 5.625,
+   "peak_s": 5.625,
+   "pan": 0.0,
+   "gain_db": -9.82,
+   "limited_by": "best-band target",
+   "band_hz": [
+    2000,
+    4000
+   ],
+   "win_s": [
+    5.615,
+    5.665
+   ],
+   "visual": null
+  },
+  {
+   "id": "pop-5.859",
+   "sound": "pop/fs-244652-pop-4-1",
+   "files": [
+    "audio/kit/pop/fs-244652-pop-4-1.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 5.8594,
+   "peak_s": 5.8594,
+   "pan": 0.0,
+   "gain_db": -16.29,
+   "limited_by": "best-band target",
+   "band_hz": [
+    500,
+    1000
+   ],
+   "win_s": [
+    5.8494,
+    5.8994
+   ],
+   "visual": null
+  },
+  {
+   "id": "tick-6.223",
+   "sound": "tick/fs-386202-ratchet-vlc-tighten-4-3",
+   "files": [
+    "audio/kit/tick/fs-386202-ratchet-vlc-tighten-4-3.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 6.2229,
+   "peak_s": 6.2229,
+   "pan": 0.0,
+   "gain_db": -26.45,
+   "limited_by": "best-band target",
+   "band_hz": [
+    4000,
+    8000
+   ],
+   "win_s": [
+    6.2129,
+    6.2629
+   ],
+   "visual": null
+  },
+  {
+   "id": "tick-6.293",
+   "sound": "tick/fs-386203-ratchet-vlc-tighten-1-2",
+   "files": [
+    "audio/kit/tick/fs-386203-ratchet-vlc-tighten-1-2.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 6.2929,
+   "peak_s": 6.2929,
+   "pan": 0.0,
+   "gain_db": -34.09,
+   "limited_by": "best-band target + cluster x0.6",
+   "band_hz": [
+    4000,
+    8000
+   ],
+   "win_s": [
+    6.2829,
+    6.3329
+   ],
+   "visual": null
+  },
+  {
+   "id": "tick-6.357",
+   "sound": "tick/fs-386203-ratchet-vlc-tighten-1-2",
+   "files": [
+    "audio/kit/tick/fs-386203-ratchet-vlc-tighten-1-2.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 6.3566,
+   "peak_s": 6.3566,
+   "pan": 0.0,
+   "gain_db": -36.61,
+   "limited_by": "best-band target + cluster x0.6",
+   "band_hz": [
+    4000,
+    8000
+   ],
+   "win_s": [
+    6.3466,
+    6.3966
+   ],
+   "visual": null
+  },
+  {
+   "id": "whoosh-6.562",
+   "sound": "whoosh/fs-449988-whoosh-med-high-1",
+   "files": [
+    "audio/kit/whoosh/fs-449988-whoosh-med-high-1.wav"
+   ],
+   "weight": "support",
+   "align": "end",
+   "cue_s": 6.5625,
+   "peak_s": 6.2725,
+   "pan": 0.3,
+   "gain_db": -28.98,
+   "limited_by": "best-band target + cluster x0.6",
+   "band_hz": [
+    4000,
+    8000
+   ],
+   "win_s": [
+    6.2625,
+    6.4225
+   ],
+   "visual": null
+  },
+  {
+   "id": "reverse-6.984",
+   "sound": "reverse/fs-503805-reverse-fx-7-wav-1",
+   "files": [
+    "audio/kit/reverse/fs-503805-reverse-fx-7-wav-1.wav"
+   ],
+   "weight": "support",
+   "align": "end",
+   "cue_s": 6.9844,
+   "peak_s": 6.9532,
+   "pan": 0.0,
+   "gain_db": -22.02,
+   "limited_by": "best-band target + cluster x0.6",
+   "band_hz": [
+    125,
+    250
+   ],
+   "win_s": [
+    6.9432,
+    6.9932
+   ],
+   "visual": null
+  },
+  {
+   "id": "riser-7.031",
+   "sound": "riser/fs-531729-energy-riser-3-1",
+   "files": [
+    "audio/kit/riser/fs-531729-energy-riser-3-1.wav"
+   ],
+   "weight": "support",
+   "align": "end",
+   "cue_s": 7.0312,
+   "peak_s": 6.9273,
+   "pan": 0.0,
+   "gain_db": -17.04,
+   "limited_by": "best-band target",
+   "band_hz": [
+    250,
+    500
+   ],
+   "win_s": [
+    6.9173,
+    7.0276
+   ],
+   "visual": null
+  },
+  {
+   "id": "reverse-7.500",
+   "sound": "reverse/fs-503803-reverse-fx-13-wav-1",
+   "files": [
+    "audio/kit/reverse/fs-503803-reverse-fx-13-wav-1.wav"
+   ],
+   "weight": "support",
+   "align": "end",
+   "cue_s": 7.5,
+   "peak_s": 7.4568,
+   "pan": 0.0,
+   "gain_db": -41.14,
+   "limited_by": "best-band target",
+   "band_hz": [
+    1000,
+    2000
+   ],
+   "win_s": [
+    7.4468,
+    7.4976
+   ],
+   "visual": null
+  },
+  {
+   "id": "drop",
+   "sound": "hit/fs-558238-distorted-impact-short-wav-1+boom/fs-636624-deep-hit-2",
+   "files": [
+    "audio/kit/hit/fs-558238-distorted-impact-short-wav-1.wav",
+    "audio/kit/boom/fs-636624-deep-hit-2.wav"
+   ],
+   "weight": "hero",
+   "align": "peak",
+   "cue_s": 7.5,
+   "peak_s": 7.5,
+   "pan": 0.0,
+   "gain_db": -7.0,
+   "limited_by": "main-band target (hero)",
+   "band_hz": [
+    125,
+    250
+   ],
+   "win_s": [
+    7.49,
+    7.65
+   ],
+   "visual": "cut"
+  },
+  {
+   "id": "shimmer-7.500",
+   "sound": "shimmer/fs-462095-sparkling-star-01-wav-2",
+   "files": [
+    "audio/kit/shimmer/fs-462095-sparkling-star-01-wav-2.wav"
+   ],
+   "weight": "support",
+   "align": "start",
+   "cue_s": 7.5,
+   "peak_s": 7.5554,
+   "pan": 0.0,
+   "gain_db": -43.55,
+   "limited_by": "best-band target + cluster x0.6",
+   "band_hz": [
+    1000,
+    2000
+   ],
+   "win_s": [
+    7.5454,
+    7.7054
+   ],
+   "visual": null
+  },
+  {
+   "id": "impact-7.969",
+   "sound": "hit/fs-243375-tire-puncture-pop-hit-punch-1",
+   "files": [
+    "audio/kit/hit/fs-243375-tire-puncture-pop-hit-punch-1.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 7.9688,
+   "peak_s": 7.9688,
+   "pan": 0.0,
+   "gain_db": -12.46,
+   "limited_by": "best-band target",
+   "band_hz": [
+    500,
+    1000
+   ],
+   "win_s": [
+    7.9588,
+    8.0634
+   ],
+   "visual": null
+  },
+  {
+   "id": "reverse-8.438",
+   "sound": "reverse/fs-503805-reverse-fx-7-wav-1",
+   "files": [
+    "audio/kit/reverse/fs-503805-reverse-fx-7-wav-1.wav"
+   ],
+   "weight": "support",
+   "align": "end",
+   "cue_s": 8.4375,
+   "peak_s": 8.4062,
+   "pan": 0.0,
+   "gain_db": -17.05,
+   "limited_by": "best-band target",
+   "band_hz": [
+    125,
+    250
+   ],
+   "win_s": [
+    8.3962,
+    8.4462
+   ],
+   "visual": null
+  },
+  {
+   "id": "impact-8.438",
+   "sound": "hit/fs-243375-tire-puncture-pop-hit-punch-1",
+   "files": [
+    "audio/kit/hit/fs-243375-tire-puncture-pop-hit-punch-1.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 8.4375,
+   "peak_s": 8.4375,
+   "pan": 0.0,
+   "gain_db": -14.89,
+   "limited_by": "best-band target + cluster x0.6",
+   "band_hz": [
+    1000,
+    2000
+   ],
+   "win_s": [
+    8.4275,
+    8.5318
+   ],
+   "visual": null
+  },
+  {
+   "id": "whoosh-9.375",
+   "sound": "whoosh/fs-471097-knife-sword-swing-1",
+   "files": [
+    "audio/kit/whoosh/fs-471097-knife-sword-swing-1.wav"
+   ],
+   "weight": "support",
+   "align": "end",
+   "cue_s": 9.375,
+   "peak_s": 9.2706,
+   "pan": -0.3,
+   "gain_db": -14.32,
+   "limited_by": "best-band target",
+   "band_hz": [
+    1000,
+    2000
+   ],
+   "win_s": [
+    9.2606,
+    9.3674
+   ],
+   "visual": null
+  },
+  {
+   "id": "blip-9.609",
+   "sound": "ui/kenney-digital-high-down",
+   "files": [
+    "audio/kit/ui/kenney-digital-high-down.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 9.6094,
+   "peak_s": 9.6094,
+   "pan": 0.0,
+   "gain_db": -21.15,
+   "limited_by": "best-band target",
+   "band_hz": [
+    1000,
+    2000
+   ],
+   "win_s": [
+    9.5994,
+    9.7007
+   ],
+   "visual": null
+  },
+  {
+   "id": "pop-10.312",
+   "sound": "pop/fs-328117-pop-8-1",
+   "files": [
+    "audio/kit/pop/fs-328117-pop-8-1.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 10.3125,
+   "peak_s": 10.3125,
+   "pan": 0.0,
+   "gain_db": -17.86,
+   "limited_by": "best-band target",
+   "band_hz": [
+    500,
+    1000
+   ],
+   "win_s": [
+    10.3025,
+    10.3525
+   ],
+   "visual": null
+  },
+  {
+   "id": "blip-10.781",
+   "sound": "ui/kenney-digital-high-down",
+   "files": [
+    "audio/kit/ui/kenney-digital-high-down.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 10.7812,
+   "peak_s": 10.7812,
+   "pan": 0.0,
+   "gain_db": -25.15,
+   "limited_by": "best-band target",
+   "band_hz": [
+    500,
+    1000
+   ],
+   "win_s": [
+    10.7713,
+    10.9204
+   ],
+   "visual": null
+  },
+  {
+   "id": "blip-10.898",
+   "sound": "ui/kenney-digital-high-up",
+   "files": [
+    "audio/kit/ui/kenney-digital-high-up.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 10.8984,
+   "peak_s": 10.8984,
+   "pan": 0.0,
+   "gain_db": -43.72,
+   "limited_by": "best-band target + cluster x0.6",
+   "band_hz": [
+    500,
+    1000
+   ],
+   "win_s": [
+    10.8884,
+    11.0158
+   ],
+   "visual": null
+  },
+  {
+   "id": "whoosh-11.133",
+   "sound": "whoosh/fs-471097-knife-sword-swing-1",
+   "files": [
+    "audio/kit/whoosh/fs-471097-knife-sword-swing-1.wav"
+   ],
+   "weight": "support",
+   "align": "end",
+   "cue_s": 11.1328,
+   "peak_s": 11.0275,
+   "pan": 0.3,
+   "gain_db": -16.76,
+   "limited_by": "best-band target + cluster x0.6",
+   "band_hz": [
+    500,
+    1000
+   ],
+   "win_s": [
+    11.0175,
+    11.1252
+   ],
+   "visual": null
+  },
+  {
+   "id": "swish-11.525",
+   "sound": "swish/fs-395264-sword-movement-single-3-1",
+   "files": [
+    "audio/kit/swish/fs-395264-sword-movement-single-3-1.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 11.525,
+   "peak_s": 11.525,
+   "pan": 0.0,
+   "gain_db": -18.65,
+   "limited_by": "best-band target",
+   "band_hz": [
+    2000,
+    4000
+   ],
+   "win_s": [
+    11.515,
+    11.5738
+   ],
+   "visual": null
+  },
+  {
+   "id": "glitch-11.719",
+   "sound": "glitch/fs-262858-blip-1-2",
+   "files": [
+    "audio/kit/glitch/fs-262858-blip-1-2.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 11.7188,
+   "peak_s": 11.7188,
+   "pan": 0.0,
+   "gain_db": -19.09,
+   "limited_by": "best-band target",
+   "band_hz": [
+    2000,
+    4000
+   ],
+   "win_s": [
+    11.7088,
+    11.7626
+   ],
+   "visual": null
+  },
+  {
+   "id": "glitch-11.953",
+   "sound": "glitch/fs-262858-blip-1-2",
+   "files": [
+    "audio/kit/glitch/fs-262858-blip-1-2.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 11.9531,
+   "peak_s": 11.9531,
+   "pan": 0.0,
+   "gain_db": -25.27,
+   "limited_by": "best-band target + cluster x0.6",
+   "band_hz": [
+    4000,
+    8000
+   ],
+   "win_s": [
+    11.9431,
+    12.0005
+   ],
+   "visual": null
+  },
+  {
+   "id": "whoosh-12.188",
+   "sound": "whoosh/fs-449988-whoosh-med-high-1",
+   "files": [
+    "audio/kit/whoosh/fs-449988-whoosh-med-high-1.wav"
+   ],
+   "weight": "support",
+   "align": "end",
+   "cue_s": 12.1875,
+   "peak_s": 11.898,
+   "pan": 0.3,
+   "gain_db": -20.54,
+   "limited_by": "best-band target",
+   "band_hz": [
+    4000,
+    8000
+   ],
+   "win_s": [
+    11.888,
+    12.048
+   ],
+   "visual": null
+  },
+  {
+   "id": "key-12.188",
+   "sound": "key/fs-348239-mech-keyboard-01-wav-1",
+   "files": [
+    "audio/kit/key/fs-348239-mech-keyboard-01-wav-1.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 12.1875,
+   "peak_s": 12.1875,
+   "pan": 0.0,
+   "gain_db": -14.28,
+   "limited_by": "best-band target",
+   "band_hz": [
+    4000,
+    8000
+   ],
+   "win_s": [
+    12.1775,
+    12.2275
+   ],
+   "visual": null
+  },
+  {
+   "id": "swish-12.891",
+   "sound": "swish/fs-395263-sword-movement-single-4-1",
+   "files": [
+    "audio/kit/swish/fs-395263-sword-movement-single-4-1.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 12.8906,
+   "peak_s": 12.8906,
+   "pan": 0.0,
+   "gain_db": -27.49,
+   "limited_by": "best-band target",
+   "band_hz": [
+    1000,
+    2000
+   ],
+   "win_s": [
+    12.8806,
+    12.9373
+   ],
+   "visual": null
+  },
+  {
+   "id": "riser-13.008",
+   "sound": "riser/fs-608217-inhale-with-glass-wav-1",
+   "files": [
+    "audio/kit/riser/fs-608217-inhale-with-glass-wav-1.wav"
+   ],
+   "weight": "support",
+   "align": "end",
+   "cue_s": 13.0078,
+   "peak_s": 12.9728,
+   "pan": 0.0,
+   "gain_db": -19.12,
+   "limited_by": "best-band target + cluster x0.6",
+   "band_hz": [
+    250,
+    500
+   ],
+   "win_s": [
+    12.9628,
+    13.0128
+   ],
+   "visual": null
+  },
+  {
+   "id": "reverse-13.125",
+   "sound": "reverse/fs-503803-reverse-fx-13-wav-1",
+   "files": [
+    "audio/kit/reverse/fs-503803-reverse-fx-13-wav-1.wav"
+   ],
+   "weight": "support",
+   "align": "end",
+   "cue_s": 13.125,
+   "peak_s": 13.0821,
+   "pan": 0.0,
+   "gain_db": -45.56,
+   "limited_by": "best-band target + cluster x0.6",
+   "band_hz": [
+    1000,
+    2000
+   ],
+   "win_s": [
+    13.0721,
+    13.1226
+   ],
+   "visual": null
+  },
+  {
+   "id": "final-hit",
+   "sound": "hit/fs-592034-braams-hit-1-1+boom/fs-636624-deep-hit-2",
+   "files": [
+    "audio/kit/hit/fs-592034-braams-hit-1-1.wav",
+    "audio/kit/boom/fs-636624-deep-hit-2.wav"
+   ],
+   "weight": "hero",
+   "align": "peak",
+   "cue_s": 13.125,
+   "peak_s": 13.125,
+   "pan": 0.0,
+   "gain_db": -6.78,
+   "limited_by": "main-band target (hero)",
+   "band_hz": [
+    125,
+    250
+   ],
+   "win_s": [
+    13.115,
+    13.275
+   ],
+   "visual": null
+  },
+  {
+   "id": "shimmer-13.125",
+   "sound": "shimmer/fs-452371-small-bell-2",
+   "files": [
+    "audio/kit/shimmer/fs-452371-small-bell-2.wav"
+   ],
+   "weight": "support",
+   "align": "start",
+   "cue_s": 13.125,
+   "peak_s": 13.181,
+   "pan": 0.0,
+   "gain_db": -33.99,
+   "limited_by": "best-band target + cluster x0.6",
+   "band_hz": [
+    8000,
+    16000
+   ],
+   "win_s": [
+    13.171,
+    13.3103
+   ],
+   "visual": null
+  },
+  {
+   "id": "pop-13.594",
+   "sound": "pop/fs-328117-pop-8-1",
+   "files": [
+    "audio/kit/pop/fs-328117-pop-8-1.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 13.5938,
+   "peak_s": 13.5938,
+   "pan": 0.0,
+   "gain_db": -19.04,
+   "limited_by": "best-band target",
+   "band_hz": [
+    1000,
+    2000
+   ],
+   "win_s": [
+    13.5838,
+    13.6337
+   ],
+   "visual": "land"
+  },
+  {
+   "id": "tick-13.770",
+   "sound": "tick/fs-386202-ratchet-vlc-tighten-4-3",
+   "files": [
+    "audio/kit/tick/fs-386202-ratchet-vlc-tighten-4-3.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 13.7695,
+   "peak_s": 13.7695,
+   "pan": 0.0,
+   "gain_db": -23.2,
+   "limited_by": "best-band target",
+   "band_hz": [
+    8000,
+    16000
+   ],
+   "win_s": [
+    13.7595,
+    13.8095
+   ],
+   "visual": null
+  },
+  {
+   "id": "blip-14.531",
+   "sound": "ui/kenney-digital-high-up",
+   "files": [
+    "audio/kit/ui/kenney-digital-high-up.wav"
+   ],
+   "weight": "support",
+   "align": "peak",
+   "cue_s": 14.5312,
+   "peak_s": 14.5312,
+   "pan": 0.0,
+   "gain_db": -43.28,
+   "limited_by": "best-band target",
+   "band_hz": [
+    1000,
+    2000
+   ],
+   "win_s": [
+    14.5213,
+    14.5949
+   ],
+   "visual": null
+  }
+ ]
+}

@@ -1,0 +1,362 @@
+{
+ "fps": 60,
+ "duration_s": 15,
+ "energy": "punchy",
+ "lufs": -14,
+ "kit": "audio/kit",
+ "music": {
+  "file": "audio/music.wav",
+  "start_s": 0,
+  "loop": false,
+  "fade_out_s": 0.1
+ },
+ "cues": [
+  {
+   "id": "cold-open",
+   "t": 0,
+   "sound": "hit/fs-443494-thud2-wav-1+boom/fs-223838-expriements-bass-8-mp3-2",
+   "weight": "hero",
+   "align": "start"
+  },
+  {
+   "id": "shimmer-0.000",
+   "t": 0,
+   "sound": "shimmer/fs-452371-small-bell-2",
+   "align": "start"
+  },
+  {
+   "id": "impact-0.469",
+   "t": 0.46875,
+   "sound": "hit/fs-443494-thud2-wav-1+thump/fs-458877-thump-1",
+   "align": "peak"
+  },
+  {
+   "id": "swish-0.938",
+   "t": 0.9375,
+   "sound": "swish/fs-395264-sword-movement-single-3-1",
+   "align": "peak"
+  },
+  {
+   "id": "impact-1.406",
+   "t": 1.40625,
+   "sound": "hit/fs-243375-tire-puncture-pop-hit-punch-1",
+   "align": "peak"
+  },
+  {
+   "id": "pop-1.641",
+   "t": 1.640625,
+   "sound": "pop/fs-328117-pop-8-1",
+   "align": "peak",
+   "pitch": 5.0
+  },
+  {
+   "id": "whoosh-1.875",
+   "t": 1.875,
+   "sound": "whoosh/fs-471097-knife-sword-swing-1",
+   "align": "end",
+   "pan": -0.3
+  },
+  {
+   "id": "pop-2.344",
+   "t": 2.34375,
+   "sound": "pop/fs-244652-pop-4-1",
+   "align": "peak",
+   "pitch": -7.0,
+   "visual": "land"
+  },
+  {
+   "id": "pop-2.578",
+   "t": 2.578125,
+   "sound": "pop/fs-328117-pop-8-1",
+   "align": "peak",
+   "pitch": -4.0,
+   "visual": "land"
+  },
+  {
+   "id": "pop-2.812",
+   "t": 2.8125,
+   "sound": "pop/fs-244652-pop-4-1",
+   "align": "peak",
+   "pitch": 0.0,
+   "visual": "land"
+  },
+  {
+   "id": "pop-2.930",
+   "t": 2.9296875,
+   "sound": "pop/fs-328117-pop-8-1",
+   "align": "peak",
+   "pitch": 5.0,
+   "visual": "land"
+  },
+  {
+   "id": "tick-3.047",
+   "t": 3.046875,
+   "sound": "tick/fs-386202-ratchet-vlc-tighten-4-3",
+   "align": "peak",
+   "pitch": 5.0
+  },
+  {
+   "id": "click-3.281",
+   "t": 3.28125,
+   "sound": "click/kenney-interface-switch-001",
+   "align": "peak"
+  },
+  {
+   "id": "reverse-3.750",
+   "t": 3.75,
+   "sound": "reverse/fs-503805-reverse-fx-7-wav-1",
+   "align": "end"
+  },
+  {
+   "id": "unfold",
+   "t": 3.75,
+   "sound": "hit/fs-57893-dun-wav-1+boom/fs-201748-bass-rugged-sub-2-3",
+   "weight": "hero",
+   "align": "peak"
+  },
+  {
+   "id": "whoosh-4.102",
+   "t": 4.1015625,
+   "sound": "whoosh/fs-449988-whoosh-med-high-1",
+   "align": "end",
+   "pan": -0.3
+  },
+  {
+   "id": "click-4.219",
+   "t": 4.21875,
+   "sound": "click/fs-399443-mouse-clicks",
+   "align": "peak"
+  },
+  {
+   "id": "click-4.688",
+   "t": 4.6875,
+   "sound": "click/kenney-interface-switch-001",
+   "align": "peak"
+  },
+  {
+   "id": "key-5.200",
+   "t": 5.2,
+   "sound": "key/fs-348239-mech-keyboard-01-wav-1",
+   "align": "peak"
+  },
+  {
+   "id": "click-5.625",
+   "t": 5.625,
+   "sound": "click/fs-399443-mouse-clicks",
+   "align": "peak"
+  },
+  {
+   "id": "pop-5.859",
+   "t": 5.859375,
+   "sound": "pop/fs-244652-pop-4-1",
+   "align": "peak",
+   "pitch": 0.02
+  },
+  {
+   "id": "tick-6.223",
+   "t": 6.2229,
+   "sound": "tick/fs-386202-ratchet-vlc-tighten-4-3",
+   "align": "peak",
+   "pitch": -7.0
+  },
+  {
+   "id": "tick-6.293",
+   "t": 6.2929,
+   "sound": "tick/fs-386203-ratchet-vlc-tighten-1-2",
+   "align": "peak",
+   "pitch": -3.98
+  },
+  {
+   "id": "tick-6.357",
+   "t": 6.3566,
+   "sound": "tick/fs-386203-ratchet-vlc-tighten-1-2",
+   "align": "peak",
+   "pitch": 0.02
+  },
+  {
+   "id": "whoosh-6.562",
+   "t": 6.5625,
+   "sound": "whoosh/fs-449988-whoosh-med-high-1",
+   "align": "end",
+   "pan": 0.3
+  },
+  {
+   "id": "reverse-6.984",
+   "t": 6.984375,
+   "sound": "reverse/fs-503805-reverse-fx-7-wav-1",
+   "align": "end"
+  },
+  {
+   "id": "riser-7.031",
+   "t": 7.03125,
+   "sound": "riser/fs-531729-energy-riser-3-1",
+   "align": "end"
+  },
+  {
+   "id": "reverse-7.500",
+   "t": 7.5,
+   "sound": "reverse/fs-503803-reverse-fx-13-wav-1",
+   "align": "end"
+  },
+  {
+   "id": "drop",
+   "t": 7.5,
+   "sound": "hit/fs-558238-distorted-impact-short-wav-1+boom/fs-636624-deep-hit-2",
+   "weight": "hero",
+   "align": "peak",
+   "visual": "cut"
+  },
+  {
+   "id": "shimmer-7.500",
+   "t": 7.5,
+   "sound": "shimmer/fs-462095-sparkling-star-01-wav-2",
+   "align": "start"
+  },
+  {
+   "id": "impact-7.969",
+   "t": 7.96875,
+   "sound": "hit/fs-243375-tire-puncture-pop-hit-punch-1",
+   "align": "peak"
+  },
+  {
+   "id": "reverse-8.438",
+   "t": 8.4375,
+   "sound": "reverse/fs-503805-reverse-fx-7-wav-1",
+   "align": "end"
+  },
+  {
+   "id": "impact-8.438",
+   "t": 8.4375,
+   "sound": "hit/fs-243375-tire-puncture-pop-hit-punch-1",
+   "align": "peak"
+  },
+  {
+   "id": "whoosh-9.375",
+   "t": 9.375,
+   "sound": "whoosh/fs-471097-knife-sword-swing-1",
+   "align": "end",
+   "pan": -0.3
+  },
+  {
+   "id": "blip-9.609",
+   "t": 9.609375,
+   "sound": "ui/kenney-digital-high-down",
+   "align": "peak",
+   "pitch": 0.02
+  },
+  {
+   "id": "pop-10.312",
+   "t": 10.3125,
+   "sound": "pop/fs-328117-pop-8-1",
+   "align": "peak",
+   "pitch": -7.0
+  },
+  {
+   "id": "blip-10.781",
+   "t": 10.78125,
+   "sound": "ui/kenney-digital-high-down",
+   "align": "peak",
+   "pitch": -7.0
+  },
+  {
+   "id": "blip-10.898",
+   "t": 10.8984375,
+   "sound": "ui/kenney-digital-high-up",
+   "align": "peak",
+   "pitch": -3.98
+  },
+  {
+   "id": "whoosh-11.133",
+   "t": 11.1328125,
+   "sound": "whoosh/fs-471097-knife-sword-swing-1",
+   "align": "end",
+   "pan": 0.3
+  },
+  {
+   "id": "swish-11.525",
+   "t": 11.525,
+   "sound": "swish/fs-395264-sword-movement-single-3-1",
+   "align": "peak"
+  },
+  {
+   "id": "glitch-11.719",
+   "t": 11.71875,
+   "sound": "glitch/fs-262858-blip-1-2",
+   "align": "peak",
+   "pitch": -7.0
+  },
+  {
+   "id": "glitch-11.953",
+   "t": 11.953125,
+   "sound": "glitch/fs-262858-blip-1-2",
+   "align": "peak",
+   "pitch": 0.0
+  },
+  {
+   "id": "whoosh-12.188",
+   "t": 12.1875,
+   "sound": "whoosh/fs-449988-whoosh-med-high-1",
+   "align": "end",
+   "pan": 0.3
+  },
+  {
+   "id": "key-12.188",
+   "t": 12.1875,
+   "sound": "key/fs-348239-mech-keyboard-01-wav-1",
+   "align": "peak"
+  },
+  {
+   "id": "swish-12.891",
+   "t": 12.890625,
+   "sound": "swish/fs-395263-sword-movement-single-4-1",
+   "align": "peak"
+  },
+  {
+   "id": "riser-13.008",
+   "t": 13.0078125,
+   "sound": "riser/fs-608217-inhale-with-glass-wav-1",
+   "align": "end"
+  },
+  {
+   "id": "reverse-13.125",
+   "t": 13.125,
+   "sound": "reverse/fs-503803-reverse-fx-13-wav-1",
+   "align": "end"
+  },
+  {
+   "id": "final-hit",
+   "t": 13.125,
+   "sound": "hit/fs-592034-braams-hit-1-1+boom/fs-636624-deep-hit-2",
+   "weight": "hero",
+   "align": "peak"
+  },
+  {
+   "id": "shimmer-13.125",
+   "t": 13.125,
+   "sound": "shimmer/fs-452371-small-bell-2",
+   "align": "start"
+  },
+  {
+   "id": "pop-13.594",
+   "t": 13.59375,
+   "sound": "pop/fs-328117-pop-8-1",
+   "align": "peak",
+   "pitch": 5.0,
+   "visual": "land"
+  },
+  {
+   "id": "tick-13.770",
+   "t": 13.76953125,
+   "sound": "tick/fs-386202-ratchet-vlc-tighten-4-3",
+   "align": "peak",
+   "pitch": 7.0
+  },
+  {
+   "id": "blip-14.531",
+   "t": 14.53125,
+   "sound": "ui/kenney-digital-high-up",
+   "align": "peak",
+   "pitch": 7.0
+  }
+ ]
+}
