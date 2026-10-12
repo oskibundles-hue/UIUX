@@ -39,9 +39,9 @@ after a day, so a card you stop updating goes stale in the open rather than look
 
 The lead keeps the card; agents never write it. On any job past a couple of minutes:
 
-1. **Start:** `python3 .claude/brain/live_card.py start "<job>" "<first step>"` prints the payload
+1. **Start:** `python3 .claude/brain/live_card.py start "<job>" "<first step>" --role <id>` prints the payload
    (url, collection `work`, this session's doc id, data). Pass it to `ArtifactData` as a `set`; a new
-   card needs no `if_version`.
+   card needs no `if_version`. `live_card.py roles` lists the ids; it lights that role on the Agents page map.
 2. **Each new step, and at least every 15 minutes while working:** `... step "<what you're on now>"`
    (add `--pct N` when there's a real percentage), then `ArtifactData` `update` with `if_version` set
    to the version the last write returned.
