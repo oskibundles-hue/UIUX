@@ -64,7 +64,8 @@ see `.claude/agentmesh/bench-2026-09-30.md`. The policy and the reasons are in
 
 **Brief with the class, the playbook and the style.** The workstream knowledge (branches, worktrees,
 pipelines, brand rules) is in `.claude/playbooks/`: `formula-dynamics.md`, `supercar-experience.md`,
-`anti-stock.md`, `research.md`, and `review.md` for the checks. Name the one that applies, so the same
+`anti-stock.md`, `research.md`, `sound-layer.md` for recorded sound effects on any video (added with the
+workstream's playbook), and `review.md` for the checks. Name the one that applies, so the same
 `nq-build` builds any workstream's piece. Builders work in worktrees of their workstream's branch,
 because this default branch doesn't carry `creator-kit/`, `formula-dynamics/` or `supercar-experience/`.
 

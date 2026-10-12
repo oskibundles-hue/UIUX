@@ -30,6 +30,8 @@ client-facing that carries figures or claims then goes through the facts panel (
    speech** — his words are not copy.
 6. **Audio.** Anti Stock delivers at -14 LUFS:
    `ffmpeg -i in.mp4 -af loudnorm=print_format=summary -f null - 2>&1 | grep 'Input Integrated'`.
+   Sound effects from the sound layer (`sound-layer.md`): its `qa.py` report is on the final file, every FAIL
+   is listed in the delivery note, and no script or threshold was changed.
 7. **Approval separation.** Held or unapproved variants are physically separate from approved ones.
 8. **Voice.** Anti Stock captions caption only Omarie (voice profile), and coverage numbers weren't
    raised by loosening the threshold.
