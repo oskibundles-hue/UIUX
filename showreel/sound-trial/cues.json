@@ -193,12 +193,6 @@
    "align": "end"
   },
   {
-   "id": "reverse-7.500",
-   "t": 7.5,
-   "sound": "reverse/fs-503803-reverse-fx-13-wav-1",
-   "align": "end"
-  },
-  {
    "id": "drop",
    "t": 7.5,
    "sound": "hit/fs-558238-distorted-impact-short-wav-1+boom/fs-636624-deep-hit-2",
@@ -315,12 +309,6 @@
    "id": "riser-13.008",
    "t": 13.0078125,
    "sound": "riser/fs-608217-inhale-with-glass-wav-1",
-   "align": "end"
-  },
-  {
-   "id": "reverse-13.125",
-   "t": 13.125,
-   "sound": "reverse/fs-503803-reverse-fx-13-wav-1",
    "align": "end"
   },
   {

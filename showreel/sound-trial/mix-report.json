@@ -19,7 +19,7 @@
    "cue_s": 0.0,
    "peak_s": 0.0187,
    "pan": 0.0,
-   "gain_db": -7.78,
+   "gain_db": -7.82,
    "limited_by": "main-band target (hero)",
    "band_hz": [
     125,
@@ -42,7 +42,7 @@
    "cue_s": 0.0,
    "peak_s": 0.056,
    "pan": 0.0,
-   "gain_db": -37.99,
+   "gain_db": -38.0,
    "limited_by": "best-band target + cluster x0.6",
    "band_hz": [
     8000,
@@ -66,7 +66,7 @@
    "cue_s": 0.4688,
    "peak_s": 0.4688,
    "pan": 0.0,
-   "gain_db": -10.57,
+   "gain_db": -10.6,
    "limited_by": "best-band target",
    "band_hz": [
     250,
@@ -89,7 +89,7 @@
    "cue_s": 0.9375,
    "peak_s": 0.9375,
    "pan": 0.0,
-   "gain_db": -16.58,
+   "gain_db": -16.61,
    "limited_by": "best-band target",
    "band_hz": [
     2000,
@@ -112,7 +112,7 @@
    "cue_s": 1.4062,
    "peak_s": 1.4062,
    "pan": 0.0,
-   "gain_db": -14.46,
+   "gain_db": -14.49,
    "limited_by": "best-band target",
    "band_hz": [
     125,
@@ -135,7 +135,7 @@
    "cue_s": 1.6406,
    "peak_s": 1.6406,
    "pan": 0.0,
-   "gain_db": -17.04,
+   "gain_db": -17.07,
    "limited_by": "best-band target",
    "band_hz": [
     1000,
@@ -158,7 +158,7 @@
    "cue_s": 1.875,
    "peak_s": 1.7698,
    "pan": -0.3,
-   "gain_db": -20.76,
+   "gain_db": -20.79,
    "limited_by": "best-band target + cluster x0.6",
    "band_hz": [
     1000,
@@ -181,7 +181,7 @@
    "cue_s": 2.3438,
    "peak_s": 2.3438,
    "pan": 0.0,
-   "gain_db": -14.29,
+   "gain_db": -14.32,
    "limited_by": "best-band target",
    "band_hz": [
     500,
@@ -204,7 +204,7 @@
    "cue_s": 2.5781,
    "peak_s": 2.5781,
    "pan": 0.0,
-   "gain_db": -21.04,
+   "gain_db": -21.07,
    "limited_by": "best-band target",
    "band_hz": [
     500,
@@ -227,7 +227,7 @@
    "cue_s": 2.8125,
    "peak_s": 2.8125,
    "pan": 0.0,
-   "gain_db": -18.29,
+   "gain_db": -18.32,
    "limited_by": "best-band target",
    "band_hz": [
     1000,
@@ -250,7 +250,7 @@
    "cue_s": 2.9297,
    "peak_s": 2.9297,
    "pan": 0.0,
-   "gain_db": -25.48,
+   "gain_db": -25.51,
    "limited_by": "best-band target + cluster x0.6",
    "band_hz": [
     1000,
@@ -296,7 +296,7 @@
    "cue_s": 3.2812,
    "peak_s": 3.2812,
    "pan": 0.0,
-   "gain_db": -20.66,
+   "gain_db": -20.69,
    "limited_by": "best-band target",
    "band_hz": [
     4000,
@@ -319,7 +319,7 @@
    "cue_s": 3.75,
    "peak_s": 3.7188,
    "pan": 0.0,
-   "gain_db": -19.58,
+   "gain_db": -19.62,
    "limited_by": "best-band target",
    "band_hz": [
     125,
@@ -343,7 +343,7 @@
    "cue_s": 3.75,
    "peak_s": 3.75,
    "pan": 0.0,
-   "gain_db": -6.49,
+   "gain_db": -6.52,
    "limited_by": "main-band target (hero)",
    "band_hz": [
     125,
@@ -366,7 +366,7 @@
    "cue_s": 4.1016,
    "peak_s": 3.8094,
    "pan": -0.3,
-   "gain_db": -26.98,
+   "gain_db": -27.01,
    "limited_by": "best-band target + cluster x0.6",
    "band_hz": [
     4000,
@@ -389,7 +389,7 @@
    "cue_s": 4.2188,
    "peak_s": 4.2188,
    "pan": 0.0,
-   "gain_db": -5.82,
+   "gain_db": -5.85,
    "limited_by": "best-band target",
    "band_hz": [
     500,
@@ -412,7 +412,7 @@
    "cue_s": 4.6875,
    "peak_s": 4.6875,
    "pan": 0.0,
-   "gain_db": -24.66,
+   "gain_db": -24.69,
    "limited_by": "best-band target",
    "band_hz": [
     4000,
@@ -435,7 +435,7 @@
    "cue_s": 5.2,
    "peak_s": 5.2,
    "pan": 0.0,
-   "gain_db": -18.28,
+   "gain_db": -18.31,
    "limited_by": "best-band target",
    "band_hz": [
     4000,
@@ -458,7 +458,7 @@
    "cue_s": 5.625,
    "peak_s": 5.625,
    "pan": 0.0,
-   "gain_db": -9.82,
+   "gain_db": -9.85,
    "limited_by": "best-band target",
    "band_hz": [
     2000,
@@ -481,7 +481,7 @@
    "cue_s": 5.8594,
    "peak_s": 5.8594,
    "pan": 0.0,
-   "gain_db": -16.29,
+   "gain_db": -16.32,
    "limited_by": "best-band target",
    "band_hz": [
     500,
@@ -504,7 +504,7 @@
    "cue_s": 6.2229,
    "peak_s": 6.2229,
    "pan": 0.0,
-   "gain_db": -26.45,
+   "gain_db": -26.48,
    "limited_by": "best-band target",
    "band_hz": [
     4000,
@@ -573,7 +573,7 @@
    "cue_s": 6.5625,
    "peak_s": 6.2725,
    "pan": 0.3,
-   "gain_db": -28.98,
+   "gain_db": -29.01,
    "limited_by": "best-band target + cluster x0.6",
    "band_hz": [
     4000,
@@ -596,7 +596,7 @@
    "cue_s": 6.9844,
    "peak_s": 6.9532,
    "pan": 0.0,
-   "gain_db": -22.02,
+   "gain_db": -22.05,
    "limited_by": "best-band target + cluster x0.6",
    "band_hz": [
     125,
@@ -619,7 +619,7 @@
    "cue_s": 7.0312,
    "peak_s": 6.9273,
    "pan": 0.0,
-   "gain_db": -17.04,
+   "gain_db": -17.07,
    "limited_by": "best-band target",
    "band_hz": [
     250,
@@ -628,29 +628,6 @@
    "win_s": [
     6.9173,
     7.0276
-   ],
-   "visual": null
-  },
-  {
-   "id": "reverse-7.500",
-   "sound": "reverse/fs-503803-reverse-fx-13-wav-1",
-   "files": [
-    "audio/kit/reverse/fs-503803-reverse-fx-13-wav-1.wav"
-   ],
-   "weight": "support",
-   "align": "end",
-   "cue_s": 7.5,
-   "peak_s": 7.4568,
-   "pan": 0.0,
-   "gain_db": -41.14,
-   "limited_by": "best-band target",
-   "band_hz": [
-    1000,
-    2000
-   ],
-   "win_s": [
-    7.4468,
-    7.4976
    ],
    "visual": null
   },
@@ -666,7 +643,7 @@
    "cue_s": 7.5,
    "peak_s": 7.5,
    "pan": 0.0,
-   "gain_db": -7.0,
+   "gain_db": -6.97,
    "limited_by": "main-band target (hero)",
    "band_hz": [
     125,
@@ -712,7 +689,7 @@
    "cue_s": 7.9688,
    "peak_s": 7.9688,
    "pan": 0.0,
-   "gain_db": -12.46,
+   "gain_db": -12.49,
    "limited_by": "best-band target",
    "band_hz": [
     500,
@@ -735,7 +712,7 @@
    "cue_s": 8.4375,
    "peak_s": 8.4062,
    "pan": 0.0,
-   "gain_db": -17.05,
+   "gain_db": -17.08,
    "limited_by": "best-band target",
    "band_hz": [
     125,
@@ -758,7 +735,7 @@
    "cue_s": 8.4375,
    "peak_s": 8.4375,
    "pan": 0.0,
-   "gain_db": -14.89,
+   "gain_db": -14.93,
    "limited_by": "best-band target + cluster x0.6",
    "band_hz": [
     1000,
@@ -781,7 +758,7 @@
    "cue_s": 9.375,
    "peak_s": 9.2706,
    "pan": -0.3,
-   "gain_db": -14.32,
+   "gain_db": -14.35,
    "limited_by": "best-band target",
    "band_hz": [
     1000,
@@ -804,7 +781,7 @@
    "cue_s": 9.6094,
    "peak_s": 9.6094,
    "pan": 0.0,
-   "gain_db": -21.15,
+   "gain_db": -21.18,
    "limited_by": "best-band target",
    "band_hz": [
     1000,
@@ -827,7 +804,7 @@
    "cue_s": 10.3125,
    "peak_s": 10.3125,
    "pan": 0.0,
-   "gain_db": -17.86,
+   "gain_db": -17.89,
    "limited_by": "best-band target",
    "band_hz": [
     500,
@@ -850,7 +827,7 @@
    "cue_s": 10.7812,
    "peak_s": 10.7812,
    "pan": 0.0,
-   "gain_db": -25.15,
+   "gain_db": -25.18,
    "limited_by": "best-band target",
    "band_hz": [
     500,
@@ -873,7 +850,7 @@
    "cue_s": 10.8984,
    "peak_s": 10.8984,
    "pan": 0.0,
-   "gain_db": -43.72,
+   "gain_db": -43.73,
    "limited_by": "best-band target + cluster x0.6",
    "band_hz": [
     500,
@@ -896,7 +873,7 @@
    "cue_s": 11.1328,
    "peak_s": 11.0275,
    "pan": 0.3,
-   "gain_db": -16.76,
+   "gain_db": -16.79,
    "limited_by": "best-band target + cluster x0.6",
    "band_hz": [
     500,
@@ -919,7 +896,7 @@
    "cue_s": 11.525,
    "peak_s": 11.525,
    "pan": 0.0,
-   "gain_db": -18.65,
+   "gain_db": -18.67,
    "limited_by": "best-band target",
    "band_hz": [
     2000,
@@ -942,7 +919,7 @@
    "cue_s": 11.7188,
    "peak_s": 11.7188,
    "pan": 0.0,
-   "gain_db": -19.09,
+   "gain_db": -19.12,
    "limited_by": "best-band target",
    "band_hz": [
     2000,
@@ -965,7 +942,7 @@
    "cue_s": 11.9531,
    "peak_s": 11.9531,
    "pan": 0.0,
-   "gain_db": -25.27,
+   "gain_db": -25.3,
    "limited_by": "best-band target + cluster x0.6",
    "band_hz": [
     4000,
@@ -988,7 +965,7 @@
    "cue_s": 12.1875,
    "peak_s": 11.898,
    "pan": 0.3,
-   "gain_db": -20.54,
+   "gain_db": -20.57,
    "limited_by": "best-band target",
    "band_hz": [
     4000,
@@ -1011,7 +988,7 @@
    "cue_s": 12.1875,
    "peak_s": 12.1875,
    "pan": 0.0,
-   "gain_db": -14.28,
+   "gain_db": -14.31,
    "limited_by": "best-band target",
    "band_hz": [
     4000,
@@ -1034,7 +1011,7 @@
    "cue_s": 12.8906,
    "peak_s": 12.8906,
    "pan": 0.0,
-   "gain_db": -27.49,
+   "gain_db": -26.8,
    "limited_by": "best-band target",
    "band_hz": [
     1000,
@@ -1057,7 +1034,7 @@
    "cue_s": 13.0078,
    "peak_s": 12.9728,
    "pan": 0.0,
-   "gain_db": -19.12,
+   "gain_db": -18.8,
    "limited_by": "best-band target + cluster x0.6",
    "band_hz": [
     250,
@@ -1066,29 +1043,6 @@
    "win_s": [
     12.9628,
     13.0128
-   ],
-   "visual": null
-  },
-  {
-   "id": "reverse-13.125",
-   "sound": "reverse/fs-503803-reverse-fx-13-wav-1",
-   "files": [
-    "audio/kit/reverse/fs-503803-reverse-fx-13-wav-1.wav"
-   ],
-   "weight": "support",
-   "align": "end",
-   "cue_s": 13.125,
-   "peak_s": 13.0821,
-   "pan": 0.0,
-   "gain_db": -45.56,
-   "limited_by": "best-band target + cluster x0.6",
-   "band_hz": [
-    1000,
-    2000
-   ],
-   "win_s": [
-    13.0721,
-    13.1226
    ],
    "visual": null
   },
@@ -1127,7 +1081,7 @@
    "cue_s": 13.125,
    "peak_s": 13.181,
    "pan": 0.0,
-   "gain_db": -33.99,
+   "gain_db": -34.0,
    "limited_by": "best-band target + cluster x0.6",
    "band_hz": [
     8000,
@@ -1150,7 +1104,7 @@
    "cue_s": 13.5938,
    "peak_s": 13.5938,
    "pan": 0.0,
-   "gain_db": -19.04,
+   "gain_db": -19.07,
    "limited_by": "best-band target",
    "band_hz": [
     1000,
@@ -1196,7 +1150,7 @@
    "cue_s": 14.5312,
    "peak_s": 14.5312,
    "pan": 0.0,
-   "gain_db": -43.28,
+   "gain_db": -43.29,
    "limited_by": "best-band target",
    "band_hz": [
     1000,

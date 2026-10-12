@@ -1,4 +1,4 @@
-# Sound credits (29 recordings)
+# Sound credits (28 recordings)
 
 These are the recordings the trial mix plays. All are CC0 (public domain) and come from the opus-sound-layer kit
 (https://github.com/Bodila51/opus-sound-layer). CC0 doesn't require credit, but it's given here. The kit's own
@@ -19,7 +19,6 @@ CREDITS.md lists all 1,139 sounds.
 - key/fs-348239-mech-keyboard-01-wav-1: "MECH-KEYBOARD-01.wav" by newagesoup, CC0, https://freesound.org/people/newagesoup/sounds/348239
 - pop/fs-244652-pop-4-1: "Pop 4" by greenvwbeetle, CC0, https://freesound.org/people/greenvwbeetle/sounds/244652
 - pop/fs-328117-pop-8-1: "Pop 8" by greenvwbeetle, CC0, https://freesound.org/people/greenvwbeetle/sounds/328117
-- reverse/fs-503803-reverse-fx-13-wav-1: "reverse fx 13.wav" by neezen., CC0, https://freesound.org/people/neezen./sounds/503803
 - reverse/fs-503805-reverse-fx-7-wav-1: "reverse fx 7.wav" by neezen., CC0, https://freesound.org/people/neezen./sounds/503805
 - riser/fs-531729-energy-riser-3-1: "Energy Riser 3" by magnuswaker, CC0, https://freesound.org/people/magnuswaker/sounds/531729
 - riser/fs-608217-inhale-with-glass-wav-1: "Inhale with glass.wav" by guitargeorge-2, CC0, https://freesound.org/people/guitargeorge-2/sounds/608217

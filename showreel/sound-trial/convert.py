@@ -49,6 +49,10 @@ PRIORITY = ["impact", "pop", "blip", "click", "glitch", "tick", "type", "swish"]
 # What the picture does on each sound, from the scene's own comment on the R.sfx call.
 LAND = {2.34375, 2.578125, 2.8125, 2.9296875, 5.15625, 11.1328125, 12.1875, 13.59375}
 CUT = {9.375, 11.25, 11.484375}
+# Round 4: the score's dead stops before the drop (7.27-7.50 s) and the final hit (13.01-13.13 s). The music bed
+# is rendered with `synth.py --mute hits`, which keeps the synth's own swells through them. A recorded swell
+# ending there was solved against a silent bed (-41 and -46 dB, inaudible), so the score's swell plays instead.
+PASSED = {7.5, 13.125}
 
 
 def near(t, times):
@@ -85,6 +89,8 @@ for ev in src["sounds"]:
         cues.append(c); continue
     if typ in ("whoosh", "reverse", "riser"):  # end-anchored in the picture: they land at t + dur
         end = t + ev["dur"]
+        if typ != "whoosh" and near(end, PASSED) is not None:
+            continue
         snd = by_len(WHOOSH, ev["dur"]) if typ == "whoosh" else by_len(REVERSE, ev["dur"]) if typ == "reverse" \
             else SOUND["riser"][0]
         # fix after round 3: OVERRIDE is keyed by time only, so it is for the riser here; a whoosh or reverse that

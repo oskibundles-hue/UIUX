@@ -8,9 +8,9 @@ answer the questions below; your ears can.
 |---|---|---|---|
 | 1 | 0.00 | cold open: thud + bass hit on frame 1 | Does it hit on the first frame, or does it feel late? QA: starts on frame 0 (start-aligned, so no sync row), stands out 10.1 dB, body 3.3 dB. |
 | 2 | 3.75 | the box unfolds: dun + rugged sub | Does the sub carry the unfold as the synth's did? QA: sync 0, body 3.9 dB. |
-| 3 | 7.20–7.60 | **the drop** | **The biggest difference.** The synth builds into the drop; the trial goes almost silent for about 0.25 s before it (mean −51.5 dB, against −25.3 dB in the synth). The music bed is silent there by design, and the mixer sets each sound against the bed, so the reverse swell meant to fill it comes out at −41 dB. Is the hole a good tension beat, or does the build go missing? The drop itself: sync 0, stands out 6.7 dB, body 3.3 dB. |
+| 3 | 7.20–7.60 | **the drop** | The run-up is back. Round 4 keeps the synth's own swell through the score's dead stop, because a recorded one placed there is mixed nearly silent. 7.20–7.47 s averages −24.2 dB, against −25.3 dB in the synth version and −51.5 dB in rounds 1–3. Does the recorded drop land on it as hard as the synth's does? QA: sync 0, stands out 5.0 dB, body 3.3 dB. |
 | 4 | 9.40–12.30 | the RANGE passage: glitches, blips, ticks, whooshes | Busy or clean? QA measures the two whooshes (11.13, 12.19), a blip (9.61), a glitch (11.95) and the key (12.19) as under the score, and blip-10.898 as 2.85 frames late. 13 sounds from this stretch were dropped as inaudible (list below). |
-| 5 | 13.125 | final hit: braam + deep hit | Does it land as hard as the synth? QA: sync 0, but body only 2.1 dB over the score (needs 3), the one hero check that fails. |
+| 5 | 13.125 | final hit: braam + deep hit | Does it land as hard as the synth? QA: sync 0, but body only 2.1 dB over the score (needs 3), the one hero check that fails. The synth's swell through the short dead stop before it (13.01–13.13 s) is back too. |
 
 ## Sounds left out
 

@@ -267,7 +267,8 @@ MIX = {
 RETURNS = dict(room=-6.0, hall=-4.0, delay=-6.0, fxverb=-7.0)   # return levels, dB
 RETURN_DUCK = 3.0               # sidechain depth (dB) on the hall/delay returns: the space pumps too
 DUCK_SHAPE = 1.8                # ducking = depth * key_envelope ** DUCK_SHAPE (>1: snappier recovery)
-MUTE = []                       # parts or buses to silence, e.g. ['saw', 'sfx']  (buses: drums tonal sfx)
+MUTE = []                       # parts or buses to silence, e.g. ['saw', 'sfx']  (buses: drums tonal sfx;
+                                # 'hits' is the sfx bus without the swells that pass a silence)
 SOLO = []                       # if not empty only these parts / buses play
 
 # Picture-driven sound design (R.sfx vocabulary + internal sounds). gain dB, verb = send to the FX reverb,
@@ -2389,6 +2390,8 @@ def render(cues_path, mute=(), solo=()):
         sfx[:] = 0.0
         sfx_pass[:] = 0.0
         counts = {}
+    elif 'hits' in mute:                         # the score plus the swells that pass a silence (sound-trial bed)
+        sfx[:] = 0.0
     music += kick_bus
     # music dips under big hits (trigger -> 5 ms attack, 280 ms release, in dB)
     if duck_trig.any():
