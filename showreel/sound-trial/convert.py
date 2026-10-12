@@ -19,8 +19,10 @@ HERO = {
     0.0:    ("cold-open", "hit/fs-443494-thud2-wav-1+boom/fs-223838-expriements-bass-8-mp3-2", None),
     3.75:   ("unfold",    "hit/fs-57893-dun-wav-1+boom/fs-201748-bass-rugged-sub-2-3", None),
     7.5:    ("drop",      "hit/fs-558238-distorted-impact-short-wav-1+boom/fs-636624-deep-hit-2", "cut"),
-    # round 3: a boom with body at 114 Hz, under the braam (round 2 lifted 125-250 Hz by 2.9 dB, needs 3)
-    13.125: ("final-hit", "hit/fs-592034-braams-hit-1-1+boom/fs-636624-deep-hit-2", None),
+    # round 3: a boom with body at 114 Hz, under the braam (round 2 lifted 125-250 Hz by 2.9 dB, needs 3).
+    # round 5, "make the final hit hit harder": the unfold's rugged sub added as a third layer. Of six layer sets
+    # tried under the braam, it is the one that lifts 125-250 Hz past 3 dB (3.5) without a new FAIL
+    13.125: ("final-hit", "hit/fs-592034-braams-hit-1-1+boom/fs-636624-deep-hit-2+boom/fs-201748-bass-rugged-sub-2-3", None),
 }
 SUPPORT_IMPACT = {1.0: "hit/fs-443494-thud2-wav-1+thump/fs-458877-thump-1"}   # the HEAVY slam
 IMPACT = "hit/fs-243375-tire-puncture-pop-hit-punch-1"      # round 2: thud2 was buried at 125-250 Hz

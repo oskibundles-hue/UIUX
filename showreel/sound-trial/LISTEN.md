@@ -10,7 +10,7 @@ answer the questions below; your ears can.
 | 2 | 3.75 | the box unfolds: dun + rugged sub | Does the sub carry the unfold as the synth's did? QA: sync 0, body 3.9 dB. |
 | 3 | 7.20–7.60 | **the drop** | The run-up is back. Round 4 keeps the synth's own swell through the score's dead stop, because a recorded one placed there is mixed nearly silent. 7.20–7.47 s averages −24.2 dB, against −25.3 dB in the synth version and −51.5 dB in rounds 1–3. Does the recorded drop land on it as hard as the synth's does? QA: sync 0, stands out 5.0 dB, body 3.3 dB. |
 | 4 | 9.40–12.30 | the RANGE passage: glitches, blips, ticks, whooshes | Busy or clean? QA measures the two whooshes (11.13, 12.19), a blip (9.61), a glitch (11.95) and the key (12.19) as under the score, and blip-10.898 as 2.85 frames late. 13 sounds from this stretch were dropped as inaudible (list below). |
-| 5 | 13.125 | final hit: braam + deep hit | Does it land as hard as the synth? QA: sync 0, but body only 2.1 dB over the score (needs 3), the one hero check that fails. The synth's swell through the short dead stop before it (13.01–13.13 s) is back too. |
+| 5 | 13.125 | final hit: braam + deep hit + rugged sub | Round 5 added the rugged sub to make it hit harder. Does it land as hard as the synth now? QA: sync 0, body 3.5 dB (needs 3; it was 2.1). Over 13.10–13.40 s it measures −11.3 dB, against −13.1 dB in round 4 and −10.5 dB in the synth version. The synth's swell through the short dead stop before it (13.01–13.13 s) is back too. |
 
 ## Sounds left out
 
