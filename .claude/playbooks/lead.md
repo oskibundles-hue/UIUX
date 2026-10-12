@@ -24,9 +24,24 @@ in Dropbox itself, deliver it through the **Video Drop** page: https://claude.ai
      `scope: "assets"` prints for its asset id, so a part out of place on the card is caught (one or two calls
      for all the parts). Omarie, 7 Oct: Part 2 v2 checked 26 parts this way, where reading each back with its
      own `path` would have taken 26 calls; a multi-`paths` read of asset ids failed in Part 2.
-  5. Once he has saved it, confirm the file in Dropbox at the exact size and the master's SHA-256 (`shasum -a 256`
-     on the Dropbox copy, a few seconds). That checks the whole file end to end, whatever the listing's hash is
-     based on.
+  5. Once he has saved it, confirm the Dropbox copy against the master. It won't have the master's size or its
+     whole-file SHA-256: claude.ai's save path adds a C2PA box right after `ftyp` (a top-level MP4 `uuid` box,
+     type `d8fec3d6-1b0e-483c-9297-5828877ec481`), and because the box sits before `mdat`, every `stco`/`co64`
+     chunk offset goes up by the box's size. Nothing else changes. Expect the master's size plus the box, and
+     don't fail a file on a `shasum -a 256` mismatch alone. Either of these checks the whole file end to end:
+     - (a) The streams match: `ffmpeg -v error -i FILE -map 0 -c copy -f streamhash -hash sha256 -` prints the
+       same per-stream hashes for the master and the Dropbox copy, and the same command ending `-f framemd5 -`
+       prints the same packet list.
+     - (b) The file matches with the box out: `python3 .claude/brain/c2pa_strip_check.py MASTER DROPBOX_COPY`
+       leaves the box out, moves the chunk offsets back and prints PASS when the SHA-256 is then exactly the
+       master's. MASTER is the master file, or its SHA-256 when the master isn't on this machine. It writes
+       nothing.
+
+     Seen 12 Oct on four FD Opus clips and the Showreel 2026 sound trial: each landed 5,893 bytes over its
+     master, the size of the box, so the old exact-size check failed every time.
+- The box is Content Credentials, signed "Anthropic Claude Content Signing" with claim generator "Anthropic
+  Claude.ai" and the action `com.anthropic.claude.provided`. Instagram reads C2PA and may add its own "AI info"
+  tag to a post. Whether a post gets labelled is Omarie's call.
 - The page holds 1 GiB. Clear older cards only once they're confirmed in Dropbox, and ask him first.
 
 ## The Working-now card: step detail
