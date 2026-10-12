@@ -40,6 +40,8 @@ SERVER_IDS = {
 # Higgsfield call keeps asking. Playbook: .claude/playbooks/genjutsu-runner.md
 GO_TICKETS = os.environ.get("GENJUTSU_GO_DIR", "/tmp/genjutsu-go")
 GENJUTSU_MODELS = {"hf_mult_replace_object", "hf_mult_motion_control"}
+GENJUTSU_PRESETS = ("genjutsu:trending:", "genjutsu-style:")
+TICKET_LIFE = 900   # seconds; a ticket that claims to live longer is ignored
 MEMORY_WRITE = re.compile(r"^(remember|update_memory|archive_memory|approve_constraint|forget\w*|delete\w*)$")
 GITHUB_BRANCH_WRITE = {"push_files", "create_or_update_file", "delete_file"}
 GITHUB_MERGE = {"merge_pull_request", "enable_pr_auto_merge"}
@@ -97,16 +99,23 @@ def num(v):
         return None
 
 
+def one(v):
+    """A count is fine only when it is exactly 1 (callers pass 1 for a count that was left out)."""
+    return type(v) is int and v == 1
+
+
 def genjutsu_go(name, args):
     """True when a paid Genjutsu call matches an unused, unexpired Go ticket; the ticket is used up here."""
     params = args.get("params") if isinstance(args.get("params"), dict) else {}
+    inputs = args.get("inputs") if isinstance(args.get("inputs"), dict) else {}
     if name == "generate_video":
         key = params.get("model")
-        if key not in GENJUTSU_MODELS or (num(params.get("count", 1)) or 0) > 1:
+        if key not in GENJUTSU_MODELS or not one(params.get("count", 1)) or not one(args.get("count", 1)):
             return False
     elif name == "execute_preset":
         key = args.get("preset_id")
-        if not str(key or "").startswith(("genjutsu:", "genjutsu-style:")):
+        if (args.get("source") != "genjutsu" or not str(key or "").startswith(GENJUTSU_PRESETS)
+                or not one(args.get("count", 1)) or not one(inputs.get("count", 1))):
             return False
     else:
         return False
@@ -114,6 +123,7 @@ def genjutsu_go(name, args):
         tickets = sorted(f for f in os.listdir(GO_TICKETS) if f.endswith(".json"))
     except OSError:
         return False
+    now = time.time()
     for f in tickets:
         path = os.path.join(GO_TICKETS, f)
         try:
@@ -121,15 +131,24 @@ def genjutsu_go(name, args):
                 t = json.load(fh)
         except Exception:  # noqa: BLE001
             continue
+        if not isinstance(t, dict):
+            continue
         cost, quote, expires = num(t.get("cost")), num(t.get("quote")), num(t.get("expires"))
-        if (t.get("tool") == name and t.get("key") == key and cost is not None and quote is not None
-                and expires is not None and expires > time.time() and 0 <= quote <= cost
-                and f == f"{t.get('doc_id')}.json"):
-            try:
-                os.rename(path, path[:-5] + ".used")   # single use: a second call finds no ticket
-            except OSError:
-                return False
-            return True
+        doc = str(t.get("doc_id") or "")
+        if not (t.get("tool") == name and t.get("key") == key and re.fullmatch(r"gen-[\w-]+", doc)
+                and f == f"{doc}.json" and cost is not None and quote is not None and expires is not None
+                and now < expires <= now + TICKET_LIFE and 0 <= quote <= cost):
+            continue
+        if name == "generate_video":
+            # The ticket names who pays. A free (unlimited) quote never covers a credit charge.
+            unlim = t.get("use_unlim")
+            if type(unlim) is not bool or params.get("use_unlim") is not unlim or (quote == 0 and not unlim):
+                continue
+        try:
+            os.rename(path, path[:-5] + ".used")   # single use: a second call finds no ticket
+        except OSError:
+            return False
+        return True
     return False
 
 

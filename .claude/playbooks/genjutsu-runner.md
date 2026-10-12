@@ -13,8 +13,11 @@ If `.claude/playbooks/genjutsu-runner.md` is missing, or `.claude/hooks/regret_g
 
     git fetch origin feat/genjutsu-runner && git checkout origin/feat/genjutsu-runner -- .claude/hooks/regret_gate.py .claude/playbooks/genjutsu-runner.md
 
-Check with `grep -c GO_TICKETS .claude/hooks/regret_gate.py` (should be 2 or more).
-Without it, every paid call asks, nobody answers, and nothing runs. Then skip the run pass and say so.
+Then check two things:
+- `grep -c GO_TICKETS .claude/hooks/regret_gate.py` is 2 or more;
+- `grep -c e17b92d9 ~/.claude/settings.json` is 1 or more (the gate only sees the Higgsfield connector when
+  its id is in the hook matcher; settings load when the session starts, so a checkout now can't fix it).
+If either check fails, do the quote pass only, skip the run pass, and say so in the summary.
 
 Then, if `.claude/brain/live_card.py` exists, start the Working-now card (see section 8). If not, skip it quietly.
 
@@ -113,9 +116,12 @@ For every doc with `decision:'make'`, `status:'asked'`, and no `quote` or a `quo
    Missing something: pinned write `status:'failed'`, `error` and a `claudeReply` saying what to add,
    for example "This swap needs a clip. Add one and ask again." Next doc.
 2. Upload or import the inputs (section 3). Keep the media ids for the run pass in the same session.
-3. Price it. Unlimited first (Omarie's choice): price without `use_unlim`.
-   - `unlim_choice` comes back: `payer:'unlimited'`, `quote:0`, and `quoteCredits` = the credit price.
+3. Price it. Unlimited first (Omarie's choice). Swap and motion: `generate_video` with `get_cost:true` and
+   `use_unlim` left out. Never probe without `get_cost:true`: if no allowance covers it, that call would submit.
+   - The answer shows `unlim_choice` (or says his unlimited allowance covers it): `payer:'unlimited'`, `quote:0`,
+     and `quoteCredits` = the credit price.
    - Otherwise: `payer:'credits'`, `quote` = the credit price.
+   - Trending and styles (`execute_preset`) have no unlimited switch: `payer:'credits'`, `quote` = `execution.cost_credits`.
 4. Pinned write `quote`, `quoteAt`, `payer` (and `quoteCredits`), plus a short `claudeReply`, for example
    "Priced at 40 credits. Tap Go to make it." or "Free from your unlimited plan. Tap Go to make it."
 
@@ -124,39 +130,52 @@ For every doc with `decision:'make'`, `status:'asked'`, and no `quote` or a `quo
 For every doc with `decision:'go'` and `status` not `running` or `done`.
 (A doc already `running` is handled in step 7.)
 
+**Every stop or failed write in this section also sets `decision:'make'`.** Then `decision:'go'` only ever
+means a fresh tap from Omarie, and nothing is tried again until he taps Go again.
+
 1. **Claim it.** Pinned write `status:'running'`, `runBy:<this session url, or the time>`, `ranAt:<now>`,
    BEFORE anything paid. If the write fails, someone else took it. Skip it.
+   If `cost` is missing: write `status:'asked'`, `decision:'make'`, claudeReply
+   "Tap Go again so I know the price is OK." Stop.
 2. **Re-price** (section 4 step 3, uploading inputs if needed).
    If the new quote > `cost`: write `status:'asked'`, `decision:'make'`, the new `quote` and `quoteAt`,
    and claudeReply "The price went up from X to Y credits. Tap Go again if that's OK." Stop. Spend nothing.
-3. **Balance check** (section 3). Too low: `status:'failed'`, `error:'Not enough Higgsfield credits'`, plain claudeReply. Stop.
+   If the re-price itself fails: write `status:'asked'`, `decision:'make'`, a plain `error`, and claudeReply
+   "I couldn't get a price from Higgsfield, so I didn't make it. Tap Go again later." Stop. Nothing was spent.
+3. **Balance check** (section 3). Too low: `status:'failed'`, `decision:'make'`, `error:'Not enough Higgsfield credits'`, plain claudeReply. Stop.
 4. **Write the Go ticket** the regret gate needs, `/tmp/genjutsu-go/<doc_id>.json` (make the folder):
 
        {"doc_id": "gen-...", "tool": "generate_video" or "execute_preset",
         "key": "<params.model, or the preset_id>", "cost": <the cost he tapped>,
-        "quote": <the new quote>, "expires": <unix time now + 900>}
+        "quote": <the new quote>, "use_unlim": true or false (generate_video only: who pays),
+        "expires": <unix time now + 900>}
 
    The file name must be exactly `<doc_id>.json`. The gate lets one matching paid call through
-   (count 1 only, quote ≤ cost, not expired), then uses the ticket up.
+   (count 1 only, quote ≤ cost, `use_unlim` on the call equal to the ticket's, expires no more than
+   15 minutes ahead), then uses the ticket up. A ticket with `quote:0` must say `use_unlim:true`:
+   a free quote never covers a credit charge. For `execute_preset` pass `source:'genjutsu'` and no count.
    Any other paid call still asks, and nobody answers. Never try one.
 5. **Submit**, once.
-   - payer unlimited: `use_unlim:true`.
-   - payer credits: `use_unlim:false`.
+   - payer unlimited: `use_unlim:true` (ticket `use_unlim:true`).
+   - payer credits: `use_unlim:false` (ticket `use_unlim:false`).
    - If the unlimited opt-in is refused, the ticket is used up. Write a fresh ticket with
-     `quote` = the credit price, and submit with `use_unlim:false` only if the credit price ≤ `cost`.
+     `quote` = the credit price and `use_unlim:false`, and submit with `use_unlim:false` only if the credit price ≤ `cost`.
      Otherwise set `status:'asked'`, `decision:'make'`, `payer:'credits'`, the credit `quote`, and claudeReply
      "Unlimited didn't cover this one. It costs X credits. Tap Go again if that's OK."
    - Never `count` > 1.
 6. **Write `jobId` straight away** (pinned). The job counts as submitted only once its id is written.
 7. **Never resubmit after a timeout.** If the submit call times out or errors without a clear refusal:
    - search `show_generations` for a job made in the last few minutes with this model or preset, and adopt its id;
-   - none found: `status:'failed'`, `error:'submit timed out; not resubmitted, check Higgsfield history'`. Stop.
+   - none found: `status:'failed'`, `decision:'make'`, `error:"Higgsfield didn't answer, so I didn't send it again"`,
+     claudeReply "Higgsfield didn't answer when I sent this, so I didn't send it again. Check your Higgsfield
+     history before you tap Go." Stop.
    A doc already `running` with a `jobId` is only waited on, never resubmitted.
-   A doc `running` with no `jobId`: same history search; none found, same failed write.
+   A doc `running` with no `jobId` and `ranAt` older than 30 minutes: same history search; none found, same
+   failed write. If `ranAt` is newer than 30 minutes, another run may have it: leave it alone.
 8. **Wait.** `jobs_wait`, 15 s or less, loop for up to about 20 minutes.
    - Done: `status:'done'`, `resultLink` (https only), `result:''`, and a claudeReply naming the video and who paid,
      for example "Your 'Night run' swap is ready. Paid from your unlimited plan."
-   - Failed: `status:'failed'`, plain `error` and claudeReply.
+   - Failed: `status:'failed'`, `decision:'make'`, plain `error` and claudeReply.
    - Still going after 20 minutes: leave it `running` with its `jobId`. The next run waits on it.
 
 Delete any ticket you wrote but didn't use (`/tmp/genjutsu-go/<doc_id>.json`) before moving on.
@@ -172,7 +191,7 @@ If he tapped Never or changed the ask in between, respect it.
 
 Write one snapshot to Dropbox with `create_file` (new files only, never overwrite):
 
-    /NQ Studio/06 Creator Kit/Agentic OS/plans/genjutsu-runs/genjutsu-run-YYYY-MM-DD-HHMM.json
+    /NQ Studio/06 Creator Kit/Agentic OS/plans/genjutsu-runs/genjutsu-run-YYYY-MM-DD-HHMMSS.json
 
 (Pacific time.) Make the `genjutsu-runs` folder first if it's missing. Content:
 
@@ -180,7 +199,7 @@ Write one snapshot to Dropbox with `create_file` (new files only, never overwrit
       "cost", "jobId", "resultLink", "error", "claudeReply"}]}
 
 List every genjutsu doc you read, not only the ones you changed. The Mac reads the newest file
-to show the asks, file finished videos and update Progress. If the name is taken, add `-2`.
+to show the asks, file finished videos and update Progress. The seconds keep names unique and in order.
 
 ## 8. The Working-now card
 
