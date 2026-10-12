@@ -24,18 +24,21 @@ in Dropbox itself, deliver it through the **Video Drop** page: https://claude.ai
      `scope: "assets"` prints for its asset id, so a part out of place on the card is caught (one or two calls
      for all the parts). Omarie, 7 Oct: Part 2 v2 checked 26 parts this way, where reading each back with its
      own `path` would have taken 26 calls; a multi-`paths` read of asset ids failed in Part 2.
-  5. Once he has saved it, confirm the Dropbox copy against the master. It won't have the master's size or its
-     whole-file SHA-256: claude.ai's save path adds a C2PA box right after `ftyp` (a top-level MP4 `uuid` box,
-     type `d8fec3d6-1b0e-483c-9297-5828877ec481`), and because the box sits before `mdat`, every `stco`/`co64`
-     chunk offset goes up by the box's size. Nothing else changes. Expect the master's size plus the box, and
-     don't fail a file on a `shasum -a 256` mismatch alone. Either of these checks the whole file end to end:
+  5. Once he has saved it, get the Dropbox copy (`download_link`, then `curl`; on the Mac it is already in the
+     Dropbox folder) and confirm it against the master. If the file isn't in the card's folder, search Dropbox
+     for its filename: the showreel trial landed in the Dropbox root. Ask him before moving it. The copy won't
+     have the master's size or its whole-file SHA-256: claude.ai's save path adds a C2PA box right after `ftyp`
+     (a top-level MP4 `uuid` box, type `d8fec3d6-1b0e-483c-9297-5828877ec481`), and because the box sits before
+     `mdat`, every `stco`/`co64` chunk offset goes up by the box's size. Nothing else changes. Expect the
+     master's size plus the box, and don't fail a file on a `shasum -a 256` mismatch alone. Either of these
+     checks the whole file end to end:
      - (a) The streams match: `ffmpeg -v error -i FILE -map 0 -c copy -f streamhash -hash sha256 -` prints the
        same per-stream hashes for the master and the Dropbox copy, and the same command ending `-f framemd5 -`
        prints the same packet list.
      - (b) The file matches with the box out: `python3 .claude/brain/c2pa_strip_check.py MASTER DROPBOX_COPY`
        leaves the box out, moves the chunk offsets back and prints PASS when the SHA-256 is then exactly the
-       master's. MASTER is the master file, or its SHA-256 when the master isn't on this machine. It writes
-       nothing.
+       master's. MASTER is the master file, or its SHA-256 when the master isn't on this machine. A copy with
+       no box passes only when it is the master byte for byte. It writes nothing.
 
      Seen 12 Oct on four FD Opus clips and the Showreel 2026 sound trial: each landed 5,893 bytes over its
      master, the size of the box, so the old exact-size check failed every time.
@@ -54,9 +57,9 @@ after a day, so a card you stop updating goes stale in the open rather than look
 
 The lead keeps the card; agents never write it. On any job past a couple of minutes:
 
-1. **Start:** `python3 .claude/brain/live_card.py start "<job>" "<first step>"` prints the payload
+1. **Start:** `python3 .claude/brain/live_card.py start "<job>" "<first step>" --role <id>` prints the payload
    (url, collection `work`, this session's doc id, data). Pass it to `ArtifactData` as a `set`; a new
-   card needs no `if_version`.
+   card needs no `if_version`. `live_card.py roles` lists the ids; it lights that role on the Agents page map.
 2. **Each new step, and at least every 15 minutes while working:** `... step "<what you're on now>"`
    (add `--pct N` when there's a real percentage), then `ArtifactData` `update` with `if_version` set
    to the version the last write returned.
@@ -79,7 +82,8 @@ see `.claude/agentmesh/bench-2026-09-30.md`. The policy and the reasons are in
 
 **Brief with the class, the playbook and the style.** The workstream knowledge (branches, worktrees,
 pipelines, brand rules) is in `.claude/playbooks/`: `formula-dynamics.md`, `supercar-experience.md`,
-`anti-stock.md`, `research.md`, and `review.md` for the checks. Name the one that applies, so the same
+`anti-stock.md`, `research.md`, `sound-layer.md` for recorded sound effects on any video (added with the
+workstream's playbook), and `review.md` for the checks. Name the one that applies, so the same
 `nq-build` builds any workstream's piece. Builders work in worktrees of their workstream's branch,
 because this default branch doesn't carry `creator-kit/`, `formula-dynamics/` or `supercar-experience/`.
 

@@ -1,0 +1,359 @@
+<title>Sample Carousel Mockup</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap">
+<style>
+/* Post mockup: the post as Instagram shows it, in a phone, beside the posting kit
+   (variant switch, posting order with Save buttons, caption, the 9:16 cut, notes).
+   One deliberate dark look. Swap the brand tokens below for the workstream's own (README). */
+:root{
+  /* brand tokens */
+  --ground:#0A0A0B;
+  --panel:#151517;
+  --accent:#FE0F13;
+  --display:'Bebas Neue','Oswald','Arial Narrow',Impact,sans-serif;
+  /* fixed tokens */
+  --line:rgba(255,255,255,.10);
+  --fg:#F5F5F3;
+  --dim:#9C9CA2;
+  --ig-blue:#0095F6;
+  --ig-dot:#5E5E62;
+  --ui:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',Arial,sans-serif;
+  --aspect:4/5;
+  color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--fg);font-family:var(--ui);font-size:15px;line-height:1.45}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px;padding-block:28px 56px}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 24px;margin-bottom:26px}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(40px,7vw,64px);line-height:.9;letter-spacing:.02em;margin:0;text-wrap:balance}
+h1 .r{display:block;width:56px;height:6px;background:var(--accent);margin-bottom:14px}
+.sub{color:var(--dim);margin:8px 0 0;max-width:52ch}
+.seg{display:inline-flex;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:999px;padding:4px}
+.seg button{appearance:none;border:0;background:transparent;color:var(--dim);font:600 14px/1 var(--ui);
+  letter-spacing:.04em;text-transform:uppercase;padding:10px 18px;border-radius:999px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--ground)}
+.seg button:focus-visible,.btn:focus-visible,.order button:focus-visible,.nav:focus-visible,.snd:focus-visible,.dl:focus-visible{outline:2px solid var(--ig-blue);outline-offset:2px}
+
+.grid{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:40px;align-items:start}
+@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
+
+/* phone */
+.phone{width:100%;max-width:400px;margin:0 auto;background:#000;border:10px solid #1D1D20;border-radius:46px;
+  overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.55)}
+.status{display:flex;justify-content:space-between;padding:12px 26px 6px;font:600 14px var(--ui);color:#fff}
+.ig-bar{display:flex;align-items:center;justify-content:space-between;padding:6px 14px 10px;color:#fff}
+.ig-bar b{font:700 20px/1 var(--ui);letter-spacing:-.02em}
+.post-h{display:flex;align-items:center;gap:10px;padding:8px 12px}
+.av{width:34px;height:34px;border-radius:50%;background:#000;border:1.5px solid #3A3A3D;display:grid;place-items:center;overflow:hidden;
+  flex:none;font:700 13px/1 var(--ui);color:#fff}
+.av img{width:22px}
+.post-h .nm{font:600 13.5px/1.2 var(--ui);color:#fff;overflow-wrap:anywhere}
+.post-h .lc{font:400 12px/1.2 var(--ui);color:#C8C8CC}
+.post-h .more{margin-left:auto;color:#fff;font-size:18px;letter-spacing:1px}
+
+.car{position:relative}
+.track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;aspect-ratio:var(--aspect);max-width:100%}
+.track::-webkit-scrollbar{display:none}
+.cell{flex:0 0 100%;scroll-snap-align:start;position:relative;background:#000}
+.cell img,.cell video{width:100%;height:100%;object-fit:cover;display:block}
+.ph{width:100%;height:100%;display:grid;align-content:center;justify-items:center;gap:8px;padding:24px;text-align:center;
+  background:linear-gradient(160deg,#202024,#0C0C0E 70%);color:var(--fg)}
+.ph span{font-family:var(--display);font-size:72px;line-height:.8;color:var(--accent)}
+.ph b{font-family:var(--display);font-weight:400;font-size:30px;letter-spacing:.03em;text-wrap:balance}
+.ph em{font-style:normal;color:var(--dim);font-size:13px;letter-spacing:.06em;text-transform:uppercase}
+.count{position:absolute;top:12px;right:12px;background:rgba(18,18,18,.72);color:#fff;font:600 12px/1 var(--ui);
+  padding:6px 9px;border-radius:12px;font-variant-numeric:tabular-nums}
+.nav{position:absolute;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;border:0;
+  background:rgba(255,255,255,.85);color:#111;font:700 15px/30px var(--ui);cursor:pointer;padding:0}
+.nav.prev{left:10px}.nav.next{right:10px}
+.nav[disabled]{opacity:0;pointer-events:none}
+.snd{position:absolute;left:12px;bottom:12px;background:rgba(18,18,18,.72);color:#fff;border:0;border-radius:14px;
+  font:600 12px/1 var(--ui);padding:7px 10px;cursor:pointer}
+.acts{display:flex;align-items:center;gap:16px;padding:10px 14px 6px;color:#fff;position:relative}
+.acts svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:1.8}
+.acts .sv{margin-left:auto}
+.dots{position:absolute;left:50%;transform:translateX(-50%);display:flex;gap:4px}
+.dots i{width:6px;height:6px;border-radius:50%;background:var(--ig-dot)}
+.dots i.on{background:var(--ig-blue)}
+.cap{padding:2px 14px 18px;color:#F2F2F2;font:400 13.5px/1.42 var(--ui);white-space:pre-wrap;overflow-wrap:anywhere}
+.cap b{font-weight:600}
+.cap .tag{color:#E0F1FF}
+
+/* kit */
+.kit{display:grid;gap:22px;min-width:0}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 18px 16px;min-width:0}
+.box h2{font-family:var(--display);font-weight:400;font-size:26px;letter-spacing:.04em;margin:0 0 12px;display:flex;align-items:center;gap:10px}
+.box h2::before{content:"";width:18px;height:4px;background:var(--accent)}
+.order{list-style:none;margin:0;padding:0;display:grid;gap:2px}
+.order li{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;gap:6px}
+.order button{width:100%;display:grid;grid-template-columns:2.2em minmax(0,1fr) auto;gap:10px;align-items:center;text-align:left;
+  background:transparent;border:0;border-radius:8px;color:var(--fg);font:14px/1.3 var(--ui);padding:8px;cursor:pointer}
+.order button:hover{background:rgba(255,255,255,.04)}
+.order button[aria-current="true"]{background:rgba(255,255,255,.07)}
+.order .n{font-family:var(--display);font-size:22px;color:var(--dim);font-variant-numeric:tabular-nums}
+.order .f{color:var(--dim);font-size:12.5px;font-family:ui-monospace,SFMono-Regular,Menlo,monospace;overflow-wrap:anywhere}
+.order .k{font-size:11px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);border:1px solid var(--line);border-radius:6px;padding:3px 6px}
+.order .k.v{color:var(--fg);border-color:color-mix(in srgb,var(--accent) 60%,transparent)}
+.dl{font:600 12.5px/1 var(--ui);color:var(--fg);background:transparent;border:1px solid var(--line);border-radius:999px;
+  padding:8px 12px;cursor:pointer;text-decoration:none;white-space:nowrap}
+.dl:hover{border-color:rgba(255,255,255,.32)}
+.dl:disabled{opacity:.5;cursor:default}
+.savemsg{color:var(--dim);font-size:13px;margin:10px 0 0}
+.savemsg a{color:var(--fg)}
+.captxt{white-space:pre-wrap;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 0 12px;
+  font:14px/1.5 var(--ui);overflow-wrap:anywhere}
+.btn{appearance:none;border:0;background:var(--fg);color:var(--ground);font:600 14px/1 var(--ui);padding:11px 16px;border-radius:10px;cursor:pointer}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.ok{color:var(--dim);font-size:13px}
+.reel{display:grid;grid-template-columns:minmax(0,200px) minmax(0,1fr);gap:18px;align-items:start}
+@media (max-width:520px){.reel{grid-template-columns:minmax(0,1fr)}}
+.reel .v{position:relative;aspect-ratio:9/16;max-width:100%;border-radius:14px;overflow:hidden;background:#000}
+.reel video{width:100%;height:100%;object-fit:cover;display:block}
+/* the 4:5 crop of a 1080x1920 frame: 1350 px tall, starting 285 px down */
+.band{position:absolute;left:0;right:0;top:14.84%;height:70.31%;border-top:1px dashed rgba(255,255,255,.55);border-bottom:1px dashed rgba(255,255,255,.55);pointer-events:none}
+.reel p,.notes li{color:var(--dim);margin:0 0 8px;font-size:14px}
+.notes{margin:0;padding-left:18px}
+.notes li b{color:var(--fg);font-weight:600}
+@media (prefers-reduced-motion:reduce){.track{scroll-behavior:auto}}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1><span class="r"></span><span id="h1"></span></h1>
+      <p class="sub" id="sub"></p>
+    </div>
+    <div class="seg" id="seg" role="group" aria-label="Version"></div>
+  </header>
+
+  <div class="grid">
+    <div class="phone" aria-label="Instagram post preview">
+      <div class="status"><span>9:41</span><span>●●● ▲ ▮</span></div>
+      <div class="ig-bar"><b>Instagram</b><span aria-hidden="true">♡&nbsp;&nbsp;✉</span></div>
+      <div class="post-h">
+        <div class="av" id="av"></div>
+        <div><div class="nm" id="nm"></div><div class="lc" id="lc"></div></div>
+        <div class="more">···</div>
+      </div>
+      <div class="car">
+        <div class="track" id="track" tabindex="0" aria-label="Carousel slides"></div>
+        <div class="count" id="count"></div>
+        <button class="nav prev" id="prev" aria-label="Previous slide">‹</button>
+        <button class="nav next" id="next" aria-label="Next slide">›</button>
+      </div>
+      <div class="acts">
+        <svg viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-7.5-10.1A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.8c0 5.5-7.5 10.1-7.5 10.1z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M20.5 12a8.5 8.5 0 1 1-3.1-6.6A8.4 8.4 0 0 1 20.5 12z M20.5 20.5l-2-4.3"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M21 3 10 13.5 M21 3l-6.5 18-4.5-7.5L3 9.5z"/></svg>
+        <div class="dots" id="dots"></div>
+        <svg class="sv" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V3h14z"/></svg>
+      </div>
+      <div class="cap" id="cap"></div>
+    </div>
+
+    <div class="kit">
+      <section class="box">
+        <h2>Posting order</h2>
+        <ol class="order" id="order"></ol>
+        <p class="savemsg" id="savemsg" aria-live="polite"></p>
+      </section>
+      <section class="box">
+        <h2>Caption</h2>
+        <p class="captxt" id="captxt"></p>
+        <div class="row"><button class="btn" id="copy">Copy caption</button><span class="ok" id="copied" aria-live="polite"></span></div>
+      </section>
+      <section class="box" id="reelbox" hidden>
+        <h2>9:16 video</h2>
+        <div class="reel">
+          <div class="v" id="reelv"><div class="band" title="Carousel 4:5 crop"></div></div>
+          <div>
+            <div id="reeltxt"></div>
+            <button class="btn" id="reelsnd" hidden>Play with sound</button>
+          </div>
+        </div>
+      </section>
+      <section class="box" id="notesbox" hidden>
+        <h2>Before posting</h2>
+        <ul class="notes" id="notes"></ul>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ======== POST: the only block to edit for a new mockup (README, "Making a new one") ======== */
+const POST = {
+  title: 'Sample product<br>carousel mockup',
+  sub: 'Sample feed post: a 4:5 carousel of six photos, one moving slide and a 9:16 video. Not posted.',
+  handle: 'samplebrand',
+  location: 'Las Vegas, Nevada',
+  avatar: '',                 // a published path such as 'brand/icon-white.png'; empty shows the handle's first letter
+  aspect: '4/5',              // the feed crop: '4/5' or '1/1'
+  demo: true,                 // true draws labelled placeholders instead of loading files
+  // Each version is one carousel. Its files sit in a folder named after its id, published next to the page.
+  variants: [
+    { id: 'silver', label: 'Silver',
+      caption: 'Sample product in silver, in stock now.\n\nNot for your car? We have options. DM to order.\n\nSilver or black?\n\n#sampletag #anothertag' },
+    { id: 'black', label: 'Black',
+      caption: 'Sample product in black, in stock now.\n\nNot for your car? We have options. DM to order.\n\nBlack or silver?\n\n#sampletag #anothertag' },
+  ],
+  // f: the published file in the version's folder; name: the file name to post, {V} is the version label.
+  // v: true marks a video. Videos get a link to where they are collected (videoLink) instead of a Save button.
+  items: [
+    { f: '01.jpg', name: 'Sample-{V}-01.jpg', label: 'Cover: in stock' },
+    { f: '02.jpg', name: 'Sample-{V}-02.jpg', label: 'Detail one' },
+    { f: '03.jpg', name: 'Sample-{V}-03.jpg', label: 'Detail two' },
+    { f: '04.jpg', name: 'Sample-{V}-04.jpg', label: 'Detail three' },
+    { f: '05.mp4', name: 'Sample-{V}-05-moving.mp4', label: 'Moving slide', v: true },
+    { f: '06.jpg', name: 'Sample-{V}-06.jpg', label: 'Not for your car? We have options' },
+    { f: '07.jpg', name: 'Sample-{V}-07.jpg', label: 'DM to order' },
+    { f: '08.mp4', name: 'Sample-{V}-08-video-9x16.mp4', label: 'Video, 9:16', v: true },
+  ],
+  videoLink: { href: 'https://example.com/', text: 'Video Drop' },
+  // The 9:16 box: which item is the vertical cut, and what to say beside it. Leave reel out to hide the box.
+  reel: { f: '08.mp4', text: [
+    'Item 8 in the carousel, also usable as a Reel or Story. The dashed lines mark the 4:5 crop the carousel shows; every word sits inside it.',
+    '19.4 s, 1080×1920, sound design only.',
+  ] },
+  notes: [
+    '<b>AI footage:</b> say which slides use AI clips, and suggest Instagram\'s AI label.',
+    '<b>Claims:</b> say what the post does not claim (price, fitment, performance), or where each claim comes from.',
+    '<b>Files:</b> where the READ ME, the captions and the videos are.',
+  ],
+  storageKey: 'post-mockup-version',
+};
+/* ======== end of POST ======== */
+
+const ITEMS = POST.items, VARS = POST.variants;
+let downloads = null, vi = 0, idx = 0;
+try { const s = localStorage.getItem(POST.storageKey); const k = VARS.findIndex(x => x.id === s); if (k >= 0) vi = k; } catch (e) {}
+const $ = id => document.getElementById(id);
+const track = $('track'), dots = $('dots'), count = $('count'), order = $('order');
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+const V = () => VARS[vi];
+const NAME = it => it.name.replace(/\{V\}/g, V().label);
+const SRC = f => `${V().id}/${f}`;
+
+function ph(it, i) {
+  return `<div class="ph"><span>${String(i + 1).padStart(2, '0')}</span><b>${esc(it.label)}</b><em>${it.v ? 'Video' : 'Photo'} · ${esc(V().label)}</em></div>`;
+}
+function setup() {
+  document.documentElement.style.setProperty('--aspect', POST.aspect || '4/5');
+  $('h1').innerHTML = POST.title;
+  $('sub').textContent = POST.sub;
+  $('nm').textContent = POST.handle;
+  $('lc').textContent = POST.location || '';
+  $('av').innerHTML = POST.avatar ? `<img src="${esc(POST.avatar)}" alt="">` : esc(POST.handle.charAt(0).toUpperCase());
+  $('seg').hidden = VARS.length < 2;
+  $('seg').innerHTML = VARS.map((x, k) => `<button data-k="${k}" aria-pressed="false">${esc(x.label)}</button>`).join('');
+  const multi = ITEMS.length > 1;
+  [count, dots, $('prev'), $('next')].forEach(el => { el.hidden = !multi; });
+  if (POST.notes && POST.notes.length) { $('notesbox').hidden = false; $('notes').innerHTML = POST.notes.map(n => `<li>${n}</li>`).join(''); }
+  if (POST.reel) {
+    $('reelbox').hidden = false;
+    $('reeltxt').innerHTML = POST.reel.text.map(t => `<p>${esc(t)}</p>`).join('');
+  }
+  const vids = ITEMS.filter(it => it.v).length;
+  if (vids && POST.videoLink) $('savemsg').innerHTML = `The videos are on the <a href="${esc(POST.videoLink.href)}" target="_blank" rel="noopener">${esc(POST.videoLink.text)}</a> page.`;
+}
+function render() {
+  $('seg').querySelectorAll('button').forEach(b => b.setAttribute('aria-pressed', String(+b.dataset.k === vi)));
+  track.innerHTML = ITEMS.map((it, i) => `<div class="cell">${POST.demo ? ph(it, i) : it.v
+    ? `<video src="${SRC(it.f)}" muted loop playsinline autoplay preload="metadata"></video><button class="snd">Sound off</button>`
+    : `<img src="${SRC(it.f)}" alt="Slide ${i + 1}: ${esc(it.label)}" ${i ? 'loading="lazy"' : ''}>`}</div>`).join('');
+  dots.innerHTML = ITEMS.map(() => '<i></i>').join('');
+  order.innerHTML = ITEMS.map((it, i) => `<li><button data-i="${i}"><span class="n">${String(i + 1).padStart(2, '0')}</span>
+    <span><span>${esc(it.label)}</span><br><span class="f">${esc(NAME(it))}</span></span>
+    <span class="k ${it.v ? 'v' : ''}">${it.v ? 'Video' : 'Photo'}</span></button>${it.v
+    ? (POST.videoLink ? `<a class="dl" href="${esc(POST.videoLink.href)}" target="_blank" rel="noopener">${esc(POST.videoLink.text)}</a>` : '<span></span>')
+    : `<button class="dl" data-save="${i}" ${downloads && !POST.demo ? '' : 'hidden'} aria-label="Save ${esc(NAME(it))}">Save</button>`}</li>`).join('');
+  const cap = V().caption;
+  $('captxt').textContent = cap;
+  $('cap').innerHTML = `<b>${esc(POST.handle)}</b> ` + esc(cap).replace(/(#\w+)/g, '<span class="tag">$1</span>');
+  if (POST.reel) {
+    const box = $('reelv'), band = box.querySelector('.band');
+    const it = ITEMS.find(x => x.f === POST.reel.f) || { label: 'Video, 9:16', v: true };
+    box.querySelectorAll('video,.ph').forEach(el => el.remove());
+    if (POST.demo) { box.insertAdjacentHTML('afterbegin', ph(it, ITEMS.indexOf(it))); }
+    else {
+      box.insertAdjacentHTML('afterbegin', `<video id="reelvid" src="${SRC(POST.reel.f)}" muted loop playsinline autoplay preload="metadata"></video>`);
+      $('reelvid').play().catch(() => {});
+    }
+    box.appendChild(band);
+    $('reelsnd').hidden = !!POST.demo;
+    $('reelsnd').textContent = 'Play with sound';
+  }
+  track.scrollLeft = 0; setIdx(0);
+}
+function setIdx(i) {
+  idx = i;
+  count.textContent = `${i + 1}/${ITEMS.length}`;
+  dots.querySelectorAll('i').forEach((d, k) => d.classList.toggle('on', k === i));
+  order.querySelectorAll('button[data-i]').forEach((b, k) => b.setAttribute('aria-current', String(k === i)));
+  $('prev').disabled = i === 0;
+  $('next').disabled = i === ITEMS.length - 1;
+}
+function go(i) {
+  i = Math.max(0, Math.min(ITEMS.length - 1, i));
+  track.scrollTo({ left: i * track.clientWidth, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  setIdx(i);
+}
+track.addEventListener('scroll', () => {
+  const i = Math.round(track.scrollLeft / Math.max(1, track.clientWidth));
+  if (i !== idx) setIdx(i);
+}, { passive: true });
+track.addEventListener('keydown', e => { if (e.key === 'ArrowRight') go(idx + 1); if (e.key === 'ArrowLeft') go(idx - 1); });
+$('prev').onclick = () => go(idx - 1);
+$('next').onclick = () => go(idx + 1);
+order.addEventListener('click', e => {
+  const sv = e.target.closest('button.dl');
+  if (sv) { savePhoto(sv, ITEMS[+sv.dataset.save]); return; }
+  const b = e.target.closest('button[data-i]'); if (b) go(+b.dataset.i);
+});
+async function savePhoto(btn, it) {
+  const msg = $('savemsg'), name = NAME(it);
+  btn.disabled = true;
+  try {
+    const r = await fetch(SRC(it.f));
+    if (!r.ok) throw new Error(`the photo did not load (${r.status})`);
+    await downloads.save({ filename: name, data: await r.blob() });
+    msg.textContent = `Saved ${name}.`;
+  } catch (e) {
+    const code = e && e.code;
+    if (code === 'declined') msg.textContent = 'Not saved. Tap Save to try again.';
+    else if (code === 'rate_limited') msg.textContent = 'A save prompt is already open. Finish or close it, then try again.';
+    else msg.textContent = 'That photo could not be saved: ' + (e && e.message ? e.message : code || e) + '.';
+  } finally { btn.disabled = false; }
+}
+function toggleSound(v, b, on, off) {
+  v.muted = !v.muted; if (!v.muted) { v.currentTime = 0; v.play().catch(() => {}); }
+  b.textContent = v.muted ? off : on;
+}
+track.addEventListener('click', e => {
+  const b = e.target.closest('.snd'); if (b) toggleSound(b.parentElement.querySelector('video'), b, 'Sound on', 'Sound off');
+});
+$('seg').addEventListener('click', e => {
+  const b = e.target.closest('button[data-k]'); if (!b) return;
+  vi = +b.dataset.k; try { localStorage.setItem(POST.storageKey, V().id); } catch (err) {}
+  render();
+});
+$('reelsnd').onclick = e => { const v = $('reelvid'); if (v) toggleSound(v, e.target, 'Mute', 'Play with sound'); };
+$('copy').onclick = () => {
+  const t = $('captxt'), ok = $('copied');
+  const sel = () => { const r = document.createRange(); r.selectNodeContents(t); const s = getSelection(); s.removeAllRanges(); s.addRange(r); };
+  try {
+    navigator.clipboard.writeText(t.textContent).then(() => { ok.textContent = 'Copied'; },
+      () => { sel(); ok.textContent = 'Selected. Copy it from here.'; });
+  } catch (e) { sel(); ok.textContent = 'Selected. Copy it from here.'; }
+};
+setup();
+render();
+// Save buttons need the downloads capability (publish with capabilities: {downloads: true}); hidden without it.
+(async () => {
+  downloads = window.claude && typeof window.claude.use === 'function' ? await window.claude.use('downloads') : null;
+  if (!downloads || POST.demo) return;
+  document.querySelectorAll('button.dl').forEach(b => { b.hidden = false; });
+  $('savemsg').insertAdjacentText('afterbegin', 'Save puts a photo in Photos or Dropbox through the share sheet. ');
+})();
+</script>

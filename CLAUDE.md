@@ -28,6 +28,12 @@ style should be used."
    colours, a tab bar and one search across everything. Omarie picked it on 2026-09-28 ("save this apple layout it
    looks so nice"). It lives in `design-systems/iphone-index/`, with `qa.js` to run before publishing. Skip the
    question only when he has already named the style for this piece.
+
+   To show Omarie a post before it goes out (a carousel, a feed post, a reel set), present it on the **post mockup**
+   page: the post in an Instagram phone frame beside its posting kit (versions, posting order with Save buttons,
+   caption, the 9:16 cut, notes). He approved it on 2026-10-10 ("this is a great model and way to show what it would
+   look like save this"). It lives in `design-systems/post-mockup/`, with `qa.js` to run before publishing. The
+   style question above is still asked for the post itself.
 2. **Then build that style all the way**: its techniques, process and quality bar, in the workstream's own brand. The
    page's gold on black is Supercar Experience's; Formula Dynamics keeps FD red and Bebas Neue, Anti Stock keeps its
    own look, and two brands never share a video.
@@ -69,7 +75,8 @@ straight to Omarie.
 The `plate` class is switched off, so it has no agent.
 
 - **Brief with the class, the playbook** (`.claude/playbooks/`; `vlog-lifestyle.md` for spotting and tagging the
-  moments that carry a personal, YouTube-style vlog in any workstream) **and the style.** Builders work in
+  moments that carry a personal, YouTube-style vlog in any workstream; `sound-layer.md` for recorded sound
+  effects synced to picture) **and the style.** Builders work in
   worktrees of their workstream's branch, because this default branch doesn't carry the workstream folders.
 - **The usual chain** is `nq-build` → `nq-check` → lead delivers. Figures, specs, prices, names or
   "we did X" claims go through `nq-facts`, then `nq-second`, independently; either can block.

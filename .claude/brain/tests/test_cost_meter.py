@@ -91,6 +91,17 @@ CHECKS.append(("done logs the job once, step does not",
                done.returncode == 0 and len(logged) == 1 and logged[0]["job"] == "card test shipped"
                and "cost" in json.loads(done.stdout)["data"]))
 
+role = subprocess.run(lc + ["start", "role job", "--role", "editor", "--no-cost"], capture_output=True, text=True, env=env, cwd=TMP)
+plain = subprocess.run(lc + ["start", "plain job", "first step", "--no-cost"], capture_output=True, text=True, env=env, cwd=TMP)
+typo = subprocess.run(lc + ["step", "midway", "--role", "edtior", "--no-cost"], capture_output=True, text=True, env=env, cwd=TMP)
+rd = json.loads(role.stdout)["data"]
+CHECKS.append(("--role lands on the card, and its value is not read as the first step",
+               rd.get("role") == "editor" and rd["detail"] == ""))
+CHECKS.append(("a card started without --role still prints, with a hint on stderr",
+               "role" not in json.loads(plain.stdout)["data"] and "--role" in plain.stderr))
+CHECKS.append(("a role id that is not on the list stops with the list",
+               typo.returncode != 0 and not typo.stdout and "editor" in typo.stderr))
+
 bad = 0
 for label, ok in CHECKS:
     bad += not ok
