@@ -47,7 +47,7 @@ all within 4. The cover jpg is written straight from the RGB frame (sRGB, no YUV
 Part brands: in IMG_0579 a branded hang tag (maker's logo, serial, address) hangs under the X-pipe's
 second brace until about 7.4 s, and the muffler can carries the maker's name and lines of text etched on
 its side (readable whenever the can's side faces the camera, about 7.4-13.9 s). Every parts shot is framed
-so neither is in frame; `exports/qa/brandscan_parts_*.jpg` shows every frame of 5.00-7.90 at half size.
+so neither is in frame; `exports/qa/brandscan_parts_*.jpg` shows every frame of 5.00-7.10 at half size.
 IMG_0570 is not used (different car). IMG_0590 windows avoid the person at the left edge (about 1,
 37-41 and 69-73 s); the latest window now ends at 59.5 s.
 
