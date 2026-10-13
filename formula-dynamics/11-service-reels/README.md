@@ -107,3 +107,25 @@ making the product's argument, not decorating it.
 The scenes were built on the `claude/formula-dynamics-meta-reels-h2hzvr` branch,
 where `out/` is gitignored — which is why the rendered files went missing and
 had to be re-rendered from source. They live here now, outside any ignored path.
+
+## P1: product carousel (Opus exhaust tips, 10 Oct)
+
+The first product carousel built in this engine, in the Oct 7 Brembo carousel
+format: seven 4:5 slides, a moving slide cut from the Higgsfield clips, and a
+9:16 video whose words stay inside the middle 4:5 band so the carousel crop of
+it is safe. One scene renders every piece, chosen by query string:
+
+```
+python3 tools/prep_opus.py <src>        # photos + clip frames -> media/opus/ (git-ignored)
+node tools/still.js  "scenes/p1-opus-carousel.html?color=tan&fmt=4x5&slide=1" Opus-Tan-01.jpg 1080 1350
+node tools/render.js "scenes/p1-opus-carousel.html?color=tan&fmt=4x5&slide=5" Opus-Tan-05-moving-master.mp4 30 1080 1350
+node tools/render.js "scenes/p1-opus-carousel.html?color=tan&fmt=9x16" Opus-Tan-08-video-9x16-master.mp4 30 1080 1920
+python3 tools/build_audio.py "Opus-Tan-08-video-9x16:<master.mp4>:<out.mp4>"   # SFX bed at -14 LUFS
+```
+
+`render.js` now passes a query string through to the scene and falls back to
+the system ffmpeg when `imageio-ffmpeg` isn't installed. `still.js` writes the
+frame at `window.STILL_T`. The photo framing is measured, not hand-cropped:
+`prep_opus.py` finds each part's box against the seamless and the scene fits
+it to the band, 32 px clear of its top and sides. The THE FACETS macros run off
+the frame on purpose, so they take a focus row (`FOCUS` in the scene) instead.
