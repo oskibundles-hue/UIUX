@@ -3,7 +3,7 @@
  "name": "Detail ZR1 and 911",
  "end": "build",
  "audio": "real",
- "_source": "ZR1 and 911 detailing clips (1080x1920 ~60 fps), real sound. No cabin footage exists, so beat 03 is THE WHEELS (brief had INSIDE). nq-check: zr1_17 dropped (soft), zr1_29 dropped (truck advert, face box); THE REVEAL is the foam sliding off the 911 crest (911_07).",
+ "_source": "ZR1 and 911 detailing clips (1080x1920 ~60 fps), real sound. No cabin footage exists, so beat 03 is THE WHEELS (brief had INSIDE). nq-check: zr1_17 dropped (soft), zr1_29 dropped (truck advert, face box); THE REVEAL is the foam sliding off the 911 crest (911_07), landing on the clean pink front (911_01 cropped below the boxes; nq-check v4: 07 alone ended hazy).",
  "beats": [
   {
    "num": "01",
@@ -81,8 +81,20 @@
     {
      "src": "/tmp/claude-0/-home-user/a62cc172-5e3e-5608-b2b2-4bc094d7e26f/scratchpad/fd-src/detail/911_07.mov",
      "in": 1.3,
-     "out": 3.9,
-     "_note": "reveal re-picked 13 Oct: foam slides off the crest and it lands clean; replaces 911_01 (boxes and plate frame up top)"
+     "out": 3.1,
+     "_note": "foam slides off the crest"
+    },
+    {
+     "src": "/tmp/claude-0/-home-user/a62cc172-5e3e-5608-b2b2-4bc094d7e26f/scratchpad/fd-src/detail/911_01.mov",
+     "in": 0.2,
+     "out": 1.7,
+     "crop": [
+      0,
+      380,
+      866,
+      1540
+     ],
+     "_note": "lands on the clean pink front; crop keeps the parts boxes and plate frame (y<380) out, so no blur needed"
     }
    ]
   }

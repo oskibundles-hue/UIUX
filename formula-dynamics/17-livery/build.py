@@ -191,8 +191,9 @@ def main():
     for bi, beat in enumerate(cut["beats"]):
         beat_t.append(t)
         plate = L.beat_plate(beat["num"], beat["word"], beat.get("sub"))
-        if cut.get("scrim"):                    # bright shop footage: shade the board's area
-            plate = Image.alpha_composite(scrim(plate.getbbox(), cut["scrim"]), plate)
+        sc = beat.get("scrim", cut.get("scrim"))  # a beat can opt out (product cards already sit on black)
+        if sc:                                  # bright shop footage: shade the board's area
+            plate = Image.alpha_composite(scrim(plate.getbbox(), sc), plate)
         plate.save(work / f"plate{bi}.png")
         for si, shot in enumerate(beat["shots"]):
             p = work / f"s{bi:02d}_{si:02d}.mov"
