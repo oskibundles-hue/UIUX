@@ -69,4 +69,15 @@ containers. LIVERY has no container at all: the graphics are the brand stripe an
 4. Copy goes through SlopMonster (5/5). Any figure on screen needs a named source; this look carries none by design.
 5. Graphics only: `python3 livery.py stills <dir>` (end cards, a sample plate and a look-test sheet).
 
+Cut-sheet extensions (2026-10-13, fd-zr1/fd-f8/fd-detail previews):
+- **Stills as shots**: a `.jpg`/`.png` `src` with `dur` and `move` (`from`/`to` = [cx, cy, zoom], cosine-eased,
+  sub-pixel), `blur_src` boxes as fractions of the photo (blurred before the move), optional `audio_from`
+  [clip, t] room tone. A stills reel can add a cut-level `bed` (clips + `gain_db`) of real sound from the same job.
+- **`crop`** [x, y, w, h] on a video shot, in source pixels, before the 9:16 scale (used to keep baked-in
+  graphics of an older edit out of frame).
+- **Product cards**: `prep_cards.py <ad.mp4> 0.1 <out.png>` lifts the clean product panel from the first
+  0.3 s of a store ad (before its logo, title and price animate in).
+- `build.py --shots-only` renders the shots for the pre-render frame sheet and stops. Ungraded renders are
+  named `... - UNGRADED PREVIEW 1080x1920.mp4`.
+
 Files: `livery.py` (graphics), `build.py` (render), `cuts/` (cut sheets), `captions/` (caption .txt).

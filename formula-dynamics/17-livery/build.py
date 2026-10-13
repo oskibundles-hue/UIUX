@@ -48,9 +48,79 @@ def run(cmd):
     return r
 
 
+IMG_EXT = {".jpg", ".jpeg", ".png"}
+
+
+def ease(u):
+    """Cosine ease in-out, 0..1 -> 0..1 (slow push/pan on stills)."""
+    import math
+    return 0.5 - 0.5 * math.cos(math.pi * max(0.0, min(1.0, u)))
+
+
+def render_still(shot, out, grade):
+    """A photo as a shot: a 9:16 window that pushes/pans across it with sub-pixel accuracy.
+    shot: {"src": photo, "dur": s, "move": {"from": [cx, cy, zoom], "to": [cx, cy, zoom]},
+           "blur_src": [[x, y, w, h], ...],   # fractions of the photo, blurred before the move
+           "audio_from": [clip, t0]}           # optional room tone; otherwise silence
+    cx, cy are the window centre as fractions of the photo; zoom 1.0 = the largest 9:16 window."""
+    from PIL import Image, ImageFilter, ImageOps
+    dur = float(shot["dur"])
+    im = ImageOps.exif_transpose(Image.open(shot["src"])).convert("RGB")
+    iw, ih = im.size
+    for (x, y, w, h) in shot.get("blur_src", []):
+        box = tuple(int(v) for v in (x * iw, y * ih, (x + w) * iw, (y + h) * ih))
+        reg = im.crop(box)
+        reg = reg.resize((max(1, reg.width // 24), max(1, reg.height // 24)), Image.BILINEAR)
+        reg = reg.resize((box[2] - box[0], box[3] - box[1]), Image.BILINEAR).filter(ImageFilter.GaussianBlur(12))
+        im.paste(reg, box[:2])
+    bw, bh = (ih * W / H, ih) if iw / ih > W / H else (iw, iw * H / W)
+    k = min(1.0, 2.0 * H / bh)                       # keep ~2x headroom over the output
+    if k < 1.0:
+        im = im.resize((round(iw * k), round(ih * k)), Image.LANCZOS)
+        iw, ih, bw, bh = im.width, im.height, bw * k, bh * k
+    mv = shot.get("move", {"from": [0.5, 0.5, 1.0], "to": [0.5, 0.5, 1.06]})
+    f0, f1 = mv["from"], mv["to"]
+    n = max(2, round(dur * FPS))
+    cmd = ["ffmpeg", "-y", "-v", "error", "-f", "rawvideo", "-pix_fmt", "rgb24", "-s", f"{W}x{H}",
+           "-r", str(FPS), "-i", "-"]
+    if shot.get("audio_from"):              # room tone from a clip of the same job (stills have no sound)
+        asrc, a0 = shot["audio_from"]
+        cmd += ["-ss", str(a0), "-t", f"{n / FPS:.3f}", "-i", asrc]
+    else:
+        cmd += ["-f", "lavfi", "-t", f"{n / FPS:.3f}", "-i", "anullsrc=r=48000:cl=stereo"]
+    vf = ["setsar=1"] + ([grade] if grade else [])
+    chain, last = f"[0:v]{','.join(vf)}[v0]", "v0"
+    for j, (t0, t1, x, y, w, h) in enumerate(shot.get("blur", [])):
+        chain += (f";[{last}]split[a{j}][b{j}];[b{j}]crop={w}:{h}:{x}:{y},boxblur=28:3[c{j}];"
+                  f"[a{j}][c{j}]overlay={x}:{y}:enable='between(t,{t0},{t1})'[v{j+1}]")
+        last = f"v{j+1}"
+    chain += ";[1:a]aresample=48000,aformat=channel_layouts=stereo,afade=t=in:d=0.08[aa]"
+    cmd += ["-filter_complex", chain, "-map", f"[{last}]", "-map", "[aa]",
+            "-c:v", "libx264", "-preset", "medium", "-crf", "14", "-pix_fmt", "yuv420p",
+            "-c:a", "pcm_s16le", "-ar", "48000", "-ac", "2", "-shortest", str(out)]
+    pr = subprocess.Popen(cmd, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
+    for i in range(n):
+        u = ease(i / (n - 1))
+        cx, cy, z = (a + (b - a) * u for a, b in zip(f0, f1))
+        ww, wh = bw / z, bh / z
+        x0 = min(max(cx * iw - ww / 2, 0), iw - ww)
+        y0 = min(max(cy * ih - wh / 2, 0), ih - wh)
+        fr = im.transform((W, H), Image.EXTENT, (x0, y0, x0 + ww, y0 + wh), resample=Image.BICUBIC)
+        pr.stdin.write(fr.tobytes())
+    pr.stdin.close()
+    err = pr.stderr.read().decode()
+    if pr.wait():
+        sys.stderr.write(err[-1500:])
+        raise SystemExit(f"still render failed: {shot['src']}")
+    return n / FPS
+
+
 def render_shot(shot, out, grade, mute):
+    if Path(shot["src"]).suffix.lower() in IMG_EXT:
+        return render_still(shot, out, grade)
     dur = shot["out"] - shot["in"]
-    vf = [f"scale={W}:{H}:force_original_aspect_ratio=increase:flags=lanczos",
+    pre = [f"crop={shot['crop'][2]}:{shot['crop'][3]}:{shot['crop'][0]}:{shot['crop'][1]}"] if shot.get("crop") else []
+    vf = pre + [f"scale={W}:{H}:force_original_aspect_ratio=increase:flags=lanczos",
           f"crop={W}:{H}", f"fps={FPS}", "setsar=1"]
     if grade:
         vf.append(grade)
@@ -77,6 +147,8 @@ def main():
     ap.add_argument("--lut", help="R2 reel grade cube (~/.local/vlogtools/gR2.cube)")
     ap.add_argument("--ungraded", action="store_true", help="test render without the R2 grade")
     ap.add_argument("-o", "--out", default=str(HERE / "renders"))
+    ap.add_argument("--shots-only", action="store_true",
+                    help="render the shots into work/<id>/ and stop (pre-render frame gate)")
     a = ap.parse_args()
     cut = json.loads(Path(a.cut).read_text())
     if a.lut:
@@ -100,6 +172,9 @@ def main():
             t += render_shot(shot, p, grade, mute)
             segs.append(p)
     body_end = t
+    if a.shots_only:
+        print(f"shots in {work}  body {body_end:.2f}s")
+        return
     card = work / "endcard.png"
     (L.endcard_store() if cut.get("end") == "store" else L.endcard()).convert("RGB").save(card)
     ec = work / "endcard.mov"
@@ -113,6 +188,23 @@ def main():
     body = work / "body.mov"
     run(["ffmpeg", "-y", "-v", "error", "-f", "concat", "-safe", "0", "-i", str(lst),
          "-c:v", "copy", "-c:a", "pcm_s16le", str(body)])
+
+    # 1b. ambience bed (stills reels have no sound of their own): clips concatenated with
+    # short fades, trimmed to the body, placed under the whooshes
+    bed = None
+    if cut.get("bed"):
+        bd = cut["bed"]; ins, parts = [], []
+        for k, (src, b0, b1) in enumerate(bd["clips"]):
+            ins += ["-ss", str(b0), "-t", f"{b1 - b0:.3f}", "-i", src]
+            parts.append(f"[{k}:a]aresample=48000,aformat=channel_layouts=stereo,"
+                         f"afade=t=in:d=0.25,afade=t=out:st={b1 - b0 - 0.25:.3f}:d=0.25[b{k}]")
+        n_b = len(bd["clips"])
+        g = (";".join(parts) + ";" + "".join(f"[b{k}]" for k in range(n_b)) +
+             f"concat=n={n_b}:v=0:a=1,volume={bd.get('gain_db', 0)}dB,atrim=0:{body_end:.3f},"
+             f"afade=t=in:d=0.3,afade=t=out:st={body_end - 0.4:.3f}:d=0.4[bed]")
+        bed = work / "bed.wav"
+        run(["ffmpeg", "-y", "-v", "error", *ins, "-filter_complex", g, "-map", "[bed]",
+             "-c:a", "pcm_s16le", str(bed)])
 
     # 2. stripe pass clip (RGBA) once
     pdir = work / "pass"; pdir.mkdir()
@@ -144,6 +236,9 @@ def main():
     # whooshes under each pass
     amix = ["[0:a]anull[a0]"]
     alabels = ["[a0]"]
+    if bed:
+        inputs += ["-i", str(bed)]
+        amix.append(f"[{n}:a]anull[bd]"); alabels.append("[bd]"); n += 1
     for ci, tc in enumerate(cuts_at):
         st = max(0.0, tc - L.PASS_CUT / FPS - 0.12)
         inputs += ["-i", str(SFX)]
@@ -161,11 +256,12 @@ def main():
 
     # 4. loudness: FD pipeline target via fd_master (-14 LUFS / -1.0 dBTP, two-pass)
     outdir = Path(a.out); outdir.mkdir(parents=True, exist_ok=True)
-    final = outdir / f"FD {cut['name']} - INSTAGRAM 1080x1920.mp4"
+    tag = "INSTAGRAM" if grade else "UNGRADED PREVIEW"
+    final = outdir / f"FD {cut['name']} - {tag} 1080x1920.mp4"
     fd_master.master(pre, final)
     manifest = dict(id=cut["id"], final=str(final), duration=round(total, 3), graded=bool(grade),
                     lut=a.lut, beats=[dict(num=b["num"], word=b["word"], t=round(bt, 3),
-                                           shots=[s["src"] for s in b["shots"]])
+                                           shots=[Path(s["src"]).name for s in b["shots"]])
                                       for b, bt in zip(cut["beats"], beat_t)],
                     passes_at=[round(c, 3) for c in cuts_at])
     (outdir / f"{cut['id']}.manifest.json").write_text(json.dumps(manifest, indent=2))
