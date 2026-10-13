@@ -5,8 +5,8 @@
 
 The v2.1 store ads open on the product photo alone (white panel, black below) for about
 0.5 s before the FD logo, title and price animate in. This grabs a frame from that clean
-stretch (t <= 0.3 s), keeps only the white product panel, and sets it on black under the
-beat-plate zone with a raked FD stripe band below it. Nothing from the ad's graphics
+stretch (t <= 0.3 s), cuts the product out of the white panel and scales it to fill a white
+field that bleeds to the frame edges under the beat-plate zone, with a raked FD stripe band on top. Nothing from the ad's graphics
 survives: the grab is before they appear, and only the white panel is kept.
 """
 import subprocess
@@ -14,13 +14,15 @@ import sys
 import tempfile
 from pathlib import Path
 
-from PIL import Image
+from PIL import Image, ImageFilter
 
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 import livery as L  # noqa: E402
 
 PANEL_Y = 520          # panel top: clear of the beat plate (board ends ~y 440)
+FILL_MARGIN = 40       # white kept round the product inside the field
+MASK_LO, MASK_HI = 196, 236   # luma ramp for blending the product into the field
 
 
 def main(src, t, out):
@@ -36,19 +38,30 @@ def main(src, t, out):
     white = [y for y, v in enumerate(rows) if v > 200]
     top, bot = white[0], white[-1]
     # product bbox inside the panel (pixels darker than the backdrop)
-    mask = g.crop((0, top, w, bot)).point(lambda v: 255 if v < 225 else 0)
+    mask = g.crop((0, top, w, bot)).point(lambda v: 255 if v < MASK_LO else 0)
     bb = mask.getbbox()
-    y0 = max(top, top + bb[1] - 90)
-    y1 = min(bot, top + bb[3] + 90)
-    panel = fr.crop((0, y0, w, y1))
+    # Fill the frame: the studio backdrop bleeds edge to edge below the beat board, and the
+    # product is scaled up to fill that white field (Omarie, 13 Oct: "make the F8 product
+    # cards fill the frame"). The board sits on black above a raked stripe band.
+    prod = fr.crop((bb[0], top + bb[1], bb[2], top + bb[3]))
+    bg = fr.getpixel((5, top + 5))
+    field_y = PANEL_Y - 20
     card = Image.new("RGBA", (L.W, L.H), (0, 0, 0, 255))
-    scale = L.W / panel.width
-    panel = panel.resize((L.W, round(panel.height * scale)), Image.LANCZOS)
-    card.paste(panel, (0, PANEL_Y))
+    card.paste(Image.new("RGBA", (L.W, L.H - field_y), bg + (255,)), (0, field_y))
+    room_w, room_h = L.W - 2 * FILL_MARGIN, L.H - field_y - 2 * FILL_MARGIN - 60
+    scale = min(room_w / prod.width, room_h / prod.height)
+    prod = prod.resize((round(prod.width * scale), round(prod.height * scale)), Image.LANCZOS)
+    py = field_y + FILL_MARGIN + (room_h - prod.height) // 2
+    # Near-white pixels fade out so the photo's own panel edge and faint print behind the
+    # product don't show at this size; the field is white, so highlights lose nothing.
+    a = prod.convert("L").point(lambda v: 0 if v >= MASK_HI else 255 if v <= MASK_LO
+                                else round(255 * (MASK_HI - v) / (MASK_HI - MASK_LO)))
+    a = a.filter(ImageFilter.GaussianBlur(1.2))
+    card.paste(prod, ((L.W - prod.width) // 2, py), a)
     band = L.stripe_band(L.W, 30)
-    card.alpha_composite(band, (0, PANEL_Y + panel.height + 24))
+    card.alpha_composite(band, (0, field_y - 30))
     card.convert("RGB").save(out)
-    print(out, "panel", panel.size, "src rows", y0, y1)
+    print(out, "product", prod.size, "scale", round(scale, 2), "at y", py)
 
 
 if __name__ == "__main__":
