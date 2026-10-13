@@ -14,31 +14,36 @@ Omarie, 2026-09-27: "no more ultracode unless necessary." Multi-agent workflows 
 
 ## The standard for every job, and which style to use (every session, every branch)
 
-Omarie, 2026-09-28: "My locked on artifact is my standard for any work I work on", and "make sure every
-session/branch/everything knows and implements it no matter what when creating any work but ask beforehand what
-style should be used."
+Omarie, 2026-09-28: "My locked on artifact is my standard for any work I work on". On 2026-10-13 he replaced the
+"ask beforehand what style should be used" part: "always try to make something new that we havent done to add to our
+layout designs", then "yes make it a standing rule".
 
-1. **Ask which style first.** Before building any new piece of work (an ad, a vlog, a reel, a poster, a page), ask
-   Omarie which style to use, as a click (AskUserQuestion) with your recommendation first. Offer the approved styles:
-   **Locked-On**, the standard (https://claude.ai/artifact/WCe1qHhTrMDw7bkDaskeQm); **Quick-Promo** when a promo has to go out in under
-   about 30 minutes; and the workstream's own approved formats where they fit (Fast Cut and Reel Cut for Anti Stock,
-   the Sep 15 rally v2 build for Supercar Experience vlogs). Also offer the proposed looks on the same page
-   (**Now Boarding**, **Paste-Up**), marked as proposed. For a page people use to find things (an index, a
-   directory, a deliverables list, a to-do board), offer the **iPhone index layout** first: Apple's system font, iOS
-   colours, a tab bar and one search across everything. Omarie picked it on 2026-09-28 ("save this apple layout it
-   looks so nice"). It lives in `design-systems/iphone-index/`, with `qa.js` to run before publishing. Skip the
-   question only when he has already named the style for this piece.
+1. **A new look by default.** For any new piece of work (an ad, a vlog, a reel, a poster), don't ask which style.
+   Invent a fresh look that isn't **Locked-On** (https://claude.ai/artifact/WCe1qHhTrMDw7bkDaskeQm), **Quick-Promo**,
+   **Now Boarding**, **Paste-Up** or any earlier proposed look, in the workstream's own brand and to Locked-On's
+   quality bar. Write a one-page spec and recipe for it (type, colour, motion, transitions, grade, end card), and add
+   it to the Locked-On page as a proposed look so the layout designs keep growing. Use an approved style (Locked-On;
+   Quick-Promo for a promo due in about 30 minutes; Fast Cut and Reel Cut for Anti Stock; the Sep 15 rally v2 build
+   for Supercar Experience vlogs) only when he names one for the piece, or for a new version of something that
+   already has a look. For a page people use to find things (an index, a directory, a deliverables list, a to-do
+   board), use the **iPhone index layout**: Apple's system font, iOS colours, a tab bar and one search across
+   everything. Omarie picked it on 2026-09-28 ("save this apple layout it looks so nice"). It lives in
+   `design-systems/iphone-index/`, with `qa.js` to run before publishing.
 
    To show Omarie a post before it goes out (a carousel, a feed post, a reel set), present it on the **post mockup**
    page: the post in an Instagram phone frame beside its posting kit (versions, posting order with Save buttons,
    caption, the 9:16 cut, notes). He approved it on 2026-10-10 ("this is a great model and way to show what it would
    look like save this"). It lives in `design-systems/post-mockup/`, with `qa.js` to run before publishing. The
-   style question above is still asked for the post itself.
+   post itself gets a new look, as above.
 2. **Then build that style all the way**: its techniques, process and quality bar, in the workstream's own brand. The
    page's gold on black is Supercar Experience's; Formula Dynamics keeps FD red and Bebas Neue, Anti Stock keeps its
    own look, and two brands never share a video.
-3. **Agents never ask Omarie themselves.** The lead asks, then names the style in the brief. An agent
-   whose brief names no style stops and asks the lead.
+3. **Agents never pick the look themselves.** The lead names it in the brief: "a new look", with the looks to
+   avoid, or the style Omarie named. An agent whose brief names neither stops and asks the lead.
+4. **Go with the recommendation** (Omarie, 2026-10-13: "you can enter whats recommended in the [chat] for me").
+   When a decision has a clearly recommended option, take it, say in one line what was picked, and carry on,
+   instead of stopping to ask. Spending credits, buying, posting, publishing to someone else, and Dropbox or
+   artifact moves and deletes still get his click.
 
 The rules and the feedback log are in `supercar-experience/09-campaign-ads/HOUSE-STYLE.md` on the SE branch
 (`claude/supercar-rental-ad-graphics-o64vo3`).

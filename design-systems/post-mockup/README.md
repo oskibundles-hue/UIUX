@@ -21,8 +21,8 @@ design with sample content only. Real files, links and names never go in this pu
 ## When to use it
 
 Use it whenever a job ends in a post Omarie approves and posts himself: a carousel, a single feed post, or a set
-with a Reel. It presents the work; it doesn't style it. Ask which style the post itself takes first (CLAUDE.md, rule
-1). It was first used for the FD Opus exhaust tips carousel in tan and black, on 10 Oct 2026.
+with a Reel. It presents the work; it doesn't style it. The post itself gets a new look unless Omarie names a style (CLAUDE.md,
+rule 1). It was first used for the FD Opus exhaust tips carousel in tan and black, on 10 Oct 2026.
 
 ## The design
 

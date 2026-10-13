@@ -25,8 +25,8 @@ the notes are missing, tell the lead and use the files the playbooks name.
 in the workstream playbook the brief names.
 
 **Check the style named in the brief.** The render must be the style the lead named (Locked-On,
-Quick-Promo, a workstream format, or a proposed look). A render in a different style, or a brief that
-names none, is a FAIL.
+Quick-Promo, a workstream format, a proposed look, or "a new look"). A new look FAILs if it repeats a look
+the brief said to avoid, or has no spec. A render in a different style, or a brief that names none, is a FAIL.
 
 **The bar is the Locked-On style guide** (Omarie, 2026-09-28: "My locked on artifact is my standard for
 any work I work on"): https://claude.ai/artifact/WCe1qHhTrMDw7bkDaskeQm. Judge every render, in any workstream, against its
