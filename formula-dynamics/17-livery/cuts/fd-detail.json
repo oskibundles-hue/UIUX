@@ -86,18 +86,18 @@
       [
        0,
        3.0,
-       680,
+       700,
        220,
-       340,
+       320,
        200
       ],
       [
        0,
        3.0,
-       580,
+       560,
        0,
-       200,
-       50
+       400,
+       60
       ]
      ],
      "_note": "blur: third-party parts box (top right) and a background plate frame (top edge)"
