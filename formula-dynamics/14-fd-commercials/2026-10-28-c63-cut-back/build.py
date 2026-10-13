@@ -7,7 +7,8 @@ One car, one question: open on the payoff (a rev), cut back to the stock car
 Pipeline: ffmpeg decodes each source window (autorotated to 2160x3840 portrait)
 -> numpy/OpenCV per frame: plate + meter redaction (tracked, in source space),
 crop/push, grade, text -> raw frames piped to libx264. Audio is rebuilt in numpy
-from the same windows plus self-synthesised sub hits, then two-pass loudnorm.
+from the same windows only (the car's own sound, no music, no added effects),
+then two-pass loudnorm.
 
 Usage:
   python3 build.py --raw <dir with IMG_0325/0579/0590.MOV> [--stills] [--only-audio]
@@ -37,7 +38,7 @@ RED = fd_brand.rgb(fd_brand.RED)
 ICON = FD / "02-logos/png-transparent/fd-icon-mark-only--white_1000w.png"
 EXPORTS = HERE / "exports"
 QA = EXPORTS / "qa"
-OUT_MP4 = EXPORTS / "FD C63 - Cut Back (exhaust, 17s) - INSTAGRAM 1080x1920.mp4"
+OUT_MP4 = EXPORTS / "FD C63 - Cut Back (exhaust, 15s) - INSTAGRAM 1080x1920.mp4"
 OUT_COVER = EXPORTS / "FD C63 - Cut Back - cover STATIC 1080x1920.jpg"
 
 # 9:16 keep-out zones: top 11%, bottom 20%, left 5%, right 16%
@@ -50,6 +51,8 @@ SAFE = dict(x0=int(W * 0.05), x1=int(W * 0.84), y0=int(H * 0.11), y1=int(H * 0.8
 PLATE_0590 = (690, 745, 1100, 1015)
 METER_0590 = (632, 2075, 910, 2480)       # LCD readout of the sound meter
 PLATE_0325 = (1165, 1880, 1395, 2050)
+LIVERY_0325 = (1495, 1610, 1610, 1750)    # another customer's car: sponsor logo + name on its side
+CRATE_0325 = (1640, 2050, 1780, 2150)     # printed maker emblems on a parts box by the tail light
 
 # ---------------------------------------------------------------------------
 # Shot list. crop = ((cx, cy, w) at start, (cx, cy, w) at end) in source px;
@@ -59,28 +62,34 @@ SHOTS = [
     dict(name="hook", src="IMG_0590.MOV", t_in=63.40, dur=2.0,
          crop=((1530, 1120, 1260), (1565, 1200, 1120)),
          redact=[("plate", PLATE_0590, (6, 3)), ("meter", METER_0590, (3, 4))]),
+    # crop top held at source y 1380: the lift posts' maker branding sits above y 1290
     dict(name="before", src="IMG_0325.MOV", t_in=4.25, dur=3.0,
-         crop=((900, 1900, 1800), (930, 1900, 1660)),
-         redact=[("plate", PLATE_0325, (6, 3))]),
-    # 0579 windows start at 7.2 s: before that a branded hang tag (part maker's logo,
-    # serial and address) is in frame, and part brands stay off screen.
-    dict(name="parts1", src="IMG_0579.MOV", t_in=7.20, dur=1.0,
-         crop=((1080, 1920, 2160), (1080, 1800, 1900)), redact=[]),
-    dict(name="parts2", src="IMG_0579.MOV", t_in=8.30, dur=1.0,
-         crop=((1080, 1920, 1880), (1080, 1920, 2100)), redact=[]),
-    dict(name="parts3", src="IMG_0579.MOV", t_in=9.60, dur=1.3,
-         crop=((1080, 1920, 2160), (1080, 2000, 1900)), redact=[]),
-    dict(name="parts4", src="IMG_0579.MOV", t_in=11.10, dur=1.2,
-         crop=((1080, 2100, 1750), (1080, 2100, 1900)), redact=[]),
-    dict(name="parts5", src="IMG_0579.MOV", t_in=12.35, dur=1.5,
-         crop=((1080, 1920, 2160), (1080, 1980, 2000)), redact=[]),
-    dict(name="coldstart", src="IMG_0590.MOV", t_in=6.15, dur=2.45,
+         crop=((1150, 2500, 1260), (1150, 2447, 1200)),
+         redact=[("plate", PLATE_0325, (6, 3)), ("livery", LIVERY_0325, (3, 3)),
+                 ("crate", CRATE_0325, (3, 2))]),
+    # Parts (0579). Part brands stay off screen, by framing only:
+    #  - the hang tag (maker's logo, serial, address) hangs under the X-pipe's second brace;
+    #    parts1 is framed left of / above it for every frame;
+    #  - the muffler can carries an etched maker name and text lines on its side; parts2 and
+    #    parts3 are framed below / above the can.
+    dict(name="parts1", src="IMG_0579.MOV", t_in=5.10, dur=1.1,
+         crop=((530, 1400, 1060), (500, 1650, 980)), redact=[]),
+    dict(name="parts2", src="IMG_0579.MOV", t_in=7.45, dur=0.5,
+         crop=((420, 3200, 800), (420, 3260, 760)), redact=[]),
+    dict(name="parts3", src="IMG_0579.MOV", t_in=10.35, dur=1.3,
+         crop=((600, 1740, 1200), (800, 1800, 1100)), redact=[]),
+    dict(name="coldstart", src="IMG_0590.MOV", t_in=6.20, dur=2.45, a_pre=0.50,
          crop=((1330, 1475, 1659), (1350, 1475, 1590)),
          redact=[("plate", PLATE_0590, (6, 3)), ("meter", METER_0590, (3, 4))]),
-    dict(name="rev", src="IMG_0590.MOV", t_in=54.45, dur=2.55,
+    # the new burnt piping under the bumper, between the tip pairs; source y 1027-2093
+    # keeps the plate (ends y 1015) out and the meter's logo box far below
+    dict(name="piping", src="IMG_0590.MOV", t_in=53.90, dur=0.8,
+         crop=((880, 1560, 520), (880, 1580, 470)),
+         redact=[("plate", PLATE_0590, (6, 3)), ("meter", METER_0590, (3, 4))]),
+    dict(name="rev", src="IMG_0590.MOV", t_in=54.70, dur=2.30,
          crop=((1420, 1300, 1400), (1420, 1300, 1400)),
          redact=[("plate", PLATE_0590, (6, 3)), ("meter", METER_0590, (3, 4))]),
-    dict(name="end", src="IMG_0590.MOV", t_in=57.00, dur=1.5,
+    dict(name="end", src="IMG_0590.MOV", t_in=57.00, dur=1.7,
          crop=((1420, 1300, 1400), (1420, 1300, 1400)),
          redact=[("plate", PLATE_0590, (6, 3)), ("meter", METER_0590, (3, 4))],
          darken=True),
@@ -106,7 +115,7 @@ CARDS = [
     dict(id="hook", t_in=0.0, t_out=shot_at("before")["t0"]),
     dict(id="SEP 29", t_in=shot_at("before")["t0"], t_out=shot_at("before")["t0"] + 1.0, typed=True),
     dict(id="OCT 7", t_in=P1, t_out=P1 + 1.0, typed=True),
-    dict(id="NEW.", t_in=P1 + 7 / FPS, t_out=P1 + 7 / FPS + 0.7),
+    dict(id="NEW.", t_in=P1 + 6 / FPS, t_out=P1 + 6 / FPS + 0.7),     # on the X-pipe
     dict(id="endmark", t_in=shot_at("end")["t0"], t_out=TOTAL),
 ]
 
@@ -137,7 +146,7 @@ def card_hook():
         size -= 2
     f = font(size)
     x = SAFE["x0"] + 10
-    y = SAFE["y0"] + 30
+    y = SAFE["y0"] + 70                       # 40 px lower than v1: clears the grid's 3:4 crop
     asc, desc = f.getmetrics()
     lh = int(size * 0.92)
     d.text((x, y), l1, font=f, fill=(255, 255, 255, 255))
@@ -406,27 +415,6 @@ def read_audio(path, t_in, dur):
     return a.reshape(-1, 2).copy()
 
 
-def sub_hit(dur=0.35, f0=58.0, level=0.5):
-    n = int(dur * SR); t = np.arange(n) / SR
-    f = f0 * (1 + 0.6 * np.exp(-t * 30))                      # small pitch drop
-    ph = 2 * np.pi * np.cumsum(f) / SR
-    env = np.exp(-t * 9) * np.minimum(1, t / 0.004)
-    s = np.sin(ph) * env * level
-    return np.stack([s, s], axis=1)
-
-
-def whoosh(dur=0.45, level=0.12, seed=7):
-    rng = np.random.default_rng(seed)
-    n = int(dur * SR)
-    x = rng.standard_normal(n)
-    # crude band-pass via moving averages
-    lp = np.convolve(x, np.ones(12) / 12, mode="same")
-    bp = lp - np.convolve(lp, np.ones(120) / 120, mode="same")
-    env = np.sin(np.linspace(0, np.pi, n)) ** 2 * np.linspace(0.4, 1, n)
-    s = bp / (np.abs(bp).max() + 1e-9) * env * level
-    return np.stack([s, s * 0.9], axis=1)
-
-
 def fade(a, fin=0.008, fout=0.012):
     n = len(a); i = int(fin * SR); o = int(fout * SR)
     if i: a[:i] *= np.linspace(0, 1, i)[:, None]
@@ -434,28 +422,25 @@ def fade(a, fin=0.008, fout=0.012):
     return a
 
 
-GAIN_DB = {"hook": 0, "before": 0, "parts1": -4, "parts2": -4, "parts3": -4, "parts4": -4, "parts5": -4,
-           "coldstart": 0, "rev": 0, "end": 0}
+GAIN_DB = {"hook": 0, "before": 0, "parts1": 0, "parts2": 0, "parts3": 0,
+           "coldstart": 0, "piping": 0, "rev": 0, "end": 0}
+A_POST = {"before": 1.20}      # L-cut: the stock car's rev and idle carry 1.2 s into the parts
 
 
 def build_audio(raw, wav_path):
     N = int(round(TOTAL * SR))
     mix = np.zeros((N + SR, 2), np.float32)
+    # Each window's own audio only. J-cut (a_pre): the cold start's own cranking comes in
+    # under the last parts cut; L-cut (A_POST): the stock rev decays under the first.
     for s in SHOTS:
-        a = read_audio(raw / s["src"], s["t_in"], s["dur"])
-        a = a[: int(round(s["dur"] * SR))]
-        a = fade(a, fin=0.0 if s["name"] == "hook" else 0.008,
-                 fout=1.3 if s["name"] == "end" else 0.012) * (10 ** (GAIN_DB[s["name"]] / 20))
-        i0 = int(round(s["t0"] * SR))
+        pre, post = s.get("a_pre", 0.0), A_POST.get(s["name"], 0.0)
+        dur = s["dur"] + pre + post
+        a = read_audio(raw / s["src"], s["t_in"] - pre, dur)
+        a = a[: int(round(dur * SR))]
+        a = fade(a, fin=0.0 if s["name"] == "hook" else (0.15 if pre else 0.008),
+                 fout=1.3 if s["name"] == "end" else (0.50 if post else 0.012)) * (10 ** (GAIN_DB[s["name"]] / 20))
+        i0 = int(round((s["t0"] - pre) * SR))
         mix[i0:i0 + len(a)] += a
-    # sub hits on the parts cuts and into the payoff; whoosh into the payoff
-    for nm in ("parts1", "parts2", "parts3", "parts4", "parts5", "coldstart"):
-        i0 = int(round(shot_at(nm)["t0"] * SR))
-        h = sub_hit(level=0.55 if nm == "coldstart" else 0.4)
-        mix[i0:i0 + len(h)] += h
-    w = whoosh()
-    i1 = int(round(shot_at("coldstart")["t0"] * SR)) - len(w)
-    mix[i1:i1 + len(w)] += w
     mix = mix[:N]
     mix *= 0.7 / max(1e-9, float(np.abs(mix).max()))   # headroom before 16-bit; loudnorm sets level
     pcm = (np.clip(mix, -1, 1) * 32767).astype("<i2").tobytes()
@@ -519,6 +504,11 @@ def main():
             enc.stdin.write(o.tobytes())
             if meta["boxes"]:
                 log.append(dict(frame=fidx, t=round(tsec, 3), shot=s["name"], **meta))
+            if s["name"].startswith("parts") or s["name"] == "piping":
+                # every frame of the parts (brand scan) and of the piping close-up
+                sd = work / "scan_frames"; sd.mkdir(exist_ok=True)
+                Image.fromarray(o).resize((540, 960), Image.LANCZOS).save(
+                    sd / f"{'parts' if s['name'].startswith('parts') else 'piping'}__{fidx:04d}.jpg", quality=92)
             if meta["boxes"] and fidx % 2 == 0:
                 # QA crops written now from the final frame (text included)
                 save_qa_tiles(o, meta, s["name"], fidx, work)
@@ -571,6 +561,25 @@ def make_qa_sheets(work):
         for i, p in enumerate(ps):
             sheet.paste(Image.open(p), ((i % cols) * 240, (i // cols) * 240))
         sheet.save(QA / f"redaction_{shot}_{nm}.jpg", quality=90)
+    # brand scan: every frame of the parts section, and every frame of the piping shot,
+    # 540x960 tiles (half the delivered size), 6 x 2 per sheet, stamped with timeline time
+    for old in QA.glob("brandscan_*.jpg"):
+        old.unlink()
+    for old in QA.glob("piping_*.jpg"):
+        old.unlink()
+    sf = work / "scan_frames"
+    for kind, stem in (("parts", "brandscan_parts"), ("piping", "piping_every_frame")):
+        ps = sorted(sf.glob(f"{kind}__*.jpg"))
+        for k in range(0, len(ps), 12):
+            sheet = Image.new("RGB", (6 * 540, 2 * 960), (20, 20, 20))
+            for i, pth in enumerate(ps[k:k + 12]):
+                tile = Image.open(pth)
+                fi = int(pth.stem.split("__")[1])
+                d = ImageDraw.Draw(tile)
+                d.rectangle([0, 0, 170, 44], fill=(0, 0, 0))
+                d.text((6, 4), f"{fi / FPS:05.2f}s f{fi}", font=font(36), fill=(255, 255, 0))
+                sheet.paste(tile, ((i % 6) * 540, (i // 6) * 960))
+            sheet.save(QA / f"{stem}_{k // 12 + 1:02d}.jpg", quality=88)
     # whole render, 1 frame per 0.5 s
     sd = work / "every05"; sd.mkdir(exist_ok=True)
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(OUT_MP4), "-vf",
