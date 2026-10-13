@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: formula-dynamics-job-board
+    runtime: static
+    rootDir: formula-dynamics/16-website
+    buildCommand: echo "static site, no build"
+    staticPublishPath: .
+    headers:
+      - path: /media/*
+        name: Cache-Control
+        value: public, max-age=604800
