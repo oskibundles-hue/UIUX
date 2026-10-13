@@ -3,9 +3,9 @@
     python3 generate.py <spec.json> <out_dir>                # the spec's variation (studio by default)
     python3 generate.py <spec.json> <out_dir> --variations   # every variation side by side, to pick from
 
-Writes 01.png to 05.png, spread45.png (slides 4 and 5 as one 2160-wide spread) and layout.json
-(every text, part and subject box, for qa.py). Everything brand-specific comes from the spec;
-see README.md for its fields. Needs numpy, Pillow and scipy.
+Writes 01.png to 05.png, spread45.png (slides 4 and 5 as one 2160-wide spread; the cutout build only)
+and layout.json (every text, part, subject and photo box, for qa.py). Everything brand-specific comes
+from the spec; see README.md for its fields and LAYOUT.md for the rules. Needs numpy, Pillow and scipy.
 """
 import json
 import os
@@ -15,7 +15,11 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFilter, ImageFont
 from scipy import ndimage
 
+sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+from photos import clean_cut, panel, photo, redact  # noqa: E402
+
 W, H = 1080, 1350
+MARGIN = 40   # every word and every photo frame stays this far inside the slide (LAYOUT.md)
 BACKGROUND = {'soft_fill', 'ghost', 'vertical'}   # type behind everything; may bleed off the frame
 
 # ---- variations: a theme (the colours of the studio and the type behind) and a layout. The light grey
@@ -43,9 +47,16 @@ def mirror(layout, width):
     out = []
     for e in layout:
         e = dict(e)
+        if e['type'] == 'steps':  # the grid is centred already
+            out.append(e)
+            continue
         for k in ('x', 'cx'):
             if k in e:
                 e[k] = width - e[k]
+        if e['type'] in ('panel', 'rule'):  # placed by their left edge, with no anchor
+            e['x'] -= e['w']
+            out.append(e)
+            continue
         default = 'lb' if e['type'] == 'vertical' else 'lt'
         a = e.get('anchor', default)
         e['anchor'] = flip[a[0]] + a[1]
@@ -63,8 +74,8 @@ DEFAULT_LAYOUT = {
         {'type': 'ghost', 'text': '{brand}', 'px': 70, 'x': 1030, 'y': 60, 'anchor': 'rt', 'width': 2, 'spacing': 14},
         {'type': 'vertical', 'text': '{cover_word}', 'px': 470, 'x': -62, 'y': 1390},
         {'type': 'part', 'ref': 'hero', 'w': 1000, 'cx': 640, 'cy': 520, 'rot': -4},
-        {'type': 'echo', 'text': '{model}', 'px': 170, 'x': 1040, 'y': 1000, 'anchor': 'rt'},
-        {'type': 'label', 'text': '{product}', 'px': 46, 'x': 1034, 'y': 1250, 'anchor': 'rt', 'spacing': 9},
+        {'type': 'echo', 'text': '{model}', 'px': 170, 'x': 1028, 'y': 1000, 'anchor': 'rt'},
+        {'type': 'label', 'text': '{product}', 'px': 46, 'x': 1020, 'y': 1250, 'anchor': 'rt', 'spacing': 9},
     ],
     '2': [  # stacked headline top left, two parts floating, feature list mid left
         {'type': 'soft_fill', 'text': '{brand}', 'px': 520, 'x': 660, 'y': 330, 'anchor': 'mm', 'alpha': 70},
@@ -107,6 +118,53 @@ DEFAULT_LAYOUT = {
 }
 
 
+# ---- the photo build: the same look made from real photos. Framed photo panels stand in for the
+# renders, and slide 3 is a 2x2 grid of numbered steps. Five single slides, no spread.
+PHOTO_LAYOUT = {
+    '1': [  # hook: the vertical word up the side, the subject framed beside it, a part floating over the corner
+        {'type': 'vertical', 'text': '{cover_word}', 'px': 300, 'x': 20, 'y': 675, 'anchor': 'lm', 'fit': True},
+        {'type': 'panel', 'ref': 'hero', 'x': 300, 'y': 110, 'w': 740, 'h': 600, 'focus': [0.5, 0.55]},
+        {'type': 'part', 'ref': 'hero_part', 'w': 400, 'cx': 870, 'cy': 1030, 'rot': -8},
+        {'type': 'echo', 'text': '{model}', 'px': 260, 'x': 290, 'y': 839},
+        {'type': 'label', 'text': '{job}', 'px': 50, 'x': 300, 'y': 1175, 'spacing': 9},
+        {'type': 'label', 'text': '{brand}', 'px': 30, 'x': 302, 'y': 1245, 'colour': 'brand', 'spacing': 8},
+    ],
+    '2': [  # the part: one large clean cutout and a one-line headline
+        {'type': 'soft_fill', 'text': '{model}', 'px': 760, 'x': 680, 'y': 620, 'anchor': 'mm', 'alpha': 70},
+        {'type': 'echo', 'text': '{category}', 'px': 120, 'x': 40, 'y': 200},
+        {'type': 'label', 'text': '{subject_name}', 'px': 48, 'x': 46, 'y': 330, 'spacing': 8},
+        {'type': 'part', 'ref': 'main', 'box': [600, 900], 'cx': 720, 'cy': 790},
+        {'type': 'echo', 'text': '{part_line}', 'px': 70, 'x': 40, 'y': 1150},
+        {'type': 'label', 'text': '{job}', 'px': 40, 'x': 44, 'y': 1240, 'spacing': 7},
+    ],
+    '3': [  # the steps: four photos in tidy boxes on a clear 2x2 grid, numbered
+        {'type': 'ghost', 'text': '{subject_name}', 'px': 60, 'x': 1020, 'y': 80, 'anchor': 'rt', 'width': 2,
+         'spacing': 10},
+        {'type': 'echo', 'text': '{steps_title}', 'px': 96, 'x': 60, 'y': 140},
+        {'type': 'steps', 'items': [{'ref': 'step1', 'text': '{step_1}'}, {'ref': 'step2', 'text': '{step_2}'},
+                                    {'ref': 'step3', 'text': '{step_3}'}, {'ref': 'step4', 'text': '{step_4}'}]},
+    ],
+    '4': [  # the subject, one large framed photo
+        {'type': 'soft_fill', 'text': '{model}', 'px': 760, 'x': 480, 'y': 640, 'anchor': 'mm', 'alpha': 70},
+        {'type': 'ghost', 'text': '{category}', 'px': 60, 'x': 50, 'y': 50, 'width': 2, 'spacing': 10},
+        {'type': 'panel', 'ref': 'view', 'x': 160, 'y': 140, 'w': 760, 'h': 860},
+        {'type': 'label', 'text': '{view_line}', 'px': 46, 'x': 66, 'y': 1060, 'spacing': 12},
+        {'type': 'echo', 'text': '{subject_name}', 'px': 110, 'x': 60, 'y': 1170},
+    ],
+    '5': [  # call to action: the cutout stays clear of the ghost words
+        {'type': 'ghost', 'text': '{brand_1}', 'px': 200, 'x': 30, 'y': 90, 'width': 2},
+        {'type': 'ghost', 'text': '{brand_2}', 'px': 200, 'x': 30, 'y': 300, 'width': 2},
+        {'type': 'part', 'ref': 'closing_part', 'box': [330, 800], 'cx': 875, 'cy': 520},
+        {'type': 'echo', 'text': '{cta_1}', 'px': 84, 'x': 50, 'y': 990},
+        {'type': 'label', 'text': '{cta_2}', 'px': 40, 'x': 54, 'y': 1095, 'spacing': 5},
+        {'type': 'rule', 'x': 54, 'y': 1170, 'w': 120, 'h': 6},
+        {'type': 'label', 'text': '{brand}', 'px': 52, 'x': 50, 'y': 1195, 'spacing': 9},
+        {'type': 'label', 'text': '{handle}', 'px': 32, 'x': 54, 'y': 1255, 'colour': 'brand', 'spacing': 4},
+    ],
+}
+BUILDS = {'cutout': DEFAULT_LAYOUT, 'photo': PHOTO_LAYOUT}   # spec["build"]; cutout is the default
+
+
 def rgb(c):
     if isinstance(c, str):
         c = c.lstrip('#')
@@ -123,6 +181,9 @@ class Carousel:
             self.spec.get('theme', 'studio'), self.spec.get('layout', 'default'))
         if theme not in THEMES or self.layout not in LAYOUTS:
             raise ValueError(f'unknown theme {theme!r} or layout {self.layout!r}')
+        self.build = self.spec.get('build', 'cutout')
+        if self.build not in BUILDS:
+            raise ValueError(f'unknown build {self.build!r}')
         self.theme = THEMES[theme]
         b = self.spec['brand']
         self.font_path = self.path(b['font'])
@@ -143,6 +204,11 @@ class Carousel:
 
     def text(self, t):
         return t.format_map(self.words)
+
+    def col(self, c, default):
+        """A colour from an element: a hex, an [r, g, b], or the names "brand" and "ink"."""
+        named = {'brand': self.colour, 'ink': self.ink}
+        return rgb(default) if c is None else named[c] if c in ('brand', 'ink') else rgb(c)
 
     # ---- backdrop
     def studio(self, w, h):
@@ -207,10 +273,13 @@ class Carousel:
             lay = self.text_layer(text, px, fill=rgb(e.get('fill', self.theme['fill'])) + (255,), stroke=3,
                                   stroke_col=rgb(e.get('stroke', self.theme['stroke'])) + (255,), spacing=sp)
             lay = lay.rotate(90, expand=True)
+            if e.get('fit') and lay.height > H - 2 * MARGIN + 40:  # the layer has 20 px of padding each end
+                s = (H - 2 * MARGIN + 40) / lay.height
+                lay = lay.resize((int(lay.width * s), int(lay.height * s)), Image.LANCZOS)
             x, y = self.put(img, lay, e['x'], e['y'], e.get('anchor', 'lb'))
             box = self.ink_box(lay, x, y)
         elif kind == 'echo':  # solid line in the brand colour with a blurred echo above and right
-            col = rgb(e.get('colour', self.colour))
+            col = self.col(e.get('colour'), self.colour)
             sp = e.get('spacing', 2)
             base = self.text_layer(text, px, fill=col + (255,), spacing=sp)
             off = int(px * 0.42)
@@ -222,16 +291,20 @@ class Carousel:
             y0 = e['y'] - off if anchor[1] == 't' else e['y']
             x, y = self.put(img, pad, e['x'], y0, anchor)
             box = self.ink_box(base, x, y + off)
+            echo_box = self.ink_box(pad, x, y, 10)   # the headline with its blurred echo
         elif kind == 'label':
-            col = rgb(e.get('colour', self.ink))
+            col = self.col(e.get('colour'), self.ink)
             lay = self.text_layer(text, px, fill=col + (255,), spacing=e.get('spacing', 5))
             x, y = self.put(img, lay, e['x'], e['y'], anchor)
             box = self.ink_box(lay, x, y)
         else:
             raise ValueError(f'unknown element type {kind!r}')
-        return {'kind': 'text', 'type': kind, 'text': text, 'box': box,
-                'layer': 'background' if kind in BACKGROUND else 'foreground',
-                'bleed': e.get('bleed', kind in BACKGROUND)}
+        rec = {'kind': 'text', 'type': kind, 'text': text, 'box': box,
+               'layer': 'background' if kind in BACKGROUND else 'foreground',
+               'bleed': e.get('bleed', kind in BACKGROUND)}
+        if kind == 'echo':
+            rec['echo_box'] = echo_box
+        return rec
 
     # ---- parts: product photos cut out with rembg beforehand, never recoloured
     def part(self, ref):
@@ -240,7 +313,9 @@ class Carousel:
         src = self.spec['parts'][ref]
         src = {'file': src} if isinstance(src, str) else src
         im = Image.open(self.path(src['file'])).convert('RGBA')
-        if src.get('split'):  # one photo of several pieces: take one piece, largest first
+        if src.get('clean') is not None:  # a rough rembg cutout: keep the largest piece, trim and fade it
+            im = clean_cut(im, **src['clean'])
+        elif src.get('split'):  # one photo of several pieces: take one piece, largest first
             pieces = self.pieces(im, src.get('open', 0))
             im = pieces[src.get('piece', 0)]
         else:
@@ -328,6 +403,49 @@ class Carousel:
         bb = lay.getchannel('A').point(lambda v: 255 if v > 128 else 0).getbbox()
         return {'kind': 'subject', 'ref': e['ref'], 'box': [x + bb[0], y + bb[1], x + bb[2], y + bb[3]]}
 
+    # ---- photos: real photos, framed. Plates are covered before anything is cropped
+    def photo_pic(self, ref):
+        key = ('photo', ref)
+        if key not in self._cache:
+            src = self.spec['photos'][ref]
+            src = {'file': src} if isinstance(src, str) else src
+            im = photo(self.path(src['file']))
+            for box in src.get('redact') or []:
+                im = redact(im, box)
+            if src.get('crop'):  # crop every face out here
+                im = im.crop(tuple(src['crop']))
+            self._cache[key] = im
+        return self._cache[key]
+
+    def draw_panel(self, img, e):
+        x, y, w, h = e['x'], e['y'], e['w'], e['h']
+        frame = panel(img, self.photo_pic(e['ref']), x, y, w, h, tuple(e.get('focus', (0.5, 0.5))),
+                      e.get('shadow', True), self.theme['shadow'])
+        return {'kind': 'panel', 'ref': e['ref'], 'box': [x, y, x + w, y + h], 'frame': frame}
+
+    def draw_steps(self, img, e):
+        """A 2x2 grid of framed photos, each with its number in the brand colour and a short label."""
+        bw, bh = e.get('box', (450, 420))
+        inset, px = e.get('inset', 60), e.get('px', 38)
+        cols, rows = [inset, img.width - inset - bw], e.get('rows', (290, 800))
+        recs = []
+        for i, item in enumerate(e['items'][:4]):
+            x, y = cols[i % 2], rows[i // 2]
+            recs.append(self.draw_panel(img, {'ref': item['ref'], 'x': x, 'y': y, 'w': bw, 'h': bh,
+                                              'focus': item.get('focus', (0.5, 0.5))}))
+            num = self.draw_text(img, {'type': 'label', 'text': item.get('num', f'{i + 1:02d}'), 'px': px,
+                                       'x': x - 2, 'y': y + bh + 22, 'colour': 'brand', 'spacing': 4})
+            words = self.draw_text(img, {'type': 'label', 'text': item['text'], 'px': px,
+                                         'x': num['box'][2] - 4, 'y': y + bh + 22, 'spacing': 6})
+            recs += [num, words]
+        return recs
+
+    def draw_rule(self, img, e):
+        box = [e['x'], e['y'], e['x'] + e['w'], e['y'] + e['h']]
+        ImageDraw.Draw(img).rectangle([box[0], box[1], box[2] - 1, box[3] - 1],
+                                      fill=self.col(e.get('colour'), self.colour))
+        return {'kind': 'rule', 'box': box}
+
     @staticmethod
     def mask_box(mask):
         ys, xs = np.where(mask)
@@ -336,7 +454,7 @@ class Carousel:
     # ---- slides
     def canvas(self, key, width):
         img = self.studio(width, H)
-        layout = self.spec.get('slides', {}).get(key) or DEFAULT_LAYOUT[key]
+        layout = self.spec.get('slides', {}).get(key) or BUILDS[self.build][key]
         if self.layout == 'mirror' and key != 'spread':  # the spread keeps its order, so it reads across the swipe
             layout = mirror(layout, width)
         recs = []
@@ -345,6 +463,12 @@ class Carousel:
                 recs.append(self.draw_part(img, e))
             elif e['type'] == 'subject':
                 recs.append(self.draw_subject(img, e))
+            elif e['type'] == 'panel':
+                recs.append(self.draw_panel(img, e))
+            elif e['type'] == 'steps':
+                recs += self.draw_steps(img, e)
+            elif e['type'] == 'rule':
+                recs.append(self.draw_rule(img, e))
             else:
                 recs.append(self.draw_text(img, e))
         return img, recs
@@ -352,15 +476,16 @@ class Carousel:
     def render(self, out):
         os.makedirs(out, exist_ok=True)
         canvases = {}
-        for k in ('1', '2', '3'):
+        for k in (k for k in '12345' if k in BUILDS[self.build]):
             img, recs = self.canvas(k, W)
             img.save(f'{out}/0{k}.png')
             canvases[k] = {'size': [W, H], 'files': [f'0{k}.png'], 'records': recs}
-        img, recs = self.canvas('spread', 2 * W)
-        img.crop((0, 0, W, H)).save(f'{out}/04.png')
-        img.crop((W, 0, 2 * W, H)).save(f'{out}/05.png')
-        img.save(f'{out}/spread45.png')
-        canvases['spread'] = {'size': [2 * W, H], 'files': ['04.png', '05.png'], 'records': recs}
+        if 'spread' in BUILDS[self.build]:
+            img, recs = self.canvas('spread', 2 * W)
+            img.crop((0, 0, W, H)).save(f'{out}/04.png')
+            img.crop((W, 0, 2 * W, H)).save(f'{out}/05.png')
+            img.save(f'{out}/spread45.png')
+            canvases['spread'] = {'size': [2 * W, H], 'files': ['04.png', '05.png'], 'records': recs}
         with open(f'{out}/layout.json', 'w') as fh:
             json.dump({k: {**c, 'records': [{a: b for a, b in r.items() if a != 'mask'} for r in c['records']]}
                        for k, c in canvases.items()}, fh, indent=1)

@@ -8,7 +8,13 @@ on a light grey seamless backdrop, with big type behind them. Everything brand-s
 placements) comes from a JSON spec. This folder holds the code and a sample spec with labelled placeholder images only.
 Real photos, renders, client names and words never go in this public repo.
 
-![The sample carousel, slides 1 to 5](preview.png)
+The approved layout rules (the look, the five slides, the margins, plates and faces, the checks) are in
+[LAYOUT.md](LAYOUT.md). Read them before building one.
+
+There are two builds. The **cutout build** (the default) uses product cutouts and studio renders, with slides 4 and
+5 as one spread. The **photo build** uses real photos in clean frames, with a 2x2 grid of numbered steps on slide 3.
+
+![The sample carousels: the cutout build on top, the photo build below](preview.png)
 
 ## Variations
 
@@ -37,15 +43,21 @@ python3 qa.py spec.json out/ --variations
 
 | File | What it is |
 |---|---|
-| `generate.py` | The generator: `python3 generate.py <spec.json> <out_dir> [--variations]`. Holds the default layout |
+| `LAYOUT.md` | The approved layout rules |
+| `generate.py` | The generator: `python3 generate.py <spec.json> <out_dir> [--variations]`. Holds both builds' layouts |
+| `photos.py` | The real-photo helpers: `photo()`, `redact()`, `cover()`, `panel()`, `clean_cut()` and `make_cuts()` |
 | `qa.py` | The check to run before anything goes to nq-check (below) |
 | `sheet.py` | One contact sheet of the slides: `python3 sheet.py out.jpg 1/5=01.png 2/5=02.png ...` |
-| `sample/spec.json` | The sample spec. Copy it to start a new carousel |
-| `sample/assets/` | Labelled placeholder parts and subjects; `sample/make_placeholders.py` redraws them |
-| `preview.png` | The sample, rendered |
-| `variations.jpg` | The sample in every variation |
+| `sample/spec.json` | The cutout build's sample spec. Copy it to start a new carousel |
+| `sample/photo_spec.json` | The photo build's sample spec |
+| `sample/broken_spec.json` | Broken on purpose, for `python3 qa.py --selftest` |
+| `sample/assets/` | Labelled placeholder parts, subjects and photos; `sample/make_placeholders.py` redraws them |
+| `preview.png` | Both samples, rendered |
+| `variations.jpg` | The cutout sample in every variation |
 
-Needs Python 3 with numpy, Pillow and scipy (`pip install numpy pillow scipy`).
+Needs Python 3 with numpy, Pillow and scipy (`pip install numpy pillow scipy`). On Omarie's Mac, run
+it through uv: `uv run --with numpy --with pillow --with scipy python qa.py`. Cutting parts out of photos
+(`photos.py cuts`) also needs rembg.
 
 ## The rules
 
@@ -100,6 +112,28 @@ Needs Python 3 with numpy, Pillow and scipy (`pip install numpy pillow scipy`).
 4. Make the contact sheet and send it to nq-check; then nq-facts and nq-second for the words.
 5. Present the slides on the post mockup page.
 
+### The photo build
+
+Set `"build": "photo"` in the spec (start from `sample/photo_spec.json`). It makes five single slides: the hook
+with a framed photo, the part, the 2x2 numbered steps, one large framed photo, and the call to action. It needs:
+
+- `words`: `cover_word`, `model`, `subject_name`, `category`, `job`, `part_line`, `steps_title`, `step_1` to
+  `step_4`, `view_line`, `cta_1`, `cta_2`, `brand`, `brand_1` and `brand_2` (the name over two lines of ghost
+  type) and `handle`;
+- `photos`: the slots `hero`, `view` and `step1` to `step4`. Each is
+  `{"file", "redact": [[x0, y0, x1, y1], ...], "crop": [x0, y0, x1, y1]}`. The photo is opened the way it was
+  shot (its EXIF rotation applied), then each `redact` box is covered, then it is cropped, so boxes are in the
+  upright photo's pixels. List every plate under `redact`, with `[]` when there are none, and crop every face out;
+- `parts`: the slots `hero_part`, `main` and `closing_part`. A rough rembg cutout takes
+  `{"file", "clean": {"fade", "cut_right": [x, y0, y1], "cut_top", "solid"}}`, which keeps the largest piece and
+  trims it: `fade` fades out a flat bottom edge, `cut_right` trims a ragged end, `cut_top` clears rows at the top,
+  and `solid` drops faint alpha;
+- `cuts`, if the parts still have to be cut out: `{"name": {"file": photo, "crop": [...], "out": "cut/name.png"}}`,
+  then `python3 photos.py cuts spec.json`. It skips any cutout that exists already.
+
+The framed photo, the step grid and the cleaned cutout also work in the cutout build: add `photos` to the spec and
+put the elements in a slide's own list.
+
 ### Elements
 
 A slide is a list of elements, drawn in order (later on top). Positions are in px on that canvas (the spread is
@@ -109,18 +143,26 @@ A slide is a list of elements, drawn in order (later on top). Positions are in p
 |---|---|---|
 | `soft_fill` | `text`, `px`, `x`, `y`, `anchor`, `alpha`, `colour`, `spacing` | background |
 | `ghost` | `text`, `px`, `x`, `y`, `anchor`, `rot`, `width`, `colour`, `spacing` | background |
-| `vertical` | `text`, `px`, `x`, `y` (its bottom-left corner), `fill`, `stroke` | background |
+| `vertical` | `text`, `px`, `x`, `y` (its bottom-left corner), `anchor`, `fill`, `stroke`, `fit` (shrink it to stay inside the margin) | background |
 | `echo` | `text`, `px`, `x`, `y`, `anchor`, `colour`, `spacing` | foreground |
 | `label` | `text`, `px`, `x`, `y`, `anchor`, `colour`, `spacing` | foreground |
 | `part` | `ref`, `cx`, `cy`, `w` or `box: [w, h]`, `rot`, `shadow` | |
 | `subject` | `ref`, `cx`, `cy`, `w`, `crop` | |
+| `panel` | `ref` (a photo), `x`, `y`, `w`, `h`, `focus: [fx, fy]`, `shadow` | |
+| `steps` | `items: [{"ref", "text", "num", "focus"}]` (four of them), `box: [w, h]`, `inset`, `rows: [y1, y2]`, `px` | |
+| `rule` | `x`, `y`, `w`, `h`, `colour` | |
+
+A `panel` is one photo, scaled to cover its box around the `focus` point, in a thin white mat with a floor shadow.
+`steps` is the 2x2 grid of panels, each with its number in the brand colour (01 to 04 unless `num` is set) and a
+short label. A `colour` is a hex, or `"brand"` or `"ink"`.
 
 Any text element takes `"bleed": true` to let it run off the frame on purpose.
 
 ## Before nq-check
 
 ```bash
-python3 qa.py spec.json out/       # no arguments renders and checks the sample
+python3 qa.py spec.json out/       # no arguments renders and checks both samples
+python3 qa.py --selftest           # renders sample/broken_spec.json and confirms every check fires
 ```
 
 It renders the spec and fails on any of these:
@@ -128,14 +170,19 @@ It renders the spec and fails on any of these:
 - a slide that isn't 1080x1350, or a spread that isn't 2160x1350;
 - foreground text (headlines and labels) crossing the frame edge, or the seam between slides 4 and 5, unless it has
   `"bleed": true`;
+- a headline, label or photo frame closer than 40 px to any edge of its slide;
+- a headline or label on the cover closer than 80 px to a side, because the profile grid crops the cover to 3:4;
+- a headline's blurred echo touching a photo frame or running off the canvas;
+- a photo in the spec with no `redact` list;
 - foreground text whose box sits on a part's opaque pixels for more than 2% of the box. nq-check caught this twice
   on the first carousel;
 - a part's alpha box within 30 px of a subject's;
 - any word, in any text element, that isn't on `allowed_words`.
 
 Send to nq-check only when it prints `all clear`. The check covers text drawn by the generator, not words inside
-the photos.
+the photos, and it can't see a face or a plate nobody listed: look for those on the contact sheet.
 
 ## Where it is used
 
 - **FD x RYFT Ferrari 812 GTS carousel** (13 Oct 2026), the first build.
+- **A shop-photo install carousel** (13 Oct 2026), the first photo build.
