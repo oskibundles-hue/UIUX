@@ -2,6 +2,7 @@
 
     python3 qa.py                    # renders sample/spec.json into the scratch dir below
     python3 qa.py <spec.json> [out]  # renders that spec
+    add --variations to render and check every variation (generate.py --variations)
 
 Prints one line per failure and exits 1 on any, or prints `all clear`. It fails on:
   - a slide that isn't 1080x1350 (or a spread that isn't 2160x1350);
@@ -19,7 +20,7 @@ import tempfile
 from PIL import Image
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from generate import H, W, Carousel  # noqa: E402
+from generate import H, VARIATIONS, W, Carousel  # noqa: E402
 
 OVERLAP = 0.02   # share of a text box that may sit on a part's opaque pixels
 GAP = 30         # px between a part's alpha box and a subject's
@@ -35,8 +36,8 @@ def gap(a, b):
     return max(dx, dy) if (dx == 0 or dy == 0) else (dx * dx + dy * dy) ** 0.5
 
 
-def check(spec_path, out):
-    car = Carousel(spec_path)
+def check(spec_path, out, variation=None):
+    car = Carousel(spec_path, variation)
     canvases = car.render(out)
     allowed = {w.upper() for w in car.spec.get('allowed_words', [])}
     fails = []
@@ -82,9 +83,13 @@ def check(spec_path, out):
 
 if __name__ == '__main__':
     here = os.path.dirname(os.path.abspath(__file__))
-    spec = sys.argv[1] if len(sys.argv) > 1 else os.path.join(here, 'sample', 'spec.json')
-    out = sys.argv[2] if len(sys.argv) > 2 else os.path.join(tempfile.gettempdir(), 'studio-carousel-qa')
-    fails = check(spec, out)
+    args = [a for a in sys.argv[1:] if a != '--variations']
+    spec = args[0] if args else os.path.join(here, 'sample', 'spec.json')
+    out = args[1] if len(args) > 1 else os.path.join(tempfile.gettempdir(), 'studio-carousel-qa')
+    if '--variations' in sys.argv:
+        fails = [f'{v}: {f}' for v in VARIATIONS for f in check(spec, os.path.join(out, v), v)]
+    else:
+        fails = check(spec, out)
     for f in fails:
         print('FAIL', f)
     print(f'{len(fails)} failure(s); slides in {out}' if fails else f'all clear; slides in {out}')

@@ -1,6 +1,7 @@
 """Studio carousel generator: a 5-slide 4:5 Instagram carousel (1080x1350) in the studio look.
 
-    python3 generate.py <spec.json> <out_dir>
+    python3 generate.py <spec.json> <out_dir>                # the spec's variation (studio by default)
+    python3 generate.py <spec.json> <out_dir> --variations   # every variation side by side, to pick from
 
 Writes 01.png to 05.png, spread45.png (slides 4 and 5 as one 2160-wide spread) and layout.json
 (every text, part and subject box, for qa.py). Everything brand-specific comes from the spec;
@@ -17,13 +18,49 @@ from scipy import ndimage
 W, H = 1080, 1350
 BACKGROUND = {'soft_fill', 'ghost', 'vertical'}   # type behind everything; may bleed off the frame
 
+# ---- variations: a theme (the colours of the studio and the type behind) and a layout. The light grey
+# studio with the default layout is the house default (Omarie, 13 Oct 2026: "one of my new favorites").
+THEMES = {
+    'studio': {'base': 214, 'falloff': 1.0, 'tint': (1, 1, 1.01), 'soft': (226, 226, 230), 'ghost': (190, 190, 196),
+               'fill': (250, 250, 252), 'stroke': (205, 205, 210), 'ink': None, 'shadow': (80, 80, 86)},
+    'night': {'base': 64, 'falloff': 0.8, 'tint': (1, 1, 1.04), 'soft': (78, 78, 86), 'ghost': (98, 98, 108),
+              'fill': (34, 34, 38), 'stroke': (92, 92, 100), 'ink': (232, 232, 236), 'shadow': (0, 0, 0)},
+    'sand': {'base': 214, 'falloff': 1.0, 'tint': (1.03, 0.99, 0.92), 'soft': (232, 224, 210), 'ghost': (196, 184, 166),
+             'fill': (250, 246, 238), 'stroke': (210, 198, 180), 'ink': (58, 46, 36), 'shadow': (96, 80, 62)},
+}
+LAYOUTS = ('default', 'mirror')
+VARIATIONS = {  # what --variations renders; the first is the default
+    'studio': ('studio', 'default'),
+    'studio-mirror': ('studio', 'mirror'),
+    'night': ('night', 'default'),
+    'sand': ('sand', 'default'),
+}
+
+
+def mirror(layout, width):
+    """The same layout flipped left to right, for slides 1 to 3. Photos and renders are placed, never flipped."""
+    flip = {'l': 'r', 'r': 'l', 'm': 'm'}
+    out = []
+    for e in layout:
+        e = dict(e)
+        for k in ('x', 'cx'):
+            if k in e:
+                e[k] = width - e[k]
+        default = 'lb' if e['type'] == 'vertical' else 'lt'
+        a = e.get('anchor', default)
+        e['anchor'] = flip[a[0]] + a[1]
+        if e['type'] == 'part' and e.get('rot'):
+            e['rot'] = -e['rot']
+        out.append(e)
+    return out
+
+
 # ---- the default layout. Words are {role} keys from spec["words"]; parts and subjects are slot
 # names from spec["parts"] and spec["subjects"]. A spec replaces any slide with its own list.
 DEFAULT_LAYOUT = {
     '1': [  # cover: giant vertical word, hero part huge, model stacked bottom right
         {'type': 'soft_fill', 'text': '{product}', 'px': 330, 'x': 660, 'y': 330, 'anchor': 'mm', 'alpha': 70},
-        {'type': 'ghost', 'text': '{brand}', 'px': 70, 'x': 1030, 'y': 60, 'anchor': 'rt', 'width': 2, 'spacing': 14,
-         'colour': [196, 196, 200]},
+        {'type': 'ghost', 'text': '{brand}', 'px': 70, 'x': 1030, 'y': 60, 'anchor': 'rt', 'width': 2, 'spacing': 14},
         {'type': 'vertical', 'text': '{cover_word}', 'px': 470, 'x': -62, 'y': 1390},
         {'type': 'part', 'ref': 'hero', 'w': 1000, 'cx': 640, 'cy': 520, 'rot': -4},
         {'type': 'echo', 'text': '{model}', 'px': 170, 'x': 1040, 'y': 1000, 'anchor': 'rt'},
@@ -40,10 +77,8 @@ DEFAULT_LAYOUT = {
         {'type': 'echo', 'text': '{feature_3}', 'px': 64, 'x': 50, 'y': 940},
     ],
     '3': [  # three views of the subject in a row, parts set out above and below
-        {'type': 'ghost', 'text': '{brand}', 'px': 64, 'x': 30, 'y': 30, 'width': 2, 'spacing': 14,
-         'colour': [190, 190, 196]},
-        {'type': 'ghost', 'text': '{cover_word}', 'px': 560, 'x': 540, 'y': 675, 'rot': 90, 'anchor': 'mm', 'width': 2,
-         'colour': [204, 204, 210]},
+        {'type': 'ghost', 'text': '{brand}', 'px': 64, 'x': 30, 'y': 30, 'width': 2, 'spacing': 14},
+        {'type': 'ghost', 'text': '{cover_word}', 'px': 560, 'x': 540, 'y': 675, 'rot': 90, 'anchor': 'mm', 'width': 2},
         {'type': 'part', 'ref': 'flat1', 'box': [900, 260], 'cx': 540, 'cy': 330},
         {'type': 'part', 'ref': 'flat2', 'box': [400, 240], 'cx': 290, 'cy': 1110},
         {'type': 'part', 'ref': 'flat3', 'box': [400, 240], 'cx': 790, 'cy': 1110},
@@ -67,7 +102,7 @@ DEFAULT_LAYOUT = {
         {'type': 'echo', 'text': '{closing_1}', 'px': 58, 'x': 2110, 'y': 960, 'anchor': 'rt'},
         {'type': 'echo', 'text': '{closing_2}', 'px': 58, 'x': 2110, 'y': 1035, 'anchor': 'rt'},
         {'type': 'ghost', 'text': '{brand}', 'px': 110, 'x': 2130, 'y': 1330, 'anchor': 'rb', 'width': 2,
-         'spacing': 10, 'colour': [200, 200, 206]},
+         'spacing': 10},
     ],
 }
 
@@ -80,15 +115,21 @@ def rgb(c):
 
 
 class Carousel:
-    def __init__(self, spec_path):
+    def __init__(self, spec_path, variation=None):
         self.root = os.path.dirname(os.path.abspath(spec_path))
         with open(spec_path) as fh:
             self.spec = json.load(fh)
+        theme, self.layout = VARIATIONS[variation] if variation else (
+            self.spec.get('theme', 'studio'), self.spec.get('layout', 'default'))
+        if theme not in THEMES or self.layout not in LAYOUTS:
+            raise ValueError(f'unknown theme {theme!r} or layout {self.layout!r}')
+        self.theme = THEMES[theme]
         b = self.spec['brand']
         self.font_path = self.path(b['font'])
         self.colour = rgb(b['colour'])
-        self.ink = rgb(b.get('ink', '#28282C'))
-        self.ghost_col = rgb(b.get('ghost', '#B0B0B6'))
+        # brand ink and ghost are for the plain studio; the other themes bring their own
+        self.ink = self.theme['ink'] or rgb(b.get('ink', '#28282C'))
+        self.ghost_col = rgb(b['ghost']) if b.get('ghost') and theme == 'studio' else self.theme['ghost']
         self.words = self.spec.get('words', {})
         self._fonts, self._cache = {}, {}
 
@@ -104,14 +145,13 @@ class Carousel:
         return t.format_map(self.words)
 
     # ---- backdrop
-    @staticmethod
-    def studio(w, h):
-        """Light grey seamless, bright centre, darker top and edges."""
+    def studio(self, w, h):
+        """Seamless backdrop: bright centre, darker top and edges, in the theme's tone."""
+        t = self.theme
         yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
-        base = 214 - 26 * (yy / h - 0.55) ** 2 * 4
         r = ((xx - w / 2) / (w * 0.75)) ** 2 + ((yy - h * 0.5) / (h * 0.8)) ** 2
-        v = base - 30 * np.clip(r, 0, 1.4)
-        return Image.fromarray(np.stack([v, v, v + 2], -1).clip(0, 255).astype(np.uint8))
+        v = t['base'] - t['falloff'] * (26 * (yy / h - 0.55) ** 2 * 4 + 30 * np.clip(r, 0, 1.4))
+        return Image.fromarray(np.stack([v * c for c in t['tint']], -1).clip(0, 255).astype(np.uint8))
 
     # ---- type
     def text_layer(self, text, px, fill=None, stroke=0, stroke_col=None, spacing=0):
@@ -151,7 +191,7 @@ class Carousel:
         kind, text, px = e['type'], self.text(e['text']), e['px']
         anchor, sp = e.get('anchor', 'lt'), e.get('spacing', 0)
         if kind == 'soft_fill':  # big faint filled word behind everything
-            col = rgb(e.get('colour', [226, 226, 230]))
+            col = rgb(e.get('colour', self.theme['soft']))
             lay = self.text_layer(text, px, fill=col + (e.get('alpha', 150),), spacing=sp)
             lay = lay.filter(ImageFilter.GaussianBlur(1.5))
             x, y = self.put(img, lay, e['x'], e['y'], anchor)
@@ -164,10 +204,10 @@ class Carousel:
             x, y = self.put(img, lay, e['x'], e['y'], anchor)
             box = self.ink_box(lay, x, y)
         elif kind == 'vertical':  # the cover's huge vertical word; x, y is its bottom-left corner
-            lay = self.text_layer(text, px, fill=rgb(e.get('fill', [250, 250, 252])) + (255,), stroke=3,
-                                  stroke_col=rgb(e.get('stroke', [205, 205, 210])) + (255,), spacing=sp)
+            lay = self.text_layer(text, px, fill=rgb(e.get('fill', self.theme['fill'])) + (255,), stroke=3,
+                                  stroke_col=rgb(e.get('stroke', self.theme['stroke'])) + (255,), spacing=sp)
             lay = lay.rotate(90, expand=True)
-            x, y = self.put(img, lay, e['x'], e['y'], 'lb')
+            x, y = self.put(img, lay, e['x'], e['y'], e.get('anchor', 'lb'))
             box = self.ink_box(lay, x, y)
         elif kind == 'echo':  # solid line in the brand colour with a blurred echo above and right
             col = rgb(e.get('colour', self.colour))
@@ -247,7 +287,7 @@ class Carousel:
             sh = Image.new('L', img.size, 0)
             sh.paste(p.getchannel('A').point(lambda v: 70 if v > 120 else 0), (x + 14, y + 40))
             sh = sh.filter(ImageFilter.GaussianBlur(30))
-            img.paste(Image.new('RGB', img.size, (80, 80, 86)), (0, 0), sh)
+            img.paste(Image.new('RGB', img.size, self.theme['shadow']), (0, 0), sh)
         img.paste(p, (x, y), p)
         mask = np.zeros((img.height, img.width), bool)
         a = np.array(p.getchannel('A')) > 128
@@ -283,7 +323,7 @@ class Carousel:
         ImageDraw.Draw(sh).ellipse([x + lay.width * .08, y + lay.height * .80,
                                     x + lay.width * .92, y + lay.height * 1.02], fill=110)
         sh = sh.filter(ImageFilter.GaussianBlur(max(8, lay.width // 25)))
-        img.paste(Image.new('RGB', img.size, (90, 90, 96)), (0, 0), sh)
+        img.paste(Image.new('RGB', img.size, self.theme['shadow']), (0, 0), sh)
         img.paste(lay.convert('RGB'), (x, y), lay.getchannel('A'))
         bb = lay.getchannel('A').point(lambda v: 255 if v > 128 else 0).getbbox()
         return {'kind': 'subject', 'ref': e['ref'], 'box': [x + bb[0], y + bb[1], x + bb[2], y + bb[3]]}
@@ -297,6 +337,8 @@ class Carousel:
     def canvas(self, key, width):
         img = self.studio(width, H)
         layout = self.spec.get('slides', {}).get(key) or DEFAULT_LAYOUT[key]
+        if self.layout == 'mirror' and key != 'spread':  # the spread keeps its order, so it reads across the swipe
+            layout = mirror(layout, width)
         recs = []
         for e in layout:
             if e['type'] == 'part':
@@ -325,8 +367,30 @@ class Carousel:
         return canvases
 
 
+def render_variations(spec_path, out):
+    """Every variation in its own folder, plus variations.jpg: one row per variation, to pick from."""
+    rows = []
+    for name in VARIATIONS:
+        Carousel(spec_path, name).render(f'{out}/{name}')
+        rows.append(name)
+    tw, th, lab = 300, 375, 34
+    sheet = Image.new('RGB', (5 * tw, len(rows) * (th + lab)), 'white')
+    d = ImageDraw.Draw(sheet)
+    for i, name in enumerate(rows):
+        d.text((8, i * (th + lab) + 10), name + ('  (default)' if i == 0 else ''), fill='black')
+        for j in range(5):
+            im = Image.open(f'{out}/{name}/0{j + 1}.png').convert('RGB').resize((tw, th), Image.LANCZOS)
+            sheet.paste(im, (j * tw, i * (th + lab) + lab))
+    sheet.save(f'{out}/variations.jpg', quality=88)
+    return rows
+
+
 if __name__ == '__main__':
-    if len(sys.argv) != 3:
+    args = [a for a in sys.argv[1:] if a != '--variations']
+    if len(args) != 2:
         sys.exit(__doc__)
-    Carousel(sys.argv[1]).render(sys.argv[2])
-    print('ok', sorted(f for f in os.listdir(sys.argv[2]) if f.endswith('.png')))
+    if '--variations' in sys.argv:
+        print('ok', render_variations(*args), f'{args[1]}/variations.jpg')
+    else:
+        Carousel(args[0]).render(args[1])
+        print('ok', sorted(f for f in os.listdir(args[1]) if f.endswith('.png')))

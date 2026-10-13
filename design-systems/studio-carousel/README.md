@@ -10,16 +10,40 @@ Real photos, renders, client names and words never go in this public repo.
 
 ![The sample carousel, slides 1 to 5](preview.png)
 
+## Variations
+
+The light grey studio look is the default. Omarie, 13 Oct 2026: "it should offer different variations as well but
+this is one of my new favorites ones so this can be default". A variation is a theme plus a layout:
+
+| Variation | Theme | Layout | Looks like |
+|---|---|---|---|
+| `studio` (default) | studio | default | light grey seamless, dark ink |
+| `studio-mirror` | studio | mirror | the same look with slides 1 to 3 flipped left to right |
+| `night` | night | default | charcoal studio, light ink, deeper shadows |
+| `sand` | sand | default | warm off-white studio, brown ink |
+
+The mirror layout leaves the 4–5 spread alone so it still reads across the swipe. Set `"theme"` and `"layout"` in
+the spec, or pass `--variations` to render every variation into `out/<name>/` with one sheet of them all
+(`out/variations.jpg`), so Omarie can pick:
+
+```bash
+python3 generate.py spec.json out/ --variations
+python3 qa.py spec.json out/ --variations
+```
+
+![The sample in each variation, studio first](variations.jpg)
+
 ## Files
 
 | File | What it is |
 |---|---|
-| `generate.py` | The generator: `python3 generate.py <spec.json> <out_dir>`. Holds the default layout |
+| `generate.py` | The generator: `python3 generate.py <spec.json> <out_dir> [--variations]`. Holds the default layout |
 | `qa.py` | The check to run before anything goes to nq-check (below) |
 | `sheet.py` | One contact sheet of the slides: `python3 sheet.py out.jpg 1/5=01.png 2/5=02.png ...` |
 | `sample/spec.json` | The sample spec. Copy it to start a new carousel |
 | `sample/assets/` | Labelled placeholder parts and subjects; `sample/make_placeholders.py` redraws them |
 | `preview.png` | The sample, rendered |
+| `variations.jpg` | The sample in every variation |
 
 Needs Python 3 with numpy, Pillow and scipy (`pip install numpy pillow scipy`).
 
@@ -59,7 +83,10 @@ Needs Python 3 with numpy, Pillow and scipy (`pip install numpy pillow scipy`).
 
 1. Copy `sample/spec.json` into the scratchpad, with the images beside it. Never put real ones in this repo.
 2. Fill in the spec:
-   - `brand`: `colour` (hex), `font` (a .ttf path), and optionally `ink` and `ghost`;
+   - `brand`: `colour` (hex), `font` (a .ttf path), and optionally `ink` and `ghost` (the night and sand themes
+     set their own ink and ghost);
+   - `theme` (`studio`, `night` or `sand`) and `layout` (`default` or `mirror`), both optional, defaulting to
+     studio and default;
    - `words`: the roles the default layout uses: `brand`, `product`, `product_word`, `cover_word`, `model`,
      `subject_name`, `feature_1` to `feature_3`, `closing_1` and `closing_2`;
    - `allowed_words`: every word the slides may show;
