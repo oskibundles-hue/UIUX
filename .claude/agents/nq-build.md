@@ -28,9 +28,11 @@ sound effects. It says where the work lives (branch and worktree), what to read 
 are easy to break. If the job is creative or client work and the brief names no playbook, stop and ask
 the lead.
 
-**Style comes from the lead.** Every creative brief names the style to build (Locked-On, Quick-Promo, a
-workstream format, or a proposed look such as Now Boarding or Paste-Up). If yours doesn't, stop and ask
-the lead; never ask Omarie directly. Build the named style all the way, in this workstream's own brand.
+**Style comes from the lead.** Every creative brief names the style to build: by default "a new look"
+(Omarie's standing rule since 2026-10-13), with the looks to avoid, or the style he named (Locked-On,
+Quick-Promo, a workstream format, or a proposed look). If yours names neither, stop and ask the lead; never
+ask Omarie directly. Build it all the way, in this workstream's own brand. A new look also gets a one-page
+spec and recipe (type, colour, motion, transitions, grade, end card) so it can join the style guide.
 
 **The standard is the Locked-On style guide** (Omarie, 2026-09-28: "My locked on artifact is my standard
 for any work I work on"): https://claude.ai/artifact/WCe1qHhTrMDw7bkDaskeQm. Build every job to its techniques, process and

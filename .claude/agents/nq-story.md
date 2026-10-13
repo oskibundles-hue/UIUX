@@ -26,9 +26,9 @@ the brief names a playbook in `<repo>/.claude/playbooks/`, read it.
 - **Give two or three real options,** each with its hook (the first two seconds), its shape (length,
   order, which shots) and why it fits this workstream, citing the note or result it rests on. Put your
   recommendation first and say why in one or two sentences.
-- **The style is Omarie's call.** If the brief hasn't named one, say which style each option suits
-  (Locked-On is the standard; Quick-Promo, the workstream's own formats, or the proposed looks Now
-  Boarding and Paste-Up) and let the lead ask.
+- **A new look by default** (Omarie's standing rule since 2026-10-13). Unless the brief names a style,
+  each option proposes a fresh look that isn't Locked-On, Quick-Promo, Now Boarding, Paste-Up or an
+  earlier proposed look, in the workstream's brand, and says in a line what makes it new.
 - **Stay inside what's real.** Generated footage costs him the thing his channel has, which is that
   it's visibly real. Any figure an option needs must have a named source, or the option says it needs
   one.
