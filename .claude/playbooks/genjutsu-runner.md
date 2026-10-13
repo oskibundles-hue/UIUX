@@ -16,8 +16,8 @@ If `.claude/playbooks/genjutsu-runner.md` is missing, or `.claude/hooks/regret_g
 Then check two things:
 - `grep -c GO_TICKETS .claude/hooks/regret_gate.py` is 2 or more;
 - `grep -cE 'Higgsfield|e17b92d9' ~/.claude/settings.json` is 1 or more (the gate only sees the Higgsfield
-  connector when the hook matcher covers it, by name or, on older setups, by its id; settings load when the
-  session starts, so a checkout now can't fix it).
+  connector when its name or old id is in the hook matcher; settings load when the session starts, so a checkout
+  now can't fix it).
 If either check fails, do the quote pass only, skip the run pass, and say so in the summary.
 
 Then, if `.claude/brain/live_card.py` exists, start the Working-now card (see section 8). If not, skip it quietly.
@@ -84,10 +84,9 @@ Read every genjutsu doc once at the start. Keep each doc's version. Skip `decisi
 
 ## 3. The Higgsfield connector
 
-Tools appear as `mcp__Higgsfield__<tool>` and `mcp__Dropbox__<tool>`. Older setups show the server ids
-instead: `mcp__e17b92d9-8ef6-414a-9d7c-cbcd27995067__<tool>` for Higgsfield and
-`mcp__a8f752c9-094c-401f-bfd1-5765c16a1cac__<tool>` for Dropbox. The gate treats both names the same.
-Load them with ToolSearch.
+Tools appear as `mcp__Higgsfield__<tool>` and `mcp__Dropbox__<tool>`. Older setups name them by id instead:
+Higgsfield `e17b92d9-8ef6-414a-9d7c-cbcd27995067`, Dropbox `a8f752c9-094c-401f-bfd1-5765c16a1cac`. The gate
+handles both. Load them with ToolSearch.
 
 - **Price swap/motion:** `generate_video` with `params.model` (`hf_mult_replace_object` or `hf_mult_motion_control`),
   `medias` (one role `image`, exactly one role `video`), and `get_cost:true`. It submits nothing.
