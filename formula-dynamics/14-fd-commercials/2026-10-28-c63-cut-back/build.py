@@ -76,9 +76,9 @@ SHOTS = [
          crop=((530, 1400, 1060), (500, 1650, 980)), redact=[]),
     dict(name="parts2", src="IMG_0579.MOV", t_in=7.45, dur=0.5,
          crop=((420, 3200, 800), (420, 3260, 760)), redact=[]),
-    dict(name="parts3", src="IMG_0579.MOV", t_in=10.35, dur=1.3,
+    dict(name="parts3", src="IMG_0579.MOV", t_in=10.35, dur=0.5,
          crop=((600, 1740, 1200), (800, 1800, 1100)), redact=[]),
-    dict(name="coldstart", src="IMG_0590.MOV", t_in=6.20, dur=2.45, a_pre=0.50,
+    dict(name="coldstart", src="IMG_0590.MOV", t_in=6.20, dur=74 / 30, a_pre=0.50,
          crop=((1330, 1475, 1659), (1350, 1475, 1590)),
          redact=[("plate", PLATE_0590, (6, 3)), ("meter", METER_0590, (3, 4))]),
     # the new burnt piping under the bumper, between the tip pairs; source y 1027-2093
@@ -86,10 +86,10 @@ SHOTS = [
     dict(name="piping", src="IMG_0590.MOV", t_in=53.90, dur=0.8,
          crop=((880, 1560, 520), (880, 1580, 470)),
          redact=[("plate", PLATE_0590, (6, 3)), ("meter", METER_0590, (3, 4))]),
-    dict(name="rev", src="IMG_0590.MOV", t_in=54.70, dur=2.30,
+    dict(name="rev", src="IMG_0590.MOV", t_in=54.70, dur=3.10,
          crop=((1420, 1300, 1400), (1420, 1300, 1400)),
          redact=[("plate", PLATE_0590, (6, 3)), ("meter", METER_0590, (3, 4))]),
-    dict(name="end", src="IMG_0590.MOV", t_in=57.00, dur=1.7,
+    dict(name="end", src="IMG_0590.MOV", t_in=57.80, dur=1.7,
          crop=((1420, 1300, 1400), (1420, 1300, 1400)),
          redact=[("plate", PLATE_0590, (6, 3)), ("meter", METER_0590, (3, 4))],
          darken=True),
@@ -428,7 +428,7 @@ A_POST = {"before": 1.20}      # L-cut: the stock car's rev and idle carry 1.2 s
 
 
 def build_audio(raw, wav_path):
-    N = int(round(TOTAL * SR))
+    N = int(round(NFRAMES / FPS * SR))      # exactly the video length, so the mux drops no frames
     mix = np.zeros((N + SR, 2), np.float32)
     # Each window's own audio only. J-cut (a_pre): the cold start's own cranking comes in
     # under the last parts cut; L-cut (A_POST): the stock rev decays under the first.
@@ -489,8 +489,9 @@ def main():
         return finish(raw, work)
     enc = subprocess.Popen(["ffmpeg", "-v", "error", "-y", "-f", "rawvideo", "-pix_fmt", "rgb24",
                             "-s", f"{W}x{H}", "-r", str(FPS), "-i", "-",
+                            "-vf", "scale=in_range=full:out_range=tv:out_color_matrix=bt709:flags=accurate_rnd+full_chroma_int,format=yuv420p",
                             "-c:v", "libx264", "-profile:v", "high", "-preset", "slow", "-crf", "17",
-                            "-pix_fmt", "yuv420p", "-colorspace", "bt709", "-color_primaries", "bt709",
+                            "-pix_fmt", "yuv420p", "-color_range", "tv", "-colorspace", "bt709", "-color_primaries", "bt709",
                             "-color_trc", "bt709", "-movflags", "+faststart", str(work / "video.mp4")],
                            stdin=subprocess.PIPE)
     log = []
@@ -526,7 +527,7 @@ def finish(raw, work):
     print("loudnorm pass1", json.dumps({k: js[k] for k in ("input_i", "input_tp", "input_lra")}))
     subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", str(work / "video.mp4"), "-i", str(work / "mix_ln.wav"),
                     "-map", "0:v", "-map", "1:a", "-c:v", "copy", "-c:a", "aac", "-b:a", "192k", "-ar", str(SR),
-                    "-shortest", "-movflags", "+faststart", str(OUT_MP4)], check=True)
+                    "-movflags", "+faststart", str(OUT_MP4)], check=True)
     make_qa_sheets(work)
 
 
