@@ -288,6 +288,14 @@ def main():
     final = outdir / f"FD {cut['name']} - {tag} 1080x1920.mp4"
     fd_master.TARGET_TP = -1.5        # margin under -1.0 after the platform's encode (Locked-On bar)
     fd_master.master(pre, final)
+    # alimiter holds sample peaks; the AAC encode adds inter-sample overs on top (detail v4
+    # landed at -1.2 dBTP). Re-master from the pre-mix with the ceiling lowered by the overshoot.
+    for _ in range(2):
+        tp = fd_master.measure(final)["input_tp"]
+        if float(tp) <= -1.5:
+            break
+        fd_master.TARGET_TP -= float(tp) + 1.5 + 0.1
+        fd_master.master(pre, final)
     manifest = dict(id=cut["id"], final=str(final), duration=round(total, 3), graded=bool(grade),
                     lut=a.lut, beats=[dict(num=b["num"], word=b["word"], t=round(bt, 3),
                                            shots=[Path(s["src"]).name for s in b["shots"]])
