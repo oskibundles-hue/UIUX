@@ -30,6 +30,7 @@ from pathlib import Path
 HERE = Path(__file__).resolve().parent
 sys.path.insert(0, str(HERE))
 sys.path.insert(0, str(HERE.parent / "99-toolkit"))
+from PIL import Image  # noqa: E402
 import livery as L  # noqa: E402
 import fd_master  # noqa: E402
 
@@ -37,6 +38,10 @@ W, H, FPS = L.W, L.H, L.FPS
 SFX = HERE.parent / "10-motion-sfx/sfx/whoosh-in.wav"
 END_S = 2.6
 PLATE_S = 1.8
+# RGB graphics -> video with the BT.709 matrix (ffmpeg's default is BT.601, which turns
+# FD red #FE0F13 orange-ish on phones), and tag every encode as BT.709
+CM = "scale=out_color_matrix=bt709:out_range=tv"
+TAGS = ["-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709"]
 SFX_GAIN = 0.45          # accents sit about 45% under the bed (Locked-On rule 7)
 
 
@@ -94,9 +99,10 @@ def render_still(shot, out, grade):
         chain += (f";[{last}]split[a{j}][b{j}];[b{j}]crop={w}:{h}:{x}:{y},boxblur=28:3[c{j}];"
                   f"[a{j}][c{j}]overlay={x}:{y}:enable='between(t,{t0},{t1})'[v{j+1}]")
         last = f"v{j+1}"
+    chain += f";[{last}]{CM},format=yuv420p[vout]"
     chain += ";[1:a]aresample=48000,aformat=channel_layouts=stereo,afade=t=in:d=0.08[aa]"
-    cmd += ["-filter_complex", chain, "-map", f"[{last}]", "-map", "[aa]",
-            "-c:v", "libx264", "-preset", "medium", "-crf", "14", "-pix_fmt", "yuv420p",
+    cmd += ["-filter_complex", chain, "-map", "[vout]", "-map", "[aa]",
+            "-c:v", "libx264", "-preset", "medium", "-crf", "14", "-pix_fmt", "yuv420p", *TAGS,
             "-c:a", "pcm_s16le", "-ar", "48000", "-ac", "2", "-shortest", str(out)]
     pr = subprocess.Popen(cmd, stdin=subprocess.PIPE, stderr=subprocess.PIPE)
     for i in range(n):
@@ -113,6 +119,18 @@ def render_still(shot, out, grade):
         sys.stderr.write(err[-1500:])
         raise SystemExit(f"still render failed: {shot['src']}")
     return n / FPS
+
+
+def scrim(bbox, strength):
+    """Full-frame RGBA: black behind the board's box, feathered out, so white type
+    reads over blown-out shop lights. strength = peak alpha 0..1."""
+    from PIL import Image, ImageDraw, ImageFilter
+    m = Image.new("L", (W, H), 0)
+    x0, y0, x1, y1 = bbox
+    ImageDraw.Draw(m).rectangle((0, max(0, y0 - 90), min(W, x1 + 160), y1 + 90), fill=int(255 * strength))
+    m = m.filter(ImageFilter.GaussianBlur(70))
+    sc = Image.new("RGBA", (W, H), (0, 0, 0, 0)); sc.putalpha(m)
+    return sc
 
 
 def render_shot(shot, out, grade, mute):
@@ -135,7 +153,7 @@ def render_shot(shot, out, grade, mute):
     if not has_a:
         cmd += ["-f", "lavfi", "-t", f"{dur:.3f}", "-i", "anullsrc=r=48000:cl=stereo"]
     cmd += ["-filter_complex", chain, "-map", f"[{last}]", "-map", "0:a:0" if has_a else "1:a:0",
-            "-c:v", "libx264", "-preset", "medium", "-crf", "14", "-pix_fmt", "yuv420p",
+            "-c:v", "libx264", "-preset", "medium", "-crf", "14", "-pix_fmt", "yuv420p", *TAGS,
             "-c:a", "pcm_s16le", "-ar", "48000", "-ac", "2", "-shortest", str(out)]
     run(cmd)
     return dur
@@ -166,7 +184,10 @@ def main():
     segs, beat_t, t = [], [], 0.0
     for bi, beat in enumerate(cut["beats"]):
         beat_t.append(t)
-        L.beat_plate(beat["num"], beat["word"], beat.get("sub")).save(work / f"plate{bi}.png")
+        plate = L.beat_plate(beat["num"], beat["word"], beat.get("sub"))
+        if cut.get("scrim"):                    # bright shop footage: shade the board's area
+            plate = Image.alpha_composite(scrim(plate.getbbox(), cut["scrim"]), plate)
+        plate.save(work / f"plate{bi}.png")
         for si, shot in enumerate(beat["shots"]):
             p = work / f"s{bi:02d}_{si:02d}.mov"
             t += render_shot(shot, p, grade, mute)
@@ -180,7 +201,7 @@ def main():
     ec = work / "endcard.mov"
     run(["ffmpeg", "-y", "-v", "error", "-loop", "1", "-framerate", str(FPS), "-t", str(END_S), "-i", str(card),
          "-f", "lavfi", "-t", str(END_S), "-i", "anullsrc=r=48000:cl=stereo",
-         "-vf", "format=yuv420p", "-c:v", "libx264", "-crf", "14", "-c:a", "pcm_s16le", "-shortest", str(ec)])
+         "-vf", f"{CM},format=yuv420p", "-c:v", "libx264", "-crf", "14", *TAGS, "-c:a", "pcm_s16le", "-shortest", str(ec)])
     segs.append(ec)
     total = body_end + END_S
     lst = work / "concat.txt"
@@ -220,17 +241,18 @@ def main():
     fc, last, n = [], "0:v", 1
     for bi, t0 in enumerate(beat_t):
         inputs += ["-loop", "1", "-framerate", str(FPS), "-t", f"{total:.3f}", "-i", str(work / f"plate{bi}.png")]
-        t_in = t0 + (L.PASS_CUT / FPS if bi else 0.15)
-        t_out = t_in + PLATE_S
-        fc.append(f"[{n}:v]format=rgba,fade=t=in:st={t_in:.3f}:d=0.2:alpha=1,"
-                  f"fade=t=out:st={t_out:.3f}:d=0.2:alpha=1[pl{bi}]")
-        fc.append(f"[{last}][pl{bi}]overlay=x='-70*pow(max(0\\,1-(t-{t_in:.3f})/0.25)\\,3)':y=0:"
+        t_in = t0 + (L.PASS_CUT / FPS if bi else 0.0)
+        t_out = t_in + PLATE_S + (0.15 if bi == 0 else 0.0)
+        fin = f"fade=t=in:st={t_in:.3f}:d=0.2:alpha=1," if bi else ""   # frame 0: hook already built
+        fc.append(f"[{n}:v]format=rgba,{fin}fade=t=out:st={t_out:.3f}:d=0.2:alpha=1,{CM},format=yuva420p[pl{bi}]")
+        xs = f"-70*pow(max(0\\,1-(t-{t_in:.3f})/0.25)\\,3)" if bi else "0"
+        fc.append(f"[{last}][pl{bi}]overlay=x='{xs}':y=0:"
                   f"enable='between(t,{t_in:.3f},{t_out + 0.2:.3f})':eval=frame[o{bi}]")
         last, n = f"o{bi}", n + 1
     for ci, tc in enumerate(cuts_at):
         st = max(0.0, tc - L.PASS_CUT / FPS)
         inputs += ["-i", str(pmov)]
-        fc.append(f"[{n}:v]setpts=PTS-STARTPTS+{st:.3f}/TB[ps{ci}]")
+        fc.append(f"[{n}:v]setpts=PTS-STARTPTS+{st:.3f}/TB,{CM},format=yuva420p[ps{ci}]")
         fc.append(f"[{last}][ps{ci}]overlay=0:0:eof_action=pass[q{ci}]")
         last, n = f"q{ci}", n + 1
     # whooshes under each pass
@@ -251,13 +273,14 @@ def main():
     pre = work / "composite.mp4"
     run(["ffmpeg", "-y", "-v", "error", *inputs, "-filter_complex", graph, "-map", f"[{last}]", "-map", "[aout]",
          "-t", f"{total:.3f}", "-r", str(FPS), "-c:v", "libx264", "-profile:v", "high", "-preset", "slow",
-         "-crf", "17", "-maxrate", "12M", "-bufsize", "24M", "-pix_fmt", "yuv420p",
+         "-crf", "17", "-maxrate", "12M", "-bufsize", "24M", "-pix_fmt", "yuv420p", *TAGS,
          "-c:a", "aac", "-b:a", "192k", "-ar", "48000", "-movflags", "+faststart", str(pre)])
 
     # 4. loudness: FD pipeline target via fd_master (-14 LUFS / -1.0 dBTP, two-pass)
     outdir = Path(a.out); outdir.mkdir(parents=True, exist_ok=True)
     tag = "INSTAGRAM" if grade else "UNGRADED PREVIEW"
     final = outdir / f"FD {cut['name']} - {tag} 1080x1920.mp4"
+    fd_master.TARGET_TP = -1.5        # margin under -1.0 after the platform's encode (Locked-On bar)
     fd_master.master(pre, final)
     manifest = dict(id=cut["id"], final=str(final), duration=round(total, 3), graded=bool(grade),
                     lut=a.lut, beats=[dict(num=b["num"], word=b["word"], t=round(bt, 3),

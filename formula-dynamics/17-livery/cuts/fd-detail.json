@@ -3,7 +3,7 @@
  "name": "Detail ZR1 and 911",
  "end": "build",
  "audio": "real",
- "_source": "ZR1 and 911 detailing clips (1080x1920 ~60 fps), real sound. No cabin footage exists, so beat 03 is THE WHEELS (brief had INSIDE).",
+ "_source": "ZR1 and 911 detailing clips (1080x1920 ~60 fps), real sound. No cabin footage exists, so beat 03 is THE WHEELS (brief had INSIDE). nq-check: zr1_17 dropped (soft), zr1_29 dropped (truck advert, face box); THE REVEAL ends on the 911 front.",
  "beats": [
   {
    "num": "01",
@@ -50,11 +50,6 @@
      "src": "/tmp/claude-0/-home-user/a62cc172-5e3e-5608-b2b2-4bc094d7e26f/scratchpad/fd-src/detail/zr1_11.mov",
      "in": 0.3,
      "out": 1.8
-    },
-    {
-     "src": "/tmp/claude-0/-home-user/a62cc172-5e3e-5608-b2b2-4bc094d7e26f/scratchpad/fd-src/detail/zr1_17.mov",
-     "in": 0.3,
-     "out": 1.8
     }
    ]
   },
@@ -86,23 +81,7 @@
     {
      "src": "/tmp/claude-0/-home-user/a62cc172-5e3e-5608-b2b2-4bc094d7e26f/scratchpad/fd-src/detail/911_01.mov",
      "in": 0.2,
-     "out": 2.0
-    },
-    {
-     "src": "/tmp/claude-0/-home-user/a62cc172-5e3e-5608-b2b2-4bc094d7e26f/scratchpad/fd-src/detail/zr1_29.mov",
-     "in": 0.4,
-     "out": 2.2,
-     "blur": [
-      [
-       0,
-       1.8,
-       590,
-       760,
-       170,
-       220
-      ]
-     ],
-     "_note": "person behind the car (face) blurred"
+     "out": 3.2
     }
    ]
   }
