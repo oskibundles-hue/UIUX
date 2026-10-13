@@ -57,8 +57,8 @@ What the page writes:
 | `op` | `execute_preset` (trending, styles), `hf_mult_replace_object` (swap), `hf_mult_motion_control` (motion) |
 | `preset_id`, `preset_name` | trending: `genjutsu:trending:<uuid>`; styles: `genjutsu-style:<uuid>` |
 | `name` | what he called it |
-| `clip` | Dropbox path of the video (swap, motion) |
-| `photo_path`, `photo_name` | Dropbox path and name of the photo |
+| `clip` | the video (swap, motion, styles): a Dropbox path (starts with `/`) or an https link |
+| `photo_path`, `photo_name` | the photo, as a Dropbox path or an https link, and its name |
 | `photo` | small JPEG data URL, or null |
 | `text` | his note or prompt |
 | `cost` | null until Go; then the credits he OK'd |
@@ -98,7 +98,8 @@ handles both. Load them with ToolSearch.
   (bring it in with `media_import_url`).
 - **Run trending/styles:** `execute_preset(source:'genjutsu', preset_id, inputs)`.
 - **Inputs:** `media_upload`, then curl PUT the file, then `media_confirm`. Or `media_import_url` for a URL.
-  For a Dropbox clip or photo, get a link with the Dropbox `download_link`. These links work once:
+  A `clip` or `photo_path` that starts with `https://` is a link: bring it in with `media_import_url`.
+  For a Dropbox clip or photo (starts with `/`), get a link with the Dropbox `download_link`. These links work once:
   fetch the file once to `/tmp`, then upload it. If `photo` is a data URL and there's no `photo_path`, decode it to a file and upload that.
 - **Waiting:** `jobs_wait` with timeout 15 or less. Repeat.
 - **Result:** `show_generation_by_ids`, or the job's result URL (https).
