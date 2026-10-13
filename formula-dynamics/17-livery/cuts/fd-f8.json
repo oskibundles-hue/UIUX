@@ -46,12 +46,12 @@
        0,
        1.3,
        560,
-       400,
+       330,
        520,
-       190
+       270
       ]
      ],
-     "_note": "F8 rear plate (on the lift) blurred"
+     "_note": "F8 plate on the lift; box raised to cover plate-frame text and state name (nq-check v2)"
     },
     {
      "src": "/tmp/claude-0/-home-user/a62cc172-5e3e-5608-b2b2-4bc094d7e26f/scratchpad/fd-src/f8/f8_build_story_9x16.mp4",
@@ -118,5 +118,6 @@
     }
    ]
   }
- ]
+ ],
+ "scrim": 0.6
 }

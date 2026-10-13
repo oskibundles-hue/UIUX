@@ -152,6 +152,16 @@ def stripe_pass_frame(i):
     return im
 
 
+def centre_fit(t):
+    """Scale a centred line down so both edges stay inside the keep-outs: the right one
+    (x907, the action rail) is nearer the centre than the left, so it sets the width."""
+    maxw = 2 * min(W // 2 - SAFE["left"], SAFE["right"] - W // 2)
+    if t.width > maxw:
+        s = maxw / t.width
+        t = t.resize((int(t.width * s), int(t.height * s)), Image.LANCZOS)
+    return t
+
+
 def endcard():
     """Black ground, white primary logo, raked livery stripe, BOOK YOUR BUILD raked,
     site and handle. Everything inside the keep-out zones."""
@@ -165,19 +175,16 @@ def endcard():
     band = stripe_band(W + 200, 30)
     by = ly + logo.height + 120
     im.alpha_composite(band, (-100, by))
-    l1 = trim(raked_text("BOOK YOUR", 150, WHITE + (255,)))
-    l2 = trim(raked_text("BUILD", 230, RED + (255,)))
+    l1 = centre_fit(trim(raked_text("BOOK YOUR", 150, WHITE + (255,))))
+    l2 = centre_fit(trim(raked_text("BUILD", 230, RED + (255,))))
     y = by + 110
     im.alpha_composite(l1, ((W - l1.width) // 2, y))
     y += l1.height + 22
     im.alpha_composite(l2, ((W - l2.width) // 2, y))
     y += l2.height + 70
-    site = trim(raked_text("FORMULADYNAMICSPERFORMANCE.COM", 58, WHITE + (255,), tracking=0.06))
-    hand = trim(raked_text("@FORMULADYNAMICSPERFORMANCE", 58, RED + (255,), tracking=0.06))
+    site = centre_fit(trim(raked_text("FORMULADYNAMICSPERFORMANCE.COM", 58, WHITE + (255,), tracking=0.06)))
+    hand = centre_fit(trim(raked_text("@FORMULADYNAMICSPERFORMANCE", 58, RED + (255,), tracking=0.06)))
     for t in (site, hand):
-        if t.width > W - 2 * SAFE["left"] - 40:
-            s = (W - 2 * SAFE["left"] - 40) / t.width
-            t = t.resize((int(t.width * s), int(t.height * s)), Image.LANCZOS)
         im.alpha_composite(t, ((W - t.width) // 2, y))
         y += t.height + 30
     assert y < SAFE["bottom"], f"end card runs into bottom keep-out ({y} >= {SAFE['bottom']})"
@@ -197,11 +204,11 @@ def endcard_store():
     im.alpha_composite(band, (-100, by))
     y = by + 110
     for txt, px, col in (("SHOP F8 PARTS", 150, WHITE), ("ONLINE", 200, RED)):
-        t = trim(raked_text(txt, px, col + (255,)))
+        t = centre_fit(trim(raked_text(txt, px, col + (255,))))
         im.alpha_composite(t, ((W - t.width) // 2, y)); y += t.height + 22
     y += 48
     for txt, col in (("FORMULADYNAMICS.COM", WHITE), ("@FORMULADYNAMICSPERFORMANCE", RED)):
-        t = trim(raked_text(txt, 58, col + (255,), tracking=0.06))
+        t = centre_fit(trim(raked_text(txt, 58, col + (255,), tracking=0.06)))
         im.alpha_composite(t, ((W - t.width) // 2, y)); y += t.height + 30
     assert y < SAFE["bottom"]
     return im

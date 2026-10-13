@@ -81,7 +81,26 @@
     {
      "src": "/tmp/claude-0/-home-user/a62cc172-5e3e-5608-b2b2-4bc094d7e26f/scratchpad/fd-src/detail/911_01.mov",
      "in": 0.2,
-     "out": 3.2
+     "out": 3.2,
+     "blur": [
+      [
+       0,
+       3.0,
+       680,
+       220,
+       340,
+       200
+      ],
+      [
+       0,
+       3.0,
+       580,
+       0,
+       200,
+       50
+      ]
+     ],
+     "_note": "blur: third-party parts box (top right) and a background plate frame (top edge)"
     }
    ]
   }
