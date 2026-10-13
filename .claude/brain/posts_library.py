@@ -5,7 +5,8 @@ usage: python3 .claude/brain/posts_library.py add VIDEO --brand fd|se|as --id <p
            [--num 12] [--car "<car>"] [--caption-file FILE --caption-source "<who approved it, when>"]
            [--hook "<line>"] [--note "<line>"] [--post-on "Wed 28 Oct"] [--dropbox-path "<folder/file>"]
            [--drop-card <Video Drop card id>] [--still FILE]... [--ai] [--in-dropbox] [--no-parts] [--work DIR]
-       python3 .claude/brain/posts_library.py record <post-id> name=<asset id>... [--part <asset id>:<bytes>]... [--work DIR]
+       python3 .claude/brain/posts_library.py record <post-id> name=<asset id>... [--part <asset id>:<bytes>]... [--work DIR] [--update]
+       python3 .claude/brain/posts_library.py dropbox <post-id>         tick In Dropbox once the copy is confirmed
        python3 .claude/brain/posts_library.py read                      the call that reads every post back
        python3 .claude/brain/posts_library.py supersede <post-id> "<why>"   mark an older cut as replaced
 
@@ -26,7 +27,10 @@ server (Artifact publish with asset, from_url and asset_ids) and give `record` t
 --part <id>:<bytes>. The copy keeps the bytes off this machine's upload.
 
 The caption is read from --caption-file byte for byte and never edited here: it has to be the approved one,
-and --caption-source says who approved it and when. With no caption file the page shows the hook and
+and --caption-source says who approved it and when. The file must hold the caption and nothing else: a file
+with a Markdown heading or a code fence is refused, because all of it would land in Copy caption.
+`record` prints a `set`, which is right for a new post only. For a post already on the page give --update:
+it prints an `update` that leaves his Posted tick, the hand-over date and the order alone (add if_version). With no caption file the page shows the hook and
 "caption not on record". --ai labels every still "AI still" (a commercial that is all generated footage).
 Posted is Omarie's tick on the page; `read` prints the call that reads it back (steps.posted, posted_at).
 Post records live in the page's database, never in this repo. No model call; `add` takes a few seconds.
@@ -37,7 +41,9 @@ URL = "https://claude.ai/artifact/Y3shBejn5Lat1TZY7hVWYk"   # the NQ Posts Libra
 PART = 19 * 1024 * 1024                                       # same part size as the Video Drop page
 WORK = os.path.join(os.environ.get("TMPDIR") or "/tmp", "posts-library-handover")   # --work overrides it
 BRANDS = ("fd", "se", "as")                                   # two brands never share a post
-FLAGS = {"--ai", "--in-dropbox", "--no-parts"}                # options that take no value
+FLAGS = {"--ai", "--in-dropbox", "--no-parts", "--update"}    # options that take no value
+KNOWN = FLAGS | {"--brand", "--id", "--title", "--num", "--car", "--caption-file", "--caption-source", "--hook", "--note",
+                 "--post-on", "--dropbox-path", "--drop-card", "--still", "--part", "--work"}
 MANY = {"--still", "--part"}                                  # options that can repeat
 FRAMES = (0.15, 0.5, 0.85)                                    # where the three frames are cut, as a share of the length
 
@@ -51,6 +57,8 @@ def parse(argv):
     i = 0
     while i < len(argv):
         a = argv[i]
+        if a.startswith("--") and a not in KNOWN:
+            sys.exit(f"unknown option {a}")
         if a in FLAGS:
             opt[a] = True
         elif a.startswith("--"):
@@ -122,6 +130,8 @@ def add(pos, opt):
             sys.exit("--caption-source is needed with a caption: say who approved it and when")
         with open(opt["--caption-file"], encoding="utf-8") as f:
             caption = f.read().strip("\n")
+        if "```" in caption or any(l.startswith("# ") or l.startswith("## ") for l in caption.split("\n")):
+            sys.exit("the caption file has a heading or a code fence: give a file with only the caption text")
     folder = os.path.join(opt.get("--work", WORK), pid)
     if os.path.isdir(folder):
         shutil.rmtree(folder)
@@ -194,6 +204,8 @@ def record(pos, opt):
         if not size.isdigit():
             sys.exit(f"--part {spec!r}: write <asset id>:<bytes>")
         parts.append({"id": aid, "size": int(size)})
+    if not parts:
+        sys.exit("no video parts: give --part <asset id>:<bytes> for each part copied from Video Drop")
     total = sum(p["size"] for p in parts)
     if parts and total != m["video"]["total"]:
         sys.exit(f"the parts add up to {total:,} bytes but the master is {m['video']['total']:,}: check the ids and their order")
@@ -204,8 +216,16 @@ def record(pos, opt):
     path = os.path.join(folder, "doc.json")
     with open(path, "w", encoding="utf-8") as f:
         json.dump(doc, f, ensure_ascii=False, indent=1)
-    print(json.dumps({"tool": "ArtifactData", "url": URL, "action": "set", "collection": "posts", "doc_id": pid, "file_path": path},
-                     ensure_ascii=False))
+    if opt.get("--update"):
+        for k in ("steps", "posted_at", "handed", "order"):
+            doc.pop(k, None)
+    with open(path, "w", encoding="utf-8") as f:
+        json.dump(doc, f, ensure_ascii=False, indent=1)
+    call = {"tool": "ArtifactData", "url": URL, "action": "update" if opt.get("--update") else "set", "collection": "posts",
+            "doc_id": pid, "file_path": path}
+    if opt.get("--update"):
+        call["if_version"] = "<the version `read` showed>"
+    print(json.dumps(call, ensure_ascii=False))
 
 
 def main(argv):
@@ -218,6 +238,9 @@ def main(argv):
         record(pos, opt)
     elif cmd == "read":
         print(json.dumps({"tool": "ArtifactData", "url": URL, "action": "list", "collection": "posts"}))
+    elif cmd == "dropbox" and len(pos) == 1:
+        print(json.dumps({"tool": "ArtifactData", "url": URL, "action": "update", "collection": "posts", "doc_id": safe_id(pos[0]),
+                          "data": {"steps": {"dropbox": True}}, "if_version": "<the version `read` showed>"}))
     elif cmd == "supersede" and len(pos) == 2:
         print(json.dumps({"tool": "ArtifactData", "url": URL, "action": "update", "collection": "posts", "doc_id": safe_id(pos[0]),
                           "data": {"superseded": True, "note": pos[1]}, "if_version": "<the version `read` showed>"}, ensure_ascii=False))

@@ -69,6 +69,11 @@ Right after the Video Drop card step, add the post, with nothing typed twice:
 
 - The caption is the approved one, read from its file byte for byte. With no approved caption, leave it out: the
   page then shows the hook and "caption not on record". Never write one to fill the gap.
+- The caption file holds the caption and nothing else. A hand-over note with a heading, a "Post with" line or a
+  code fence is refused; save the caption lines to their own file first.
+- Once the Dropbox copy is confirmed (Video Drop step 5), run `posts_library.py dropbox <post-id>` and make the
+  call it prints, so In Dropbox is true on the page. For any other change to a post already on the page, use
+  `record ... --update`: a plain `record` replaces the whole record and would clear his Posted tick.
 - One brand per post. A newer cut replaces an older one with `posts_library.py supersede <old-id> "<why>"`; the
   old one stays on the page, greyed, with saving off.
 - **Posted is his tick.** He taps Posted on the page once it's up on Instagram. To see what's posted, run

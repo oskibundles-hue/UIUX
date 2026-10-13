@@ -42,6 +42,12 @@ def main():
     check("an unknown brand is refused", run("add", video, "--brand", "xx", "--id", "t1", "--title", "x", "--work", work).returncode != 0)
     check("a post id with a slash is refused", run("add", video, "--brand", "fd", "--id", "a/b", "--title", "x", "--work", work).returncode != 0)
 
+    bad = os.path.join(TMP, "bad.md")
+    with open(bad, "w", encoding="utf-8") as f:
+        f.write("# Caption\n\n```\nLine one.\n```\n")
+    check("a caption file with a heading and a fence is refused", run(*base, "--caption-file", bad, "--caption-source", "t").returncode != 0)
+    check("a mistyped option is refused", run(*base, "--dropbox-pth", "x").returncode != 0)
+
     pl.PART = 4096                                            # small parts, so the clip splits into several
     pl.add([video], {"--brand": "fd", "--id": "t1", "--title": "Clip one", "--work": work, "--caption-file": cap,
                      "--caption-source": "test", "--still": [video]})
@@ -64,6 +70,10 @@ def main():
     check("a missing asset id is refused", run("record", "t1", *pairs[:-1], "--work", work).returncode != 0)
     check("parts out of step with the master are refused",
           run("record", "t1", *pairs, "--part", "0" * 32 + ":5", "--work", work).returncode != 0)
+    u = run("record", "t1", *pairs, "--work", work, "--update")
+    upd = json.loads(u.stdout) if u.returncode == 0 else {}
+    kept = json.load(open(upd["file_path"], encoding="utf-8")) if upd else {"steps": 1}
+    check("--update prints an update that leaves the Posted tick alone", upd.get("action") == "update" and "steps" not in kept and "posted_at" not in kept)
     r = run("record", "t1", *pairs, "--work", work)
     call = json.loads(r.stdout) if r.returncode == 0 else {}
     check("record prints a set on posts/t1", (call.get("action"), call.get("collection"), call.get("doc_id")) == ("set", "posts", "t1"), r.stderr)
