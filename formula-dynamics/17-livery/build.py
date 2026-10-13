@@ -96,7 +96,7 @@ def render_still(shot, out, grade):
     vf = ["setsar=1"] + ([grade] if grade else [])
     chain, last = f"[0:v]{','.join(vf)}[v0]", "v0"
     for j, (t0, t1, x, y, w, h) in enumerate(shot.get("blur", [])):
-        chain += (f";[{last}]split[a{j}][b{j}];[b{j}]crop={w}:{h}:{x}:{y},boxblur=28:3[c{j}];"
+        chain += (f";[{last}]split[a{j}][b{j}];[b{j}]crop={w}:{h}:{x}:{y},{bblur(w, h)}[c{j}];"
                   f"[a{j}][c{j}]overlay={x}:{y}:enable='between(t,{t0},{t1})'[v{j+1}]")
         last = f"v{j+1}"
     chain += f";[{last}]{CM},format=yuv420p[vout]"
@@ -119,6 +119,12 @@ def render_still(shot, out, grade):
         sys.stderr.write(err[-1500:])
         raise SystemExit(f"still render failed: {shot['src']}")
     return n / FPS
+
+
+def bblur(w, h):
+    """boxblur sized to the box: ffmpeg refuses a radius over half the plane (a quarter for chroma)."""
+    r = max(1, min(28, min(w, h) // 2 - 1)); rc = max(1, min(r, min(w, h) // 4 - 1))
+    return f"boxblur={r}:3:{rc}:3"
 
 
 def scrim(bbox, strength):
@@ -145,7 +151,7 @@ def render_shot(shot, out, grade, mute):
     chain = f"[0:v]{','.join(vf)}[v0]"
     last = "v0"
     for k, (t0, t1, x, y, w, h) in enumerate(shot.get("blur", [])):
-        chain += (f";[{last}]split[a{k}][b{k}];[b{k}]crop={w}:{h}:{x}:{y},boxblur=28:3[c{k}];"
+        chain += (f";[{last}]split[a{k}][b{k}];[b{k}]crop={w}:{h}:{x}:{y},{bblur(w, h)}[c{k}];"
                   f"[a{k}][c{k}]overlay={x}:{y}:enable='between(t,{t0},{t1})'[v{k+1}]")
         last = f"v{k+1}"
     cmd = ["ffmpeg", "-y", "-v", "error", "-ss", str(shot["in"]), "-t", f"{dur:.3f}", "-i", shot["src"]]
