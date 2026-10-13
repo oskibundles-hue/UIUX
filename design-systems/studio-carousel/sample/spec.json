@@ -1,0 +1,37 @@
+{
+  "brand": {
+    "colour": "#1F4FFF",
+    "font": "../../../.claude/skills/ui-styling/canvas-fonts/BigShoulders-Bold.ttf",
+    "ink": "#28282C"
+  },
+  "words": {
+    "brand": "MAKER",
+    "product": "MAKER PARTS",
+    "product_word": "PARTS",
+    "cover_word": "SUBJECT",
+    "model": "MODEL 01",
+    "subject_name": "SUBJECT MODEL 01",
+    "feature_1": "PART A",
+    "feature_2": "PART B",
+    "feature_3": "THE FULL SET",
+    "closing_1": "PART A, PART B,",
+    "closing_2": "THE FULL SET."
+  },
+  "allowed_words": ["MAKER", "PARTS", "SUBJECT", "MODEL", "01", "PART", "A", "B", "THE", "FULL", "SET"],
+  "parts": {
+    "hero": "assets/part_hero.png",
+    "a": "assets/part_a.png",
+    "b": "assets/part_b.png",
+    "c": "assets/part_c.png",
+    "flat1": {"file": "assets/flatlay.png", "split": true, "piece": 0},
+    "flat2": {"file": "assets/flatlay.png", "split": true, "piece": 1},
+    "flat3": {"file": "assets/flatlay.png", "split": true, "piece": 2}
+  },
+  "subjects": {
+    "side": "assets/subject_side.png",
+    "rear": "assets/subject_rear.png",
+    "front": "assets/subject_front.png",
+    "three_quarter": "assets/subject_three_quarter.png"
+  },
+  "slides": {}
+}

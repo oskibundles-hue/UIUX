@@ -34,6 +34,12 @@ style should be used."
    caption, the 9:16 cut, notes). He approved it on 2026-10-10 ("this is a great model and way to show what it would
    look like save this"). It lives in `design-systems/post-mockup/`, with `qa.js` to run before publishing. The
    style question above is still asked for the post itself.
+
+   To build a 4:5 carousel in the light grey **studio** look (floating product parts, soft-masked subject renders,
+   ghost type, brand-colour headlines, slides 4 and 5 as one spread), use the **studio carousel** generator, first
+   used for the FD x RYFT 812 GTS carousel on 2026-10-13. It lives in `design-systems/studio-carousel/`: a JSON spec
+   in, five slides out, with `qa.py` to run before nq-check. Offer it in the style question; it uses the images
+   already supplied, and every word on it must be on the spec's allowed list.
 2. **Then build that style all the way**: its techniques, process and quality bar, in the workstream's own brand. The
    page's gold on black is Supercar Experience's; Formula Dynamics keeps FD red and Bebas Neue, Anti Stock keeps its
    own look, and two brands never share a video.
