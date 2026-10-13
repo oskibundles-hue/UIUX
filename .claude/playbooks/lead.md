@@ -47,6 +47,35 @@ in Dropbox itself, deliver it through the **Video Drop** page: https://claude.ai
   tag to a post. Whether a post gets labelled is Omarie's call.
 - The page holds 1 GiB. Clear older cards only once they're confirmed in Dropbox, and ask him first.
 
+## Adding the post to the Posts Library (at every hand-over)
+
+Omarie, 2026-10-13: "i cant keep track of all this through dropbox and dropbox aint gonna keep my captions." The
+**NQ Posts Library**, https://claude.ai/artifact/Y3shBejn5Lat1TZY7hVWYk, keeps each post's video, final caption and
+stills together, with a tab per brand and a status he can trust: Built, Checked, In Dropbox, Posted. Video Drop is
+still the one delivery page; the library is where a post lives afterwards. Use this one page. Never make a second.
+
+Right after the Video Drop card step, add the post, with nothing typed twice:
+
+1. `python3 .claude/brain/posts_library.py add VIDEO --brand fd|se|as --id <post-id> --title "..." --work <your
+   scratchpad>`, plus the caption file and who approved it, the Dropbox path and the Video Drop card id. It cuts
+   the poster, a small preview and three frames, splits the master and prints the upload call. Add `--still FILE`
+   for each cover or AI still, and `--ai` when every shot is generated.
+2. Make the upload call it printed (one call for up to 25 files). When the master is already on Video Drop, pass
+   `--no-parts` and copy those parts across on the server instead of uploading them again.
+3. `python3 .claude/brain/posts_library.py record <post-id> name=<asset id>... --work <same folder>` writes the
+   record and prints the database call. Make it. The post appears on the page at once; the page itself is not
+   edited or republished.
+4. Open the page and check the post plays, its caption copies and Save offers the full file.
+
+- The caption is the approved one, read from its file byte for byte. With no approved caption, leave it out: the
+  page then shows the hook and "caption not on record". Never write one to fill the gap.
+- One brand per post. A newer cut replaces an older one with `posts_library.py supersede <old-id> "<why>"`; the
+  old one stays on the page, greyed, with saving off.
+- **Posted is his tick.** He taps Posted on the page once it's up on Instagram. To see what's posted, run
+  `posts_library.py read` and make the call it prints: `steps.posted` and `posted_at` on each post. Don't set
+  them for him.
+- Post records live in the page's database, never in this repo or the page's source.
+
 ## The Working-now card: step detail
 
 Omarie, 2026-09-30: "I want my NQ OS system to show me when it's actively working on something." The
