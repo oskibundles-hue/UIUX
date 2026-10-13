@@ -8,7 +8,7 @@ so a bare `git push` can be judged by the branch it would really update.
 import json, os, subprocess, sys, tempfile, time
 
 GATE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "regret_gate.py")
-TMP = tempfile.mkdtemp(prefix="regret-gate-test-")
+TMP = tempfile.mkdtemp(prefix="regret-gate-test-", dir="/tmp")   # macOS temp is /var/folders, which the gate does not count as /tmp
 ON_DEFAULT = os.path.join(TMP, "on-default")
 ON_WORK = os.path.join(TMP, "on-work")
 for path, branch in ((ON_DEFAULT, "claude/new-session-mucc2q"), (ON_WORK, "feat/x")):
