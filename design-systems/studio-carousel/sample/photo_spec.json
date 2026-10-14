@@ -1,0 +1,46 @@
+{
+  "build": "photo",
+  "brand": {
+    "colour": "#1F4FFF",
+    "font": "../../../.claude/skills/ui-styling/canvas-fonts/BigShoulders-Bold.ttf",
+    "ink": "#28282C"
+  },
+  "words": {
+    "brand": "MAKER STUDIO",
+    "brand_1": "MAKER",
+    "brand_2": "STUDIO",
+    "handle": "@MAKERSTUDIO",
+    "cover_word": "SUBJECT",
+    "model": "M1",
+    "subject_name": "SUBJECT M1",
+    "category": "CATEGORY",
+    "job": "PART INSTALL",
+    "part_line": "ON THE BENCH",
+    "steps_title": "THE STEPS",
+    "step_1": "STEP ONE",
+    "step_2": "STEP TWO",
+    "step_3": "STEP THREE",
+    "step_4": "STEP FOUR",
+    "view_line": "ON THE STAND",
+    "cta_1": "TELL US WHAT YOU HAVE.",
+    "cta_2": "MESSAGE MAKER STUDIO TO BOOK."
+  },
+  "allowed_words": ["MAKER", "STUDIO", "MAKERSTUDIO", "SUBJECT", "M1", "CATEGORY", "PART", "INSTALL", "ON", "THE",
+                    "BENCH", "STEPS", "STEP", "ONE", "TWO", "THREE", "FOUR", "01", "02", "03", "04", "STAND",
+                    "TELL", "US", "WHAT", "YOU", "HAVE", "MESSAGE", "TO", "BOOK"],
+  "photos": {
+    "hero": {"file": "assets/photo_hero.jpg", "crop": [150, 150, 1450, 1100], "redact": []},
+    "view": {"file": "assets/photo_view.jpg", "redact": [[620, 885, 980, 1005]]},
+    "step1": {"file": "assets/photo_step1.jpg", "redact": []},
+    "step2": {"file": "assets/photo_step2.jpg", "redact": []},
+    "step3": {"file": "assets/photo_step3.jpg", "redact": []},
+    "step4": {"file": "assets/photo_step4.jpg", "redact": []}
+  },
+  "parts": {
+    "hero_part": "assets/cut_top.png",
+    "main": {"file": "assets/cut_rough.png", "clean": {"cut_top": 140, "cut_right": [600, 380, 480], "fade": 0.05}},
+    "closing_part": {"file": "assets/cut_rough.png", "clean": {"cut_top": 140, "cut_right": [600, 380, 480],
+                                                               "fade": 0.16, "solid": 150}}
+  },
+  "slides": {}
+}
