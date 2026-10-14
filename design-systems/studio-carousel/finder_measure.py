@@ -1,6 +1,6 @@
 """Measure how often finder.py misses a plate, on drawn plates only.
 
-    python3 finder_test.py [how many, default 240] [--sheet misses.jpg]
+    python3 finder_measure.py [how many, default 240] [--sheet misses.jpg]
 
 It draws dummy plates of known position on drawn scenes (near and far, light and dark, tilted, soft,
 dim, noisy), runs the finder, and counts a plate as found only when a cover box hides at least 90% of

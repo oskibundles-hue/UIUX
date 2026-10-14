@@ -48,7 +48,7 @@ python3 qa.py spec.json out/ --variations
 | `photos.py` | The real-photo helpers: `photo()`, `redact()`, `cover()`, `panel()`, `clean_cut()` and `make_cuts()` |
 | `engine.py` | The engine: a folder of photos and a words file in, five checked slides and one contact sheet out (below) |
 | `finder.py` | Proposes plate boxes and finds faces for the engine. Local only: OpenCV, nothing generated |
-| `finder_test.py` | Measures how often the finder misses a drawn plate |
+| `finder_measure.py` | Measures how often the finder misses a drawn plate |
 | `qa.py` | The check to run before anything goes to nq-check (below) |
 | `sheet.py` | One contact sheet of the slides: `python3 sheet.py out.jpg 1/5=01.png 2/5=02.png ...` |
 | `sample/spec.json` | The cutout build's sample spec. Copy it to start a new carousel |
@@ -98,7 +98,7 @@ photos, or a check that fails.
 changed since the sheet was made. `"photos": {"IMG_1.jpg": {"redact": [[x0, y0, x1, y1]], "crop": [...]}}` in
 the words file sets a photo's boxes by hand; the finder is then skipped for that photo.
 
-**The finder misses plates, so "none found" is not a pass.** Measured 13 Oct 2026 with `finder_test.py` on 240
+**The finder misses plates, so "none found" is not a pass.** Measured 13 Oct 2026 with `finder_measure.py` on 240
 drawn plates: it missed 21 (9%): 0 of 80 near, 2 of 80 middle, 19 of 80 far (a plate under 5% of the photo's
 width). It also covered something on 28 of 80 scenes with no plate; that costs a blurred patch, and 11 of those
 were flagged as unsure. Drawn plates are easier than real ones, so expect it to miss more on real photos. It has
