@@ -34,7 +34,8 @@ FORMATS = {
 }
 # delivery rate (average, max, buffer; kb/s) scales with the pixel count from the approved 9:16 delivery
 
-# SHA-256 of the approved exports (delivery, master). build.py will not re-encode over them without --force.
+# SHA-256 of the approved exports (Instagram-ready delivery, retired master). build.py will not re-encode over the
+# delivery file without --force; masters are no longer written (Omarie, 28 Sept 2026: one video per edit).
 APPROVED = {
     '9x16': ('22ddf49232086eb8d3856fc05760032d2a9385df77acf0c19eb3ee885e2ca544',
              '73762b7c7c59961b0a524b9fe607d65dc2b185336753389145dd1e26f03ba545'),

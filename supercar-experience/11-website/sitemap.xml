@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Only pages that stay put. The ep/<k>/ share pages send visitors straight on to /#watch-<k>,
+     so search engines treat them as redirects and they are left out. Add each approved post here. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url>
+    <loc>https://supercar-experience-garage.onrender.com/</loc>
+    <lastmod>2026-10-07</lastmod>
+  </url>
+  <url>
+    <loc>https://supercar-experience-garage.onrender.com/posts/renting-a-supercar-in-las-vegas/</loc>
+    <lastmod>2026-10-07</lastmod>
+  </url>
+  <url>
+    <loc>https://supercar-experience-garage.onrender.com/posts/renting-a-supercar-in-las-vegas-under-25/</loc>
+    <lastmod>2026-10-06</lastmod>
+  </url>
+  <url>
+    <loc>https://supercar-experience-garage.onrender.com/posts/which-rental-length-fits-a-vegas-trip/</loc>
+    <lastmod>2026-10-07</lastmod>
+  </url>
+</urlset>

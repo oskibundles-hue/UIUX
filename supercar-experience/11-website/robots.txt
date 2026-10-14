@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://supercar-experience-garage.onrender.com/sitemap.xml

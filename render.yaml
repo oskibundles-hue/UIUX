@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: supercar-experience-garage
+    runtime: static
+    rootDir: supercar-experience/11-website
+    buildCommand: echo "static site, no build"
+    staticPublishPath: .
+    headers:
+      - path: /media/*
+        name: Cache-Control
+        value: public, max-age=604800

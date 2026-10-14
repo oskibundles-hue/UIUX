@@ -55,6 +55,9 @@ Read, in the worktree: `CLAUDE.md`, `formula-dynamics/README.md`, `formula-dynam
 
 ## Rules
 
+- **Motion layouts from the layout engine (2026-10-04).** A variation of an approved FD motion layout (abc-mix, Locked-On ABC) (new car, new offer,
+  A/B/C looks on one step) is built from a recipe, not by hand: read `~/.claude/skills/layout-engine/SKILL.md`
+  and follow it. The engine is private and local; never copy any of it into this repo.
 - **For ads, Pillow + ffmpeg is the pipeline**, driven by `99-toolkit/build_all.py` from one constants
   file, `99-toolkit/fd_brand.py`. The FD branch's Remotion project is a cross-check only — do not make it
   the ad pipeline. (The vlog overlays above are a separate, Remotion-native set.)

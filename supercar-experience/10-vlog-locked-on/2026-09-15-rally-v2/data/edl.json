@@ -1,0 +1,1042 @@
+{
+ "fps": "30000/1001",
+ "size": [
+  1080,
+  1920
+ ],
+ "duration": 174.52,
+ "chapters": [
+  {
+   "t": 7.0,
+   "title": "RALLY DAY",
+   "clock": "16:10"
+  },
+  {
+   "t": 25.88,
+   "title": "THE LINEUP",
+   "clock": "18:46"
+  },
+  {
+   "t": 54.09,
+   "title": "THE GUESTS",
+   "clock": "18:52"
+  },
+  {
+   "t": 78.84,
+   "title": "ROLL OUT",
+   "clock": "19:13"
+  },
+  {
+   "t": 87.54,
+   "title": "RED ROCK",
+   "clock": "20:12"
+  },
+  {
+   "t": 116.61,
+   "title": "THE DRIVE BACK",
+   "clock": "22:36"
+  },
+  {
+   "t": 147.77,
+   "title": "THE VERDICT",
+   "clock": "23:24"
+  }
+ ],
+ "shots": [
+  {
+   "beat": 0,
+   "src": "0032",
+   "in": 820.0,
+   "out": 821.8,
+   "speed": 1.0,
+   "t": 0.0,
+   "dur": 1.8,
+   "note": "hook frame: Las Vegas Blvd, Urus ahead, Spirit of Ecstasy; HOOK PANEL on frame 0"
+  },
+  {
+   "beat": 0,
+   "src": "P2140c",
+   "in": 1.0,
+   "out": 2.2,
+   "speed": 1.0,
+   "t": 1.8,
+   "dur": 1.2,
+   "note": "Lotus of Siam lanterns, the whole group at dinner"
+  },
+  {
+   "beat": 0,
+   "src": "0013",
+   "in": 13.0,
+   "out": 14.0,
+   "speed": 1.0,
+   "t": 3.0,
+   "dur": 1.0,
+   "note": "garage lineup"
+  },
+  {
+   "beat": 0,
+   "src": "0034",
+   "in": 431.4,
+   "out": 433.4,
+   "speed": 1.0,
+   "t": 4.0,
+   "dur": 2.0,
+   "note": "SYNC: guest \"Wonderful time. Good time.\""
+  },
+  {
+   "beat": 0,
+   "src": "0032",
+   "in": 100.0,
+   "out": 101.0,
+   "speed": 1.0,
+   "t": 6.0,
+   "dur": 1.0,
+   "note": "freeway, the purple Urus passes under the lights -> whip into CH1"
+  },
+  {
+   "beat": 1,
+   "src": "0001",
+   "in": 2.0,
+   "out": 8.7,
+   "speed": 1.0,
+   "t": 7.0,
+   "dur": 6.7,
+   "note": "SYNC"
+  },
+  {
+   "beat": 2,
+   "src": "0001",
+   "in": 83.2,
+   "out": 85.8,
+   "speed": 1.0,
+   "t": 13.7,
+   "dur": 2.6,
+   "note": "SYNC opening words"
+  },
+  {
+   "beat": 2,
+   "src": "0010",
+   "in": 12.0,
+   "out": 15.0,
+   "speed": 1.0,
+   "t": 16.3,
+   "dur": 3.0,
+   "note": "the SE shop: logo wall"
+  },
+  {
+   "beat": 2,
+   "src": "0010",
+   "in": 34.0,
+   "out": 37.0,
+   "speed": 1.0,
+   "t": 19.3,
+   "dur": 3.0,
+   "note": "the SE showroom with cars"
+  },
+  {
+   "beat": 2,
+   "src": "0004",
+   "in": 47.0,
+   "out": 50.58,
+   "speed": 1.0,
+   "t": 22.3,
+   "dur": 3.58,
+   "note": "garage: green Huracan + purple Urus -> lock-on only if the make reads clearly"
+  },
+  {
+   "beat": 3,
+   "src": "0013",
+   "in": 0.0,
+   "out": 4.0,
+   "speed": 1.0,
+   "t": 25.88,
+   "dur": 4.18,
+   "note": "SYNC"
+  },
+  {
+   "beat": 3,
+   "src": "0013",
+   "in": 5.4,
+   "out": 16.45,
+   "speed": 1.0,
+   "t": 30.06,
+   "dur": 11.05,
+   "note": "SYNC"
+  },
+  {
+   "beat": 4,
+   "src": "0013",
+   "in": 26.6,
+   "out": 30.4,
+   "speed": 1.0,
+   "t": 41.11,
+   "dur": 3.8,
+   "note": "SYNC"
+  },
+  {
+   "beat": 5,
+   "src": "0013",
+   "in": 58.6,
+   "out": 65.1,
+   "speed": 1.0,
+   "t": 44.91,
+   "dur": 6.68,
+   "note": "SYNC"
+  },
+  {
+   "beat": 5,
+   "src": "0013",
+   "in": 73.1,
+   "out": 75.6,
+   "speed": 1.0,
+   "t": 51.59,
+   "dur": 2.5,
+   "note": "SYNC"
+  },
+  {
+   "beat": 6,
+   "src": "0013",
+   "in": 387.9,
+   "out": 391.0,
+   "speed": 1.0,
+   "t": 54.09,
+   "dur": 3.1,
+   "note": "SYNC"
+  },
+  {
+   "beat": 7,
+   "src": "0015",
+   "in": 2.0,
+   "out": 4.6,
+   "speed": 1.0,
+   "t": 57.19,
+   "dur": 2.6,
+   "note": "guests arriving in the garage"
+  },
+  {
+   "beat": 7,
+   "src": "0015",
+   "in": 340.0,
+   "out": 342.4,
+   "speed": 1.0,
+   "t": 59.79,
+   "dur": 2.4,
+   "note": "guests signing in on clipboards"
+  },
+  {
+   "beat": 7,
+   "src": "0013",
+   "in": 962.0,
+   "out": 964.0,
+   "speed": 1.0,
+   "t": 62.19,
+   "dur": 2.0,
+   "note": "guests walking to their cars (SAFELY. slam lands here)"
+  },
+  {
+   "beat": 8,
+   "src": "0013",
+   "in": 757.1,
+   "out": 760.6,
+   "speed": 1.0,
+   "t": 64.19,
+   "dur": 3.5,
+   "note": "SYNC: \"for you specifically you'll get the R8\""
+  },
+  {
+   "beat": 8,
+   "src": "0015",
+   "in": 89.0,
+   "out": 91.0,
+   "speed": 1.0,
+   "t": 67.69,
+   "dur": 2.0,
+   "note": "the white Audi R8 - lock-on AUDI R8"
+  },
+  {
+   "beat": 8,
+   "src": "0013",
+   "in": 762.6,
+   "out": 764.1,
+   "speed": 1.0,
+   "t": 69.69,
+   "dur": 1.5,
+   "note": "SYNC: \"because you're pretty tall\""
+  },
+  {
+   "beat": 9,
+   "src": "0013",
+   "in": 606.8,
+   "out": 610.4,
+   "speed": 1.0,
+   "t": 71.19,
+   "dur": 3.6,
+   "note": "SYNC"
+  },
+  {
+   "beat": 9,
+   "src": "0015",
+   "in": 163.0,
+   "out": 167.05,
+   "speed": 1.0,
+   "t": 74.79,
+   "dur": 4.05,
+   "note": "the black Cullinan - LEAD CAR lock-on: ROLLS-ROYCE CULLINAN"
+  },
+  {
+   "beat": 10,
+   "src": "0016",
+   "in": 0.0,
+   "out": 255.0,
+   "speed": "keyframes",
+   "t": 78.84,
+   "dur": 4.0,
+   "note": "TIMELAPSE from keyframes only (1 per source second), 4.0 s: the convoy pulls out past the Cullinan hood"
+  },
+  {
+   "beat": 11,
+   "src": "0016",
+   "in": 195.0,
+   "out": 199.7,
+   "speed": 1.0,
+   "t": 82.84,
+   "dur": 4.7,
+   "note": "SYNC"
+  },
+  {
+   "beat": 12,
+   "src": "0017",
+   "in": 11.4,
+   "out": 14.05,
+   "speed": 1.0,
+   "t": 87.54,
+   "dur": 2.83,
+   "note": "SYNC"
+  },
+  {
+   "beat": 12,
+   "src": "0017",
+   "in": 17.9,
+   "out": 19.3,
+   "speed": 1.0,
+   "t": 90.37,
+   "dur": 1.58,
+   "note": "SYNC"
+  },
+  {
+   "beat": 12,
+   "src": "0017",
+   "in": 21.1,
+   "out": 23.4,
+   "speed": 1.0,
+   "t": 91.95,
+   "dur": 2.3,
+   "note": "SYNC"
+  },
+  {
+   "beat": 13,
+   "src": "P2139a",
+   "in": 0.5,
+   "out": 3.0,
+   "speed": 1.0,
+   "t": 94.25,
+   "dur": 2.5,
+   "note": "Lotus of Siam: lanterns, SE shirt"
+  },
+  {
+   "beat": 13,
+   "src": "P2140c",
+   "in": 2.0,
+   "out": 4.5,
+   "speed": 1.0,
+   "t": 96.75,
+   "dur": 2.5,
+   "note": "the group at dinner"
+  },
+  {
+   "beat": 13,
+   "src": "P2140d",
+   "in": 3.0,
+   "out": 5.5,
+   "speed": 1.0,
+   "t": 99.25,
+   "dur": 2.5,
+   "note": "the group at dinner"
+  },
+  {
+   "beat": 14,
+   "src": "0021",
+   "in": 23.4,
+   "out": 26.0,
+   "speed": 1.0,
+   "t": 101.75,
+   "dur": 2.6,
+   "note": "SYNC walking to dinner with group two"
+  },
+  {
+   "beat": 14,
+   "src": "0005",
+   "in": 55.0,
+   "out": 58.91,
+   "speed": 1.0,
+   "t": 104.35,
+   "dur": 3.91,
+   "note": "the Ferrari Roma pulling in - lock-on FERRARI ROMA"
+  },
+  {
+   "beat": 14,
+   "src": "0021",
+   "in": 35.0,
+   "out": 37.25,
+   "speed": 1.0,
+   "t": 108.26,
+   "dur": 2.25,
+   "note": "SYNC"
+  },
+  {
+   "beat": 15,
+   "src": "0025",
+   "in": 17.0,
+   "out": 18.9,
+   "speed": 1.0,
+   "t": 110.51,
+   "dur": 1.9,
+   "note": "SYNC team dinner at Yard House"
+  },
+  {
+   "beat": 15,
+   "src": "0025",
+   "in": 36.0,
+   "out": 40.2,
+   "speed": 1.0,
+   "t": 112.41,
+   "dur": 4.2,
+   "note": "the team at the table"
+  },
+  {
+   "beat": 16,
+   "src": "P2245",
+   "in": 5.0,
+   "out": 11.1,
+   "speed": 1.0,
+   "t": 116.61,
+   "dur": 6.1,
+   "note": "Red Rock rooftop: the lineup under the lights"
+  },
+  {
+   "beat": 17,
+   "src": "P2236",
+   "in": 37.5,
+   "out": 43.35,
+   "speed": 1.0,
+   "t": 122.71,
+   "dur": 6.03,
+   "note": "SYNC"
+  },
+  {
+   "beat": 17,
+   "src": "P2236",
+   "in": 66.5,
+   "out": 70.65,
+   "speed": 1.0,
+   "t": 128.74,
+   "dur": 4.33,
+   "note": "SYNC"
+  },
+  {
+   "beat": 17,
+   "src": "P2236",
+   "in": 114.3,
+   "out": 117.0,
+   "speed": 1.0,
+   "t": 133.07,
+   "dur": 2.7,
+   "note": "SYNC"
+  },
+  {
+   "beat": 18,
+   "src": "0032",
+   "in": 5.0,
+   "out": 7.0,
+   "speed": 1.0,
+   "t": 135.77,
+   "dur": 2.0,
+   "note": "freeway: waypoint 215"
+  },
+  {
+   "beat": 18,
+   "src": "0032",
+   "in": 460.0,
+   "out": 462.0,
+   "speed": 1.0,
+   "t": 137.77,
+   "dur": 2.0,
+   "note": "green highway sign: waypoint 15 NORTH"
+  },
+  {
+   "beat": 18,
+   "src": "0032",
+   "in": 760.0,
+   "out": 762.0,
+   "speed": 1.0,
+   "t": 139.77,
+   "dur": 2.0,
+   "note": "the Strip skyline: waypoint FLAMINGO"
+  },
+  {
+   "beat": 18,
+   "src": "0032",
+   "in": 822.2,
+   "out": 824.7,
+   "speed": 1.0,
+   "t": 141.77,
+   "dur": 2.5,
+   "note": "Las Vegas Blvd neon, purple Urus ahead: waypoint LAS VEGAS BLVD, lock-on LAMBORGHINI URUS"
+  },
+  {
+   "beat": 18,
+   "src": "0032",
+   "in": 1141.0,
+   "out": 1143.0,
+   "speed": 1.0,
+   "t": 144.27,
+   "dur": 2.0,
+   "note": "the Venetian: waypoint VENETIAN"
+  },
+  {
+   "beat": 18,
+   "src": "0032",
+   "in": 1203.0,
+   "out": 1204.5,
+   "speed": 1.0,
+   "t": 146.27,
+   "dur": 1.5,
+   "note": "garage ramp: waypoint LEVEL 9"
+  },
+  {
+   "beat": 19,
+   "src": "0034",
+   "in": 428.6,
+   "out": 433.4,
+   "speed": 1.0,
+   "t": 147.77,
+   "dur": 4.8,
+   "note": "SYNC"
+  },
+  {
+   "beat": 20,
+   "src": "0034",
+   "in": 545.4,
+   "out": 550.3,
+   "speed": 1.0,
+   "t": 152.57,
+   "dur": 4.9,
+   "note": "SYNC"
+  },
+  {
+   "beat": 21,
+   "src": "0032",
+   "in": 1442.2,
+   "out": 1446.25,
+   "speed": 1.0,
+   "t": 157.47,
+   "dur": 4.05,
+   "note": "SYNC"
+  },
+  {
+   "beat": 22,
+   "src": "0034",
+   "in": 190.4,
+   "out": 195.4,
+   "speed": 1.0,
+   "t": 161.52,
+   "dur": 5.0,
+   "note": "SYNC"
+  },
+  {
+   "beat": 23,
+   "src": "0034",
+   "in": 96.8,
+   "out": 100.3,
+   "speed": 1.0,
+   "t": 166.52,
+   "dur": 3.5,
+   "note": "SYNC"
+  },
+  {
+   "beat": 24,
+   "src": "card",
+   "in": 0,
+   "out": 4.5,
+   "speed": 1.0,
+   "t": 170.02,
+   "dur": 4.5,
+   "note": "END CARD"
+  }
+ ],
+ "dialog": [
+  {
+   "beat": 1,
+   "src": "0001",
+   "in": 2.0,
+   "out": 8.7,
+   "t": 7.0,
+   "trim_pauses": null
+  },
+  {
+   "beat": 2,
+   "src": "0001",
+   "in": 83.2,
+   "out": 89.9,
+   "t": 13.7,
+   "trim_pauses": null
+  },
+  {
+   "beat": 2,
+   "src": "0001",
+   "in": 92.05,
+   "out": 97.35,
+   "t": 20.58,
+   "trim_pauses": null
+  },
+  {
+   "beat": 3,
+   "src": "0013",
+   "in": 0.0,
+   "out": 4.0,
+   "t": 25.88,
+   "trim_pauses": 0.45
+  },
+  {
+   "beat": 3,
+   "src": "0013",
+   "in": 5.4,
+   "out": 16.45,
+   "t": 30.06,
+   "trim_pauses": 0.45
+  },
+  {
+   "beat": 4,
+   "src": "0013",
+   "in": 26.6,
+   "out": 30.4,
+   "t": 41.11,
+   "trim_pauses": null
+  },
+  {
+   "beat": 5,
+   "src": "0013",
+   "in": 58.6,
+   "out": 65.1,
+   "t": 44.91,
+   "trim_pauses": null
+  },
+  {
+   "beat": 5,
+   "src": "0013",
+   "in": 73.1,
+   "out": 75.6,
+   "t": 51.59,
+   "trim_pauses": null
+  },
+  {
+   "beat": 6,
+   "src": "0013",
+   "in": 387.9,
+   "out": 391.0,
+   "t": 54.09,
+   "trim_pauses": null
+  },
+  {
+   "beat": 7,
+   "src": "0011",
+   "in": 221.0,
+   "out": 228.0,
+   "t": 57.19,
+   "trim_pauses": null
+  },
+  {
+   "beat": 8,
+   "src": "0013",
+   "in": 757.1,
+   "out": 764.1,
+   "t": 64.19,
+   "trim_pauses": null
+  },
+  {
+   "beat": 9,
+   "src": "0013",
+   "in": 606.8,
+   "out": 614.45,
+   "t": 71.19,
+   "trim_pauses": null
+  },
+  {
+   "beat": 11,
+   "src": "0016",
+   "in": 195.0,
+   "out": 199.7,
+   "t": 82.84,
+   "trim_pauses": null
+  },
+  {
+   "beat": 12,
+   "src": "0017",
+   "in": 11.4,
+   "out": 14.05,
+   "t": 87.54,
+   "trim_pauses": null
+  },
+  {
+   "beat": 12,
+   "src": "0017",
+   "in": 17.9,
+   "out": 19.3,
+   "t": 90.37,
+   "trim_pauses": null
+  },
+  {
+   "beat": 12,
+   "src": "0017",
+   "in": 21.1,
+   "out": 23.4,
+   "t": 91.95,
+   "trim_pauses": null
+  },
+  {
+   "beat": 14,
+   "src": "0021",
+   "in": 23.4,
+   "out": 25.85,
+   "t": 101.75,
+   "trim_pauses": null
+  },
+  {
+   "beat": 14,
+   "src": "0021",
+   "in": 28.5,
+   "out": 32.4,
+   "t": 104.38,
+   "trim_pauses": null
+  },
+  {
+   "beat": 14,
+   "src": "0021",
+   "in": 35.2,
+   "out": 37.25,
+   "t": 108.46,
+   "trim_pauses": null
+  },
+  {
+   "beat": 15,
+   "src": "0025",
+   "in": 17.0,
+   "out": 18.9,
+   "t": 110.51,
+   "trim_pauses": null
+  },
+  {
+   "beat": 15,
+   "src": "0022",
+   "in": 116.0,
+   "out": 120.0,
+   "t": 112.59,
+   "trim_pauses": null
+  },
+  {
+   "beat": 16,
+   "src": "0030",
+   "in": 48.4,
+   "out": 54.5,
+   "t": 116.61,
+   "trim_pauses": null
+  },
+  {
+   "beat": 17,
+   "src": "P2236",
+   "in": 37.5,
+   "out": 43.35,
+   "t": 122.71,
+   "trim_pauses": null
+  },
+  {
+   "beat": 17,
+   "src": "P2236",
+   "in": 66.5,
+   "out": 70.65,
+   "t": 128.74,
+   "trim_pauses": null
+  },
+  {
+   "beat": 17,
+   "src": "P2236",
+   "in": 114.3,
+   "out": 117.0,
+   "t": 133.07,
+   "trim_pauses": null
+  },
+  {
+   "beat": 19,
+   "src": "0034",
+   "in": 428.6,
+   "out": 433.4,
+   "t": 147.77,
+   "trim_pauses": null
+  },
+  {
+   "beat": 20,
+   "src": "0034",
+   "in": 545.4,
+   "out": 550.3,
+   "t": 152.57,
+   "trim_pauses": null
+  },
+  {
+   "beat": 21,
+   "src": "0032",
+   "in": 1442.2,
+   "out": 1446.25,
+   "t": 157.47,
+   "trim_pauses": null
+  },
+  {
+   "beat": 22,
+   "src": "0034",
+   "in": 190.4,
+   "out": 195.4,
+   "t": 161.52,
+   "trim_pauses": null
+  },
+  {
+   "beat": 23,
+   "src": "0034",
+   "in": 96.8,
+   "out": 100.3,
+   "t": 166.52,
+   "trim_pauses": null
+  }
+ ],
+ "audio_extra": [
+  {
+   "beat": 0,
+   "src": "0034",
+   "in": 431.5,
+   "out": 433.35,
+   "t": 0.0,
+   "kind": "dialog"
+  },
+  {
+   "beat": 10,
+   "src": "0016",
+   "in": 60.0,
+   "out": 64.0,
+   "t": 78.84,
+   "kind": "nat"
+  },
+  {
+   "beat": 13,
+   "src": "P2140c",
+   "in": 2.0,
+   "out": 4.5,
+   "t": 94.25,
+   "kind": "nat"
+  },
+  {
+   "beat": 13,
+   "src": "P2140d",
+   "in": 3.0,
+   "out": 5.5,
+   "t": 94.25,
+   "kind": "nat"
+  },
+  {
+   "beat": 18,
+   "src": "0032",
+   "in": 5.0,
+   "out": 18.0,
+   "t": 135.77,
+   "kind": "nat"
+  }
+ ],
+ "beats": [
+  {
+   "i": 0,
+   "ch": "OPEN",
+   "t0": 0.0,
+   "t1": 7.0,
+   "note": ""
+  },
+  {
+   "i": 1,
+   "ch": "CH1",
+   "t0": 7.0,
+   "t1": 13.7,
+   "note": "\"What's going on guys? We're back at it again. So today we have a rally\" - host in the Cullinan"
+  },
+  {
+   "i": 2,
+   "ch": "CH1",
+   "t0": 13.7,
+   "t1": 25.88,
+   "note": "\"...as Supercar Experience offer, if you guys ever want to go on a big group / drive all these cars, go get dinner, show up, show out\""
+  },
+  {
+   "i": 3,
+   "ch": "CH2",
+   "t0": 25.88,
+   "t1": 41.11,
+   "note": "\"See, we have all the cars. Black Series, Uruses, Corvette, Huracan Evos, GT3s, Rolls-Royce Cullinan\" - CONVOY LOCK-ON hops car to car"
+  },
+  {
+   "i": 4,
+   "ch": "CH2",
+   "t0": 41.11,
+   "t1": 44.91,
+   "note": "\"So right now, we're getting ready to meet the customers.\""
+  },
+  {
+   "i": 5,
+   "ch": "CH2",
+   "t0": 44.91,
+   "t1": 54.09,
+   "note": "\"If you ever need to book with us for a large event like this, as you can see, we're able to do it... let us know what you need and we'll make it happen\" - CTA chip TEXT OR DM TO BOOK"
+  },
+  {
+   "i": 6,
+   "ch": "CH3",
+   "t0": 54.09,
+   "t1": 57.19,
+   "note": "\"How you guys doing?\" \"Good. Good.\""
+  },
+  {
+   "i": 7,
+   "ch": "CH3",
+   "t0": 57.19,
+   "t1": 64.19,
+   "note": "VO \"just showing the customers how the vehicles are supposed to be driven safely. That's our number one thing. Safely.\""
+  },
+  {
+   "i": 8,
+   "ch": "CH3",
+   "t0": 64.19,
+   "t1": 71.19,
+   "note": "tall guest gets the drop top"
+  },
+  {
+   "i": 9,
+   "ch": "CH3",
+   "t0": 71.19,
+   "t1": 78.84,
+   "note": "\"Everyone's getting ready to get out of here so we can start this drive. I am in the all black Cullinan. I'll be leading everybody.\""
+  },
+  {
+   "i": 10,
+   "ch": "CH4",
+   "t0": 78.84,
+   "t1": 82.84,
+   "note": "route card: VENETIAN -> BLUE DIAMOND -> RED ROCK"
+  },
+  {
+   "i": 11,
+   "ch": "CH4",
+   "t0": 82.84,
+   "t1": 87.54,
+   "note": "\"Where are you guys from?\" \"San Francisco.\" (guests riding in the Cullinan)"
+  },
+  {
+   "i": 12,
+   "ch": "CH5",
+   "t0": 87.54,
+   "t1": 94.25,
+   "note": "\"So as of right now, I'm going to go down to Lotus of Siam. / We lost so many people. / That's just part of being in a rally.\""
+  },
+  {
+   "i": 13,
+   "ch": "CH5",
+   "t0": 94.25,
+   "t1": 101.75,
+   "note": "place stamp 21:39 LOTUS OF SIAM - RED ROCK CASINO"
+  },
+  {
+   "i": 14,
+   "ch": "CH5",
+   "t0": 101.75,
+   "t1": 110.51,
+   "note": "GUEST TESTIMONIAL card, RALLY GUEST: \"Out of all those cars, I would say maybe the Roma. That's the color shift Ferrari from gray to red. That's my favorite part\""
+  },
+  {
+   "i": 15,
+   "ch": "CH5",
+   "t0": 110.51,
+   "t1": 116.61,
+   "note": "TEAM DINNER: \"We are currently eating at Yard House.\" + VO \"We're just out here getting everybody together and giving them the experience that they want.\""
+  },
+  {
+   "i": 16,
+   "ch": "CH6",
+   "t0": 116.61,
+   "t1": 122.71,
+   "note": "VO \"We're gonna go back to the Venetian right now. So it's been a long, a full day, eventful day\""
+  },
+  {
+   "i": 17,
+   "ch": "CH6",
+   "t0": 122.71,
+   "t1": 135.77,
+   "note": "the convoy briefing: \"look at what car is in front of you. Follow that car.\" / \"215 ... to the 15 North\" / \"make sure everybody's safe, make sure everybody's having fun\" - ROUTE LINE appears"
+  },
+  {
+   "i": 18,
+   "ch": "CH6",
+   "t0": 135.77,
+   "t1": 147.77,
+   "note": "music-driven convoy montage, whips between shots, clock rolls 23:00 -> 23:20"
+  },
+  {
+   "i": 19,
+   "ch": "CH7",
+   "t0": 147.77,
+   "t1": 152.57,
+   "note": "\"You guys had a great time though?\" \"Wonderful time. Good time.\" -> QUOTE WALL word 1-2"
+  },
+  {
+   "i": 20,
+   "ch": "CH7",
+   "t0": 152.57,
+   "t1": 157.47,
+   "note": "\"You guys had a great time?\" \"Wonderful?\" \"Awesome.\" \"Amazing, amazing.\" -> QUOTE WALL"
+  },
+  {
+   "i": 21,
+   "ch": "CH7",
+   "t0": 157.47,
+   "t1": 161.52,
+   "note": "\"Guys had fun.\" \"Good experience.\" -> QUOTE WALL"
+  },
+  {
+   "i": 22,
+   "ch": "CH7",
+   "t0": 161.52,
+   "t1": 166.52,
+   "note": "\"Man, today was a hell of a day, I'm not gonna lie. But I feel like the ending was a lot better than anything.\""
+  },
+  {
+   "i": 23,
+   "ch": "CH7",
+   "t0": 166.52,
+   "t1": 170.02,
+   "note": "\"make sure you follow us on Instagram at Supercar Experience\" -> END CARD"
+  },
+  {
+   "i": 24,
+   "ch": "END",
+   "t0": 170.02,
+   "t1": 174.52,
+   "note": ""
+  }
+ ],
+ "warnings": [
+  "beat 0: picture 7.00s vs dialog/dur 0.00s",
+  "beat 18: picture 12.00s vs dialog/dur 0.00s"
+ ]
+}
