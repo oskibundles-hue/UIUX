@@ -1,0 +1,42 @@
+{
+  "brand": {
+    "colour": "#1F4FFF",
+    "font": "../../../.claude/skills/ui-styling/canvas-fonts/BigShoulders-Bold.ttf",
+    "ink": "#28282C"
+  },
+  "words": {
+    "brand": "MAKER STUDIO",
+    "brand_1": "MAKER",
+    "brand_2": "STUDIO",
+    "handle": "@MAKERSTUDIO",
+    "cover_word": "SUBJECT",
+    "model": "M1",
+    "subject_name": "SUBJECT M1",
+    "category": "CATEGORY",
+    "job": "PART INSTALL",
+    "part_line": "ON THE BENCH",
+    "steps_title": "THE STEPS",
+    "step_1": "STEP ONE",
+    "step_2": "STEP TWO",
+    "step_3": "STEP THREE",
+    "step_4": "STEP FOUR",
+    "view_line": "ON THE STAND",
+    "cta_1": "TELL US WHAT YOU HAVE.",
+    "cta_2": "MESSAGE MAKER STUDIO TO BOOK."
+  },
+  "pick": {"hero_part": "cut_top.png", "main": "cut_rough.png", "closing_part": "cut_rough.png"},
+  "clean": {
+    "main": {"cut_top": 140, "cut_right": [600, 380, 480], "fade": 0.05},
+    "closing_part": {"cut_top": 140, "cut_right": [600, 380, 480], "fade": 0.16, "solid": 150}
+  },
+  "post": {
+    "title": "Sample studio<br>carousel",
+    "sub": "Sample feed post: a 4:5 carousel of five slides, built by the carousel engine from placeholder photos. Not posted.",
+    "handle": "makerstudio",
+    "location": "Sample location",
+    "name": "Sample-Studio",
+    "caption": "Sample part install on the Subject M1, start to finish.\n\nTell us what you have. Message Maker Studio to book.\n\n#sampletag #anothertag",
+    "display": {"family": "Big Shoulders Display", "google": "Big+Shoulders+Display:wght@700"},
+    "notes": ["<b>Words:</b> every word on the slides comes from the words file. These are placeholders."]
+  }
+}

@@ -23,9 +23,10 @@ reads the private repo `nq-agent-channel`, so that repo has to be attached to th
 the notes are missing, tell the lead and use the files the playbook names.
 
 **Read the playbook the brief names**, in `<repo>/.claude/playbooks/`: `formula-dynamics.md`,
-`supercar-experience.md`, `anti-stock.md` or `research.md`. It says where the work lives (branch and
-worktree), what to read first and which rules are easy to break. If the job is creative or client work
-and the brief names no playbook, stop and ask the lead.
+`supercar-experience.md`, `anti-stock.md` or `research.md`, plus `sound-layer.md` when the job adds
+sound effects. It says where the work lives (branch and worktree), what to read first and which rules
+are easy to break. If the job is creative or client work and the brief names no playbook, stop and ask
+the lead.
 
 **Style comes from the lead.** Every creative brief names the style to build (Locked-On, Quick-Promo, a
 workstream format, or a proposed look such as Now Boarding or Paste-Up). If yours doesn't, stop and ask

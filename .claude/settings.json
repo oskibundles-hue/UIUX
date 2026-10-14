@@ -43,7 +43,7 @@
     ],
     "PreToolUse": [
       {
-        "matcher": "Bash|mcp__(Higgsfield|Dropbox|Windsor_ai|vidIQ|Vertiso_Memory|github)__.*",
+        "matcher": "Bash|mcp__(Higgsfield|Dropbox|Windsor_ai|vidIQ|Vertiso_Memory|github|e17b92d9-8ef6-414a-9d7c-cbcd27995067|a8f752c9-094c-401f-bfd1-5765c16a1cac|ce55a968-b7c0-40de-9c2e-6aca8cb8f490|6887db1f-0e1a-41ac-ba4c-ce4158862ba3)__.*",
         "hooks": [
           {
             "type": "command",

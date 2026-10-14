@@ -1,0 +1,34 @@
+{
+  "_note": "Broken on purpose: every qa.py check should fire on this. Run python3 qa.py --selftest.",
+  "brand": {
+    "colour": "#1F4FFF",
+    "font": "../../../.claude/skills/ui-styling/canvas-fonts/BigShoulders-Bold.ttf"
+  },
+  "words": {"brand": "MAKER", "model": "MODEL 01"},
+  "allowed_words": ["MAKER", "MODEL", "01", "PART", "A", "B"],
+  "parts": {"a": "assets/part_a.png", "c": "assets/part_c.png"},
+  "subjects": {"rear": "assets/subject_rear.png"},
+  "photos": {"shot": "assets/photo_step1.jpg"},
+  "slides": {
+    "1": [
+      {"type": "label", "text": "{model}", "px": 46, "x": 30, "y": 1200},
+      {"type": "label", "text": "ROGUE WORD", "px": 46, "x": 400, "y": 600}
+    ],
+    "2": [
+      {"type": "label", "text": "PART A", "px": 60, "x": -40, "y": 200},
+      {"type": "label", "text": "PART B", "px": 60, "x": 0, "y": 400},
+      {"type": "part", "ref": "a", "w": 560, "cx": 700, "cy": 800},
+      {"type": "label", "text": "MODEL 01", "px": 80, "x": 560, "y": 760}
+    ],
+    "3": [
+      {"type": "panel", "ref": "shot", "x": 10, "y": 300, "w": 500, "h": 400},
+      {"type": "echo", "text": "{brand}", "px": 100, "x": 300, "y": 720},
+      {"type": "echo", "text": "{model}", "px": 100, "x": 1119, "y": 900, "anchor": "rt"}
+    ],
+    "spread": [
+      {"type": "label", "text": "MODEL 01 PART A PART B", "px": 60, "x": 900, "y": 300},
+      {"type": "subject", "ref": "rear", "w": 600, "cx": 1500, "cy": 800},
+      {"type": "part", "ref": "c", "w": 300, "cx": 1500, "cy": 500}
+    ]
+  }
+}

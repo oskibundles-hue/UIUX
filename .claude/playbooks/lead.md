@@ -24,10 +24,62 @@ in Dropbox itself, deliver it through the **Video Drop** page: https://claude.ai
      `scope: "assets"` prints for its asset id, so a part out of place on the card is caught (one or two calls
      for all the parts). Omarie, 7 Oct: Part 2 v2 checked 26 parts this way, where reading each back with its
      own `path` would have taken 26 calls; a multi-`paths` read of asset ids failed in Part 2.
-  5. Once he has saved it, confirm the file in Dropbox at the exact size and the master's SHA-256 (`shasum -a 256`
-     on the Dropbox copy, a few seconds). That checks the whole file end to end, whatever the listing's hash is
-     based on.
+  5. Once he has saved it, get the Dropbox copy (`download_link`, then `curl`; on the Mac it is already in the
+     Dropbox folder) and confirm it against the master. If the file isn't in the card's folder, search Dropbox
+     for its filename: the showreel trial landed in the Dropbox root. Ask him before moving it. The copy won't
+     have the master's size or its whole-file SHA-256: claude.ai's save path adds a C2PA box right after `ftyp`
+     (a top-level MP4 `uuid` box, type `d8fec3d6-1b0e-483c-9297-5828877ec481`), and because the box sits before
+     `mdat`, every `stco`/`co64` chunk offset goes up by the box's size. Nothing else changes. Expect the
+     master's size plus the box, and don't fail a file on a `shasum -a 256` mismatch alone. Either of these
+     checks the whole file end to end:
+     - (a) The streams match: `ffmpeg -v error -i FILE -map 0 -c copy -f streamhash -hash sha256 -` prints the
+       same per-stream hashes for the master and the Dropbox copy, and the same command ending `-f framemd5 -`
+       prints the same packet list.
+     - (b) The file matches with the box out: `python3 .claude/brain/c2pa_strip_check.py MASTER DROPBOX_COPY`
+       leaves the box out, moves the chunk offsets back and prints PASS when the SHA-256 is then exactly the
+       master's. MASTER is the master file, or its SHA-256 when the master isn't on this machine. A copy with
+       no box passes only when it is the master byte for byte. It writes nothing.
+
+     Seen 12 Oct on four FD Opus clips and the Showreel 2026 sound trial: each landed 5,893 bytes over its
+     master, the size of the box, so the old exact-size check failed every time.
+- The box is Content Credentials, signed "Anthropic Claude Content Signing" with claim generator "Anthropic
+  Claude.ai" and the action `com.anthropic.claude.provided`. Instagram reads C2PA and may add its own "AI info"
+  tag to a post. Whether a post gets labelled is Omarie's call.
 - The page holds 1 GiB. Clear older cards only once they're confirmed in Dropbox, and ask him first.
+
+## Adding the post to the Posts Library (at every hand-over)
+
+Omarie, 2026-10-13: "i cant keep track of all this through dropbox and dropbox aint gonna keep my captions." The
+**NQ Posts Library**, https://claude.ai/artifact/Y3shBejn5Lat1TZY7hVWYk, keeps each post's video, final caption and
+stills together, with a tab per brand and a status he can trust: Built, Checked, In Dropbox, Posted. Video Drop is
+still the one delivery page; the library is where a post lives afterwards. Use this one page. Never make a second.
+
+Right after the Video Drop card step, add the post, with nothing typed twice:
+
+1. `python3 .claude/brain/posts_library.py add VIDEO --brand fd|se|as --id <post-id> --title "..." --work <your
+   scratchpad>`, plus the caption file and who approved it, the Dropbox path and the Video Drop card id. It cuts
+   the poster, a small preview and three frames, splits the master and prints the upload call. Add `--still FILE`
+   for each cover or AI still, and `--ai` when every shot is generated.
+2. Make the upload call it printed (one call for up to 25 files). When the master is already on Video Drop, pass
+   `--no-parts` and copy those parts across on the server instead of uploading them again.
+3. `python3 .claude/brain/posts_library.py record <post-id> name=<asset id>... --work <same folder>` writes the
+   record and prints the database call. Make it. The post appears on the page at once; the page itself is not
+   edited or republished.
+4. Open the page and check the post plays, its caption copies and Save offers the full file.
+
+- The caption is the approved one, read from its file byte for byte. With no approved caption, leave it out: the
+  page then shows the hook and "caption not on record". Never write one to fill the gap.
+- The caption file holds the caption and nothing else. A hand-over note with a heading, a "Post with" line or a
+  code fence is refused; save the caption lines to their own file first.
+- Once the Dropbox copy is confirmed (Video Drop step 5), run `posts_library.py dropbox <post-id>` and make the
+  call it prints, so In Dropbox is true on the page. For any other change to a post already on the page, use
+  `record ... --update`: a plain `record` replaces the whole record and would clear his Posted tick.
+- One brand per post. A newer cut replaces an older one with `posts_library.py supersede <old-id> "<why>"`; the
+  old one stays on the page, greyed, with saving off.
+- **Posted is his tick.** He taps Posted on the page once it's up on Instagram. To see what's posted, run
+  `posts_library.py read` and make the call it prints: `steps.posted` and `posted_at` on each post. Don't set
+  them for him.
+- Post records live in the page's database, never in this repo or the page's source.
 
 ## The Working-now card: step detail
 
@@ -39,9 +91,9 @@ after a day, so a card you stop updating goes stale in the open rather than look
 
 The lead keeps the card; agents never write it. On any job past a couple of minutes:
 
-1. **Start:** `python3 .claude/brain/live_card.py start "<job>" "<first step>"` prints the payload
+1. **Start:** `python3 .claude/brain/live_card.py start "<job>" "<first step>" --role <id>` prints the payload
    (url, collection `work`, this session's doc id, data). Pass it to `ArtifactData` as a `set`; a new
-   card needs no `if_version`.
+   card needs no `if_version`. `live_card.py roles` lists the ids; it lights that role on the Agents page map.
 2. **Each new step, and at least every 15 minutes while working:** `... step "<what you're on now>"`
    (add `--pct N` when there's a real percentage), then `ArtifactData` `update` with `if_version` set
    to the version the last write returned.
@@ -64,7 +116,8 @@ see `.claude/agentmesh/bench-2026-09-30.md`. The policy and the reasons are in
 
 **Brief with the class, the playbook and the style.** The workstream knowledge (branches, worktrees,
 pipelines, brand rules) is in `.claude/playbooks/`: `formula-dynamics.md`, `supercar-experience.md`,
-`anti-stock.md`, `research.md`, and `review.md` for the checks. Name the one that applies, so the same
+`anti-stock.md`, `research.md`, `sound-layer.md` for recorded sound effects on any video (added with the
+workstream's playbook), and `review.md` for the checks. Name the one that applies, so the same
 `nq-build` builds any workstream's piece. Builders work in worktrees of their workstream's branch,
 because this default branch doesn't carry `creator-kit/`, `formula-dynamics/` or `supercar-experience/`.
 
