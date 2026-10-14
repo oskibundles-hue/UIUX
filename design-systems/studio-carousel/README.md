@@ -46,10 +46,14 @@ python3 qa.py spec.json out/ --variations
 | `LAYOUT.md` | The approved layout rules |
 | `generate.py` | The generator: `python3 generate.py <spec.json> <out_dir> [--variations]`. Holds both builds' layouts |
 | `photos.py` | The real-photo helpers: `photo()`, `redact()`, `cover()`, `panel()`, `clean_cut()` and `make_cuts()` |
+| `engine.py` | The engine: a folder of photos and a words file in, five checked slides and one contact sheet out (below) |
+| `finder.py` | Proposes plate boxes and finds faces for the engine. Local only: OpenCV, nothing generated |
+| `finder_test.py` | Measures how often the finder misses a drawn plate |
 | `qa.py` | The check to run before anything goes to nq-check (below) |
 | `sheet.py` | One contact sheet of the slides: `python3 sheet.py out.jpg 1/5=01.png 2/5=02.png ...` |
 | `sample/spec.json` | The cutout build's sample spec. Copy it to start a new carousel |
 | `sample/photo_spec.json` | The photo build's sample spec |
+| `sample/words.json` | The engine's sample words file |
 | `sample/broken_spec.json` | Broken on purpose, for `python3 qa.py --selftest` |
 | `sample/assets/` | Labelled placeholder parts, subjects and photos; `sample/make_placeholders.py` redraws them |
 | `preview.png` | Both samples, rendered |
@@ -58,6 +62,51 @@ python3 qa.py spec.json out/ --variations
 Needs Python 3 with numpy, Pillow and scipy (`pip install numpy pillow scipy`). On Omarie's Mac, run
 it through uv: `uv run --with numpy --with pillow --with scipy python qa.py`. Cutting parts out of photos
 (`photos.py cuts`) also needs rembg.
+
+## The engine
+
+One command builds the photo build from a folder of photos and a words file:
+
+```
+python3 engine.py <photo folder> --words words.json --out out/ [--mockup]
+python3 engine.py --approve out/
+```
+
+On Omarie's Mac: `uv run --with numpy --with pillow --with scipy --with opencv-python-headless python engine.py ...`
+(add `--with rembg` when it has to cut a part out of a photo). Try it on the sample:
+`engine.py sample/assets --words sample/words.json --out out/`.
+
+What it does, in order:
+
+1. **Reads the words file.** It needs all 18 word roles (see `sample/words.json`) and the brand colour and font.
+   Words on the slides come only from this file, and the engine writes them to the spec's `allowed_words`.
+2. **Picks the photos.** Six photos: the hook, the large photo and the four steps. A name helps (`hero`, `view`,
+   `step1` to `step4`); without names it uses the photo's shape, then name order. Cutout PNGs in the folder are
+   used as the parts. `"pick": {"hero": "IMG_1.jpg", ...}` in the words file pins any slot.
+3. **Looks for plates and faces** in every photo (`finder.py`), covers each plate it finds and crops each face
+   out. It writes what it found to the photo's `redact` list in the spec, marked `proposed`.
+4. **Writes `out/spec.json`, builds the five slides and runs `qa.py`'s checks.**
+5. **Writes `out/sheet.jpg`**: the five slides, and under them every photo as it went in, with an outline where
+   a cover was applied (red: plate, amber: plate it is unsure of, blue: face, green: the crop that removes it).
+
+It prints `all clear` when the slides pass, then `NOT APPROVED YET`. It stops with `STOPPED:` and one plain line
+when something is wrong: a word role missing, a word that isn't on the words file's own `allowed_words`, too few
+photos, or a check that fails.
+
+**A person approves the plates on the finished sheet.** Nothing is final until someone has looked at
+`out/sheet.jpg` and run `engine.py --approve out/`, which writes `out/final/`. It refuses when the slides have
+changed since the sheet was made. `"photos": {"IMG_1.jpg": {"redact": [[x0, y0, x1, y1]], "crop": [...]}}` in
+the words file sets a photo's boxes by hand; the finder is then skipped for that photo.
+
+**The finder misses plates, so "none found" is not a pass.** Measured 13 Oct 2026 with `finder_test.py` on 240
+drawn plates: it missed 21 (9%): 0 of 80 near, 2 of 80 middle, 19 of 80 far (a plate under 5% of the photo's
+width). It also covered something on 28 of 80 scenes with no plate; that costs a blurred patch, and 11 of those
+were flagged as unsure. Drawn plates are easier than real ones, so expect it to miss more on real photos. It has
+not been measured on real photos yet.
+
+`--mockup` also writes `out/mockup/`, the sample as a page built from `../post-mockup/template.html`; it needs a
+`post` block in the words file (title, sub, handle, caption, name). Run `../post-mockup/qa.js` on it before
+publishing.
 
 ## The rules
 
@@ -180,7 +229,7 @@ It renders the spec and fails on any of these:
 - any word, in any text element, that isn't on `allowed_words`.
 
 Send to nq-check only when it prints `all clear`. The check covers text drawn by the generator, not words inside
-the photos, and it can't see a face or a plate nobody listed: look for those on the contact sheet.
+the photos, and it can't see a face or a plate nobody listed: look for those on the contact sheet. The engine's sheet shows every photo with its covers outlined for that look.
 
 ## Where it is used
 

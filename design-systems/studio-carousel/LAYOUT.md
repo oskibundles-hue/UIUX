@@ -44,6 +44,11 @@ workstream's own colour and font. `generate.py` builds it, and `qa.py` checks th
   field with a feathered edge, because letters stay readable through a plain blur.
 - **No faces.** Crop them out with the photo's `crop`.
 - Every photo in the spec carries a `redact` list, `[]` when it has no plate, so nobody skips the look.
+- **The engine finds them, a person approves them.** Omarie, 13 Oct 2026: "Find the plates for me", and "we can
+  just do it after it makes the carousel". `engine.py` covers the plates and faces it finds and builds straight
+  through; the look happens once, on the finished contact sheet, where each cover is outlined. Nothing is posted
+  or delivered until that look is done and `engine.py --approve` has been run. The finder misses plates
+  (README.md has the measured rate), so "none found" still needs the look.
 - **No generating.** Omarie, 13 Oct 2026: "use what we have". Use only the photos supplied, rembg and Pillow.
 
 ## Words
