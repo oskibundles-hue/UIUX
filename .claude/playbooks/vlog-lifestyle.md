@@ -116,6 +116,28 @@ long-form YouTube video first (about 10–20 min). Then cut the vertical 3-minut
 chapters. Each chapter is already a self-contained beat with a hook line, so a part or Short is a re-frame
 and a re-time, not a new edit. Below that bar, make 3-minute parts only.
 
+## Speed: rough cut in hours, not days (Omarie, 2026-10-09)
+
+"next time i make a vid it better not take this long at all." The "One-way ticket" long-form took about three days.
+The causes were 4K source cuts fetched for every candidate span, one fresh agent per chapter (each hitting its turn
+cap), 4K renders before he had seen a cut, and blur rules that changed mid-build, forcing re-renders. Every long-form
+vlog now runs in this order:
+
+1. **Settle every privacy call in the first click**, together with the style: what gets blurred (clothing prints,
+   signs, plates, the speedometer only while the car is moving), whose voices get muted, and what never goes on
+   screen. That way no chapter is re-rendered for a rule change.
+2. **Cut the whole video from 720p proxies in one pass.** Fetch only the planned spans, with
+   `VLOG_MEZZ_LONG=1280` (about 9x smaller and several times faster than 3840). Use one builder for all the
+   chapters, with the PLAN as the EDL, and batch its commands.
+3. **Send Omarie a 720p rough cut of the whole video** for notes before any 4K work.
+4. **After his notes, fetch 4K only for the seconds the final cut uses.** Render the 4K master once, assembled from
+   the silent picture plus the mixes, so the NO MUSIC master is only a remux.
+5. **Run one `nq-check` on the whole video, then `nq-facts` and `nq-second`, then deliver.** Don't run a separate
+   check per chapter unless he asks for one.
+
+Free disk as you go. Delete the proxies once the 4K cut is fetched, and the 4K source cuts once the master passes.
+Each chapter keeps only its silent `master_video.mp4` and its wavs.
+
 ## Before delivery (`nq-check` adds these to `review.md`)
 
 - [ ] The first 15 s state the question or show the payoff, and he is on screen or heard by 0:05.
