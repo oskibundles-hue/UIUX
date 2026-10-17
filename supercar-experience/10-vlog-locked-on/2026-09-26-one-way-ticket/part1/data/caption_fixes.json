@@ -1,0 +1,100 @@
+[
+ {
+  "clip": "0075",
+  "at": 76.64,
+  "whisper": "or",
+  "shown": "(dropped)",
+  "why": "v2 tail: \"... 600 LT or Supercar experience\": both models hear \"or\", which reads as a mis-hearing of \"for\", so the word is not captioned"
+ },
+ {
+  "clip": "0075",
+  "at": 78.52,
+  "whisper": "Supercar experience",
+  "shown": "Supercar Experience",
+  "why": "the brand (both models: \"supercar experience\")"
+ },
+ {
+  "clip": "0076",
+  "at": 25.25,
+  "whisper": "That's",
+  "shown": "(dropped)",
+  "why": "piece 2 now opens in the pause before it (25.25 s): the word before \"a little tired\" is \"I was\" in medium.en and \"That's\" in small.en / base.en, so it is not captioned (never a word the two models do not share)"
+ },
+ {
+  "clip": "0076",
+  "at": 40.58,
+  "whisper": "a super car experience vlog.",
+  "shown": "a Supercar Experience vlog.",
+  "why": "two clean ASR passes on the source (0076 at about 39.9-41.7 s) and one on the delivered audio all hear \"this is a Supercar Experience vlog\" (6 Oct, nq-second); the brand is one word"
+ },
+ {
+  "clip": "0076",
+  "at": 50.78,
+  "whisper": "this.",
+  "shown": "us.",
+  "why": "medium.en: \"look at us.\""
+ },
+ {
+  "clip": "0079",
+  "at": 62.95,
+  "whisper": "and like all that stuff",
+  "shown": "like all that stuff.",
+  "why": "v2 tail: medium.en \"like all that stuff.\" (small.en adds \"and\", medium.en does not, so it is not captioned)"
+ },
+ {
+  "clip": "0087",
+  "at": 44.46,
+  "whisper": "you doing?",
+  "shown": "How you doing?",
+  "why": "medium.en: \"How you doing?\" (small.en ran \"How you\" into one word)"
+ },
+ {
+  "clip": "0087",
+  "at": 58.45,
+  "whisper": "got to",
+  "shown": "gotta",
+  "why": "medium.en: \"I gotta drive it\""
+ },
+ {
+  "clip": "0089",
+  "at": 143.2,
+  "whisper": "finna",
+  "shown": "gonna",
+  "why": "medium.en (four runs) and small.en: \"he's gonna go grab the 600 LT\"; the day index said finna"
+ },
+ {
+  "clip": "0090",
+  "at": 104.75,
+  "whisper": "600lt",
+  "shown": "600LT",
+  "why": "spelling"
+ },
+ {
+  "clip": "0094",
+  "at": 2.37,
+  "whisper": "(piece rewritten)",
+  "shown": "I like it. I want y'all to, you know what I'm saying, get the vibes, so you feel me. We gon' catch the vibes right now.",
+  "why": "wording settled by the lead (6 Oct); timings from medium.en / small.en, see OVERRIDE"
+ },
+ {
+  "clip": "0102",
+  "at": 6.68,
+  "whisper": "OT",
+  "shown": "LT",
+  "why": "the car is the 600LT (Omarie, 6 Oct); medium.en also heard LT"
+ },
+ {
+  "clip": "0102",
+  "at": 19.44,
+  "whisper": "red bull",
+  "shown": "Red Bull",
+  "why": "spelling"
+ },
+ {
+  "clip": "0102",
+  "at": 24.22,
+  "whisper": "In and out",
+  "shown": "In-N-Out",
+  "why": "the restaurant (Part 2 stops there); medium.en: \"In-N-Out\""
+ }
+]

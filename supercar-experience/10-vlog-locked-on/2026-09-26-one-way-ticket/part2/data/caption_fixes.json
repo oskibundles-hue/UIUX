@@ -1,0 +1,156 @@
+[
+ {
+  "clip": "0116",
+  "at": 38.68,
+  "whisper": "know where",
+  "shown": "know where.",
+  "why": "punctuation (final render check, 7 Oct)"
+ },
+ {
+  "clip": "0105",
+  "at": 5.86,
+  "whisper": "it. To In -N -Out.",
+  "shown": "it to In-N-Out.",
+  "why": "medium.en: \"We finally made it to In-N-Out.\" (one sentence; the restaurant's spelling)"
+ },
+ {
+  "clip": "0107",
+  "at": 16.98,
+  "whisper": "doom -scrolling",
+  "shown": "doom-scrolling",
+  "why": "one word (both models: \"nothing like doom-scrolling while eating, no cap\")"
+ },
+ {
+  "clip": "0111",
+  "at": 47.32,
+  "whisper": "It's a McLaren",
+  "shown": "It's a McLaren.",
+  "why": "punctuation"
+ },
+ {
+  "clip": "0111",
+  "at": 54.98,
+  "whisper": "like that's",
+  "shown": "like, that's",
+  "why": "punctuation"
+ },
+ {
+  "clip": "0111",
+  "at": 55.82,
+  "whisper": "a Corvette",
+  "shown": "a Corvette.",
+  "why": "punctuation (final render check, 7 Oct)"
+ },
+ {
+  "clip": "0112",
+  "at": 17.31,
+  "whisper": "We are gassed up,",
+  "shown": "We are gassed up,",
+  "why": "both models"
+ },
+ {
+  "clip": "0112",
+  "at": 58.02,
+  "whisper": "here, and",
+  "shown": "here.",
+  "why": "fix A tail: medium.en does not hear the trailing \"and\" (a breath): not captioned"
+ },
+ {
+  "clip": "0115",
+  "at": 10.41,
+  "whisper": "gassing up dude it is freezing",
+  "shown": "Gassing up, dude, it is freezing.",
+  "why": "punctuation (medium.en: \"gassing up. Dude, it is freezing.\")"
+ },
+ {
+  "clip": "0116",
+  "at": 156.34,
+  "whisper": "y 'all being in the mirror,",
+  "shown": "y'all",
+  "why": "medium.en (piece window) hears \"being in there\", small.en \"being in the mirror\": \"being in the mirror\" not captioned"
+ },
+ {
+  "clip": "0116",
+  "at": 159.42,
+  "whisper": "and yeah",
+  "shown": "And yeah.",
+  "why": "both models (data/words_small_fix.json; medium.en \"and yeah\")"
+ },
+ {
+  "clip": "0116",
+  "at": 160.5,
+  "whisper": "out you",
+  "shown": "(dropped)",
+  "why": "the models differ (\"out you\" / \"out to\" / \"outchoo\"): not captioned"
+ },
+ {
+  "clip": "0117",
+  "at": 51.46,
+  "whisper": "here",
+  "shown": "here.",
+  "why": "punctuation"
+ },
+ {
+  "clip": "0117",
+  "at": 101.48,
+  "whisper": "service,",
+  "shown": "service.",
+  "why": "punctuation (the caption ends here, see the next fix)"
+ },
+ {
+  "clip": "0117",
+  "at": 102.18,
+  "whisper": "not an SOS.",
+  "shown": "(dropped)",
+  "why": "v2 gate round (7 Oct): on the piece audio (0117 99.3-106.7 and 100.8-103.2, beam 1 and 5) small.en hears \"not an SLS\", medium.en \"not an SOS\" (the day index's small.en had \"SOS\"): the models differ on the last word, so \"not an SOS\" is not captioned (the audio runs on); \"I have\" (both models on the piece audio, missed by the day index) is not added"
+ },
+ {
+  "clip": "0119",
+  "at": 227.84,
+  "whisper": "Man so",
+  "shown": "Man, so",
+  "why": "punctuation (final render check, 7 Oct)"
+ },
+ {
+  "clip": "0119",
+  "at": 233.34,
+  "whisper": "the back",
+  "shown": "the back.",
+  "why": "punctuation (final render check, 7 Oct)"
+ },
+ {
+  "clip": "0121",
+  "at": 21.09,
+  "whisper": "hopefully this don't fly off good lord",
+  "shown": "Hopefully this don't fly off. Good lord.",
+  "why": "punctuation (medium.en: \"Hopefully this don't fly off. Good lord.\")"
+ },
+ {
+  "clip": "0118",
+  "at": 61.92,
+  "whisper": "trip",
+  "shown": "Trip",
+  "why": "sentence start"
+ },
+ {
+  "clip": "0118",
+  "at": 62.58,
+  "whisper": "been cool",
+  "shown": "been cool.",
+  "why": "punctuation (final render check, 7 Oct)"
+ },
+ {
+  "clip": "0118",
+  "at": 70.78,
+  "whisper": "Wow,",
+  "shown": "(dropped)",
+  "why": "medium.en does not hear \"Wow\" (\"It's been pretty fire, really nice scenery\"): not captioned"
+ },
+ {
+  "clip": "0118",
+  "at": 70.06,
+  "whisper": "pretty fire",
+  "shown": "pretty fire,",
+  "why": "punctuation (final render check, 7 Oct)"
+ }
+]

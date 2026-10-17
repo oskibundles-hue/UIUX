@@ -1,0 +1,74 @@
+<!doctype html>
+<!--
+  mid_paste-up.html -- the BEHIND-THE-CAR layer of the PASTE-UP look (roof shot only, 10.731 s -> end).
+  build.py multiplies it by the per-frame sky matte, so the car, the stowing roof and the hills stay in front.
+    MCLAREN 750S is pasted up on a white strip on beat 24; SPIDER arrives as six cut-out letters, each on its own
+    scrap of paper (black, white, gold), rising from behind the rear deck one drawing after another as the roof
+    folds away; the crash (12.115 s) slaps every letter again; in the tape stop they drop back behind the car in
+    pairs, gone by 13.83 s. On the end-card hit (13.962 s) the price rises on a gold halftone patch, whole, and
+    stays, clear of the car, slapped again twice in the hold.
+-->
+<html><head><meta charset="utf-8"><title>PASTE-UP mid layer</title>
+<style>
+@font-face{font-family:Bebas;src:url('../../07-fonts/BebasNeue-Regular.ttf')}
+@font-face{font-family:Michroma;src:url('../../07-fonts/Michroma-Regular.ttf')}
+html,body{margin:0;padding:0;background:transparent;width:1080px;height:1920px;overflow:hidden}
+.a{position:absolute;left:0;top:0}
+</style>
+<script src=".work/config.js"></script>
+<script src=".work/timeline.js"></script>
+<script src="lib/kinetic.js"></script>
+<script src="lib/paper.js"></script>
+<script>window.KT_PLAN = { k: 3, shutter: 180, spans: [] };</script>
+</head><body>
+<div id="stage" class="a" style="width:1080px;height:1920px;transform-origin:540px 1130px"></div>
+<script>
+const C = window.CONFIG, FPS = TL.fps, E = KT.ease, P = KT.p, cl = KT.cl;
+Paper.fps(FPS);
+const g = k => TL.g0 + k * TL.beat;
+const TE = TL.tEnd, TS = TL.tStop, TC = TL.tCrash, S = 2 / FPS;
+const $ = id => document.getElementById(id);
+const X = { L: [] };
+const cv = document.createElement('canvas').getContext('2d');
+function tw(font, size, text, ls = 0) { cv.font = `${size}px ${font}`; cv.letterSpacing = (ls * size) + 'px'; return cv.measureText(text).width; }
+
+(async () => {
+  await document.fonts.load('100px Bebas'); await document.fonts.load('40px Michroma'); await KT.ready();
+  const stage = $('stage');
+  // MCLAREN 750S on a white strip
+  const make = C.brand + ' ' + C.model.split(' ')[0];
+  const mw = Math.ceil(tw('Michroma', 32, make, 0.08)) + 56;
+  X.make = Paper.piece(stage, { x: 76, y: 322, w: mw, h: 70, rot: -2.4, kind: 'white', seed: 91, sides: 'tb' });
+  Paper.text(X.make, make, { font: 'Michroma', size: 32, color: '#000', ls: '.08em' });
+  // SPIDER: one scrap per letter
+  const kinds = ['black', 'white', 'gold', 'white', 'black', 'gold'], rots = [-5, 3, -2, 6, -4, 2.5], dys = [8, -6, 10, -4, 6, -8];
+  [...C.giant].forEach((ch, i) => {
+    const pc = Paper.piece(stage, { x: 76 + i * 134, y: 452 + dys[i % 6], w: 130, h: 232, rot: rots[i % 6], kind: kinds[i % 6], seed: 100 + i });
+    Paper.text(pc, ch, { font: 'Bebas', size: 238, color: kinds[i % 6] === 'black' ? '#FFFFFF' : '#000000', dy: 6 });
+    X.L.push(pc);
+  });
+  // the price patch for the end card
+  const ps = Math.min(236, Math.floor(236 * 690 / tw('Bebas', 236, C.price)));
+  X.price = Paper.piece(stage, { x: 92, y: 470, w: 756, h: 232, rot: -2, kind: 'gold', seed: 120 });
+  Paper.text(X.price, C.price, { font: 'Bebas', size: ps, color: '#000', dy: 6 });
+  Paper.tape(X.price.w, 110, 8, 140, -22, 121); Paper.tape(X.price.w, 660, 10, 130, 24, 122);
+  window.renderAt(0);
+  window.__ktReady = true;
+})();
+
+window.renderAt = function (t) {
+  const i0 = TL.beats[16][0], on = t * FPS >= i0 - 0.5;
+  $('stage').style.display = on ? 'block' : 'none';
+  if (!on) return;
+  const u = cl((Math.round(t * FPS) - i0) / (TL.nf - 1 - i0));
+  $('stage').style.transform = `scale(${(1 + 0.02 * (1 - (1 - u) * (1 - u))).toFixed(5)})`;
+
+  Paper.pose(X.make, t, { t0: g(24) - 0.06, t1: TS, dx: -800, dy: -200, spin: -14 });
+  // letters: one per drawing from beat 24, rising from behind the deck; slapped on the crash; dropped in pairs
+  X.L.forEach((pc, i) => Paper.pose(pc, t, { t0: g(24) + 0.02 + i * S, dyIn: 150, t1: TS + Math.floor(i / 2) * S,
+                                             dx: 0, dy: 520, spin: (i % 2 ? 9 : -9), hits: [TC] }));
+  // the price: up on the end-card hit, whole, slapped again twice in the hold
+  Paper.pose(X.price, t, { t0: TE + 0.04, dyIn: 60, hits: [TE + 1.2, TE + 2.8], hitPop: 0.5 });
+};
+</script>
+</body></html>

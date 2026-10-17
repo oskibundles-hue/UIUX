@@ -1,0 +1,24 @@
+{
+  "_": "v3 shot list (no countdown), cut to Car Scenes' own music (89.0 BPM, beat P = 0.6742 s). Ad beat a = 0 is music time 2.9163 s (4 beats before the drop at 5.6131 s). src = source seconds in Duo AMG x SF90 No Logo.mp4. speed < 1 = motion-interpolated slow-mo (src_end keeps it inside the shot). freeze = hold the last frame to the end.",
+  "beat": 0.6742,
+  "music_start": 2.871,
+  "beats_total": 24,
+  "shots": [
+    {"b": [0, 2],     "src": 18.330, "speed": 1,    "car": "AMG",  "what": "AMG, New York-New York skyline (hook)"},
+    {"b": [2, 4],     "src": 8.370,  "speed": 0.7,  "src_end": 9.320, "car": "AMG", "what": "AMG rear, lit building (hook, slow-mo over the build)", "shift_y": 110},
+    {"b": [4, 5],     "src": 3.265,  "speed": 0.8,  "src_end": 3.790, "car": "AMG", "what": "AMG drive-mode button and wheel (DROP)"},
+    {"b": [5, 6],     "src": 14.350, "speed": 0.8,  "src_end": 14.880, "car": "AMG", "what": "POV down the Strip over the AMG wing"},
+    {"b": [6, 6.5],   "src": 5.300,  "speed": 1,    "src_end": 5.700, "car": "?", "what": "driver's foot on the pedal"},
+    {"b": [6.5, 7],   "src": 4.940,  "speed": 1,    "src_end": 5.285, "car": "?", "what": "hand on the gear selector"},
+    {"b": [7, 8],     "src": 7.640,  "speed": 1,    "src_end": 8.330, "car": "SF90", "what": "SF90 rear wheel, Aria sign (date words only)"},
+    {"b": [8, 9],     "src": 10.980, "speed": 1,    "src_end": 12.300, "car": "SF90", "what": "SF90 side profile (HUD only)"},
+    {"b": [9, 11],    "src": 12.310, "speed": 1,    "src_end": 13.715, "car": "AMG", "what": "AMG rear 3/4, skyline (timing gates + lock-on + name)"},
+    {"b": [11, 12],   "src": 19.745, "speed": 0.78, "src_end": 20.265, "car": "SF90", "what": "SF90 wheel, Caesars Palace sign (event words only)"},
+    {"b": [12, 13],   "src": 3.800,  "speed": 0.7,  "src_end": 4.275, "car": "AMG", "what": "AMG head-on, still distant (THU · FRI · SAT)", "shift_y": 140},
+    {"b": [13, 14],   "src": 17.080, "speed": 1,    "src_end": 18.300, "car": "SF90", "what": "SF90 rear, purple light (RACE NIGHT, event words only)"},
+    {"b": [14, 15],   "src": 13.730, "speed": 0.91, "src_end": 14.340, "car": "SF90", "what": "the Strip in the SF90 mirror (HUD only)"},
+    {"b": [15, 16],   "src": 0.400,  "speed": 1,    "car": "SF90", "what": "Caesars fountain, SF90 nose (HUD only)"},
+    {"b": [16, 17],   "src": 1.074,  "speed": 0.5,  "src_end": 1.420, "car": "SF90", "what": "same shot ramped down under the tape stop"},
+    {"b": [17, 24],   "src": 14.920, "speed": 0.8,  "src_end": 16.960, "freeze": true, "car": "AMG", "what": "AMG under the monorail (end card), freeze + push + light sweep"}
+  ]
+}

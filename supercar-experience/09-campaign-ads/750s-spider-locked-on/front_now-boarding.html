@@ -1,0 +1,304 @@
+<!doctype html>
+<!--
+  front_now-boarding.html -- FRONT layer of the NOW BOARDING look: the ROOF DOWN edit re-dressed as a split-flap
+  departure board. Same contract as front.html (transparent 1080x1920, window.renderAt(t) pure in t, captured by
+  lib/kcapture.js with sub-frame motion blur), same copy (config.json), tracks and beat grid.
+
+  The idea: renting the car is a departure. Every piece of copy lives on a black flap board with a gold header bar,
+  and it arrives the way a real board updates: characters clatter through letters and land.
+    hook (frame 0 complete)  DEPARTURES board: MCLAREN / 750S SPIDER / 5 HOURS · $1,299, lamp + NOW BOARDING
+    badge (beat 4)           a gold pin tracked to the speedmark, tethered to a flap tag: MCLAREN / 750S SPIDER / 2026 · EXOTIC
+    offer (beats 6-10)       FARES board: 5 HOURS, the price cycling through letters and landing on the reel beats,
+                             FULL DAY $1,799; a pin on the headlight on beat 8
+    requirements (11-15)     CHECK-IN board: VALID DRIVER'S LICENSE / INSURANCE
+    end card (13.962)        logo, MCLAREN 750S SPIDER tiles, NOW BOARDING bar, TEXT OR DM TO BOOK and the phone in
+                             tiles, site and handle, the age and requirement lines (the price board is mid_now-boarding)
+  Figures (prices, the phone, the year) never show a wrong digit: they arrive and leave whole (every cell flips at
+  once), and the price reels cycle only through letters that cannot be read as digits (Flap.SAFE_LETTERS).
+-->
+<html><head><meta charset="utf-8"><title>NOW BOARDING front layer</title>
+<style>
+@font-face{font-family:Bebas;src:url('../../07-fonts/BebasNeue-Regular.ttf')}
+@font-face{font-family:Michroma;src:url('../../07-fonts/Michroma-Regular.ttf')}
+html,body{margin:0;padding:0;background:transparent;width:1080px;height:1920px;overflow:hidden}
+*{box-sizing:border-box}
+.a{position:absolute;left:0;top:0}
+.mic{font-family:Michroma;letter-spacing:.08em;line-height:1;white-space:pre}
+.beb{font-family:Bebas;letter-spacing:0;line-height:1;white-space:pre}
+.housing{background:rgba(7,7,7,.94);border-radius:12px;box-shadow:0 22px 48px rgba(0,0,0,.34),inset 0 0 0 1px rgba(255,255,255,.07)}
+.hbar{background:#FBD101;border-radius:12px 12px 0 0}
+.lbl{font-family:Michroma;letter-spacing:.16em;font-size:18px;color:rgba(255,255,255,.55);line-height:1;white-space:pre}
+.lamp{width:14px;height:14px;border-radius:50%}
+</style>
+<script src=".work/config.js"></script>
+<script src=".work/timeline.js"></script>
+<script src=".work/tracks.js"></script>
+<script src="lib/kinetic.js"></script>
+<script src="lib/lock.js"></script>
+<script src="lib/flap.js"></script>
+<script>
+const g = k => TL.g0 + k * TL.beat;
+// flips are fast (1.8 frames): 12 samples everywhere a board is clattering, more where a whole board folds
+window.KT_PLAN = { k: 12, shutter: 180, spans: [
+  { a: 2.72, b: 2.90, k: 20, shutter: 240 }, { a: 4.44, b: 4.62, k: 20, shutter: 240 },
+  { a: 7.80, b: 7.97, k: 20, shutter: 240 }, { a: 10.57, b: 10.74, k: 20, shutter: 240 } ] };
+</script>
+</head><body>
+<div id="stage" class="a" style="width:1080px;height:1920px"></div>
+<svg id="pins" class="a" width="1080" height="1920" viewBox="0 0 1080 1920" style="overflow:visible">
+  <line id="tether" stroke="#FBD101" stroke-width="3" stroke-linecap="round"/>
+  <circle id="ring1" fill="none" stroke="#FBD101" stroke-width="3"/>
+  <circle id="ring2" fill="none" stroke="#FBD101" stroke-width="3"/>
+  <circle id="pin" fill="#FBD101" stroke="#000" stroke-width="3"/>
+</svg>
+<script>
+const C = window.CONFIG, FPS = TL.fps, E = KT.ease, P = KT.p, cl = KT.cl, lerp = KT.lerp;
+const TE = TL.tEnd;
+const $ = id => document.getElementById(id);
+const fT = i => i / FPS;
+const R = {};                                      // flap rows
+const B = {};                                      // board wrappers
+const rng = KT.rng(750);
+
+// ---------------------------------------------------------------- building blocks
+const cv = document.createElement('canvas').getContext('2d');
+function micW(size, text, ls = 0.08) { cv.font = `${size}px Michroma`; cv.letterSpacing = (ls * size) + 'px'; return cv.measureText(text).width; }
+function el(parent, cls, css, html) { const d = document.createElement('div'); d.className = cls; d.style.cssText = css;
+  if (html !== undefined) d.textContent = html; parent.appendChild(d); return d; }
+// a board: a full-stage wrapper (so rows keep stage coordinates) holding a housing and a gold header bar
+function board(name, x, y, w, h, left, right, hb = 50) {
+  const wrap = el($('stage'), 'a', `width:1080px;height:1920px;transform-origin:${x + w / 2}px ${y}px`);
+  el(wrap, 'a housing', `left:${x}px;top:${y}px;width:${w}px;height:${h}px`);
+  el(wrap, 'a hbar', `left:${x}px;top:${y}px;width:${w}px;height:${hb}px`);
+  const fs = Math.round(hb * 0.44), ty = y + (hb - fs * 0.72) / 2 - fs * 0.14;
+  if (left) el(wrap, 'a mic', `left:${x + 22}px;top:${ty}px;font-size:${fs}px;color:#000`, left);
+  if (right) el(wrap, 'a mic', `left:${x + w - 22 - micW(fs, right)}px;top:${ty}px;font-size:${fs}px;color:#000`, right);
+  B[name] = wrap; return wrap;
+}
+const label = (wrap, x, y, text, color) => el(wrap, 'a lbl', `left:${x}px;top:${y}px${color ? ';color:' + color : ''}`, text);
+function row(wrap, name, text, o) { R[name] = Flap.row(wrap, text, o); return R[name]; }
+// fold a board open (from its top edge) or shut; 0 = shut, 1 = open
+function fold(name, k) { const w = B[name]; w.style.display = k > 0.001 ? 'block' : 'none';
+  w.style.transform = k < 1 ? `scaleY(${k.toFixed(4)})` : 'none'; }
+const blank = r => ''.padEnd(r.cells.length);
+// a word row clatters out (right to left); a figure row leaves whole
+const outWord = (r, t0, st = 0.012) => Flap.cascade(r, t0, { stagger: st, text: blank(r), order: 'rtl' });
+const outFig = (r, t0) => Flap.all(r, t0, blank(r));
+function srcPos(t, id) {
+  const [i0, i1] = TL.beats[id], x = t * FPS, a = i0, b = i1 - 1;
+  if (x <= a) return TL.p[a] + (x - a) * (TL.p[a + 1] - TL.p[a]);
+  if (x >= b) return TL.p[b] + (x - b) * (TL.p[b] - TL.p[b - 1]);
+  const i = Math.floor(x); return lerp(TL.p[i], TL.p[i + 1], x - i);
+}
+const lampOn = (t, t0) => ((t - t0) * 2 % 1 + 1) % 1 < 0.62;          // 2 Hz, on 62% of each cycle
+
+// ---------------------------------------------------------------- beat times
+const [iB0, iB1] = TL.beats[4], [iH0, iH1] = TL.beats[8];
+const tB0 = fT(iB0) - 0.5 / FPS, tBend = fT(iB1) - 0.5 / FPS, tBx = tBend - 0.12;
+const tO = fT(TL.beats[6][0]) - 0.5 / FPS, tOx = g(17) - 0.13;
+const tR = fT(TL.beats[11][0]) + 0.5 / FPS, tRx = g(23) - 0.13;
+const tH0 = fT(iH0) - 0.5 / FPS, tH1 = fT(iH1) - 0.5 / FPS;
+const LANDS = [g(11), g(11) + TL.beat / 4, g(11) + TL.beat / 2, g(12)];
+
+(async () => {
+  await document.fonts.load('100px Bebas'); await document.fonts.load('40px Michroma'); await KT.ready();
+  const hours = C.hours + ' HOURS';
+
+  // A. HOOK: the DEPARTURES board, every character already landed on frame 0
+  { const w = board('hook', 54, 276, 846, 462, 'DEPARTURES', C.city);
+    row(w, 'hMake', C.brand, { x: 76, y: 348, cw: 44, ch: 62, gap: 4 });
+    row(w, 'hHead', C.model, { x: 76, y: 424, cw: 68, ch: 104, gap: 5 });
+    label(w, 76, 550, 'DURATION'); label(w, 476, 550, 'FARE', '#FBD101');
+    row(w, 'hHours', hours, { x: 76, y: 574, cw: 50, ch: 74, gap: 4 });
+    row(w, 'hPrice', C.price, { x: 476, y: 574, cw: 58, ch: 74, gap: 4, color: '#FBD101' });
+    const logo = document.createElement('img'); logo.src = '../../02-logos/png/sce-primary-horizontal--white.png';
+    logo.style.cssText = 'position:absolute;left:76px;top:672px;width:210px;display:block'; logo.id = 'hLogo'; w.appendChild(logo);
+    const st = 'NOW BOARDING', sw = micW(18, st);
+    el(w, 'a mic', `left:${874 - sw}px;top:684px;font-size:18px;color:#fff`, st);
+    el(w, 'a lamp', `left:${874 - sw - 28}px;top:683px;background:#FBD101`).id = 'hLamp';
+    // re-hits: the fare row refreshes on beat 1, the model on beat 2 (same characters: a mechanical glint)
+    Flap.cascade(R.hHours, g(1), { stagger: 0.025 }); Flap.all(R.hPrice, g(1) + 0.19);
+    Flap.cascade(R.hHead, g(2), { stagger: 0.03 }); Flap.cascade(R.hMake, g(4), { stagger: 0.03 });
+    // exit: the words clatter out, the fare leaves whole, then the board folds shut
+    outFig(R.hHead, 2.50); outWord(R.hMake, 2.53); outWord(R.hHours, 2.56); outFig(R.hPrice, 2.60);
+  }
+
+  // B. BADGE TAG (stage coordinates are set per frame by the tracker; rows sit inside a moving container)
+  { const w = el($('stage'), 'a', 'width:560px;height:206px'); w.id = 'tag';
+    const inner = el(w, 'a', 'width:560px;height:206px;transform-origin:50% 0%'); inner.id = 'tagIn';
+    el(inner, 'a housing', 'width:560px;height:206px');
+    el(inner, 'a hbar', 'width:560px;height:40px');
+    el(inner, 'a mic', `left:18px;top:${(40 - 18 * 0.72) / 2 - 18 * 0.14}px;font-size:18px;color:#000`, C.brand);
+    R.tModel = Flap.row(inner, C.model, { x: 18, y: 56, cw: 44, ch: 66, gap: 4 });
+    const yr = C.year + ' · ' + C.cls;
+    R.tYear = Flap.row(inner, yr, { x: 18, y: 138, cw: 30, ch: 48, gap: 3, colors: [...yr].map(c => c === '·' ? '#FBD101' : null) });
+    Flap.set(R.tModel, ''); Flap.set(R.tYear, '');
+    // 750S and the year are figures: each row lands whole (a stagger spelled out 7?UY, 750, 202 on the way in)
+    Flap.all(R.tModel, tB0 + 0.12); Flap.all(R.tYear, tB0 + 0.24);
+    Flap.cascade(R.tModel, g(8), { stagger: 0.03 });                     // the glint beat: a refresh
+    outFig(R.tModel, tBx - 0.10); outFig(R.tYear, tBx - 0.10);
+  }
+
+  // C. OFFER: the FARES board, slammed in on the drop hit
+  { const w = board('offer', 54, 276, 846, 526, 'FARES', C.city);
+    label(w, 76, 346, 'DURATION');
+    row(w, 'oHours', hours, { x: 76, y: 368, cw: 62, ch: 92, gap: 5 });
+    label(w, 76, 482, 'FARE', '#FBD101');
+    row(w, 'oPrice', C.price, { x: 76, y: 504, cw: 126, ch: 196, gap: 6, color: '#FBD101' });
+    row(w, 'oDayL', 'FULL DAY', { x: 76, y: 724, cw: 38, ch: 56, gap: 4 });
+    row(w, 'oDayP', C.dayPrice, { x: 432, y: 724, cw: 38, ch: 56, gap: 4, color: '#FBD101' });
+    for (const n of ['oHours', 'oPrice', 'oDayL', 'oDayP']) Flap.set(R[n], '');
+    Flap.cascade(R.oHours, tO + 0.02, { stagger: 0.03, cycle: 2, pool: Flap.SAFE_LETTERS, rng });
+    // the price: $ and , flip straight in; each digit cycles letters and lands on its reel beat, left to right
+    let d = 0;
+    R.oPrice.cells.forEach((k, i) => {
+      if (/\d/.test(k.final)) Flap.reel(k, tO + 0.05 + i * 0.02, LANDS[Math.min(d++, LANDS.length - 1)], { rng });
+      else Flap.cascade({ cells: [k] }, tO + 0.05 + i * 0.02, {});
+    });
+    Flap.cascade(R.oDayL, g(12), { stagger: 0.025, cycle: 1, pool: Flap.SAFE_LETTERS, rng });
+    Flap.all(R.oDayP, g(12) + 0.40);                                     // the day price arrives whole
+    Flap.all(R.oPrice, g(14));                                           // the glint beat: every digit refreshes
+    outWord(R.oHours, tOx - 0.12); outFig(R.oPrice, tOx - 0.10); outWord(R.oDayL, tOx - 0.12); outFig(R.oDayP, tOx - 0.10);
+  }
+
+  // E. REQUIREMENTS: the CHECK-IN board
+  { const w = board('req', 54, 276, 846, 266, 'CHECK-IN', 'YOU NEED');
+    row(w, 'rLic', "VALID DRIVER'S LICENSE", { x: 68, y: 348, cw: 34, ch: 54, gap: 3 });
+    row(w, 'rIns', 'INSURANCE', { x: 68, y: 422, cw: 62, ch: 92, gap: 5, color: '#FBD101' });
+    Flap.set(R.rLic, ''); Flap.set(R.rIns, '');
+    Flap.cascade(R.rLic, tR + 0.08, { stagger: 0.016, cycle: 1, pool: Flap.SAFE_LETTERS, rng });
+    Flap.cascade(R.rIns, tR + 0.28, { stagger: 0.03, cycle: 2, pool: Flap.SAFE_LETTERS, rng });
+    outWord(R.rLic, tRx - 0.12, 0.006); outWord(R.rIns, tRx - 0.12, 0.01);
+  }
+
+  // G. END CARD (front; the price board behind the car is mid_now-boarding.html)
+  { const w = el($('stage'), 'a', 'width:1080px;height:1920px'); w.id = 'end';
+    el(w, 'a', 'top:1050px;width:1080px;height:870px;background:linear-gradient(180deg,rgba(0,0,0,0) 0,rgba(0,0,0,.74) 180px,rgba(0,0,0,.84) 870px)').id = 'botScrim';
+    const logo = document.createElement('img'); logo.src = '../../02-logos/png/sce-primary-horizontal--white.png';
+    logo.style.cssText = 'position:absolute;left:62px;top:282px;width:320px;display:block;filter:drop-shadow(0 0 2px rgba(0,0,0,.55)) drop-shadow(0 0 10px rgba(0,0,0,.45))';
+    logo.id = 'eLogo'; w.appendChild(logo);
+    const em = C.brand + ' ' + C.model;
+    row(w, 'eModel', em, { x: 62, y: 344, cw: 38, ch: 54, gap: 3, colors: [...em].map((c, i) => i < C.brand.length ? '#FBD101' : null) });
+    const bar = el(w, 'a hbar', 'left:62px;top:1164px;width:843px;height:44px;border-radius:8px;transform-origin:0 50%'); bar.id = 'eBar';
+    el(bar, 'a lamp', 'left:18px;top:15px;background:#000').id = 'eLamp';
+    el(bar, 'a mic', `left:46px;top:${(44 - 20 * 0.72) / 2 - 20 * 0.14}px;font-size:20px;color:#000`, 'NOW BOARDING');
+    const tail = hours + ' · ' + C.city;
+    el(bar, 'a mic', `left:${843 - 18 - micW(16, tail)}px;top:${(44 - 16 * 0.72) / 2 - 16 * 0.14}px;font-size:16px;color:#000`, tail);
+    row(w, 'eCta', C.cta, { x: 62, y: 1220, cw: 44, ch: 70, gap: 3 });
+    row(w, 'ePhone', C.phone, { x: 62, y: 1302, cw: 44, ch: 64, gap: 3, color: '#FBD101' });
+    const web = el(w, 'a beb', 'left:62px;top:1378px;font-size:46px;color:#fff'); web.id = 'eWeb';
+    web.innerHTML = `${C.url}<span style="color:#FBD101"> · </span>${C.handle}`;
+    const r1 = el(w, 'a beb', 'left:62px;top:1434px;font-size:36px;color:#fff'); r1.id = 'eReq1';
+    r1.innerHTML = `RENTERS ${C.age}<span style="color:#FBD101"> · </span>${C.ageLine}`;
+    const r2 = el(w, 'a beb', 'left:62px;top:1478px;font-size:36px;color:#fff'); r2.id = 'eReq2';
+    r2.innerHTML = `VALID DRIVER'S LICENSE<span style="color:#FBD101"> · </span>INSURANCE`;
+    for (const n of ['eModel', 'eCta', 'ePhone']) Flap.set(R[n], '');
+    Flap.all(R.eModel, TE + 0.08);                                       // carries 750S: lands whole
+    Flap.cascade(R.eCta, TE + 0.40, { stagger: 0.014, cycle: 1, pool: Flap.SAFE_LETTERS, rng });
+    Flap.all(R.ePhone, TE + 0.66);                                        // the phone arrives whole
+    Flap.all(R.ePhone, TE + 2.2); Flap.cascade(R.eCta, TE + 3.0, { stagger: 0.014 });   // two refreshes in the hold
+  }
+  for (const id of ['hLogo', 'eLogo']) await new Promise(r => $(id).complete ? r() : ($(id).onload = r));
+  window.renderAt(0);
+  window.__ktReady = true;
+})();
+
+const fadeUp = (id, t, a, b, dy) => { const q = E.outCubic(P(t, a, b)); $(id).style.opacity = q.toFixed(4);
+  $(id).style.transform = `translateY(${(dy * (1 - q)).toFixed(3)}px)`; };
+function ringAt(id, cx, cy, t, t0, r0 = 12, r1 = 72, dur = 0.42) {
+  const q = P(t, t0, t0 + dur), c = $(id);
+  if (q <= 0 || q >= 1) { c.style.display = 'none'; return; }
+  c.style.display = 'block'; c.setAttribute('cx', cx.toFixed(2)); c.setAttribute('cy', cy.toFixed(2));
+  c.setAttribute('r', lerp(r0, r1, E.outCubic(q)).toFixed(2)); c.style.opacity = (1 - q).toFixed(4);
+  c.style.setProperty('--k', `"${cx.toFixed(1)},${cy.toFixed(1)},${q.toFixed(3)}"`);   // KT.signature sees SVG moves
+}
+
+// ---------------------------------------------------------------- renderAt
+window.renderAt = function (t) {
+  // A. HOOK 0 - 2.885
+  const hk = t < 2.74 ? 1 : 1 - E.inCubic(P(t, 2.74, 2.86));
+  fold('hook', hk);
+  if (hk > 0) {
+    for (const n of ['hMake', 'hHead', 'hHours', 'hPrice']) Flap.render(R[n], t);
+    $('hLamp').style.opacity = lampOn(t, 0) ? 1 : 0.18;
+  }
+
+  // B. BADGE: pin on the speedmark, tether up to the flap tag
+  const pin = $('pin'), teth = $('tether');
+  const bOn = t >= tB0 && t < tBend;
+  $('tag').style.display = bOn ? 'block' : 'none';
+  let pinOn = false;
+  if (bOn) {
+    const p = srcPos(Math.max(t, tB0), 4), box = TrackLock.at(TRACKS.badge, p / FPS);
+    const cx = box.x + box.w / 2, cy = box.y + box.h / 2;
+    const lab = TrackLock.follow(TRACKS.badge, p / FPS, { x: 54, y: 936 }, { x: .25, y: .25 }, 8);
+    $('tag').style.left = lab.x.toFixed(2) + 'px'; $('tag').style.top = lab.y.toFixed(2) + 'px';
+    const open = E.outCubic(P(t, tB0 + 0.06, tB0 + 0.2)) * (1 - E.inCubic(P(t, tBx, tBx + 0.10)));
+    $('tagIn').style.transform = `scaleY(${open.toFixed(4)})`; $('tagIn').style.opacity = open > 0.001 ? 1 : 0;
+    Flap.render(R.tModel, t); Flap.render(R.tYear, t);
+    // the pin snaps onto the badge; the tether draws from the pin up to the tag and retracts on the exit
+    const ps = E.outExpo(P(t, tB0, tB0 + 4 / FPS)), gone = E.inCubic(P(t, tBx + 0.02, tBx + 0.11));
+    pinOn = ps > 0 && gone < 1;
+    const py = box.y - 8;                                                  // on the top edge, clear of the speedmark
+    pin.setAttribute('cx', cx.toFixed(2)); pin.setAttribute('cy', py.toFixed(2));
+    pin.setAttribute('r', (11 * lerp(2.2, 1, ps) * (1 - gone)).toFixed(2));
+    const ax = lab.x + 44, ay = lab.y + 206 * open, len = Math.hypot(ax - cx, ay - py);
+    const dq = E.outCubic(P(t, tB0 + 0.03, tB0 + 0.18)) * (1 - gone);
+    teth.setAttribute('x1', cx.toFixed(2)); teth.setAttribute('y1', py.toFixed(2));
+    teth.setAttribute('x2', lerp(cx, ax, dq).toFixed(2)); teth.setAttribute('y2', lerp(py, ay, dq).toFixed(2));
+    teth.style.display = dq > 0.001 ? 'block' : 'none'; teth.style.setProperty('--k', `"${len.toFixed(1)},${dq.toFixed(3)}"`);
+    ringAt('ring1', cx, cy, t, tB0 + 0.04); ringAt('ring2', cx, cy, t, g(8));
+  }
+  // D. headlight pin (beat 8), clamped below the fares board
+  const hOn = t >= tH0 && t < tH1;
+  if (hOn) {
+    const p = srcPos(t, 8), box = TrackLock.at(TRACKS.headlight, p / FPS);
+    const cx = box.x + box.w / 2, cy = Math.max(box.y + box.h * 0.62, 868);
+    const ps = E.outExpo(P(t, tH0, tH0 + 4 / FPS)), gone = E.inCubic(P(t, tH1 - 3 / FPS, tH1));
+    pinOn = ps > 0 && gone < 1;
+    pin.setAttribute('cx', cx.toFixed(2)); pin.setAttribute('cy', cy.toFixed(2));
+    pin.setAttribute('r', (10 * lerp(2.2, 1, ps) * (1 - gone)).toFixed(2));
+    ringAt('ring1', cx, cy, t, tH0 + 0.02); ringAt('ring2', cx, cy, t, tH0 + 0.24);
+  }
+  if (!bOn && !hOn) { teth.style.display = 'none'; ringAt('ring1', 0, 0, -1, 0); ringAt('ring2', 0, 0, -1, 0); }
+  if (!bOn) teth.style.display = 'none';
+  pin.style.display = pinOn ? 'block' : 'none';
+  pin.style.setProperty('--k', `"${pin.getAttribute('cx')},${pin.getAttribute('cy')},${pin.getAttribute('r')}"`);
+
+  // C. OFFER 4.731 - 7.962: slammed in on the drop (the same scale kick and shake as the approved cut)
+  const oOn = t >= tO && t < g(17);
+  const ok = !oOn ? 0 : t < tOx ? 1 : 1 - E.inCubic(P(t, tOx, tOx + 0.12));
+  fold('offer', ok);
+  if (ok > 0) {
+    const k = (t - tO) * FPS, s = 1 + 0.08 * (1 - E.outExpo(cl(k / 5)));
+    const sh = TL.shake[Math.round(t * FPS)] || [0, 0];
+    const w = B.offer; w.style.transformOrigin = '477px 540px';
+    w.style.transform = `translate(${sh[0]}px,${sh[1]}px) scale(${s.toFixed(5)})` + (ok < 1 ? ` scaleY(${ok.toFixed(4)})` : '');
+    const flash = (c, tt) => { const tl = Flap.landTime(c); if (tl === null) return 0;
+      const q = (tt - tl + Flap.D) / (5 / FPS); return q > 0 && q < 1 ? Math.sin(Math.PI * q) : 0; };
+    Flap.render(R.oHours, t); Flap.render(R.oPrice, t, { flash }); Flap.render(R.oDayL, t); Flap.render(R.oDayP, t);
+  }
+
+  // E. REQUIREMENTS 7.985 - 10.731
+  const rOn = t >= tR && t < g(23);
+  const rk = !rOn ? 0 : Math.min(E.outCubic(P(t, tR, tR + 0.14)), 1 - E.inCubic(P(t, tRx, tRx + 0.12)));
+  fold('req', rk);
+  if (rk > 0) { Flap.render(R.rLic, t); Flap.render(R.rIns, t); }
+
+  // G. END CARD 13.962 -
+  const endOn = t >= TE - 0.12;
+  $('end').style.display = endOn ? 'block' : 'none';
+  if (endOn) {
+    $('botScrim').style.opacity = E.outCubic(P(t, TE - 0.12, TE + 0.25)).toFixed(4);
+    const lw = E.inOutCubic(P(t, TE + 0.18, TE + 0.46));
+    $('eLogo').style.clipPath = `inset(0 ${(100 - 100 * lw).toFixed(3)}% 0 0)`;
+    $('eBar').style.transform = `scaleX(${E.outExpo(P(t, TE + 0.30, TE + 0.62)).toFixed(4)})`;
+    $('eLamp').style.opacity = lampOn(t, TE) ? 1 : 0.15;
+    Flap.render(R.eModel, t); Flap.render(R.eCta, t); Flap.render(R.ePhone, t);
+    fadeUp('eWeb', t, TE + 0.72, TE + 0.95, 12);
+    fadeUp('eReq1', t, TE + 0.80, TE + 1.00, 10);
+    fadeUp('eReq2', t, TE + 0.84, TE + 1.04, 10);
+  }
+};
+</script>
+</body></html>

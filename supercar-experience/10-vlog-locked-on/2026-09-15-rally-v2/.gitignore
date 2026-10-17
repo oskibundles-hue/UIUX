@@ -1,0 +1,9 @@
+.work/
+exports/*.mp4
+exports/*.mov
+exports/*.wav
+audio/*.wav
+__pycache__/
+lib/__pycache__/
+exports/draft/
+config.local.json

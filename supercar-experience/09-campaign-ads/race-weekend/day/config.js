@@ -1,0 +1,1 @@
+window.CONFIG = {"DAYS": 46, "POST_DATE": "2026-10-04", "FREEZE": 15.3};

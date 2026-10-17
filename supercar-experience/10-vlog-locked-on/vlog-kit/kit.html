@@ -1,0 +1,145 @@
+<!doctype html>
+<!--
+  kit.html -- the SE vlog Locked-On kit: every component, config-driven, rendered as a transparent 1080x1920 layer.
+  window.renderAt(t) is a pure function of t (scene seconds, 30000/1001 fps): no CSS animation, no timers, no
+  clock, no randomness. lib/kcapture.js samples it several times per frame (true motion blur); lib/compose.py
+  lays the layer over the footage.
+
+  What it renders is the SCENE (built by build.py from config.json into .work/scene.js): a list of shots (which
+  plate is on screen, for the tracked components and the clock) and a list of component instances
+  {code, type, t0, t1, p}. Every component and its params: lib/sekit.js and README.md.
+    kit.html                 the whole scene (the reel, then the mockup-only shots)
+    kit.html#only=B2,A2      only those codes (window.setOnly does the same; the mockups use it)
+    kit.html#chip=0          hide the reel's code chip
+  Loads: .work/scene.js (window.SCENE), .work/tracks.js (window.TRACKS, lib/data/tracks.json),
+  .work/kitdata.js (window.KITDATA: meter envelopes). Fonts from ../../07-fonts, logos from ../../02-logos/png.
+-->
+<html><head><meta charset="utf-8"><title>SE Vlog Kit Layer</title>
+<style>
+@font-face{font-family:Bebas;src:url('../../07-fonts/BebasNeue-Regular.ttf')}
+@font-face{font-family:Michroma;src:url('../../07-fonts/Michroma-Regular.ttf')}
+:root{--gold:#FBD101;--white:#FFFFFF;--black:#000000}
+html,body{margin:0;padding:0;background:transparent;width:1080px;height:1920px;overflow:hidden}
+*{box-sizing:border-box}
+.a{position:absolute;left:0;top:0}
+.beb{font-family:Bebas;letter-spacing:0;line-height:1;white-space:pre}
+.mic{font-family:Michroma;letter-spacing:.08em;line-height:1;white-space:pre}
+.stripe{background:linear-gradient(90deg,#FBD101 0 78%,#fff 78% 100%);transform-origin:left center}
+.mask{overflow:hidden;padding:6px 24px 6px 0;margin:-6px 0 0 0}
+.edge{width:4px;margin-left:-2px;background:#fff;box-shadow:0 0 26px 9px rgba(255,255,255,.42),0 0 7px 2px rgba(255,255,255,.8);border-radius:2px}
+</style>
+<script src=".work/scene.js"></script>
+<script src=".work/tracks.js"></script>
+<script src=".work/kitdata.js"></script>
+<script src="lib/kinetic.js"></script>
+<script src="lib/sekit.js"></script>
+</head><body>
+<div id="stage" class="a" style="width:1080px;height:1920px"></div>
+<script>
+const SC = window.SCENE, TR = window.TRACKS || {}, DATA = window.KITDATA || {};
+const FPS = 30000 / 1001;
+const stage = document.getElementById('stage');
+const hashArg = k => { const m = location.hash.match(new RegExp('[#&]' + k + '=([^&]*)')); return m ? decodeURIComponent(m[1]) : null; };
+
+// ------------------------------------------------------------ plate mapping (mirrors lib/compose.py)
+const kbEase = x => 0.5 - 0.5 * Math.cos(Math.PI * Math.min(1, Math.max(0, x)));
+function shotAt(t) { for (const s of SC.shots) if (t >= s.t0 - 1e-6 && t < s.t1 - 1e-6) return s; return null; }
+function specAt(s, t) { if (!s) return null; if (s.a && s.b) return t < (s.t0 + s.t1) / 2 ? s.a : s.b; return s.plate; }
+function kbAt(sp, t) {
+  const k = sp && sp.kb; if (!k) return { s: 1, dx: 0, dy: 0, ax: 540, ay: 960 };
+  const u = kbEase((t - sp.t0) / Math.max(1e-6, sp.t1 - sp.t0));
+  return { s: k.s0 + (k.s1 - k.s0) * u, dx: (k.dx0 || 0) + ((k.dx1 || 0) - (k.dx0 || 0)) * u, dy: (k.dy0 || 0) + ((k.dy1 || 0) - (k.dy0 || 0)) * u, ax: k.ax ?? 540, ay: k.ay ?? 960 };
+}
+function clipFrame(sp, t) {
+  if (!sp) return null;
+  if (sp.kind === 'clip') return (sp.c0 + (t - sp.t0) * (sp.speed || 1)) * FPS;
+  if (sp.kind === 'still' && sp.frame != null) return sp.frame;
+  return null;
+}
+function trackBox(name, fp) {
+  const tr = TR[name]; if (!tr || fp == null) return null;
+  const f = fp - tr.f0, n = tr.frames.length;
+  if (f < -0.5 || f > n - 0.5) return null;
+  const i = Math.max(0, Math.min(n - 1, Math.floor(f))), j = Math.min(i + 1, n - 1), k = Math.min(1, Math.max(0, f - i));
+  const a = tr.frames[i], b = tr.frames[j], L = (u, v) => u + (v - u) * k;
+  return { x: L(a.x, b.x), y: L(a.y, b.y), w: L(a.w, b.w), h: L(a.h, b.h), conf: Math.min(a.conf, b.conf) };
+}
+const CTX = {
+  dur: SC.dur,
+  box(name, t) {
+    const s = shotAt(t), sp = specAt(s, t); if (!sp || s.split) return null;
+    const b = trackBox(name, clipFrame(sp, t)); if (!b) return null;
+    const k = kbAt(sp, t);
+    return { x: k.ax + k.s * (b.x - k.ax) + k.dx, y: k.ay + k.s * (b.y - k.ay) + k.dy, w: b.w * k.s, h: b.h * k.s, conf: b.conf };
+  },
+  clip(t) { const s = shotAt(t), sp = specAt(s, t); const f = clipFrame(sp, t); return f == null ? null : f / FPS; },
+  data(name) { return DATA[name]; },
+};
+
+// ------------------------------------------------------------ build
+let ONLY = (hashArg('only') || '').split(',').filter(Boolean);
+const CHIP = hashArg('chip') !== '0';
+window.setOnly = list => { ONLY = list || []; };
+let comps = [];
+window.FX = {};
+(async () => {
+  await document.fonts.load('100px Bebas'); await document.fonts.load('40px Michroma'); await KT.ready();
+  SEK.init(stage, CTX);
+  // layer order: full-frame scrims under everything, banners above the content, transitions and cards on top
+  const Z = { routeFull: 5, chapterSlam: 10, chapterGlass: 10, captionsBox: 30, captionsStrip: 30, bannerBug: 50, bannerTab: 50,
+              bannerBreathe: 50, sweep: 60, clockJump: 70, indexCard: 80, codeChip: 100 };
+  comps = SC.comps.map(c => {
+    const f = SEK[c.type]; if (!f) throw new Error('unknown component type ' + c.type);
+    const n0 = stage.childElementCount, o = f(c);
+    for (let i = n0; i < stage.childElementCount; i++) { const e = stage.children[i]; e.style.zIndex = Z[c.type] ?? 20; e.dataset.type = c.type; e.dataset.code = c.code; }
+    o.code = c.code; o.t0 = c.t0; o.t1 = c.t1; return o;
+  });
+  const imgs = [...document.images];
+  await Promise.all(imgs.map(i => i.complete ? 0 : new Promise(r => { i.onload = r; i.onerror = r; })));
+  window.renderAt(0);
+  window.__ktReady = true;
+})().catch(e => { console.error(e); throw e; });
+
+window.renderAt = function (t) {
+  window.FX = {};
+  for (const c of comps) {
+    const allowed = c.chip ? (CHIP && !ONLY.length) : (!ONLY.length || ONLY.includes(c.code));
+    if (!allowed) { c.render(-1e9); continue; }
+    c.render(t);
+  }
+};
+// capture plan (lib/kcapture.js): 1 sample on held frames, more where things move fast
+window.KT_PLAN = SC.plan || { k: 1, shutter: 180, spans: [] };
+window.WINDOWS = SC.windows || [[0, SC.dur]];
+// QA: ink rects of visible text at t (safe-zone audit)
+window.inkAudit = function (t) {
+  window.renderAt(t);
+  const out = [];
+  document.querySelectorAll('.beb,.mic').forEach(n => {
+    let vis = true, m = n;
+    while (m && m !== document.body) { const cs = getComputedStyle(m); if (cs.display === 'none' || +cs.opacity < 0.05) { vis = false; break; } m = m.parentElement; }
+    if (!vis || !n.textContent.trim()) return;
+    // intersect with every clipping ancestor (overflow:hidden boxes and clip-path insets): hidden ink is not ink
+    const rr = n.getBoundingClientRect(); let r = { left: rr.left, right: rr.right, top: rr.top, bottom: rr.bottom, width: rr.width };
+    for (let a = n.parentElement; a && a !== document.body; a = a.parentElement) {
+      const cs = getComputedStyle(a), b = a.getBoundingClientRect();
+      let c = null;
+      if (cs.overflow === 'hidden') c = { l: b.left, r: b.right, t: b.top, b: b.bottom };
+      const m = cs.clipPath && cs.clipPath.match(/^inset\(([^)]*)\)/);
+      if (m) {
+        const v = m[1].trim().split(/\s+/), q = v.length === 1 ? [v[0], v[0], v[0], v[0]] : v.length === 2 ? [v[0], v[1], v[0], v[1]] : v.length === 3 ? [v[0], v[1], v[2], v[1]] : v;
+        const u = (s, L) => s.endsWith('%') ? parseFloat(s) / 100 * L : parseFloat(s);
+        const ci = { l: b.left + u(q[3], b.width), r: b.right - u(q[1], b.width), t: b.top + u(q[0], b.height), b: b.bottom - u(q[2], b.height) };
+        c = c ? { l: Math.max(c.l, ci.l), r: Math.min(c.r, ci.r), t: Math.max(c.t, ci.t), b: Math.min(c.b, ci.b) } : ci;
+      }
+      if (c) { r.left = Math.max(r.left, c.l); r.right = Math.min(r.right, c.r); r.top = Math.max(r.top, c.t); r.bottom = Math.min(r.bottom, c.b); }
+    }
+    if (r.right - r.left < 1 || r.bottom - r.top < 1) return;
+    let host = n; while (host && host.parentElement !== stage) host = host.parentElement;
+    out.push({ text: n.textContent, type: host ? host.dataset.type : null, code: host ? host.dataset.code : null,
+               x0: r.left, x1: r.right, y0: r.top, y1: r.bottom });
+  });
+  return out;
+};
+</script>
+</body></html>

@@ -1,0 +1,37 @@
+{
+  "name": "se-f1-weekend-remake",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "studio": "remotion studio src/index.ts",
+    "still": "remotion still src/index.ts RaceWeekend out/still.png",
+    "render": "remotion render src/index.ts RaceWeekend out/SCE_F1-Weekend_Remake_76s-9x16.mp4 --codec=h264 --crf=18 --audio-codec=aac",
+    "render30": "remotion render src/index.ts RaceWeekend30 out/SCE_F1-Weekend_Remake_30s-9x16.mp4 --codec=h264 --crf=18 --audio-codec=aac",
+    "audio": "python3 audio/synth.py",
+    "plates": "python3 tools/cut_plates.py --raw raw",
+    "cut30": "python3 tools/cut30.py",
+    "music": "uv run --no-project --quiet --with numpy --with scipy --with soundfile python tools/music_bed.py --cut 76 && uv run --no-project --quiet --with numpy --with scipy --with soundfile python tools/music_bed.py --cut 30",
+    "carsound": "uv run --no-project --quiet --with numpy --with scipy --with soundfile --with pyloudnorm python tools/car_audio.py --cut 76 && uv run --no-project --quiet --with numpy --with scipy --with soundfile --with pyloudnorm python tools/car_audio.py --cut 30",
+    "finish": "python3 tools/finish.py",
+    "finish30": "python3 tools/finish.py --name SCE_F1-Weekend_Remake_30s-9x16",
+    "sfx": "uv run --no-project --quiet --with numpy --with soundfile python ~/.local/vlogtools/sfx/engine.py .",
+    "sfx30": "uv run --no-project --quiet --with numpy --with soundfile python ~/.local/vlogtools/sfx/engine.py . --events sfx/events30.json --reference none --suffix 30",
+    "sfx:check": "uv run --no-project --quiet --with numpy --with soundfile python ~/.local/vlogtools/sfx/verify.py ."
+  },
+  "dependencies": {
+    "remotion": "4.0.532",
+    "@remotion/cli": "4.0.532",
+    "@remotion/transitions": "4.0.532",
+    "@remotion/paths": "4.0.532",
+    "@remotion/shapes": "4.0.532",
+    "@remotion/noise": "4.0.532",
+    "@remotion/layout-utils": "4.0.532",
+    "@remotion/media-utils": "4.0.532",
+    "react": "18.3.1",
+    "react-dom": "18.3.1",
+    "@fontsource/archivo-black": "5.3.0",
+    "@fontsource/archivo": "5.3.0",
+    "@fontsource/silkscreen": "5.3.0",
+    "@fontsource/dm-mono": "5.3.0"
+  }
+}

@@ -1,0 +1,1708 @@
+{
+ "_about": "Rally vlog v2 (Sep 15 2026, rebuilt from the raw footage). Everything that is not in the EDL lives here: paths, the per-shot reframe / look / ramp, transitions, the music slot, the clocks and every on-screen line. Edit, then run ./render.sh. Sources for every line: README.md.",
+ "paths": {
+  "scratch": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad",
+  "ffmpeg": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/ffmpeg",
+  "mezz": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/mezz",
+  "edl": "data/edl.json",
+  "captions": "data/captions.json",
+  "sparse": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/raw/sparse",
+  "sfx": "../../10-motion-sfx/locked-on-sfx",
+  "transcripts": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/raw/tr"
+ },
+ "name": "2026-09-15 rally day (Egnyte) - SE LOCKED-ON vlog v2",
+ "forbidden": [
+  {
+   "src": "0008",
+   "a": 0,
+   "b": 100000,
+   "why": "spoken password"
+  },
+  {
+   "src": "0022",
+   "a": 67,
+   "b": 100,
+   "why": "take that 17-second segment out"
+  },
+  {
+   "src": "0032",
+   "a": 1455,
+   "b": 1470,
+   "why": "speed talk"
+  },
+  {
+   "src": "0034",
+   "a": 638,
+   "b": 690,
+   "why": "speed talk, firearm"
+  },
+  {
+   "src": "P2236",
+   "a": 95,
+   "b": 98,
+   "why": "speeding talk"
+  },
+  {
+   "src": "P2236",
+   "a": 105,
+   "b": 113,
+   "why": "double-yellow talk"
+  }
+ ],
+ "timelapseShutter": 1.0,
+ "looks": {
+  "night": {
+   "mid": 0.18,
+   "contrast": 0.5,
+   "sat": 0.84,
+   "warm_sat": 1.08,
+   "shadow_tint": [
+    -0.01,
+    0.002,
+    0.014
+   ],
+   "hi_tint": [
+    0.012,
+    0.004,
+    -0.012
+   ]
+  },
+  "face": {
+   "mid": 0.2,
+   "contrast": 0.42,
+   "sat": 0.9,
+   "warm_sat": 1.02,
+   "shadow_tint": [
+    -0.006,
+    0.001,
+    0.008
+   ],
+   "hi_tint": [
+    0.01,
+    0.004,
+    -0.008
+   ]
+  },
+  "interior": {
+   "mid": 0.2,
+   "contrast": 0.42,
+   "sat": 0.88,
+   "warm_sat": 1.02,
+   "shadow_tint": [
+    -0.006,
+    0.001,
+    0.009
+   ],
+   "hi_tint": [
+    0.012,
+    0.005,
+    -0.01
+   ]
+  },
+  "day": {
+   "mid": 0.3,
+   "contrast": 0.35,
+   "sat": 0.9,
+   "warm_sat": 1.04,
+   "shadow_tint": [
+    -0.006,
+    0.002,
+    0.01
+   ],
+   "hi_tint": [
+    0.008,
+    0.003,
+    -0.008
+   ],
+   "gmin": 0.7
+  },
+  "garage": {
+   "mid": 0.22,
+   "contrast": 0.42,
+   "sat": 0.86,
+   "warm_sat": 1.06,
+   "shadow_tint": [
+    -0.008,
+    0.002,
+    0.011
+   ],
+   "hi_tint": [
+    0.01,
+    0.004,
+    -0.01
+   ]
+  }
+ },
+ "shotDefaults": {
+  "look": "night",
+  "s0": 1.0,
+  "s1": 1.04
+ },
+ "shots": {
+  "5": {
+   "look": "day"
+  },
+  "6": {
+   "look": "day",
+   "c0": [
+    1250,
+    960
+   ],
+   "c1": [
+    1250,
+    960
+   ],
+   "s0": 1.0,
+   "s1": 1.03
+  },
+  "10": {
+   "look": "garage",
+   "c0": [
+    930,
+    960
+   ],
+   "c1": [
+    930,
+    960
+   ]
+  },
+  "11": {
+   "look": "garage",
+   "keys": [
+    [
+     0,
+     1000,
+     1063,
+     1.12
+    ],
+    [
+     0.6,
+     1150,
+     1063,
+     1.12
+    ],
+    [
+     3.0,
+     1150,
+     1063,
+     1.12
+    ],
+    [
+     4.8,
+     1000,
+     1063,
+     1.12
+    ],
+    [
+     5.6,
+     850,
+     1063,
+     1.12
+    ],
+    [
+     6.8,
+     1100,
+     1063,
+     1.12
+    ],
+    [
+     8.2,
+     1000,
+     1063,
+     1.12
+    ],
+    [
+     9.2,
+     950,
+     1063,
+     1.12
+    ],
+    [
+     10.6,
+     850,
+     1063,
+     1.12
+    ]
+   ]
+  },
+  "24": {
+   "look": "garage"
+  },
+  "32": {
+   "look": "interior"
+  },
+  "34": {
+   "look": "interior"
+  },
+  "37": {
+   "look": "night"
+  },
+  "38": {
+   "look": "face"
+  },
+  "41": {
+   "look": "night",
+   "ramp": [
+    [
+     0,
+     0.6
+    ],
+    [
+     0.55,
+     0.8
+    ],
+    [
+     1,
+     1.7
+    ]
+   ]
+  },
+  "2": {
+   "look": "garage",
+   "ramp": [
+    [
+     0,
+     1.8
+    ],
+    [
+     0.45,
+     0.6
+    ],
+    [
+     1,
+     0.7
+    ]
+   ]
+  },
+  "9": {
+   "look": "garage"
+  },
+  "12": {
+   "look": "garage"
+  },
+  "13": {
+   "look": "garage"
+  },
+  "14": {
+   "look": "garage"
+  },
+  "15": {
+   "look": "garage"
+  },
+  "16": {
+   "look": "garage"
+  },
+  "17": {
+   "look": "garage"
+  },
+  "18": {
+   "look": "garage"
+  },
+  "19": {
+   "look": "garage"
+  },
+  "20": {
+   "look": "garage"
+  },
+  "21": {
+   "look": "garage"
+  },
+  "22": {
+   "look": "garage"
+  },
+  "23": {
+   "look": "garage"
+  },
+  "4": {
+   "ramp": [
+    [
+     0,
+     0.5
+    ],
+    [
+     0.55,
+     0.5
+    ],
+    [
+     1,
+     2.2
+    ]
+   ]
+  },
+  "42": {
+   "ramp": [
+    [
+     0,
+     1.6
+    ],
+    [
+     0.25,
+     0.7
+    ],
+    [
+     0.75,
+     0.7
+    ],
+    [
+     1,
+     1.6
+    ]
+   ]
+  },
+  "43": {
+   "ramp": [
+    [
+     0,
+     1.6
+    ],
+    [
+     0.25,
+     0.7
+    ],
+    [
+     0.75,
+     0.7
+    ],
+    [
+     1,
+     1.6
+    ]
+   ]
+  },
+  "45": {
+   "ramp": [
+    [
+     0,
+     1.6
+    ],
+    [
+     0.25,
+     0.7
+    ],
+    [
+     0.75,
+     0.7
+    ],
+    [
+     1,
+     1.6
+    ]
+   ]
+  },
+  "46": {
+   "ramp": [
+    [
+     0,
+     1.5
+    ],
+    [
+     0.3,
+     0.7
+    ],
+    [
+     1,
+     0.7
+    ]
+   ]
+  },
+  "7": {
+   "look": "interior"
+  },
+  "8": {
+   "look": "interior"
+  },
+  "1": {
+   "look": "interior"
+  },
+  "29": {
+   "look": "interior"
+  },
+  "30": {
+   "look": "interior"
+  },
+  "31": {
+   "look": "interior"
+  },
+  "35": {
+   "look": "interior"
+  },
+  "36": {
+   "look": "interior"
+  },
+  "33": {
+   "look": "garage"
+  },
+  "47": {
+   "look": "garage"
+  },
+  "48": {
+   "look": "garage"
+  },
+  "49": {
+   "look": "garage"
+  },
+  "50": {
+   "look": "garage"
+  },
+  "51": {
+   "look": "garage"
+  },
+  "3": {
+   "look": "garage"
+  },
+  "39": {
+   "look": "face"
+  },
+  "40": {
+   "look": "face"
+  }
+ },
+ "slips": {
+  "_about": "per-shot source slips over the EDL (applied by lib/plate.py when it loads the EDL): in/speed replace the EDL values, out = in + dur * speed",
+  "17": {
+   "in": 341.36,
+   "speed": 0.75,
+   "why": "0015 340.0-341.3: an arm and a ring cover the lens; the clean part of the take (341.36-343.16, all the mezzanine has) is played at 0.75x on the 59.94p source"
+  }
+ },
+ "transitions": [
+  {
+   "into": 1,
+   "type": "whip",
+   "dir": "left"
+  },
+  {
+   "into": 2,
+   "type": "whip",
+   "dir": "right"
+  },
+  {
+   "into": 3,
+   "type": "impact",
+   "strength": 0.45
+  },
+  {
+   "into": 4,
+   "type": "whip",
+   "dir": "left"
+  },
+  {
+   "into": 5,
+   "type": "whip",
+   "dir": "right"
+  },
+  {
+   "into": 10,
+   "type": "sweep",
+   "t0": 25.88,
+   "dur": 0.36
+  },
+  {
+   "into": 15,
+   "type": "sweep",
+   "t0": 54.09,
+   "dur": 0.36
+  },
+  {
+   "into": 24,
+   "type": "sweep",
+   "t0": 78.84,
+   "dur": 0.36
+  },
+  {
+   "into": 26,
+   "type": "sweep",
+   "t0": 87.54,
+   "dur": 0.36
+  },
+  {
+   "into": 37,
+   "type": "sweep",
+   "t0": 116.61,
+   "dur": 0.36
+  },
+  {
+   "into": 41,
+   "type": "impact",
+   "strength": 0.55,
+   "sfx": false
+  },
+  {
+   "into": 42,
+   "type": "whip",
+   "dir": "right"
+  },
+  {
+   "into": 43,
+   "type": "whip",
+   "dir": "left"
+  },
+  {
+   "into": 44,
+   "type": "whip",
+   "dir": "right"
+  },
+  {
+   "into": 45,
+   "type": "whip",
+   "dir": "left"
+  },
+  {
+   "into": 46,
+   "type": "whip",
+   "dir": "up"
+  },
+  {
+   "into": 47,
+   "type": "sweep",
+   "t0": 147.77,
+   "dur": 0.36
+  }
+ ],
+ "slams": [
+  {
+   "t": 7.05,
+   "title": "RALLY DAY"
+  },
+  {
+   "t": 26.08,
+   "title": "THE LINEUP"
+  },
+  {
+   "t": 54.29,
+   "title": "EGNYTE ARRIVES"
+  },
+  {
+   "t": 79.04,
+   "title": "ROLL OUT"
+  },
+  {
+   "t": 87.74,
+   "title": "RED ROCK"
+  },
+  {
+   "t": 116.81,
+   "title": "THE DRIVE BACK"
+  },
+  {
+   "t": 147.97,
+   "title": "THE VERDICT"
+  },
+  {
+   "t": 63.54,
+   "title": "SAFELY."
+  }
+ ],
+ "endCard": {
+  "plateRun": 0.35
+ },
+ "clockStarts": {
+  "_about": "camera clock at source second 0 of each clip: DJI file names (DJI_20260915HHMMSS_NNNN) and the iPhone clips' creation times (UTC-7). Chapter stamps = this + the chapter's first shot in-point.",
+  "0001": "16:10:22",
+  "0004": "16:52:31",
+  "0005": "17:02:14",
+  "0010": "17:48:15",
+  "0011": "17:52:19",
+  "0013": "18:46:41",
+  "0015": "19:04:30",
+  "0016": "19:13:07",
+  "0017": "20:12:24",
+  "0021": "20:35:56",
+  "0022": "20:43:47",
+  "0025": "21:21:58",
+  "0030": "22:49:27",
+  "0032": "23:00:03",
+  "0034": "23:26:18",
+  "P2139a": "21:39:36",
+  "P2140c": "21:40:17",
+  "P2140d": "21:40:24",
+  "P2236": "22:36:28",
+  "P2245": "22:45:24"
+ },
+ "layer": {
+  "_about": "every on-screen element: code, kit/v2 component type, in/out on the timeline (s), params. Sources for every line: README.md. Captions are built from captions.json (config `captions`).",
+  "comps": [
+   {
+    "code": "HOOK",
+    "type": "v2hook",
+    "t0": 0,
+    "t1": 2.0,
+    "p": {
+     "eyebrow": "SUPERCAR EXPERIENCE × EGNYTE · RALLY DAY",
+     "line1": "THE RALLY",
+     "line2": "LAS VEGAS · SEP 15 2026",
+     "x": 54,
+     "y": 330,
+     "w": 853,
+     "exit": 1.42
+    }
+   },
+   {
+    "code": "A2",
+    "type": "bannerTab",
+    "t0": 1.62,
+    "t1": 170.02,
+    "p": {
+     "name": "SUPERCAR EXPERIENCE",
+     "label": "RALLY DAY · LAS VEGAS",
+     "enter": "slide",
+     "progress": [
+      1.62,
+      170.02
+     ]
+    }
+   },
+   {
+    "code": "G1-01",
+    "type": "chapterSlam",
+    "t0": 7.05,
+    "t1": 9.0,
+    "p": {
+     "tag": "16:10 · CH 01 / 07",
+     "title": "RALLY DAY",
+     "y": 350,
+     "maxW": 700,
+     "maxS": 215
+    }
+   },
+   {
+    "code": "G1-02",
+    "type": "chapterSlam",
+    "t0": 26.08,
+    "t1": 28.03,
+    "p": {
+     "tag": "18:46 · CH 02 / 07",
+     "title": "THE LINEUP",
+     "y": 350,
+     "maxW": 700,
+     "maxS": 215
+    }
+   },
+   {
+    "code": "G1-03",
+    "type": "chapterSlam",
+    "t0": 54.29,
+    "t1": 56.24,
+    "p": {
+     "tag": "18:53 · CH 03 / 07",
+     "title": "EGNYTE ARRIVES",
+     "y": 350,
+     "maxW": 700,
+     "maxS": 215
+    }
+   },
+   {
+    "code": "G1-04",
+    "type": "chapterSlam",
+    "t0": 79.04,
+    "t1": 80.99,
+    "p": {
+     "tag": "19:13 · CH 04 / 07",
+     "title": "ROLL OUT",
+     "y": 350,
+     "maxW": 700,
+     "maxS": 215
+    }
+   },
+   {
+    "code": "G1-05",
+    "type": "chapterSlam",
+    "t0": 87.74,
+    "t1": 89.69,
+    "p": {
+     "tag": "20:12 · CH 05 / 07",
+     "title": "RED ROCK",
+     "y": 350,
+     "maxW": 700,
+     "maxS": 215
+    }
+   },
+   {
+    "code": "G1-06",
+    "type": "chapterSlam",
+    "t0": 116.81,
+    "t1": 118.76,
+    "p": {
+     "tag": "22:45 · CH 06 / 07",
+     "title": "THE DRIVE BACK",
+     "y": 350,
+     "maxW": 700,
+     "maxS": 215
+    }
+   },
+   {
+    "code": "G1-07",
+    "type": "chapterSlam",
+    "t0": 147.97,
+    "t1": 149.92,
+    "p": {
+     "tag": "23:33 · CH 07 / 07",
+     "title": "THE VERDICT",
+     "y": 350,
+     "maxW": 700,
+     "maxS": 215
+    }
+   },
+   {
+    "code": "I1",
+    "type": "sweep",
+    "t0": 25.88,
+    "t1": 26.24,
+    "p": {
+     "angle": 16,
+     "width": 360
+    }
+   },
+   {
+    "code": "I1",
+    "type": "sweep",
+    "t0": 54.09,
+    "t1": 54.45,
+    "p": {
+     "angle": 16,
+     "width": 360
+    }
+   },
+   {
+    "code": "I1",
+    "type": "sweep",
+    "t0": 78.84,
+    "t1": 79.2,
+    "p": {
+     "angle": 16,
+     "width": 360
+    }
+   },
+   {
+    "code": "I1",
+    "type": "sweep",
+    "t0": 87.54,
+    "t1": 87.9,
+    "p": {
+     "angle": 16,
+     "width": 360
+    }
+   },
+   {
+    "code": "I1",
+    "type": "sweep",
+    "t0": 116.61,
+    "t1": 116.97,
+    "p": {
+     "angle": 16,
+     "width": 360
+    }
+   },
+   {
+    "code": "I1",
+    "type": "sweep",
+    "t0": 147.77,
+    "t1": 148.13,
+    "p": {
+     "angle": 16,
+     "width": 360
+    }
+   },
+   {
+    "code": "B1",
+    "type": "personLock",
+    "t0": 9.2,
+    "t1": 11.35,
+    "p": {
+     "track": "host_ch1",
+     "name": "OMARIE",
+     "handle": "@NQ.YOUNG",
+     "acquire": 9.2,
+     "exit": 11.05,
+     "maxBottom": 1100
+    }
+   },
+   {
+    "code": "C1",
+    "type": "convoyHop",
+    "t0": 30.9,
+    "t1": 40.8,
+    "p": {
+     "total": 6,
+     "exit": 40.45,
+     "label": "CAR",
+     "segs": [
+      {
+       "track": "lineup_urus",
+       "t": 30.96,
+       "make": "LAMBORGHINI URUS",
+       "mode": "acquire"
+      },
+      {
+       "track": "lineup_corvette",
+       "t": 32.3,
+       "make": "CORVETTE Z06",
+       "mode": "relock",
+       "lost": 0.73
+      },
+      {
+       "track": "lineup_huracan",
+       "t": 35.08,
+       "make": "LAMBORGHINI HURACÁN EVO",
+       "mode": "hop"
+      },
+      {
+       "track": "lineup_amg",
+       "t": 35.86,
+       "make": "MERCEDES-AMG GT BLACK SERIES",
+       "mode": "relock",
+       "lost": 0.71
+      },
+      {
+       "track": "lineup_gt3rs",
+       "t": 37.18,
+       "make": "PORSCHE 911 GT3 RS",
+       "mode": "hop"
+      },
+      {
+       "track": "lineup_cullinan",
+       "t": 37.8,
+       "make": "ROLLS-ROYCE CULLINAN",
+       "mode": "relock",
+       "lost": 0.84
+      }
+     ],
+     "_about": "each car is released with the LOCK LOST treatment as it leaves frame on a pan (Urus 32.30, Huracán 35.86, GT3 RS 37.80) and the next car is locked when it is in frame (snap = t + lost); hops only while both cars are in frame"
+    }
+   },
+   {
+    "code": "CTA",
+    "type": "v2cta",
+    "t0": 45.15,
+    "t1": 54.0,
+    "p": {
+     "x": 54,
+     "y": 300,
+     "kicker": "TEXT OR DM TO BOOK",
+     "line": "(725) 425-3583",
+     "sub": "@SUPERCAR_EXPERIENCE_"
+    }
+   },
+   {
+    "code": "SLAM",
+    "type": "v2slam",
+    "t0": 63.54,
+    "t1": 64.62,
+    "p": {
+     "word": "SAFELY.",
+     "y": 340,
+     "maxS": 330,
+     "maxW": 780,
+     "exit": 64.3
+    }
+   },
+   {
+    "code": "R8",
+    "type": "v2lock",
+    "t0": 67.8,
+    "t1": 69.5,
+    "p": {
+     "track": "r8",
+     "kicker": "LOCKED ON",
+     "name": "AUDI R8",
+     "acquire": 67.85,
+     "exit": 69.15,
+     "side": "above"
+    }
+   },
+   {
+    "code": "C3",
+    "type": "leadLock",
+    "t0": 74.88,
+    "t1": 77.0,
+    "p": {
+     "track": "cullinan_lead",
+     "kicker": "LEAD CAR",
+     "name": "ROLLS-ROYCE CULLINAN",
+     "quote": "",
+     "acquire": 74.9,
+     "exit": 76.6,
+     "side": "above",
+     "follow": 0.4
+    }
+   },
+   {
+    "code": "E-CH4",
+    "type": "v2routeCard",
+    "t0": 79.3,
+    "t1": 82.8,
+    "p": {
+     "x": 54,
+     "y": 800,
+     "w": 853,
+     "title": "THE ROUTE",
+     "sub": "19:13 · ROLL OUT",
+     "waypoints": [
+      "VENETIAN",
+      "BLUE DIAMOND",
+      "RED ROCK"
+     ],
+     "firstAt": 79.75,
+     "steps": [
+      {
+       "t": 80.95,
+       "k": 1
+      },
+      {
+       "t": 82.05,
+       "k": 2
+      }
+     ],
+     "exit": 82.42
+    }
+   },
+   {
+    "code": "D1-DINNER",
+    "type": "clockStamp",
+    "t0": 94.35,
+    "t1": 101.65,
+    "p": {
+     "x": 54,
+     "y": 300,
+     "start": "00:00:00",
+     "place": "LOTUS OF SIAM · RED ROCK CASINO",
+     "date": "SEP 15 2026",
+     "built": false
+    }
+   },
+   {
+    "code": "F1",
+    "type": "quoteCard",
+    "t0": 101.8,
+    "t1": 110.45,
+    "p": {
+     "label": "OMARIE · @NQ.YOUNG",
+     "wordsFrom": [
+      101.7,
+      110.5
+     ],
+     "insert": [
+      {
+       "w": "…",
+       "t": 104.4
+      }
+     ],
+     "replaceLast": [
+      "LEDS…"
+     ],
+     "footer": "RALLY DAY · SEP 15 2026 · RED ROCK CASINO",
+     "meter": "meter",
+     "y": 340,
+     "placeholder": false,
+     "start": 101.82,
+     "header": "FAVOURITE OF THE FLEET"
+    }
+   },
+   {
+    "code": "ROMA",
+    "type": "v2lock",
+    "t0": 106.3,
+    "t1": 108.25,
+    "p": {
+     "track": "roma",
+     "kicker": "OMARIE'S PICK",
+     "name": "FERRARI ROMA",
+     "acquire": 106.35,
+     "exit": 107.92,
+     "side": "below"
+    }
+   },
+   {
+    "code": "PLACE",
+    "type": "v2place",
+    "t0": 110.62,
+    "t1": 116.4,
+    "p": {
+     "x": 54,
+     "y": 300,
+     "kicker": "TEAM DINNER",
+     "name": "YARD HOUSE"
+    }
+   },
+   {
+    "code": "E1",
+    "type": "v2route",
+    "t0": 129.45,
+    "t1": 147.72,
+    "p": {
+     "x": 54,
+     "y": 290,
+     "title": "THE ROUTE",
+     "waypoints": [
+      "215",
+      "15 NORTH",
+      "FLAMINGO",
+      "LAS VEGAS BLVD",
+      "VENETIAN",
+      "LEVEL 9"
+     ],
+     "drawIn": 129.5,
+     "firstAt": 135.77,
+     "called": [
+      {
+       "k": 0,
+       "t": 129.74
+      },
+      {
+       "k": 1,
+       "t": 132.37
+      }
+     ],
+     "steps": [
+      {
+       "t": 137.77,
+       "k": 1
+      },
+      {
+       "t": 139.77,
+       "k": 2
+      },
+      {
+       "t": 141.77,
+       "k": 3
+      },
+      {
+       "t": 144.27,
+       "k": 4
+      },
+      {
+       "t": 146.27,
+       "k": 5
+      }
+     ],
+     "exit": 147.3,
+     "layout": "strip",
+     "w": 853
+    }
+   },
+   {
+    "code": "D1-DRIVE",
+    "type": "clockStamp",
+    "t0": 135.9,
+    "t1": 147.7,
+    "p": {
+     "x": 54,
+     "y": 1330,
+     "start": "00:00:00",
+     "place": "BACK TO THE VENETIAN",
+     "date": "SEP 15 2026",
+     "built": false
+    }
+   },
+   {
+    "code": "URUS",
+    "type": "v2lock",
+    "t0": 141.9,
+    "t1": 144.2,
+    "p": {
+     "track": "urus_strip",
+     "kicker": "FOLLOW THAT CAR",
+     "name": "LAMBORGHINI URUS",
+     "acquire": 141.95,
+     "exit": 143.9,
+     "side": "above"
+    }
+   },
+   {
+    "code": "WALL",
+    "type": "v2wall",
+    "t0": 150.55,
+    "t1": 161.5,
+    "p": {
+     "header": "EGNYTE ON THE DAY",
+     "x": 54,
+     "y": 300,
+     "size": 84,
+     "items": [
+      {
+       "w": "WONDERFUL",
+       "t": 150.84
+      },
+      {
+       "w": "GOOD TIME",
+       "t": 152.16
+      },
+      {
+       "w": "AWESOME",
+       "t": 156.07
+      },
+      {
+       "w": "AMAZING",
+       "t": 156.85
+      },
+      {
+       "w": "GOOD EXPERIENCE",
+       "t": 160.62
+      }
+     ],
+     "exit": 161.1,
+     "flow": true,
+     "w": 853
+    }
+   },
+   {
+    "code": "END",
+    "type": "v2end",
+    "t0": 170.02,
+    "t1": 174.52,
+    "p": {
+     "tagline": "A RIDE OF A LIFETIME.",
+     "cta": "TEXT OR DM TO BOOK",
+     "phone": "(725) 425-3583",
+     "url": "SUPERCAREXP.VIP",
+     "handle": "@SUPERCAR_EXPERIENCE_",
+     "locations": "LAS VEGAS · SCOTTSDALE · BOISE",
+     "requirement": "RENTERS 25+ · AGES 21–24 WITH $299 UNDERAGE FEE",
+     "credit": "FILMED BY @NQ.YOUNG"
+    }
+   }
+  ],
+  "captions": {
+   "t0": 4.0,
+   "t1": 170.02,
+   "p": {
+    "size": 68,
+    "yBottom": 1372,
+    "maxLines": 2,
+    "maxW": 700,
+    "cx": 480
+   }
+  },
+  "testimonial": {
+   "t0": 101.8,
+   "t1": 110.45
+  }
+ },
+ "captions": {
+  "hide": [
+   [
+    63.6,
+    64.2,
+    "SAFELY. slam shows the word"
+   ],
+   [
+    101.7,
+    110.52,
+    "host's pick card shows Omarie's words"
+   ],
+   [
+    150.8,
+    152.5,
+    "quote wall"
+   ],
+   [
+    154.9,
+    157.45,
+    "quote wall"
+   ],
+   [
+    160.5,
+    161.45,
+    "quote wall"
+   ]
+  ],
+  "fix": {
+   "Ignite": "Egnyte",
+   "ignite": "Egnyte"
+  },
+  "extra": [
+   {
+    "src": "0034",
+    "in": 431.5,
+    "out": 433.35,
+    "t": 4.1,
+    "why": "cold-open guest line (same words as the CH7 piece)",
+    "words": [
+     [
+      4.27,
+      4.63,
+      "Wonderful"
+     ],
+     [
+      4.63,
+      4.99,
+      "time."
+     ],
+     [
+      5.59,
+      5.59,
+      "Good"
+     ],
+     [
+      5.59,
+      5.89,
+      "time."
+     ]
+    ]
+   }
+  ]
+ },
+ "tracks": {
+  "_about": "lock-on targets: shot, output frame range f0-f1, anchor frame (sharp, mid-shot) and the box x,y,w,h on it (output px). Tracked with lib/track_mid.py both ways from the anchor.",
+  "lineup_urus": {
+   "shot": 11,
+   "f0": 915,
+   "f1": 985,
+   "anchor": 935,
+   "box": [
+    36,
+    744,
+    638,
+    302
+   ]
+  },
+  "lineup_corvette": {
+   "shot": 11,
+   "f0": 975,
+   "f1": 1056,
+   "anchor": 1013,
+   "box": [
+    394,
+    856,
+    414,
+    269
+   ]
+  },
+  "lineup_huracan": {
+   "shot": 11,
+   "f0": 1047,
+   "f1": 1094,
+   "anchor": 1067,
+   "box": [
+    260,
+    889,
+    526,
+    291
+   ]
+  },
+  "lineup_gt3rs": {
+   "shot": 11,
+   "f0": 1086,
+   "f1": 1150,
+   "anchor": 1109,
+   "box": [
+    529,
+    845,
+    437,
+    314
+   ]
+  },
+  "lineup_amg": {
+   "shot": 11,
+   "f0": 1090,
+   "f1": 1150,
+   "anchor": 1119,
+   "box": [
+    90,
+    828,
+    395,
+    140
+   ]
+  },
+  "lineup_cullinan": {
+   "shot": 11,
+   "f0": 1141,
+   "f1": 1230,
+   "anchor": 1178,
+   "box": [
+    361,
+    733,
+    672,
+    392
+   ]
+  },
+  "plate_hook_urus": {
+   "shot": 0,
+   "f0": 0,
+   "f1": 53,
+   "anchor": 27,
+   "box": [
+    200,
+    1030,
+    100,
+    66
+   ],
+   "scalePen": 0.3
+  },
+  "plate_hook_car": {
+   "shot": 0,
+   "f0": 0,
+   "f1": 53,
+   "anchor": 27,
+   "box": [
+    740,
+    1066,
+    80,
+    52
+   ],
+   "scalePen": 0.3
+  },
+  "urus_strip": {
+   "shot": 44,
+   "f0": 4249,
+   "f1": 4323,
+   "anchor": 4290,
+   "box": [
+    10,
+    905,
+    480,
+    340
+   ],
+   "scalePen": 0.3
+  },
+  "plate_strip_urus": {
+   "shot": 44,
+   "f0": 4249,
+   "f1": 4323,
+   "anchor": 4290,
+   "box": [
+    212,
+    1062,
+    100,
+    66
+   ],
+   "scalePen": 0.3
+  },
+  "plate_strip_car": {
+   "shot": 44,
+   "f0": 4249,
+   "f1": 4323,
+   "anchor": 4290,
+   "box": [
+    866,
+    1106,
+    62,
+    46
+   ],
+   "scalePen": 0.3
+  },
+  "host_ch1": {
+   "shot": 5,
+   "f0": 274,
+   "f1": 390,
+   "anchor": 330,
+   "box": [
+    335,
+    700,
+    360,
+    480
+   ],
+   "scalePen": 0.15
+  },
+  "roma": {
+   "shot": 33,
+   "f0": 3183,
+   "f1": 3244,
+   "anchor": 3200,
+   "box": [
+    424,
+    1040,
+    246,
+    110
+   ],
+   "scalePen": 0.2
+  },
+  "plate_r8_roma": {
+   "shot": 33,
+   "f0": 3185,
+   "f1": 3244,
+   "anchor": 3200,
+   "box": [
+    674,
+    1194,
+    68,
+    48
+   ],
+   "scalePen": 0.3
+  },
+  "r8": {
+   "shot": 20,
+   "f0": 2029,
+   "f1": 2078,
+   "anchor": 2034,
+   "box": [
+    470,
+    985,
+    570,
+    380
+   ],
+   "scalePen": 0.2
+  },
+  "cullinan_lead": {
+   "shot": 23,
+   "f0": 2243,
+   "f1": 2306,
+   "anchor": 2262,
+   "box": [
+    20,
+    760,
+    620,
+    380
+   ],
+   "scalePen": 0.25
+  },
+  "plate_level9_urus": {
+   "shot": 46,
+   "f0": 4386,
+   "f1": 4440,
+   "anchor": 4395,
+   "box": [
+    428,
+    1030,
+    76,
+    44
+   ],
+   "scalePen": 0.3
+  }
+ },
+ "music": {
+  "_about": "THE MUSIC. The bed is ORIGINAL (lib/music.py, synthesised here, cleared) unless a track is dropped at audio/music.wav. To switch music OFF: set music.enabled to false here, or run MUSIC=0 ./render.sh (the master is then dialog + nat + SFX). The no-music master is exported every time anyway. To use another track: put it at audio/music.wav (48 kHz stereo), set bpm / downbeat0 / offset (where in the file the timeline starts); the mixer ducks it under speech and tape-stops it at tapeStop before the end card hit (170.02 s). The placeholder bed: 105.11 BPM, first downbeat 1.0533 s, drop 135.77 s, tape stop 168.878-169.449 s.",
+  "file": "audio/music.wav",
+  "bpm": 105.11,
+  "downbeat0": 1.0533,
+  "offset": 0.0,
+  "tapeStop": [
+   168.878,
+   169.449
+  ],
+  "lufs": -20.0,
+  "duckDb": -11.0,
+  "enabled": true
+ },
+ "audio": {
+  "dialogFilter": "highpass=f=80:poles=2,afftdn=nr=8:nf=-45:tn=1,acompressor=threshold=-26dB:ratio=2:attack=12:release=180:makeup=1",
+  "dialogLufs": -16.0,
+  "edgeFade": 0.012,
+  "trims": {
+   "_about": "per-piece edge trims (s, source) found on the audio envelope where a neighbouring word crosses the EDL edge (build notes in cue.md)",
+   "1": {
+    "out": -0.015
+   },
+   "2": {
+    "in": 0.075
+   },
+   "9": {
+    "fin": 0.03
+   },
+   "16": {
+    "fout": 0.04
+   },
+   "17": {
+    "out": -0.13
+   },
+   "18": {
+    "in": -0.05,
+    "out": -0.12
+   }
+  },
+  "extraDialog": [
+   {
+    "src": "0034",
+    "in": 431.5,
+    "out": 433.35,
+    "t": 4.1,
+    "why": "cold open: the guest's sync line on its own shot (the EDL put it at 0.0 s, 4 s before its picture)"
+   }
+  ],
+  "natLufs": -24.0,
+  "natDuckDb": -10.0,
+  "nat": [
+   {
+    "src": "0032",
+    "a": 820.0,
+    "b": 821.8,
+    "t": 0.0,
+    "lufs": -23,
+    "why": "hook frame: Las Vegas Blvd, Urus ahead, Spirit of Ecstasy; H"
+   },
+   {
+    "src": "P2140c",
+    "a": 1.0,
+    "b": 2.2,
+    "t": 1.8,
+    "lufs": -25,
+    "why": "Lotus of Siam lanterns, the whole group at dinner"
+   },
+   {
+    "src": "0013",
+    "a": 13.0,
+    "b": 14.0,
+    "t": 3.0,
+    "lufs": -26,
+    "why": "garage lineup"
+   },
+   {
+    "src": "0032",
+    "a": 100.0,
+    "b": 101.0,
+    "t": 6.0,
+    "lufs": -23,
+    "why": "freeway, the purple Urus passes under the lights -> whip int"
+   },
+   {
+    "src": "0010",
+    "a": 12.0,
+    "b": 15.0,
+    "t": 16.3,
+    "lufs": -30,
+    "why": "the SE shop: logo wall"
+   },
+   {
+    "src": "0015",
+    "a": 2.0,
+    "b": 4.6,
+    "t": 57.19,
+    "lufs": -30,
+    "why": "guests arriving in the garage"
+   },
+   {
+    "src": "0015",
+    "a": 340.8,
+    "b": 343.2,
+    "t": 59.79,
+    "lufs": -30,
+    "why": "guests signing in on clipboards (slipped with the picture, shot 17)"
+   },
+   {
+    "src": "0013",
+    "a": 962.0,
+    "b": 964.0,
+    "t": 62.19,
+    "lufs": -30,
+    "why": "guests walking to their cars (SAFELY. slam lands here)"
+   },
+   {
+    "src": "0015",
+    "a": 89.0,
+    "b": 91.0,
+    "t": 67.69,
+    "lufs": -30,
+    "why": "the white Audi R8 - lock-on AUDI R8"
+   },
+   {
+    "src": "P2245",
+    "a": 5.0,
+    "b": 11.1,
+    "t": 116.61,
+    "lufs": -30,
+    "why": "Red Rock rooftop: the lineup under the lights"
+   },
+   {
+    "src": "0016",
+    "a": 60.0,
+    "b": 64.0,
+    "t": 78.84,
+    "lufs": -24,
+    "why": "EDL nat for the timelapse (in-car, 0016 60-64 s)"
+   },
+   {
+    "src": "P2139a",
+    "a": 0.5,
+    "b": 3.0,
+    "t": 94.25,
+    "lufs": -22,
+    "why": "Lotus of Siam: lanterns, SE shirt"
+   },
+   {
+    "src": "P2140c",
+    "a": 2.0,
+    "b": 4.5,
+    "t": 96.75,
+    "lufs": -22,
+    "why": "the group at dinner"
+   },
+   {
+    "src": "P2140d",
+    "a": 3.0,
+    "b": 5.5,
+    "t": 99.25,
+    "lufs": -22,
+    "why": "the group at dinner"
+   },
+   {
+    "src": "0032",
+    "a": 5.0,
+    "b": 18.0,
+    "t": 135.77,
+    "lufs": -22,
+    "why": "EDL nat under the convoy montage (0032 5-18 s)"
+   }
+  ],
+  "sfx": {
+   "ratio": 0.45,
+   "duckDb": -6.0
+  },
+  "duck": {
+   "_about": "music sidechain: every dialog piece plus every nat clip with transcribed speech; raised-cosine attack before the words and release after them; gaps under `bridge` s are held down (no pumping between sentences)",
+   "attack": 0.06,
+   "release": 0.4,
+   "bridge": 0.6
+  }
+ },
+ "sfx": {
+  "files": {
+   "hitOpen": "SE-LO_01_hit_open.wav",
+   "hitDrop": "SE-LO_02_hit_drop.wav",
+   "hitEnd": "SE-LO_03_hit_endcard.wav",
+   "whooshLR": "SE-LO_04_whoosh_left_to_right.wav",
+   "whooshRL": "SE-LO_05_whoosh_right_to_left.wav",
+   "tickAcquire": "SE-LO_10_tick_acquire.wav",
+   "tickLock": "SE-LO_11_tick_lock.wav",
+   "tickReel": "SE-LO_12_tick_reel_lands.wav",
+   "riser": "SE-LO_06_riser_noise_1.5s.wav"
+  },
+  "align": {
+   "whooshLR": 0.62,
+   "whooshRL": 0.62
+  },
+  "extra": []
+ },
+ "master": {
+  "lufs": -14.0,
+  "ceiling": -2.0
+ },
+ "qa": {
+  "moments": {},
+  "bannerCodes": [
+   "A2"
+  ]
+ },
+ "blurs": [
+  {
+   "track": "plate_hook_urus",
+   "pad": 12,
+   "radius": 12
+  },
+  {
+   "track": "plate_hook_car",
+   "pad": 10,
+   "radius": 10
+  },
+  {
+   "track": "plate_strip_urus",
+   "pad": 12,
+   "radius": 12
+  },
+  {
+   "track": "plate_strip_car",
+   "pad": 10,
+   "radius": 10
+  },
+  {
+   "track": "plate_r8_roma",
+   "pad": 12,
+   "radius": 12
+  },
+  {
+   "track": "plate_level9_urus",
+   "pad": 12,
+   "radius": 11,
+   "f1": 4433
+  }
+ ]
+}
