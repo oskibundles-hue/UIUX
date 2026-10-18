@@ -42,6 +42,19 @@ in Dropbox itself, deliver it through the **Video Drop** page: https://claude.ai
 
      Seen 12 Oct on four FD Opus clips and the Showreel 2026 sound trial: each landed 5,893 bytes over its
      master, the size of the box, so the old exact-size check failed every time.
+- **Auto-save** (Omarie, 18 Oct: "save all videos in video drop automatically and organize where it should go in
+  dropbox"). When the environment has a Dropbox key (`DROPBOX_REFRESH_TOKEN` + `DROPBOX_APP_KEY`, or
+  `DROPBOX_TOKEN`), `python3 .claude/brain/video_drop_sync.py` saves cards straight into the folder on each card,
+  with no taps from him:
+  1. `plan INDEX_HTML` (the page read once with `path: "index.html"`) lists the "new" cards, their Dropbox paths
+     and the part ids (BLOBS line). Cards titled "don't post" / "replaced by" are skipped, so an old cut never
+     lands in a "post these" folder.
+  2. Fetch the parts with the Artifact tool's `read` and `path` set to each part id, into one empty folder.
+  3. `push INDEX_HTML PARTS_DIR` joins them, checks sizes against the card, uploads without overwriting and
+     checks Dropbox's content hash. A file sent this way has no C2PA box, so it is the master byte for byte.
+  4. `mark INDEX_HTML ID ...` for each SAVED line, then republish the page.
+  At hand-over, with the master on this machine, `file MASTER "Portfolio / ..."` saves it directly; still add the
+  card so the page keeps the record. Test: `python3 .claude/brain/tests/test_video_drop_sync.py`.
 - The box is Content Credentials, signed "Anthropic Claude Content Signing" with claim generator "Anthropic
   Claude.ai" and the action `com.anthropic.claude.provided`. Instagram reads C2PA and may add its own "AI info"
   tag to a post. Whether a post gets labelled is Omarie's call.
