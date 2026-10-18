@@ -42,6 +42,10 @@ in Dropbox itself, deliver it through the **Video Drop** page: https://claude.ai
 
      Seen 12 Oct on four FD Opus clips and the Showreel 2026 sound trial: each landed 5,893 bytes over its
      master, the size of the box, so the old exact-size check failed every time.
+- **Save all new** (Omarie, 18 Oct: "just create the button then to save all new videos"): the page's top button
+  saves every "new" card with parts, one after another, leaving out titles marked "don't post" / "replaced by".
+  He still confirms each save and picks Dropbox and the card's folder; a decline stops the run, and the next tap
+  carries on from there. A new card picks this up by itself, with nothing to add.
 - **Auto-save** (Omarie, 18 Oct: "save all videos in video drop automatically and organize where it should go in
   dropbox"). When the environment has a Dropbox key (`DROPBOX_REFRESH_TOKEN` + `DROPBOX_APP_KEY`, or
   `DROPBOX_TOKEN`), `python3 .claude/brain/video_drop_sync.py` saves cards straight into the folder on each card,
