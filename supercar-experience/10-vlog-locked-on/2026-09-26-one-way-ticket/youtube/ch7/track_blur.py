@@ -76,6 +76,28 @@ def keys_of(boxes, fps, W=640, H=360):
     return ks
 
 
+def despike(keys, lim=0.04):
+    # a key whose x or y sits more than lim from the run's median is a tracker slip (his hand over the dash): s08 3.5 s
+    # and s09 1.2-1.8 s, 3.2 s, 8.0 s jumped the boxes off the dash and the 4K check saw 96 MPH (2026-10-19). Its x, y
+    # are interpolated from the nearest good keys either side; w and h are kept. The camera is fixed to the car, so
+    # the dash itself never moves that far.
+    mx, my = np.median([k[1] for k in keys]), np.median([k[2] for k in keys])
+    good = [abs(k[1] - mx) <= lim and abs(k[2] - my) <= lim for k in keys]
+    if all(good) or not any(good):
+        return keys
+    out = [list(k) for k in keys]
+    for i, k in enumerate(keys):
+        if good[i]:
+            continue
+        a = next((j for j in range(i - 1, -1, -1) if good[j]), None)
+        b = next((j for j in range(i + 1, len(keys)) if good[j]), None)
+        a, b = (b if a is None else a), (a if b is None else b)
+        f = 0 if a == b else (k[0] - keys[a][0]) / (keys[b][0] - keys[a][0])
+        for c in (1, 2):
+            out[i][c] = round(keys[a][c] + f * (keys[b][c] - keys[a][c]), 4)
+    return out
+
+
 def main():
     os.makedirs(DBG, exist_ok=True)
     look = json.load(open(os.path.join(HERE, 'look.json')))
@@ -115,8 +137,8 @@ def main():
                     bc = lastc if lastc else (ex, ey, T_CLU[2] * s, T_CLU[3] * s)
                 lastc = bc
                 tft.append(pad(b, PAD['tft'])); clu.append(pad(bc, PAD['cluster'])); st.append(v); sc.append(vc)
-            lk['blur'] += [dict(shape='round', auto='tft', why='centre TFT (nav/media), template-tracked', keys=keys_of(tft, fps)),
-                           dict(shape='round', auto='cluster', why='driver cluster (speed/gear), template-tracked', keys=keys_of(clu, fps))]
+            lk['blur'] += [dict(shape='round', auto='tft', why='centre TFT (nav/media), template-tracked', keys=despike(keys_of(tft, fps))),
+                           dict(shape='round', auto='cluster', why='driver cluster (speed/gear), template-tracked', keys=despike(keys_of(clu, fps)))]
             report.append(f's{i:02d}: TFT score min {min(st):.2f} median {np.median(st):.2f}; cluster min {min(sc):.2f} median {np.median(sc):.2f}')
             dbg = [(tft, (0, 255, 255)), (clu, (255, 0, 255))]
         else:
