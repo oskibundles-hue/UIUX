@@ -1,0 +1,16 @@
+{"note": "Fetch spans for the opening A/B test (lead's picks). Montage windows are 4-6 s; the builder picks about 2.3 s from each.",
+ "shots": [
+  {"src":"0117","in":100.9,"out":102.7,"note":"hook 1: No cell service, not an SOS"},
+  {"src":"0117","in":111.9,"out":113.2,"note":"hook 2: I have to make it"},
+  {"src":"0075","in":56.8,"out":77.5,"note":"hook 3+4: 4:30 a.m. Uber line and the Seattle / 600 LT line (rotate)"},
+  {"src":"0075","in":80.7,"out":85.6,"note":"chapter 1 open: So let's head up out of here"},
+  {"src":"0092","in":18.0,"out":24.0,"note":"montage: Seattle, top down, cabin side"},
+  {"src":"0094","in":24.0,"out":30.0,"note":"montage: forest road POV"},
+  {"src":"0095","in":8.0,"out":14.0,"note":"montage: green forest road"},
+  {"src":"0098","in":98.0,"out":104.0,"note":"montage: trees and highway"},
+  {"src":"0099","in":176.0,"out":182.0,"note":"montage: eastern Oregon plains (clear of the stereo flags 0-162, 211.6+)"},
+  {"src":"0116","in":18.0,"out":24.0,"note":"montage: sunrise through the windshield (hands-off flags start at 78)"},
+  {"src":"0121","in":148.0,"out":154.0,"note":"montage: rear camera, desert highway"},
+  {"src":"0122","in":553.0,"out":559.0,"note":"montage: Las Vegas skyline"},
+  {"src":"0122","in":584.0,"out":590.0,"note":"montage: casino signs, last shot"}
+ ]}

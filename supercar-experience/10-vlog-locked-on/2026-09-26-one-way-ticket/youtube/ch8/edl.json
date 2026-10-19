@@ -1,0 +1,311 @@
+{
+ "fps": "30000/1001",
+ "size": [
+  3840,
+  2160
+ ],
+ "duration": 83.24,
+ "frames": 2495,
+ "chapters": [
+  {
+   "t": 0.0,
+   "title": "Las Vegas",
+   "clock": "0119 Pahranagat Valley (selfie at the Shell) to 0123 the shop, DJI camera clock"
+  }
+ ],
+ "title": {
+  "text": "LAS VEGAS",
+  "t0": 34.67,
+  "t1": 37.97
+ },
+ "shots": [
+  {
+   "beat": 0,
+   "src": "0119",
+   "in": 84.6,
+   "out": 92.0,
+   "speed": 1.0,
+   "t": 0.0,
+   "dur": 7.4,
+   "note": "SHELL STATION SELFIE (parked): \"Pahranagat Valley, we are about an hour and some change from Vegas. We're in the final countdown.\""
+  },
+  {
+   "beat": 1,
+   "src": "0119",
+   "in": 227.5,
+   "out": 234.2,
+   "speed": 1.0,
+   "t": 7.4,
+   "dur": 6.7,
+   "note": "AT THE PUMP: \"Man, so I think for the last bit of the drive, I'm gonna have you guys like in the back\""
+  },
+  {
+   "beat": 2,
+   "src": "0121",
+   "in": 80.0,
+   "out": 82.4,
+   "speed": 1.0,
+   "t": 14.1,
+   "dur": 2.4,
+   "note": "MONTAGE rear deck: leaving the station"
+  },
+  {
+   "beat": 3,
+   "src": "0121",
+   "in": 87.0,
+   "out": 89.4,
+   "speed": 1.0,
+   "t": 16.5,
+   "dur": 2.4,
+   "note": "MONTAGE rear deck: the truck stop"
+  },
+  {
+   "beat": 4,
+   "src": "0121",
+   "in": 93.5,
+   "out": 95.9,
+   "speed": 1.0,
+   "t": 18.9,
+   "dur": 2.4,
+   "note": "MONTAGE rear deck: trees"
+  },
+  {
+   "beat": 5,
+   "src": "0121",
+   "in": 99.0,
+   "out": 101.4,
+   "speed": 1.0,
+   "t": 21.3,
+   "dur": 2.4,
+   "note": "MONTAGE rear deck: the green road"
+  },
+  {
+   "beat": 6,
+   "src": "0121",
+   "in": 107.0,
+   "out": 109.4,
+   "speed": 1.0,
+   "t": 23.7,
+   "dur": 2.4,
+   "note": "MONTAGE rear deck: the desert hills"
+  },
+  {
+   "beat": 7,
+   "src": "0121",
+   "in": 115.0,
+   "out": 117.6,
+   "speed": 1.0,
+   "t": 26.1,
+   "dur": 2.6,
+   "note": "MONTAGE rear deck: the valley"
+  },
+  {
+   "beat": 8,
+   "src": "0122",
+   "in": 42.4,
+   "out": 47.77,
+   "speed": 1.0,
+   "t": 28.7,
+   "dur": 5.37,
+   "note": "REAR CAMERA (sound in sync): \"Alright, we're almost to the shop... minutes out.\" (the number differs between small.en and medium.en: not captioned)"
+  },
+  {
+   "beat": 9,
+   "src": "0122",
+   "in": 552.6,
+   "out": 555.6,
+   "speed": 1.0,
+   "t": 34.07,
+   "dur": 3.0,
+   "note": "MONTAGE skyline, under the \"LAS VEGAS\" title (Omarie 2026-10-09: move it to the skyline): Las Vegas behind, the dump truck closing in"
+  },
+  {
+   "beat": 10,
+   "src": "0122",
+   "in": 558.5,
+   "out": 561.5,
+   "speed": 1.0,
+   "t": 37.07,
+   "dur": 3.0,
+   "note": "MONTAGE skyline: cars passing"
+  },
+  {
+   "beat": 11,
+   "src": "0122",
+   "in": 565.0,
+   "out": 568.0,
+   "speed": 1.0,
+   "t": 40.07,
+   "dur": 3.0,
+   "note": "MONTAGE skyline"
+  },
+  {
+   "beat": 12,
+   "src": "0122",
+   "in": 584.0,
+   "out": 587.0,
+   "speed": 1.0,
+   "t": 43.07,
+   "dur": 3.0,
+   "note": "MONTAGE skyline"
+  },
+  {
+   "beat": 13,
+   "src": "0122",
+   "in": 594.5,
+   "out": 597.5,
+   "speed": 1.0,
+   "t": 46.07,
+   "dur": 3.0,
+   "note": "MONTAGE skyline: the van passing"
+  },
+  {
+   "beat": 14,
+   "src": "0123",
+   "in": 4.9,
+   "out": 12.02,
+   "speed": 1.0,
+   "t": 49.07,
+   "dur": 7.12,
+   "note": "BACK AT THE SHOP: \"we just got back to the shop. Joey and John here. I swear we got that last part. I don't know what we got, honestly,\""
+  },
+  {
+   "beat": 15,
+   "src": "0123",
+   "in": 17.05,
+   "out": 24.2,
+   "speed": 1.0,
+   "t": 56.19,
+   "dur": 7.15,
+   "note": "JUMP: \"Hopefully I got the driving part. Damn. The last little driving piece is pretty gnarly. I'm not gonna lie.\""
+  },
+  {
+   "beat": 16,
+   "src": "0123",
+   "in": 39.9,
+   "out": 59.8,
+   "speed": 1.0,
+   "t": 63.34,
+   "dur": 19.9,
+   "note": "THE OUTRO (as filmed): \"So that concludes today's episode... And until next time, peace.\""
+  }
+ ],
+ "dialog": [
+  {
+   "beat": 0,
+   "src": "0119",
+   "in": 84.6,
+   "out": 92.0,
+   "t": 0.0,
+   "trim_pauses": null,
+   "last_word_end": 91.47,
+   "onset_measured": 84.8,
+   "voice_end": 91.6,
+   "next_onset_measured": 93.55,
+   "extended": false,
+   "out_asr": 91.47,
+   "text": "Farangit Valley, we are about an hour and some change from Vegas. We're in the final countdown."
+  },
+  {
+   "beat": 1,
+   "src": "0119",
+   "in": 227.5,
+   "out": 234.2,
+   "t": 7.4,
+   "trim_pauses": null,
+   "last_word_end": 233.75,
+   "onset_measured": 227.9,
+   "voice_end": 233.8,
+   "next_onset_measured": 234.75,
+   "extended": false,
+   "out_asr": 233.75,
+   "text": "Man so I think for the last bit of the drive, I'm gonna have you guys like in the back"
+  },
+  {
+   "beat": 8,
+   "src": "0122",
+   "in": 42.4,
+   "out": 47.77,
+   "t": 28.7,
+   "trim_pauses": null,
+   "last_word_end": 47.37,
+   "onset_measured": 43.05,
+   "voice_end": 47.0,
+   "next_onset_measured": 1000000000.0,
+   "extended": false,
+   "out_asr": 47.37,
+   "text": "to the shop Seven minutes out"
+  },
+  {
+   "beat": 14,
+   "src": "0123",
+   "in": 4.9,
+   "out": 12.02,
+   "t": 49.07,
+   "trim_pauses": null,
+   "last_word_end": 11.97,
+   "onset_measured": 4.6,
+   "voice_end": 12.3,
+   "next_onset_measured": 14.2,
+   "extended": false,
+   "out_asr": 11.97,
+   "text": "just got back to the shop. Joey and John here. I swear we got that last part. I don't know what we got honestly,"
+  },
+  {
+   "beat": 15,
+   "src": "0123",
+   "in": 17.05,
+   "out": 24.2,
+   "t": 56.19,
+   "trim_pauses": null,
+   "last_word_end": 23.97,
+   "onset_measured": 16.95,
+   "voice_end": 24.05,
+   "next_onset_measured": 25.75,
+   "extended": false,
+   "out_asr": 23.97,
+   "text": "Hopefully I got the driving part. Damn. The last little driving piece is pretty gnarly. I'm not gonna lie."
+  },
+  {
+   "beat": 16,
+   "src": "0123",
+   "in": 39.9,
+   "out": 59.8,
+   "t": 63.34,
+   "trim_pauses": null,
+   "last_word_end": 59.38,
+   "onset_measured": 39.95,
+   "voice_end": 59.45,
+   "next_onset_measured": 1000000000.0,
+   "extended": false,
+   "out_asr": 59.38,
+   "text": "So that concludes today's episode. We dropped it off here at Supercar Experience at headquarters. And yeah, we just did our straight 15 and a half. So we changed our trip. They're about to wash it up right now and I'm finna go home and go to sleep. So I hope you guys enjoyed that. And until next time, peace."
+  }
+ ],
+ "audio_extra": [],
+ "beats": [
+  {
+   "i": 0,
+   "ch": "CH8",
+   "t0": 0.0,
+   "t1": 83.24,
+   "note": "CH8 Las Vegas: an hour and some change out -> the last bit from the back -> desert road montage -> seven minutes out -> the skyline -> back at the shop -> the outro, peace"
+  }
+ ],
+ "mute": [
+  {
+   "src": "0122",
+   "in": 552.0,
+   "out": 600.0,
+   "note": "skyline: car-stereo blocks either side (flags.json 510-552, 570-582)"
+  }
+ ],
+ "bleeps": [],
+ "rotate": {},
+ "warnings": [
+  "0123 4.9: voice ends 12.30, next onset 14.20: tail -0.28 s",
+  "0123 4.9: voice onset 4.60 is before the in-point",
+  "0123 17.05: voice ends 24.05, next onset 25.75: tail 0.15 s",
+  "0123 17.05: voice onset 16.95 is before the in-point"
+ ]
+}

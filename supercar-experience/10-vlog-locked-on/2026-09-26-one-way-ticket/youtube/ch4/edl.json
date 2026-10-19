@@ -1,0 +1,303 @@
+{
+ "fps": "30000/1001",
+ "size": [
+  3840,
+  2160
+ ],
+ "duration": 72.56,
+ "chapters": [
+  {
+   "t": 0.0,
+   "title": "Into Oregon",
+   "clock": "12:00:58 (0093) to 16:06 (0100), DJI camera clock"
+  }
+ ],
+ "shots": [
+  {
+   "beat": 0,
+   "src": "0093",
+   "in": 3.45,
+   "out": 8.4,
+   "speed": 1.0,
+   "t": 0.0,
+   "dur": 4.95,
+   "note": "OPEN (side cam, roof down, Washington suburbs) under the \"INTO OREGON\" title: \"I ain't gonna lie, it is beautiful out here, like gorgeous.\""
+  },
+  {
+   "beat": 1,
+   "src": "0093",
+   "in": 127.84,
+   "out": 140.7,
+   "speed": 1.0,
+   "t": 4.95,
+   "dur": 12.86,
+   "note": "\"But I just want to let you guys know, like I said, we're on our way... destination to Las Vegas. We're gonna do 12 hour non-stop all the way to Salt Lake I believe, and then we're gonna stay there overnight at the Hamptons\""
+  },
+  {
+   "beat": 2,
+   "src": "0094",
+   "in": 151.15,
+   "out": 155.0,
+   "speed": 1.0,
+   "t": 17.81,
+   "dur": 3.85,
+   "note": "FOREST ROAD (rear cam): \"This place is so nice. Like it's fresh air...\" (picture until the phone comes up at ~155.4)"
+  },
+  {
+   "beat": 3,
+   "src": "0095",
+   "in": 18.6,
+   "out": 22.2,
+   "speed": 1.0,
+   "t": 21.66,
+   "dur": 3.6,
+   "note": "CUTAWAY (picture + nat, 0094 line runs on): forest road, both hands on the wheel (\"Man, I miss trees and nature\")"
+  },
+  {
+   "beat": 4,
+   "src": "0095",
+   "in": 22.3,
+   "out": 25.8,
+   "speed": 1.0,
+   "t": 25.26,
+   "dur": 3.5,
+   "note": "CUTAWAY: forest road (\"...some fire hiking trails out here\")"
+  },
+  {
+   "beat": 5,
+   "src": "0095",
+   "in": 31.0,
+   "out": 34.8,
+   "speed": 1.0,
+   "t": 28.76,
+   "dur": 3.8,
+   "note": "CUTAWAY: forest road (\"It's so nice out here.\")"
+  },
+  {
+   "beat": 6,
+   "src": "0095",
+   "in": 14.4,
+   "out": 16.4,
+   "speed": 1.0,
+   "t": 32.56,
+   "dur": 2.0,
+   "note": "MONTAGE: forest road, yellow lines"
+  },
+  {
+   "beat": 7,
+   "src": "0095",
+   "in": 35.0,
+   "out": 37.1,
+   "speed": 1.0,
+   "t": 34.56,
+   "dur": 2.1,
+   "note": "MONTAGE: forest road"
+  },
+  {
+   "beat": 8,
+   "src": "0095",
+   "in": 49.0,
+   "out": 51.3,
+   "speed": 1.0,
+   "t": 36.66,
+   "dur": 2.3,
+   "note": "MONTAGE: forest road, car passing"
+  },
+  {
+   "beat": 9,
+   "src": "0095",
+   "in": 53.0,
+   "out": 55.3,
+   "speed": 1.0,
+   "t": 38.96,
+   "dur": 2.3,
+   "note": "MONTAGE: forest road, stone wall"
+  },
+  {
+   "beat": 10,
+   "src": "0098",
+   "in": 0.6,
+   "out": 3.0,
+   "speed": 1.0,
+   "t": 41.26,
+   "dur": 2.4,
+   "note": "MONTAGE: highway, pines, pickup alongside"
+  },
+  {
+   "beat": 11,
+   "src": "0098",
+   "in": 3.6,
+   "out": 5.9,
+   "speed": 1.0,
+   "t": 43.66,
+   "dur": 2.3,
+   "note": "MONTAGE: highway"
+  },
+  {
+   "beat": 12,
+   "src": "0098",
+   "in": 6.6,
+   "out": 8.9,
+   "speed": 1.0,
+   "t": 45.96,
+   "dur": 2.3,
+   "note": "MONTAGE: highway"
+  },
+  {
+   "beat": 13,
+   "src": "0098",
+   "in": 9.6,
+   "out": 11.9,
+   "speed": 1.0,
+   "t": 48.26,
+   "dur": 2.3,
+   "note": "MONTAGE: highway"
+  },
+  {
+   "beat": 14,
+   "src": "0098",
+   "in": 12.3,
+   "out": 14.3,
+   "speed": 1.0,
+   "t": 50.56,
+   "dur": 2.0,
+   "note": "MONTAGE: highway, truck passing"
+  },
+  {
+   "beat": 15,
+   "src": "0098",
+   "in": 47.0,
+   "out": 49.4,
+   "speed": 1.0,
+   "t": 52.56,
+   "dur": 2.4,
+   "note": "MONTAGE (scenery crop, the cockpit below frame): highway, mountains"
+  },
+  {
+   "beat": 16,
+   "src": "0098",
+   "in": 51.0,
+   "out": 53.3,
+   "speed": 1.0,
+   "t": 54.96,
+   "dur": 2.3,
+   "note": "MONTAGE (scenery crop): highway, mountains"
+  },
+  {
+   "beat": 17,
+   "src": "0098",
+   "in": 55.4,
+   "out": 57.8,
+   "speed": 1.0,
+   "t": 57.26,
+   "dur": 2.4,
+   "note": "MONTAGE (scenery crop): valley, mountains"
+  },
+  {
+   "beat": 18,
+   "src": "0100",
+   "in": 18.2,
+   "out": 21.45,
+   "speed": 1.0,
+   "t": 59.66,
+   "dur": 3.25,
+   "note": "OREGON (desert, rear cam): \"We are in Oregon, we passed the welcome to Oregon sign.\""
+  },
+  {
+   "beat": 19,
+   "src": "0100",
+   "in": 28.15,
+   "out": 37.8,
+   "speed": 1.0,
+   "t": 62.91,
+   "dur": 9.65,
+   "note": "JUMP: \"But we just got into Oregon. So that's a quick little update. Hopefully you guys can hear me. Oh yeah, I just wanted to let you guys know. We're in Oregon!\" (ends on the shout; \"Alright, I'll see you guys later\" is cut: he reaches for the camera while driving)"
+  }
+ ],
+ "dialog": [
+  {
+   "beat": 0,
+   "src": "0093",
+   "in": 3.45,
+   "out": 8.4,
+   "t": 0.0,
+   "trim_pauses": null,
+   "last_word_end": 8.19,
+   "voice_end": 8.05,
+   "next_onset_measured": 8.5,
+   "extended": false,
+   "out_asr": 8.19,
+   "text": "It is beautiful out here, like gorgeous."
+  },
+  {
+   "beat": 1,
+   "src": "0093",
+   "in": 127.84,
+   "out": 140.7,
+   "t": 4.95,
+   "trim_pauses": null,
+   "last_word_end": 140.54,
+   "voice_end": 140.5,
+   "next_onset_measured": 140.75,
+   "extended": false,
+   "out_asr": 140.54,
+   "text": "But I just want to let you guys know like I said, we're on our way. We're on the destination to Las Vegas We're gonna do 12 hour non -stop all the way to Salt Lake I believe and then we're gonna stay there overnight at the Hamptons"
+  },
+  {
+   "beat": 2,
+   "src": "0094",
+   "in": 151.15,
+   "out": 165.9,
+   "t": 17.81,
+   "trim_pauses": null,
+   "last_word_end": 165.54,
+   "voice_end": 165.54,
+   "next_onset_measured": 170.0,
+   "extended": false,
+   "out_asr": 165.54,
+   "text": "This place is so nice Like it's fresh air like Man, I miss trees and nature. Good lord. I just know they got some fire hiking trails out here. It's so nice out here."
+  },
+  {
+   "beat": 18,
+   "src": "0100",
+   "in": 18.2,
+   "out": 21.45,
+   "t": 59.66,
+   "trim_pauses": null,
+   "last_word_end": 21.01,
+   "voice_end": 21.0,
+   "next_onset_measured": 22.0,
+   "extended": false,
+   "out_asr": 21.08,
+   "text": "Oregon sign."
+  },
+  {
+   "beat": 19,
+   "src": "0100",
+   "in": 28.15,
+   "out": 37.8,
+   "t": 62.91,
+   "trim_pauses": null,
+   "last_word_end": 36.92,
+   "voice_end": 37.45,
+   "next_onset_measured": 37.9,
+   "extended": false,
+   "out_asr": 36.92,
+   "text": "What we just got into Oregon. So that's a quick little update. Hopefully you guys can hear me. Oh yeah, I just wanted to let you guys know. We're in Oregon!"
+  }
+ ],
+ "audio_extra": [],
+ "beats": [
+  {
+   "i": 0,
+   "ch": "CH4",
+   "t0": 0.0,
+   "t1": 72.56,
+   "note": "CH4 Into Oregon: leaving Seattle roof down -> the plan (Las Vegas via Salt Lake) -> the forest road -> montage -> \"We're in Oregon!\""
+  }
+ ],
+ "mute": [],
+ "bleeps": [],
+ "rotate": {},
+ "warnings": []
+}

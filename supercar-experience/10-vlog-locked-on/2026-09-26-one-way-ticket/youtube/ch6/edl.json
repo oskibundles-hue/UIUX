@@ -1,0 +1,273 @@
+{
+ "fps": "30000/1001",
+ "size": [
+  3840,
+  2160
+ ],
+ "duration": 46.14,
+ "frames": 1383,
+ "chapters": [
+  {
+   "t": 0.0,
+   "title": "1:29 a.m.",
+   "clock": "01:29:05 (0114) to 02:46:38 (0115), DJI camera clock (time zone to be checked by nq-facts)"
+  }
+ ],
+ "title": {
+  "text": "1:29 A.M.",
+  "t0": 0.6,
+  "t1": 3.9
+ },
+ "shots": [
+  {
+   "beat": 0,
+   "src": "0114",
+   "in": 3.7,
+   "out": 5.65,
+   "speed": 1.0,
+   "t": 0.0,
+   "dur": 1.95,
+   "note": "NIGHT CABIN (parked, Club 93 lot), under the \"1:29 A.M.\" title: \"I'm not gonna lie, chat,\""
+  },
+  {
+   "beat": 1,
+   "src": "0114",
+   "in": 7.4,
+   "out": 11.15,
+   "speed": 1.0,
+   "t": 1.95,
+   "dur": 3.75,
+   "note": "JUMP: \"I definitely did take a nice McLaren nap.\""
+  },
+  {
+   "beat": 2,
+   "src": "0114",
+   "in": 13.2,
+   "out": 16.95,
+   "speed": 1.0,
+   "t": 5.7,
+   "dur": 3.75,
+   "note": "JUMP: \"I'm in the Club 93 parking lot.\""
+  },
+  {
+   "beat": 3,
+   "src": "0114",
+   "in": 19.7,
+   "out": 22.85,
+   "speed": 1.0,
+   "t": 9.45,
+   "dur": 3.15,
+   "note": "JUMP: \"Pretty nice parking lot. Reminds me of Vegas.\""
+  },
+  {
+   "beat": 4,
+   "src": "0114",
+   "in": 25.6,
+   "out": 30.75,
+   "speed": 1.0,
+   "t": 12.6,
+   "dur": 5.15,
+   "note": "JUMP: \"I took a nice, supposed to be hour nap, probably hour and 30 minute nap.\""
+  },
+  {
+   "beat": 5,
+   "src": "0114",
+   "in": 87.8,
+   "out": 89.25,
+   "speed": 1.0,
+   "t": 17.75,
+   "dur": 1.45,
+   "note": "CABIN (parked, phone in hand): \"My wrist hurts.\""
+  },
+  {
+   "beat": 6,
+   "src": "0115",
+   "in": 1.78,
+   "out": 15.02,
+   "speed": 1.0,
+   "t": 19.2,
+   "dur": 13.24,
+   "note": "GAS STOP, 02:46 (selfie, camera on its side: turned upright): \"Alright chat, so we're about six hours out, six-five hours out, gassing up. Dude, it is freezing.\""
+  },
+  {
+   "beat": 7,
+   "src": "0115",
+   "in": 31.15,
+   "out": 37.2,
+   "speed": 1.0,
+   "t": 32.44,
+   "dur": 6.05,
+   "note": "JUMP: \"Whoo, six more hours it is. When I say it's cold, it's cold outside, like it's really cold outside, so\""
+  },
+  {
+   "beat": 8,
+   "src": "0115",
+   "in": 15.0,
+   "out": 22.65,
+   "speed": 1.0,
+   "t": 38.49,
+   "dur": 7.65,
+   "note": "END (back in the take): \"I'm not gonna lie to you, car still holding up good, brand new engine in her, she's still doing great.\""
+  }
+ ],
+ "dialog": [
+  {
+   "beat": 0,
+   "src": "0114",
+   "in": 3.7,
+   "out": 5.65,
+   "t": 0.0,
+   "trim_pauses": null,
+   "last_word_end": 4.82,
+   "onset_measured": 3.4,
+   "voice_end": 5.45,
+   "next_onset_measured": 7.1,
+   "extended": false,
+   "out_asr": 5.2,
+   "text": "I'm not gonna lie,"
+  },
+  {
+   "beat": 1,
+   "src": "0114",
+   "in": 7.4,
+   "out": 11.15,
+   "t": 1.95,
+   "trim_pauses": null,
+   "last_word_end": 11.03,
+   "onset_measured": 7.6,
+   "voice_end": 10.35,
+   "next_onset_measured": 1000000000.0,
+   "extended": false,
+   "out_asr": 11.0,
+   "text": "I definitely did take a nice McLaren nap."
+  },
+  {
+   "beat": 2,
+   "src": "0114",
+   "in": 13.2,
+   "out": 16.95,
+   "t": 5.7,
+   "trim_pauses": null,
+   "last_word_end": 16.81,
+   "onset_measured": 14.45,
+   "voice_end": 16.65,
+   "next_onset_measured": 1000000000.0,
+   "extended": false,
+   "out_asr": 16.8,
+   "text": "I'm in the Club 93 parking lot."
+  },
+  {
+   "beat": 3,
+   "src": "0114",
+   "in": 19.7,
+   "out": 22.85,
+   "t": 9.45,
+   "trim_pauses": null,
+   "last_word_end": 22.58,
+   "onset_measured": 20.05,
+   "voice_end": 22.4,
+   "next_onset_measured": 1000000000.0,
+   "extended": false,
+   "out_asr": 22.6,
+   "text": "Pretty nice parking lot. Reminds me of Vegas."
+  },
+  {
+   "beat": 4,
+   "src": "0114",
+   "in": 25.6,
+   "out": 30.75,
+   "t": 12.6,
+   "trim_pauses": null,
+   "last_word_end": 30.53,
+   "onset_measured": 25.8,
+   "voice_end": 30.35,
+   "next_onset_measured": 1000000000.0,
+   "extended": false,
+   "out_asr": 30.5,
+   "text": "I took a nice, supposed to be hour nap, probably hour and 30 minute nap."
+  },
+  {
+   "beat": 5,
+   "src": "0114",
+   "in": 87.8,
+   "out": 89.25,
+   "t": 17.75,
+   "trim_pauses": null,
+   "last_word_end": 89.01,
+   "onset_measured": 87.5,
+   "voice_end": 89.15,
+   "next_onset_measured": 89.3,
+   "extended": false,
+   "out_asr": 89.0,
+   "text": "My wrist hurts."
+  },
+  {
+   "beat": 6,
+   "src": "0115",
+   "in": 1.78,
+   "out": 15.02,
+   "t": 19.2,
+   "trim_pauses": null,
+   "last_word_end": 14.69,
+   "onset_measured": 1.8,
+   "voice_end": 15.0,
+   "next_onset_measured": 15.2,
+   "extended": false,
+   "out_asr": 14.7,
+   "text": "Alright chat so we're about six hours out six five hours out gassing up dude it is freezing"
+  },
+  {
+   "beat": 7,
+   "src": "0115",
+   "in": 31.15,
+   "out": 37.2,
+   "t": 32.44,
+   "trim_pauses": null,
+   "last_word_end": 36.75,
+   "onset_measured": 31.35,
+   "voice_end": 36.8,
+   "next_onset_measured": 37.7,
+   "extended": false,
+   "out_asr": 36.75,
+   "text": "Whoo six more hours it is when I say it's cold it's cold outside like it's really cold outside so"
+  },
+  {
+   "beat": 8,
+   "src": "0115",
+   "in": 15.0,
+   "out": 22.65,
+   "t": 38.49,
+   "trim_pauses": null,
+   "last_word_end": 30.67,
+   "onset_measured": 14.7,
+   "voice_end": 22.25,
+   "next_onset_measured": 24.0,
+   "extended": false,
+   "out_asr": 22.1,
+   "text": "I'm not gonna lie to you car still holding up good brand new engine in her she's"
+  }
+ ],
+ "audio_extra": [],
+ "beats": [
+  {
+   "i": 0,
+   "ch": "CH6",
+   "t0": 0.0,
+   "t1": 46.14,
+   "note": "CH6 1:29 a.m., the setback: woke up from a McLaren nap in a parking lot, wrist hurts -> 5-6 hours out, freezing -> car still holding up"
+  }
+ ],
+ "mute": [],
+ "bleeps": [],
+ "rotate": {
+  "0115": "cw"
+ },
+ "warnings": [
+  "0114 3.7: voice ends 5.45, next onset 7.10: tail 0.20 s",
+  "0114 3.7: voice onset 3.40 is before the in-point",
+  "0114 87.8: voice ends 89.15, next onset 89.30: tail 0.10 s",
+  "0114 87.8: voice onset 87.50 is before the in-point",
+  "0115 1.78: voice ends 15.00, next onset 15.20: tail 0.02 s",
+  "0115 15.0: voice onset 14.70 is before the in-point"
+ ]
+}
