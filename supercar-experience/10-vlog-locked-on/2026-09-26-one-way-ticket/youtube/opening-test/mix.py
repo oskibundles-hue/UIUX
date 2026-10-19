@@ -34,7 +34,8 @@ PREVIEW = len(sys.argv) > 2 and sys.argv[2] == 'preview'
 # limiter ceiling: the 4K master's AAC 320k adds up to ~0.2 dB (CEIL -1.8, as Ch1-Ch4); the 192k previews added up to 0.5 dB
 # (B: -1.2 dBTP at -1.5, -1.49 at -2.0), so `preview` keeps -2.3
 M.CEIL = -2.3 if PREVIEW else -1.8
-WORK = '/home/user/day-owt/openwork'
+DAY = os.environ.get('VLOG_DAY', '/home/user/day-owt')   # the day folder (work, sound, fonts); set VLOG_DAY to build outside the cloud container
+WORK = f'{DAY}/openwork'
 NAME = sys.argv[1]
 EDL = json.load(open(os.path.join(HERE, f'edl_{NAME}.json')))
 FPS = 30000 / 1001
@@ -48,7 +49,7 @@ MONT_BED_V2, MONT_DUCK = -19.0, -23.0   # v2 sound-bite montage: bed level betwe
 
 def words_of(src, a, b):
     """small.en word windows of `src` (the day index, /home/user/day-owt/tr), as ../ch3/mix.py's per-word margin."""
-    t = json.load(open(f'/home/user/day-owt/tr/{src}.json'))
+    t = json.load(open(f'{DAY}/tr/{src}.json'))
     return [(w[0], w[1], w[2].strip()) for s in t['segments'] for w in s['words']]
 
 

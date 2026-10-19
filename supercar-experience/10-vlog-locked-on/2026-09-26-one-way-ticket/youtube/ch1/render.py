@@ -16,12 +16,13 @@ import glob, json, os, re, subprocess, sys
 from PIL import Image, ImageDraw, ImageFont, ImageFilter
 
 HERE = os.path.dirname(os.path.abspath(__file__))
-WORK = '/home/user/day-owt/ch1work'
-MEZZ = '/home/user/day-owt/mezz'
+DAY = os.environ.get('VLOG_DAY', '/home/user/day-owt')   # the day folder (work, sound, fonts); set VLOG_DAY to build outside the cloud container
+WORK = f'{DAY}/ch1work'
+MEZZ = os.environ.get('VLOG_MEZZ', f'{DAY}/mezz')
 _IIO = '/usr/local/lib/python3.13/dist-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2'
 FF = os.environ.get('FFMPEG', _IIO if os.path.exists(_IIO) else 'ffmpeg')   # test-ch3's imageio build when present, else the system ffmpeg
-FONT_T = glob.glob('/home/user/day-owt/fonts/fontsource-anton-*/files/anton-latin-400-normal.woff')[0]
-FONT_P = glob.glob('/home/user/day-owt/fonts/fontsource-archivo-*/files/archivo-latin-800-normal.woff')[0]
+FONT_T = (glob.glob(f'{DAY}/fonts/fontsource-anton-*/files/anton-latin-400-normal.woff') + glob.glob(f'{DAY}/fonts/Anton-Regular.ttf'))[0]
+FONT_P = (glob.glob(f'{DAY}/fonts/fontsource-archivo-*/files/archivo-latin-800-normal.woff') + glob.glob(f'{DAY}/fonts/Archivo.ttf'))[0]   # Archivo.ttf is the variable font: pop_font() sets its 800 weight
 RED, YEL = (0xDE, 0x1A, 0x22), (0xFB, 0xD1, 0x01)
 EDL = json.load(open(os.path.join(HERE, 'edl.json')))
 FPS = '30000/1001'
@@ -173,6 +174,13 @@ def title_frames(W, H, n):
     return frames
 
 
+def pop_font(size):
+    f = ImageFont.truetype(FONT_P, size)
+    if FONT_P.endswith('.ttf'):   # the variable Archivo (weight, width): the 800 weight the fontsource woff has built in
+        f.set_variation_by_axes([800, 100])
+    return f
+
+
 def pop_frames(W, H, text, n, side):
     fp = ImageFont.truetype(FONT_P, int(H * 0.11))
     frames = []
@@ -180,7 +188,7 @@ def pop_frames(W, H, text, n, side):
         tt = k / 29.97
         s = 0.6 + 0.55 * min(1, tt / 0.12) - 0.15 * min(1, max(0, tt - 0.12) / 0.1)   # punch: 0.6 -> 1.15 -> 1.0
         a = min(1, tt / 0.06, max(0, (n / 29.97 - tt) / 0.15))
-        f = ImageFont.truetype(FONT_P, max(8, int(H * 0.11 * s)))
+        f = pop_font(max(8, int(H * 0.11 * s)))
         bb = f.getbbox(text); tw, th = bb[2] - bb[0], bb[3] - bb[1]
         cx = int(W * (0.30 if side == 'l' else 0.70)); cy = int(H * 0.30)
         im = Image.new('RGBA', (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(im)

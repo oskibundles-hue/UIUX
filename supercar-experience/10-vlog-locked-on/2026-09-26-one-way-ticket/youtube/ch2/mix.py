@@ -22,8 +22,9 @@ HERE = os.path.dirname(os.path.abspath(__file__))
 SR = 48000
 _IIO = '/usr/local/lib/python3.13/dist-packages/imageio_ffmpeg/binaries/ffmpeg-linux-x86_64-v7.0.2'
 FF = os.environ.get('FFMPEG', _IIO if os.path.exists(_IIO) else 'ffmpeg')   # test-ch3's imageio build when present, else the system ffmpeg
-AUD = '/home/user/day-owt/aud'
-TRD = '/home/user/day-owt/tr'
+DAY = os.environ.get('VLOG_DAY', '/home/user/day-owt')   # the day folder (work, sound, fonts); set VLOG_DAY to build outside the cloud container
+AUD = f'{DAY}/aud'
+TRD = f'{DAY}/tr'
 CHAIN = ('highpass=f=90:poles=2,afftdn=nr=10:nf=-42:tn=1,equalizer=f=300:t=q:w=1.2:g=-2,equalizer=f=3500:t=q:w=1.0:g=2.5,'
          'deesser=i=0.4:m=0.5:f=0.5,acompressor=threshold=-24dB:ratio=3:attack=10:release=150:makeup=2')
 # Tone scan (2026-10-08, 0.5 s windows over every used range): no steady tone; the only windows with a spectral peak
