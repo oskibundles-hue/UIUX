@@ -299,6 +299,7 @@ OV_FMT = 'scale=out_color_matrix=bt709:out_range=tv,format=yuva420p'    # the br
 def encode():
     if os.path.exists(NAME) and os.path.exists(NAME + '.ok'):
         log('encode: already done'); return
+    wait_power('encode')                                         # about 2.4 h at 4K: never start it on battery
     man = json.load(open(f'{OUT}/ov/clips.json'))
     fr = json.load(open(f'{OUT}/shots/frames.json'))
     assert all(fr[p]['frames'] >= n for p, n in PIECES)
