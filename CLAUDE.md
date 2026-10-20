@@ -12,6 +12,21 @@ The notes are private. They live in the private repo `oskibundles-hue/nq-agent-c
 
 Omarie, 2026-09-27: "no more ultracode unless necessary." Multi-agent workflows (ultracode, the Workflow tool, agent fan-outs) used most of a week's usage limit in a day. Work in the main session by default, even when ultracode is switched on. Only use a workflow when the job truly can't be done well without one, and say why before starting it.
 
+## Do it for him unless only he can
+
+Omarie, 2026-10-20: "it should be a rule that you do it for me always unless i have to actually do it." If the session can do a step itself, do it instead of handing it to him. Don't stop to ask about a step his request already covers: "save them to dropbox" includes filing them in the right folders. Every hand-back costs him a trip.
+
+Hand him only what truly needs him:
+- something on his phone or computer
+- a login, or a key or setting only he can add
+- a creative or brand call (the style question above)
+- a safety stop: posting or publishing, deleting, paid calls, clearing Video Drop cards, and the regret gate's asks
+
+When a step does need him:
+- First use everything the session has. For a video, that means `video_drop_sync.py` when the environment has a Dropbox key.
+- Cut his part to as few taps as possible, and do everything before and after it.
+- Tell him what would remove that step next time.
+
 ## The standard for every job, and which style to use (every session, every branch)
 
 Omarie, 2026-09-28: "My locked on artifact is my standard for any work I work on", and "make sure every
@@ -53,8 +68,9 @@ The rules and the feedback log are in `supercar-experience/09-campaign-ads/HOUSE
 ## Delivering finished videos: Dropbox, through Video Drop when needed
 
 Omarie, 2026-09-28. Finished videos go into his Dropbox (the notes' `deliver-to-dropbox` has the folders and
-naming). When a session can't put the file there itself (the connector can't upload video; chat attachments stop
-at 30 MiB), deliver through the one **Video Drop** page, https://claude.ai/artifact/5pW7z8z8fqRa35vMjNUYYP, and
+naming). When the environment has a Dropbox key, save it there yourself with `.claude/brain/video_drop_sync.py`
+(steps in `.claude/playbooks/lead.md`). When a session can't put the file there itself (no key; the connector can't
+upload video; chat attachments stop at 30 MiB), deliver through the one **Video Drop** page, https://claude.ai/artifact/5pW7z8z8fqRa35vMjNUYYP, and
 never make a second one. Clear older cards only once they're confirmed in Dropbox, and ask him first. The
 split/upload/SHA-256/confirm steps are in `.claude/playbooks/lead.md` (Video Drop steps).
 
