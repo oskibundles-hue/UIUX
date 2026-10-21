@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Behind the Wheel · Supercar Experience</title>
-<meta name="description" content="Behind the Wheel: the vlog series from Supercar Experience in Las Vegas. Pickups, hand-overs, a flat tyre at night and a rally, filmed on the day. Watch every episode in full.">
+<title>Behind the Wheel · Exotic Car Rental Las Vegas · Supercar Experience</title>
+<meta name="description" content="Exotic, supercar and luxury car rental in Las Vegas, by the hour or the day. Plus Behind the Wheel, the Supercar Experience vlog series, filmed on the day and shown in full.">
 <meta name="google-site-verification" content="HQz0WICtwJ8bNIyJWbhu0w4v1Bjz5f_RkZxtd0iyhls">
 <link rel="canonical" href="https://supercar-experience-garage.onrender.com/">
 <meta property="og:type" content="website">
@@ -899,9 +899,9 @@ footer nav a:hover{color:#fff}
   <div class="wrap">
     <div class="rent-intro">
       <div>
-        <div class="eyebrow rv">[ Rentals <b>·</b> Las Vegas ]</div>
+        <div class="eyebrow rv">[ Exotic car rental <b>·</b> Las Vegas ]</div>
         <h2 class="h-lg kin">Want the <span class="o">keys?</span></h2>
-        <p class="lede rv">Hourly and daily rentals out of Las Vegas. Tap a car for its video or photo and the rates, or price a drive below and text to book.</p>
+        <p class="lede rv">Exotic, super SUV and luxury car rental out of Las Vegas, by the hour or the day. Tap a car for its video or photo and the rates, or price a drive below and text to book.</p>
         <p class="rv" style="margin:14px 0 0"><span class="deal" id="deal-all"></span></p>
       </div>
       <div class="filters rv" role="group" aria-label="Filter the cars">
@@ -913,7 +913,7 @@ footer nav a:hover{color:#fff}
       </div>
     </div>
     <div class="grid" id="grid"></div>
-    <div class="fleet-link"><p class="note" style="margin:0">Rates before tax and deposit. Text to confirm availability and today's price. 50% off the 2nd day or the 3rd day free.</p><a class="btn ghost sm" href="https://www.supercarexp.vip/cars" target="_blank" rel="noopener">Full fleet<span class="ar" aria-hidden="true"><svg class="i" viewBox="0 0 16 16"><path d="M4 12 12 4M5.5 4H12v6.5"/></svg></span></a></div>
+    <div class="fleet-link"><p class="note" style="margin:0">Rates before tax and deposit. Text to confirm availability and today's price. 50% off the 2nd day or the 3rd day free. Looking for an exotic car rental in Scottsdale or Boise? The full fleet lists those cars too.</p><a class="btn ghost sm" href="https://www.supercarexp.vip/cars" target="_blank" rel="noopener">Full fleet<span class="ar" aria-hidden="true"><svg class="i" viewBox="0 0 16 16"><path d="M4 12 12 4M5.5 4H12v6.5"/></svg></span></a></div>
     <div class="builder" id="build">
       <div class="panel rv">
         <div class="eyebrow">[ Trip builder ]</div>
@@ -966,7 +966,7 @@ footer nav a:hover{color:#fff}
     <div>
       <div class="eyebrow">[ Your turn in the driver's seat ]</div>
       <h2 class="kin">Pick the car.<br>We hand you the keys.</h2>
-      <p>Hourly and daily rentals out of Las Vegas. Text or DM <a class="dm" href="https://www.instagram.com/supercar_experience_/" target="_blank" rel="noopener">@supercar_experience_</a> with the car and the date.</p>
+      <p>Hourly and daily supercar rentals out of Las Vegas. Text or DM <a class="dm" href="https://www.instagram.com/supercar_experience_/" target="_blank" rel="noopener">@supercar_experience_</a> with the car and the date.</p>
       <div class="fine"><span>25+ to drive</span><span>Under 25 adds $299</span><span>One text line for every city</span></div>
       <p class="guide"><a href="posts/renting-a-supercar-in-las-vegas/">First time? How renting works, from booking to keys →</a></p>
     </div>
@@ -1367,7 +1367,7 @@ function renderGarage(){
   list.forEach((c,n)=>{
     const el=document.createElement("article");el.className="car rv";el.style.transitionDelay=(n%4)*60+"ms";
     const vk=c.vids.find(v=>!v[1].startsWith("photo:"));
-    const alt=`${c.yr} ${c.make} ${c.name}`;
+    const alt=`${c.yr} ${c.make} ${c.name} for rent in Las Vegas`;
     const pic=c.photo?`<img class="bg" src="${M}${c.photo}" alt="" loading="lazy"><img class="fg" src="${M}${c.photo}" alt="${alt}" loading="lazy">`:`<img src="${M}stills/${c.id}.jpg" alt="${alt}" loading="lazy">`;
     el.innerHTML=`<div class="cm"><div class="clip${c.photo?" ph":""}">${pic}${vk?`<video muted playsinline preload="none" src="${M}${vk[1]}.mp4#t=${c.s0??S0}"></video>`:""}</div>
       <div class="lk"><i></i><i></i><i></i><i></i></div>
