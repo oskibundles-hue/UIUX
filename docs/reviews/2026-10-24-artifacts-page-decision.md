@@ -1,4 +1,4 @@
-# Artifacts page — one decision, four reports deep
+# Artifacts page — one decision, nine reports deep
 
 **Page:** Download Everything — https://claude.ai/artifact/QzgoR9wsQGonTidm9vX6m2
 **Run:** scheduled sweep, 24 Oct 2026. Read-only.
@@ -8,16 +8,24 @@
 
 ## Read this part only
 
-The sweep you scheduled has now run four times and produced four reviews that all
-say the same thing. None of them has been applied, because each one ends by waiting
-for a yes that has not come.
+The sweep you scheduled has produced the same review nine times. **Eight of them are
+open draft pull requests right now**, going back to 5 Oct, and not one has been
+applied — each ends by waiting for a yes that has not come. This is the ninth.
 
-| Report | Where it is | State |
+| Report | PR | State |
 |---|---|---|
-| 13 Oct sweep (itself a consolidation of **six** earlier reports) | `ARTIFACTS-SWEEP-2026-10-13.md` on `claude/eloquent-ptolemy-d220p3` | unapplied |
-| 14 Oct review | `ARTIFACTS-PAGE-REVIEW-2026-10-14.md` on `claude/eloquent-ptolemy-qcpdkz` | unapplied |
-| **22 Oct review — the standing proposal, still accurate** | `docs/reviews/2026-10-22-artifacts-page-review.md` on `claude/eloquent-ptolemy-252ug1` | unapplied |
-| 24 Oct (this one) | here | asks for the yes |
+| 5 Oct review | [#31](https://github.com/oskibundles-hue/UIUX/pull/31) | open draft, unapplied |
+| 6 Oct — inventory, archive proposals, memory gaps | [#38](https://github.com/oskibundles-hue/UIUX/pull/38) | open draft, unapplied |
+| 9 Oct review | [#50](https://github.com/oskibundles-hue/UIUX/pull/50) | open draft, unapplied |
+| 10 Oct review | [#52](https://github.com/oskibundles-hue/UIUX/pull/52) | open draft, unapplied |
+| 12 Oct sweep | [#58](https://github.com/oskibundles-hue/UIUX/pull/58) | open draft, unapplied |
+| 13 Oct sweep (itself a consolidation of **six** earlier reports) | [#68](https://github.com/oskibundles-hue/UIUX/pull/68) | open draft, unapplied |
+| 14 Oct review | [#71](https://github.com/oskibundles-hue/UIUX/pull/71) | open draft, unapplied |
+| **22 Oct review — the standing proposal, still accurate** | [#74](https://github.com/oskibundles-hue/UIUX/pull/74) | open draft, unapplied |
+| 24 Oct (this one) | this PR | asks for the yes |
+
+Writing a tenth would be the wrong thing to do, so this one does not re-review the
+page. It asks for the decision and then recommends the routine be changed.
 
 I re-ran the whole audit from scratch today and independently reproduced the 22 Oct
 findings: **22 missing rows, 5 pages carrying more than one row, 15 rows to archive,
@@ -31,6 +39,21 @@ findings: **22 missing rows, 5 pages carrying more than one row, 15 rows to arch
 
 Reply **"apply it"** and it goes up in one edit. Reply with changes and I'll amend first.
 The two questions that need you regardless are at the bottom.
+
+**And then change the routine**, because a read-only sweep that cannot apply its own
+findings will keep producing these. Three options, my pick first:
+
+1. **Let the sweep apply the mechanical half itself** — add missing rows, re-stamp dates
+   and counts, annotate dead pointers — and keep asking before anything is archived,
+   re-pointed or re-statused. Those additions are reversible, and the page's own history
+   blocks already record who added what and when. This is what I'd do.
+2. **Keep it read-only but make it update one page instead of opening a PR** — the sweep
+   rewrites a single standing "artifacts page: what needs your yes" page each run, so
+   there is one thing to read rather than a growing pile.
+3. **Turn the schedule off** and run the sweep when you ask for it.
+
+Either way, PRs #31 through #74 should be closed once this decision lands — their
+findings are either folded in here or superseded by it. I have not closed them.
 
 ---
 
