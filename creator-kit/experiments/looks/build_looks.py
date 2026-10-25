@@ -572,7 +572,8 @@ def cmd_looks(a):
         enc.stdin.close()
         if enc.wait():
             sys.exit(f"encode failed for {name}")
-        manifest[name] = {"title": title, "file": f"{name}.mp4", "status": spec.get("status", "proposed"),
+        status = "picked" if name == spec.get("picked") else spec.get("status", "proposed")
+        manifest[name] = {"title": title, "file": f"{name}.mp4", "status": status,
                           "elements": sorted(ctx.log.values(), key=lambda e: e["t0"])}
         json.dump(manifest, open(mpath, "w"), indent=1)
         print(f"{name}: {out}")

@@ -3,7 +3,8 @@
 One talking-head take in, several styled cuts out, so Omarie can pick a look instead
 of describing one. It started from a reel Oski passed on (one clip, a grid of
 caption looks); the six looks here are new, made for @nq.young in the kit's
-colours, and every one is **proposed** until Omarie picks.
+colours. On 2026-10-25 Omarie picked **Mono** as the default, so set `"picked"` in
+the spec. The other five stay proposed.
 
 | look | what it is |
 |---|---|
@@ -11,7 +12,7 @@ colours, and every one is **proposed** until Omarie picks.
 | One Word | one word at a time in big Anton, key words yellow, a pop on each word |
 | Tag Stack | black-on-yellow tag boxes that stack as he talks; orange hook tab up top |
 | Framed | yellow page, the take in a rounded card, black Anton headline, caption pill |
-| Mono | black and white, only the yellow survives: karaoke caps and a thin border |
+| **Mono** (picked) | black and white, only the yellow survives: karaoke caps and a thin border |
 | Headline | editorial black band (serif + Anton hook), serif/Anton captions on a pill, orange progress bar |
 
 ## Running it

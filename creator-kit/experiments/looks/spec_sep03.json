@@ -320,5 +320,8 @@
   "headline"
  ],
  "status": "proposed",
- "transcript_note": "faster-whisper large-v3, word timestamps; pass the JSON to qa.py with --transcript"
+ "transcript_note": "faster-whisper large-v3, word timestamps; pass the JSON to qa.py with --transcript",
+ "picked": "mono",
+ "picked_note": "Omarie picked Mono as the default look on 2026-10-25; the other five stay proposed.",
+ "names_confirmed": "Omarie confirmed the captions \"Bum Cola\" and \"Bum Root Beer\" on 2026-10-25 (the can reads BUM ENERGY / COLA)."
 }
