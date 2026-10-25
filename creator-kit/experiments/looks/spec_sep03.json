@@ -1,0 +1,324 @@
+{
+ "name": "sep03_product_to_camera",
+ "brand": "@nq.young",
+ "source_note": "Sep 3 product-to-camera take (HEVC 2160x3840, 60 fps, D-Log range)",
+ "transcript": "words_large.json",
+ "keep": [
+  [
+   11.8,
+   13.34
+  ],
+  [
+   14.21,
+   15.1
+  ],
+  [
+   16.1,
+   16.99
+  ],
+  [
+   17.92,
+   19.84
+  ],
+  [
+   20.2,
+   21.44
+  ],
+  [
+   22.08,
+   26.95
+  ]
+ ],
+ "keep_note": "Silero VAD speech regions (threshold 0.35, 150 ms min silence) inside 11.80-26.95 s; the pauses between them are cut.",
+ "lut": "../../luts/AK_Garage_Dark.cube",
+ "punch": [
+  1.0,
+  1.1
+ ],
+ "hook": [
+  "it tastes just like root beer."
+ ],
+ "hook_alt": [
+  "Not sponsored by them,"
+ ],
+ "phrases": [
+  {
+   "text": "Not sponsored by them,",
+   "words": [
+    {
+     "w": "Not",
+     "t0": 11.29,
+     "t1": 11.95,
+     "key": false
+    },
+    {
+     "w": "sponsored",
+     "t0": 11.95,
+     "t1": 12.33,
+     "key": true
+    },
+    {
+     "w": "by",
+     "t0": 12.33,
+     "t1": 12.51,
+     "key": false
+    },
+    {
+     "w": "them,",
+     "t0": 12.51,
+     "t1": 12.65,
+     "key": false
+    }
+   ]
+  },
+  {
+   "text": "but this Bum Cola",
+   "words": [
+    {
+     "w": "but",
+     "t0": 12.65,
+     "t1": 12.83,
+     "key": false
+    },
+    {
+     "w": "this",
+     "t0": 12.83,
+     "t1": 14.33,
+     "key": false
+    },
+    {
+     "w": "Bum",
+     "t0": 14.33,
+     "t1": 14.65,
+     "key": false
+    },
+    {
+     "w": "Cola",
+     "t0": 14.65,
+     "t1": 16.29,
+     "key": true
+    }
+   ]
+  },
+  {
+   "text": "and Bum Root Beer.",
+   "words": [
+    {
+     "w": "and",
+     "t0": 16.29,
+     "t1": 17.93,
+     "key": false
+    },
+    {
+     "w": "Bum",
+     "t0": 17.93,
+     "t1": 18.21,
+     "key": false
+    },
+    {
+     "w": "Root",
+     "t0": 18.21,
+     "t1": 18.59,
+     "key": true
+    },
+    {
+     "w": "Beer.",
+     "t0": 18.59,
+     "t1": 18.83,
+     "key": true
+    }
+   ]
+  },
+  {
+   "text": "Boy, the Bum Root Beer,",
+   "words": [
+    {
+     "w": "Boy,",
+     "t0": 18.83,
+     "t1": 19.29,
+     "key": false
+    },
+    {
+     "w": "the",
+     "t0": 19.29,
+     "t1": 20.23,
+     "key": false
+    },
+    {
+     "w": "Bum",
+     "t0": 20.23,
+     "t1": 20.45,
+     "key": false
+    },
+    {
+     "w": "Root",
+     "t0": 20.45,
+     "t1": 20.67,
+     "key": true
+    },
+    {
+     "w": "Beer,",
+     "t0": 20.67,
+     "t1": 20.93,
+     "key": true
+    }
+   ]
+  },
+  {
+   "text": "it tastes just like root beer.",
+   "words": [
+    {
+     "w": "it",
+     "t0": 22.27,
+     "t1": 22.87,
+     "key": false
+    },
+    {
+     "w": "tastes",
+     "t0": 22.87,
+     "t1": 23.13,
+     "key": false
+    },
+    {
+     "w": "just",
+     "t0": 23.13,
+     "t1": 23.25,
+     "key": false
+    },
+    {
+     "w": "like",
+     "t0": 23.25,
+     "t1": 23.39,
+     "key": false
+    },
+    {
+     "w": "root",
+     "t0": 23.39,
+     "t1": 23.53,
+     "key": true
+    },
+    {
+     "w": "beer.",
+     "t0": 23.53,
+     "t1": 23.71,
+     "key": true
+    }
+   ]
+  },
+  {
+   "text": "It's an energy drink.",
+   "words": [
+    {
+     "w": "It's",
+     "t0": 23.71,
+     "t1": 24.13,
+     "key": false
+    },
+    {
+     "w": "an",
+     "t0": 24.13,
+     "t1": 24.17,
+     "key": false
+    },
+    {
+     "w": "energy",
+     "t0": 24.17,
+     "t1": 24.41,
+     "key": true
+    },
+    {
+     "w": "drink.",
+     "t0": 24.41,
+     "t1": 24.73,
+     "key": true
+    }
+   ]
+  },
+  {
+   "text": "It's supposed to be like healthy",
+   "words": [
+    {
+     "w": "It's",
+     "t0": 24.73,
+     "t1": 24.93,
+     "key": false
+    },
+    {
+     "w": "supposed",
+     "t0": 24.93,
+     "t1": 25.03,
+     "key": false
+    },
+    {
+     "w": "to",
+     "t0": 25.03,
+     "t1": 25.17,
+     "key": false
+    },
+    {
+     "w": "be",
+     "t0": 25.17,
+     "t1": 25.27,
+     "key": false
+    },
+    {
+     "w": "like",
+     "t0": 25.27,
+     "t1": 25.49,
+     "key": false
+    },
+    {
+     "w": "healthy",
+     "t0": 25.49,
+     "t1": 25.79,
+     "key": true
+    }
+   ]
+  },
+  {
+   "text": "or something, I don't know.",
+   "words": [
+    {
+     "w": "or",
+     "t0": 25.79,
+     "t1": 25.95,
+     "key": false
+    },
+    {
+     "w": "something,",
+     "t0": 25.95,
+     "t1": 26.11,
+     "key": false
+    },
+    {
+     "w": "I",
+     "t0": 26.11,
+     "t1": 26.41,
+     "key": false
+    },
+    {
+     "w": "don't",
+     "t0": 26.41,
+     "t1": 26.71,
+     "key": false
+    },
+    {
+     "w": "know.",
+     "t0": 26.71,
+     "t1": 26.87,
+     "key": false
+    }
+   ]
+  }
+ ],
+ "looks": [
+  "highlighter",
+  "one_word",
+  "tag_stack",
+  "framed",
+  "mono",
+  "headline"
+ ],
+ "status": "proposed",
+ "transcript_note": "faster-whisper large-v3, word timestamps; pass the JSON to qa.py with --transcript"
+}
