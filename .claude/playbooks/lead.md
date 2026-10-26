@@ -77,12 +77,15 @@ Right after the Video Drop card step, add the post, with nothing typed twice:
    scratchpad>`, plus the caption file and who approved it, the Dropbox path and the Video Drop card id. It cuts
    the poster, a small preview and three frames, splits the master and prints the upload call. Add `--still FILE`
    for each cover or AI still, and `--ai` when every shot is generated.
-2. Make the upload call it printed (one call for up to 25 files). When the master is already on Video Drop, pass
-   `--no-parts` and copy those parts across on the server instead of uploading them again.
+2. Make the upload call it printed (one call for up to 25 files, each under 20 MB). When the master is already on
+   Video Drop, pass `--no-parts` and copy those parts across on the server instead of uploading them again. For a
+   long vlog, pass `--preview-only` with `--dropbox-path` (Omarie, 26 Oct: "Preview + Dropbox path"): no parts, and
+   the page points to the Dropbox file instead.
 3. `python3 .claude/brain/posts_library.py record <post-id> name=<asset id>... --work <same folder>` writes the
    record and prints the database call. Make it. The post appears on the page at once; the page itself is not
    edited or republished.
-4. Open the page and check the post plays, its caption copies and Save offers the full file.
+4. Open the page and check the post plays, its caption copies and Save offers the full file (for a preview-only
+   vlog, that the Dropbox path shows instead).
 
 - The caption is the approved one, read from its file byte for byte. With no approved caption, leave it out: the
   page then shows the hook and "caption not on record". Never write one to fill the gap.

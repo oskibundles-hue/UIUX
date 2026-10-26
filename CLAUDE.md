@@ -58,6 +58,15 @@ at 30 MiB), deliver through the one **Video Drop** page, https://claude.ai/artif
 never make a second one. Clear older cards only once they're confirmed in Dropbox, and ask him first. The
 split/upload/SHA-256/confirm steps are in `.claude/playbooks/lead.md` (Video Drop steps).
 
+## Every handed-over post goes in the Posts Library
+
+Omarie, 2026-10-13 and 2026-10-26. The **NQ Posts Library**, https://claude.ai/artifact/Y3shBejn5Lat1TZY7hVWYk, is
+part of NQ OS: one page, a tab per brand (FD, SE, Anti Stock), each post's video, approved caption, stills, Dropbox
+path and status. Add every post at hand-over with `.claude/brain/posts_library.py`, right after its Video Drop card,
+and never make a second page. Short ads carry the full file; a long vlog goes in with `--preview-only` (poster,
+preview, frames, caption and Dropbox path; the full file is posted from Dropbox). Captions only from an approved
+file; Posted is his tick. Steps: `.claude/playbooks/lead.md` (Posts Library).
+
 ## The NQ OS team (the main team in every session)
 
 Omarie, 2026-09-30. The agents in `.claude/agents/` are the NQ OS agentmesh classes; each job goes to a
