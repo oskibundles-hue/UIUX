@@ -4,6 +4,7 @@ open only the best note -> print only the lines that answer -> mention one point
 v2: the cached index now holds each note's title, index line, description,
 headings, bold phrases and body word counts, scored BM25-style so rare words count more; a small synonym list covers
 words the owner uses that the notes phrase differently; output is the best few lines, not whole sections.
+v3 scoring (2026-10-26): those synonyms count for 0.3 of a typed word, so a guess can't outvote what he asked.
 usage: python3 .claude/brain/recall.py "how do I deliver finished work" [--top 1] [--full] [--json]
   --json prints {query, top:{file,title,hook,score,units:[{text,score}]}, runner_up} for tools (Jarvis).
 """
@@ -40,8 +41,11 @@ def words(s):
         if len(parts) > 1: out.append(tok)
         out += [stem(w) for w in parts if w and w not in STOP]
     return out
+class Terms(set):
+    """The query's search words; .typed holds the ones actually in the question (synonyms and phrases are guesses)."""
+    typed = frozenset()
 def qterms(q):
-    base = words(q); out = set(base)
+    base = words(q); out = Terms(base); out.typed = frozenset(base)
     for w in base:
         for k, vs in SYN.items():
             sk = stem(k)
@@ -89,13 +93,17 @@ def index():
     avg = sum(n["n"] for n in notes) / max(1, len(notes))
     json.dump(dict(sig=sig, notes=notes, df=df, avg=avg), open(CACHE, "w"))
     return notes, df, avg
+# a word the search guessed (synonym or phrase) counts this much of a word he typed: at full weight "can jarvis
+# delete stuff" went to archive-never-delete on delete's guesses (archive, remove, trash), not to jarvis.md
+GUESS_W = 0.3
 def score(qs, n, df, N, avg):
-    s = 0.0
+    s, typed = 0.0, getattr(qs, "typed", None) or qs
     for w in qs:
         idf = math.log(1 + (N - df.get(w, 0) + 0.5) / (df.get(w, 0) + 0.5))
         tf = n["tf"].get(w, 0)
-        s += idf * (tf * 2.2) / (tf + 1.2 * (0.25 + 0.75 * n["n"] / avg)) if tf else 0
-        s += idf * (3.0 * (w in n["title_t"]) + 2.0 * (w in n["hook_t"]) + 1.0 * (w in n["head_t"]))
+        part = idf * (tf * 2.2) / (tf + 1.2 * (0.25 + 0.75 * n["n"] / avg)) if tf else 0
+        part += idf * (3.0 * (w in n["title_t"]) + 2.0 * (w in n["hook_t"]) + 1.0 * (w in n["head_t"]))
+        s += part if w in typed else part * GUESS_W
     return s
 def unit_score(u, qs, df, N):
     ws = set(words(u)); return sum(math.log(1 + N / (df.get(w, 0) + 1)) for w in qs & ws)

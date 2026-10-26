@@ -1,0 +1,351 @@
+[
+ {
+  "q": "whats my time zone again",
+  "key": [
+   "owner-profile.md",
+   "standing-rules.md"
+  ]
+ },
+ {
+  "q": "what do u still need from me",
+  "key": [
+   "handoff.md"
+  ]
+ },
+ {
+  "q": "what layout do i like for a directory page",
+  "key": [
+   "iphone-index-layout.md"
+  ]
+ },
+ {
+  "q": "how loud should a fast cut be",
+  "key": [
+   "fast-cut-recipe.md"
+  ]
+ },
+ {
+  "q": "how do i build the 2:50 vlog",
+  "key": [
+   "reel-cut-format.md"
+  ]
+ },
+ {
+  "q": "what should we focus on first youtube or reels",
+  "key": [
+   "format-priorities.md"
+  ]
+ },
+ {
+  "q": "he said a slur what do we do",
+  "key": [
+   "censor-bleep.md"
+  ]
+ },
+ {
+  "q": "exhaust vlog what shots do we need",
+  "key": [
+   "show-tune-results.md"
+  ]
+ },
+ {
+  "q": "can i use anton on a formula dynamics post",
+  "key": [
+   "fd-palette-lesson.md"
+  ]
+ },
+ {
+  "q": "the work order ticket with the installed stamp",
+  "key": [
+   "fd-job-ticket-look.md"
+  ]
+ },
+ {
+  "q": "can we say ryft in the caption",
+  "key": [
+   "fd-partners.md"
+  ]
+ },
+ {
+  "q": "what goes on a supercar experience ad",
+  "key": [
+   "se-standards.md"
+  ]
+ },
+ {
+  "q": "what end card for an fd vlog",
+  "key": [
+   "se-vs-fd-overlays.md"
+  ]
+ },
+ {
+  "q": "whats the hp on the huracan sto",
+  "key": [
+   "verify-vehicle-facts.md"
+  ]
+ },
+ {
+  "q": "how do i send the finished ad",
+  "key": [
+   "deliver-to-dropbox.md"
+  ]
+ },
+ {
+  "q": "just start building it",
+  "key": [
+   "confirm-before-building.md"
+  ]
+ },
+ {
+  "q": "is that number real",
+  "key": [
+   "verify-facts.md",
+   "verify-vehicle-facts.md"
+  ]
+ },
+ {
+  "q": "theres a job running nobody owns can u kill it",
+  "key": [
+   "cross-session-process-caution.md"
+  ]
+ },
+ {
+  "q": "dont make me type my answers",
+  "key": [
+   "decide-by-click-not-typing.md"
+  ]
+ },
+ {
+  "q": "the check passed but it checked the wrong file",
+  "key": [
+   "gate-record-binding.md"
+  ]
+ },
+ {
+  "q": "got any ideas to improve the system",
+  "key": [
+   "continuous-improvement.md"
+  ]
+ },
+ {
+  "q": "can jarvis delete stuff",
+  "key": [
+   "jarvis.md"
+  ]
+ },
+ {
+  "q": "start a fresh session and clean up the old ones",
+  "key": [
+   "session-rotation-routine.md"
+  ]
+ },
+ {
+  "q": "does the nightly memory thing save by itself",
+  "key": [
+   "memory-compile-routine.md"
+  ]
+ },
+ {
+  "q": "stop asking me permission for every command",
+  "key": [
+   "always-allow-permissions.md"
+  ]
+ },
+ {
+  "q": "which style should we use",
+  "key": [
+   "standing-rules.md"
+  ]
+ },
+ {
+  "q": "which branch is anti stock on",
+  "key": [
+   "workstreams.md"
+  ]
+ },
+ {
+  "q": "why is my usage limit gone so fast this week",
+  "key": [
+   "usage-drains.md",
+   "token-policy.md"
+  ]
+ },
+ {
+  "q": "where do i find all the stuff we delivered",
+  "key": [
+   "artifact-indexes.md"
+  ]
+ },
+ {
+  "q": "should vidiq be on",
+  "key": [
+   "connectors.md"
+  ]
+ },
+ {
+  "q": "where do my camera files go",
+  "key": [
+   "omarie-dropbox-layout.md"
+  ]
+ },
+ {
+  "q": "how much does the second brain actually save",
+  "key": [
+   "memory-lookup-tools.md"
+  ]
+ },
+ {
+  "q": "whats wrong with mr3",
+  "key": [
+   "anti-stock-known-defects.md"
+  ]
+ },
+ {
+  "q": "should i post short car only reels or the vlog ones",
+  "key": [
+   "reel-format-open-question.md"
+  ]
+ },
+ {
+  "q": "how do we put the tracked dots and callouts in a vlog",
+  "key": [
+   "branded-cut-template.md"
+  ]
+ },
+ {
+  "q": "whats version A of the story",
+  "key": [
+   "story-templates.md"
+  ]
+ },
+ {
+  "q": "whats next in the vlog lab",
+  "key": [
+   "vlog-lab-roadmap.md"
+  ]
+ },
+ {
+  "q": "give me a few color options for this clip",
+  "key": [
+   "grade-variants-workflow.md"
+  ]
+ },
+ {
+  "q": "what font does fd use",
+  "key": [
+   "fd-pipeline.md",
+   "fd-palette-lesson.md"
+  ]
+ },
+ {
+  "q": "the before the work payoff panels look",
+  "key": [
+   "fd-triptych-look.md"
+  ]
+ },
+ {
+  "q": "has this fd video already gone out",
+  "key": [
+   "fd-post-log.md"
+  ]
+ },
+ {
+  "q": "how fast does the mac render an se vlog",
+  "key": [
+   "se-vlog-mac-pipeline.md"
+  ]
+ },
+ {
+  "q": "do we still blur plates on fd videos",
+  "key": [
+   "fd-triptych-look.md",
+   "client-plate-blur.md"
+  ]
+ },
+ {
+  "q": "can i move this app folder in dropbox",
+  "key": [
+   "file-organizing.md"
+  ]
+ },
+ {
+  "q": "the mac keeps freezing on long renders",
+  "key": [
+   "render-pipeline-safety.md",
+   "long-jobs-safety.md"
+  ]
+ },
+ {
+  "q": "upload link expired",
+  "key": [
+   "pipeline-notes.md"
+  ]
+ },
+ {
+  "q": "just post it for me",
+  "key": [
+   "never-post-or-send.md"
+  ]
+ },
+ {
+  "q": "can u get rid of the old files",
+  "key": [
+   "archive-never-delete.md",
+   "file-organizing.md"
+  ]
+ },
+ {
+  "q": "is another session already doing this",
+  "key": [
+   "check-who-else-first.md"
+  ]
+ },
+ {
+  "q": "is opus more expensive per agent than sonnet",
+  "key": [
+   "agent-cost-per-call.md"
+  ]
+ },
+ {
+  "q": "what does nq-fix do",
+  "key": [
+   "repo-agents.md"
+  ]
+ },
+ {
+  "q": "turn this into a skill",
+  "key": [
+   "skills-loop-workflow.md"
+  ]
+ },
+ {
+  "q": "update the dashboard",
+  "key": [
+   "control-room-upkeep.md"
+  ]
+ },
+ {
+  "q": "run this every morning",
+  "key": [
+   "scheduling-and-persistence.md"
+  ]
+ },
+ {
+  "q": "end of day what do we do",
+  "key": [
+   "daily-session-routine.md"
+  ]
+ },
+ {
+  "q": "find the stuff i keep having to correct",
+  "key": [
+   "weekly-correction-audit.md"
+  ]
+ },
+ {
+  "q": "plan this with a few agents",
+  "key": [
+   "multi-agent-planning.md"
+  ]
+ }
+]
