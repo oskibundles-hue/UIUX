@@ -93,6 +93,10 @@ check("no reference for an unknown format", job_diff.reference(dict(loud, format
 note, _ = job_diff.first_divergence(loud)
 check("hook note names the step", note and "First divergence (steps)" in note and "loudnorm" in note, note)
 
+# a report with no table: gap 1's bullet reader still finds the FAIL
+v, rows = job_card.parse_report("Checked out/x.mp4.\n- Audio level: FAIL - 9 LUFS too loud\n- Captions: PASS")
+check("bullet report: FAIL read through post_mortem.parse_fails", v == "FAIL" and rows == {"Audio level": "FAIL"}, (v, rows))
+
 # a background launch is not a finished check
 check("async launch gives no card", job_card.from_event({"tool_input": {"subagent_type": "nq-check"},
       "tool_response": {"status": "async_launched", "agentId": "x"}}) is None)

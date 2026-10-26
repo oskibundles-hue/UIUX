@@ -23,13 +23,12 @@ import datetime, glob, json, os, re, shlex, shutil, subprocess, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from nqos_config import HAVE_NOTES, HOME, WORK
+from post_mortem import FORMATS, parse_fails   # gap 1's format order and FAIL-bullet reader, shared
 
 CARDS = os.environ.get("NQOS_JOBCARDS") or (os.path.join(HOME, "jobcards") if HAVE_NOTES
                                             else os.path.join(WORK, "jobcards"))
 CHECK_AGENT = "nq-check"
 BUILD_AGENTS = ("nq-build", "nq-fix", "nq-run", "nq-label")
-# The order matters: the first hit wins, and a reel cut from a vlog is a reel.
-FORMATS = ("carousel", "reel", "poster", "thumbnail", "ad", "promo", "story", "page", "vlog")
 WORKSTREAMS = (("Anti Stock", r"anti[ -]?stock|antistock"),
                ("Formula Dynamics", r"formula dynamics|(?<![a-z])fd(?![a-z])"),
                ("Supercar Experience", r"supercar experience|(?<![a-z])se(?![a-z])|(?<![a-z])se-vlog"))
@@ -233,6 +232,8 @@ def parse_report(text):
                 if name:
                     checks[name] = m.group(1).upper().replace("NA", "N/A")
                 break
+    if not checks:   # no table: "- Audio level: FAIL - too loud" bullets, read the way gap 1's log reads them
+        checks = {check: "FAIL" for check, _ in parse_fails(text)}
     if any(v == "FAIL" for v in checks.values()):
         verdict = "FAIL"
     elif checks:
