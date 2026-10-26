@@ -257,10 +257,10 @@ Scope notice: The rules below are for App UI (iOS/Android/React Native/Flutter),
 
 ### Icons & Visual Elements
 
-- 默认图标库使用 **Phosphor (`@phosphor-icons/react`)**。`src/ui-ux-pro-max/data/icons.csv` 中列出的只是常用推荐图标，不是完整集合。
-- 当推荐表中找不到合适的图标时：
-  - **优先继续从 Phosphor 的完整图标集中选择任何语义更贴切的图标**；
-  - 如果 Phosphor 也没有理想选项，可以使用 **Heroicons (`@heroicons/react`)** 作为备选，注意保持风格一致（线性/填充、笔画粗细、圆角风格）。
+- The default icon library is **Phosphor (`@phosphor-icons/react`)**. The icons in this skill's `data/icons.csv` (search them with `--domain icons`) are common recommendations, not the full set.
+- When the recommendation list has no suitable icon:
+  - **First, pick any icon from Phosphor's full set whose meaning fits better.**
+  - If Phosphor has nothing suitable either, use **Heroicons (`@heroicons/react`)** as the fallback, keeping the style consistent (outline/filled, stroke weight, corner rounding).
 
 | Rule | Standard | Avoid | Why It Matters |
 |------|----------|--------|----------------|
