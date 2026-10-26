@@ -108,6 +108,19 @@ code, out = push()
 CHECKS.append(("both refused: exit 1, says the lines are still local", code == 1 and "still in" in out))
 os.remove(hook)
 
+# nq-check FAIL rows (qualityfails.jsonl next to the log) go to main too; two rows at one time both land
+FAILS = os.path.join(os.path.dirname(LOG), "qualityfails.jsonl")
+with open(FAILS, "w") as fh:
+    for check in ("Caption rules", "Hands"):
+        fh.write(json.dumps(dict(at="2026-10-06T08:00:00Z", session="cloud6", agent="a1", key=check.lower(),
+                                 check=check, why="x")) + "\n")
+code, out = push()
+p = sh("git", "-C", ORIGIN, "show", "main:brain/costlog/qualityfails.jsonl")
+CHECKS.append(("FAIL rows reach main, both rows of one report", code == 0 and "quality fails: pushed 2" in out
+               and [json.loads(x)["check"] for x in p.stdout.splitlines()] == ["Caption rules", "Hands"]))
+code, out = push()
+CHECKS.append(("FAIL rows twice changes nothing", code == 0 and "quality fails: up to date" in out))
+
 # skips: tests' NQOS_COSTLOG, and a brain that isn't an nq-agent-channel clone
 code, out = push(env=dict(ENV, NQOS_COSTLOG=os.path.join(TMP, "x.jsonl")))
 CHECKS.append(("NQOS_COSTLOG set: skipped", code == 0 and out.startswith("skipped")))

@@ -12,14 +12,16 @@ with git plumbing on top of origin/main, so the clone's working tree and other c
 touched. If main refuses the push, the lines go to branch claude/costlog-cloud instead, and the Mac's
 costlog_sync.py merges that branch into main. Skipped when NQOS_COSTLOG is set (tests), or when the
 log isn't brain/costlog/costlog.jsonl in a clone of nq-agent-channel. Running it twice changes nothing.
-Written 2026-10-06 (approved by Omarie the same day).
+Written 2026-10-06 (approved by Omarie the same day). Since 2026-10-26 it also pushes nq-check's FAIL rows
+(qualityfails.jsonl, the file next to the cost log) the same way, so the review sees them from every session.
 """
 import json, os, subprocess, sys, tempfile
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from post_mortem import LOG
+from post_mortem import FAILS, LOG
 
 PATH = "brain/costlog/costlog.jsonl"
+FAILS_PATH = "brain/costlog/qualityfails.jsonl"
 FALLBACK = "claude/costlog-cloud"
 WHERE = "cloud" if os.environ.get("CLAUDE_CODE_REMOTE_SESSION_ID") else "mac"
 
@@ -41,7 +43,8 @@ def rows(text):
 
 
 def key(row):
-    return row.get("session"), row.get("at")
+    """Cost lines are one per session and time; a FAIL row also needs its check, reason and agent."""
+    return row.get("session"), row.get("at"), row.get("key"), row.get("why"), row.get("agent")
 
 
 def clone_of(log):
@@ -74,32 +77,54 @@ def merged(remote_text, new_rows):
     return text + "".join(json.dumps(dict(r, where=r.get("where", WHERE))) + "\n" for r in new), len(new)
 
 
-def push_to(repo, branch, base, new_rows, dry):
+def push_to(repo, branch, base, new_rows, dry, path=PATH):
     """Commit the missing lines on top of `base` and push to `branch`. Returns (status, message)."""
-    code, remote_text, _ = git(repo, "show", f"{base}:{PATH}")
+    code, remote_text, _ = git(repo, "show", f"{base}:{path}")
     text, added = merged(remote_text if not code else "", new_rows)
     if not added:
         return "ok", f"up to date: {branch} has all {len(new_rows)} new line(s)"
     if dry:
         return "ok", f"would push {added} line(s) to {branch}"
+    what = "session line(s)" if path == PATH else "nq-check FAIL row(s)"
     with tempfile.TemporaryDirectory() as tmp:                 # a private index, so the clone's own is untouched
         env = {"GIT_INDEX_FILE": os.path.join(tmp, "index")}
         code, blob, err = git(repo, "hash-object", "-w", "--stdin", stdin=text)
         if not code:
             code, _, err = git(repo, "read-tree", base, env=env)
         if not code:
-            code, _, err = git(repo, "update-index", "--add", "--cacheinfo", f"100644,{blob.strip()},{PATH}", env=env)
+            code, _, err = git(repo, "update-index", "--add", "--cacheinfo", f"100644,{blob.strip()},{path}", env=env)
         if not code:
             code, tree, err = git(repo, "write-tree", env=env)
     if not code:
         code, commit, err = git(repo, "commit-tree", tree.strip(), "-p", base,
-                                "-m", f"costlog: add {added} {WHERE} session line(s)\n\nFrom .claude/brain/costlog_push.py.")
+                                "-m", f"costlog: add {added} {WHERE} {what}\n\nFrom .claude/brain/costlog_push.py.")
     if code:
         return "fail", "commit failed: " + err.strip()[-200:]
     code, _, err = git(repo, "push", "-q", "origin", f"{commit.strip()}:refs/heads/{branch}")
     if code:
         return ("race" if "fetch first" in err or "non-fast-forward" in err else "refused"), err.strip()[-200:]
     return "ok", f"pushed {added} line(s) to {branch} ({commit.strip()[:7]})"
+
+
+def push_file(repo, local, path, dry):
+    """Push one log's missing lines to main (or the fallback branch). Returns (code, message)."""
+    _, on_main, _ = git(repo, "show", f"origin/main:{path}")
+    local_rows = rows(open(local).read())
+    have = {key(r) for r in rows(on_main)}
+    new = [r for r in local_rows if key(r) not in have]       # lines main already has never go to the fallback
+    if not new:
+        return 0, f"up to date: main has all {len(local_rows)} lines"
+    for branch in ("main", FALLBACK):
+        for _ in (1, 2):                                       # one retry when another push got there first
+            exists, err = fetch(repo, branch)
+            status, msg = ("fail", "fetch failed: " + err) if err else \
+                push_to(repo, branch, f"origin/{branch}" if exists else "origin/main", new, dry, path)
+            if status != "race":
+                break
+        if status == "ok":
+            return 0, msg
+        print(f"{branch}: {msg}", file=sys.stderr)
+    return 1, "cost log push failed (see above); the lines are still in " + local
 
 
 def main(argv):
@@ -111,24 +136,11 @@ def main(argv):
     exists, err = fetch(repo, "main")
     if not exists:
         return 1, "can't fetch nq-agent-channel main: " + (err or "no main branch")
-    _, on_main, _ = git(repo, "show", f"origin/main:{PATH}")
-    local_rows = rows(open(LOG).read())
-    have = {key(r) for r in rows(on_main)}
-    new = [r for r in local_rows if key(r) not in have]       # lines main already has never go to the fallback
-    if not new:
-        return 0, f"up to date: main has all {len(local_rows)} lines"
-    dry = "--dry-run" in argv
-    for branch in ("main", FALLBACK):
-        for _ in (1, 2):                                       # one retry when another push got there first
-            exists, err = fetch(repo, branch)
-            status, msg = ("fail", "fetch failed: " + err) if err else \
-                push_to(repo, branch, f"origin/{branch}" if exists else "origin/main", new, dry)
-            if status != "race":
-                break
-        if status == "ok":
-            return 0, msg
-        print(f"{branch}: {msg}", file=sys.stderr)
-    return 1, "cost log push failed (see above); the lines are still in " + LOG
+    code, msg = push_file(repo, LOG, PATH, "--dry-run" in argv)
+    if os.path.isfile(FAILS) and os.path.dirname(os.path.abspath(FAILS)) == os.path.dirname(os.path.abspath(LOG)):
+        fcode, fmsg = push_file(repo, FAILS, FAILS_PATH, "--dry-run" in argv)
+        code, msg = max(code, fcode), f"{msg}; quality fails: {fmsg}"
+    return code, msg
 
 
 if __name__ == "__main__":
