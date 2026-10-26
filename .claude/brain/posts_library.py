@@ -10,6 +10,7 @@ usage: python3 .claude/brain/posts_library.py add VIDEO --brand fd|se|as --id <p
        python3 .claude/brain/posts_library.py dropbox <post-id>         tick In Dropbox once the copy is confirmed
        python3 .claude/brain/posts_library.py read                      the call that reads every post back
        python3 .claude/brain/posts_library.py supersede <post-id> "<why>"   mark an older cut as replaced
+       python3 .claude/brain/posts_library.py slim DOC.json --dropbox-size <bytes> [--same-streams]
 
 Omarie, 2026-10-13: "i cant keep track of all this through dropbox and dropbox aint gonna keep my captions."
 Run it at hand-over, right after the Video Drop card step (playbooks/lead.md), so nobody re-types a post.
@@ -38,6 +39,15 @@ it prints an `update` that leaves his Posted tick, the hand-over date and the or
 "caption not on record". --ai labels every still "AI still" (a commercial that is all generated footage).
 Posted is Omarie's tick on the page; `read` prints the call that reads it back (steps.posted, posted_at).
 Post records live in the page's database, never in this repo. No model call; `add` takes a few seconds.
+
+`slim` drops a short ad's full file once its Dropbox copy is confirmed (Omarie, 26 Oct, after the page's file
+store reached 94% of its 1 GiB: "Only until in Dropbox"). Give it the post as `ArtifactData get` saved it
+(out_dir) and the Dropbox file's size from get_file_metadata on its dropbox_path. It writes an update that ticks
+In Dropbox (the size check is the confirmation), empties the parts and notes where the full file is, then
+prints that update and one Artifact delete per part. Make the update first, then the deletes. A size that
+differs from the library's is refused until the streams are shown to match: on 26 Oct four Dropbox copies
+carried an extra 5,893-byte uuid box with identical streams (ffmpeg -i FILE -map 0 -c copy -f streamhash
+-hash sha256 - on both files), and then --same-streams lets it through.
 """
 import json, os, shutil, subprocess, sys, time
 
@@ -45,9 +55,9 @@ URL = "https://claude.ai/artifact/Y3shBejn5Lat1TZY7hVWYk"   # the NQ Posts Libra
 PART = 19 * 1024 * 1024                                       # same part size as the Video Drop page
 WORK = os.path.join(os.environ.get("TMPDIR") or "/tmp", "posts-library-handover")   # --work overrides it
 BRANDS = ("fd", "se", "as")                                   # two brands never share a post
-FLAGS = {"--ai", "--in-dropbox", "--no-parts", "--preview-only", "--update"}    # options that take no value
+FLAGS = {"--ai", "--in-dropbox", "--no-parts", "--preview-only", "--same-streams", "--update"}    # options that take no value
 KNOWN = FLAGS | {"--brand", "--id", "--title", "--num", "--car", "--caption-file", "--caption-source", "--hook", "--note",
-                 "--post-on", "--dropbox-path", "--drop-card", "--still", "--part", "--work"}
+                 "--post-on", "--dropbox-path", "--drop-card", "--still", "--part", "--work", "--dropbox-size"}
 MANY = {"--still", "--part"}                                  # options that can repeat
 FRAMES = (0.15, 0.5, 0.85)                                    # where the three frames are cut, as a share of the length
 
@@ -237,6 +247,36 @@ def record(pos, opt):
     print(json.dumps(call, ensure_ascii=False))
 
 
+def slim(pos, opt):
+    if len(pos) != 1 or not str(opt.get("--dropbox-size", "")).isdigit():
+        sys.exit(__doc__)
+    with open(pos[0], encoding="utf-8") as f:
+        doc = json.load(f)
+    pid = safe_id(os.path.splitext(os.path.basename(pos[0]))[0])
+    video, size = doc.get("video") or {}, int(opt["--dropbox-size"])
+    if not video.get("parts"):
+        sys.exit(f"{pid} has no full file on the page: nothing to slim")
+    if not doc.get("dropbox_path"):
+        sys.exit(f"{pid} has no dropbox_path: the parts are the only copy the page knows of")
+    if size != video["total"] and not opt.get("--same-streams"):
+        sys.exit(f"Dropbox has {size:,} bytes, the library {video['total']:,}: compare the stream hashes "
+                 "(ffmpeg -i FILE -map 0 -c copy -f streamhash -hash sha256 -) and give --same-streams if they match")
+    note = doc.get("note", "")
+    if "Full file: post it from its Dropbox path" not in note:
+        note = (note + " Full file: post it from its Dropbox path (the library copy was removed on "
+                + time.strftime("%d %b").lstrip("0") + " to free space; Dropbox has the same file).").strip()
+    data = {"video": dict(video, parts=[]), "preview_only": True, "note": note,
+            "steps": dict(doc.get("steps") or {}, dropbox=True)}
+    out = os.path.splitext(pos[0])[0] + ".slim.json"
+    with open(out, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=1)
+    print(json.dumps({"tool": "ArtifactData", "url": URL, "action": "update", "collection": "posts", "doc_id": pid,
+                      "file_path": out, "if_version": "<the version `get` showed>"}, ensure_ascii=False))
+    for p in video["parts"]:
+        print(json.dumps({"tool": "Artifact", "action": "delete", "url": URL, "path": p["id"]}))
+    print(f"{len(video['parts'])} parts, {video['total']:,} bytes. Make the update first, then the deletes.", file=sys.stderr)
+
+
 def main(argv):
     if not argv or argv[0] in ("-h", "--help"):
         sys.exit(__doc__)
@@ -250,6 +290,8 @@ def main(argv):
     elif cmd == "dropbox" and len(pos) == 1:
         print(json.dumps({"tool": "ArtifactData", "url": URL, "action": "update", "collection": "posts", "doc_id": safe_id(pos[0]),
                           "data": {"steps": {"dropbox": True}}, "if_version": "<the version `read` showed>"}))
+    elif cmd == "slim":
+        slim(pos, opt)
     elif cmd == "supersede" and len(pos) == 2:
         print(json.dumps({"tool": "ArtifactData", "url": URL, "action": "update", "collection": "posts", "doc_id": safe_id(pos[0]),
                           "data": {"superseded": True, "note": pos[1]}, "if_version": "<the version `read` showed>"}, ensure_ascii=False))

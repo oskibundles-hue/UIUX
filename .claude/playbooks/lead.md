@@ -92,7 +92,12 @@ Right after the Video Drop card step, add the post, with nothing typed twice:
 - The caption file holds the caption and nothing else. A hand-over note with a heading, a "Post with" line or a
   code fence is refused; save the caption lines to their own file first.
 - Once the Dropbox copy is confirmed (Video Drop step 5), run `posts_library.py dropbox <post-id>` and make the
-  call it prints, so In Dropbox is true on the page. For any other change to a post already on the page, use
+  call it prints, so In Dropbox is true on the page. For a short ad that still carries its full file, run `slim`
+  in place of `dropbox`, because the page's file store is 1 GiB (it reached 94% on 26 Oct): `ArtifactData get`
+  the post with out_dir, `get_file_metadata` its dropbox_path, then
+  `posts_library.py slim <saved doc.json> --dropbox-size <size>`. Make the update it prints (it ticks In
+  Dropbox too), then the Artifact deletes. If the sizes differ, compare the stream hashes as it says before
+  giving `--same-streams`. For any other change to a post already on the page, use
   `record ... --update`: a plain `record` replaces the whole record and would clear his Posted tick.
 - One brand per post. A newer cut replaces an older one with `posts_library.py supersede <old-id> "<why>"`; the
   old one stays on the page, greyed, with saving off.

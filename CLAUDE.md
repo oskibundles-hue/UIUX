@@ -63,9 +63,10 @@ split/upload/SHA-256/confirm steps are in `.claude/playbooks/lead.md` (Video Dro
 Omarie, 2026-10-13 and 2026-10-26. The **NQ Posts Library**, https://claude.ai/artifact/Y3shBejn5Lat1TZY7hVWYk, is
 part of NQ OS: one page, a tab per brand (FD, SE, Anti Stock), each post's video, approved caption, stills, Dropbox
 path and status. Add every post at hand-over with `.claude/brain/posts_library.py`, right after its Video Drop card,
-and never make a second page. Short ads carry the full file; a long vlog goes in with `--preview-only` (poster,
-preview, frames, caption and Dropbox path; the full file is posted from Dropbox). Captions only from an approved
-file; Posted is his tick. Steps: `.claude/playbooks/lead.md` (Posts Library).
+and never make a second page. A short ad carries its full file only until it's confirmed in Dropbox, then `slim`
+drops that copy (Omarie, 26 Oct, after the page's 1 GiB file store reached 94%); a long vlog goes in with
+`--preview-only` (poster, preview, frames, caption and Dropbox path; the full file is posted from Dropbox).
+Captions only from an approved file; Posted is his tick. Steps: `.claude/playbooks/lead.md` (Posts Library).
 
 ## The NQ OS team (the main team in every session)
 
