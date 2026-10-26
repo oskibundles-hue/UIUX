@@ -142,6 +142,26 @@ because this default branch doesn't carry `creator-kit/`, `formula-dynamics/` or
 pass one voter's verdict to the other, because a vote that saw the other's answer isn't independent.
 Run `nq-story` first only when the creative direction isn't settled.
 
+**Replay a proposed rule before it lands** (gap 3 of the reel-harness comparison, 2026-10-26: nothing that
+used to pass may fail after an update). Before putting a rule proposal to Omarie as a click, run
+`python3 .claude/brain/rule_gate.py check "<proposed rule>" [--format reel]`, or `rule_gate.py review` for the
+whole weekly review with a gate line under each proposal. It re-checks the stored outputs of the replay set
+(3 to 5 passed jobs per format, from gap 2's job cards) and never rebuilds anything. Put its last line,
+"safe to land" or "would break N of M past jobs", in the click's option description, so he decides with
+the evidence in front of him.
+- **Mechanical rules** (caption length or lines, duration, loudness, size, fps, banned words, a brief that
+  names the style) are measured by the script, no model call.
+- **Process rules** (sessions, cache, agents, the builder's hand-over steps) change no delivered file, so
+  they pass.
+- **Judgement rules** get one bundle for the whole set (`prompt.md`, `jobs.md`, one `sheet.jpg`). Brief
+  nq-check once with `prompt.md`, then `rule_gate.py verdict <bundle> < report` saves its answer, and the
+  same rule reuses it. Omarie set the limit on 2026-10-26: scripts, plus at most one nq-check per proposal,
+  never one agent per job.
+- **The set:** `rule_gate.py set suggest --format reel` lists passed cards not in it yet. Put the pick to
+  Omarie, then `set add <card> [--captions f.srt] [--copy f.txt] [--sheet s.jpg]`, because cards don't hold
+  captions, copy or frames. The set and the bundles live next to the cards in the private brain's
+  `jobcards/` and `gate/`, or the git-ignored `work/` without it.
+
 **Claude Code enforces the chain** (Omarie, 2026-09-28). `.claude/settings.json` sets
 `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` and `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` to 1: one subagent runs at a time,
 and subagents can't start their own. Claude 5 models delegate more readily, and every agent costs a full conversation's
