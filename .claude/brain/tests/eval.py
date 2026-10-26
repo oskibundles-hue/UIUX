@@ -2,6 +2,9 @@
 """Check recall.py against questions with known answers (no model, about 0.1 s per question).
 
 usage: NQOS_HOME=/path/to/brain python3 .claude/brain/tests/eval.py [questions.json]
+Sets: questions.json (tidy), fresh_questions.json (held out), casual_questions.json (typed the way Omarie
+writes, lower-case and loose; 38/57 before the 2026-10-26 scoring change,
+40/57 after; not all are expected to pass, it is a score to beat).
 A question passes when recall.py's top note is one of its "key" files.
 """
 import json, os, subprocess, sys, time
