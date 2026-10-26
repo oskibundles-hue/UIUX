@@ -349,7 +349,7 @@ def load_all():
             continue
         c["_path"] = p
         cards.append(c)
-    return sorted(cards, key=lambda c: c.get("at", ""), reverse=True)
+    return sorted(cards, key=lambda c: (c.get("at", ""), os.path.getmtime(c["_path"])), reverse=True)   # same second: file time
 
 
 def load(ref):
