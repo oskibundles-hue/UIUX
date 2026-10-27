@@ -54,8 +54,7 @@ def save_title(title, now):
     """Keep the job title where the nq-check hooks find it (post_mortem.live_job), so a FAIL row or job card whose
     briefs name no job still carries one. Keyed by the hook's session id. Never raises."""
     try:
-        from nqos_config import WORK
-        d = os.path.join(WORK, "livecard")
+        from nqos_config import LIVECARD as d
         os.makedirs(d, exist_ok=True)
         sid = os.environ.get("CLAUDE_CODE_SESSION_ID", "") or "local"
         with open(os.path.join(d, sid.replace("/", "_") + ".json"), "w") as fh:

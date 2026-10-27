@@ -8,6 +8,11 @@ Two events, one script (.claude/settings.json):
                                    background nq-check finish. A SubagentStop hook can't speak to the lead
                                    (its output goes to the subagent), so on a FAIL with a reference on file it
                                    leaves the note in work/jobdiff-pending/<session>.txt.
+  PostToolUse, matcher SubagentHandback
+                                   the same capture as SubagentStop, from the handback message. Most agents
+                                   report this way, so their last text is empty and SubagentStop alone saw no
+                                   report (the real run of 2026-10-27 left no card). Whichever of the two fires
+                                   second finds the card saved and does nothing.
   PostToolUse, matcher Agent|Task  a foreground nq-check's result arrives here: save the card (same id, so no
                                    duplicate) and add the first divergence next to the FAIL as additionalContext.
   PostToolUse, every tool          through jobdiff_pending.sh, which starts Python only when a note is pending
@@ -77,18 +82,26 @@ def main(pending_only=False):
     sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     event = ev.get("hook_event_name", "")
     session = ev.get("session_id", "")
-    if event == "SubagentStop":
+    handback = event == "PostToolUse" and ev.get("tool_name") == "SubagentHandback"
+    if event == "SubagentStop" or handback:
         if ev.get("agent_type") != "nq-check":
             return
+        if handback:                                   # the report is the handback message, not the last text
+            ev = {**ev, "hook_event_name": "SubagentStop",
+                  "last_assistant_message": (ev.get("tool_input") or {}).get("message", "")}
         card = None
         try:
             import job_card
             card = job_card.from_event(ev)             # built first, so the FAIL rows get the card's job and format
         except Exception:
             pass
+        if card and os.path.isfile(os.path.join(job_card.CARDS, card["id"] + ".json")):
+            return                                     # the handback and SubagentStop both fire: capture once
         try:
             import quality_fails
             text = quality_fails.report(ev)
+            if not text and job_card.with_paths(ev).get("agent_transcript_path"):
+                text = job_card.agent_report(job_card.with_paths(ev)["agent_transcript_path"])
             if text:
                 from post_mortem import log_fails
                 log_fails(text, session, job=(card or {}).get("job", ""), agent=ev.get("agent_id", ""),

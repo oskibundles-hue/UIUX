@@ -7,7 +7,8 @@ times in a week) went unseen. On SubagentStop (matcher nq-check) job_diff_hook.p
 log_fails(), so nq-check's output is read once for both the FAIL log and the job card (2026-10-27); the
 docs say last_assistant_message holds the subagent's final text, and unlike PostToolUse on Agent it also
 fires for background agents. A subagent that reports through SubagentHandback puts the report in that
-tool's tool_input.message instead, so .claude/settings.json runs this script on PostToolUse SubagentHandback.
+tool's tool_input.message instead; job_diff_hook.py takes that event too (it used to come here, which logged
+the rows before the job card could give them a job and format).
 
 The rows go to costlog/qualityfails.jsonl next to the cost log (private brain, or the git-ignored work/
 fallback); see post_mortem.py. Never blocks or prints: a hook failure must not keep nq-check running.

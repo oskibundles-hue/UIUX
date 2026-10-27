@@ -128,7 +128,8 @@ def live_job(session=""):
     """The job title live_card.py start gave this session's Working-now card, or ""."""
     sid = session or os.environ.get("CLAUDE_CODE_SESSION_ID", "")
     try:
-        return json.load(open(os.path.join(WORK, "livecard", sid.replace("/", "_") + ".json"))).get("title", "")
+        from nqos_config import LIVECARD
+        return json.load(open(os.path.join(LIVECARD, sid.replace("/", "_") + ".json"))).get("title", "")
     except (OSError, ValueError, AttributeError):
         return ""
 

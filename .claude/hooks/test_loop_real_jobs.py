@@ -151,6 +151,41 @@ check("fast path: the next Read shows the FAIL line", "nq-check FAILed" in note,
 check("fast path: shown once", not os.path.exists(pend) and
       run({"hook_event_name": "PostToolUse", "session_id": "s-bg", "tool_name": "Bash", "tool_input": {}}, SH) == "")
 
+# a handback agent (the real shape, 2026-10-27): no final text, the report is the SubagentHandback message
+def handback_job(name, brief, report, session):
+    stop, _ = lead_job(name, brief, "", session=session)
+    sub = os.path.dirname(stop["agent_transcript_path"])
+    with open(stop["agent_transcript_path"], "w") as fh:
+        fh.write(json.dumps(_rec("assistant", [{"type": "tool_use", "id": f"toolu_{name}_h", "name": "SubagentHandback",
+                                                "input": {"message": report}}])) + "\n")
+    hb = {"hook_event_name": "PostToolUse", "session_id": session, "tool_name": "SubagentHandback",
+          "transcript_path": stop["agent_transcript_path"], "agent_id": stop["agent_id"], "agent_type": "nq-check",
+          "tool_input": {"message": report}, "tool_response": {}}
+    stop.pop("agent_transcript_path")             # the real SubagentStop may not name it; the hook works it out
+    return hb, {**stop, "last_assistant_message": ""}
+
+hb, stop = handback_job("hb", "Build a one-screen index page for the made-up Demo Co tools.",
+                        "Checked index.html.\n" + TABLE.format(v="FAIL", e="one tab sits left"), "s-hb")
+run(hb)
+rows = [r for r in fails("") if r["session"] == "s-hb"]
+c = cards().get("s-hb", {})
+check("handback: the card is saved from the handback message", c.get("verdict") == "FAIL" and c.get("format") in ("page", "index"), c)
+check("handback: the FAIL row has the brief's job and the card's format",
+      rows and rows[0]["job"].startswith("Build a one-screen") and rows[0]["format"] == c.get("format"), rows)
+n = len(fails(""))
+run(stop)
+check("handback then SubagentStop with no final text: captured once", len(fails("")) == n
+      and len([x for x in cards().values() if x["session"] == "s-hb"]) == 1)
+hb2, stop2 = handback_job("hb2", "Build a one-screen index page for the made-up Demo Co docs.",
+                          "Checked.\n" + TABLE.format(v="FAIL", e="z"), "s-hb2")
+run(stop2)
+check("SubagentStop alone finds the handback report in the agent transcript", cards().get("s-hb2", {}).get("verdict") == "FAIL")
+check("settings: SubagentHandback goes to job_diff_hook.py", any("job_diff_hook.py" in c for c in post.get("SubagentHandback", [])), post)
+env = {k: v for k, v in os.environ.items() if k not in ("NQOS_WORK", "NQOS_LIVECARD")}
+out = subprocess.run([sys.executable, "-c", "import nqos_config; print(nqos_config.LIVECARD)"], capture_output=True,
+                     text=True, env=env, cwd=os.path.join(os.path.dirname(HERE), "brain")).stdout.strip()
+check("Working-now titles sit in one folder whichever copy runs (not under the copy's work/)", out == "/tmp/nqos-livecard", out)
+
 # cost: with nothing pending, the fast path never starts Python
 ev = json.dumps({"hook_event_name": "PostToolUse", "session_id": "s-bg", "tool_name": "Bash", "tool_input": {}})
 def ms(cmd):
