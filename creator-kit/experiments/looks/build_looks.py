@@ -84,19 +84,22 @@ def cmd_base(a):
     set_size(*resolve_size(a, spec))
     os.makedirs(a.work, exist_ok=True)
     lut = os.path.normpath(os.path.join(spec["_dir"], spec["lut"]))
-    parts, labels = [], []
+    # One seeked input per keep range: trimming a single [0:v] six ways buffers decoded frames
+    # for every branch, and at 2160x3840 that ran ffmpeg to 9.7 GB and an OOM kill (2026-10-27).
+    inputs, parts, labels = [], [], []
     for i, (s, e) in enumerate(spec["keep"]):
         d = e - s
-        parts.append(f"[0:v]trim=start={s}:end={e},setpts=PTS-STARTPTS,fps={FPS},"
+        inputs += ["-ss", f"{s}", "-t", f"{d:.3f}", "-i", a.src]
+        parts.append(f"[{i}:v]setpts=PTS-STARTPTS,fps={FPS},"
                      f"scale={W}:{H}:flags=lanczos:in_color_matrix=bt709:out_color_matrix=bt709,"
                      f"format=gbrp,lut3d='{lut}',format=yuv420p[v{i}]")
-        parts.append(f"[0:a]atrim=start={s}:end={e},asetpts=PTS-STARTPTS,aresample=48000,"
+        parts.append(f"[{i}:a]asetpts=PTS-STARTPTS,aresample=48000,"
                      f"afade=t=in:d=0.015,afade=t=out:st={d - 0.015:.3f}:d=0.015[a{i}]")
         labels.append(f"[v{i}][a{i}]")
     fc = ";".join(parts) + f";{''.join(labels)}concat=n={len(labels)}:v=1:a=1[v][a]"
     base = os.path.join(a.work, "base.mp4")
     raw = os.path.join(a.work, "base_raw.wav")
-    run(["ffmpeg", "-y", "-v", "error", "-i", a.src, "-filter_complex", fc,
+    run(["ffmpeg", "-y", "-v", "error", *inputs, "-filter_complex", fc,
          "-map", "[v]", "-c:v", "libx264", "-crf", "12", "-preset", "medium",
          "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709", base,
          "-map", "[a]", "-c:a", "pcm_s16le", raw])
