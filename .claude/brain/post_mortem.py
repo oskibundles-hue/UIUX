@@ -167,22 +167,27 @@ def check_key(check):
 
 
 def tags(text):
-    """(workstream, format) the report names, or "" when it names none or several."""
-    ws = [name for name, pat in WORKSTREAMS if re.search(pat, text or "", re.I)]
-    fm = [f for f in FORMATS if re.search(rf"(?<![a-z]){f}s?(?![a-z])", text or "", re.I)]   # part2_reel.mp4 counts
+    """(workstream, format) the report names, or "" when it names none or several. A "Workstream: X" or
+    "Format: X" line wins over the words around it (2026-10-27: a vlog brief that cited 09-campaign-ads/ was
+    filed as an ad, and a check that said "no FD overlay" lost its workstream)."""
+    ws = [name for name, pat in WORKSTREAMS if re.search(rf"\bworkstream:\s*(?:{pat})", text or "", re.I)]
+    ws = ws or [name for name, pat in WORKSTREAMS if re.search(pat, text or "", re.I)]
+    fm = [f for f in FORMATS if re.search(rf"\bformat:\s*\**{f}s?(?![a-z])", text or "", re.I)]
+    fm = fm or [f for f in FORMATS if re.search(rf"(?<![a-z]){f}s?(?![a-z])", text or "", re.I)]   # part2_reel.mp4 counts
     fm = fm or [f for f, pat in FORMAT_ALIASES if re.search(rf"(?<![a-z])(?:{pat})s?(?![a-z])", text or "", re.I)]
     return (ws[0] if len(ws) == 1 else ""), (fm[0] if fm else "")
 
 
-def log_fails(text, session, job="", agent="", source="hook", fmt=""):
+def log_fails(text, session, job="", agent="", source="hook", fmt="", ws=""):
     """Append one row per FAIL in an nq-check report to FAILS. Returns the rows written. A report seen twice
     (SubagentStop and a handback both firing) writes nothing the second time. fmt is the format the job card
-    found in the briefs; else the report's own words decide. Where nothing names them, the job is the session's
+    found in the briefs (ws its workstream); else the report's own words decide. Where nothing names them, the job is the session's
     Working-now title and the format is UNKNOWN, never an empty string."""
     found = parse_fails(text)
     if not found:
         return []
-    ws, fm = tags(text)
+    found_ws, fm = tags(text)
+    ws = (known(ws) or found_ws).lower()
     fm = known(fmt) or fm or UNKNOWN
     job = known(job) or live_job(session) or UNKNOWN
     seen = {(r.get("session"), r.get("agent"), r.get("key"), r.get("why")) for r in _read(FAILS, None)}

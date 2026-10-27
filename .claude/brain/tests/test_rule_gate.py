@@ -65,6 +65,8 @@ assert P("captions under 32 characters")["field"] == "caption_len" and P("captio
 assert P("Caption lines at most 2 lines")["field"] == "caption_lines"
 assert P("Reels at -14 LUFS")["value"] == -14 and P("Reels at -14 LUFS")["tol"] == 1.0
 assert P("loudness at least -16 LUFS")["op"] == ">="
+b = P("vlog loudness between -15 and -13 LUFS")
+assert (b["op"], b["value"], b["tol"]) == ("==", -14, 1), b
 assert P("reels under 30 seconds")["field"] == "duration" and P("reels under 1 min")["value"] == 60
 assert P("deliver 1080x1920")["value"] == "1080x1920"
 assert P('never say "unleash" or "elevate" in copy')["value"] == ["unleash", "elevate"]

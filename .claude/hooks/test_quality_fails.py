@@ -58,6 +58,9 @@ check("all PASS: nothing", pm.parse_fails("| a | PASS | x |\n| b | N/A | y |") =
 check("header and separator rows ignored", pm.parse_fails("| check | verdict | evidence |\n|---|---|---|") == [])
 check("caption rule and Caption rules group together", pm.check_key("Caption rules") == pm.check_key("caption rule"))
 check("workstream and format from the report", pm.tags(REPORT) == ("supercar experience", "reel"))
+# a "Format:" / "Workstream:" line wins over a path or a brand named in passing (made-up brief)
+LABELLED = "Workstream: Supercar Experience. Format: vlog.\nRead 09-campaign-ads/HOUSE-STYLE.md. No FD overlay."
+check("labelled format and workstream win", pm.tags(LABELLED) == ("supercar experience", "vlog"))
 
 # hook: nq-check SubagentStop logs, anything else is ignored, bad input never fails
 stop = {"hook_event_name": "SubagentStop", "session_id": "sessA", "agent_id": "ag1", "agent_type": "nq-check",
@@ -98,6 +101,12 @@ check("review: a 14-day window says so", "in the last 14 days" in pm.review(14))
 pm.log_fails(BULLETS, "sessB", agent="ag4")
 check("grouping: two fails in one job still count once",
       [n for _, n, *_ in pm.repeated_fails(pm._read(FAILLOG, 7), pm.read_log(7))] == [2])
+
+# the card's workstream fills the row when the report names two
+row = pm.log_fails("| Framing | FAIL | upside down |\nNo FD overlay; SE strip.", "sessW", agent="agW",
+                   fmt="vlog", ws="Supercar Experience")
+check("row takes the card's workstream and format", row and row[0]["workstream"] == "supercar experience"
+      and row[0]["format"] == "vlog")
 
 # manual fallback
 p = subprocess.run([sys.executable, os.path.join(BRAIN, "post_mortem.py"), "fail", "--job", "FD carousel",

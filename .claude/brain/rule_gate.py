@@ -189,6 +189,12 @@ def parse(rule):
     if m:
         return {"kind": "mechanical", "field": "caption_lines", "op": _op(m[1]), "value": int(m[2]), "tol": 0,
                 "text": f"every caption {_op(m[1])} {m[2]} lines"}
+    m = re.search(r"between\s*(-?\d+(?:\.\d+)?)\s*(?:lufs)?\s*and\s*(-?\d+(?:\.\d+)?)\s*lufs", r)
+    if m:                                                       # "between -15 and -13 LUFS": the middle, ± half
+        a, b = sorted(-abs(float(x)) for x in m.groups())
+        mid, t = (a + b) / 2, (b - a) / 2
+        return {"kind": "mechanical", "field": "lufs", "op": "==", "value": mid, "tol": t,
+                "text": f"integrated loudness == {mid:g} LUFS (±{t:g})"}
     m = re.search(r"(-?\d+(?:\.\d+)?)\s*lufs", r)
     if m:
         target = float(m[1])

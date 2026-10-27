@@ -41,7 +41,7 @@ LOOK_GIT = {"status", "log", "diff", "show", "fetch", "branch", "rev-parse", "ls
 WORK_TOOLS = {"Bash", "Write", "Edit", "NotebookEdit", "Skill", "Agent", "Task"}
 MEDIA = r"[\w./~+-]+\.(?:mp4|mov|m4v|webm|mkv|mp3|wav|m4a|png|jpe?g|webp|gif)"
 LUFS_RE = re.compile(r"(-\d+(?:\.\d+)?)\s*LUFS", re.I)
-VERDICT_RE = re.compile(r"^[^\w]*\**\s*(PASS|FAIL|N/?A)\b", re.I)
+VERDICT_RE = re.compile(r"^[^\w]*\**\s*(PASS|FAIL|N/?A)\b(?!\s*/)", re.I)   # a "PASS/FAIL" header cell isn't one
 # Noise that always differs between two runs: replaced before anything is compared.
 NOISE = ((re.compile(r"\b[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}\b"), "<id>"),
          (re.compile(r"\bsession_[A-Za-z0-9]+|\bcse_[A-Za-z0-9]+|\btoolu_[A-Za-z0-9]+"), "<id>"),

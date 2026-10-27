@@ -105,7 +105,7 @@ def main(pending_only=False):
             if text:
                 from post_mortem import log_fails
                 log_fails(text, session, job=(card or {}).get("job", ""), agent=ev.get("agent_id", ""),
-                          fmt=(card or {}).get("format", ""))
+                          fmt=(card or {}).get("format", ""), ws=(card or {}).get("workstream", ""))
         except Exception:                              # the FAIL log must never stop the job card
             pass
         if not card:
