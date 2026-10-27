@@ -16,7 +16,8 @@ cloud sessions before the container ends; --no-sync skips that, and so does NQOS
 too"), and the team map on the control room's Agents page shows that role as working while the card is.
 Give it on start, or on a later step. The ids are in ROLES below; `roles` prints them.
 Prints one JSON object: url, collection, doc_id, action and data. Pass those to the ArtifactData tool.
-`start` is a `set` (no if_version on a new card). Every later call is an `update`: add
+`start` also keeps the title in work/livecard/<session>.json, the job name for nq-check's FAIL rows and job
+cards when the briefs give none (2026-10-27). `start` is a `set` (no if_version on a new card). Every later call is an `update`: add
 if_version = the version the last write returned. No model call; about 0.05 s.
 """
 import datetime, json, os, socket, sys
@@ -49,6 +50,19 @@ def session():
     return "s_" + (local[:8] or "local"), "", "mac", "Mac session on " + socket.gethostname().split(".")[0]
 
 
+def save_title(title, now):
+    """Keep the job title where the nq-check hooks find it (post_mortem.live_job), so a FAIL row or job card whose
+    briefs name no job still carries one. Keyed by the hook's session id. Never raises."""
+    try:
+        from nqos_config import LIVECARD as d
+        os.makedirs(d, exist_ok=True)
+        sid = os.environ.get("CLAUDE_CODE_SESSION_ID", "") or "local"
+        with open(os.path.join(d, sid.replace("/", "_") + ".json"), "w") as fh:
+            json.dump({"title": title, "at": now}, fh)
+    except Exception:
+        pass
+
+
 def push_log():
     """Run costlog_push.py now, while the container is still up. Never raises: the card goes out either way."""
     import subprocess
@@ -76,6 +90,7 @@ def main(argv):
     if verb == "start":
         data.update(title=text[0], detail=text[1] if len(text) > 1 else "", where=where,
                     session=opts.get("session", name), link=link, started=now)
+        save_title(text[0], now)
     else:
         data["detail"] = text[0]
     if "pct" in opts:

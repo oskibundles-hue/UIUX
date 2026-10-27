@@ -23,7 +23,7 @@ import datetime, glob, json, os, re, shlex, shutil, subprocess, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from nqos_config import HAVE_NOTES, HOME, WORK
-from post_mortem import parse_fails, tags   # gap 1's FAIL-bullet reader and format/workstream tags, shared
+from post_mortem import UNKNOWN, known, live_job, parse_fails, tags   # gap 1's FAIL reader and tags, shared
 
 CARDS = os.environ.get("NQOS_JOBCARDS") or (os.path.join(HOME, "jobcards") if HAVE_NOTES
                                             else os.path.join(WORK, "jobcards"))
@@ -309,12 +309,16 @@ def build_card(lead_path, report, check_tool_id=None, session="", agent_id="", c
     brief_text = "\n".join(b["text"] for b in briefs) or check_brief
     verdict, checks = parse_report(report)
     at = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    first = re.sub(r"\s+", " ", (briefs[0]["text"] if briefs else check_brief))[:80]
+    # A build brief names the job; with none in scope (a re-check after a hand fix) the Working-now title does
+    # better than nq-check's own instructions, which read as a job title nobody gave (2026-10-27); then "unknown".
+    first = re.sub(r"\s+", " ", next((b["text"] for b in briefs if b["text"].strip()), "")
+                   or live_job(session))[:80]
     return {
         "id": f"{at[:10].replace('-', '')}-{(session or 'nosession')[:8]}-{(agent_id or check_tool_id or 'x')[-6:]}",
-        "at": at, "session": session, "job": first,
+        "at": at, "session": session, "job": first or UNKNOWN,
         "workstream": detect(brief_text, "workstream") or detect(all_text, "workstream"),
-        "format": detect(brief_text, "format") or detect(report, "format"),
+        "format": (detect(brief_text, "format") or detect(check_brief, "format") or detect(report, "format")
+                   or UNKNOWN),
         "style": detect(brief_text, "style") or detect(check_brief, "style"),
         "playbook": detect(brief_text, "playbook"),
         "brief": briefs or [brief_fields(CHECK_AGENT, check_brief)],
@@ -357,8 +361,39 @@ def load(ref):
     return None
 
 
+def agent_report(path):
+    """The last report in a subagent transcript: its final text, or the message of a SubagentHandback call, which
+    is how most agents report (their last text is then empty: the real run of 2026-10-27 left no card)."""
+    out = ""
+    for r in records(path):
+        if r.get("type") != "assistant":
+            continue
+        for b in (r.get("message") or {}).get("content") or []:
+            if not isinstance(b, dict):
+                continue
+            if b.get("type") == "text" and b.get("text", "").strip():
+                out = b["text"]
+            elif b.get("type") == "tool_use" and b.get("name") == "SubagentHandback":
+                out = (b.get("input") or {}).get("message", "") or out
+    return out
+
+
+def with_paths(ev):
+    """The event with the lead transcript and the agent transcript filled in. A hook fired inside a subagent may
+    name the agent's own transcript, which sits at <lead without .jsonl>/subagents/agent-<id>.jsonl."""
+    ev = dict(ev)
+    tp = ev.get("transcript_path") or ""
+    if "/subagents/" in tp:
+        ev["transcript_path"] = tp.split("/subagents/")[0] + ".jsonl"
+    if not ev.get("agent_transcript_path") and ev.get("agent_id") and ev.get("transcript_path"):
+        ev["agent_transcript_path"] = os.path.join(ev["transcript_path"][:-len(".jsonl")], "subagents",
+                                                   f"agent-{ev['agent_id']}.jsonl")
+    return ev
+
+
 def from_event(ev):
     """A SubagentStop or PostToolUse hook event for an nq-check run into a card (None for anything else)."""
+    ev = with_paths(ev)
     kind = ev.get("agent_type") or (ev.get("tool_input") or {}).get("subagent_type")
     if kind != CHECK_AGENT:
         return None
@@ -373,9 +408,7 @@ def from_event(ev):
             resp = "\n".join(b.get("text", "") for b in resp if isinstance(b, dict))
         report = resp if isinstance(resp, str) else ""
     if not report and ev.get("agent_transcript_path"):
-        msgs = [b.get("text", "") for r in records(ev["agent_transcript_path"]) if r.get("type") == "assistant"
-                for b in (r.get("message") or {}).get("content") or [] if isinstance(b, dict) and b.get("type") == "text"]
-        report = msgs[-1] if msgs else ""
+        report = agent_report(ev["agent_transcript_path"])
     if not report or "launched successfully" in report[:200]:
         return None                                    # a background launch, not the finished check
     check_tool_id = ev.get("tool_use_id")

@@ -61,6 +61,11 @@ with tempfile.TemporaryDirectory() as tmp:
     r = subprocess.run([sys.executable, runner, ".claude/hooks/probe_hook.py"], input="x", capture_output=True,
                        text=True, env={**os.environ, "CLAUDE_PROJECT_DIR": proj})
     check("runner skips when the project runs the same hook", r.returncode == 0 and r.stdout == "")
+    shprobe = os.path.join(sysdir, ".claude", "hooks", "probe_hook.sh")
+    open(shprobe, "w").write('read d; echo "sh ran:$d"\n')
+    out = subprocess.run([sys.executable, runner, ".claude/hooks/probe_hook.sh"], input="x\n", capture_output=True,
+                         text=True, env={**os.environ, "CLAUDE_PROJECT_DIR": tmp}).stdout
+    check("runner runs a .sh hook (jobdiff_pending.sh) with sh, stdin passed", out.strip() == "sh ran:x")
 
 print(f"{'FAILED' if fails else 'passed'}: {len(fails)} failing")
 sys.exit(1 if fails else 0)

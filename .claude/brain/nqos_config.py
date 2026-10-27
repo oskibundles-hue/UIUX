@@ -34,6 +34,10 @@ HOME = _find_home()
 OS_DIR = HERE
 MEM = os.path.join(HOME, "memory")          # memory notes + MEMORY.md + handoff.md
 WORK = os.environ.get("NQOS_WORK") or os.path.join(HERE, "work")   # hook log
+# Working-now titles, read by the nq-check hooks. Not under WORK: live_card.py runs from the repo and the hooks from
+# the installed copy, so a per-copy folder split them and the job came out "unknown" (2026-10-27).
+LIVECARD = os.environ.get("NQOS_LIVECARD") or (os.path.join(os.environ["NQOS_WORK"], "livecard")
+                                              if os.environ.get("NQOS_WORK") else "/tmp/nqos-livecard")
 HAVE_NOTES = os.path.isfile(os.path.join(MEM, "MEMORY.md"))
 NO_NOTES = ("No second-brain notes found. They live in the private repo oskibundles-hue/nq-agent-channel "
             "(folder brain/): attach that repo to this session, or set NQOS_HOME to a brain folder.")

@@ -12,7 +12,7 @@ CLONE = os.path.join(TMP, "clone", "nq-agent-channel")
 LOG = os.path.join(CLONE, "brain", "costlog", "costlog.jsonl")
 HOME = os.path.join(TMP, "home")
 ENV = {k: v for k, v in os.environ.items() if k != "NQOS_COSTLOG"}
-ENV.update(NQOS_HOME=os.path.join(CLONE, "brain"), HOME=HOME, CLAUDE_CODE_REMOTE_SESSION_ID="cse_test",
+ENV.update(NQOS_HOME=os.path.join(CLONE, "brain"), NQOS_WORK=os.path.join(TMP, "work"), HOME=HOME, CLAUDE_CODE_REMOTE_SESSION_ID="cse_test",
            GIT_AUTHOR_NAME="costlog test", GIT_AUTHOR_EMAIL="test@example.invalid",
            GIT_COMMITTER_NAME="costlog test", GIT_COMMITTER_EMAIL="test@example.invalid",
            GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_NOSYSTEM="1")
@@ -120,6 +120,44 @@ CHECKS.append(("FAIL rows reach main, both rows of one report", code == 0 and "q
                and [json.loads(x)["check"] for x in p.stdout.splitlines()] == ["Caption rules", "Hands"]))
 code, out = push()
 CHECKS.append(("FAIL rows twice changes nothing", code == 0 and "quality fails: up to date" in out))
+
+# job cards (brain/jobcards/*.json, job_card.py) go to main too, so they outlive the container (2026-10-27)
+CARDDIR = os.path.join(CLONE, "brain", "jobcards")
+WORKDIR = os.path.join(TMP, "work")
+os.makedirs(CARDDIR)
+os.makedirs(os.path.join(WORKDIR, "jobcards"))
+card = lambda cid, **kw: json.dumps(dict(id=cid, at="2026-10-06T09:00:00Z", session="cloud7", job="made-up page",
+                                         format="page", verdict="PASS", **kw))
+open(os.path.join(CARDDIR, "20261006-cloud7-aaaaaa.json"), "w").write(card("20261006-cloud7-aaaaaa"))
+open(os.path.join(WORKDIR, "jobcards", "20261006-cloud7-bbbbbb.json"), "w").write(card("20261006-cloud7-bbbbbb"))
+open(os.path.join(CARDDIR, "20261006-cloud7-broken.json"), "w").write('{"id": "half')
+cenv = dict(ENV, NQOS_WORK=WORKDIR)
+listing = lambda: sh("git", "-C", ORIGIN, "ls-tree", "--name-only", "main:brain/jobcards").stdout.split()
+code, out = push("--dry-run", env=cenv)
+CHECKS.append(("cards: dry run says what it would push", code == 0 and "would push 2 card file(s)" in out and not listing()))
+code, out = push(env=cenv)
+CHECKS.append(("cards reach main, the work/ fallback's card too, a half-written card stays home",
+               code == 0 and "job cards: pushed 2 card file(s)" in out
+               and listing() == ["20261006-cloud7-aaaaaa.json", "20261006-cloud7-bbbbbb.json"]))
+CHECKS.append(("a pushed card is the card", json.loads(sh("git", "-C", ORIGIN, "show",
+               "main:brain/jobcards/20261006-cloud7-aaaaaa.json").stdout)["format"] == "page"))
+code, out = push(env=cenv)
+CHECKS.append(("cards twice changes nothing", code == 0 and "job cards: up to date" in out))
+# a pin made in this session goes up once; once pushed, it never overwrites a newer pin from another session
+open(os.path.join(CARDDIR, "refs.json"), "w").write(json.dumps({"page": "20261006-cloud7-aaaaaa"}))
+code, out = push(env=cenv)
+pinned = sh("git", "-C", ORIGIN, "show", "main:brain/jobcards/refs.json").stdout
+CHECKS.append(("a pin this session made reaches main", code == 0 and json.loads(pinned or "{}").get("page") == "20261006-cloud7-aaaaaa"))
+os.remove(os.path.join(CARDDIR, "20261006-cloud7-broken.json"))
+other2 = os.path.join(TMP, "other2")
+sh("git", "clone", "-q", ORIGIN, other2)
+open(os.path.join(other2, "brain", "jobcards", "refs.json"), "w").write(json.dumps({"page": "newer-pin"}))
+sh("git", "-C", other2, "commit", "-qam", "another session pins", env=ENV)
+sh("git", "-C", other2, "push", "-q", "origin", "main")
+code, out = push(env=cenv)
+pinned = json.loads(sh("git", "-C", ORIGIN, "show", "main:brain/jobcards/refs.json").stdout or "{}")
+CHECKS.append(("an unchanged local pin never overwrites another session's newer one",
+               code == 0 and pinned.get("page") == "newer-pin"))
 
 # skips: tests' NQOS_COSTLOG, and a brain that isn't an nq-agent-channel clone
 code, out = push(env=dict(ENV, NQOS_COSTLOG=os.path.join(TMP, "x.jsonl")))

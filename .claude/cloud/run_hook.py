@@ -17,4 +17,6 @@ if project and os.path.isfile(os.path.join(project, rel)) \
         and os.path.isfile(os.path.join(project, ".claude", "settings.json")):
     sys.exit(0)
 root = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+if rel.endswith(".sh"):                                  # a shell fast path (jobdiff_pending.sh)
+    os.execv("/bin/sh", ["/bin/sh", os.path.join(root, rel)] + sys.argv[2:])
 os.execv(sys.executable, [sys.executable, os.path.join(root, rel)] + sys.argv[2:])

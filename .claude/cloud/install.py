@@ -45,16 +45,16 @@ def fetch_tree():
                        check=True, timeout=120, capture_output=True)
         out = subprocess.run(["git", "-C", SRC, "archive", "FETCH_HEAD", ".claude", "CLAUDE.md"],
                              check=True, timeout=60, capture_output=True).stdout
-        sha = subprocess.run(["git", "-C", SRC, "rev-parse", "--short", "FETCH_HEAD"],
+        sha = subprocess.run(["git", "-C", SRC, "rev-parse", "FETCH_HEAD"],
                              capture_output=True, text=True).stdout.strip()
-        return out, f"{BRANCH} @ {sha}"
+        return out, sha
     except Exception as e:  # offline, no origin, not a git checkout
         log(f"fetch of {BRANCH} failed ({type(e).__name__}); installing from {SRC}")
-        return None, SRC
+        return None, ""
 
 
 def install_tree():
-    data, where = fetch_tree()
+    data, sha = fetch_tree()
     os.makedirs(os.path.dirname(DEST), exist_ok=True)
     tmp = tempfile.mkdtemp(prefix=".nqos-new-", dir=os.path.dirname(DEST))
     if data:
@@ -72,8 +72,11 @@ def install_tree():
         shutil.copytree(keep, os.path.join(tmp, ".claude", "brain", "work"), dirs_exist_ok=True)
     if os.path.isdir(DEST):
         shutil.rmtree(DEST)
+    # The stamp session_refresh.py reads to tell a stale install (2026-10-27: one copy predated the loop's hooks).
+    with open(os.path.join(tmp, ".claude", "cloud", "installed.json"), "w") as f:
+        json.dump({"branch": BRANCH, "sha": sha, "src": SRC}, f)
     os.rename(tmp, DEST)
-    log(f"system copied from {where} to {DEST}")
+    log(f"system copied from {f'{BRANCH} @ {sha[:7]}' if sha else SRC} to {DEST}")
 
 
 def strip_ours(hooks):

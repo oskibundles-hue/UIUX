@@ -9,7 +9,7 @@ HOOK = os.path.join(os.path.dirname(os.path.abspath(__file__)), "session_refresh
 BRANCH = "claude/new-session-mucc2q"
 ENV = {**os.environ, "GIT_AUTHOR_NAME": "t", "GIT_AUTHOR_EMAIL": "t@t", "GIT_COMMITTER_NAME": "t",
        "GIT_COMMITTER_EMAIL": "t@t", "NQ_DEFAULT_BRANCH": BRANCH,
-       "NQ_REFRESH_REMOTE_MATCH": "origin.git"}
+       "NQ_REFRESH_REMOTE_MATCH": "origin.git", "NQOS_SYSTEM_DIR": "/nonexistent/nqos-system"}
 ENV.pop("NQ_SKIP_REFRESH", None)
 
 
@@ -103,6 +103,46 @@ def case_other_repo(clone):
     assert rc == 0 and note == "" and sh(clone, "rev-parse", "HEAD") == head, note
 
 
+def case_stale_system(clone):
+    """The user-level copy is stamped with an old commit: reinstalled from the default branch, then silent."""
+    import shutil
+    tmp = os.path.dirname(clone)
+    cloud = os.path.join(clone, ".claude", "cloud")
+    os.makedirs(os.path.join(clone, ".claude", "agents"))
+    os.makedirs(cloud)
+    with open(os.path.join(clone, ".claude", "agents", "made-up.md"), "w") as f:
+        f.write("a made-up agent")
+    real = os.path.join(os.path.dirname(os.path.dirname(HOOK)), "cloud")
+    for f in ("install.py", "run_hook.py"):
+        shutil.copy2(os.path.join(real, f), cloud)
+    with open(os.path.join(clone, ".claude", "settings.json"), "w") as f:
+        json.dump({"hooks": {"SubagentStop": [{"matcher": "nq-check", "hooks": [{"type": "command",
+                  "command": 'python3 "$CLAUDE_PROJECT_DIR/.claude/hooks/made_up_hook.py"'}]}]}}, f)
+    sh(clone, "fetch", "-q", "origin", f"+refs/heads/{BRANCH}:refs/remotes/origin/{BRANCH}")
+    sh(clone, "merge", "--ff-only", "-q", f"origin/{BRANCH}")   # brings CLAUDE.md
+    sh(clone, "add", ".claude")
+    sh(clone, "commit", "-q", "-m", "system")
+    sh(clone, "push", "-q", "origin", f"HEAD:{BRANCH}")
+    system, home = os.path.join(tmp, "sys"), os.path.join(tmp, "home")
+    os.makedirs(os.path.join(system, ".claude", "cloud"))
+    with open(os.path.join(system, ".claude", "cloud", "installed.json"), "w") as f:
+        json.dump({"branch": BRANCH, "sha": "0" * 40, "src": clone}, f)
+    saved = dict(ENV)
+    ENV.update(NQOS_SYSTEM_DIR=system, HOME=home, NQ_SKIP_REFRESH="")
+    try:
+        rc, note = run(tmp)   # a session opened outside the repo still gets the reinstall
+        assert rc == 0 and "reinstalled" in note and "restart" in note, note
+        stamp = json.load(open(os.path.join(system, ".claude", "cloud", "installed.json")))
+        assert stamp["sha"] == sh(clone, "rev-parse", f"origin/{BRANCH}"), stamp
+        hooks = json.load(open(os.path.join(home, ".claude", "settings.json")))["hooks"]
+        assert "SubagentStop" in hooks, hooks
+        rc, note = run(tmp)   # current now: silent, nothing re-run
+        assert rc == 0 and note == "", note
+    finally:
+        ENV.clear()
+        ENV.update(saved)
+
+
 def case_not_a_repo(tmp):
     rc, note = run(tmp)
     assert rc == 0 and note == "", note
@@ -113,7 +153,8 @@ CASES = [("clean, 2 behind -> fast-forward, then silent", case_clean),
          ("untracked file only -> fast-forward", case_untracked_only),
          ("own commits -> left alone, told why", case_diverged),
          ("remote unreachable -> silent, unchanged", case_offline),
-         ("origin is another repo -> silent, unchanged", case_other_repo)]
+         ("origin is another repo -> silent, unchanged", case_other_repo),
+         ("user-level system copy behind -> reinstalled, then silent", case_stale_system)]
 
 if __name__ == "__main__":
     failed = 0

@@ -41,7 +41,7 @@ CARDS = os.environ.get("NQOS_JOBCARDS") or (os.path.join(HOME, "jobcards") if HA
 GATE = os.environ.get("NQOS_GATE") or (os.path.join(HOME, "gate") if HAVE_NOTES else os.path.join(WORK, "gate"))
 REPLAY = os.path.join(CARDS, "replayset.json")
 PER_FORMAT = 5
-FORMATS = ("carousel", "reel", "poster", "thumbnail", "ad", "promo", "story", "page", "vlog")
+from post_mortem import FORMATS   # one list, so a format the cards can carry is one a rule can name
 IMAGE = (".png", ".jpg", ".jpeg", ".webp")
 
 
@@ -103,7 +103,7 @@ def set_add(ref, fmt=None, captions=None, copy=None, sheet=None):
         return f"no job card {ref} in {CARDS}"
     if c.get("verdict") != "PASS":
         return f"{c['id']} did not pass nq-check ({c.get('verdict') or 'no verdict'}); only passed jobs go in the set"
-    fmt = fmt or c.get("format")
+    fmt = fmt or ("" if c.get("format") == "unknown" else c.get("format"))
     if not fmt:
         return "the card has no format; give --format"
     s = replay_set()

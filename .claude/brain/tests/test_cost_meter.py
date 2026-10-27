@@ -87,7 +87,7 @@ home = os.path.join(TMP, "home")                    # live_card finds the newest
 os.makedirs(os.path.join(home, ".claude", "projects", "x"))
 with open(path) as src, open(os.path.join(home, ".claude", "projects", "x", "cardtest.jsonl"), "w") as dst:
     dst.write(src.read())
-env = dict(os.environ, HOME=home)
+env = dict(os.environ, HOME=home, NQOS_LIVECARD=os.path.join(TMP, "livecard"))   # never the real Working-now titles
 lc = [sys.executable, os.path.join(HERE, "live_card.py")]
 subprocess.run(lc + ["step", "midway"], capture_output=True, text=True, env=env, cwd=TMP)
 done = subprocess.run(lc + ["done", "card test shipped"], capture_output=True, text=True, env=env, cwd=TMP)
