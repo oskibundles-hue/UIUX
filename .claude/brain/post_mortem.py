@@ -15,7 +15,9 @@ nq-check's FAIL rows go to costlog/qualityfails.jsonl next to it (gap 1 of the r
 2026-10-26): the SubagentStop hook .claude/hooks/quality_fails.py records each one as it happens, and
     python3 .claude/brain/post_mortem.py fail [--job "..."] [--file report.md]    (or the report on stdin)
 does the same by hand. review groups the checks that failed in two or more jobs and turns them into
-proposals; one-offs are left out. FAIL evidence can quote client copy, so it only ever goes to that
+proposals; one-offs are left out. Before a proposal reaches Omarie it is re-checked against a few past
+PASSED jobs (regression.py, gap 3), and the proposal says whether they all still pass or names the ones
+that would now fail. FAIL evidence can quote client copy, so it only ever goes to that
 private file (or the git-ignored work/ fallback), never into this repo.
 No model call, stdlib only.
 """
@@ -184,15 +186,32 @@ FIX_FOR = (("caption", "add the caption rules to nq-build's brief for {where} an
            (("frame", "fill", "bar", "framing"), "add a framing contact sheet to nq-build's hand-over for {where}"))
 
 
-def quality_proposals(groups, days=7):
+def fix_for(key):
+    """(rule id, rule template) for a check key: the rule id is the first keyword of the FIX_FOR entry that
+    matched (regression.py tests a past job against that id), or "" for the pre-flight default."""
+    for k, f in FIX_FOR:
+        words = (k,) if isinstance(k, str) else k
+        if any(w in key.split() or key.startswith(w) for w in words):
+            return words[0], f
+    return "", "add \"{check}\" to nq-build's pre-flight for {where}, so the builder checks it before it hands over"
+
+
+def rule_text(key, check, ws=(), fm=()):
+    where = " ".join(filter(None, [" / ".join(ws), " / ".join(fm)])) or "every"
+    return fix_for(key)[1].format(where=where, check=check)
+
+
+def quality_proposals(groups, days=7, recheck=True):
+    """One proposal per repeated fail. Each ends with gap 3's line: the rule re-checked against a few past
+    PASSED jobs (regression.py), so Omarie sees before he clicks whether it would have failed good work."""
     when = "this week" if days == 7 else f"in the last {days} days"
     out = []
     for key, n, ex, ws, fm in groups:
-        where = " ".join(filter(None, [" / ".join(ws), " / ".join(fm)])) or "every"
-        fix = next((f for k, f in FIX_FOR if any(w in key.split() or key.startswith(w)
-                                                 for w in ((k,) if isinstance(k, str) else k))),
-                   "add \"{check}\" to nq-build's pre-flight for {where}, so the builder checks it before it hands over")
-        out.append(f"{n} jobs failed {ex['check']} {when}. Proposed rule: " + fix.format(where=where, check=ex["check"]) + ".")
+        line = f"{n} jobs failed {ex['check']} {when}. Proposed rule: " + rule_text(key, ex["check"], ws, fm) + "."
+        if recheck:
+            import regression                       # late: regression -> job_card -> post_mortem
+            line += " " + regression.summary(regression.recheck(key, ex["check"], ws, fm))
+        out.append(line)
     return out
 
 

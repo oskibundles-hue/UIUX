@@ -150,6 +150,14 @@ or the one pinned with `job_diff.py pin <card>`, and puts the first place they s
 a brief with no style, a different ffmpeg flag, an output at the wrong loudness. Fix that step first.
 By hand: `python3 .claude/brain/job_diff.py latest`, or `job_diff.py <card> --ref <card | format>`.
 
+**Before a proposed rule reaches Omarie, re-check it against past passed jobs** (gap 3, 2026-10-27).
+`post_mortem.py review` tries each quality proposal on a few past PASS job cards (the pinned refs, plus
+the latest PASS per format in the rule's scope; `.claude/brain/regression.py`) and ends the proposal with
+"re-checked against N past jobs: all still pass" or the jobs that would now fail and why. Put that line in
+the click. A rule that breaks a past good job gets narrowed before it goes to him. The default test reads
+the cards and costs nothing; `regression.py rebuild "<check>"` prints the full re-build test (about 110k
+tokens a job), for a rule that changes how every job is built.
+
 **Claude Code enforces the chain** (Omarie, 2026-09-28). `.claude/settings.json` sets
 `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` and `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` to 1: one subagent runs at a time,
 and subagents can't start their own. Claude 5 models delegate more readily, and every agent costs a full conversation's
