@@ -1,0 +1,79 @@
+{
+ "sample_rate": 48000,
+ "bits": 24,
+ "channels": 2,
+ "peak_dbfs": -1.0,
+ "generator": "creator-kit/experiments/edit-refs/gen_sfx_kit.py",
+ "sounds": {
+  "rapid_click_3f": {
+   "seconds": 1.02,
+   "hit": 0.0,
+   "what": "click train, one every 3 frames (9.99/s) at 29.97 fps; 1 s"
+  },
+  "rapid_click_2f": {
+   "seconds": 1.02,
+   "hit": 0.0,
+   "what": "click train, one every 2 frames (15/s); 1 s"
+  },
+  "rapid_click_1f": {
+   "seconds": 1.02,
+   "hit": 0.0,
+   "what": "click train, one per frame (30/s); 1 s"
+  },
+  "rapid_click_ramp": {
+   "seconds": 1.02,
+   "hit": 0.0,
+   "what": "click train accelerating from 6/s to 30/s; 1 s"
+  },
+  "mech_click_a": {
+   "seconds": 0.16,
+   "hit": 0.0,
+   "what": "mechanical key, linear thock: down and up stroke"
+  },
+  "mech_click_b": {
+   "seconds": 0.16,
+   "hit": 0.0,
+   "what": "mechanical key, clicky switch: double click down, up stroke"
+  },
+  "button": {
+   "seconds": 0.14,
+   "hit": 0.0,
+   "what": "UI press: click plus a short blip, then release"
+  },
+  "whoosh": {
+   "seconds": 0.75,
+   "hit": 0.62,
+   "what": "band-passed noise sweep, L to R; peak at 0.62 s"
+  },
+  "big_flash": {
+   "seconds": 0.9,
+   "hit": 0.0,
+   "what": "bright transient: crack, burst, falling zap, sub, airy tail; hit at 0"
+  },
+  "whoosh_flash": {
+   "seconds": 1.52,
+   "hit": 0.62,
+   "what": "whoosh into big_flash; flash hit at 0.62 s"
+  },
+  "glitch_1": {
+   "seconds": 0.55,
+   "hit": 0.0,
+   "what": "bit-crush and sample-rate reduction, stepped"
+  },
+  "glitch_2": {
+   "seconds": 0.55,
+   "hit": 0.0,
+   "what": "stutter: one slice gated, speeding up"
+  },
+  "glitch_3": {
+   "seconds": 0.55,
+   "hit": 0.0,
+   "what": "buffer repeat: a grain repeated, halving each time"
+  },
+  "zoom_riser": {
+   "seconds": 1.0,
+   "hit": 1.0,
+   "what": "riser for the rapid zoom; peak at the end (1.0 s), place its end on the land"
+  }
+ }
+}
