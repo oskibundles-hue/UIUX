@@ -6,8 +6,12 @@ Warns (to Omarie as a system message, and to Claude as added context) when:
   - a compaction has happened (a compacted session keeps re-reading a big summary: hand off);
   - a Bash call is a wait/poll loop (not a timed wait on a PID or marker file), and harder when it is `pgrep -f` in a loop, which matches its
     own command line and never ends (the Oct 5 vlog.py loop ran 28 min after the job finished);
-  - a fourth agent is about to start in one session, or any Workflow (ultracode) call.
-Context and compaction warnings fire once per session and level; loop and agent warnings every time.
+  - a fourth agent is about to start in one session, or any Workflow (ultracode) call;
+  - a reminder or check-in that wakes this session (send_later, ScheduleWakeup, or create_trigger without a fresh
+    session or another session to fire into) is set past 150k of context: each wake re-writes the whole context
+    to the cache (asked for by Omarie on 2026-10-27, after the weekly review found 141 of 143 sessions spending
+    35%+ on cache writes although the rule was already written).
+Context and compaction warnings fire once per session and level; loop, agent and check-in warnings every time.
 Three blocks:
   - approved by Omarie on 2026-10-06: in the lead, a second Read of the same image file is denied
     (frames go to nq-check / nq-label as one contact sheet; re-reading them re-writes the cache);
@@ -21,7 +25,7 @@ Three blocks:
     (the harness times it out and re-invokes Claude when it ends), `watch` and a single long sleep still only warn.
 Apart from those it never prints a permission decision, so the regret gate's ask/deny stays in charge.
 Reads the tail of the transcript only; about 20 ms. Fails open: any error means no warning.
-Thresholds: NQOS_GUARD_CTX (300000), NQOS_GUARD_HANDOFF (500000), NQOS_GUARD_AGENTS (3).
+Thresholds: NQOS_GUARD_CTX (300000), NQOS_GUARD_HANDOFF (500000), NQOS_GUARD_AGENTS (3), NQOS_GUARD_CHECKIN (150000).
 Tests: python3 .claude/hooks/test_cost_guard.py
 """
 import json, mmap, os, re, sys, tempfile
@@ -29,6 +33,7 @@ import json, mmap, os, re, sys, tempfile
 CTX = int(os.environ.get("NQOS_GUARD_CTX", 300_000))
 HANDOFF = int(os.environ.get("NQOS_GUARD_HANDOFF", 500_000))
 AGENTS = int(os.environ.get("NQOS_GUARD_AGENTS", 3))
+CHECKIN = int(os.environ.get("NQOS_GUARD_CHECKIN", 150_000))
 STATE = os.environ.get("NQOS_GUARD_STATE") or os.path.join(tempfile.gettempdir(), "nqos-cost-guard")
 
 HEREDOC = re.compile(r"<<-?\s*['\"]?(\w+)['\"]?[^\n]*\n.*?\n\s*\1\s*(?:\n|$)", re.S)   # file text written by a heredoc isn't a command
@@ -196,6 +201,15 @@ def repeat_read(hook):
             "Use the earlier read; if you need one part of it again, read just that part with offset and limit.")
 
 
+def wakes_this_session(tool, inp):
+    """A reminder or check-in that fires back into this session (MCP tools carry a server prefix)."""
+    name = tool.rsplit("__", 1)[-1]
+    if name in ("send_later", "ScheduleWakeup"):
+        return not inp.get("stop")
+    return name == "create_trigger" and not inp.get("create_new_session_on_fire") \
+        and not inp.get("persistent_session_id")
+
+
 def warnings(hook):
     tool, inp = hook.get("tool_name", ""), hook.get("tool_input") or {}
     session, path = hook.get("session_id", ""), hook.get("transcript_path", "")
@@ -222,6 +236,10 @@ def warnings(hook):
     elif ctx >= CTX and once(session, "ctx"):
         out.append(f"Context passed {CTX // 1000}k ({ctx // 1000}k now). Finish this step, then plan a "
                    "handoff to a fresh session.")
+    if ctx >= CHECKIN and wakes_this_session(tool, inp):
+        out.append(f"This check-in wakes this session at {ctx // 1000}k of context, and each wake re-writes all of "
+                   "it to the cache. Point it at a small session instead: write a handoff and have it start a fresh "
+                   "session (create_trigger with create_new_session_on_fire), or finish the job now.")
     if count(path, b'"compact_boundary"') and once(session, "compacted"):
         out.append(f"This session has been compacted. {HANDOFF_HOW}")
     return out

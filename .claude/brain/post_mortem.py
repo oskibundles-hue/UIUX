@@ -306,7 +306,7 @@ def proposals(rows, broken=None):
             "(idle gaps past the TTL, or wakes on a big session)",
             "bind reminders and check-ins to a small session, and finish or hand off before stepping away",
             "Finish or hand off before going idle",
-            "have the cost guard warn when a reminder or check-in is set from a session past 150k context")
+            "the cost guard warns when a check-in is set from a session past 150k since 2026-10-27; check this count falls")
     polls = sum(any("poll" in d for d in r["drains"]) for r in rows)
     if polls:
         add(f"{polls} session(s) ran wait/poll loops",

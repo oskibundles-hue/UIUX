@@ -130,7 +130,9 @@ The `plate` class is switched off, so it has no agent.
 - **The cost guard** (`.claude/hooks/cost_guard.py`) warns, and blocks three things: a wait loop that may never end
   (no hard bound in the foreground, or `pgrep -f` matching itself), and in the lead a second read of an unchanged
   file with the same range or the same fetch twice (frames since 2026-10-06; the rest added 2026-10-27 after the
-  weekly review found poll loops in 35 and repeat reads in 32 of 143 sessions).
+  weekly review found poll loops in 35 and repeat reads in 32 of 143 sessions). Since 2026-10-27 it also warns when a
+  reminder or check-in that wakes this session is set past 150k of context (141 of 143 sessions spent 35%+ on cache
+  writes).
 - **In every session, not just this repo's** (Omarie, 2026-10-06: "it should work in every session thats the
   point"): the cloud environment's setup script runs `.claude/cloud/install.py`, which installs these hooks, the
   300k auto-compact, the agents and this file at the user level from the default branch. The setup line and the
