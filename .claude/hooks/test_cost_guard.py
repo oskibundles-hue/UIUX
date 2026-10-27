@@ -31,12 +31,25 @@ SMALL = transcript("small", 40_000)
 BIG = transcript("big", 320_000)
 HUGE = transcript("huge", 640_000)
 COMPACTED = transcript("compacted", 90_000, [{"type": "system", "subtype": "compact_boundary"}])
-def read_use(fp, tid="toolu_old"):
-    return {"type": "assistant", "message": {"content": [{"type": "tool_use", "id": tid, "name": "Read",
-                                                          "input": {"file_path": fp}}]}}
+def read_use(fp, tid="toolu_old", at=None, name="Read", **inp):
+    rec = {"type": "assistant", "message": {"content": [{"type": "tool_use", "id": tid, "name": name,
+                                                         "input": dict({"file_path": fp} if fp else {}, **inp)}]}}
+    return dict(rec, timestamp=at) if at else rec
 
 
-FRAMES = transcript("frames", 50_000, [read_use("/w/look/96.jpg"), read_use("/w/look/99.jpg", "toolu_now")])
+W = os.path.join(TMP, "w")
+os.makedirs(os.path.join(W, "look"))
+for name in ("look/96.jpg", "look/99.jpg", "look/100.jpg", "story.html", "notes.md", "edited.py", "old.md"):
+    open(os.path.join(W, name), "w").write("x")
+    os.utime(os.path.join(W, name), (1767225600, 1767225600))         # 2026-01-01, before every read below
+os.utime(os.path.join(W, "edited.py"))                                  # changed now, after its read
+READ_AT = "2026-06-01T00:00:00Z"
+FRAMES = transcript("frames", 50_000, [read_use(f"{W}/look/96.jpg"), read_use(f"{W}/look/99.jpg", "toolu_now")])
+READS = transcript("reads", 50_000, [
+    read_use(f"{W}/old.md", "t0", READ_AT), {"type": "system", "subtype": "compact_boundary"},
+    read_use(f"{W}/notes.md", "t1", READ_AT), read_use(f"{W}/edited.py", "t2", READ_AT),
+    read_use(f"{W}/story.html", "t3", READ_AT, offset=10, limit=20),
+    read_use(None, "t4", READ_AT, "WebFetch", url="https://example.com/a", prompt="list the prices")])
 AGENTS3 = transcript("agents3", 50_000, [agent_use(), agent_use(), agent_use()])
 LISTED = transcript("listed", 50_000, [{"type": "attachment", "tools": [{"name": "Agent"}] * 4},
                                        agent_use("same"), agent_use("same")])   # tool list + a re-written record
@@ -95,13 +108,32 @@ CASES = [
      lambda: run("Bash", {"command": "while true; do sleep 5; done"}, HUGE, "s-sub", agent_id="a1"), "DENY"),
     ("inside an agent: a long sleep still warns",
      lambda: run("Bash", {"command": "sleep 300"}, HUGE, "s-sub", agent_id="a1"), "wait/poll"),
-    ("second read of the same frame is denied", lambda: run("Read", {"file_path": "/w/look/96.jpg"}, FRAMES, "s-f",
+    ("second read of the same frame is denied", lambda: run("Read", {"file_path": f"{W}/look/96.jpg"}, FRAMES, "s-f",
                                                               tool_use_id="toolu_new"), "DENY"),
-    ("the current call's own record doesn't count", lambda: run("Read", {"file_path": "/w/look/99.jpg"}, FRAMES, "s-f",
+    ("the current call's own record doesn't count", lambda: run("Read", {"file_path": f"{W}/look/99.jpg"}, FRAMES, "s-f",
                                                                 tool_use_id="toolu_now"), ""),
-    ("first read of a new frame is fine", lambda: run("Read", {"file_path": "/w/look/100.jpg"}, FRAMES, "s-f"), ""),
-    ("re-reading a source file is fine", lambda: run("Read", {"file_path": "/w/story.html"}, FRAMES, "s-f"), ""),
-    ("agents may re-read frames", lambda: run("Read", {"file_path": "/w/look/96.jpg"}, FRAMES, "s-f", agent_id="a1"), ""),
+    ("first read of a new frame is fine", lambda: run("Read", {"file_path": f"{W}/look/100.jpg"}, FRAMES, "s-f"), ""),
+    ("first read of a source file is fine", lambda: run("Read", {"file_path": f"{W}/story.html"}, FRAMES, "s-f"), ""),
+    ("agents may re-read frames", lambda: run("Read", {"file_path": f"{W}/look/96.jpg"}, FRAMES, "s-f", agent_id="a1"), ""),
+    ("second read of an unchanged file is denied", lambda: run("Read", {"file_path": f"{W}/notes.md"}, READS, "s-r"),
+     "DENY Cost guard: blocked. This file was already read"),
+    ("the reads fixture is compacted, so it warns once first", lambda: run("Grep", {"pattern": "x"}, READS, "s-r"),
+     "compacted"),
+    ("a file edited since its last read may be read again",
+     lambda: run("Read", {"file_path": f"{W}/edited.py"}, READS, "s-r"), ""),
+    ("a read from before the compaction doesn't count", lambda: run("Read", {"file_path": f"{W}/old.md"}, READS, "s-r"), ""),
+    ("the same range again is denied",
+     lambda: run("Read", {"file_path": f"{W}/story.html", "offset": 10, "limit": 20}, READS, "s-r"), "DENY"),
+    ("a different range of the same file is fine",
+     lambda: run("Read", {"file_path": f"{W}/story.html", "offset": 30, "limit": 20}, READS, "s-r"), ""),
+    ("a file that doesn't exist isn't blocked (the Read fails on its own)",
+     lambda: run("Read", {"file_path": f"{W}/gone.md"}, READS, "s-r"), ""),
+    ("agents may re-read files", lambda: run("Read", {"file_path": f"{W}/notes.md"}, READS, "s-r", agent_id="a1"), ""),
+    ("the same fetch twice is denied",
+     lambda: run("WebFetch", {"url": "https://example.com/a", "prompt": "list the prices"}, READS, "s-r"),
+     "DENY Cost guard: blocked. This URL was already fetched"),
+    ("the same URL with a new prompt is fine",
+     lambda: run("WebFetch", {"url": "https://example.com/a", "prompt": "who wrote it"}, READS, "s-r"), ""),
     ("missing transcript fails open", lambda: run("Read", {}, "/nonexistent.jsonl"), ""),
 ]
 
