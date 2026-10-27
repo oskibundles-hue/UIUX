@@ -40,16 +40,18 @@ rebuild `base` to change size. For a 4K pass, build only what's needed:
 
 **Retouch.** The spec's `"retouch"` list names marks to paint out, each with the time
 it is seeded at and its centre there in base pixels. `retouch.py` tracks a mark one jump
-cut at a time, never across one. YuNet's five landmarks, mapped from the seed frame,
-predict where the mark should be. Inside that window the mark is found by its saturation
-template (a grey patch on skin stands out by saturation; the ceiling lights make the
-brightest spots). A match that jumps, or strays from the prediction, is refused. The
-first version did both and ended up on his nose and an eye. The mask is the pixels near
-the match that are as grey and as dark as the mark itself, so eye whites and brow hair
-stay out. They are filled with Telea inpainting. The untouched base is kept as
-`base_src.mp4` and every position goes to `retouch.json`. On the Sep 3 take it tracks
-the star patch between his brows on all 344 frames. Re-run it after `base`, since `base`
-writes a fresh `base.mp4` (delete `base_src.mp4` first so it is refreshed too).
+cut at a time, never across one. Each cut is anchored on the frame where the mark's
+saturation template matches best near where YuNet's landmarks put it. From there optical
+flow (Lucas-Kanade) follows the skin around the mark frame to frame and snaps back to the
+template when it is close; a template search alone lost it on fast head turns and slid
+onto his eye. A frame is painted only when his face is in shot at a reasonable size with
+skin around the track, so the wide cutaway and the can held over his brow are left alone.
+The mask is the pixels near the track that are as grey and as dark as the mark itself
+(eye whites and brow hair stay out), filled with Telea inpainting. The untouched base is
+kept as `base_src.mp4` and every position, with how it was found, goes to `retouch.json`.
+On the Sep 3 take it paints 328 of 344 frames and skips f47-62 (the can and the cutaway).
+Re-run it after `base`, which writes a fresh `base.mp4` (delete `base_src.mp4` first so it
+is refreshed too).
 
 **Audio.** Two-pass loudnorm to -14 LUFS, then the 0.84 limiter at 4x oversampling (so
 it catches inter-sample peaks) and 0.3 dB of headroom for the AAC encode. The last cut
