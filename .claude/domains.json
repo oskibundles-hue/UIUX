@@ -1,0 +1,35 @@
+{
+  "_about": "Domain rules for .claude/hooks/domain_rules.py (idea from Basemode's domains.toml, 2026-10-27). A domain fires when a prompt holds one of its keywords (UserPromptSubmit) or when Claude is about to write a file matching one of its globs (PreToolUse on Edit/Write). Each domain's rule is injected at most once per session. Keep each rule to one or two lines: do Y, because Z.",
+  "domains": {
+    "antigravity-kit": {
+      "keywords": ["antigravity", "ui-ux-pro-max", "search.py", "uipro"],
+      "paths": ["src/ui-ux-pro-max/**", "cli/assets/**"],
+      "rule": "src/ui-ux-pro-max/ is the source of truth: edit there, then copy data/, scripts/ and templates/ into cli/assets/ before publishing, because the CLI ships cli/assets/ (.claude/playbooks/antigravity-kit.md, Sync Rules)."
+    },
+    "nqos-hooks": {
+      "keywords": ["regret gate", "cost guard", "hook"],
+      "paths": [".claude/hooks/**", ".claude/brain/*.py", ".claude/settings.json"],
+      "rule": "Run the matching .claude/hooks/test_*.py (or .claude/brain/tests/) before committing a hook or brain script, and tell Omarie to restart the session after settings.json or a hook changes, because hooks load at session start."
+    },
+    "nqos-agents": {
+      "keywords": ["agentmesh", "nq-build", "nq-check", "nq-facts"],
+      "paths": [".claude/agents/**", ".claude/agentmesh/**"],
+      "rule": "Agent classes decide model and effort; change MESH.md and the agent file together, because the policy and the agent frontmatter must agree (.claude/agentmesh/MESH.md)."
+    },
+    "formula-dynamics": {
+      "keywords": ["formula dynamics", "fd red", "ryft"],
+      "paths": ["formula-dynamics/**"],
+      "rule": "Formula Dynamics keeps FD red and Bebas Neue; never mix another brand into the piece, and ask which style first (CLAUDE.md, The standard for every job)."
+    },
+    "supercar-experience": {
+      "keywords": ["supercar experience", "rally vlog"],
+      "paths": ["supercar-experience/**"],
+      "rule": "Supercar Experience is gold on black; house style and feedback log live in supercar-experience/09-campaign-ads/HOUSE-STYLE.md on its branch. Ask which style first."
+    },
+    "anti-stock": {
+      "keywords": ["anti stock", "antistock"],
+      "paths": ["anti-stock/**"],
+      "rule": "Anti Stock keeps its own look; Fast Cut and Reel Cut are its approved formats. Ask which style first."
+    }
+  }
+}
