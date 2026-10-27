@@ -10,6 +10,7 @@ creator-kit/
 ├── scripts/
 │   ├── build_luts.py      regenerates the look pack (pure stdlib)
 │   ├── autocut.py         silence-cut + grade + 4K export, one command
+│   ├── idea_scraper.py    outlier videos/posts from your watchlist -> idea list
 │   ├── match_grade.py     copy a grade from a reference by histogram matching
 │   ├── bake_lut.py        bakes any ffmpeg colour chain into a .cube
 │   └── ig_export.sh       Osmo clip → Instagram-ready 1080×1920 master
@@ -39,6 +40,26 @@ Performance matters on 4K60: raw decode runs at 0.84x realtime and the LUT
 drops it to 0.23x. So it defaults to a single ABR pass. Add `--two-pass` for
 exact size targeting at double the time, and `--fast` to run the LUT after
 the downscale when you are not exporting at native resolution.
+
+## idea_scraper — what to film next
+
+```bash
+brew install yt-dlp                     # once, on the Mac
+python3 scripts/idea_scraper.py         # writes ideas/out/ideas-<date>.md
+```
+
+Reads the latest uploads of every YouTube channel and this week's top posts of
+every subreddit in `ideas/watchlist.json`, and lists what is beating its own
+source's normal: views over the channel's median, upvotes over the
+subreddit's median. A 3x video on a small channel counts the same as one on a
+big channel, because the shape is what you copy. Each idea comes with its
+title pattern (`I spent $N on N wheels`) and the brand topics it hits.
+
+Re-runs only show new ideas (`--all` shows everything again). `--brand`,
+`--top`, `--min-outlier` and `--per-channel` tune it, and `--offline` scores a
+saved fetch with no network. Add the channels you actually study to the
+watchlist first; the YouTube lists start nearly empty on purpose. Free: no API
+keys, no logins, nothing posted. Test: `python3 ideas/test_idea_scraper.py`.
 
 ## match_grade — copy a look you have no recipe for
 
