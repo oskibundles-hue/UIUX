@@ -110,6 +110,62 @@ python3 scripts/voice_check.py my-edit.txt --seconds 30
 
 Test: `python3 scripts/test_voice.py` (no network, the Claude call is faked).
 
+## post_queue — nothing posts without Omarie's yes
+
+```bash
+python3 scripts/post_queue.py add --brand fd --kind reel --media reel.mp4 \
+    --cover covers/reel/cover-02-text.jpg --caption-file caption.txt --at "2026-10-28 18:00"
+python3 scripts/post_queue.py add --brand fd --kind carousel --media 01.jpg 02.jpg 03.mp4 \
+    --url https://.../01.jpg https://.../02.jpg - --caption "..."
+python3 scripts/post_queue.py page --brand fd       # -> posting/approve/index.html, the post mockup look
+python3 scripts/post_queue.py approvals ~/Downloads/approvals.json
+python3 scripts/post_queue.py publish               # dry run: what would post
+python3 scripts/post_queue.py publish --live        # posts what's approved and due
+python3 scripts/post_queue.py list
+```
+
+- **The gate.** Every post has a digest: a SHA-256 over the account, type,
+  caption, every media file's bytes, the cover and the options. The approval
+  page saves the digest each yes was given for. `publish` works the digest out
+  again from the files on disk and refuses if anything changed. An edited
+  caption or a re-exported video goes back to pending and needs a fresh yes. A
+  posted post never posts again. A post is marked `posting` before the API
+  call, so a crash can't leave it approved and post it twice; `retry <id>`
+  puts a failed post back once you've checked Instagram.
+- **Held, not posted:** a caption over 2,200 characters or over 30 hashtags,
+  an unsourced `[CHECK: ...]`, a photo with no public URL, or a post whose
+  `--at` time hasn't come yet.
+- **The approval page** is the post mockup (IG phone frame plus kit) in the
+  brand's own look, one brand per page. Each post has Approve, Needs changes
+  (a note is required) and Reject. Publish `posting/approve/index.html` as an
+  Artifact with `capabilities: {db: {rules: [{path: "approvals", read: "view",
+  write: "owner"}]}, user: {}, downloads: true}`, so only Omarie can decide.
+  Decisions save to the page's `approvals` collection. The **Save approval
+  file** button downloads `approvals.json` for the `approvals` step. Or the
+  lead reads the collection with ArtifactData and writes that file.
+- **Types.** Reels go up straight from the file (resumable upload), and the
+  cover frame comes from `thumbnail.py`'s `covers.json`, `--cover-time` or a
+  public `--cover-url`. Instagram only takes photos by public URL (`--url`, `-`
+  for none), so photos in a feed post or carousel need hosting first. Videos in
+  a carousel upload from the file.
+
+**One-time setup on the Mac** (the token never goes in this repo):
+
+1. The Instagram account must be a Business or Creator account linked to a
+   Facebook Page.
+2. In a Meta developer app, add Instagram Graph API with
+   `instagram_basic` and `instagram_content_publish` (plus `pages_show_list`
+   and `pages_read_engagement`). Make a long-lived user token and find the
+   Instagram user id (`/me/accounts` → the page → `instagram_business_account`).
+3. Save `~/.config/creator-kit/instagram.json` with `chmod 600`:
+   `{"accounts": {"fd": {"ig_user_id": "1784...", "token": "EAAG..."}}}`. Add
+   one entry per account (`se`, `vlog`). Use `"host": "graph.instagram.com"` for
+   an Instagram-login token. Long-lived tokens last about 60 days, so refresh
+   before then.
+
+Test: `python3 scripts/test_posting.py` (a fake Graph API on localhost, no
+token, nothing reaches Instagram).
+
 ## match_grade — copy a look you have no recipe for
 
 ```bash
