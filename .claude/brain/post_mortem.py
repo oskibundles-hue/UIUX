@@ -8,6 +8,8 @@ Once a week (or whenever asked):
 prints the week's cost list, the drains that repeated, and proposed rule changes. The proposals are
 only proposals: each one goes to Omarie as a click (AskUserQuestion) before any rule or CLAUDE.md
 line changes. Claude can't be retrained; this loop changes the rules, briefs and routing instead.
+A finding whose rule CLAUDE.md or lead.md already has is listed apart, as a rule broken anyway, with the hook
+that could enforce it, so the review never proposes the same rule twice (2026-10-27).
 
 The log is costlog/costlog.jsonl in the private brain (nq-agent-channel/brain) when it is attached,
 so the Mac and the cloud share one history; otherwise .claude/brain/work/ (git-ignored, local only).
@@ -264,30 +266,65 @@ def format_lines(rows):
     return out
 
 
-def proposals(rows):
-    """Rule changes the numbers argue for. Thresholds come from the Oct 5-6 case and usage-drains."""
-    out = []
+# A proposal whose rule is already written down isn't a new rule: the sessions broke it, so the fix is a hook
+# that enforces it. The marker is a phrase from the rule's line in CLAUDE.md or lead.md.
+RULE_FILES = os.environ.get("NQOS_RULEFILES", "").split(os.pathsep) if os.environ.get("NQOS_RULEFILES") else \
+    [os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..", "CLAUDE.md"),
+     os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "playbooks", "lead.md")]
+
+
+def written_rule(marker):
+    """The file that already holds the rule, or ""."""
+    for f in RULE_FILES:
+        try:
+            if marker in open(f).read():
+                return os.path.basename(f)
+        except OSError:
+            pass
+    return ""
+
+
+def proposals(rows, broken=None):
+    """Rule changes the numbers argue for. Thresholds come from the Oct 5-6 case and usage-drains.
+    A rule that is already written goes to `broken` (a list) instead, with how a hook could enforce it."""
+    out, seen = [], []
+    def add(finding, rule, marker, enforce):
+        where = written_rule(marker)
+        if where and broken is not None:
+            broken.append(f"{finding}. Already a rule ({where}: \"{marker}\"); enforce it: {enforce}.")
+        else:
+            out.append(f"{finding}. Proposed rule: {rule}.")
     big = [r for r in rows if r["ctx_median"] > 300_000]
     if big:
-        out.append(f"{len(big)} session(s) ran at a median context over 300k. Proposed rule: hand off to a fresh "
-                   "session from a short handoff once the guard's 300k warning fires, and always after a compaction.")
+        add(f"{len(big)} session(s) ran at a median context over 300k",
+            "hand off to a fresh session from a short handoff once the guard's 300k warning fires, and always after "
+            "a compaction", "Hand off after each job",
+            "have the cost guard ask for a handoff at 300k instead of only warning")
     churn = [r for r in rows if r["share"].get("cache_write", 0) >= 35]
     if churn:
-        out.append(f"{len(churn)} session(s) spent 35%+ on cache writes, which means the cache keeps going cold "
-                   "(idle gaps past the TTL, or wakes on a big session). Proposed rule: bind reminders and check-ins "
-                   "to a small session, and finish or hand off before stepping away.")
+        add(f"{len(churn)} session(s) spent 35%+ on cache writes, which means the cache keeps going cold "
+            "(idle gaps past the TTL, or wakes on a big session)",
+            "bind reminders and check-ins to a small session, and finish or hand off before stepping away",
+            "Finish or hand off before going idle",
+            "have the cost guard warn when a reminder or check-in is set from a session past 150k context")
     polls = sum(any("poll" in d for d in r["drains"]) for r in rows)
     if polls:
-        out.append(f"{polls} session(s) ran wait/poll loops. Proposed rule: wait on a marker file or the PID "
-                   "(`wait $pid`, or `pgrep -f '[v]log.py'` so it can't match itself), with a hard timeout.")
+        add(f"{polls} session(s) ran wait/poll loops",
+            "wait on a marker file or the PID (`wait $pid`, or `pgrep -f '[v]log.py'` so it can't match itself), "
+            "with a hard timeout", "never a `pgrep -f` loop",
+            "have the cost guard block a sleep or pgrep poll loop instead of only warning")
     dups = sum(any("x " in d and "poll" not in d for d in r["drains"]) for r in rows)
     if dups:
-        out.append(f"{dups} session(s) fetched or read the same thing twice. Proposed rule: save fetched frames "
-                   "and transcripts to the scratchpad once and point agents at the file.")
+        add(f"{dups} session(s) fetched or read the same thing twice",
+            "save fetched frames and transcripts to the scratchpad once and point agents at the file",
+            "Keep frames out of the lead",
+            "widen the cost guard's repeat-Read block from frames to any file or fetch read twice")
     heavy = [r for r in rows if r["agent_ctx_max"] > 250_000]
     if heavy:
-        out.append(f"{len(heavy)} session(s) had an agent past 250k context. Proposed rule: one agent, one job; "
-                   "split the brief or start a fresh agent from a summary.")
+        add(f"{len(heavy)} session(s) had an agent past 250k context",
+            "one agent, one job; split the brief or start a fresh agent from a summary",
+            "Start a fresh agent from a summary",
+            "have the SubagentStop hook flag an agent that ended past 250k, so the next brief is split")
     return out
 
 
@@ -310,7 +347,8 @@ def review(days=7, gate=True):
         out += ["", "repeated quality fails (nq-check, 2+ jobs):"]
         out += [f"  {n}x {ex['check']}" + (f"  [{', '.join(ws + fm)}]" if ws or fm else "")
                 + (f"  e.g. {ex['why'][:70]}" if ex.get("why") else "") for _, n, ex, ws, fm in groups[:5]]
-    props = proposals(rows) + quality_proposals(groups, days)
+    broken = []
+    props = proposals(rows, broken) + quality_proposals(groups, days)
     out += ["", "proposed rule changes (each goes to Omarie as a click before it lands):"]
     for i, p in enumerate(props, 1):
         out.append(f"  {i}. {p}")
@@ -318,6 +356,10 @@ def review(days=7, gate=True):
             out.append(f"     gate: {gate_line(p)}")
     if not props:
         out.append("  none this week")
+    if broken:
+        out += ["", "already rules, broken anyway (the fix is enforcing them in a hook, not adding them again; "
+                    "each still goes to Omarie as a click):"]
+        out += [f"  {i}. {b}" for i, b in enumerate(broken, 1)]
     return "\n".join(out)
 
 

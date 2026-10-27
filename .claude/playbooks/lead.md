@@ -181,6 +181,11 @@ pass rate per format: jobs, spend, passed out of checked, cost per passed job (s
 the passes) and how many went unchecked. A session is one job in the log, so start a fresh session for the
 next job, as the token cost rules already say.
 
+**A rule that's already written is never proposed again** (2026-10-27). When a review finding matches a rule
+CLAUDE.md or lead.md already has, `post_mortem.py review` lists it under "already rules, broken anyway" with
+the hook that could enforce it, instead of proposing the rule a second time. The fix for those is a hook,
+and it still goes to Omarie as a click.
+
 **Claude Code enforces the chain** (Omarie, 2026-09-28). `.claude/settings.json` sets
 `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` and `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` to 1: one subagent runs at a time,
 and subagents can't start their own. Claude 5 models delegate more readily, and every agent costs a full conversation's
