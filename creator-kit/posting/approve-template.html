@@ -1,0 +1,262 @@
+<title>PAGE_TITLE</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=FONT_FAMILY&display=swap">
+<style>
+/* Approval page: the post mockup look (design-systems/post-mockup) with a decision box.
+   post_queue.py fills POSTS and the brand tokens; don't edit a generated copy by hand. */
+:root{
+  --ground:#0A0A0B;--accent:#FE0F13;--display:'Bebas Neue','Arial Narrow',Impact,sans-serif;
+  /*BRAND_TOKENS*/
+  --panel:#151517;--line:rgba(255,255,255,.10);--fg:#F5F5F3;--dim:#9C9CA2;
+  --ig-blue:#0095F6;--ig-dot:#5E5E62;--ok:#34C759;--warn:#FF9F0A;--no:#FF453A;
+  --ui:-apple-system,BlinkMacSystemFont,'SF Pro Text','Helvetica Neue',Arial,sans-serif;
+  --aspect:4/5;color-scheme:dark;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--ground);color:var(--fg);font-family:var(--ui);font-size:15px;line-height:1.45}
+.wrap{max-width:1120px;margin:0 auto;padding-inline:20px;padding-block:28px 56px}
+header.top{display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:16px 24px;margin-bottom:26px}
+h1{font-family:var(--display);font-weight:400;font-size:clamp(40px,7vw,64px);line-height:.9;letter-spacing:.02em;margin:0;text-wrap:balance}
+h1 .r{display:block;width:56px;height:6px;background:var(--accent);margin-bottom:14px}
+.sub{color:var(--dim);margin:8px 0 0;max-width:56ch}
+.seg{display:inline-flex;flex-wrap:wrap;background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:4px;max-width:100%}
+.seg button{appearance:none;border:0;background:transparent;color:var(--dim);font:600 13px/1.2 var(--ui);
+  padding:9px 14px;border-radius:14px;cursor:pointer;display:flex;align-items:center;gap:7px;max-width:100%;text-align:left}
+.seg button[aria-pressed="true"]{background:var(--fg);color:var(--ground)}
+.seg i{width:8px;height:8px;border-radius:50%;background:var(--ig-dot);flex:none}
+.seg i.approve{background:var(--ok)}.seg i.changes{background:var(--warn)}.seg i.reject{background:var(--no)}
+button:focus-visible,textarea:focus-visible,.track:focus-visible{outline:2px solid var(--ig-blue);outline-offset:2px}
+
+.grid{display:grid;grid-template-columns:minmax(0,400px) minmax(0,1fr);gap:40px;align-items:start}
+@media (max-width:860px){.grid{grid-template-columns:minmax(0,1fr)}}
+
+.phone{width:100%;max-width:400px;margin:0 auto;background:#000;border:10px solid #1D1D20;border-radius:46px;overflow:hidden;box-shadow:0 30px 80px rgba(0,0,0,.55)}
+.status{display:flex;justify-content:space-between;padding:12px 26px 6px;font:600 14px var(--ui);color:#fff}
+.ig-bar{display:flex;align-items:center;justify-content:space-between;padding:6px 14px 10px;color:#fff}
+.ig-bar b{font:700 20px/1 var(--ui);letter-spacing:-.02em}
+.post-h{display:flex;align-items:center;gap:10px;padding:8px 12px}
+.av{width:34px;height:34px;border-radius:50%;background:#000;border:1.5px solid #3A3A3D;display:grid;place-items:center;flex:none;font:700 13px/1 var(--ui);color:#fff}
+.post-h .nm{font:600 13.5px/1.2 var(--ui);color:#fff;overflow-wrap:anywhere}
+.post-h .lc{font:400 12px/1.2 var(--ui);color:#C8C8CC}
+.post-h .more{margin-left:auto;color:#fff;font-size:18px;letter-spacing:1px}
+.car{position:relative}
+.track{display:flex;overflow-x:auto;scroll-snap-type:x mandatory;scrollbar-width:none;aspect-ratio:var(--aspect);max-width:100%}
+.track::-webkit-scrollbar{display:none}
+.cell{flex:0 0 100%;scroll-snap-align:start;position:relative;background:#000}
+.cell img{width:100%;height:100%;object-fit:cover;display:block}
+.tagv{position:absolute;left:12px;bottom:12px;background:rgba(18,18,18,.72);color:#fff;border-radius:14px;font:600 12px/1 var(--ui);padding:7px 10px}
+.count{position:absolute;top:12px;right:12px;background:rgba(18,18,18,.72);color:#fff;font:600 12px/1 var(--ui);padding:6px 9px;border-radius:12px;font-variant-numeric:tabular-nums}
+.nav{position:absolute;top:50%;transform:translateY(-50%);width:30px;height:30px;border-radius:50%;border:0;background:rgba(255,255,255,.85);color:#111;font:700 15px/30px var(--ui);cursor:pointer;padding:0}
+.nav.prev{left:10px}.nav.next{right:10px}
+.nav[disabled]{opacity:0;pointer-events:none}
+.acts{display:flex;align-items:center;gap:16px;padding:10px 14px 6px;color:#fff;position:relative}
+.acts svg{width:24px;height:24px;stroke:#fff;fill:none;stroke-width:1.8}
+.acts .sv{margin-left:auto}
+.dots{position:absolute;left:50%;transform:translateX(-50%);display:flex;gap:4px}
+.dots i{width:6px;height:6px;border-radius:50%;background:var(--ig-dot)}
+.dots i.on{background:var(--ig-blue)}
+.cap{padding:2px 14px 18px;color:#F2F2F2;font:400 13.5px/1.42 var(--ui);white-space:pre-wrap;overflow-wrap:anywhere}
+.cap b{font-weight:600}
+.cap .tag{color:#E0F1FF}
+
+.kit{display:grid;gap:22px;min-width:0}
+.box{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px 18px 16px;min-width:0}
+.box h2{font-family:var(--display);font-weight:400;font-size:26px;letter-spacing:.04em;margin:0 0 12px;display:flex;align-items:center;gap:10px}
+.box h2::before{content:"";width:18px;height:4px;background:var(--accent)}
+.facts{display:grid;grid-template-columns:auto minmax(0,1fr);gap:6px 14px;margin:0 0 14px;font-size:14px}
+.facts dt{color:var(--dim)}.facts dd{margin:0;overflow-wrap:anywhere}
+.mono{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:12.5px}
+.state{font-weight:600;margin:0 0 12px}
+.state.approve{color:var(--ok)}.state.changes{color:var(--warn)}.state.reject{color:var(--no)}
+.probs{margin:0 0 12px;padding:10px 12px 10px 30px;border:1px solid color-mix(in srgb,var(--warn) 55%,transparent);border-radius:10px;color:var(--fg);font-size:14px}
+textarea{width:100%;min-height:72px;resize:vertical;background:rgba(0,0,0,.35);color:var(--fg);border:1px solid var(--line);border-radius:10px;padding:10px 12px;font:14px/1.45 var(--ui);margin:0 0 12px}
+.row{display:flex;flex-wrap:wrap;align-items:center;gap:10px}
+.btn{appearance:none;border:1px solid var(--line);background:transparent;color:var(--fg);font:600 14px/1 var(--ui);padding:11px 16px;border-radius:10px;cursor:pointer}
+.btn.go{background:var(--ok);border-color:var(--ok);color:#06200D}
+.btn:disabled{opacity:.45;cursor:default}
+.msg{color:var(--dim);font-size:13px;margin:10px 0 0}
+.captxt{white-space:pre-wrap;background:rgba(0,0,0,.35);border:1px solid var(--line);border-radius:10px;padding:12px 14px;margin:0;font:14px/1.5 var(--ui);overflow-wrap:anywhere}
+.notes{margin:0;padding-left:18px}.notes li{color:var(--dim);margin:0 0 8px;font-size:14px}
+.empty{color:var(--dim)}
+</style>
+
+<div class="wrap">
+  <header class="top">
+    <div>
+      <h1><span class="r"></span><span id="h1">Posts to approve</span></h1>
+      <p class="sub">Nothing posts until it's approved here. A yes covers these exact files and this caption; if either changes, it comes back for a fresh look.</p>
+    </div>
+    <div class="seg" id="seg" role="group" aria-label="Post"></div>
+  </header>
+
+  <div class="grid">
+    <div class="phone" aria-label="Instagram post preview">
+      <div class="status"><span>9:41</span><span>●●● ▲ ▮</span></div>
+      <div class="ig-bar"><b>Instagram</b><span aria-hidden="true">♡&nbsp;&nbsp;✉</span></div>
+      <div class="post-h">
+        <div class="av" id="av"></div>
+        <div><div class="nm" id="nm"></div><div class="lc" id="lc"></div></div>
+        <div class="more">···</div>
+      </div>
+      <div class="car">
+        <div class="track" id="track" tabindex="0" aria-label="Post slides"></div>
+        <div class="count" id="count"></div>
+        <button class="nav prev" id="prev" aria-label="Previous slide">‹</button>
+        <button class="nav next" id="next" aria-label="Next slide">›</button>
+      </div>
+      <div class="acts">
+        <svg viewBox="0 0 24 24"><path d="M12 20.5s-7.5-4.6-7.5-10.1A4.3 4.3 0 0 1 12 7.6a4.3 4.3 0 0 1 7.5 2.8c0 5.5-7.5 10.1-7.5 10.1z"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M20.5 12a8.5 8.5 0 1 1-3.1-6.6A8.4 8.4 0 0 1 20.5 12z M20.5 20.5l-2-4.3"/></svg>
+        <svg viewBox="0 0 24 24"><path d="M21 3 10 13.5 M21 3l-6.5 18-4.5-7.5L3 9.5z"/></svg>
+        <div class="dots" id="dots"></div>
+        <svg class="sv" viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V3h14z"/></svg>
+      </div>
+      <div class="cap" id="cap"></div>
+    </div>
+
+    <div class="kit">
+      <section class="box" aria-labelledby="dh">
+        <h2 id="dh">Your call</h2>
+        <dl class="facts">
+          <dt>Account</dt><dd id="acct"></dd>
+          <dt>Type</dt><dd id="kind"></dd>
+          <dt>Goes out</dt><dd id="when"></dd>
+          <dt>Content</dt><dd><span class="mono" id="dig"></span></dd>
+        </dl>
+        <p class="state" id="state" aria-live="polite"></p>
+        <ul class="probs" id="probs" hidden></ul>
+        <label for="note" class="msg" style="display:block;margin:0 0 6px">Note (what to change, or anything for the record)</label>
+        <textarea id="note"></textarea>
+        <div class="row">
+          <button class="btn go" id="approve" data-d="approve" disabled>Approve</button>
+          <button class="btn" id="changes" data-d="changes" disabled>Needs changes</button>
+          <button class="btn" id="reject" data-d="reject" disabled>Reject</button>
+        </div>
+        <p class="msg" id="msg" aria-live="polite">Loading decisions…</p>
+      </section>
+      <section class="box">
+        <h2>Caption</h2>
+        <p class="captxt" id="captxt"></p>
+      </section>
+      <section class="box">
+        <h2>Hand off</h2>
+        <p class="msg" style="margin:0 0 12px">The poster reads the decisions from this page. In a Claude session, say "post what's approved". Or save the file and run <span class="mono">post_queue.py approvals</span> on it.</p>
+        <div class="row"><button class="btn" id="savefile" hidden>Save approval file</button></div>
+        <p class="msg" id="savemsg" aria-live="polite"></p>
+      </section>
+      <section class="box" id="notesbox" hidden>
+        <h2>Notes</h2>
+        <ul class="notes" id="notes"></ul>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script>
+/* post_queue.py page writes POSTS; each entry is one queued post. */
+const POSTS = /*POSTS*/[];
+const KIND = { reel: 'Reel', image: 'Photo post', carousel: 'Carousel' };
+const WORD = { approve: 'Approved', changes: 'Needs changes', reject: 'Rejected' };
+const $ = id => document.getElementById(id);
+const esc = s => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/"/g, '&quot;');
+const track = $('track'), dots = $('dots'), count = $('count');
+let pi = 0, idx = 0, db = null, owner = false, decisions = {}, busy = false;
+try { const s = localStorage.getItem('approve-post'); const k = POSTS.findIndex(p => p.id === s); if (k >= 0) pi = k; } catch (e) {}
+const P = () => POSTS[pi];
+// A decision counts only for the content it was given for.
+const cur = p => { const d = decisions[p.id]; return d && d.digest === p.digest ? d : null; };
+
+function seg() {
+  $('seg').hidden = POSTS.length < 2;
+  $('seg').innerHTML = POSTS.map((p, k) => { const d = cur(p);
+    return `<button data-k="${k}" aria-pressed="${k === pi}"><i class="${d ? d.decision : ''}"></i>${esc(p.label)}</button>`; }).join('');
+}
+function render() {
+  const p = P();
+  if (!p) { $('state').textContent = 'Nothing is waiting for approval.'; $('msg').textContent = ''; return; }
+  document.documentElement.style.setProperty('--aspect', p.aspect);
+  $('nm').textContent = p.handle; $('lc').textContent = '';
+  $('av').textContent = p.handle.charAt(0).toUpperCase();
+  track.innerHTML = p.items.map((it, i) => `<div class="cell"><img src="${esc(p.id + '/' + it.f)}" alt="${esc(it.label)}" ${i ? 'loading="lazy"' : ''}>${it.v ? `<span class="tagv">${p.kind === 'reel' ? 'Reel · cover frame' : 'Video'}</span>` : ''}</div>`).join('');
+  const multi = p.items.length > 1;
+  [count, dots, $('prev'), $('next')].forEach(el => { el.hidden = !multi; });
+  dots.innerHTML = p.items.map(() => '<i></i>').join('');
+  $('cap').innerHTML = `<b>${esc(p.handle)}</b> ` + esc(p.caption).replace(/(#\w+)/g, '<span class="tag">$1</span>');
+  $('captxt').textContent = p.caption;
+  $('acct').textContent = p.account + (p.handle && p.handle !== p.account ? ` (@${p.handle})` : '');
+  $('kind').textContent = KIND[p.kind] + (multi ? `, ${p.items.length} items` : '');
+  $('when').textContent = p.post_at ? new Date(p.post_at).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' }) : 'As soon as it is approved and the poster runs';
+  $('dig').textContent = p.digest.slice(0, 12);
+  $('probs').hidden = !p.problems.length;
+  $('probs').innerHTML = p.problems.map(x => `<li>${esc(x)}</li>`).join('');
+  $('notesbox').hidden = !p.notes.length;
+  $('notes').innerHTML = p.notes.map(n => `<li>${esc(n)}</li>`).join('');
+  track.scrollLeft = 0; setIdx(0); seg(); decision();
+}
+function decision() {
+  const p = P(); if (!p) return;
+  const d = cur(p), old = decisions[p.id] && !d;
+  $('state').className = 'state ' + (d ? d.decision : '');
+  $('state').textContent = d ? `${WORD[d.decision]} ${new Date(d.at).toLocaleString([], { dateStyle: 'medium', timeStyle: 'short' })}${d.note ? ': ' + d.note : ''}`
+    : old ? 'An earlier decision was for different files or caption. This version needs a fresh look.' : 'Waiting for your call.';
+  const can = !!db && owner && !busy;
+  ['approve', 'changes', 'reject'].forEach(b => { $(b).disabled = !can; });
+  if (p.problems.length) $('approve').disabled = true;
+  $('msg').textContent = !db ? 'Decisions can\'t be saved in this view. Open the page on claude.ai.'
+    : !owner ? 'Only the page owner can approve. You can look.' : p.problems.length ? 'Fix the problems above before this can be approved.' : '';
+}
+function setIdx(i) {
+  idx = i; const n = P().items.length;
+  count.textContent = `${i + 1}/${n}`;
+  dots.querySelectorAll('i').forEach((d, k) => d.classList.toggle('on', k === i));
+  $('prev').disabled = i === 0; $('next').disabled = i === n - 1;
+}
+function go(i) {
+  i = Math.max(0, Math.min(P().items.length - 1, i));
+  track.scrollTo({ left: i * track.clientWidth, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' });
+  setIdx(i);
+}
+track.addEventListener('scroll', () => { const i = Math.round(track.scrollLeft / Math.max(1, track.clientWidth)); if (i !== idx) setIdx(i); }, { passive: true });
+track.addEventListener('keydown', e => { if (e.key === 'ArrowRight') go(idx + 1); if (e.key === 'ArrowLeft') go(idx - 1); });
+$('prev').onclick = () => go(idx - 1);
+$('next').onclick = () => go(idx + 1);
+$('seg').addEventListener('click', e => {
+  const b = e.target.closest('button[data-k]'); if (!b) return;
+  pi = +b.dataset.k; $('note').value = ''; try { localStorage.setItem('approve-post', P().id); } catch (err) {}
+  render();
+});
+document.querySelectorAll('button[data-d]').forEach(b => b.addEventListener('click', async () => {
+  const p = P(), dec = b.dataset.d, note = $('note').value.trim();
+  if (dec === 'changes' && !note) { $('msg').textContent = 'Say what to change in the note first.'; $('note').focus(); return; }
+  busy = true; decision();
+  try {
+    await db.doc('approvals/' + p.id).set({ id: p.id, decision: dec, digest: p.digest, note, at: new Date().toISOString() });
+    $('note').value = ''; $('msg').textContent = 'Saved.';
+  } catch (e) {
+    $('msg').textContent = e && e.code === 'invalid_argument' ? 'This account can\'t save decisions here.' : 'Not saved (' + (e && (e.code || e.message) || e) + '). Try again.';
+  } finally { busy = false; decision(); }
+}));
+$('savefile').onclick = async () => {
+  const list = POSTS.map(cur).filter(Boolean);
+  if (!list.length) { $('savemsg').textContent = 'No decisions yet.'; return; }
+  const body = JSON.stringify({ source: 'approval-page', saved: new Date().toISOString(), decisions: list }, null, 1);
+  try { await downloads.save({ filename: 'approvals.json', data: body }); $('savemsg').textContent = `Saved ${list.length} decision(s).`; }
+  catch (e) { $('savemsg').textContent = e && e.code === 'declined' ? 'Not saved.' : 'Could not save: ' + (e && (e.code || e.message) || e); }
+};
+let downloads = null;
+render();
+(async () => {
+  const use = n => window.claude && typeof window.claude.use === 'function' ? window.claude.use(n) : Promise.resolve(null);
+  const [d, u, dl] = await Promise.all([use('db'), use('user'), use('downloads')]);
+  downloads = dl; $('savefile').hidden = !dl;
+  owner = u ? await u.isOwner() : false;
+  db = d;
+  if (!db) { decision(); return; }
+  db.collection('approvals').onSnapshot(snap => {
+    decisions = {}; snap.docs.forEach(s => { decisions[s.id] = s.data(); });
+    seg(); decision();
+  }, () => { db = null; decision(); });
+  decision();
+})();
+</script>
