@@ -9,6 +9,7 @@ usage: python3 .claude/brain/live_card.py start "<job title>" "<first step>"   [
 Every payload carries data.cost, this session's token bill from cost_meter.py (--no-cost leaves it off).
 `done` also appends the session's line to the cost log (post_mortem.py; the log gate approved 2026-10-06),
 with --job "<job>" --note "<what went wrong>" if given; --no-log skips it. The log path goes to stderr.
+The line carries the job's nq-check verdict, failing checks and job card ids (post_mortem.quality, "Observe").
 Then it pushes the line to nq-agent-channel (costlog_push.py, result on stderr), so the weekly review sees
 cloud sessions before the container ends; --no-sync skips that, and so does NQOS_COSTLOG (tests).
 --role <id> names the team role the job belongs to (2026-10-12, his ask: "add the role flag to the UIUX copy
