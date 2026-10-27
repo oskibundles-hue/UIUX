@@ -4,7 +4,7 @@
 After each job the lead logs the session's numbers and one line on what went wrong:
     python3 .claude/brain/cost_meter.py --log --job "SE vlog Part 1" --note "wait loop ran 28 min"
 Once a week (or whenever asked):
-    python3 .claude/brain/post_mortem.py review [--days 7]
+    python3 .claude/brain/post_mortem.py review [--days 7] [--no-gate]
 prints the week's cost list, the drains that repeated, and proposed rule changes. The proposals are
 only proposals: each one goes to Omarie as a click (AskUserQuestion) before any rule or CLAUDE.md
 line changes. Claude can't be retrained; this loop changes the rules, briefs and routing instead.
@@ -17,6 +17,8 @@ nq-check's FAIL rows go to costlog/qualityfails.jsonl next to it (gap 1 of the r
 does the same by hand. review groups the checks that failed in two or more jobs and turns them into
 proposals; one-offs are left out. FAIL evidence can quote client copy, so it only ever goes to that
 private file (or the git-ignored work/ fallback), never into this repo.
+Each proposal carries a "gate:" line (gap 3): rule_gate.py replays the rule over the replay set of past passed
+jobs and says "safe to land" or "would break N of M past jobs". --no-gate leaves it out.
 Each cost line also carries the job's quality outcome ("Observe", 2026-10-27): verdict PASS / FAIL from the
 nq-check job cards this session saved (job_card.py; a session is one job, as in read_log), the failing checks, the card
 ids, and the format. A job with no card falls back to its FAIL-log rows, and a job nq-check never saw is
@@ -289,7 +291,7 @@ def proposals(rows):
     return out
 
 
-def review(days=7):
+def review(days=7, gate=True):
     rows = sorted(read_log(days), key=lambda r: -r["usd"])
     groups = repeated_fails(_read(FAILS, days), rows)
     total = sum(r["usd"] for r in rows) or 0
@@ -310,8 +312,24 @@ def review(days=7):
                 + (f"  e.g. {ex['why'][:70]}" if ex.get("why") else "") for _, n, ex, ws, fm in groups[:5]]
     props = proposals(rows) + quality_proposals(groups, days)
     out += ["", "proposed rule changes (each goes to Omarie as a click before it lands):"]
-    out += [f"  {i}. {p}" for i, p in enumerate(props, 1)] or ["  none this week"]
+    for i, p in enumerate(props, 1):
+        out.append(f"  {i}. {p}")
+        if gate:
+            out.append(f"     gate: {gate_line(p)}")
+    if not props:
+        out.append("  none this week")
     return "\n".join(out)
+
+
+def gate_line(proposal):
+    """Gap 3: the proposed rule replayed over past passed jobs (rule_gate.py), so it goes to Omarie with the
+    evidence: "safe to land" or "would break N of M past jobs"."""
+    import rule_gate                    # here, not at the top: rule_gate imports this file too
+    rule = proposal.split("Proposed rule: ", 1)[-1].rstrip(".")
+    try:
+        return rule_gate.gate(rule)["verdict"]
+    except Exception as e:              # a broken replay set must not take the weekly review down with it
+        return f"not checked ({type(e).__name__}: {e})"
 
 
 if __name__ == "__main__":
@@ -324,6 +342,6 @@ if __name__ == "__main__":
         got = log_fails(text, sid, opt("--job"), source="manual")
         print(f"logged {len(got)} FAIL row(s) to {FAILS}" if got else "no new FAIL rows found", file=sys.stderr)
     elif a and a[0] == "review":
-        print(review(int(opt("--days", "7"))))
+        print(review(int(opt("--days", "7")), gate="--no-gate" not in a))
     else:
         sys.exit(__doc__)

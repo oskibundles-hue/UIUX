@@ -152,8 +152,8 @@ By hand: `python3 .claude/brain/job_diff.py latest`, or `job_diff.py <card> --re
 
 **Replay a proposed rule before it lands** (gap 3 of the reel-harness comparison, 2026-10-26: nothing that
 used to pass may fail after an update). Before putting a rule proposal to Omarie as a click, run
-`python3 .claude/brain/rule_gate.py check "<proposed rule>" [--format reel]`, or `rule_gate.py review` for the
-whole weekly review with a gate line under each proposal. It re-checks the stored outputs of the replay set
+`python3 .claude/brain/rule_gate.py check "<proposed rule>" [--format reel]`. The weekly review
+(`post_mortem.py review`) already prints a gate line under each proposal. It re-checks the stored outputs of the replay set
 (3 to 5 passed jobs per format, from gap 2's job cards) and never rebuilds anything. Put its last line,
 "safe to land" or "would break N of M past jobs", in the click's option description, so he decides with
 the evidence in front of him.

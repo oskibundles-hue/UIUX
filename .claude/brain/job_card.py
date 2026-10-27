@@ -335,11 +335,13 @@ def save(card):
 def load_all():
     cards = []
     for p in glob.glob(os.path.join(CARDS, "*.json")):
-        if os.path.basename(p) == "refs.json":
+        if os.path.basename(p) in ("refs.json", "replayset.json"):   # job_diff's pins, rule_gate's replay set
             continue
         try:
             c = json.load(open(p))
         except (ValueError, OSError):
+            continue
+        if not isinstance(c, dict) or "id" not in c:
             continue
         c["_path"] = p
         cards.append(c)
