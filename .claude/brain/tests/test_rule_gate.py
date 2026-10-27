@@ -13,6 +13,7 @@ os.environ["NQOS_JOBCARDS"] = os.path.join(TMP, "jobcards")
 os.environ["NQOS_GATE"] = os.path.join(TMP, "gate")
 os.environ["NQOS_COSTLOG"] = os.path.join(TMP, "costlog.jsonl")
 os.environ["NQOS_FAILLOG"] = os.path.join(TMP, "qualityfails.jsonl")
+os.environ["NQOS_RULEFILES"] = os.path.join(TMP, "no-rules.md")    # every proposal is new, so each gets a gate line
 sys.path.insert(0, HERE)
 import rule_gate as g  # noqa: E402
 

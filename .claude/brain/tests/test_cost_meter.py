@@ -54,11 +54,16 @@ CHECKS = [
 ]
 post_mortem.log_line(r, "test job", "wait loop ran long")
 post_mortem.log_line(r, "test job", "logged twice")
+real_rules, post_mortem.RULE_FILES = post_mortem.RULE_FILES, []    # as if no rule were written yet
 rev = post_mortem.review(7)
+post_mortem.RULE_FILES = real_rules
+known = post_mortem.review(7)                                         # against the real CLAUDE.md
 CHECKS += [
     ("log keeps one line per session in the review", rev.count("test job") == 1 and "logged twice" in rev),
     ("review proposes the handoff rule", "hand off" in rev),
     ("review proposes the wait rule", "marker file" in rev),
+    ("a rule CLAUDE.md already has is flagged as broken, not proposed again",
+     "Already a rule (CLAUDE.md" in known and "Proposed rule: wait on a marker" not in known),
 ]
 WAITS = [   # (command, flagged?)
     ('until ! pgrep -f "vlog.py"; do sleep 30; done', True),                          # unbounded pgrep loop
