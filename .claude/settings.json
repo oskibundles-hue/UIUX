@@ -102,11 +102,21 @@
         ]
       },
       {
-        "matcher": "*",
+        "matcher": "Agent|Task",
         "hooks": [
           {
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/job_diff_hook.py\"",
+            "timeout": 10
+          }
+        ]
+      },
+      {
+        "matcher": "*",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "sh \"$CLAUDE_PROJECT_DIR/.claude/hooks/jobdiff_pending.sh\"",
             "timeout": 10
           }
         ]

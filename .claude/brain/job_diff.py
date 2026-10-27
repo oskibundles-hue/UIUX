@@ -47,7 +47,7 @@ def pin(card_id, fmt=None):
     card = job_card.load(card_id)
     if not card:
         sys.exit(f"no card {card_id}")
-    fmt = fmt or card.get("format")
+    fmt = fmt or job_card.known(card.get("format"))
     if not fmt:
         sys.exit("the card has no format; give --format")
     r = refs()
@@ -62,7 +62,7 @@ def reference(failed, ref=None):
     if ref and not re.fullmatch(r"[a-z]+", ref):
         c = job_card.load(ref)
         return (c, "picked with --ref") if c else (None, f"no card {ref}")
-    fmt = ref or failed.get("format")
+    fmt = ref or job_card.known(failed.get("format"))
     if not fmt:
         return None, "the failed job has no format, so there is no reference; pass --ref <card>"
     pinned = refs().get(fmt)

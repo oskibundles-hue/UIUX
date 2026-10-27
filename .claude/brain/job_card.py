@@ -23,7 +23,7 @@ import datetime, glob, json, os, re, shlex, shutil, subprocess, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from nqos_config import HAVE_NOTES, HOME, WORK
-from post_mortem import parse_fails, tags   # gap 1's FAIL-bullet reader and format/workstream tags, shared
+from post_mortem import UNKNOWN, known, live_job, parse_fails, tags   # gap 1's FAIL reader and tags, shared
 
 CARDS = os.environ.get("NQOS_JOBCARDS") or (os.path.join(HOME, "jobcards") if HAVE_NOTES
                                             else os.path.join(WORK, "jobcards"))
@@ -312,9 +312,10 @@ def build_card(lead_path, report, check_tool_id=None, session="", agent_id="", c
     first = re.sub(r"\s+", " ", (briefs[0]["text"] if briefs else check_brief))[:80]
     return {
         "id": f"{at[:10].replace('-', '')}-{(session or 'nosession')[:8]}-{(agent_id or check_tool_id or 'x')[-6:]}",
-        "at": at, "session": session, "job": first,
+        "at": at, "session": session, "job": first or live_job(session) or UNKNOWN,
         "workstream": detect(brief_text, "workstream") or detect(all_text, "workstream"),
-        "format": detect(brief_text, "format") or detect(report, "format"),
+        "format": (detect(brief_text, "format") or detect(check_brief, "format") or detect(report, "format")
+                   or UNKNOWN),
         "style": detect(brief_text, "style") or detect(check_brief, "style"),
         "playbook": detect(brief_text, "playbook"),
         "brief": briefs or [brief_fields(CHECK_AGENT, check_brief)],

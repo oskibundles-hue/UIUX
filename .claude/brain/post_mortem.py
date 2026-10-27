@@ -72,13 +72,13 @@ def quality(session, job=None):
         last = cards[-1]
         out.update(verdict=last.get("verdict") or "unchecked",
                    fails=[k for k, v in (last.get("checks") or {}).items() if v == "FAIL"],
-                   format=last.get("format") or out["format"],
+                   format=known(last.get("format")) or out["format"] or last.get("format") or "",
                    workstream=(last.get("workstream") or "").lower() or out["workstream"])
         return out
     fails = [f for f in _read(FAILS, None) if f.get("session") == session]
     if fails:                                     # no card (a handback-only report): the FAIL log still knows
         out.update(verdict="FAIL", rounds=1, fails=list(dict.fromkeys(f["check"] for f in fails)),
-                   format=out["format"] or next((f["format"] for f in fails if f.get("format")), ""))
+                   format=out["format"] or next((f["format"] for f in fails if known(f.get("format"))), ""))
     return out
 
 
@@ -110,7 +110,27 @@ _BULLET = re.compile(r"^\s*(?:[-*\u2022]|\d+[.)])\s*(?P<check>[^:|\u2014]{2,60}?
 WORKSTREAMS = (("anti stock", r"anti[ -]?stock|antistock|-antistock\b"),
                ("formula dynamics", r"formula dynamics|\bFD\b|-fd\b"),
                ("supercar experience", r"supercar experience|\bSE\b|-se(?:-vlog)?\b"))
-FORMATS = ("carousel", "reel", "poster", "thumbnail", "ad", "promo", "story", "page", "vlog")   # a reel cut from a vlog is a reel
+FORMATS = ("carousel", "reel", "poster", "thumbnail", "ad", "promo", "story", "page", "vlog",   # a reel cut from a vlog is a reel
+           "sheet", "index", "deck", "dashboard")
+# Other words for a format, so a non-video job gets one too (2026-10-27: real FAIL rows from a page job came in
+# with no format). Checked after FORMATS, so "a poster page" is still a poster.
+FORMAT_ALIASES = (("page", r"artifact|web ?page|landing page|website|html"), ("sheet", r"spreadsheet|contact sheet|tracker"),
+                  ("index", r"directory|deliverables list|to-?do board"), ("deck", r"slides|slide deck|presentation"))
+UNKNOWN = "unknown"   # what a row or card says when nothing names its format or job: never an empty string
+
+
+def known(value):
+    """The value, or "" when it is empty or the UNKNOWN placeholder (so "unknown" never groups or matches)."""
+    return "" if not value or value == UNKNOWN else value
+
+
+def live_job(session=""):
+    """The job title live_card.py start gave this session's Working-now card, or ""."""
+    sid = session or os.environ.get("CLAUDE_CODE_SESSION_ID", "")
+    try:
+        return json.load(open(os.path.join(WORK, "livecard", sid.replace("/", "_") + ".json"))).get("title", "")
+    except (OSError, ValueError, AttributeError):
+        return ""
 
 
 def _clean(cell):
@@ -149,16 +169,21 @@ def tags(text):
     """(workstream, format) the report names, or "" when it names none or several."""
     ws = [name for name, pat in WORKSTREAMS if re.search(pat, text or "", re.I)]
     fm = [f for f in FORMATS if re.search(rf"(?<![a-z]){f}s?(?![a-z])", text or "", re.I)]   # part2_reel.mp4 counts
+    fm = fm or [f for f, pat in FORMAT_ALIASES if re.search(rf"(?<![a-z])(?:{pat})s?(?![a-z])", text or "", re.I)]
     return (ws[0] if len(ws) == 1 else ""), (fm[0] if fm else "")
 
 
-def log_fails(text, session, job="", agent="", source="hook"):
+def log_fails(text, session, job="", agent="", source="hook", fmt=""):
     """Append one row per FAIL in an nq-check report to FAILS. Returns the rows written. A report seen twice
-    (SubagentStop and a handback both firing) writes nothing the second time."""
+    (SubagentStop and a handback both firing) writes nothing the second time. fmt is the format the job card
+    found in the briefs; else the report's own words decide. Where nothing names them, the job is the session's
+    Working-now title and the format is UNKNOWN, never an empty string."""
     found = parse_fails(text)
     if not found:
         return []
     ws, fm = tags(text)
+    fm = known(fmt) or fm or UNKNOWN
+    job = known(job) or live_job(session) or UNKNOWN
     seen = {(r.get("session"), r.get("agent"), r.get("key"), r.get("why")) for r in _read(FAILS, None)}
     rows, at = [], _now()
     for check, why in found:
@@ -193,14 +218,14 @@ def repeated_fails(fails, rows=()):
     jobs_by_session = {r["session"]: r.get("job", "") for r in rows}
     groups = defaultdict(dict)
     for f in fails:
-        job = f.get("job") or jobs_by_session.get(f.get("session"), "") or f.get("session", "")
+        job = known(f.get("job")) or jobs_by_session.get(f.get("session"), "") or f.get("session", "")
         groups[f.get("key") or check_key(f.get("check", ""))].setdefault(job, f)
     out = []
     for key, by_job in groups.items():
         if len(by_job) >= 2:
             seen = list(by_job.values())
             out.append((key, len(by_job), seen[-1], sorted({f["workstream"] for f in seen if f.get("workstream")}),
-                        sorted({f["format"] for f in seen if f.get("format")})))
+                        sorted({f["format"] for f in seen if known(f.get("format"))})))
     return sorted(out, key=lambda g: (-g[1], g[0]))
 
 
@@ -237,7 +262,7 @@ def by_format(rows):
     Lines from before the verdict was logged count as unchecked."""
     out = defaultdict(Counter)
     for r in rows:
-        fm = r.get("format") or tags(r.get("job", ""))[1] or "other"
+        fm = known(r.get("format")) or tags(r.get("job", ""))[1] or r.get("format") or "other"
         v = r.get("verdict") or "unchecked"
         g = out[fm]
         g["jobs"] += 1
