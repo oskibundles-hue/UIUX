@@ -32,7 +32,7 @@ Times are seconds on the input clip.
 """
 import argparse, json, math, os, sys
 import numpy as np
-from PIL import Image
+from PIL import Image, ImageFilter
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 import media as M  # noqa: E402
@@ -127,8 +127,14 @@ class BurnOverlay:
         n = int(t // self.key_s); fr = (t / self.key_s) - n
         fr = 0.5 - 0.5 * math.cos(math.pi * fr)
         g = self._key(n) * (1 - fr) + self._key(n + 1) * fr
+        # Bicubic from a 6x10 grid leaves the cell edges visible, and the Difference
+        # blend shows them as soft squares; a blur of about half a cell hides the grid.
         noise = np.asarray(Image.fromarray(g).resize((lw, lh), Image.BICUBIC), np.float32)
-        noise = np.clip(noise, 0, 1) ** 1.6
+        noise = np.clip(noise, 0, 1)
+        img = Image.fromarray((noise * 255).astype(np.uint8))
+        noise = np.asarray(img.filter(ImageFilter.GaussianBlur(lw / self.grid[0] / 2)), np.float32) / 255
+        lo, hi = noise.min(), noise.max()
+        noise = ((noise - lo) / max(hi - lo, 1e-3)) ** 1.6
         yy, xx = np.mgrid[0:lh, 0:lw].astype(np.float32)
         xx /= lw; yy /= lh
         p = self.p0 + (self.p1 - self.p0) * u
