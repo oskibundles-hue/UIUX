@@ -3,10 +3,11 @@
 
 Gap 1 of the reel-harness comparison (2026-10-26): post_mortem.py review grouped repeated cost drains but
 never saw nq-check's verdicts, so a quality problem that kept coming back (the same caption issue four
-times in a week) went unseen. Registered in .claude/settings.json on SubagentStop with matcher nq-check;
-the docs say last_assistant_message holds the subagent's final text, and unlike PostToolUse on Agent it
-also fires for background agents. A subagent that reports through SubagentHandback puts the report in
-that tool's tool_input.message instead, so PostToolUse on SubagentHandback runs this too.
+times in a week) went unseen. On SubagentStop (matcher nq-check) job_diff_hook.py calls report() and
+log_fails(), so nq-check's output is read once for both the FAIL log and the job card (2026-10-27); the
+docs say last_assistant_message holds the subagent's final text, and unlike PostToolUse on Agent it also
+fires for background agents. A subagent that reports through SubagentHandback puts the report in that
+tool's tool_input.message instead, so .claude/settings.json runs this script on PostToolUse SubagentHandback.
 
 The rows go to costlog/qualityfails.jsonl next to the cost log (private brain, or the git-ignored work/
 fallback); see post_mortem.py. Never blocks or prints: a hook failure must not keep nq-check running.

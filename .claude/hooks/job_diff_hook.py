@@ -2,7 +2,9 @@
 """After nq-check, save the job's card; after a FAIL, show the lead where it split from a good job ("gap 2").
 
 Two events, one script (.claude/settings.json):
-  SubagentStop, matcher nq-check   saves the job card (job_card.py). This is the only event that sees a
+  SubagentStop, matcher nq-check   logs the report's FAIL rows for the weekly review (gap 1, quality_fails.py),
+                                   then saves the job card (job_card.py), so nq-check's output is read once;
+                                   each part runs on its own, so one failing never stops the other. This is the only event that sees a
                                    background nq-check finish. A SubagentStop hook can't speak to the lead
                                    (its output goes to the subagent), so on a FAIL with a reference on file it
                                    leaves the note in work/jobdiff-pending/<session>.txt.
@@ -40,11 +42,20 @@ def say(event, text):
 def main():
     ev = json.load(sys.stdin)
     sys.path.insert(0, BRAIN)
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
     event = ev.get("hook_event_name", "")
     session = ev.get("session_id", "")
     if event == "SubagentStop":
         if ev.get("agent_type") != "nq-check":
             return
+        try:
+            import quality_fails
+            text = quality_fails.report(ev)
+            if text:
+                from post_mortem import log_fails
+                log_fails(text, session, agent=ev.get("agent_id", ""))
+        except Exception:                              # the FAIL log must never stop the job card
+            pass
         import job_card
         card = job_card.from_event(ev)
         if not card:
