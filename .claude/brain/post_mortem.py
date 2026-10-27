@@ -312,13 +312,13 @@ def proposals(rows, broken=None):
         add(f"{polls} session(s) ran wait/poll loops",
             "wait on a marker file or the PID (`wait $pid`, or `pgrep -f '[v]log.py'` so it can't match itself), "
             "with a hard timeout", "never a `pgrep -f` loop",
-            "have the cost guard block a sleep or pgrep poll loop instead of only warning")
+            "the cost guard blocks unbounded loops since 2026-10-27; check this count falls")
     dups = sum(any("x " in d and "poll" not in d for d in r["drains"]) for r in rows)
     if dups:
         add(f"{dups} session(s) fetched or read the same thing twice",
             "save fetched frames and transcripts to the scratchpad once and point agents at the file",
             "Keep frames out of the lead",
-            "widen the cost guard's repeat-Read block from frames to any file or fetch read twice")
+            "the cost guard blocks repeat reads and fetches since 2026-10-27; check this count falls")
     heavy = [r for r in rows if r["agent_ctx_max"] > 250_000]
     if heavy:
         add(f"{len(heavy)} session(s) had an agent past 250k context",

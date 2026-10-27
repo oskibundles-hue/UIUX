@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PreToolUse cost guard: warns, and blocks two costly patterns. The token-side partner of regret_gate.py.
+"""PreToolUse cost guard: warns, and blocks three costly patterns. The token-side partner of regret_gate.py.
 
 Warns (to Omarie as a system message, and to Claude as added context) when:
   - the conversation passes 300k tokens of context (again at 500k: hand off now);
@@ -8,9 +8,13 @@ Warns (to Omarie as a system message, and to Claude as added context) when:
     own command line and never ends (the Oct 5 vlog.py loop ran 28 min after the job finished);
   - a fourth agent is about to start in one session, or any Workflow (ultracode) call.
 Context and compaction warnings fire once per session and level; loop and agent warnings every time.
-Two blocks:
+Three blocks:
   - approved by Omarie on 2026-10-06: in the lead, a second Read of the same image file is denied
     (frames go to nq-check / nq-label as one contact sheet; re-reading them re-writes the cache);
+  - asked for by Omarie on 2026-10-27, after the weekly review found repeat reads in 32 of 143 sessions: in the
+    lead, a second Read of any file with the same range, when the file hasn't changed since, and a second
+    WebFetch of the same URL with the same prompt, are denied. A file edited since, a different range, a read
+    from before the last compaction (it has left the context) and anything inside an agent stay allowed;
   - asked for by Omarie on 2026-10-27, after the weekly review found poll loops in 35 of 143 sessions although
     the rule was already written: a foreground wait loop with no hard bound, and any `pgrep -f` loop that
     matches itself, are denied with the approved way to wait. A bounded loop, a loop sent to the background
@@ -130,20 +134,66 @@ def poll_block(cmd, background=False):
 IMAGE = re.compile(r"\.(png|jpe?g|webp|gif|bmp|tiff?)$", re.I)
 
 
-def repeat_frame(hook):
-    """True if the lead already Read this image file earlier in the session."""
-    inp, path = hook.get("tool_input") or {}, hook.get("transcript_path", "")
-    fp = inp.get("file_path", "")
-    if (hook.get("tool_name") != "Read" or hook.get("agent_id") or not IMAGE.search(fp)
-            or not path or not os.path.isfile(path)):
-        return False
-    needle = json.dumps({"file_path": fp})[1:-1]          # "file_path": "<path>" as the transcript escapes it
-    me = hook.get("tool_use_id") or "\0"
-    with open(path, errors="replace") as fh:
+def _when(stamp):
+    """Epoch seconds of a transcript timestamp, or None."""
+    import datetime
+    try:
+        return datetime.datetime.fromisoformat(stamp.replace("Z", "+00:00")).timestamp()
+    except (AttributeError, ValueError):
+        return None
+
+
+def earlier_uses(path, name, same, me):
+    """Timestamps of this session's earlier `name` calls whose input `same` accepts, since the last compaction
+    (a read from before it has left the context, so reading again is fair). A record without a timestamp gives ""."""
+    found, tag = [], f'"name":"{name}"'.encode()
+    with open(path, "rb") as fh:
         for line in fh:
-            if '"name":"Read"' in line and (needle in line or needle.replace(": ", ":") in line) and me not in line:
-                return True
-    return False
+            if b'"compact_boundary"' in line:
+                found = []
+                continue
+            if tag not in line or me.encode() in line:
+                continue
+            try:
+                rec = json.loads(line)
+            except ValueError:
+                continue
+            for c in (rec.get("message") or {}).get("content") or []:
+                if isinstance(c, dict) and c.get("type") == "tool_use" and c.get("name") == name and same(c.get("input") or {}):
+                    found.append(rec.get("timestamp", ""))
+    return found
+
+
+READ_KEYS = ("file_path", "offset", "limit", "pages")
+
+
+def repeat_read(hook):
+    """The reason to deny a Read or WebFetch the lead already made this session, or None."""
+    tool, inp, path = hook.get("tool_name"), hook.get("tool_input") or {}, hook.get("transcript_path", "")
+    if tool not in ("Read", "WebFetch") or hook.get("agent_id") or not path or not os.path.isfile(path):
+        return None
+    me = hook.get("tool_use_id") or "\0"
+    if tool == "WebFetch":
+        url, prompt = inp.get("url", ""), inp.get("prompt", "")
+        if url and earlier_uses(path, "WebFetch", lambda i: i.get("url") == url and i.get("prompt", "") == prompt, me):
+            return ("Cost guard: blocked. This URL was already fetched in this session with the same prompt. Use the "
+                    "earlier result, or save a page you need again to the scratchpad and read that.")
+        return None
+    fp = inp.get("file_path", "")
+    if not fp or not os.path.isfile(fp):
+        return None
+    key = tuple(inp.get(k) for k in READ_KEYS)
+    stamps = earlier_uses(path, "Read", lambda i: tuple(i.get(k) for k in READ_KEYS) == key, me)
+    if not stamps:
+        return None
+    last = _when(stamps[-1])
+    if last is not None and os.path.getmtime(fp) > last:
+        return None                    # edited since the last read: reading it again is how you see the change
+    if IMAGE.search(fp):
+        return ("Cost guard: this frame was already viewed in this session. Re-reading it re-writes the cache. "
+                "Use your earlier look, or send frames to nq-check / nq-label as one contact sheet.")
+    return ("Cost guard: blocked. This file was already read in this session (same range) and hasn't changed since. "
+            "Use the earlier read; if you need one part of it again, read just that part with offset and limit.")
 
 
 def warnings(hook):
@@ -183,9 +233,7 @@ def main():
         inp = hook.get("tool_input") or {}
         reason = poll_block(inp.get("command", ""), bool(inp.get("run_in_background"))) \
             if hook.get("tool_name") == "Bash" else None
-        if not reason and repeat_frame(hook):
-            reason = ("Cost guard: this frame was already viewed in this session. Re-reading it re-writes the cache. "
-                      "Use your earlier look, or send frames to nq-check / nq-label as one contact sheet.")
+        reason = reason or repeat_read(hook)
         if reason:
             print(json.dumps({"hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny",
                                                      "permissionDecisionReason": reason}}))
