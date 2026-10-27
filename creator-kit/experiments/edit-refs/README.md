@@ -7,10 +7,10 @@ self-tested on **synthetic clips only**, because Dropbox's download host is bloc
 
 | tool | what it does | reference |
 |---|---|---|
-| `rapid_zoom.py` | the rapid-zoom open: 10 clips x 3 frames, duplicate layer on Add, a radial/zoom blur that peaks on each cut, a sharp land on the payoff by 2.0 s, optional splice ahead of the rest of the reel | @cinamiti, https://www.instagram.com/cinamiti/ |
-| `../../sfx/kit-v2/` + `gen_sfx_kit.py` | synthesised SFX palette: click trains, mechanical keys, button, whoosh, big flash, whoosh+flash, 3 glitches, zoom riser | @jerrzyo, https://www.instagram.com/jerrzyo/ (palette), @cinamiti (riser) |
-| `davinci_fx.py` | Anderson Tai's three DaVinci effects: `flashbox`, `flicker` (inverted flicker), `burn` (Difference light leak); `chain` runs several windows in one pass | Anderson Tai (the brief named him but gave no URL; add it here once confirmed) |
-| `beats_to_spec.py` | car-only teaser, cut on drum hits: hit times to a Kinetic Cut spec, built by `../kinetic/build_kinetic.py` (mono grade, letterbox, flashes) | @olafmotion, https://www.instagram.com/olafmotion/ and @jonasblk_, https://www.instagram.com/jonasblk_/ |
+| `rapid_zoom.py` | the rapid-zoom open: 10 clips x 3 frames, duplicate layer on Add, a radial/zoom blur that peaks on each cut, a sharp land on the payoff by 2.0 s, optional splice ahead of the rest of the reel | @cinamiti, https://www.instagram.com/reel/Dd4TKFYpsxH/ |
+| `../../sfx/kit-v2/` + `gen_sfx_kit.py` | synthesised SFX palette: click trains, mechanical keys, button, whoosh, big flash, whoosh+flash, 3 glitches, zoom riser | @jerrzyo, https://www.instagram.com/reel/DczYt6Zvvam/ (palette), @tgmhoracio, https://www.instagram.com/reel/DdhI13HKeMv/, @cinamiti (riser) |
+| `davinci_fx.py` | Anderson Tai's three DaVinci effects: `flashbox`, `flicker` (inverted flicker), `burn` (Difference light leak); `chain` runs several windows in one pass | Anderson Tai (@anderson.taii), https://www.instagram.com/reel/DexGqmKRJEC/ |
+| `beats_to_spec.py` | car-only teaser, cut on drum hits: hit times to a Kinetic Cut spec, built by `../kinetic/build_kinetic.py` (mono grade, letterbox, flashes) | @olafmotion, https://www.instagram.com/reel/De8qfjUMPZr/ and @jonasblk_, https://www.instagram.com/reel/Dc9W92HMyq_/ |
 | `master_loudness.py` | re-masters any video's audio: two-pass loudnorm -14 LUFS, then `alimiter limit=0.84 level=false` | the Fast Cut chain in `../../scripts/compose_reel.sh` |
 | `media.py` | shared ffmpeg pipes, WAV I/O, the loudness chain | |
 
