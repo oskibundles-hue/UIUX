@@ -1,6 +1,6 @@
 // qa.js <page.html> : the layout check every page in this layout gets before it is published.
 // For each tab at 390 px light and dark, 360 px and 1280 px, with every row opened: no sideways scroll, no clipped
-// text, no overlapping siblings in a row, nothing off screen, nothing marked hidden still showing, the footer clear of the tab bar, and no script errors.
+// text, no overlapping siblings in a row, nothing off screen, nothing marked hidden still showing, nothing marked hidden still showing, the footer clear of the tab bar, and no script errors.
 // Screenshots of each tab land next to the page as qa-<size>-<tab>.png. Needs Node with Playwright.
 const { chromium } = require(process.env.PLAYWRIGHT || '/opt/node22/lib/node_modules/playwright');
 const fs = require('fs'), path = require('path');
@@ -22,6 +22,8 @@ fs.writeFileSync(wrapped, `<!doctype html><html><head><meta charset="utf-8"><met
         const vis = el => { const s = getComputedStyle(el); return s.display !== 'none' && s.visibility !== 'hidden' && el.getClientRects().length; };
         const ds = [...document.querySelectorAll('.panel:not([hidden]) details')]; ds.forEach(d => { d.open = true; });
         const out = { hscroll: document.documentElement.scrollWidth - document.documentElement.clientWidth, problems: [] };
+        // a display rule on a class beats the hidden attribute, so a hidden control can still show
+        for (const el of document.querySelectorAll('[hidden]')) if (getComputedStyle(el).display !== 'none') out.problems.push('hidden but shown: ' + (el.id ? '#' + el.id : el.className));
         for (const el of document.querySelectorAll('[hidden]')) if (vis(el)) out.problems.push('shown though hidden: ' + (el.id ? '#' + el.id : el.className || el.tagName));
         for (const el of document.querySelectorAll('.panel:not([hidden]) *')) {
           if (!vis(el) || el.closest('.chips') || el.classList.contains('dz-pv') || el.closest('.rowlink')) continue;
