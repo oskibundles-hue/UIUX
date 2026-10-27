@@ -39,17 +39,22 @@ rebuild `base` to change size. For a 4K pass, build only what's needed:
 `looks --only mono,highlighter,one_word,tag_stack` covers Mono and the 2x2 grid.
 
 **Retouch.** The spec's `"retouch"` list names marks to paint out, each with the time
-it is seeded at and its centre there in base pixels. `retouch.py` follows the mark by its
-saturation template (a grey patch on skin stands out by saturation; the ceiling lights
-make the brightest spots), paints the low-saturation pixels in a 26 px disc with Telea
-inpainting, keeps the untouched base as `base_src.mp4` and logs every position to
-`retouch.json`. On the Sep 3 take it holds the star patch between his brows on all 344
-frames (4 single-frame misses filled from their neighbours). Re-run it after `base`,
-since `base` writes a fresh `base.mp4`.
+it is seeded at and its centre there in base pixels. `retouch.py` tracks a mark one jump
+cut at a time, never across one. YuNet's five landmarks, mapped from the seed frame,
+predict where the mark should be. Inside that window the mark is found by its saturation
+template (a grey patch on skin stands out by saturation; the ceiling lights make the
+brightest spots). A match that jumps, or strays from the prediction, is refused. The
+first version did both and ended up on his nose and an eye. The mask is the pixels near
+the match that are as grey and as dark as the mark itself, so eye whites and brow hair
+stay out. They are filled with Telea inpainting. The untouched base is kept as
+`base_src.mp4` and every position goes to `retouch.json`. On the Sep 3 take it tracks
+the star patch between his brows on all 344 frames. Re-run it after `base`, since `base`
+writes a fresh `base.mp4` (delete `base_src.mp4` first so it is refreshed too).
 
 **Audio.** Two-pass loudnorm to -14 LUFS, then the 0.84 limiter at 4x oversampling (so
 it catches inter-sample peaks) and 0.3 dB of headroom for the AAC encode. The last cut
-fades out 110 ms before its end, so the final 50 ms is silent. Sep 3: -14.9 LUFS,
+fades out 110 ms before its end, and the fade is applied again after the limiter, whose 4x
+resample smears it, so the final 70 ms is digital zero. Sep 3: -14.9 LUFS,
 -1.8 dBTP in the delivered file.
 
 A new take is a new spec, not a code change. The spec holds:

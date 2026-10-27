@@ -110,13 +110,18 @@ def cmd_base(a):
     r = run(["ffmpeg", "-hide_banner", "-i", raw, "-af",
              "loudnorm=I=-14:TP=-1.5:LRA=11:print_format=json", "-f", "null", "-"])
     m = json.loads(r.stderr[r.stderr.rindex("{"):r.stderr.rindex("}") + 1])
+    dur = float(run(["ffprobe", "-v", "error", "-show_entries", "format=duration", "-of", "csv=p=0",
+                     raw]).stdout)
     ln = (f"loudnorm=I=-14:TP=-1.5:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
           f"measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:"
           f"offset={m['target_offset']}:linear=true,"
           # limit at 4x so inter-sample peaks are caught: at 48 kHz the 0.84 limiter left -1.4 dBTP
           f"aresample=192000,alimiter=limit=0.84:attack=5:release=60:level=false,aresample=48000,"
           # 0.3 dB of headroom for the AAC encode, which added 0.1 dB of true peak on the Sep 3 take
-          f"volume=-0.3dB")
+          f"volume=-0.3dB,"
+          # the limiter's 4x resample smears the last cut's fade by a few ms, so silence the tail
+          # again after it: the last 70 ms are digital zero (Locked-On bar is 50 ms)
+          f"afade=t=out:st={dur - 0.12:.3f}:d=0.05")
     run(["ffmpeg", "-y", "-v", "error", "-i", raw, "-af", ln, "-c:a", "pcm_s16le",
          os.path.join(a.work, "base.wav")])
     face = find_face(base)
