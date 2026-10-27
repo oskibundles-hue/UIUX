@@ -14,6 +14,11 @@ it matters, tells the session why.
 Settings, hooks and CLAUDE.md are read before this hook runs, so when the fast-forward touched them the
 session is told to restart to pick them up.
 
+It also keeps the user-level copy of the system current (2026-10-27): the cloud installer stamps
+/home/user/.nqos-system with the commit it came from, and when that is behind the default branch (or has no
+stamp) this re-runs the installer. A session opened outside the repo loads only that copy, and one copy
+predated the learning loop's hooks, so a real nq-check left no card and no FAIL rows.
+
 Only acts when `origin` is oskibundles-hue/UIUX (the cloud installer runs it in every repo).
 Never blocks a session: any error -> exit 0. Skip with NQ_SKIP_REFRESH=1.
 Test: python3 .claude/hooks/test_session_refresh.py
@@ -24,6 +29,8 @@ DEFAULT_BRANCH = os.environ.get("NQ_DEFAULT_BRANCH", "claude/new-session-mucc2q"
 REMOTE = "origin"
 # The cloud installer runs this hook in every repo; only act on UIUX clones.
 REPO_MATCH = os.environ.get("NQ_REFRESH_REMOTE_MATCH", "oskibundles-hue/uiux").lower()
+SYSTEM = os.environ.get("NQOS_SYSTEM_DIR", "/home/user/.nqos-system")
+UIUX_DIR = os.environ.get("NQ_UIUX_DIR", "/home/user/UIUX")
 LOADED_AT_START = (".claude/settings.json", ".claude/hooks/", ".claude/agents/", "CLAUDE.md")
 
 
@@ -72,6 +79,35 @@ def refresh(cwd):
     return note
 
 
+def system_note():
+    """Re-run the installer when the user-level copy is behind the default branch; a note, or None."""
+    if not os.path.isdir(SYSTEM):
+        return None  # the installer isn't used on this machine
+    try:
+        stamp = json.load(open(os.path.join(SYSTEM, ".claude", "cloud", "installed.json")))
+    except Exception:
+        stamp = {}
+    src = stamp.get("src") or UIUX_DIR
+    if not os.path.isfile(os.path.join(src, ".claude", "cloud", "install.py")):
+        return None
+    rc, url = git(src, "remote", "get-url", REMOTE)
+    if rc or REPO_MATCH not in url.lower():
+        return None
+    target = f"{REMOTE}/{DEFAULT_BRANCH}"
+    rc, _ = git(src, "fetch", "-q", REMOTE, f"+refs/heads/{DEFAULT_BRANCH}:refs/remotes/{target}", timeout=20)
+    rc2, sha = git(src, "rev-parse", target)
+    if rc or rc2 or sha == stamp.get("sha"):
+        return None  # offline, or already current
+    r = subprocess.run([sys.executable, os.path.join(src, ".claude", "cloud", "install.py")],
+                       capture_output=True, text=True, timeout=180, env={**os.environ, "NQOS_SYSTEM_DIR": SYSTEM})
+    old = (stamp.get("sha") or "no stamp")[:7]
+    if r.returncode:
+        return (f"NQ OS system: the user-level copy ({old}) is behind {target} ({sha[:7]}) and the reinstall failed. "
+                f"Run `python3 {src}/.claude/cloud/install.py` to see why.")
+    return (f"NQ OS system: the user-level copy ({old}) was behind {target} ({sha[:7]}), so it was reinstalled. "
+            "Hooks, agents and CLAUDE.md load at session start: restart the session to use the new versions.")
+
+
 def main():
     if os.environ.get("NQ_SKIP_REFRESH") == "1":
         return
@@ -80,7 +116,7 @@ def main():
     except Exception:
         data = {}
     cwd = os.environ.get("CLAUDE_PROJECT_DIR") or data.get("cwd") or os.getcwd()
-    note = refresh(cwd)
+    note = " ".join(n for n in (refresh(cwd), system_note()) if n)
     if note:
         print(json.dumps({"hookSpecificOutput": {"hookEventName": "SessionStart", "additionalContext": note}}))
 
