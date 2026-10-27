@@ -23,15 +23,12 @@ import datetime, glob, json, os, re, shlex, shutil, subprocess, sys
 
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
 from nqos_config import HAVE_NOTES, HOME, WORK
-from post_mortem import FORMATS, parse_fails   # gap 1's format order and FAIL-bullet reader, shared
+from post_mortem import parse_fails, tags   # gap 1's FAIL-bullet reader and format/workstream tags, shared
 
 CARDS = os.environ.get("NQOS_JOBCARDS") or (os.path.join(HOME, "jobcards") if HAVE_NOTES
                                             else os.path.join(WORK, "jobcards"))
 CHECK_AGENT = "nq-check"
 BUILD_AGENTS = ("nq-build", "nq-fix", "nq-run", "nq-label")
-WORKSTREAMS = (("Anti Stock", r"anti[ -]?stock|antistock"),
-               ("Formula Dynamics", r"formula dynamics|(?<![a-z])fd(?![a-z])"),
-               ("Supercar Experience", r"supercar experience|(?<![a-z])se(?![a-z])|(?<![a-z])se-vlog"))
 STYLES = ("Locked-On", "Quick-Promo", "Fast Cut", "Reel Cut", "Now Boarding", "Paste-Up", "iPhone index",
           "post mockup", "studio carousel", "rally v2")
 PLAYBOOK_RE = re.compile(r"playbooks/([\w-]+)\.md|\b(formula-dynamics|supercar-experience|anti-stock|research|"
@@ -73,13 +70,9 @@ def short_path(tok):
 def detect(text, which):
     text = text or ""
     if which == "format":
-        hits = [f for f in FORMATS if re.search(rf"(?<![a-z]){f}s?(?![a-z])", text, re.I)]
-        return hits[0] if hits else ""
-    if which == "workstream":
-        for name, pat in WORKSTREAMS:
-            if re.search(pat, text, re.I):
-                return name
-        return ""
+        return tags(text)[1]
+    if which == "workstream":                          # post_mortem's names are lower case; cards keep "Anti Stock"
+        return tags(text)[0].title()
     if which == "style":
         hits = [s for s in STYLES if re.search(re.escape(s).replace(r"\-", "[- ]?").replace(r"\ ", "[- ]?"), text, re.I)]
         return hits[0] if hits else ""
