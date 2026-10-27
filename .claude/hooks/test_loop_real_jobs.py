@@ -103,6 +103,13 @@ run(stop)
 rows = [r for r in fails("") if r["session"] == "s-none2"]
 check("no title either: job is 'unknown'", rows and rows[0]["job"] == "unknown" and rows[0]["format"] == "unknown", rows)
 
+# a re-check with no build brief in scope: the Working-now title, not nq-check's own instructions
+json.dump({"title": "Made-up re-check job"}, open(os.path.join(WORK, "livecard", "s-re.json"), "w"))
+stop, _ = lead_job("re", "", "Checked.\n" + TABLE.format(v="FAIL", e="x"), session="s-re")
+run(stop)
+check("re-check with no build brief: the job is the Working-now title", cards().get("s-re", {}).get("job") == "Made-up re-check job",
+      cards().get("s-re"))
+
 # 4. "unknown" is never a format to compare against or group by
 sys.path.insert(0, os.path.join(os.path.dirname(HERE), "brain"))
 os.environ.update(NQOS_JOBCARDS=ENV["NQOS_JOBCARDS"], NQOS_WORK=WORK, NQOS_COSTLOG=ENV["NQOS_COSTLOG"], NQOS_FAILLOG=FAILLOG)

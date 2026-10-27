@@ -309,10 +309,13 @@ def build_card(lead_path, report, check_tool_id=None, session="", agent_id="", c
     brief_text = "\n".join(b["text"] for b in briefs) or check_brief
     verdict, checks = parse_report(report)
     at = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    first = re.sub(r"\s+", " ", (briefs[0]["text"] if briefs else check_brief))[:80]
+    # A build brief names the job; with none in scope (a re-check after a hand fix) the Working-now title does
+    # better than nq-check's own instructions, which read as a job title nobody gave (2026-10-27); then "unknown".
+    first = re.sub(r"\s+", " ", next((b["text"] for b in briefs if b["text"].strip()), "")
+                   or live_job(session))[:80]
     return {
         "id": f"{at[:10].replace('-', '')}-{(session or 'nosession')[:8]}-{(agent_id or check_tool_id or 'x')[-6:]}",
-        "at": at, "session": session, "job": first or live_job(session) or UNKNOWN,
+        "at": at, "session": session, "job": first or UNKNOWN,
         "workstream": detect(brief_text, "workstream") or detect(all_text, "workstream"),
         "format": (detect(brief_text, "format") or detect(check_brief, "format") or detect(report, "format")
                    or UNKNOWN),
