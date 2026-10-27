@@ -145,7 +145,8 @@ def main():
         # as well as the frame's own grey pixels, so a lobe that reads too bright on the brow ridge,
         # or a track a few pixels off, still gets covered
         r = RADIUS
-        shape0 = ((dist < r) & (sats[i0] < sat_max) & (vals[i0] > v_lo) & (vals[i0] < v_hi))[cy - r:cy + r, cx - r:cx + r]
+        # (no upper value bound: the star's right lobe reads bright and was missed with one)
+        shape0 = ((dist < r) & (sats[i0] < sat_max) & (vals[i0] > v_lo))[cy - r:cy + r, cx - r:cx + r]
         shape0 = cv2.dilate(shape0.astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * SHAPE_GROW + 1,) * 2))
 
         # the mark's size follows his face's: the box's width against the seed's, per frame
@@ -252,9 +253,19 @@ def main():
                 skipped.append(i)
                 how[i] += f", skipped: {why[i]}"
                 continue
-            inside = (xx - c[0]) ** 2 + (yy - c[1]) ** 2 < (RADIUS * scale[i]) ** 2
+            # the face box shrinks when he turns but the star doesn't, so the paint never shrinks
+            k = max(scale[i], 1.0)
+            if not sure.get(i):
+                # a weak snap or a flow step can sit 8-10 px off the star: centre on its grey pixels
+                near = ((xx - c[0]) ** 2 + (yy - c[1]) ** 2 < (RADIUS * k) ** 2) & (sats[i] < sat_max) & (vals[i] > v_lo)
+                if near.sum() > 150:
+                    gy, gx = np.nonzero(near)
+                    c = np.array([gx.mean(), gy.mean()])
+                    xy[i] = c
+                    how[i] += ", centred on its grey"
+            inside = (xx - c[0]) ** 2 + (yy - c[1]) ** 2 < (RADIUS * k) ** 2
             mk = (inside & (sats[i] < sat_max) & (vals[i] > v_lo) & (vals[i] < v_hi)).astype(np.uint8) * 255
-            sh = cv2.resize(shape0, None, fx=scale[i], fy=scale[i], interpolation=cv2.INTER_NEAREST)
+            sh = cv2.resize(shape0, None, fx=k, fy=k, interpolation=cv2.INTER_NEAREST)
             x0, y0 = int(round(c[0])) - sh.shape[1] // 2, int(round(c[1])) - sh.shape[0] // 2
             if x0 < 0 or y0 < 0 or x0 + sh.shape[1] > W or y0 + sh.shape[0] > b1 - b0:
                 skipped.append(i)
