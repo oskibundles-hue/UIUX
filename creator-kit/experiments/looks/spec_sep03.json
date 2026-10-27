@@ -335,5 +335,16 @@
   "one_word",
   "tag_stack"
  ],
- "grid2x2_note": "Mono plus the next three looks in spec order (Omarie, 2026-10-27). Order is top-left, top-right, bottom-left, bottom-right."
+ "grid2x2_note": "Mono plus the next three looks in spec order (Omarie, 2026-10-27). Order is top-left, top-right, bottom-left, bottom-right.",
+ "retouch": [
+  {
+   "name": "star patch between the brows",
+   "t": 0.0,
+   "xy": [
+    708,
+    1330
+   ]
+  }
+ ],
+ "retouch_note": "Omarie 2026-10-27: retouch it out. Centre read off a 1:1 crop of base frame 0 at 2160x3840; retouch.py tracks it from there."
 }

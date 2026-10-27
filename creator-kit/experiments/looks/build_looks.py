@@ -87,14 +87,17 @@ def cmd_base(a):
     # One seeked input per keep range: trimming a single [0:v] six ways buffers decoded frames
     # for every branch, and at 2160x3840 that ran ffmpeg to 9.7 GB and an OOM kill (2026-10-27).
     inputs, parts, labels = [], [], []
+    last = len(spec["keep"]) - 1
     for i, (s, e) in enumerate(spec["keep"]):
         d = e - s
         inputs += ["-ss", f"{s}", "-t", f"{d:.3f}", "-i", a.src]
         parts.append(f"[{i}:v]setpts=PTS-STARTPTS,fps={FPS},"
                      f"scale={W}:{H}:flags=lanczos:in_color_matrix=bt709:out_color_matrix=bt709,"
                      f"format=gbrp,lut3d='{lut}',format=yuv420p[v{i}]")
+        # the last cut ends on silence: a 60 ms fade, then the final 50 ms at zero (Locked-On bar)
+        fade = f"st={d - 0.11:.3f}:d=0.06" if i == last else f"st={d - 0.015:.3f}:d=0.015"
         parts.append(f"[{i}:a]asetpts=PTS-STARTPTS,aresample=48000,"
-                     f"afade=t=in:d=0.015,afade=t=out:st={d - 0.015:.3f}:d=0.015[a{i}]")
+                     f"afade=t=in:d=0.015,afade=t=out:{fade}[a{i}]")
         labels.append(f"[v{i}][a{i}]")
     fc = ";".join(parts) + f";{''.join(labels)}concat=n={len(labels)}:v=1:a=1[v][a]"
     base = os.path.join(a.work, "base.mp4")
@@ -109,7 +112,11 @@ def cmd_base(a):
     m = json.loads(r.stderr[r.stderr.rindex("{"):r.stderr.rindex("}") + 1])
     ln = (f"loudnorm=I=-14:TP=-1.5:LRA=11:measured_I={m['input_i']}:measured_TP={m['input_tp']}:"
           f"measured_LRA={m['input_lra']}:measured_thresh={m['input_thresh']}:"
-          f"offset={m['target_offset']}:linear=true,aresample=48000,alimiter=limit=0.84:attack=5:release=60:level=false")
+          f"offset={m['target_offset']}:linear=true,"
+          # limit at 4x so inter-sample peaks are caught: at 48 kHz the 0.84 limiter left -1.4 dBTP
+          f"aresample=192000,alimiter=limit=0.84:attack=5:release=60:level=false,aresample=48000,"
+          # 0.3 dB of headroom for the AAC encode, which added 0.1 dB of true peak on the Sep 3 take
+          f"volume=-0.3dB")
     run(["ffmpeg", "-y", "-v", "error", "-i", raw, "-af", ln, "-c:a", "pcm_s16le",
          os.path.join(a.work, "base.wav")])
     face = find_face(base)
