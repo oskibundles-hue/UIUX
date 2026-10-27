@@ -12,6 +12,9 @@ creator-kit/
 │   ├── autocut.py         silence-cut + grade + 4K export, one command
 │   ├── idea_scraper.py    outlier videos/posts from your watchlist -> idea list
 │   ├── thumbnail.py       best cover frames -> branded IG covers + grid check
+│   ├── voice_build.py     his transcripts/captions -> voice/style.json + STYLE.md
+│   ├── script_write.py    idea -> script brief (and drafts with --api) in his voice
+│   ├── voice_check.py     flags AI tells, long lines, stiff wording, read time
 │   ├── match_grade.py     copy a grade from a reference by histogram matching
 │   ├── bake_lut.py        bakes any ffmpeg colour chain into a .cube
 │   └── ig_export.sh       Osmo clip → Instagram-ready 1080×1920 master
@@ -82,6 +85,30 @@ third, in the top-left UI corner, or with too little contrast against the
 frame. Pick from `covers/<clip>/sheet.png`. `--at 12.5` uses your own frame,
 `--lut luts/X.cube` grades it to match the Reel, and `--picks` sets how many.
 It never writes copy; the headline is yours. Test: `python3 scripts/test_thumbnail.py`.
+
+## script in my voice — idea to a script Omarie would actually say
+
+```bash
+python3 scripts/transcribe.py talking-reels/*.mp4 -o transcripts/       # his own words, on the Mac
+python3 scripts/voice_build.py transcripts/ old-captions.txt               # -> voice/style.json, voice/STYLE.md
+python3 scripts/script_write.py --idea "why we torque wheels by hand" --brand fd --seconds 30
+python3 scripts/script_write.py --from ideas/out/2026-10-27.json --brand se --pick 2 --api
+python3 scripts/voice_check.py my-edit.txt --seconds 30
+```
+
+- `voice_build.py` measures how he talks: sentence length, pace, questions,
+  contractions, fillers, openers, the phrases he repeats and a bank of his own
+  lines. Under 1,500 words it says the profile is thin. Feed it talking reels,
+  not music-only ones.
+- `script_write.py` always writes `scripts-out/<idea>/brief.md` (paste into
+  Claude Code). `--api` calls Claude (`claude-opus-5-5`, server-side refusal
+  fallbacks on) for 3 drafts with hook, body, CTA, on-screen text and a shot
+  list, each run through `voice_check.py`. Edit `drafts.json` by hand, then
+  `--check` it again.
+- Facts it doesn't have come back as `[CHECK: ...]`, and `voice_check.py` lists
+  every figure as a claim to source; those go through nq-facts. Nothing posts.
+
+Test: `python3 scripts/test_voice.py` (no network, the Claude call is faked).
 
 ## match_grade — copy a look you have no recipe for
 
