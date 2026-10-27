@@ -30,7 +30,7 @@ import numpy as np
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FPS = 30
-RADIUS, GROW, INPAINT = 24, 5, 9   # px at 2160 wide: mask disc, mask growth, inpaint radius
+RADIUS, GROW, INPAINT = 28, 7, 9   # px at 2160 wide and the seed's face size: mask disc, growth, inpaint radius
 ANCHOR_R, LEASH = 80, 90           # anchor search around the face's prediction, and how far it may stray
 SNAP, SNAP_SCORE = 12, 0.6         # template snap radius after each flow step, and the score it needs
 FLOW_R, FB_ERR = 180, 1.0          # skin around the mark that flow follows; forward-back error, half px
@@ -137,8 +137,18 @@ def main():
         h_skin = float(np.median(hues[i0][ring0]))
         sat_max = int(s_mark + 0.4 * (s_skin - s_mark))
         v_mark = float(np.median(vals[i0][dist < 8]))
-        v_lo, v_hi = int(v_mark * 0.6), int(v_mark * 1.4)
+        v_lo, v_hi = int(v_mark * 0.5), int(v_mark * 1.9)  # the star's pale lobe sits well above its centre
         face0 = boxes[i0][2] * boxes[i0][3]
+
+        # the mark's size follows his face's: the box's width against the seed's, per frame
+        scale = [1.0 if b is None else float(np.clip(b[2] / boxes[i0][2], 0.6, 1.8)) for b in boxes]
+        tmpls = {}
+
+        def tmpl_at(i):
+            k = round(scale[i] * 20) / 20
+            if k not in tmpls:
+                tmpls[k] = cv2.resize(tmpl, None, fx=k, fy=k, interpolation=cv2.INTER_AREA)
+            return tmpls[k]
 
         pred = {}
         for i in range(n):
@@ -162,7 +172,7 @@ def main():
                 return "off face"
             if not sure.get(i) and i in pred and np.hypot(*(c - pred[i])) > 3 * LEASH:
                 return f"{np.hypot(*(c - pred[i])):.0f} px from landmarks"
-            d = np.hypot(xx - c[0], yy - c[1])
+            d = np.hypot(xx - c[0], yy - c[1]) / scale[i]
             ring = (d > 40) & (d < 60)
             sr, hr = np.median(sats[i][ring]), float(np.median(hues[i][ring]))
             if abs(sr - s_skin) >= 0.3 * s_skin or abs(hr - h_skin) >= 8:
@@ -172,16 +182,20 @@ def main():
         xy, how, skipped, sure = {}, {}, [], {}
         for c0, c1 in zip(bounds, bounds[1:]):
             # anchor: the frame in this cut that best matches near the face's prediction
-            cands = []
+            # every frame's own find near the landmarks' prediction; a sure one re-anchors the track,
+            # so flow only bridges the frames between finds (flow alone drifted 100 px onto the
+            # nose over the 147-frame last cut of the Sep 3 take)
+            found = {}
             for i in range(c0, c1):
                 if i in pred:
-                    s, c = match(sats[i], tmpl, pred[i], ANCHOR_R)
+                    s, c = match(sats[i], tmpl_at(i), pred[i], ANCHOR_R)
                     if s >= SNAP_SCORE and np.hypot(*(c - pred[i])) <= LEASH and not unpaintable(i, c):
-                        cands.append((s, i, c))
-            if not cands:
+                        found[i] = (s, c)
+            if not found:
                 skipped += list(range(c0, c1))
                 continue
-            s, ia, c = max(cands, key=lambda t: t[0])
+            ia = max(found, key=lambda i: found[i][0])
+            s, c = found[ia]
             xy[ia], how[ia], sure[ia] = c, f"anchor {s:.2f}", s >= SURE
             for order in (range(ia + 1, c1), range(ia - 1, c0 - 1, -1)):
                 last, prev = c, ia
@@ -189,9 +203,13 @@ def main():
                     p, kind = flow(greys[prev], greys[i], last), "flow"
                     if p is None:
                         p, kind = last, "held"
-                    s, ps = match(sats[i], tmpl, p, SNAP)
+                    s, ps = match(sats[i], tmpl_at(i), p, SNAP)
+                    if i in found and found[i][0] >= SURE and found[i][0] > s:
+                        s, ps, kind = found[i][0], found[i][1], f"found {found[i][0]:.2f}"
+                    elif s >= SNAP_SCORE:
+                        kind = f"snap {s:.2f}"
                     if s >= SNAP_SCORE:
-                        p, kind = ps, f"snap {s:.2f}"
+                        p = ps
                         sure[i] = s >= SURE
                     xy[i], how[i], last, prev = p, kind, p, i
 
@@ -212,8 +230,13 @@ def main():
                 skipped.append(i)
                 how[i] += f", skipped: {why[i]}"
                 continue
-            inside = (xx - c[0]) ** 2 + (yy - c[1]) ** 2 < RADIUS ** 2
-            masks[i] |= (inside & (sats[i] < sat_max) & (vals[i] > v_lo) & (vals[i] < v_hi)).astype(np.uint8) * 255
+            inside = (xx - c[0]) ** 2 + (yy - c[1]) ** 2 < (RADIUS * scale[i]) ** 2
+            mk = inside & (sats[i] < sat_max) & (vals[i] > v_lo) & (vals[i] < v_hi)
+            if not mk.any():
+                skipped.append(i)
+                how[i] += ", skipped: nothing grey at the track"
+                continue
+            masks[i] |= mk.astype(np.uint8) * 255
             painted.append(i)
         area = int((masks[i0] > 0).sum())
         log.append({"name": m["name"], "seed": m["xy"], "cuts": bounds, "area_px": area,

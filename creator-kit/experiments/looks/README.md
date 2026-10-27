@@ -49,7 +49,9 @@ skin around the track, so the wide cutaway and the can held over his brow are le
 The mask is the pixels near the track that are as grey and as dark as the mark itself
 (eye whites and brow hair stay out), filled with Telea inpainting. The untouched base is
 kept as `base_src.mp4` and every position, with how it was found, goes to `retouch.json`.
-On the Sep 3 take it paints 328 of 344 frames and skips f47-62 (the can and the cutaway).
+On the Sep 3 take it paints 327 of 344 frames and skips f47-63 (the can and the cutaway).
+Every frame also gets its own template find (scaled to his face size), and a sure one
+re-anchors the flow, which on its own drifted onto his nose over the 147-frame last cut.
 Re-run it after `base`, which writes a fresh `base.mp4` (delete `base_src.mp4` first so it
 is refreshed too).
 
