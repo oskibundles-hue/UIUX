@@ -11,6 +11,7 @@ creator-kit/
 │   ├── build_luts.py      regenerates the look pack (pure stdlib)
 │   ├── autocut.py         silence-cut + grade + 4K export, one command
 │   ├── idea_scraper.py    outlier videos/posts from your watchlist -> idea list
+│   ├── thumbnail.py       best cover frames -> branded IG covers + grid check
 │   ├── match_grade.py     copy a grade from a reference by histogram matching
 │   ├── bake_lut.py        bakes any ffmpeg colour chain into a .cube
 │   └── ig_export.sh       Osmo clip → Instagram-ready 1080×1920 master
@@ -60,6 +61,27 @@ Re-runs only show new ideas (`--all` shows everything again). `--brand`,
 saved fetch with no network. Add the channels you actually study to the
 watchlist first; the YouTube lists start nearly empty on purpose. Free: no API
 keys, no logins, nothing posted. Test: `python3 ideas/test_idea_scraper.py`.
+
+## thumbnail — pick and brand the cover
+
+```bash
+python3 scripts/thumbnail.py reel.mp4 --brand fd --text "FORGED|FITMENT DAY"
+python3 scripts/thumbnail.py reel.mp4 --brand se --text "KEYS|HANDED OVER" --kicker "THE PICKUP"
+```
+
+Never let Instagram pick the cover. This scores 80 frames of the Reel on
+sharpness, exposure and colour, keeps the best few (spread out, never a soft or
+black frame) and renders each as a 1080x1920 cover twice: clean, and with your
+headline. The words after `|` take the accent colour. Each brand keeps its own
+look, in the Locked-On style: FD is Bebas Neue with FD red, SE is Space Grotesk
+with gold corner brackets and a `[ KICKER ]`, and `vlog` uses the caption gold.
+
+Every cover also gets a grid check: the 3:4 profile-grid crop is drawn on it,
+and the script flags a headline that falls outside the crop, in the bottom
+third, in the top-left UI corner, or with too little contrast against the
+frame. Pick from `covers/<clip>/sheet.png`. `--at 12.5` uses your own frame,
+`--lut luts/X.cube` grades it to match the Reel, and `--picks` sets how many.
+It never writes copy; the headline is yours. Test: `python3 scripts/test_thumbnail.py`.
 
 ## match_grade — copy a look you have no recipe for
 
