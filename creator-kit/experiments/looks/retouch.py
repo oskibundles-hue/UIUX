@@ -35,6 +35,8 @@ ANCHOR_R, LEASH = 80, 90           # anchor search around the face's prediction,
 SNAP, SNAP_SCORE = 12, 0.6         # template snap radius after each flow step, and the score it needs
 FLOW_R, FB_ERR = 180, 1.0          # skin around the mark that flow follows; forward-back error, half px
 MIN_FACE = 0.2                     # a face smaller than this share of the seed's is a wide shot
+SHAPE_GROW = 6                     # px the seed's star shape is grown by before it is painted
+REFIND_SCORE = 0.4                 # a re-find next to a painted frame, part hidden by the can
 SURE = 0.8                         # a snap this good outranks the landmarks, which wander on close-ups
 
 
@@ -139,6 +141,12 @@ def main():
         v_mark = float(np.median(vals[i0][dist < 8]))
         v_lo, v_hi = int(v_mark * 0.5), int(v_mark * 1.9)  # the star's pale lobe sits well above its centre
         face0 = boxes[i0][2] * boxes[i0][3]
+        # the star's own shape on the seed frame, grown a little: painted at the track on every frame
+        # as well as the frame's own grey pixels, so a lobe that reads too bright on the brow ridge,
+        # or a track a few pixels off, still gets covered
+        r = RADIUS
+        shape0 = ((dist < r) & (sats[i0] < sat_max) & (vals[i0] > v_lo) & (vals[i0] < v_hi))[cy - r:cy + r, cx - r:cx + r]
+        shape0 = cv2.dilate(shape0.astype(np.uint8), cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (2 * SHAPE_GROW + 1,) * 2))
 
         # the mark's size follows his face's: the box's width against the seed's, per frame
         scale = [1.0 if b is None else float(np.clip(b[2] / boxes[i0][2], 0.6, 1.8)) for b in boxes]
@@ -224,6 +232,20 @@ def main():
                 if lo is not None and hi is not None and cut_of[lo] == cut_of[hi] == cut_of[i]:
                     why[i] = ""
                     how[i] += ", gap painted"
+        # a skipped frame next to a painted one in the same cut (the can pulling away from his brow)
+        # is looked for again around its neighbour's position, without the skin-ring test
+        for order in (sorted(xy), sorted(xy, reverse=True)):
+            for i in order:
+                nb = i - 1 if order[0] < order[-1] else i + 1
+                if not why[i] or nb not in why or why[nb] or cut_of[nb] != cut_of[i] or boxes[i] is None:
+                    continue
+                s, c = match(sats[i], tmpl_at(i), xy[nb], 2 * SNAP)
+                # a part-hidden star scores lower; a 24 px search next to a sure neighbour can afford it
+                if s >= REFIND_SCORE:
+                    xy[i], why[i] = c, ""
+                    how[i] += f", re-found from f{nb} {s:.2f}"
+                else:
+                    how[i] += f", re-find from f{nb} {s:.2f}"
         painted = []
         for i, c in xy.items():
             if why[i]:
@@ -231,12 +253,15 @@ def main():
                 how[i] += f", skipped: {why[i]}"
                 continue
             inside = (xx - c[0]) ** 2 + (yy - c[1]) ** 2 < (RADIUS * scale[i]) ** 2
-            mk = inside & (sats[i] < sat_max) & (vals[i] > v_lo) & (vals[i] < v_hi)
-            if not mk.any():
+            mk = (inside & (sats[i] < sat_max) & (vals[i] > v_lo) & (vals[i] < v_hi)).astype(np.uint8) * 255
+            sh = cv2.resize(shape0, None, fx=scale[i], fy=scale[i], interpolation=cv2.INTER_NEAREST)
+            x0, y0 = int(round(c[0])) - sh.shape[1] // 2, int(round(c[1])) - sh.shape[0] // 2
+            if x0 < 0 or y0 < 0 or x0 + sh.shape[1] > W or y0 + sh.shape[0] > b1 - b0:
                 skipped.append(i)
-                how[i] += ", skipped: nothing grey at the track"
+                how[i] += ", skipped: track at the band's edge"
                 continue
-            masks[i] |= mk.astype(np.uint8) * 255
+            mk[y0:y0 + sh.shape[0], x0:x0 + sh.shape[1]] |= sh * 255
+            masks[i] |= mk
             painted.append(i)
         area = int((masks[i0] > 0).sum())
         log.append({"name": m["name"], "seed": m["xy"], "cuts": bounds, "area_px": area,
