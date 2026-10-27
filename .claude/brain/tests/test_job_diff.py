@@ -97,6 +97,10 @@ check("hook note names the step", note and "First divergence (steps)" in note an
 v, rows = job_card.parse_report("Checked out/x.mp4.\n- Audio level: FAIL - 9 LUFS too loud\n- Captions: PASS")
 check("bullet report: FAIL read through post_mortem.parse_fails", v == "FAIL" and rows == {"Audio level": "FAIL"}, (v, rows))
 
+# the table's own header ("| check | PASS/FAIL | evidence |") is not a check
+v, rows = job_card.parse_report("| check | PASS/FAIL | evidence |\n|---|---|---|\n| Spec | PASS | ok |\n| N/A row | N/A | - |")
+check("header row skipped", v == "PASS" and rows == {"Spec": "PASS", "N/A row": "N/A"}, (v, rows))
+
 # a background launch is not a finished check
 check("async launch gives no card", job_card.from_event({"tool_input": {"subagent_type": "nq-check"},
       "tool_response": {"status": "async_launched", "agentId": "x"}}) is None)
