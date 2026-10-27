@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""PreToolUse cost guard: warns, never blocks. The token-side partner of regret_gate.py.
+"""PreToolUse cost guard: warns, and blocks two costly patterns. The token-side partner of regret_gate.py.
 
 Warns (to Omarie as a system message, and to Claude as added context) when:
   - the conversation passes 300k tokens of context (again at 500k: hand off now);
@@ -8,9 +8,14 @@ Warns (to Omarie as a system message, and to Claude as added context) when:
     own command line and never ends (the Oct 5 vlog.py loop ran 28 min after the job finished);
   - a fourth agent is about to start in one session, or any Workflow (ultracode) call.
 Context and compaction warnings fire once per session and level; loop and agent warnings every time.
-One block, approved by Omarie on 2026-10-06: in the lead, a second Read of the same image file is denied
-(frames go to nq-check / nq-label as one contact sheet; re-reading them re-writes the cache).
-Apart from that it never prints a permission decision, so the regret gate's ask/deny stays in charge.
+Two blocks:
+  - approved by Omarie on 2026-10-06: in the lead, a second Read of the same image file is denied
+    (frames go to nq-check / nq-label as one contact sheet; re-reading them re-writes the cache);
+  - asked for by Omarie on 2026-10-27, after the weekly review found poll loops in 35 of 143 sessions although
+    the rule was already written: a foreground wait loop with no hard bound, and any `pgrep -f` loop that
+    matches itself, are denied with the approved way to wait. A bounded loop, a loop sent to the background
+    (the harness times it out and re-invokes Claude when it ends), `watch` and a single long sleep still only warn.
+Apart from those it never prints a permission decision, so the regret gate's ask/deny stays in charge.
 Reads the tail of the transcript only; about 20 ms. Fails open: any error means no warning.
 Thresholds: NQOS_GUARD_CTX (300000), NQOS_GUARD_HANDOFF (500000), NQOS_GUARD_AGENTS (3).
 Tests: python3 .claude/hooks/test_cost_guard.py
@@ -104,6 +109,24 @@ def poll_warning(cmd):
     return None
 
 
+def poll_block(cmd, background=False):
+    """The reason to deny a wait loop that may never end, or None. Narrower than poll_warning on purpose:
+    only loops, and only when nothing bounds them."""
+    cmd = HEREDOC.sub("\n", cmd)
+    if not LOOP.search(cmd) or (BOUND.search(cmd) and TARGET.search(cmd) and "pgrep" not in cmd):
+        return None
+    if PGREP_SELF.search(cmd):
+        return ("Cost guard: blocked. This wait loop uses `pgrep -f`, which matches the loop's own command line, so "
+                "it never ends (the Oct 5 vlog.py loop ran 28 min after the job finished). Wait on the PID "
+                "(`timeout 900 bash -c 'while kill -0 $pid; do sleep 10; done'`) or a marker file the job writes, "
+                "or run the job with run_in_background so it re-invokes you when it exits.")
+    if not BOUND.search(cmd) and not background:
+        return ("Cost guard: blocked. This wait loop has no hard bound, so it can run until the session's own "
+                "timeout. Give it one (`timeout 900 bash -c '...'`, or a SECONDS bound) and wait on the PID "
+                "(`kill -0`) or a marker file, or run it with run_in_background.")
+    return None
+
+
 IMAGE = re.compile(r"\.(png|jpe?g|webp|gif|bmp|tiff?)$", re.I)
 
 
@@ -157,9 +180,13 @@ def warnings(hook):
 def main():
     try:
         hook = json.load(sys.stdin)
-        if repeat_frame(hook):
+        inp = hook.get("tool_input") or {}
+        reason = poll_block(inp.get("command", ""), bool(inp.get("run_in_background"))) \
+            if hook.get("tool_name") == "Bash" else None
+        if not reason and repeat_frame(hook):
             reason = ("Cost guard: this frame was already viewed in this session. Re-reading it re-writes the cache. "
                       "Use your earlier look, or send frames to nq-check / nq-label as one contact sheet.")
+        if reason:
             print(json.dumps({"hookSpecificOutput": {"hookEventName": "PreToolUse", "permissionDecision": "deny",
                                                      "permissionDecisionReason": reason}}))
             return

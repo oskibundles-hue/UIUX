@@ -52,7 +52,7 @@ def run(tool, inp, path=SMALL, session="s1", **extra):
     out = json.loads(p.stdout)
     if out.get("hookSpecificOutput", {}).get("permissionDecision") == "deny":
         return "DENY " + out["hookSpecificOutput"]["permissionDecisionReason"]
-    assert "permissionDecision" not in out.get("hookSpecificOutput", {}), "guard decides only on repeat frames"
+    assert "permissionDecision" not in out.get("hookSpecificOutput", {}), "the guard only ever denies"
     assert out["systemMessage"] == out["hookSpecificOutput"]["additionalContext"]
     return out["systemMessage"]
 
@@ -62,15 +62,24 @@ CASES = [
     ("plain command, small context", lambda: run("Bash", {"command": "ls -la"}), ""),
     ("short sleep", lambda: run("Bash", {"command": "sleep 5 && ls"}), ""),
     ("Oct 5 self-matching pgrep loop",
-     lambda: run("Bash", {"command": 'until ! pgrep -f "vlog.py ingest"; do sleep 30; done'}), "matches the loop's own"),
-    ("pgrep loop with bracket trick is still a poll loop, not self-matching",
-     lambda: run("Bash", {"command": "while pgrep -f '[v]log.py'; do sleep 20; done"}), "wait/poll loop"),
+     lambda: run("Bash", {"command": 'until ! pgrep -f "vlog.py ingest"; do sleep 30; done'}), "DENY Cost guard: blocked. This wait loop uses `pgrep -f`"),
+    ("Oct 5 loop is blocked in the background too (it never ends)",
+     lambda: run("Bash", {"command": 'until ! pgrep -f "vlog.py"; do sleep 30; done', "run_in_background": True}),
+     "DENY Cost guard: blocked. This wait loop uses `pgrep -f`"),
+    ("bracket-trick pgrep loop with no bound is blocked as unbounded, not self-matching",
+     lambda: run("Bash", {"command": "while pgrep -f '[v]log.py'; do sleep 20; done"}), "DENY Cost guard: blocked. This wait loop has no hard bound"),
+    ("bracket-trick pgrep loop with a timeout only warns",
+     lambda: run("Bash", {"command": "timeout 600 bash -c \"while pgrep -f '[v]log.py'; do sleep 20; done\""}), "wait/poll loop"),
+    ("unbounded loop sent to the background only warns",
+     lambda: run("Bash", {"command": "while kill -0 $pid; do sleep 20; done", "run_in_background": True}), "wait/poll loop"),
+    ("bounded loop on no PID or marker only warns",
+     lambda: run("Bash", {"command": "timeout 300 bash -c 'while true; do sleep 5; done'"}), "wait/poll loop"),
     ("long sleep", lambda: run("Bash", {"command": "sleep 600"}), "wait/poll loop"),
     ("watch -n", lambda: run("Bash", {"command": "watch -n 10 ls"}), "wait/poll loop"),
     ("loop text inside a heredoc is file content, not a wait",
      lambda: run("Bash", {"command": "cat > t.py <<'E'\nwhile True: sleep(5)\nuntil pgrep -f x; do sleep 9; done\nE\npython3 t.py"}), ""),
     ("a real loop after a heredoc still warns",
-     lambda: run("Bash", {"command": "cat > t <<E\nhi\nE\nwhile true; do sleep 30; done"}), "wait/poll loop"),
+     lambda: run("Bash", {"command": "cat > t <<E\nhi\nE\nwhile true; do sleep 30; done"}), "DENY"),
     ("loop without sleep is fine", lambda: run("Bash", {"command": "for f in *.mp4; do echo $f; done"}), ""),
     ("past 300k warns", lambda: run("Read", {"file_path": "x"}, BIG, "s-big"), "passed 300k"),
     ("past 300k warns once", lambda: run("Read", {"file_path": "x"}, BIG, "s-big"), ""),
@@ -82,8 +91,10 @@ CASES = [
     ("fourth agent warns", lambda: run("Agent", {"prompt": "x"}, AGENTS3, "s-a"), "agent number 4"),
     ("workflow always warns", lambda: run("Workflow", {"script": "x"}), "ultracode"),
     ("inside an agent: no lead context check", lambda: run("Read", {}, HUGE, "s-sub", agent_id="a1"), ""),
-    ("inside an agent: poll still warns",
-     lambda: run("Bash", {"command": "while true; do sleep 5; done"}, HUGE, "s-sub", agent_id="a1"), "wait/poll"),
+    ("inside an agent: an unbounded loop is still blocked",
+     lambda: run("Bash", {"command": "while true; do sleep 5; done"}, HUGE, "s-sub", agent_id="a1"), "DENY"),
+    ("inside an agent: a long sleep still warns",
+     lambda: run("Bash", {"command": "sleep 300"}, HUGE, "s-sub", agent_id="a1"), "wait/poll"),
     ("second read of the same frame is denied", lambda: run("Read", {"file_path": "/w/look/96.jpg"}, FRAMES, "s-f",
                                                               tool_use_id="toolu_new"), "DENY"),
     ("the current call's own record doesn't count", lambda: run("Read", {"file_path": "/w/look/99.jpg"}, FRAMES, "s-f",
@@ -100,10 +111,10 @@ TIMED = [   # the approved waits: no warning
     ("SECONDS-bounded wait on a marker", "end=$((SECONDS+3600)); while [ ! -f render.done ] && [ $SECONDS -lt $end ]; do sleep 60; done"),
     ("SECONDS-bounded wait on a PID", "while kill -0 $pid 2>/dev/null && (( SECONDS < 1200 )); do sleep 20; done"),
 ]
-STILL = [   # still warn
-    ("PID wait with no bound", "while kill -0 $pid; do sleep 20; done", "wait/poll loop"),
+STILL = [   # still flagged: blocked (DENY) or warned
+    ("PID wait with no bound", "while kill -0 $pid; do sleep 20; done", "DENY Cost guard: blocked. This wait loop has no hard bound"),
     ("pgrep -f loop even with a timeout", "timeout 600 bash -c 'until ! pgrep -f render; do sleep 5; done'",
-     "matches the loop's own"),
+     "DENY Cost guard: blocked. This wait loop uses `pgrep -f`"),
     ("bare long sleep check", "sleep 120 && tail -3 render.log", "wait/poll loop"),
 ]
 CASES += [(label, (lambda c=cmd: run("Bash", {"command": c})), "") for label, cmd in TIMED]
