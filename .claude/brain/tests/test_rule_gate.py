@@ -129,6 +129,10 @@ json.dump({"at": g._now(), "session": "s1", "job": "x", "note": "", "usd": 1, "c
            "output": 0, "share": {}, "agent_ctx_max": 0, "drains": []}, open(os.environ["NQOS_COSTLOG"], "w"))
 text = g.review(7)
 assert "gate: safe to land (process rule" in text, text
+import post_mortem  # noqa: E402
+assert post_mortem.review(7) == text, "post_mortem.py review carries the gate line itself"
+assert text.count("gate:") == text.count("Proposed rule:"), "one gate line per proposal, not two"
+assert "gate:" not in post_mortem.review(7, gate=False)
 
 # ---- a real gap 2 card (job_card.py) joins the set and is measured ----
 sys.path.insert(0, os.path.join(HERE, "tests"))
@@ -142,5 +146,12 @@ r = g.gate("reels louder than -12 LUFS")
 assert next(x for x in r["results"] if x["job"] == real["id"])["status"] == "fail"
 r = g.gate("name the style in every reel brief")
 assert next(x for x in r["results"] if x["job"] == real["id"])["status"] == "pass"
+
+# ---- the replay set file sits among the cards: job_card.py and job_diff.py must skip it, not crash ----
+import job_diff  # noqa: E402
+assert os.path.isfile(g.REPLAY)
+assert all("id" in c for c in job_card.load_all()), "replayset.json read as a card"
+assert job_card.load("no-such-card") is None
+assert job_diff.reference(dict(real, verdict="FAIL", id="x"))[0] is not None
 
 print("rule_gate: all checks pass")

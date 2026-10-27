@@ -54,7 +54,7 @@ def _now():
 def cards():
     out = {}
     for p in glob.glob(os.path.join(CARDS, "*.json")):
-        if os.path.basename(p) in ("refs.json", "replayset.json"):
+        if os.path.basename(p) in ("refs.json", "replayset.json"):   # job_diff's pins, the replay set
             continue
         try:
             c = json.load(open(p))
@@ -441,16 +441,9 @@ def show(res):
 
 
 def review(days=7):
-    """post_mortem's weekly review with the gate's verdict under each proposal, ready for the click."""
+    """post_mortem's weekly review, which now carries the gate's verdict under each proposal itself."""
     import post_mortem
-    text = post_mortem.review(days)
-    out = []
-    for line in text.splitlines():
-        out.append(line)
-        m = re.match(r"\s+\d+\. .*?Proposed rule: (.+)$", line)
-        if m:
-            out.append(f"     gate: {gate(m[1].rstrip('.'))['verdict']}")
-    return "\n".join(out)
+    return post_mortem.review(days)
 
 
 def main(a):
