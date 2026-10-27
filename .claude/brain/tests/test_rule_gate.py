@@ -130,4 +130,17 @@ json.dump({"at": g._now(), "session": "s1", "job": "x", "note": "", "usd": 1, "c
 text = g.review(7)
 assert "gate: safe to land (process rule" in text, text
 
+# ---- a real gap 2 card (job_card.py) joins the set and is measured ----
+sys.path.insert(0, os.path.join(HERE, "tests"))
+import job_card, jobdiff_fixtures  # noqa: E402
+job_card.CARDS = g.CARDS
+lead, rep, tid = jobdiff_fixtures.job(TMP, "real1", lufs=-14)
+real = job_card.build_card(lead, rep, tid, "sess", "creal1", TMP)
+job_card.save(real)
+assert "added" in g.set_add(real["id"], fmt="reel"), real
+r = g.gate("reels louder than -12 LUFS")
+assert next(x for x in r["results"] if x["job"] == real["id"])["status"] == "fail"
+r = g.gate("name the style in every reel brief")
+assert next(x for x in r["results"] if x["job"] == real["id"])["status"] == "pass"
+
 print("rule_gate: all checks pass")

@@ -142,6 +142,14 @@ because this default branch doesn't carry `creator-kit/`, `formula-dynamics/` or
 pass one voter's verdict to the other, because a vote that saw the other's answer isn't independent.
 Run `nq-story` first only when the creative direction isn't settled.
 
+**When nq-check FAILs, look at the first divergence** (gap 2 of the reel-harness comparison, 2026-10-26).
+Every nq-check run saves a job card (`.claude/brain/job_card.py`: briefs, steps with their flags, output
+specs, verdict) to the private brain's `jobcards/`, or to the git-ignored `work/jobcards/` without it.
+On a FAIL, `.claude/hooks/job_diff_hook.py` lines the job up against the latest PASS of the same format,
+or the one pinned with `job_diff.py pin <card>`, and puts the first place they split next to the FAIL:
+a brief with no style, a different ffmpeg flag, an output at the wrong loudness. Fix that step first.
+By hand: `python3 .claude/brain/job_diff.py latest`, or `job_diff.py <card> --ref <card | format>`.
+
 **Replay a proposed rule before it lands** (gap 3 of the reel-harness comparison, 2026-10-26: nothing that
 used to pass may fail after an update). Before putting a rule proposal to Omarie as a click, run
 `python3 .claude/brain/rule_gate.py check "<proposed rule>" [--format reel]`, or `rule_gate.py review` for the
