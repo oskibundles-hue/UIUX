@@ -2,7 +2,7 @@
 """Check cost_guard.py against calls with known answers (no model, under 2 s).
 
 usage: python3 .claude/hooks/test_cost_guard.py
-Builds throwaway transcripts in the temp folder: small, past 300k, past 500k, compacted, three agents.
+Builds throwaway transcripts in the temp folder: small, past 150k, past 300k, past 500k, compacted, three agents.
 """
 import json, os, subprocess, sys, tempfile
 
@@ -28,6 +28,7 @@ def agent_use(tid=None):
 
 
 SMALL = transcript("small", 40_000)
+MID = transcript("mid", 180_000)
 BIG = transcript("big", 320_000)
 HUGE = transcript("huge", 640_000)
 COMPACTED = transcript("compacted", 90_000, [{"type": "system", "subtype": "compact_boundary"}])
@@ -94,6 +95,23 @@ CASES = [
     ("a real loop after a heredoc still warns",
      lambda: run("Bash", {"command": "cat > t <<E\nhi\nE\nwhile true; do sleep 30; done"}), "DENY"),
     ("loop without sleep is fine", lambda: run("Bash", {"command": "for f in *.mp4; do echo $f; done"}), ""),
+    ("send_later past 150k warns", lambda: run("mcp__claude-code-remote__send_later",
+                                               {"delay_minutes": 50, "message": "x"}, MID), "wakes this session at 180k"),
+    ("send_later past 150k warns every time", lambda: run("mcp__claude-code-remote__send_later",
+                                                          {"delay_minutes": 50, "message": "x"}, MID), "wakes this session"),
+    ("send_later in a small session is fine", lambda: run("mcp__claude-code-remote__send_later",
+                                                          {"delay_minutes": 50, "message": "x"}), ""),
+    ("ScheduleWakeup past 150k warns", lambda: run("ScheduleWakeup", {"delaySeconds": 1200, "prompt": "x"}, MID),
+     "wakes this session"),
+    ("stopping a wakeup loop is fine", lambda: run("ScheduleWakeup", {"stop": True}, MID), ""),
+    ("create_trigger into this session warns", lambda: run("mcp__claude-code-remote__create_trigger",
+                                                           {"name": "n", "prompt": "p"}, MID), "wakes this session"),
+    ("create_trigger with a fresh session is fine", lambda: run("mcp__claude-code-remote__create_trigger",
+     {"name": "n", "prompt": "p", "create_new_session_on_fire": True}, MID), ""),
+    ("create_trigger into another session is fine", lambda: run("mcp__claude-code-remote__create_trigger",
+     {"name": "n", "prompt": "p", "persistent_session_id": "session_small"}, MID), ""),
+    ("a check-in set inside an agent is skipped", lambda: run("mcp__claude-code-remote__send_later",
+     {"delay_minutes": 5, "message": "x"}, MID, agent_id="a1"), ""),
     ("past 300k warns", lambda: run("Read", {"file_path": "x"}, BIG, "s-big"), "passed 300k"),
     ("past 300k warns once", lambda: run("Read", {"file_path": "x"}, BIG, "s-big"), ""),
     ("past 500k says hand off", lambda: run("Read", {"file_path": "x"}, HUGE, "s-huge"), "Hand off"),
