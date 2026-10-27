@@ -1,0 +1,23 @@
+{
+  "_about": "What idea_scraper.py watches. Per brand: YouTube channels (any URL yt-dlp takes: @handle, /channel/ID), subreddits, and the topic words that make a post relevant. Add the creators you actually study; an outlier only means something against the channel's own normal.",
+  "brands": {
+    "formula-dynamics": {
+      "youtube": [],
+      "subreddits": ["Detailing", "CarAV", "projectcar", "Autos"],
+      "keywords": ["wheels", "exhaust", "suspension", "tune", "tuning", "body kit", "ppf", "ceramic", "coating",
+                   "paint correction", "detail", "detailing", "install", "build", "fitment", "forged", "wrap"]
+    },
+    "supercar-experience": {
+      "youtube": [],
+      "subreddits": ["exoticspotting", "cars", "spotted"],
+      "keywords": ["supercar", "rental", "rent", "lamborghini", "ferrari", "mclaren", "porsche", "handover",
+                   "delivery", "experience", "test drive", "first time"]
+    },
+    "vlog": {
+      "_note": "@brezscales is the vlogger Omarie sent as a reference.",
+      "youtube": ["https://www.youtube.com/@brezscales"],
+      "subreddits": [],
+      "keywords": ["day in the life", "vlog", "my first", "week", "behind the scenes", "shop", "business"]
+    }
+  }
+}
