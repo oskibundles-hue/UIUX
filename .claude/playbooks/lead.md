@@ -170,6 +170,17 @@ the evidence in front of him.
   captions, copy or frames. The set and the bundles live next to the cards in the private brain's
   `jobcards/` and `gate/`, or the git-ignored `work/` without it.
 
+**Every cost line says whether the work passed** ("Observe", the last box of the reel-harness comparison,
+2026-10-27). `live_card.py done` (or `cost_meter.py --log`) now writes the job's nq-check outcome into its
+costlog.jsonl line: `verdict` PASS or FAIL, the failing checks in `fails`, the job card ids in `cards`
+(`job_diff.py <id>` opens one), `rounds` of nq-check, and the `format`. It reads the job cards this session
+saved (gap 2); a report that left no card falls back to gap 1's FAIL log. The last round decides, so a job
+that failed, was fixed and then passed counts as passed. A lead-only job nq-check never saw is logged as
+`unchecked` and left out of the pass rate (Omarie, 2026-10-27). `post_mortem.py review` then prints cost and
+pass rate per format: jobs, spend, passed out of checked, cost per passed job (spend on checked jobs over
+the passes) and how many went unchecked. A session is one job in the log, so start a fresh session for the
+next job, as the token cost rules already say.
+
 **Claude Code enforces the chain** (Omarie, 2026-09-28). `.claude/settings.json` sets
 `CLAUDE_CODE_MAX_CONCURRENT_SUBAGENTS` and `CLAUDE_CODE_MAX_SUBAGENT_SPAWN_DEPTH` to 1: one subagent runs at a time,
 and subagents can't start their own. Claude 5 models delegate more readily, and every agent costs a full conversation's

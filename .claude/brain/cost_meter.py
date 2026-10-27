@@ -14,7 +14,8 @@ Dollar figures are API-equivalent list prices, for comparing sessions, not what 
   --json   one JSON object (everything below)
   --card   ArtifactData `update` payload for this session's Working-now card (live_card.py's doc id)
   --log    append this session's line to the cost log (costlog.jsonl, see post_mortem.py),
-           with --job "<what the job was>" and --note "<what went wrong>"
+           with --job "<what the job was>" and --note "<what went wrong>"; the line also gets the job's nq-check
+           verdict, failing checks and job card ids (post_mortem.quality)
 No model call, stdlib only, about 0.1 s per 10 MB of transcript.
 """
 import glob, json, os, re, statistics, sys
