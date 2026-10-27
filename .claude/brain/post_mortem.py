@@ -17,6 +17,11 @@ nq-check's FAIL rows go to costlog/qualityfails.jsonl next to it (gap 1 of the r
 does the same by hand. review groups the checks that failed in two or more jobs and turns them into
 proposals; one-offs are left out. FAIL evidence can quote client copy, so it only ever goes to that
 private file (or the git-ignored work/ fallback), never into this repo.
+Each cost line also carries the job's quality outcome ("Observe", 2026-10-27): verdict PASS / FAIL from the
+nq-check job cards this session saved (job_card.py; a session is one job, as in read_log), the failing checks, the card
+ids, and the format. A job with no card falls back to its FAIL-log rows, and a job nq-check never saw is
+"unchecked": review shows it, but leaves it out of the pass rate (Omarie's call, 2026-10-27). review then
+prints cost and pass rate per format, with the cost per passed job (spend on checked jobs over the passes).
 No model call, stdlib only.
 """
 import datetime, json, os, re, sys
@@ -40,10 +45,37 @@ def log_line(r, job=None, note=None):
             "output": t.get("output", 0), "share": r["cost_share_pct"],
             "agent_ctx_max": max([s["ctx_max"] for s in r["streams"] if s["name"] != "lead"], default=0),
             "drains": r["drains"][:10]}
+    try:
+        line.update(quality(r["session"], job))
+    except Exception:                             # the cost line goes out even if the cards can't be read
+        line.update(verdict="unchecked", fails=[], cards=[], rounds=0)
     os.makedirs(os.path.dirname(LOG), exist_ok=True)
     with open(LOG, "a") as fh:
         fh.write(json.dumps(line) + "\n")
     return LOG
+
+
+def quality(session, job=None):
+    """The job's nq-check outcome for its cost line: verdict (PASS, FAIL or unchecked), the failing checks,
+    the job card ids, how many nq-check rounds ran, and the format. A session is one job, as in read_log.
+    The last card decides the verdict, so a job that failed, was fixed and then passed counts as passed,
+    with rounds showing the retry."""
+    import job_card                               # imported here: job_card imports this module
+    cards = [c for c in reversed(job_card.load_all()) if c.get("session") == session]   # oldest first, ties by file time
+    out = {"verdict": "unchecked", "fails": [], "cards": [c["id"] for c in cards], "rounds": len(cards),
+           "format": tags(job or "")[1], "workstream": tags(job or "")[0]}
+    if cards:
+        last = cards[-1]
+        out.update(verdict=last.get("verdict") or "unchecked",
+                   fails=[k for k, v in (last.get("checks") or {}).items() if v == "FAIL"],
+                   format=last.get("format") or out["format"],
+                   workstream=(last.get("workstream") or "").lower() or out["workstream"])
+        return out
+    fails = [f for f in _read(FAILS, None) if f.get("session") == session]
+    if fails:                                     # no card (a handback-only report): the FAIL log still knows
+        out.update(verdict="FAIL", rounds=1, fails=list(dict.fromkeys(f["check"] for f in fails)),
+                   format=out["format"] or next((f["format"] for f in fails if f.get("format")), ""))
+    return out
 
 
 def read_log(days):
@@ -196,6 +228,40 @@ def quality_proposals(groups, days=7):
     return out
 
 
+def by_format(rows):
+    """Cost and pass rate per format: {format: {jobs, usd, checked, passed, unchecked, checked_usd}}.
+    Lines from before the verdict was logged count as unchecked."""
+    out = defaultdict(Counter)
+    for r in rows:
+        fm = r.get("format") or tags(r.get("job", ""))[1] or "other"
+        v = r.get("verdict") or "unchecked"
+        g = out[fm]
+        g["jobs"] += 1
+        g["usd"] += r.get("usd", 0)
+        if v == "unchecked":
+            g["unchecked"] += 1
+        else:
+            g["checked"] += 1
+            g["checked_usd"] += r.get("usd", 0)
+            g["passed"] += v == "PASS"
+    return out
+
+
+def format_lines(rows):
+    """The review's cost-and-quality block: cost per passed job is the spend on checked jobs over the passes."""
+    out = []
+    for fm, g in sorted(by_format(rows).items(), key=lambda kv: -kv[1]["usd"]):
+        line = f"  {fm:<10}{g['jobs']:>3} jobs  ${g['usd']:>7.2f}"
+        if g["checked"]:
+            line += f"  {g['passed']}/{g['checked']} passed ({100 * g['passed'] // g['checked']}%)"
+            line += (f"  ${g['checked_usd'] / g['passed']:.2f} per passed {fm}" if g["passed"]
+                     else "  no passes yet")
+        if g["unchecked"]:
+            line += f"  {g['unchecked']} unchecked"
+        out.append(line)
+    return out
+
+
 def proposals(rows):
     """Rule changes the numbers argue for. Thresholds come from the Oct 5-6 case and usage-drains."""
     out = []
@@ -230,7 +296,11 @@ def review(days=7):
     out = [f"Cost review, last {days} days: {len(rows)} sessions, ${total:.2f} API-equivalent", ""]
     for r in rows[:12]:
         out.append(f"  ${r['usd']:>8.2f}  {r['session'][:8]}  {r['calls']:>4} calls  ctx med {r['ctx_median'] // 1000}k"
-                   f"  {r['agents']} agents  {r['job'][:40]}" + (f"  | {r['note'][:60]}" if r["note"] else ""))
+                   f"  {r['agents']} agents  {r.get('verdict') or 'unchecked':9}  {r['job'][:40]}"
+                   + (f"  [fails: {', '.join(r['fails'][:3])}]" if r.get("fails") else "") + (f"  | {r['note'][:60]}" if r["note"] else ""))
+    fmts = format_lines(rows)
+    if fmts:
+        out += ["", "cost and pass rate by format (nq-check; unchecked jobs are left out of the rate):"] + fmts
     drains = Counter(d.split(": ", 1)[-1][:50] for r in rows for d in r["drains"])
     if drains:
         out += ["", "repeated drains:"] + [f"  {n}x {d}" for d, n in drains.most_common(5)]
