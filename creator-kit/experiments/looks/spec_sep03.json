@@ -323,5 +323,17 @@
  "transcript_note": "faster-whisper large-v3, word timestamps; pass the JSON to qa.py with --transcript",
  "picked": "mono",
  "picked_note": "Omarie picked Mono as the default look on 2026-10-25; the other five stay proposed.",
- "names_confirmed": "Omarie confirmed the captions \"Bum Cola\" and \"Bum Root Beer\" on 2026-10-25 (the can reads BUM ENERGY / COLA)."
+ "names_confirmed": "Omarie confirmed the captions \"Bum Cola\" and \"Bum Root Beer\" on 2026-10-25 (the can reads BUM ENERGY / COLA).",
+ "size": [
+  2160,
+  3840
+ ],
+ "size_note": "Fast Cut delivers 2160x3840; layout constants are written at 1080 wide and scaled. --size overrides.",
+ "grid2x2": [
+  "mono",
+  "highlighter",
+  "one_word",
+  "tag_stack"
+ ],
+ "grid2x2_note": "Mono plus the next three looks in spec order (Omarie, 2026-10-27). Order is top-left, top-right, bottom-left, bottom-right."
 }

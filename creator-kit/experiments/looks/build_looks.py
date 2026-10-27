@@ -1,15 +1,19 @@
 #!/usr/bin/env python3
 """Talking-head looks: one take in, several styled cuts out (all proposed until Omarie picks).
 
-    python3 build_looks.py base  --spec spec_sep03.json --src take.mov --work work
+    python3 build_looks.py base  --spec spec_sep03.json --src take.mov --work work [--size 2160x3840]
     python3 build_looks.py looks --spec spec_sep03.json --work work [--only mono,framed]
     python3 build_looks.py sheets --spec spec_sep03.json --work work
 
 base   cuts the spec's keep ranges out of the take, grades them with the kit LUT at
-       1080x1920/30, and loudness-normalises the audio once (-14 LUFS, limiter 0.84).
+       W x H / 30, and loudness-normalises the audio once (-14 LUFS, limiter 0.84).
 looks  composes every look over the same base, frame by frame (PIL), and writes
        work/<look>.mp4 plus work/manifest.json (every word put on screen, with its box).
-sheets grid still, review contact sheet, 3x2 grid video and the cycle reel.
+sheets grid still, review contact sheet, 3x2 grid video, the 2x2 grid and the cycle reel.
+
+Size comes from --size, else the spec's "size", else 1080x1920. Every pixel constant
+below is written at 1080 wide and goes through px(), so one layout serves every size.
+base records the size in timeline.json and the later steps refuse a different one.
 
 Every word on screen comes from spec phrases, which come from the transcript; qa.py
 checks that, the safe zones and the loudness before anything goes to nq-check.
@@ -20,14 +24,34 @@ from PIL import Image, ImageDraw, ImageFilter, ImageFont
 
 HERE = os.path.dirname(os.path.abspath(__file__))
 FONTS = os.path.join(HERE, "../../remotion/public/fonts")
-W, H, FPS = 1080, 1920, 30
+FPS = 30
 
 # theme.ts values (Anti Stock / @nq.young)
 YELLOW, ORANGE, DEEP, WHITE, BLACK = "#FBD101", "#E75522", "#C4801B", "#FDFDFD", "#0B0B0B"
-# safe zone for Instagram UI, from theme.ts: top .135, bottom .245, left .067, right .176
-SAFE = (round(W * 0.067), round(H * 0.135), round(W * (1 - 0.176)), round(H * (1 - 0.245)))
-CX = (SAFE[0] + SAFE[2]) // 2 + 30  # centred text sits a touch right of the safe band's centre
-MAXW = 2 * (SAFE[2] - CX)
+
+
+def set_size(w, h):
+    """Frame size and everything derived from it. S scales the 1080-wide constants."""
+    global W, H, S, SAFE, CX, MAXW
+    W, H, S = w, h, w / 1080
+    # safe zone for Instagram UI, from theme.ts: top .135, bottom .245, left .067, right .176
+    SAFE = (round(W * 0.067), round(H * 0.135), round(W * (1 - 0.176)), round(H * (1 - 0.245)))
+    CX = (SAFE[0] + SAFE[2]) // 2 + px(30)  # centred text sits a touch right of the safe band's centre
+    MAXW = 2 * (SAFE[2] - CX)
+
+
+def px(v):
+    return round(v * S)
+
+
+def resolve_size(a, spec):
+    s = a.size or "x".join(map(str, spec.get("size", (1080, 1920))))
+    w, h = map(int, s.lower().split("x"))
+    return w, h
+
+
+S = 1
+set_size(1080, 1920)
 
 
 def run(cmd):
@@ -43,10 +67,21 @@ def load_spec(path):
     return spec
 
 
+def load_timeline(a, spec):
+    """timeline.json, after checking base was built at the size asked for."""
+    tl = json.load(open(os.path.join(a.work, "timeline.json")))
+    want, have = resolve_size(a, spec), tuple(tl.get("size", (1080, 1920)))
+    if want != have:
+        sys.exit(f"base in {a.work} is {have[0]}x{have[1]}, asked for {want[0]}x{want[1]}: run base again")
+    set_size(*have)
+    return tl
+
+
 # ---------------------------------------------------------------- base
 
 def cmd_base(a):
     spec = load_spec(a.spec)
+    set_size(*resolve_size(a, spec))
     os.makedirs(a.work, exist_ok=True)
     lut = os.path.normpath(os.path.join(spec["_dir"], spec["lut"]))
     parts, labels = [], []
@@ -76,9 +111,9 @@ def cmd_base(a):
          os.path.join(a.work, "base.wav")])
     face = find_face(base)
     words = remap_words(spec)
-    json.dump({"face": face, "phrases": words, "frames": nframes(base)},
+    json.dump({"size": [W, H], "face": face, "phrases": words, "frames": nframes(base)},
               open(os.path.join(a.work, "timeline.json"), "w"), indent=1)
-    print(f"base: {nframes(base)} frames, face {face}, loudness in {m['input_i']} LUFS")
+    print(f"base: {W}x{H}, {nframes(base)} frames, face {face}, loudness in {m['input_i']} LUFS")
 
 
 def nframes(path):
@@ -164,6 +199,8 @@ _font_cache, _text_cache = {}, {}
 
 
 def font(name, size, weight=None):
+    """size is at 1080 wide; scaled here."""
+    size = px(size)
     k = (name, size, weight)
     if k not in _font_cache:
         f = ImageFont.truetype(os.path.join(FONTS, name), size)
@@ -178,7 +215,7 @@ def text_img(s, f, fill, stroke=0, stroke_fill=BLACK, shadow=0):
     k = (s, id(f), fill, stroke, shadow)
     if k in _text_cache:
         return _text_cache[k]
-    pad = stroke + shadow * 3 + 4 + (30 if stroke >= 7 else 0)
+    pad = stroke + shadow * 3 + px(4) + (px(30) if stroke >= px(7) else 0)
     l, t, r, b = f.getbbox(s, stroke_width=stroke)
     asc, desc = f.getmetrics()
     w, h = r - l + 2 * pad, asc + desc + 2 * pad
@@ -212,6 +249,7 @@ def wrap(words, f, maxw, space):
 
 def tag(img, s, f, x, y, fill, ink, ph=20, pv=16):
     """A box fitted to the caps of s (same height for every line in a font), text centred in it."""
+    ph, pv = px(ph), px(pv)
     _, ct, _, cb = f.getbbox("H")
     l, _, r, _ = f.getbbox(s)
     box = (x, y, x + (r - l) + 2 * ph, y + (cb - ct) + 2 * pv)
@@ -228,7 +266,7 @@ def with_glow(im):
     """Adds a soft dark halo under rendered type so it holds on bright backgrounds."""
     k = id(im)
     if k not in _glow_cache:
-        a = im.getchannel("A").filter(ImageFilter.MaxFilter(15)).filter(ImageFilter.GaussianBlur(22))
+        a = im.getchannel("A").filter(ImageFilter.MaxFilter(2 * px(7) + 1)).filter(ImageFilter.GaussianBlur(px(22)))
         halo = Image.new("RGBA", im.size, (0, 0, 0, 0))
         halo.putalpha(a.point(lambda v: int(v * 0.55)))
         _glow_cache[k] = Image.alpha_composite(halo, im)
@@ -246,6 +284,7 @@ class Frame:
     def __init__(self, tl, spec):
         self.face = tl["face"]
         self.spec = spec
+        self.mouths = set()  # (x, y) of his mouth in output pixels, for qa's mouth check
         self.cuts, acc = [], 0.0
         for s, e in spec["keep"]:
             self.cuts.append(acc)
@@ -258,9 +297,9 @@ class Frame:
         p = self.spec["punch"]
         return p[self.seg(t) % len(p)]
 
-    def fill(self, img, box_w, box_h, scale, face_y=0.42, face_frac=None):
+    def fill(self, img, box_w, box_h, scale, face_y=0.42, face_frac=None, at=(0, 0)):
         """Crop the frame to box_w:box_h around the face at the given zoom and resize;
-        the face centre lands face_y of the way down the box."""
+        the face centre lands face_y of the way down the box, which is pasted at `at`."""
         fx, fy = self.face["cx"], self.face["cy"]
         aspect = box_w / box_h
         cw = min(W, H * aspect) / scale
@@ -272,6 +311,8 @@ class Frame:
                 cw, ch = W, W / aspect
         x0 = min(max(fx - cw / 2, 0), W - cw)
         y0 = min(max(fy - ch * face_y, 0), H - ch)
+        k = box_h / ch
+        self.mouths.add((round(at[0] + (fx - x0) * k), round(at[1] + (self.face["mouth"] - y0) * k)))
         return img.resize((box_w, box_h), Image.BILINEAR, box=(x0, y0, x0 + cw, y0 + ch))
 
 
@@ -314,9 +355,9 @@ def look_highlighter(img, t, ctx):
         return img
     f = font("Archivo.ttf", 74, 800)
     words = [dict(w, s=w["w"]) for w in p["words"]]
-    lines = wrap(words, f, MAXW, 20)
-    lead = 96
-    top = SAFE[3] - 24 - lead * len(lines)
+    lines = wrap(words, f, MAXW, px(20))
+    lead = px(96)
+    top = SAFE[3] - px(24) - lead * len(lines)
     d = ImageDraw.Draw(img, "RGBA")
     asc = f.getmetrics()[0]
 
@@ -324,11 +365,12 @@ def look_highlighter(img, t, ctx):
         on = w["on"] <= t < w["off"]
         if on:
             k = ease_out((t - w["on"]) * FPS / 4)
-            d.rounded_rectangle((x - 12, y + 4, x - 12 + (ww + 24) * k, y + asc + 18), 10, fill=YELLOW)
-        im, pad, _ = text_img(w["s"], f, BLACK if on else WHITE, shadow=0 if on else 6)
-        img.paste(im, (int(x - pad), int(y - pad + 8)), im)
+            d.rounded_rectangle((x - px(12), y + px(4), x - px(12) + (ww + px(24)) * k, y + asc + px(18)),
+                                px(10), fill=YELLOW)
+        im, pad, _ = text_img(w["s"], f, BLACK if on else WHITE, shadow=0 if on else px(6))
+        img.paste(im, (int(x - pad), int(y - pad + px(8))), im)
 
-    place_lines(ctx, lines, f, 20, CX, top, lead, draw)
+    place_lines(ctx, lines, f, px(20), CX, top, lead, draw)
     ctx.put("caption", p["text"], (CX - MAXW / 2, top, CX + MAXW / 2, top + lead * len(lines)), p)
     return img
 
@@ -345,15 +387,17 @@ def look_one_word(img, t, ctx):
         return img
     s = w["w"].strip(",.").upper()
     f = font("Anton-Regular.ttf", 168)
-    while f.getlength(s) * 1.18 + 14 > MAXW:  # fits at the top of the pop, stroke included
-        f = font("Anton-Regular.ttf", f.size - 8)
-    im, pad, asc = text_img(s, f, YELLOW if w["key"] else WHITE, stroke=7, shadow=8)
+    size = 168
+    while f.getlength(s) * 1.18 + px(14) > MAXW:  # fits at the top of the pop, stroke included
+        size -= 8
+        f = font("Anton-Regular.ttf", size)
+    im, pad, asc = text_img(s, f, YELLOW if w["key"] else WHITE, stroke=px(7), shadow=px(8))
     im = with_glow(im)
     k = 1.18 - 0.18 * ease_out((t - w["on"]) * FPS / 4)
     if k > 1.001:
         im = im.resize((int(im.width * k), int(im.height * k)), Image.BILINEAR)
         pad *= k
-    cy = round(H * 0.665)  # under his chin (YuNet: mouth ~930, chin ~1110 on this take)
+    cy = round(H * 0.665)  # under his chin (YuNet at 1080: mouth ~930, chin ~1110 on this take)
     x, y = int(CX - im.width / 2), int(cy - im.height / 2)
     img.paste(im, (x, y), im)
     ctx.put("caption", w["w"], (x + pad, y + pad, x + im.width - pad, y + im.height - pad), w)
@@ -365,7 +409,7 @@ def look_tag_stack(img, t, ctx):
     img = ctx.fr.fill(img, W, H, ctx.fr.punch(t))
     if t >= ctx.phrases[1]["t0"]:  # phrase 1 is the hook line, so the tab waits until it's said
         hook = ctx.spec["hook_alt"][0].strip(",.").upper()
-        box = tag(img, hook, font("Anton-Regular.ttf", 62), SAFE[0], SAFE[1] + 10, ORANGE, WHITE, 18, 14)
+        box = tag(img, hook, font("Anton-Regular.ttf", 62), SAFE[0], SAFE[1] + px(10), ORANGE, WHITE, 18, 14)
         ctx.put("hook", ctx.spec["hook_alt"][0], box, ctx.phrases[1])
     p = active(ctx.phrases, t)
     if not p:
@@ -373,16 +417,16 @@ def look_tag_stack(img, t, ctx):
     f = font("Anton-Regular.ttf", 88)
     said = [dict(w, s=w["w"].upper()) for w in p["words"] if w["on"] <= t]
     allw = [dict(w, s=w["w"].upper()) for w in p["words"]]
-    lines = wrap(allw, f, SAFE[2] - SAFE[0] - 26 - 2 * 20 - 6, 22)
-    lead = 114
-    top = SAFE[3] - 10 - lead * len(lines)
+    lines = wrap(allw, f, SAFE[2] - SAFE[0] - px(26) - 2 * px(20) - px(6), px(22))
+    lead = px(114)
+    top = SAFE[3] - px(10) - lead * len(lines)
     n, y = len(said), top
     for li, line in enumerate(lines):
         shown = line[:max(0, n)]
         n -= len(line)
         if not shown:
             break
-        tag(img, " ".join(w["s"] for w in shown), f, SAFE[0] + (li % 2) * 26, y, YELLOW, BLACK)
+        tag(img, " ".join(w["s"] for w in shown), f, SAFE[0] + (li % 2) * px(26), y, YELLOW, BLACK)
         y += lead
     ctx.put("caption", p["text"], (SAFE[0], top, SAFE[2], top + lead * len(lines)), p)
     return img
@@ -394,37 +438,38 @@ def look_framed(img, t, ctx):
     d = ImageDraw.Draw(page)
     hf = font("Anton-Regular.ttf", 112)
     words = [dict(w=x, s=x.strip(",.").upper()) for x in ctx.spec["hook"][0].split()]
-    lines = wrap(words, hf, MAXW, 24)
-    y, half = SAFE[1] + 6, 0
+    lines = wrap(words, hf, MAXW, px(24))
+    y, half = SAFE[1] + px(6), 0
     for line in lines:
         s = " ".join(w["s"] for w in line)
         im, pad, _ = text_img(s, hf, BLACK)
         page.paste(im, (int(CX - im.width / 2), y - pad), im)
         half = max(half, im.width / 2 - pad)
-        y += 124
+        y += px(124)
     ctx.put("hook", ctx.spec["hook"][0], (CX - half, SAFE[1], CX + half, y), None)
-    cx0, cy0, cw, ch = 96, y + 24, W - 192, H - 220 - (y + 24)  # card runs under the UI zone; text doesn't
+    cx0, cy0 = px(96), y + px(24)
+    cw, ch = W - 2 * cx0, H - px(220) - cy0  # card runs under the UI zone; text doesn't
     # face high in the card so the caption pill sits under his chin; half-strength punch
-    card = ctx.fr.fill(img, cw, ch, 1 + (ctx.fr.punch(t) - 1) / 2, face_y=0.30)
-    d.rounded_rectangle((cx0 - 7, cy0 - 7, cx0 + cw + 7, cy0 + ch + 7), 46, fill=BLACK)
-    page.paste(card, (cx0, cy0), rounded_mask(cw, ch, 40))
+    card = ctx.fr.fill(img, cw, ch, 1 + (ctx.fr.punch(t) - 1) / 2, face_y=0.30, at=(cx0, cy0))
+    d.rounded_rectangle((cx0 - px(7), cy0 - px(7), cx0 + cw + px(7), cy0 + ch + px(7)), px(46), fill=BLACK)
+    page.paste(card, (cx0, cy0), rounded_mask(cw, ch, px(40)))
     p = active(ctx.phrases, t)
     if p:
         f = font("Archivo.ttf", 58, 800)
         ws = [dict(w, s=w["w"]) for w in p["words"]]
-        lines = wrap(ws, f, cw - 120, 16)
-        lead = 74
-        top = SAFE[3] - 30 - lead * len(lines)
-        bw = max(sum(f.getlength(w["s"]) for w in line) + 16 * (len(line) - 1) for line in lines)
-        d.rounded_rectangle((CX - bw / 2 - 26, top - 14, CX + bw / 2 + 26, top + lead * len(lines) + 4),
-                            22, fill=BLACK)
+        lines = wrap(ws, f, cw - px(120), px(16))
+        lead = px(74)
+        top = SAFE[3] - px(30) - lead * len(lines)
+        bw = max(sum(f.getlength(w["s"]) for w in line) + px(16) * (len(line) - 1) for line in lines)
+        d.rounded_rectangle((CX - bw / 2 - px(26), top - px(14), CX + bw / 2 + px(26),
+                             top + lead * len(lines) + px(4)), px(22), fill=BLACK)
 
         def draw(w, x, yy, ww):
             on = w["on"] <= t
             im, pad, _ = text_img(w["s"], f, YELLOW if (on and w["key"]) else (WHITE if on else "#6B6B6B"))
             page.paste(im, (int(x - pad), int(yy - pad)), im)
 
-        place_lines(ctx, lines, f, 16, CX, top, lead, draw)
+        place_lines(ctx, lines, f, px(16), CX, top, lead, draw)
         ctx.put("caption", p["text"], (CX - bw / 2, top, CX + bw / 2, top + lead * len(lines)), p)
     return page
 
@@ -437,23 +482,23 @@ def look_mono(img, t, ctx):
     y = np.clip((y - 0.45) * 1.28 + 0.45, 0, 1) ** 1.05
     img = Image.fromarray((np.repeat(y[..., None], 3, 2) * 255).astype(np.uint8))
     d = ImageDraw.Draw(img)
-    d.rectangle((26, 26, W - 27, H - 27), outline=YELLOW, width=5)
+    d.rectangle((px(26), px(26), W - 1 - px(26), H - 1 - px(26)), outline=YELLOW, width=px(5))
     p = active(ctx.phrases, t)
     if not p:
         return img
     f = font("Anton-Regular.ttf", 104)
     ws = [dict(w, s=w["w"].upper()) for w in p["words"]]
-    lines = wrap(ws, f, MAXW, 24)
-    lead = 122
-    top = SAFE[3] - 20 - lead * len(lines)
-    d.rectangle((CX - 70, top - 34, CX + 70, top - 24), fill=YELLOW)
+    lines = wrap(ws, f, MAXW, px(24))
+    lead = px(122)
+    top = SAFE[3] - px(20) - lead * len(lines)
+    d.rectangle((CX - px(70), top - px(34), CX + px(70), top - px(24)), fill=YELLOW)
 
     def draw(w, x, yy, ww):
         on = w["on"] <= t < w["off"]
-        im, pad, _ = text_img(w["s"], f, YELLOW if on else WHITE, stroke=5, shadow=6)
+        im, pad, _ = text_img(w["s"], f, YELLOW if on else WHITE, stroke=px(5), shadow=px(6))
         img.paste(im, (int(x - pad), int(yy - pad)), im)
 
-    place_lines(ctx, lines, f, 24, CX, top, lead, draw)
+    place_lines(ctx, lines, f, px(24), CX, top, lead, draw)
     ctx.put("caption", p["text"], (CX - MAXW / 2, top, CX + MAXW / 2, top + lead * len(lines)), p)
     return img
 
@@ -461,34 +506,34 @@ def look_mono(img, t, ctx):
 def look_headline(img, t, ctx):
     """Editorial: a tall black band carries the serif + Anton hook and the captions, so the
     picture below stays clean; orange progress bar along the band's edge."""
-    band = 830
+    band = px(830)
     page = Image.new("RGB", (W, H), BLACK)
-    page.paste(ctx.fr.fill(img, W, H - band, ctx.fr.punch(t), face_y=0.36), (0, band))
+    page.paste(ctx.fr.fill(img, W, H - band, ctx.fr.punch(t), face_y=0.36, at=(0, band)), (0, band))
     d = ImageDraw.Draw(page)
     hook = ctx.spec["hook_alt"][0].strip(",.").split()
     a_s, b_s = " ".join(hook[:2]), " ".join(hook[2:]).upper() + "."
     im1, p1, _ = text_img(a_s, font("InstrumentSerif-Italic.ttf", 104), WHITE)
     im2, p2, _ = text_img(b_s, font("Anton-Regular.ttf", 116), YELLOW)
-    x = SAFE[0] + 8
-    page.paste(im1, (x - p1, SAFE[1] + 4 - p1), im1)
-    page.paste(im2, (x - p2, SAFE[1] + 118 - p2), im2)
-    hook_bottom = SAFE[1] + 118 + im2.height - 2 * p2
+    x = SAFE[0] + px(8)
+    page.paste(im1, (x - p1, SAFE[1] + px(4) - p1), im1)
+    page.paste(im2, (x - p2, SAFE[1] + px(118) - p2), im2)
+    hook_bottom = SAFE[1] + px(118) + im2.height - 2 * p2
     ctx.put("hook", ctx.spec["hook_alt"][0],
             (x, SAFE[1], x + max(im1.width - 2 * p1, im2.width - 2 * p2), hook_bottom), None)
-    d.rectangle((0, band - 10, int(W * t / ctx.dur), band), fill=ORANGE)
+    d.rectangle((0, band - px(10), int(W * t / ctx.dur), band), fill=ORANGE)
     p = active(ctx.phrases, t)
     if not p or p is ctx.phrases[0]:  # phrase 1 is the headline itself
         return page
     # serif for the plain words, Anton caps for the key ones, left aligned under the hook;
     # shrinks until the block clears the progress bar
-    top, size = hook_bottom + 30, 80
+    top, size = hook_bottom + px(30), 80
     while True:
-        sf, kf, space = font("InstrumentSerif-Italic.ttf", size), font("Anton-Regular.ttf", round(size * 0.85)), 22
+        sf, kf, space = font("InstrumentSerif-Italic.ttf", size), font("Anton-Regular.ttf", size * 0.85), px(22)
         ws = [dict(w, s=w["w"].upper().strip(",.") if w["key"] else w["w"], f=kf if w["key"] else sf)
               for w in p["words"]]
 
         def gap(prev, w):  # extra air where the italic meets Anton, so the words don't touch
-            return space + (10 if prev and prev["f"] is not w["f"] else 0)
+            return space + (px(10) if prev and prev["f"] is not w["f"] else 0)
 
         lines, cur, cw = [], [], 0
         for w in ws:
@@ -500,8 +545,8 @@ def look_headline(img, t, ctx):
             cw += (g if cur else 0) + ww
             cur.append(w)
         lines.append(cur)
-        lead = round(size * 1.2)
-        if top + lead * len(lines) <= band - 30 or size <= 56:
+        lead = px(size * 1.2)
+        if top + lead * len(lines) <= band - px(30) or size <= 56:
             break
         size -= 4
     asc = max(sf.getmetrics()[0], kf.getmetrics()[0])
@@ -550,7 +595,7 @@ class Ctx:
 
 def cmd_looks(a):
     spec = load_spec(a.spec)
-    tl = json.load(open(os.path.join(a.work, "timeline.json")))
+    tl = load_timeline(a, spec)
     names = a.only.split(",") if a.only else spec["looks"]
     mpath = os.path.join(a.work, "manifest.json")
     manifest = json.load(open(mpath)) if os.path.exists(mpath) else {}
@@ -573,7 +618,11 @@ def cmd_looks(a):
         if enc.wait():
             sys.exit(f"encode failed for {name}")
         status = "picked" if name == spec.get("picked") else spec.get("status", "proposed")
-        manifest[name] = {"title": title, "file": f"{name}.mp4", "status": status,
+        manifest[name] = {"title": title, "file": f"{name}.mp4", "status": status, "size": [W, H],
+                          # where his mouth lands across every crop and punch, as an x and y range
+                          "mouth": {"x": [min(m[0] for m in ctx.fr.mouths), max(m[0] for m in ctx.fr.mouths)],
+                                    "y": [min(m[1] for m in ctx.fr.mouths), max(m[1] for m in ctx.fr.mouths)]},
+                          "face_h": round(tl["face"]["h"] * max(ctx.spec["punch"])),
                           "elements": sorted(ctx.log.values(), key=lambda e: e["t0"])}
         json.dump(manifest, open(mpath, "w"), indent=1)
         print(f"{name}: {out}")
@@ -591,52 +640,80 @@ def grab(path, t, w):
 
 def cmd_sheets(a):
     spec = load_spec(a.spec)
-    tl = json.load(open(os.path.join(a.work, "timeline.json")))
-    names = spec["looks"]
+    tl = load_timeline(a, spec)
+    # only the looks built at this size; a 4K pass may build just the picked one
+    man = json.load(open(os.path.join(a.work, "manifest.json")))
+    names = [n for n in spec["looks"] if n in man and os.path.exists(os.path.join(a.work, f"{n}.mp4"))]
+    path = lambda n: os.path.join(a.work, f"{n}.mp4")
     label = font("Archivo.ttf", 30, 700)
     # grid still: 3x2 at the "energy drink" line
     t_grid = next(w["on"] for p in tl["phrases"] for w in p["words"] if w["w"].startswith("drink")) + 0.15
-    cw, chh, g = 480, 853, 24
-    grid = Image.new("RGB", (3 * cw + 4 * g, 2 * (chh + 56) + 3 * g), "#111111")
+    cw, g = px(480), px(24)
+    chh = round(cw * H / W)
+    rows = (len(names) + 2) // 3
+    grid = Image.new("RGB", (3 * cw + 4 * g, rows * (chh + px(56)) + (rows + 1) * g), "#111111")
     d = ImageDraw.Draw(grid)
     for i, n in enumerate(names):
-        x, y = g + (i % 3) * (cw + g), g + (i // 3) * (chh + 56 + g)
-        grid.paste(grab(os.path.join(a.work, f"{n}.mp4"), t_grid, cw), (x, y))
-        d.text((x, y + chh + 12), f"{i + 1}  {LOOKS[n][0]}  (proposed)", font=label, fill=WHITE)
+        x, y = g + (i % 3) * (cw + g), g + (i // 3) * (chh + px(56) + g)
+        grid.paste(grab(path(n), t_grid, cw), (x, y))
+        d.text((x, y + chh + px(12)), f"{i + 1}  {LOOKS[n][0]}  ({man[n]['status']})", font=label, fill=WHITE)
     grid.save(os.path.join(a.work, "grid.png"))
     # review contact sheet: each look at four moments
     ts = [tl["phrases"][k]["words"][-1]["on"] + 0.1 for k in (0, 2, 4, 6)]
-    tw, th = 270, 480
-    sheet = Image.new("RGB", (4 * tw + 5 * 8 + 180, len(names) * (th + 8) + 8), "#111111")
+    tw, th = px(270), px(480)
+    sheet = Image.new("RGB", (4 * tw + 5 * px(8) + px(180), len(names) * (th + px(8)) + px(8)), "#111111")
     d = ImageDraw.Draw(sheet)
     small = font("Archivo.ttf", 22, 700)
     for r, n in enumerate(names):
-        d.text((8, 8 + r * (th + 8) + 8), LOOKS[n][0], font=small, fill=WHITE)
+        d.text((px(8), px(8) + r * (th + px(8)) + px(8)), LOOKS[n][0], font=small, fill=WHITE)
         for c, t in enumerate(ts):
-            sheet.paste(grab(os.path.join(a.work, f"{n}.mp4"), t, tw), (180 + 8 + c * (tw + 8), 8 + r * (th + 8)))
+            sheet.paste(grab(path(n), t, tw), (px(188) + c * (tw + px(8)), px(8) + r * (th + px(8))))
     sheet.save(os.path.join(a.work, "contact_sheet.jpg"), quality=88)
-    # grid video, 3x2 cells of 360x640
-    ins = sum([["-i", os.path.join(a.work, f"{n}.mp4")] for n in names], [])
-    sc = "".join(f"[{i}:v]scale=360:640,setsar=1[c{i}];" for i in range(len(names)))
-    layout = "|".join(f"{(i % 3) * 360}_{(i // 3) * 640}" for i in range(len(names)))
-    run(["ffmpeg", "-y", "-v", "error", *ins, "-filter_complex",
-         sc + "".join(f"[c{i}]" for i in range(len(names))) + f"xstack=inputs={len(names)}:layout={layout}[v]",
-         "-map", "[v]", "-map", "0:a", "-c:v", "libx264", "-crf", "20", "-c:a", "copy",
-         "-movflags", "+faststart", os.path.join(a.work, "grid.mp4")])
-    # cycle reel: the take once, a different look on each phrase
-    bounds = [0.0] + [p["t0"] for p in tl["phrases"][1:]] + [tl["frames"] / FPS]
-    parts, labels = [], []
-    for i in range(len(bounds) - 1):
-        n = names[i % len(names)]
-        k = names.index(n)
-        parts.append(f"[{k}:v]trim=start={bounds[i]:.4f}:end={bounds[i + 1]:.4f},setpts=PTS-STARTPTS[s{i}]")
-        labels.append(f"[s{i}]")
-    run(["ffmpeg", "-y", "-v", "error", *ins, "-i", os.path.join(a.work, "base.wav"), "-filter_complex",
-         ";".join(parts) + f";{''.join(labels)}concat=n={len(labels)}:v=1:a=0[v]",
-         "-map", "[v]", "-map", f"{len(names)}:a", "-c:v", "libx264", "-crf", "17",
-         "-c:a", "aac", "-b:a", "256k", "-shortest", "-movflags", "+faststart",
-         os.path.join(a.work, "cycle.mp4")])
-    print("sheets: grid.png contact_sheet.jpg grid.mp4 cycle.mp4")
+    outs = ["grid.png", "contact_sheet.jpg"]
+    if len(names) >= 2:
+        # grid video, 3 across, cells a third of the frame
+        qw, qh = W // 3 // 2 * 2, H // 3 // 2 * 2
+        ins = sum([["-i", path(n)] for n in names], [])
+        sc = "".join(f"[{i}:v]scale={qw}:{qh},setsar=1[c{i}];" for i in range(len(names)))
+        layout = "|".join(f"{(i % 3) * qw}_{(i // 3) * qh}" for i in range(len(names)))
+        run(["ffmpeg", "-y", "-v", "error", *ins, "-filter_complex",
+             sc + "".join(f"[c{i}]" for i in range(len(names))) +
+             f"xstack=inputs={len(names)}:layout={layout}:fill=black[v]",
+             "-map", "[v]", "-map", "0:a", "-c:v", "libx264", "-crf", "20", "-c:a", "copy",
+             "-movflags", "+faststart", os.path.join(a.work, "grid.mp4")])
+        # cycle reel: the take once, a different look on each phrase
+        bounds = [0.0] + [p["t0"] for p in tl["phrases"][1:]] + [tl["frames"] / FPS]
+        parts, labels = [], []
+        for i in range(len(bounds) - 1):
+            k = i % len(names)
+            parts.append(f"[{k}:v]trim=start={bounds[i]:.4f}:end={bounds[i + 1]:.4f},setpts=PTS-STARTPTS[s{i}]")
+            labels.append(f"[s{i}]")
+        run(["ffmpeg", "-y", "-v", "error", *ins, "-i", os.path.join(a.work, "base.wav"), "-filter_complex",
+             ";".join(parts) + f";{''.join(labels)}concat=n={len(labels)}:v=1:a=0[v]",
+             "-map", "[v]", "-map", f"{len(names)}:a", "-c:v", "libx264", "-crf", "17",
+             "-c:a", "aac", "-b:a", "256k", "-shortest", "-movflags", "+faststart",
+             os.path.join(a.work, "cycle.mp4")])
+        outs += ["grid.mp4", "cycle.mp4"]
+    # 2x2 grid (@aslaniedits' format): four looks in one full-size frame, each quadrant
+    # playing the whole take in sync, split by a thin black cross. No labels: only his words.
+    quad = spec.get("grid2x2", [])
+    missing = [n for n in quad if n not in names]
+    if len(quad) == 4 and not missing:
+        qw, qh, gut = W // 2, H // 2, max(2, px(4)) // 2 * 2
+        ins = sum([["-i", path(n)] for n in quad], [])
+        sc = "".join(f"[{i}:v]scale={qw}:{qh}:flags=lanczos,setsar=1[q{i}];" for i in range(4))
+        run(["ffmpeg", "-y", "-v", "error", *ins, "-i", os.path.join(a.work, "base.wav"), "-filter_complex",
+             sc + f"[q0][q1][q2][q3]xstack=inputs=4:layout=0_0|{qw}_0|0_{qh}|{qw}_{qh},"
+             f"drawbox=x={qw - gut // 2}:y=0:w={gut}:h={H}:color=black:t=fill,"
+             f"drawbox=x=0:y={qh - gut // 2}:w={W}:h={gut}:color=black:t=fill,format=yuv420p[v]",
+             "-map", "[v]", "-map", "4:a", "-c:v", "libx264", "-crf", "17", "-preset", "medium",
+             "-colorspace", "bt709", "-color_primaries", "bt709", "-color_trc", "bt709",
+             "-c:a", "aac", "-b:a", "256k", "-shortest", "-movflags", "+faststart",
+             os.path.join(a.work, "grid2x2.mp4")])
+        outs.append("grid2x2.mp4")
+    elif quad:
+        print(f"grid2x2 skipped: build {', '.join(missing)} at {W}x{H} first (looks --only ...)")
+    print("sheets:", " ".join(outs))
 
 
 def main():
@@ -646,6 +723,7 @@ def main():
     ap.add_argument("--src")
     ap.add_argument("--work", default="work")
     ap.add_argument("--only")
+    ap.add_argument("--size", help="WxH, e.g. 2160x3840 (default: spec \"size\", else 1080x1920)")
     a = ap.parse_args()
     {"base": cmd_base, "looks": cmd_looks, "sheets": cmd_sheets}[a.step](a)
 

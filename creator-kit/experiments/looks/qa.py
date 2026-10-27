@@ -6,14 +6,17 @@
 1. words   every caption and hook on screen is a run of his words, in order, from the
            transcript inside the kept ranges (no invented copy).
 2. safe    every caption and hook box sits inside the Instagram safe zone from theme.ts.
-3. files   1080x1920, 30 fps, same length as the base (one frame of slack).
-4. loud    -14 LUFS +-1 integrated, true peak at or under -1 dBTP.
+3. mouth   no caption or hook box covers his mouth, wherever the crop puts it.
+4. files   the base's size (timeline.json; --size or the spec's "size" must match it),
+           30 fps, same length as the base (one frame of slack).
+5. loud    -14 LUFS +-1 integrated, true peak at or under -1 dBTP.
+grid2x2.mp4 gets the file and loudness checks; its quadrants' text is reported (WARN),
+since a quarter-size look can't keep the full frame's safe zone.
 Exits 1 on any FAIL.
 """
 import argparse, json, os, re, subprocess, sys
 
-W, H = 1080, 1920
-SAFE = (round(W * 0.067), round(H * 0.135), round(W * (1 - 0.176)), round(H * (1 - 0.245)))
+import build_looks as bl  # one source for W, H and SAFE
 
 
 def norm(s):
@@ -41,8 +44,11 @@ def main():
     ap.add_argument("--spec", required=True)
     ap.add_argument("--work", required=True)
     ap.add_argument("--transcript", required=True)
+    ap.add_argument("--size", help="WxH; must match the base (default: spec \"size\")")
     a = ap.parse_args()
-    spec = json.load(open(a.spec))
+    spec = bl.load_spec(a.spec)
+    bl.load_timeline(a, spec)  # exits if the base was built at another size
+    W, H, SAFE = bl.W, bl.H, bl.SAFE
     man = json.load(open(os.path.join(a.work, "manifest.json")))
     base_n = int(probe(os.path.join(a.work, "base.mp4"))["nb_read_packets"])
     words = json.load(open(a.transcript))["words"]
@@ -70,17 +76,38 @@ def main():
                or e["box"][2] > SAFE[2] + 2 or e["box"][3] > SAFE[3] + 2]
         report(not out, f"safe: {len(m['elements'])} boxes inside {SAFE}" +
                (f" -- outside: {[(e['text'], e['box']) for e in out]}" if out else ""))
+        # mouth: a box that covers the mouth point, with a margin of a tenth of the face height
+        mo, r = m.get("mouth"), m.get("face_h", 0) / 10
+        on_mouth = [(e["text"], e["box"]) for e in m["elements"] if mo
+                    and e["box"][0] <= mo["x"][1] + r and e["box"][2] >= mo["x"][0] - r
+                    and e["box"][1] <= mo["y"][1] + r and e["box"][3] >= mo["y"][0] - r]
+        report(bool(mo) and not on_mouth,
+               (f"mouth: no text over the mouth (x {mo['x']}, y {mo['y']})" if mo else "mouth: not recorded") +
+               (f" -- over it: {on_mouth}" if on_mouth else ""))
         p = probe(os.path.join(a.work, m["file"]))
         n = int(p["nb_read_packets"])
         ok = p["width"] == W and p["height"] == H and p["r_frame_rate"] == "30/1" and abs(n - base_n) <= 1
         report(ok, f"file: {p['width']}x{p['height']} {p['r_frame_rate']} {n} frames (base {base_n})")
         i, tp = loudness(os.path.join(a.work, m["file"]))
         report(abs(i + 14) <= 1 and tp <= -1.0, f"loud: {i} LUFS, true peak {tp} dBTP")
-    for extra in ("cycle.mp4", "grid.mp4"):
+    for extra in ("cycle.mp4", "grid.mp4", "grid2x2.mp4"):
         path = os.path.join(a.work, extra)
         if os.path.exists(path):
             i, tp = loudness(path)
             print(extra)
+            if extra == "grid2x2.mp4":
+                p = probe(path)
+                n = int(p["nb_read_packets"])
+                report(p["width"] == W and p["height"] == H and p["r_frame_rate"] == "30/1"
+                       and abs(n - base_n) <= 1,
+                       f"file: {p['width']}x{p['height']} {p['r_frame_rate']} {n} frames (base {base_n})")
+                for q, name in enumerate(spec.get("grid2x2", [])):
+                    ox, oy = (q % 2) * W // 2, (q // 2) * H // 2
+                    boxes = [[ox + b[0] / 2, oy + b[1] / 2, ox + b[2] / 2, oy + b[3] / 2]
+                             for b in (e["box"] for e in man.get(name, {}).get("elements", []))]
+                    out = sum(b[0] < SAFE[0] or b[1] < SAFE[1] or b[2] > SAFE[2] or b[3] > SAFE[3] for b in boxes)
+                    print(f"  {'WARN' if out else 'PASS'}  safe: {name} quadrant, {out} of {len(boxes)} "
+                          f"text boxes outside the full-frame safe zone")
             report(abs(i + 14) <= 1 and tp <= -1.0, f"loud: {i} LUFS, true peak {tp} dBTP")
     print("RESULT:", "PASS" if not fails else f"FAIL ({fails})")
     sys.exit(1 if fails else 0)

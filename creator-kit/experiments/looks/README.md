@@ -22,11 +22,19 @@ the spec. The other five stay proposed.
 python3 build_looks.py base  --spec spec_sep03.json --src take.mov --work work
 # 2. compose every look over the same base (or --only mono,framed)
 python3 build_looks.py looks --spec spec_sep03.json --work work
-# 3. grid still, review contact sheet, 3x2 grid video, cycle reel
+# 3. grid still, review contact sheet, 3x2 grid video, cycle reel, 2x2 grid
 python3 build_looks.py sheets --spec spec_sep03.json --work work
 # 4. before nq-check
 python3 qa.py --spec spec_sep03.json --work work --transcript words_large.json
 ```
+
+**Size.** `--size WxH` on any step, else the spec's `"size"`, else 1080x1920. The
+Sep 3 spec says 2160x3840 (Fast Cut delivery). Every layout constant is written at
+1080 wide and goes through `px()`, so the 4K render is the 1080 layout scaled (at
+1080 it is pixel-identical to the first build). `base` records the size in
+`timeline.json`; `looks`, `sheets` and `qa.py` stop if asked for another one, so
+rebuild `base` to change size. For a 4K pass, build only what's needed:
+`looks --only mono,highlighter,one_word,tag_stack` covers Mono and the 2x2 grid.
 
 A new take is a new spec, not a code change. The spec holds:
 
@@ -38,6 +46,8 @@ A new take is a new spec, not a code change. The spec holds:
   (faster-whisper large-v3 with word timestamps). Fix spelling and punctuation
   here, never the words. Leave out a word the model wasn't sure of rather than guess.
 - `hook` / `hook_alt`: headline lines, which must be phrases he actually says.
+- `grid2x2`: four looks for the 2x2 grid, top-left first (Mono plus the next three
+  in spec order, Omarie 2026-10-27).
 - `lut`: the kit LUT. `AK_Garage_Dark` held the blacks on the Sep 3 shop take
   (mean luma 0.32-0.40, 2nd percentile 0.02-0.05); `AK_DLogM_Rescue` crushed them.
 
@@ -59,16 +69,22 @@ A new take is a new spec, not a code change. The spec holds:
   it put the face at y 695, 184 px tall. YuNet found it at y 808, 588 px tall, with
   the mouth at y 942, and the captions built on the Haar box sat on his mouth.
 - Text sits under his chin or off the picture, never over his mouth. `timeline.json`
-  records the face box (`mouth` is the mean y of the two mouth corners), so check
-  new layouts against it.
+  records the face box (`mouth` is the mean y of the two mouth corners); each look
+  records where the mouth lands after its crop (`mouths` in `manifest.json`), and
+  qa.py fails any text box that covers it.
 
 ## Outputs (in `--work`, not committed)
 
-`<look>.mp4` for each look (1080x1920, 30 fps, H.264 + AAC), `grid.png`,
-`contact_sheet.jpg` (each look at four moments, for nq-check), `grid.mp4` (3x2),
-`cycle.mp4` (the take once, a different look on each phrase), `manifest.json`
-(every on-screen line with its box, which qa.py reads), and `timeline.json`.
+`<look>.mp4` for each look (W x H, 30 fps, H.264 + AAC), `grid.png`,
+`contact_sheet.jpg` (each built look at four moments, for nq-check), `grid.mp4` (3
+across) and `cycle.mp4` (the take once, a different look on each phrase) when two or
+more looks are built, `grid2x2.mp4`, `manifest.json` (every on-screen line with its
+box, which qa.py reads), and `timeline.json`.
 
-These are 1080x1920 review drafts. Fast Cut delivers 2160x3840, so the look Omarie
-picks still needs a 4K pass (W, H at the top of build_looks.py). Product names go
-through nq-facts and nq-second before anything ships.
+`grid2x2.mp4` is @aslaniedits' format (relayed by Muse, nq-agent-channel #58): four
+looks in one full-size frame, each quadrant playing the whole take in sync, split by
+a thin black cross, with no labels, so the only words on screen are his. Each look
+keeps its own safe zone inside its quadrant, but the quadrants' text can't all keep
+the full frame's: qa.py reports that as WARN for Omarie to judge, not as a pass.
+
+Product names go through nq-facts and nq-second before anything ships.
