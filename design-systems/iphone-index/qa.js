@@ -1,13 +1,14 @@
 // qa.js <page.html> : the layout check every page in this layout gets before it is published.
 // For each tab at 390 px light and dark, 360 px and 1280 px, with every row opened: no sideways scroll, no clipped
-// text, no overlapping siblings in a row, nothing off screen, the footer clear of the tab bar, and no script errors.
+// text, no overlapping siblings in a row, nothing off screen, nothing marked hidden still showing, the footer clear of the tab bar, and no script errors.
 // Screenshots of each tab land next to the page as qa-<size>-<tab>.png. Needs Node with Playwright.
 const { chromium } = require(process.env.PLAYWRIGHT || '/opt/node22/lib/node_modules/playwright');
 const fs = require('fs'), path = require('path');
 const file = path.resolve(process.argv[2] || 'example.html');
 const wrapped = file.replace(/\.html$/, '.qa-wrapped.html');
-// the artifact host wraps a published page in this skeleton; test it the same way
-fs.writeFileSync(wrapped, `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0}[hidden]{display:none!important}</style></head><body>${fs.readFileSync(file, 'utf8')}</body></html>`);
+// the artifact host wraps a published page in this skeleton; test it the same way. No [hidden] rule is added, so a
+// class that sets display (the clear-search button's .sf-x{display:grid}) shows up here as it would on the page.
+fs.writeFileSync(wrapped, `<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;padding-top:env(safe-area-inset-top);padding-bottom:env(safe-area-inset-bottom)}body{margin:0}</style></head><body>${fs.readFileSync(file, 'utf8')}</body></html>`);
 (async () => {
   const b = await chromium.launch(); let bad = 0;
   for (const [w, h, scheme, tag] of [[390, 844, 'light', 'phone'], [390, 844, 'dark', 'phone-dark'], [360, 780, 'light', 'small'], [1280, 900, 'light', 'desktop']]) {
@@ -21,6 +22,7 @@ fs.writeFileSync(wrapped, `<!doctype html><html><head><meta charset="utf-8"><met
         const vis = el => { const s = getComputedStyle(el); return s.display !== 'none' && s.visibility !== 'hidden' && el.getClientRects().length; };
         const ds = [...document.querySelectorAll('.panel:not([hidden]) details')]; ds.forEach(d => { d.open = true; });
         const out = { hscroll: document.documentElement.scrollWidth - document.documentElement.clientWidth, problems: [] };
+        for (const el of document.querySelectorAll('[hidden]')) if (vis(el)) out.problems.push('shown though hidden: ' + (el.id ? '#' + el.id : el.className || el.tagName));
         for (const el of document.querySelectorAll('.panel:not([hidden]) *')) {
           if (!vis(el) || el.closest('.chips') || el.classList.contains('dz-pv') || el.closest('.rowlink')) continue;
           const cs = getComputedStyle(el), rc = el.getBoundingClientRect();
