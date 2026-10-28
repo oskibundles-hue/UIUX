@@ -1,0 +1,37 @@
+{
+  "_about": "What relay_ideas.py reads into a relay. formats: a relay becomes a reel idea only when one of these matches it; 'needs' are the shot tags (see shots) the idea wants from your footage, and 'hook' is the opening line, with {car} filled from the footage that carries it. A relay that matches no format is listed as parked (a tool or a reference, not a reel). shots: words in a footage row that give it a tag. cars and car_first: words that mean a reference is about a car, and that it opens on one.",
+  "formats": [
+    {"name": "Rapid-zoom open", "match": ["rapid zoom", "radial blur", "zoom intro"],
+     "needs": ["drive", "detail"], "hook": "The {car} in 2 seconds"},
+    {"name": "Spec-callout car ad", "match": ["concept ad", "spec graphics", "spec callouts", "\\bhp\\b", "0.60"],
+     "needs": ["detail", "drive", "night"], "hook": "{car}: what we changed"},
+    {"name": "Black-and-white teaser", "match": ["black-and-white", "\\bb&w\\b", "monochrome", "film grain"],
+     "needs": ["detail", "rev"], "hook": "Guess the car. It's the {car}"},
+    {"name": "2x2 split grid", "match": ["four-quadrant", "split-screen", "\\b2x2\\b", "side-by-side"],
+     "needs": ["before", "after", "rev"], "hook": "Same {car}, four angles"},
+    {"name": "SFX-timed edit", "match": ["\\bsfx\\b", "sound effects", "whoosh", "risers"],
+     "needs": ["rev", "part"], "hook": "{car} exhaust, turn the sound up"},
+    {"name": "Flash and flicker transitions", "match": ["flashbox", "flicker", "difference burn", "overlays?\\b.*composite"],
+     "needs": ["drive", "night"], "hook": "One night in the {car}"},
+    {"name": "Styled talking head", "match": ["talking-head", "to camera", "template styles", "same speaker"],
+     "needs": ["to_camera"], "hook": "Why the {car} came in"},
+    {"name": "AI-built car teaser", "match": ["seedance", "blender", "\\bvfx\\b", "claude motion", "motion graphics max"],
+     "needs": ["detail"], "hook": "The {car}, rebuilt by AI",
+     "note": "Costs generation credits. Get a price before you say yes"}
+  ],
+  "shots": {
+    "rev": ["rev", "revving", "fires up", "loud", "flames?"],
+    "drive": ["driving", "drive-out", "on the road", "street", "pulls?\\b", "close pass"],
+    "detail": ["close-up", "hero shot", "tips", "headers", "calipers", "badge", "exhaust .*in hand"],
+    "night": ["evening", "night", "dark", "tail-lights on"],
+    "before": ["before", "stock"],
+    "after": ["after", "finished"],
+    "part": ["\\bparts?\\b", "boxed", "packaging", "unpacking", "on the floor"],
+    "to_camera": ["to camera", "talking", "update", "speech"],
+    "lift": ["on the lift", "underside", "on lift"]
+  },
+  "cars": ["car", "cars", "supercar", "lamborghini", "ferrari", "mclaren", "porsche", "maserati", "aston",
+           "bmw", "\\bm2\\b", "\\bf1\\b", "exhaust", "wheels?", "gp\\b", "racing"],
+  "car_first": ["first 2 seconds", "payoff", "\\bhooks?\\b"],
+  "off_lane": ["windows", "desktop", "launchpad", "\\btv\\b", "second brain", "obsidian", "iphone app", "agents?\\b"]
+}

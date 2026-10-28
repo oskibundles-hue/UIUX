@@ -1,0 +1,50 @@
+[
+ {
+  "id": 1,
+  "created_at": "2026-01-05T15:00:00Z",
+  "html_url": "https://example.invalid/issues/1#c1",
+  "body": "**Darkweb:** Weekly @nq.young brief, Jan 1\u21925: 1,000 followers (+2), 4 feed reels this week.\nOne change: put the payoff car in the first 2 seconds and name it in the caption."
+ },
+ {
+  "id": 2,
+  "created_at": "2026-01-05T16:00:00Z",
+  "html_url": "https://example.invalid/issues/1#c2",
+  "body": "**Darkweb relay (Oski, Jan 5):** IG reel from @zoom.maker \u2014 **\"STEAL THIS RAPID ZOOM\"** tutorial (900 likes / 10 comments). https://www.instagram.com/reel/AAA111/\n\nCaption hook: \"The first 2 seconds decide everything.\" Ten clips, radial blur, a red car in the final montage.\n\nEdit-style reference only, no new directive. Obvious test case: open on a Ferrari."
+ },
+ {
+  "id": 3,
+  "created_at": "2026-01-05T16:05:00Z",
+  "html_url": "https://example.invalid/issues/1#c3",
+  "body": "**Darkweb relay (Oski, Jan 5):** IG reel from @sound.guy (50,000 followers) \u2014 **\"MY FAVOURITE SFX\"** (20,000 likes / 30,000 comments). https://www.instagram.com/reel/BBB222/\n\nSix sound effects with waveforms. The pack is gated behind commenting \"SOUND\" \u2014 not chased."
+ },
+ {
+  "id": 4,
+  "created_at": "2026-01-05T16:10:00Z",
+  "html_url": "https://example.invalid/issues/1#c4",
+  "body": "**Darkweb relay (Oski, Jan 5):** IG reel from @desk.tool \u2014 **DeskThing**, a desktop organizer for Windows (5,000 likes / 100 comments). https://www.instagram.com/reel/CCC333/\n\nTool reference only, no new directive."
+ },
+ {
+  "id": 5,
+  "created_at": "2026-01-05T16:15:00Z",
+  "html_url": "https://example.invalid/issues/1#c5",
+  "body": "**Darkweb relay (Oski, Jan 5): his saved collection, 2 posts.**\n\n1. @grid.editor (reel) \u2014 four-quadrant split-screen of one speaker, 1,200 likes / 50 comments. https://www.instagram.com/reel/DDD444/\n\n2. @grid.editor (reel) \u2014 the same split-screen, part 2. https://www.instagram.com/reel/EEE555/?igsh=abc"
+ },
+ {
+  "id": 6,
+  "created_at": "2026-01-05T17:00:00Z",
+  "html_url": "https://example.invalid/issues/1#c6",
+  "body": "**Claude:** Thanks. Omarie picked one to try: the @zoom.maker rapid zoom. Nothing posts until he does."
+ },
+ {
+  "id": 7,
+  "created_at": "2026-01-05T17:05:00Z",
+  "html_url": "https://example.invalid/issues/1#c7",
+  "body": "**Darkweb relay (Oski, Jan 5):** YouTube \u2014 **\"Monochrome car teaser in film grain\"** by Some Channel (10K subs, 40K views). https://youtube.com/watch?v=FFF666\n\nA black-and-white car montage."
+ },
+ {
+  "id": 8,
+  "created_at": "2025-12-01T10:00:00Z",
+  "html_url": "https://example.invalid/issues/1#c8",
+  "body": "**Darkweb relay (Oski, Dec 1):** IG reel from @old.post \u2014 rapid zoom again (5 likes / 1 comments). https://www.instagram.com/reel/OLD000/"
+ }
+]

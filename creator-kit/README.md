@@ -11,6 +11,8 @@ creator-kit/
 │   ├── build_luts.py      regenerates the look pack (pure stdlib)
 │   ├── autocut.py         silence-cut + grade + 4K export, one command
 │   ├── idea_scraper.py    outlier videos/posts from your watchlist -> idea list
+│   ├── relay_ideas.py     Muse's relays + your footage index -> ranked reel ideas
+│   ├── relay_ideas_page.py  that list -> an iPhone index page
 │   ├── thumbnail.py       best cover frames -> branded IG covers + grid check
 │   ├── voice_build.py     his transcripts/captions -> voice/style.json + STYLE.md
 │   ├── script_write.py    idea -> script brief (and drafts with --api) in his voice
@@ -64,6 +66,25 @@ Re-runs only show new ideas (`--all` shows everything again). `--brand`,
 saved fetch with no network. Add the channels you actually study to the
 watchlist first; the YouTube lists start nearly empty on purpose. Free: no API
 keys, no logins, nothing posted. Test: `python3 ideas/test_idea_scraper.py`.
+
+## relay_ideas — reel ideas from Muse's relays
+
+```bash
+python3 scripts/relay_ideas.py --issue 58 --issue 59 --footage "00 CARS BY CLIP.md" --since 2026-10-25
+python3 scripts/relay_ideas_page.py ideas/out/relay-ideas-<date>.json --design ../design-systems/iphone-index -o reel-ideas.html
+```
+
+Reads the Instagram and YouTube posts Muse relays on the private channel
+repo's issues (or saved comment files with `--relays`), and turns each one
+that matches a reel format in `ideas/relay_rules.json` into an idea for
+@nq.young: an opening hook that names one of your cars, the format, the
+reference link, a one-line reason and the clips that could carry it. Tools
+and talks that match no format are listed as parked. The score out of 100 is
+engagement against followers (40), fit with the weekly brief's lesson (35)
+and footage on hand (25); the page's How tab spells out each part. Relays
+are private, so the lists go to `ideas/out/` (git ignores it) and never
+into this repo. Nothing is scraped, commented on, posted or bought.
+Test: `python3 ideas/test_relay_ideas.py` (synthetic fixture, no network).
 
 ## thumbnail — pick and brand the cover
 
