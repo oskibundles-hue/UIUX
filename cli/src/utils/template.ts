@@ -1,4 +1,4 @@
-import { readFile, mkdir, writeFile, cp, access, readdir } from 'node:fs/promises';
+import { readFile, mkdir, writeFile, cp, access, readdir, rm } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { homedir } from 'node:os';
 import { fileURLToPath } from 'node:url';
@@ -13,6 +13,8 @@ export interface PlatformConfig {
   installType: 'full' | 'reference';
   folderStructure: {
     root: string;
+    // Folder used instead of root for a global install (~/), when the platform reads skills from elsewhere there
+    globalRoot?: string;
     skillPath: string;
     filename: string;
   };
@@ -117,6 +119,13 @@ function renderFrontmatter(frontmatter: Record<string, string> | null): string {
 }
 
 /**
+ * Root folder for an install: globalRoot when installing globally and the platform sets one
+ */
+function installRoot(config: PlatformConfig, isGlobal: boolean): string {
+  return (isGlobal && config.folderStructure.globalRoot) || config.folderStructure.root;
+}
+
+/**
  * Render skill file content from template
  * When isGlobal=true, rewrites script paths to use ~/{root}/ prefix
  */
@@ -146,7 +155,7 @@ export async function renderSkillFile(config: PlatformConfig, isGlobal = false):
 
   // For global install, rewrite relative script paths to absolute ~/root/ paths
   if (isGlobal) {
-    const globalPrefix = `~/${config.folderStructure.root}/`;
+    const globalPrefix = `~/${installRoot(config, true)}/`;
     content = content.replace(
       /python3 skills\//g,
       `python3 ${globalPrefix}skills/`
@@ -196,11 +205,8 @@ export async function generatePlatformFiles(
   const effectiveDir = isGlobal ? homedir() : targetDir;
 
   // Determine full skill directory path
-  const skillDir = join(
-    effectiveDir,
-    config.folderStructure.root,
-    config.folderStructure.skillPath
-  );
+  const root = installRoot(config, isGlobal);
+  const skillDir = join(effectiveDir, root, config.folderStructure.skillPath);
 
   // Create directory structure
   await mkdir(skillDir, { recursive: true });
@@ -209,10 +215,18 @@ export async function generatePlatformFiles(
   const skillContent = await renderSkillFile(config, isGlobal);
   const skillFilePath = join(skillDir, config.folderStructure.filename);
   await writeFile(skillFilePath, skillContent, 'utf-8');
-  createdFolders.push(config.folderStructure.root);
+  createdFolders.push(root);
 
   // Copy data and scripts into the skill directory (self-contained)
   await copyDataAndScripts(skillDir);
+
+  // Moved global install: remove the copy left in the old folder so the skill isn't loaded twice
+  if (root !== config.folderStructure.root) {
+    await rm(join(effectiveDir, config.folderStructure.root, config.folderStructure.skillPath), {
+      recursive: true,
+      force: true,
+    });
+  }
 
   return createdFolders;
 }

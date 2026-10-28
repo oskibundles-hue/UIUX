@@ -298,6 +298,7 @@ uipro init --ai all         # All assistants
 ```bash
 uipro init --ai claude --global   # Install to ~/.claude/skills/
 uipro init --ai cursor --global   # Install to ~/.cursor/skills/
+uipro init --ai codex --global    # Install to ~/.agents/skills/ (moves an old ~/.codex/skills/ copy)
 ```
 
 ### Other CLI Commands
