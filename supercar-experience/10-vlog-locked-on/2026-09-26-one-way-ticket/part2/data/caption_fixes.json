@@ -152,5 +152,12 @@
   "whisper": "pretty fire",
   "shown": "pretty fire,",
   "why": "punctuation (final render check, 7 Oct)"
+ },
+ {
+  "clip": "0111",
+  "at": 55.2,
+  "whisper": "that's",
+  "shown": "(dropped)",
+  "why": "v3 (28 Oct, Omarie by click): small.en hears \"that's\", medium.en and distil-large-v3 hear \"no, it's\": the models differ, so the disputed word is not captioned (two-model rule); the caption reads \"I was like, not a Corvette.\""
  }
 ]

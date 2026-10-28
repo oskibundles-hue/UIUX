@@ -19,6 +19,18 @@ car reads MCLAREN 600LT. The full README (every element, every line's source, so
   every packet outside is byte-identical, audio packet-identical, same duration / frames / codec / profile / fps / size.
   `tools/contact_v3.py`: the v2 | v3 sheet 26.5-31.0 s.
 - **Mezzanine:** `0111_146.0-152.0.mov` (the engine's recipe) in `paths.mezz` (config.local.json).
+- **Round 2 (28 Oct, captions; nq-facts block, Omarie by click), data and code done, render pending:**
+  1. 0121 28.66 (113.9 s) showed "GUYS YOU can hear the car": `build.py caption_words()` sorted [start, end, word], so the
+     zero-length "you" / "guys" at 113.89 tied and broke alphabetically. Now `sorted(out, key=lambda r: r[0])` (stable: spoken
+     order). Checked over all 278 caption words: this pair is the only order change.
+  2. 0111 54.70 (27.6 s): small.en "that's", medium.en and distil-large-v3 "no, it's": dropped by the two-model rule, the
+     build's way (the word is deleted, nothing added; `tools/make_captions.py` FIX, `data/caption_fixes.json`,
+     `data/captions.json`). The 0.46 s gap it leaves closes the page (capPages), so it reads "I WAS LIKE," then
+     "NOT A CORVETTE." (one line), on screen to frame 902, 5 frames into shot 11 (0112).
+  - `tools/caption_patch_v3.py` redraws a caption over v2's own decoded picture (old and new layer from build.capture), for
+    0121's GOP 3256-3505 (caption frames 3362-3447; no box changes). It refuses frames where a box is removed: on 898-902 the
+    old top line's box goes away, and the plate under a 0.86 box cannot be recovered from v2 (measured rms 22 on shot 10),
+    so those 5 frames need shot 11's plate rebuilt from the 0112 source, which is not in the session.
 
 ## v2 recut (7 Oct): Omarie's v2 notes (`../HANDOFF-v2-both.md`)
 

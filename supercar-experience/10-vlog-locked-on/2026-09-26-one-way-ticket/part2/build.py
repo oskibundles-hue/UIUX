@@ -122,7 +122,10 @@ def caption_words():
                 w = re.sub(r'\b' + re.escape(k) + r'\b', v, w)
             # part1: the first word of every dialog piece carries U+2063 so lib/sekit.js capPages starts a new page there
             out.append([round(a, 3), round(b, 3), ('\u2063' + w) if j == 0 else w])
-    return sorted(out)
+    # v3 (28 Oct): sort on the start time only. A plain sorted(out) broke ties on the word, alphabetically: 0121 28.66 has
+    # "you" and "guys" both at 113.89 (zero-length words), and v2 showed "GUYS YOU can hear the car". A stable sort keeps the
+    # words in the order they are spoken (data/captions.json); this was the only tie that changed order.
+    return sorted(out, key=lambda r: r[0])
 
 
 def build_scene():
