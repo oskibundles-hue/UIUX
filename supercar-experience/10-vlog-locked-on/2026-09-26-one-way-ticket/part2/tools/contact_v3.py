@@ -1,11 +1,14 @@
 #!/usr/bin/env python3
-"""contact_v3.py -- v2 | v3 pairs from 26.5 to 31.0 s every 0.25 s (480 px each, frame + time stamped; orange = new shot 10).
-    python3 tools/contact_v3.py <v2.mp4> <v3.mp4> <out.jpg>"""
+"""contact_v3.py -- v2 | v3 pairs every 0.25 s (480 px each, frame + time stamped; orange = the marked frames).
+    python3 tools/contact_v3.py <v2.mp4> <v3.mp4> <out.jpg> [t0 t1 mark0 mark1 label]
+    default: 26.5-31.0 s, marked 821-897 "NEW SHOT 10"; caption 2: 112.0 116.5 3362 3447 "CAPTION REDRAWN"
+"""
 import subprocess, numpy as np, sys
 from PIL import Image, ImageDraw, ImageFont
 v2, v3, out = sys.argv[1:4]
+T0, T1, M0, M1, LAB = (float(sys.argv[4]), float(sys.argv[5]), int(sys.argv[6]), int(sys.argv[7]), sys.argv[8]) if len(sys.argv) > 8 else (26.5, 31.0, 821, 897, 'NEW SHOT 10')
 FPS = 30000/1001
-ts = [round(26.5 + 0.25*i, 2) for i in range(19)]
+ts = [round(T0 + 0.25*i, 2) for i in range(int(round((T1 - T0) / 0.25)) + 1)]
 idx = [int(round(t*FPS)) for t in ts]
 def grab(p):
     sel = '+'.join(f'eq(n\\,{i})' for i in idx)
@@ -19,8 +22,8 @@ rows = (len(ts)+cols-1)//cols
 sh = Image.new('RGB', (cols*pw + (cols-1)*24, rows*ph), (18,18,18)); d = ImageDraw.Draw(sh)
 for n,(t,i) in enumerate(zip(ts,idx)):
     x = (n%cols)*(pw+24); y=(n//cols)*ph
-    win = 821 <= i <= 897
-    d.text((x+4,y+6), f'{t:.2f}s  f{i}  {"NEW SHOT 10" if win else ""}', fill=(255,79,22) if win else (230,230,230), font=f)
+    win = M0 <= i <= M1
+    d.text((x+4,y+6), f'{t:.2f}s  f{i}  {LAB if win else ""}', fill=(255,79,22) if win else (230,230,230), font=f)
     sh.paste(Image.fromarray(A[n]),(x,y+36)); sh.paste(Image.fromarray(B[n]),(x+492,y+36))
     d.text((x+6,y+40),'v2',fill=(255,255,255),font=f,stroke_width=2,stroke_fill=(0,0,0)); d.text((x+498,y+40),'v3',fill=(255,255,255),font=f,stroke_width=2,stroke_fill=(0,0,0))
 sh.save(out, quality=88); print(sh.size)

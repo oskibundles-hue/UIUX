@@ -2,7 +2,10 @@
 """proof_v3.py -- v2 vs v3 proof for the shot-10 splice (tools/splice_v3.py): stream summaries, per-packet and per-decoded-frame
 md5 (framemd5), audio stream hashes, PSNR on the re-encoded frames, a clean full decode, sha256 of each file.
 
-    python3 tools/proof_v3.py --pair <v2.mp4> <v3.mp4> [--pair ...] --window 821 897 --gop 821 987 > PROOF part
+    python3 tools/proof_v3.py --pair <v2.mp4> <v3.mp4> [--pair ...] --gop 821 987 --gop 3256 3505 \
+        --new 821 897 --cap 898 902 --cap 3362 3447 > PROOF part
+  --gop: re-encoded GOPs; --new: frames with a new picture; --cap: frames whose caption changed (PSNR outside the caption band);
+  every other frame in a GOP is v2's picture re-encoded (full-frame PSNR).
 """
 import argparse, hashlib, re, subprocess
 
@@ -51,21 +54,43 @@ def ranges(ix):
     return ', '.join(f'{a}-{b}' if a != b else f'{a}' for a, b in out) or 'none'
 
 
-def psnr(a, b, f0, f1):
-    sel = f'select=between(n\\,{f0}\\,{f1})'
-    e = subprocess.run([FF, '-v', 'info', '-i', a, '-i', b, '-filter_complex', f'[0:v]{sel}[x];[1:v]{sel}[y];[x][y]psnr',
-                        '-f', 'null', '-'], capture_output=True, text=True).stderr
+BAND = (1150, 1420)   # tools/caption_patch_v3.py BAND
+
+
+def psnr(a, b, spans, crop=None):
+    """PSNR v2 vs v3 over the frames in spans [(f0, f1) inclusive]; crop 'out' = outside the caption band only."""
+    sel = 'select=' + '+'.join(f'between(n\\,{f0}\\,{f1})' for f0, f1 in spans)
+    if crop == 'out':
+        y0, y1 = BAND
+        g = (f'[0:v]{sel},split[a0][a1];[1:v]{sel},split[b0][b1];[a0]crop=iw:{y0}:0:0[at];[a1]crop=iw:ih-{y1}:0:{y1}[ab];'
+             f'[b0]crop=iw:{y0}:0:0[bt];[b1]crop=iw:ih-{y1}:0:{y1}[bb];[at][ab]vstack[x];[bt][bb]vstack[y];[x][y]psnr')
+    else:
+        g = f'[0:v]{sel}[x];[1:v]{sel}[y];[x][y]psnr'
+    e = subprocess.run([FF, '-v', 'info', '-i', a, '-i', b, '-filter_complex', g, '-f', 'null', '-'], capture_output=True, text=True).stderr
     m = re.search(r'PSNR y:([\d.inf]+) u:([\d.inf]+) v:([\d.inf]+) average:([\d.inf]+) min:([\d.inf]+) max:([\d.inf]+)', e)
     return m.group(0) if m else 'n/a'
+
+
+def spans_minus(g0, g1, cut):
+    """[g0, g1] minus the cut spans, as inclusive spans."""
+    keep = [i for i in range(g0, g1 + 1) if not any(a <= i <= b for a, b in cut)]
+    out = []
+    for i in keep:
+        if out and out[-1][1] == i - 1:
+            out[-1][1] = i
+        else:
+            out.append([i, i])
+    return [tuple(x) for x in out]
 
 
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--pair', nargs=2, action='append', required=True)
-    ap.add_argument('--window', nargs=2, type=int, required=True)
-    ap.add_argument('--gop', nargs=2, type=int, required=True)
+    ap.add_argument('--gop', nargs=2, type=int, action='append', required=True)
+    ap.add_argument('--new', nargs=2, type=int, action='append', default=[])
+    ap.add_argument('--cap', nargs=2, type=int, action='append', default=[])
     A = ap.parse_args()
-    w0, w1 = A.window; g0, g1 = A.gop
+    t = lambda f: f * 1001 / 30000
     for v2, v3 in A.pair:
         print('=' * 100)
         print(f'v2: {v2}\n    sha256 {sha256(v2)}\nv3: {v3}\n    sha256 {sha256(v3)}')
@@ -73,27 +98,29 @@ def main():
         print('\n-- ffprobe stream summary (v2 | v3; * = differs)')
         for a, b in zip(s2, s3):
             print(f'  {"*" if a != b else " "} {a:<52} | {b}')
-        # video packets (decode order, stream copy): dts, pts, duration, size, md5
         p2, p3 = framemd5(v2, 'v', True), framemd5(v3, 'v', True)
         print(f'\n-- video packets: v2 {len(p2)}, v3 {len(p3)}')
         diff = [i for i, (a, b) in enumerate(zip(p2, p3)) if a != b]
         ts_diff = [i for i, (a, b) in enumerate(zip(p2, p3)) if a[:3] != b[:3]]
         print(f'   packets that differ (decode-order index): {ranges(diff)}')
         print(f'   packets whose dts / pts / duration differ: {ranges(ts_diff)}')
-        # decoded frames (display order)
         d2, d3 = framemd5(v2, 'v', False), framemd5(v3, 'v', False)
         dd = [i for i, (a, b) in enumerate(zip(d2, d3)) if a[4] != b[4]]
-        out_win = [i for i in dd if not (g0 <= i <= g1)]
+        out_win = [i for i in dd if not any(g0 <= i <= g1 for g0, g1 in A.gop)]
         print(f'\n-- decoded frames: v2 {len(d2)}, v3 {len(d3)}')
         print(f'   frames whose decoded md5 differs: {ranges(dd)}  ({len(dd)} frames)')
-        print(f'   of those outside the re-encoded GOP {g0}-{g1}: {ranges(out_win)}')
-        print(f'   new picture (shot 10): frames {w0}-{w1} = {w0 * 1001 / 30000:.3f}-{(w1 + 1) * 1001 / 30000:.3f} s')
-        print(f'   re-encoded, same picture (shot 11, from v2\'s own decoded frames): {w1 + 1}-{g1} = '
-              f'{(w1 + 1) * 1001 / 30000:.3f}-{(g1 + 1) * 1001 / 30000:.3f} s')
-        print(f'   PSNR v3 vs v2, frames {w1 + 1}-{g1}: {psnr(v2, v3, w1 + 1, g1)}')
+        print(f'   of those outside the re-encoded GOPs {", ".join(f"{a}-{b}" for a, b in A.gop)}: {ranges(out_win)}')
+        for a, b in A.new:
+            print(f'   new picture: frames {a}-{b} = {t(a):.3f}-{t(b + 1):.3f} s')
+        for a, b in A.cap:
+            print(f'   caption changed, v2 picture elsewhere: frames {a}-{b} = {t(a):.3f}-{t(b + 1):.3f} s; '
+                  f'PSNR outside the caption band (rows {BAND[0]}-{BAND[1] - 1}): {psnr(v2, v3, [(a, b)], "out")}')
+        for g0, g1 in A.gop:
+            rest = spans_minus(g0, g1, A.new + A.cap)
+            print(f'   GOP {g0}-{g1}: frames with v2\'s picture and caption, re-encoded only because they share the GOP: '
+                  f'{", ".join(f"{a}-{b}" for a, b in rest)}; PSNR vs v2: {psnr(v2, v3, rest)}')
         same_ts = all(a[:3] == b[:3] for a, b in zip(d2, d3)) and len(d2) == len(d3)
         print(f'   decoded frame timestamps identical: {same_ts}')
-        # audio
         a2, a3 = framemd5(v2, 'a', True), framemd5(v3, 'a', True)
         ah2 = run([FF, '-v', 'error', '-i', v2, '-map', '0:a', '-c', 'copy', '-f', 'md5', '-']).stdout.strip()
         ah3 = run([FF, '-v', 'error', '-i', v3, '-map', '0:a', '-c', 'copy', '-f', 'md5', '-']).stdout.strip()

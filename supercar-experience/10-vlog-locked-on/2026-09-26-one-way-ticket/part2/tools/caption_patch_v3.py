@@ -62,15 +62,25 @@ def layer(path):
     return a[..., :3], a[..., 3:4] / 255.0
 
 
+def change_mask(old_png, new_png, L=None):
+    """the pixels the caption change touches: old and new layer differ, inside BAND, dilated by DIL (False elsewhere)."""
+    y0, y1 = BAND
+    Co, ao, Cn, an = L or (*layer(old_png), *layer(new_png))
+    diff = np.zeros((H, W), bool)
+    diff[y0:y1] = np.any(np.abs(np.concatenate([Co, ao * 255], 2) - np.concatenate([Cn, an * 255], 2))[y0:y1] > 0, axis=2)
+    if not diff.any():
+        return diff
+    M = _dilate(diff, DIL); M[:y0] = False; M[y1:] = False
+    return M
+
+
 def patch_rgb(F, old_png, new_png):
     """F: v2 decoded frame, float RGB (H, W, 3). Returns (new RGB, mask of changed pixels, ink check)."""
     y0, y1 = BAND
     Co, ao = layer(old_png); Cn, an = layer(new_png)
-    diff = np.zeros((H, W), bool)
-    diff[y0:y1] = np.any(np.abs(np.concatenate([Co, ao * 255], 2) - np.concatenate([Cn, an * 255], 2))[y0:y1] > 0, axis=2)
-    if not diff.any():
-        return F, diff, None
-    M = _dilate(diff, DIL); M[:y0] = False; M[y1:] = False
+    M = change_mask(old_png, new_png, (Co, ao, Cn, an))
+    if not M.any():
+        return F, M, None
     # work on the band only
     Fb, Cob, aob, Cnb, anb = F[y0:y1], Co[y0:y1], ao[y0:y1], Cn[y0:y1], an[y0:y1]
     exposed = int(((aob[..., 0] > 0.5) & (anb[..., 0] < 0.5)).sum())
