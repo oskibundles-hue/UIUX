@@ -1,0 +1,365 @@
+{
+ "fps": "30000/1001",
+ "size": [
+  3840,
+  2160
+ ],
+ "duration": 70.77,
+ "frames": 2121,
+ "chapters": [
+  {
+   "t": 0.0,
+   "title": "Sunrise \u00b7 Nevada",
+   "clock": "06:24:42 (0116) to 07:25:54 (0119), DJI camera clock"
+  }
+ ],
+ "title": {
+  "text": "SUNRISE \u00b7 NEVADA",
+  "t0": 0.6,
+  "t1": 3.9
+ },
+ "shots": [
+  {
+   "beat": 0,
+   "src": "0116",
+   "in": 4.55,
+   "out": 7.55,
+   "speed": 1.0,
+   "t": 0.0,
+   "dur": 3.0,
+   "note": "SUNRISE, side camera, driving, under the \"SUNRISE \u00b7 NEVADA\" title: \"As of right now you see the beautiful desert...\""
+  },
+  {
+   "beat": 1,
+   "src": "0116",
+   "in": 7.55,
+   "out": 13.4,
+   "speed": 1.0,
+   "t": 3.0,
+   "dur": 5.85,
+   "note": "CUTAWAY (windscreen zoom, same moment): \"...You see that? Actually, let me take a video of that because it actually looks amazing\" (the phone comes up)"
+  },
+  {
+   "beat": 2,
+   "src": "0116",
+   "in": 51.95,
+   "out": 55.09,
+   "speed": 1.0,
+   "t": 8.85,
+   "dur": 3.14,
+   "note": "CUTAWAY (windscreen zoom; sound in sync): \"186 miles till we're back home.\""
+  },
+  {
+   "beat": 3,
+   "src": "0116",
+   "in": 121.3,
+   "out": 128.11,
+   "speed": 1.0,
+   "t": 11.99,
+   "dur": 6.81,
+   "note": "SIDE CAMERA, one hand on the wheel: \"We got the beautiful view to us right here. Life's been good, you feel me?\""
+  },
+  {
+   "beat": 4,
+   "src": "0117",
+   "in": 74.8,
+   "out": 81.82,
+   "speed": 1.0,
+   "t": 18.8,
+   "dur": 7.02,
+   "note": "CUTAWAY (windscreen zoom, fields; sound in sync): \"As you can see, it's just all field. And there's a flock of crows right in front of me that are about to get obliterated.\""
+  },
+  {
+   "beat": 5,
+   "src": "0117",
+   "in": 100.85,
+   "out": 104.15,
+   "speed": 1.0,
+   "t": 25.82,
+   "dur": 3.3,
+   "note": "THE HOOK IN CONTEXT (windscreen zoom; sound in sync): \"No cell service, not an SOS. Crazy as [bleep].\""
+  },
+  {
+   "beat": 6,
+   "src": "0117",
+   "in": 111.85,
+   "out": 113.6,
+   "speed": 1.0,
+   "t": 29.12,
+   "dur": 1.75,
+   "note": "JUMP: \"I have to make it, we don't have a choice.\""
+  },
+  {
+   "beat": 7,
+   "src": "0118",
+   "in": 61.85,
+   "out": 63.58,
+   "speed": 1.0,
+   "t": 30.87,
+   "dur": 1.73,
+   "note": "CABIN, rear camera, driving: \"Trip has been cool...\""
+  },
+  {
+   "beat": 8,
+   "src": "0118",
+   "in": 69.4,
+   "out": 73.82,
+   "speed": 1.0,
+   "t": 32.6,
+   "dur": 4.42,
+   "note": "JUMP: \"It's been pretty fire. Wow, really nice scenery.\""
+  },
+  {
+   "beat": 9,
+   "src": "0118",
+   "in": 75.5,
+   "out": 88.52,
+   "speed": 1.0,
+   "t": 37.02,
+   "dur": 13.02,
+   "note": "JUMP: \"It was lots of beautiful trees and scenery and all kinds of [bleep] out in Seattle. I can't believe I just did the whole thing. No, no hotel, no nothing. That was the crazy part,\""
+  },
+  {
+   "beat": 10,
+   "src": "0118",
+   "in": 89.95,
+   "out": 91.63,
+   "speed": 1.0,
+   "t": 50.04,
+   "dur": 1.68,
+   "note": "JUMP: \"but you know, we thug it out.\""
+  },
+  {
+   "beat": 11,
+   "src": "0119",
+   "in": 0.9,
+   "out": 12.1,
+   "speed": 1.0,
+   "t": 51.72,
+   "dur": 11.2,
+   "note": "PULLING IN (rear camera, both hands on the wheel): \"Why ya chat, we Gucci. I'm looking at the gas station. Oh, thank the Lord. Thank the Lord, that we were toast.\""
+  },
+  {
+   "beat": 12,
+   "src": "0119",
+   "in": 51.9,
+   "out": 59.75,
+   "speed": 1.0,
+   "t": 62.92,
+   "dur": 7.85,
+   "note": "AT THE PUMP: \"I ain't gonna lie, I thought we were donezo. Over with, no return, call somebody to come get us. Donezo.\""
+  }
+ ],
+ "dialog": [
+  {
+   "beat": 0,
+   "src": "0116",
+   "in": 4.55,
+   "out": 13.4,
+   "t": 0.0,
+   "trim_pauses": null,
+   "last_word_end": 13.0,
+   "onset_measured": 4.55,
+   "voice_end": 13.0,
+   "next_onset_measured": 14.72,
+   "extended": false,
+   "out_asr": 13.0,
+   "text": "As of right now you see the beautiful desk You see that? Actually, let me take a video of that because it actually looks amazing"
+  },
+  {
+   "beat": 2,
+   "src": "0116",
+   "in": 51.95,
+   "out": 55.09,
+   "t": 8.85,
+   "trim_pauses": null,
+   "last_word_end": 54.69,
+   "onset_measured": 51.95,
+   "voice_end": 54.69,
+   "next_onset_measured": 56.88,
+   "extended": false,
+   "out_asr": 54.69,
+   "text": "186 miles till we're back home."
+  },
+  {
+   "beat": 3,
+   "src": "0116",
+   "in": 121.3,
+   "out": 128.11,
+   "t": 11.99,
+   "trim_pauses": null,
+   "last_word_end": 127.71,
+   "onset_measured": 121.3,
+   "voice_end": 127.71,
+   "next_onset_measured": 130.67,
+   "extended": false,
+   "out_asr": 127.7,
+   "text": "We got the beautiful view to us right here. Life's been good, you feel me?"
+  },
+  {
+   "beat": 4,
+   "src": "0117",
+   "in": 74.8,
+   "out": 81.82,
+   "t": 18.8,
+   "trim_pauses": null,
+   "last_word_end": 81.42,
+   "onset_measured": 74.8,
+   "voice_end": 81.42,
+   "next_onset_measured": 100.88,
+   "extended": false,
+   "out_asr": 81.4,
+   "text": "As you can see, it's just all field. And there's a flock of crows right in front of me that are about to get obliterated."
+  },
+  {
+   "beat": 5,
+   "src": "0117",
+   "in": 100.85,
+   "out": 104.15,
+   "t": 25.82,
+   "trim_pauses": null,
+   "last_word_end": 104.0,
+   "onset_measured": 100.85,
+   "voice_end": 104.0,
+   "next_onset_measured": 1000000000.0,
+   "extended": false,
+   "out_asr": 104.0,
+   "text": "No cell service, not an SOS. Crazy as fuck."
+  },
+  {
+   "beat": 6,
+   "src": "0117",
+   "in": 111.85,
+   "out": 113.6,
+   "t": 29.12,
+   "trim_pauses": null,
+   "last_word_end": 113.2,
+   "onset_measured": 111.85,
+   "voice_end": 113.2,
+   "next_onset_measured": 117.6,
+   "extended": false,
+   "out_asr": 113.2,
+   "text": "I have to make it, we don't have a choice."
+  },
+  {
+   "beat": 7,
+   "src": "0118",
+   "in": 61.85,
+   "out": 63.58,
+   "t": 30.87,
+   "trim_pauses": null,
+   "last_word_end": 63.18,
+   "onset_measured": 61.85,
+   "voice_end": 63.18,
+   "next_onset_measured": 66.98,
+   "extended": false,
+   "out_asr": 63.18,
+   "text": "trip has been cool"
+  },
+  {
+   "beat": 8,
+   "src": "0118",
+   "in": 69.4,
+   "out": 73.82,
+   "t": 32.6,
+   "trim_pauses": null,
+   "last_word_end": 73.42,
+   "onset_measured": 69.4,
+   "voice_end": 73.42,
+   "next_onset_measured": 75.62,
+   "extended": false,
+   "out_asr": 73.42,
+   "text": "it's been pretty fire Wow, really nice scenery."
+  },
+  {
+   "beat": 9,
+   "src": "0118",
+   "in": 75.5,
+   "out": 88.52,
+   "t": 37.02,
+   "trim_pauses": null,
+   "last_word_end": 88.12,
+   "onset_measured": 75.5,
+   "voice_end": 88.12,
+   "next_onset_measured": 90.13,
+   "extended": false,
+   "out_asr": 88.12,
+   "text": "It was lots of beautiful trees and scenery and all kinds of shit out in Seattle. I can't believe I just did the whole thing. No, no hotel, no nothing. That was the crazy part,"
+  },
+  {
+   "beat": 10,
+   "src": "0118",
+   "in": 89.95,
+   "out": 91.63,
+   "t": 50.04,
+   "trim_pauses": null,
+   "last_word_end": 91.23,
+   "onset_measured": 89.95,
+   "voice_end": 91.23,
+   "next_onset_measured": 98.48,
+   "extended": false,
+   "out_asr": 91.23,
+   "text": "but you know, we thug it out."
+  },
+  {
+   "beat": 11,
+   "src": "0119",
+   "in": 0.9,
+   "out": 12.1,
+   "t": 51.72,
+   "trim_pauses": null,
+   "last_word_end": 11.7,
+   "onset_measured": 9.2,
+   "voice_end": 9.3,
+   "next_onset_measured": 1000000000.0,
+   "extended": false,
+   "out_asr": 11.7,
+   "text": "Why ya chat, we Gucci. I'm looking at the gas station. Oh, thank the Lord. Thank the Lord that we were toast."
+  },
+  {
+   "beat": 12,
+   "src": "0119",
+   "in": 51.9,
+   "out": 59.75,
+   "t": 62.92,
+   "trim_pauses": null,
+   "last_word_end": 59.14,
+   "onset_measured": 52.0,
+   "voice_end": 59.35,
+   "next_onset_measured": 60.5,
+   "extended": false,
+   "out_asr": 59.14,
+   "text": "I ain't gonna lie, I thought we were donezo. Over with, no return, call somebody to come get us donezo."
+  }
+ ],
+ "audio_extra": [],
+ "beats": [
+  {
+   "i": 0,
+   "ch": "CH7",
+   "t0": 0.0,
+   "t1": 70.77,
+   "note": "CH7 Sunrise, Nevada: the desert at sunrise -> 186 miles to home -> fields -> no cell service, have to make it -> the trip in his words -> the gas station, we thought we were donezo"
+  }
+ ],
+ "mute": [],
+ "bleeps": [
+  {
+   "src": "0117",
+   "in": 103.78,
+   "out": 104.05,
+   "word": "fuck"
+  },
+  {
+   "src": "0118",
+   "in": 78.98,
+   "out": 79.14,
+   "word": "shit"
+  }
+ ],
+ "rotate": {},
+ "warnings": [
+  "0117 100.85: voice ends 104.00, next onset 1000000000.00: tail 0.15 s",
+  "0118 75.5-88.52: speaker model says OTHER (0.19) at 83.22-83.22 \"No,\""
+ ]
+}

@@ -1,0 +1,4 @@
+# Rendered video goes to Dropbox via Video Drop, never git
+*.mp4
+*.mov
+*.wav

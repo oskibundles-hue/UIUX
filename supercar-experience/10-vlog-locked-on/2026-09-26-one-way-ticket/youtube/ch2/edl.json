@@ -1,0 +1,149 @@
+{
+ "fps": "30000/1001",
+ "size": [
+  3840,
+  2160
+ ],
+ "duration": 37.95,
+ "chapters": [
+  {
+   "t": 0.0,
+   "title": "Seattle \u00b7 morning",
+   "clock": "08:59:59 (0082, DJI camera clock)"
+  }
+ ],
+ "shots": [
+  {
+   "beat": 0,
+   "src": "0082",
+   "in": 1.0,
+   "out": 5.5,
+   "speed": 1.0,
+   "t": 0.0,
+   "dur": 4.5,
+   "note": "LANDING (picture + nat only): wing and engine over the Seattle suburbs; the \"SEATTLE \u00b7 MORNING\" chapter title"
+  },
+  {
+   "beat": 1,
+   "src": "0082",
+   "in": 9.0,
+   "out": 13.0,
+   "speed": 1.0,
+   "t": 4.5,
+   "dur": 4.0,
+   "note": "LANDING (picture + nat only): low over the trees to the airport car park"
+  },
+  {
+   "beat": 2,
+   "src": "0084",
+   "in": 1.25,
+   "out": 14.4,
+   "speed": 1.0,
+   "t": 8.5,
+   "dur": 13.15,
+   "note": "\"All right, so we was just on a tram talking to Jordan Carter, you feel me, some of that morning tea... Being off, we going up to the baggage claim. I got no bags. I don't know where I'm at\""
+  },
+  {
+   "beat": 3,
+   "src": "0085",
+   "in": 49.8,
+   "out": 52.6,
+   "speed": 1.0,
+   "t": 21.65,
+   "dur": 2.8,
+   "note": "FIT CHECK (parking garage): \"You wanna see the fit check?\""
+  },
+  {
+   "beat": 4,
+   "src": "0085",
+   "in": 58.4,
+   "out": 69.35,
+   "speed": 1.0,
+   "t": 24.45,
+   "dur": 10.95,
+   "note": "JUMP (camera on the bench, full length): \"Got the Hidden Hills jacket on, you see the back... the Rick Owens on, tough, huh\""
+  },
+  {
+   "beat": 5,
+   "src": "0086",
+   "in": 31.9,
+   "out": 34.45,
+   "speed": 1.0,
+   "t": 35.4,
+   "dur": 2.55,
+   "note": "END: \"Second time in Seattle, Washington.\""
+  }
+ ],
+ "dialog": [
+  {
+   "beat": 2,
+   "src": "0084",
+   "in": 1.25,
+   "out": 14.4,
+   "t": 8.5,
+   "trim_pauses": null,
+   "last_word_end": 14.14,
+   "voice_end": 13.95,
+   "next_onset_measured": 15.65,
+   "extended": false,
+   "out_asr": 14.14,
+   "text": "All right, so we was just on a tram talking to Jordan car you feel me some of that morning, you know, I'm saying T looking at but Being off we going up to the baggage claim. I got no bags. I don't know where I'm at"
+  },
+  {
+   "beat": 3,
+   "src": "0085",
+   "in": 49.8,
+   "out": 52.6,
+   "t": 21.65,
+   "trim_pauses": null,
+   "last_word_end": 52.23,
+   "voice_end": 52.25,
+   "next_onset_measured": 53.6,
+   "extended": false,
+   "out_asr": 52.23,
+   "text": "You wanna see the fit check?"
+  },
+  {
+   "beat": 4,
+   "src": "0085",
+   "in": 58.4,
+   "out": 69.35,
+   "t": 24.45,
+   "trim_pauses": null,
+   "last_word_end": 69.01,
+   "voice_end": 68.9,
+   "next_onset_measured": 70.4,
+   "extended": false,
+   "out_asr": 69.01,
+   "text": "Got the hidden Hills jacket on you see the back fire yep the Rick Owens on tough huh"
+  },
+  {
+   "beat": 5,
+   "src": "0086",
+   "in": 31.9,
+   "out": 34.45,
+   "t": 35.4,
+   "trim_pauses": null,
+   "last_word_end": 33.04,
+   "voice_end": 34.05,
+   "next_onset_measured": 35.0,
+   "extended": false,
+   "out_asr": 33.6,
+   "text": "Second time in Seattle,"
+  }
+ ],
+ "audio_extra": [],
+ "beats": [
+  {
+   "i": 0,
+   "ch": "CH2",
+   "t0": 0.0,
+   "t1": 37.95,
+   "note": "CH2 Seattle \u00b7 morning: the landing -> the terminal -> fit check in the garage -> \"Second time in Seattle, Washington\""
+  }
+ ],
+ "mute": [],
+ "bleeps": [],
+ "rotate": {},
+ "warnings": []
+}

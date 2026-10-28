@@ -1,0 +1,227 @@
+{
+ "name": "B",
+ "fps": "30000/1001",
+ "size": [
+  1280,
+  720
+ ],
+ "duration": 42.57,
+ "montage_t": 16.69,
+ "beat": 0.7692307692307693,
+ "shots": [
+  {
+   "beat": 0,
+   "src": "0121",
+   "in": 152.0,
+   "out": 154.27,
+   "speed": 1.0,
+   "t": 0.0,
+   "dur": 2.27,
+   "kind": "cutaway",
+   "nat": null,
+   "note": "CUTAWAY over HOOK 1 (0117 phone in hand while moving): rear camera, desert highway"
+  },
+  {
+   "beat": 1,
+   "src": "0099",
+   "in": 176.3,
+   "out": 178.52,
+   "speed": 1.0,
+   "t": 2.27,
+   "dur": 2.22,
+   "kind": "cutaway",
+   "nat": null,
+   "note": "CUTAWAY over HOOK 2 (0117 phone in hand while moving): eastern Oregon plains, hands on the wheel"
+  },
+  {
+   "beat": 2,
+   "src": "0075",
+   "in": 56.45,
+   "out": 60.95,
+   "speed": 1.0,
+   "t": 4.49,
+   "dur": 4.5,
+   "kind": "talk",
+   "nat": -24.0,
+   "note": "HOOK 3 (rotate): \"It's 4:30 in the morning. I got my Uber coming right now.\""
+  },
+  {
+   "beat": 3,
+   "src": "0075",
+   "in": 69.32,
+   "out": 77.02,
+   "speed": 1.0,
+   "t": 8.99,
+   "dur": 7.7,
+   "kind": "talk",
+   "nat": -24.0,
+   "note": "HOOK 4 (rotate), jump cut: \"So we are heading to Seattle, Washington to go pick up a McLaren 600 LT.\""
+  },
+  {
+   "beat": 4,
+   "src": "0092",
+   "in": 19.0,
+   "out": 22.0769,
+   "speed": 1.0,
+   "t": 16.69,
+   "dur": 3.0769,
+   "kind": "montage",
+   "nat": -30.0,
+   "note": "Seattle, top down, cabin side (parked)"
+  },
+  {
+   "beat": 5,
+   "src": "0094",
+   "in": 27.5,
+   "out": 29.8077,
+   "speed": 1.0,
+   "t": 19.7669,
+   "dur": 2.3077,
+   "kind": "montage",
+   "nat": -30.0,
+   "note": "forest road POV (1.4x top-anchored window: mirror, his arm and the dash are below the frame; see README)"
+  },
+  {
+   "beat": 6,
+   "src": "0095",
+   "in": 8.8,
+   "out": 10.3385,
+   "speed": 1.0,
+   "t": 22.0746,
+   "dur": 1.5385,
+   "kind": "montage",
+   "nat": -30.0,
+   "note": "green forest road (2 beats: 8.8-10.34 is clear of the flares at 8.2 and 10.5+)"
+  },
+  {
+   "beat": 7,
+   "src": "0098",
+   "in": 97.35,
+   "out": 100.4269,
+   "speed": 1.0,
+   "t": 23.6131,
+   "dur": 3.0769,
+   "kind": "montage",
+   "nat": -30.0,
+   "note": "trees and highway (1.4x top-anchored window: rear-view mirror out of frame; the beat from 0095)"
+  },
+  {
+   "beat": 8,
+   "src": "0099",
+   "in": 179.0,
+   "out": 181.3077,
+   "speed": 1.0,
+   "t": 26.69,
+   "dur": 2.3077,
+   "kind": "montage",
+   "nat": null,
+   "note": "eastern Oregon plains (source muted: stereo, Shazam)"
+  },
+  {
+   "beat": 9,
+   "src": "0121",
+   "in": 148.4,
+   "out": 151.4769,
+   "speed": 1.0,
+   "t": 28.9977,
+   "dur": 3.0769,
+   "kind": "montage",
+   "nat": -30.0,
+   "note": "desert highway, rear camera"
+  },
+  {
+   "beat": 10,
+   "src": "0122",
+   "in": 583.4,
+   "out": 588.0154,
+   "speed": 1.0,
+   "t": 32.0746,
+   "dur": 4.6154,
+   "kind": "montage",
+   "nat": null,
+   "note": "Las Vegas, Rio billboard and skyline, rear camera (last; source muted: stereo, Shazam)"
+  },
+  {
+   "beat": 11,
+   "src": "0075",
+   "in": 80.5,
+   "out": 86.38,
+   "speed": 1.0,
+   "t": 36.69,
+   "dur": 5.88,
+   "kind": "talk",
+   "nat": -24.0,
+   "note": "CH1 START (rotate), jump cut: \"So let's head up out of here. Alright famo.\" + tail"
+  }
+ ],
+ "dialog": [
+  {
+   "beat": 0,
+   "src": "0117",
+   "in": 100.85,
+   "out": 103.12,
+   "t": 0.0,
+   "text": "HOOK 1: \"(I have) no cell service, not an SOS.\"",
+   "tail": 0.04
+  },
+  {
+   "beat": 1,
+   "src": "0117",
+   "in": 111.4,
+   "out": 113.62,
+   "t": 2.27,
+   "text": "HOOK 2: \"We're gonna have to make it, we don't have a choice.\""
+  },
+  {
+   "beat": 2,
+   "src": "0075",
+   "in": 56.45,
+   "out": 60.95,
+   "t": 4.49,
+   "text": ""
+  },
+  {
+   "beat": 3,
+   "src": "0075",
+   "in": 69.32,
+   "out": 77.02,
+   "t": 8.99,
+   "text": ""
+  },
+  {
+   "beat": 11,
+   "src": "0075",
+   "in": 80.5,
+   "out": 86.38,
+   "t": 36.69,
+   "text": ""
+  }
+ ],
+ "audio_extra": [
+  {
+   "beat": 0,
+   "src": "0117",
+   "in": 100.85,
+   "out": 103.12,
+   "t": 0.0,
+   "kind": "nat",
+   "lufs": -24.0,
+   "tail": 0.04
+  },
+  {
+   "beat": 1,
+   "src": "0117",
+   "in": 111.4,
+   "out": 113.62,
+   "t": 2.27,
+   "kind": "nat",
+   "lufs": -24.0,
+   "tail": 0.0
+  }
+ ],
+ "mute": [],
+ "bleeps": [],
+ "rotate": {
+  "0075": "check at the gate"
+ }
+}
