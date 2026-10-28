@@ -4,6 +4,7 @@
   "installType": "full",
   "folderStructure": {
     "root": ".codex",
+    "globalRoot": ".agents",
     "skillPath": "skills/ui-ux-pro-max",
     "filename": "SKILL.md"
   },

@@ -5,7 +5,7 @@ import chalk from 'chalk';
 import ora from 'ora';
 import prompts from 'prompts';
 import type { AIType } from '../types/index.js';
-import { AI_TYPES, AI_FOLDERS } from '../types/index.js';
+import { AI_TYPES, AI_FOLDERS, AI_GLOBAL_FOLDERS } from '../types/index.js';
 import { detectAIType, getAITypeDescription } from '../utils/detect.js';
 import { logger } from '../utils/logger.js';
 
@@ -17,8 +17,12 @@ interface UninstallOptions {
 /**
  * Remove skill directory for a given AI type
  */
-async function removeSkillDir(baseDir: string, aiType: Exclude<AIType, 'all'>): Promise<string[]> {
-  const folders = AI_FOLDERS[aiType];
+async function removeSkillDir(
+  baseDir: string,
+  aiType: Exclude<AIType, 'all'>,
+  isGlobal = false
+): Promise<string[]> {
+  const folders = (isGlobal && AI_GLOBAL_FOLDERS[aiType]) || AI_FOLDERS[aiType];
   const removed: string[] = [];
 
   for (const folder of folders) {
@@ -101,11 +105,11 @@ export async function uninstallCommand(options: UninstallOptions): Promise<void>
     if (aiType === 'all') {
       // Remove for all detected platforms
       for (const type of initialDetected) {
-        const removed = await removeSkillDir(baseDir, type);
+        const removed = await removeSkillDir(baseDir, type, isGlobal);
         allRemoved.push(...removed);
       }
     } else {
-      const removed = await removeSkillDir(baseDir, aiType);
+      const removed = await removeSkillDir(baseDir, aiType, isGlobal);
       allRemoved.push(...removed);
     }
 
