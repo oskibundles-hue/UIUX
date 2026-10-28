@@ -240,8 +240,10 @@ def cmd_mark(index, ids):
     for i, line in enumerate(lines):
         m = CARD.match(line)
         if m and json.loads(m.group(1))["id"] in ids:
-            if line.count('"state": "new"') == 1:
-                lines[i] = line.replace('"state": "new"', '"state": "saved"')
+            # Cards come both spaced ("state": "new") and compact ("state":"new").
+            line, n = re.subn(r'("state":\s*)"new"', r'\1"saved"', line)
+            if n == 1:
+                lines[i] = line
             done.add(json.loads(m.group(1))["id"])
     open(index, "w", encoding="utf-8").write("\n".join(lines))
     for i in ids:
