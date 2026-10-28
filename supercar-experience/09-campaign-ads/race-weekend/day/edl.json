@@ -1,0 +1,25 @@
+{
+  "_": "DAY ad shot list (Day Time Duo 1.mp4, Arizona). Cut to Car Scenes' own music (150 BPM, beat 0.4 s): ad t=0 is music 4.010 s. Every cut sits on a MEASURED music onset (librosa onset_detect on the source audio, mapped to ad time): 1.605 2.200 2.605 3.205 4.800 5.600 6.200 6.395 7.995 9.600 10.800 11.195 11.995 12.800 13.005 14.395 s. b = ad seconds / 0.4. src..src_end checked against the source's own cuts; speed < 1 = motion-interpolated slow-mo (no wheels in frame except the two lock-on shots, checked frame by frame).",
+  "beat": 0.4,
+  "music_start": 4.010,
+  "beats_total": 46.5,
+  "shots": [
+    {"b": [0, 4],          "src": 1.765,  "speed": 0.635, "src_end": 2.785, "car": "GT3RS", "what": "GT3 RS front approach, cloudy highway (HOOK)"},
+    {"b": [4, 5.5],        "src": 4.310,  "speed": 0.66,  "src_end": 4.705, "car": "GT3RS", "what": "GT3 RS swan-neck wing, PORSCHE lettering (THU 19)"},
+    {"b": [5.5, 6.5125],   "src": 5.810,  "speed": 1,     "src_end": 6.290, "car": "GT3RS", "what": "GT3 RS passing the camera (FRI 20)"},
+    {"b": [6.5125, 8],     "src": 4.765,  "speed": 0.94,  "src_end": 5.330, "car": "750S",  "what": "McLaren through the brush (SAT 21 / RACE NIGHT)"},
+    {"b": [8, 12],         "src": 7.270,  "speed": 0.956, "src_end": 8.795, "car": "GT3RS", "what": "GT3 RS from behind on the long straight (NOV 19-21)"},
+    {"b": [12, 14],        "src": 9.270,  "speed": 0.97,  "src_end": 10.045,"car": "750S",  "what": "McLaren rear on the winding road"},
+    {"b": [14, 15.5],      "src": 8.810,  "speed": 0.74,  "src_end": 9.255, "car": "750S",  "what": "McLaren engine mesh and tail light"},
+    {"b": [15.5, 16],      "src": 2.800,  "speed": 1,     "src_end": 3.705, "car": "750S",  "what": "McLaren flank and mirror (flash)"},
+    {"b": [16, 20],        "src": 15.525, "speed": 0.772, "src_end": 16.760,"car": "750S",  "what": "McLaren 750S Spider head-on, saguaro (gates + lock-on + name)"},
+    {"b": [20, 24],        "src": 11.690, "speed": 0.897, "src_end": 13.130,"car": "GT3RS", "what": "GT3 RS rear 3/4, wing against the clouds (gates + lock-on + name)"},
+    {"b": [24, 27],        "src": 0.500,  "speed": 1,     "src_end": 1.700, "car": "750S",  "what": "McLaren cockpit POV, GT3 RS ahead (THU · FRI · SAT)"},
+    {"b": [27, 28],        "src": 6.810,  "speed": 1,     "src_end": 7.250, "car": "?",     "what": "hand on the wheel (RACE NIGHT)"},
+    {"b": [28, 30],        "src": 14.520, "speed": 1,     "src_end": 15.510,"car": "GT3RS", "what": "GT3 RS front approach (F1 WEEKEND)"},
+    {"b": [30, 32],        "src": 17.530, "speed": 1,     "src_end": 18.430,"car": "GT3RS", "what": "open road, GT3 RS ahead (NOV 19-21)"},
+    {"b": [32, 32.5125],   "src": 13.185, "speed": 1,     "src_end": 13.590,"car": "?",     "what": "hand on the shifter (flash)"},
+    {"b": [32.5125, 36],   "src": 10.060, "speed": 1,     "src_end": 11.670,"car": "GT3RS", "what": "GT3 RS low side angle, wing (HUD only)"},
+    {"b": [36, 46.5],      "src": 19.490, "speed": 0.736, "src_end": 22.590,"car": "-",     "what": "aerial: the winding road (END CARD)"}
+  ]
+}

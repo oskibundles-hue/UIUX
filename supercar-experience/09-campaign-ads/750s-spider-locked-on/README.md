@@ -6,12 +6,15 @@ been posted anywhere yet;** each post or ad placement still needs its own go. It
 THE STANDARD for SE ads (`locked-on`, `../HOUSE-STYLE.md` on the SE branch). It started from the approved GT3
 RS showcase's settings and library (`../flash-special-showcase/`, whose `lib/` modules are vendored here).
 
-The approved render (the mp4s are not in git; `python3 build.py` rebuilds them from the source clip):
+The approved render (the mp4s are not in git; `python3 build.py` rebuilds them from the source clip). Each edit is
+delivered as **one Instagram-ready file** (H.264 High 4.2, BT.709, AAC 48 kHz, fast start). Omarie, 28 Sept 2026:
+"I just need Instagram ready reels for these edits, I don't need 2 videos per video", so the build no longer
+writes a master; the master rows below are kept as a record:
 
 | File | SHA-256 |
 |---|---|
 | `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-9x16.mp4` (delivery: 11.5 Mb/s, 25.9 MB) | `22ddf49232086eb8d3856fc05760032d2a9385df77acf0c19eb3ee885e2ca544` |
-| `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-9x16_master.mp4` (master: CRF 16, 57.1 MB) | `73762b7c7c59961b0a524b9fe607d65dc2b185336753389145dd1e26f03ba545` |
+| `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-9x16_master.mp4` (retired master, CRF 16, 57.1 MB: no longer written or delivered) | `73762b7c7c59961b0a524b9fe607d65dc2b185336753389145dd1e26f03ba545` |
 
 ![poster](exports/poster.jpg) ![end card](exports/poster-endcard.jpg)
 
@@ -135,9 +138,9 @@ Round 3 confirmed 20 of the round-2 items fixed at full resolution, with no regr
 | File | SHA-256 |
 |---|---|
 | `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-4x5.mp4` (delivery: 8.1 Mb/s, 18.4 MB) | `dfc2c1c183b0f9ec23bc4688ec5949e8f58e9e3d1e0a7120ce115c70dde610f1` |
-| `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-4x5_master.mp4` (master: CRF 16, 40.4 MB) | `a3138d13b69073a849319fce84255b9f6e81f9ebaf822c659aebd1953416addb` |
+| `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-4x5_master.mp4` (retired master, CRF 16, 40.4 MB: no longer written or delivered) | `a3138d13b69073a849319fce84255b9f6e81f9ebaf822c659aebd1953416addb` |
 | `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-1x1.mp4` (delivery: 6.5 Mb/s, 14.9 MB) | `b9dab85e7f77fd1e52a26901af2490290a590eddde705c9c4b1a971156603204` |
-| `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-1x1_master.mp4` (master: CRF 16, 32.8 MB) | `f7b2907b52e817e6744b85941ea2ff28d617e8192dbe150e2cb6a6d9fd6fa1a3` |
+| `exports/SCE_750S-Spider_Roof-Down_Locked-On_18s-1x1_master.mp4` (retired master, CRF 16, 32.8 MB: no longer written or delivered) | `f7b2907b52e817e6744b85941ea2ff28d617e8192dbe150e2cb6a6d9fd6fa1a3` |
 
 The same approved ad, cut for the feed placements. The edit, plate, grade, sky matte, graphics timing and sound
 are identical; each version is a crop window of the 1080x1920 plate per shot (`lib/formats.py`), re-composited so the
@@ -171,6 +174,52 @@ python3 build.py --format 4x5          # every stage cached; only the composite,
 python3 build.py --format 1x1          # also renders the square's hook and end card (front_1x1.html -> .work/front_1x1/)
 ```
 
+## Looks: two more graphics packages on the same edit (proposed 28 Sept 2026, not approved)
+
+Omarie, 28 Sept 2026: "create 2 more variations of the locked on artifact dynamic motion graphics we've created with
+completely different graphics... give them unique names and store them in the same artifact". Both looks are built on
+the approved ROOF DOWN edit. They share its plate, grade, sky matte, tracks, beat grid, copy (`config.json`) and sound,
+so all three looks compare shot for shot. Only the graphics change.
+
+They are **proposals**. Nothing here is approved or posted. They render into their own caches and into
+`exports/proposed/`, so the approved Locked-On files in `exports/` stay as they were, and anything that collects every
+mp4 in `exports/` can't pick up an unapproved one.
+
+| Look | Idea | Motion | Files |
+|---|---|---|---|
+| **NOW BOARDING** | The rental as a departure. Every line of copy sits on a split-flap board under a gold header bar. A gold pin on the badge is tethered to a flap tag, a giant board rises behind the deck for SPIDER, and the FARE board carries the end-card price. | Real flap mechanics: each tile has four halves and flips in 1.8 frames with a bounce, sampled up to 20 times for motion blur. Words cascade. A row that holds a figure (a price, the phone, 750S, the year) flips as one, so no partial number ever shows. A newly revealed half stays in shadow until its partner lands. | `front_now-boarding.html`, `mid_now-boarding.html`, `lib/flap.js` |
+| **PASTE-UP** | A cut-paper collage. The type sits on torn paper strips held down with gold tape, the price on a gold halftone patch. A gold marker loops the badge and the headlight, and SPIDER arrives as six cut-out letters behind the car. | Stepped at 12 drawings a second with a boil, the opposite of Locked-On's sub-frame blur. Pieces slap on over three drawings and rip off in two. A figure always sits on one piece and moves whole. | `front_paste-up.html`, `mid_paste-up.html`, `lib/paper.js` |
+
+```bash
+python3 build.py --look now-boarding --stage front,mid,finish,qa   # -> exports/proposed/SCE_750S-Spider_Roof-Down_Now-Boarding_18s-9x16.mp4
+python3 build.py --look paste-up --stage front,mid,finish,qa       # -> exports/proposed/SCE_750S-Spider_Roof-Down_Paste-Up_18s-9x16.mp4
+python3 build.py --look paste-up --frames 0,140,431               # stills of one look -> .work/stills/*_paste-up.jpg
+```
+
+QA stills go to `exports/proposed/qa_now-boarding/` and `exports/proposed/qa_paste-up/`. Both looks are 9:16 only for
+now. The 4:5 and 1:1 follow once Omarie picks a look.
+
+| File (28 Sept 2026, in `exports/proposed/`, not in git) | Frames | Loudness | Safe zone | SHA-256 |
+|---|---|---|---|---|
+| `SCE_750S-Spider_Roof-Down_Now-Boarding_18s-9x16.mp4` (25.9 MB) | 432, 18.02 s | −14.11 LUFS, TP −2.65 dBTP | 0 violations | `0a7f25fc397405b14a61d3266b8b08c77fd6d39a46b0abe8d40eccb9ea97d3d8` |
+| `SCE_750S-Spider_Roof-Down_Paste-Up_18s-9x16.mp4` (25.8 MB) | 432, 18.02 s | −14.11 LUFS, TP −2.65 dBTP | 0 violations, slap frames included | `3104c8dd66c5dbb3b189306023b467c427a0db973457d116a655a51634375e27` |
+
+**Review, 28 Sept.** The reviewer agent checked both looks frame by frame. It passed PASTE-UP and failed NOW BOARDING,
+and every finding was fixed before the files above were made:
+
+- NOW BOARDING built "750S" and the year one tile at a time, so partial figures ("7?UY", "750", "202") showed on the
+  tag and at the hook exit. Those rows now flip whole, in and out, the same as the prices.
+- The end-card model row touched the FARE bar by 1 to 4 px. The row moved up 10 px and the board down 6 px.
+- The pin sat on top of the speedmark. It now sits on the badge's top edge, and the board labels went from 15 to 18 px.
+- On PASTE-UP, gold paper crossed x 54 by 7 to 9 px on beat slaps, and the R crossed x 907 on the crash. The price patch
+  is narrower with a smaller slam (`Paper.pose(..., { pop, hitPop })`, both 1 by default, so other pieces are unchanged),
+  and the SPIDER letters sit 4 px closer together. The QA audit now also checks the slap frames (`LOOK_AUDIT`).
+
+Earlier, the first renders had failed the safe-zone audit. The NOW BOARDING sky boards reached x 52 once the end-card
+push scaled them, so they were narrowed to x 76..884. The PASTE-UP tape ends were moved inward. Fly-in and rip-off
+drawings still cross the line for a single drawing, and the audit skips them because they are in motion, the same rule
+as for Locked-On.
+
 ## Change a figure
 
 Edit `config.json`, then run `python3 build.py`. Only the layers that changed re-render.
@@ -197,7 +246,7 @@ Stages, each cached in `.work/` (ignored by git):
 5. `front`: `front.html`.
 6. `mid`: `mid.html`.
 7. `audio`: `audio/bed.py`.
-8. `finish`: composite, then the master and delivery encodes.
+8. `finish`: composite, then one encode: the Instagram-ready file (no separate master since 28 Sept).
 9. `qa`.
 
 ## Files

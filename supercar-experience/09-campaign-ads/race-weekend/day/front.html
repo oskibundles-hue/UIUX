@@ -1,0 +1,306 @@
+<!doctype html>
+<!--
+  front.html (DAY) - FRONT motion layer, SE "F1 weekend" DAY ad, race-control family (direction C), own look.
+  Footage: Day Time Duo 1 (Arizona desert, daylight). Music: Car Scenes' own track, 150 BPM, beat 0.4 s, bars 1.6 s.
+  Daylight treatment: every word sits on dark glass (bright sky), skewed flag strips instead of flat chequer bands,
+  sun-flare wipes on the bar hits (b4, b8, b16, b20, b28, b36) and heat-shimmer cuts in comp.py instead of chequered
+  wipes and whips. NO countdown. NEVER "LAS VEGAS" (this is Arizona scenery).
+  RENT version (Omarie 2026-10-03): no car names anywhere; rental framing only.
+  Key text inside x 54-907, y 285-1536. Site orange #FF4F16, black, white; Hanken Grotesk + JetBrains Mono.
+-->
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Hanken;font-weight:900;src:url('../fonts/HankenGrotesk-900.ttf')}
+@font-face{font-family:Mono;font-weight:700;src:url('../fonts/JetBrainsMono-700.ttf')}
+@font-face{font-family:Mono;font-weight:800;src:url('../fonts/JetBrainsMono-800.ttf')}
+:root{--o:#FF4F16}
+html,body{margin:0;padding:0;width:1080px;height:1920px;overflow:hidden;background:transparent}
+*{box-sizing:border-box}
+.a{position:absolute;left:0;top:0}
+.g{position:absolute;left:0;top:0;width:1080px;height:1920px}
+.hk{font-family:Hanken;font-weight:900;line-height:.9;letter-spacing:-.02em;white-space:pre;color:#fff}
+.mono{font-family:Mono;font-weight:700;line-height:1;letter-spacing:.04em;white-space:pre;color:#fff}
+.o{color:var(--o)}
+.glass{position:absolute;background:rgba(10,10,12,.64);border-radius:6px;border-top:1px solid rgba(255,255,255,.22);
+  box-shadow:0 14px 44px rgba(0,0,0,.30)}
+.glass::before{content:"";position:absolute;left:0;top:0;bottom:0;width:6px;background:var(--o);border-radius:6px 0 0 6px}
+.flag{position:absolute;height:24px;transform:skewX(-24deg);
+  background:repeating-conic-gradient(#fff 0 25%,#0a0a0a 0 50%) 0 0/24px 24px;box-shadow:0 0 0 2px rgba(255,79,22,.9)}
+.seg{position:absolute;height:12px;background:rgba(255,255,255,.22);border-radius:6px;overflow:hidden}
+.seg i{position:absolute;left:0;top:0;bottom:0;width:0;background:#fff;border-radius:6px}
+.seg.hot i{background:var(--o)}
+.seg b{position:absolute;top:0;bottom:0;width:80px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.95),rgba(255,255,255,0));display:none}
+.lab{position:absolute;font-family:Mono;font-weight:700;font-size:24px;letter-spacing:.04em;color:#fff;white-space:pre}
+.lab b{color:#9a9a9a;font-weight:700}
+.dash{position:absolute;width:4px;background:repeating-linear-gradient(to bottom,currentColor 0 16px,transparent 16px 26px)}
+.brk{position:absolute;width:60px;height:60px;border-color:var(--o);border-style:solid;border-width:0;filter:drop-shadow(0 0 6px rgba(0,0,0,.6))}
+</style>
+<script src="config.js"></script>
+</head><body>
+<div id="stage" class="g">
+
+  <!-- 1. HOOK, complete on frame 0: top card + bottom race-control strip; the car runs between them -->
+  <div id="hook" class="g">
+    <div id="hTop" class="g">
+      <div class="glass" style="left:54px;top:300px;width:816px;height:332px"></div>
+      <img class="a" src="../logos/sce-primary-horizontal--white.png" style="left:92px;top:328px;width:270px">
+      <div class="a hk" style="left:90px;top:396px;font-size:72px">RENT A SUPERCAR</div>
+      <div class="a hk" style="left:88px;top:478px;font-size:126px">F1 WEEKEND</div>
+      <div id="hFlag" class="flag" style="left:96px;top:656px;width:300px"></div>
+    </div>
+    <div id="hBot" class="g">
+      <div class="glass" style="left:54px;top:1318px;width:816px;height:212px"></div>
+      <div class="a mono o" style="left:92px;top:1340px;font-size:62px;font-weight:800">NOV 19–21</div>
+      <div class="lab" style="left:92px;top:1424px"><b>S1 </b>THU 19</div>
+      <div class="lab" style="left:350px;top:1424px"><b>S2 </b>FRI 20</div>
+      <div class="lab" style="left:608px;top:1424px"><b>S3 </b><span class="o">SAT 21</span></div>
+      <div class="seg" id="hb1" style="left:92px;top:1462px;width:246px"><i style="width:100%"></i><b></b></div>
+      <div class="seg" id="hb2" style="left:350px;top:1462px;width:246px"><i style="width:100%"></i><b></b></div>
+      <div class="seg hot" id="hb3" style="left:608px;top:1462px;width:246px"><i style="width:100%"></i><b></b></div>
+      <div class="a mono o" style="left:608px;top:1488px;font-size:20px;font-weight:800;letter-spacing:.12em">RACE NIGHT</div>
+    </div>
+  </div>
+
+  <!-- 2. SECTORS on a bottom slab, one per beat b4-b8 -->
+  <div id="sect" class="g">
+    <div class="glass" style="left:54px;top:1190px;width:816px;height:300px"></div>
+    <div id="sLab" class="a mono o" style="left:92px;top:1214px;font-size:36px;font-weight:800"></div>
+    <div class="a" style="left:80px;top:1262px;width:800px;height:170px;overflow:hidden">
+      <div id="sA" class="a hk" style="font-size:170px"></div>
+      <div id="sB" class="a hk" style="font-size:170px"></div></div>
+    <div class="seg" id="sBar" style="left:92px;top:1452px;width:760px;height:14px"><i></i></div>
+  </div>
+
+  <!-- 3. NOV 19-21 over the GT3 RS chase, b8-b12 -->
+  <div id="nov" class="g">
+    <div class="glass" style="left:54px;top:300px;width:816px;height:420px"></div>
+    <div id="nv1" class="a mono o" style="left:92px;top:330px;font-size:88px;font-weight:800">NOV</div>
+    <div id="nv2" class="a hk" style="left:80px;top:420px;font-size:250px">19–21</div>
+    <div id="nvFlag" class="flag" style="left:96px;top:744px;width:0"></div>
+    <div id="nv3" class="a mono" style="left:430px;top:342px;font-size:34px;font-weight:800"></div>
+  </div>
+
+  <!-- HUD pill, bottom (b12-b36, off under the bottom words) -->
+  <div id="hud" class="g">
+    <div class="glass" style="left:54px;top:1466px;width:560px;height:56px;border-radius:28px"></div>
+    <div class="flag" style="left:86px;top:1482px;width:70px;height:24px"></div>
+    <div id="hudTxt" class="a mono" style="left:176px;top:1482px;font-size:24px;font-weight:700"></div>
+  </div>
+
+  <!-- 4. LOCK-ON: gates + brackets + name (McLaren b16-b20, Porsche b20-b24) -->
+  <div id="lock" class="g">
+    <div id="gL" class="dash" style="color:#fff"></div>
+    <div id="gR" class="dash" style="color:#FF4F16"></div>
+    <div id="gTrack" class="a" style="height:3px;background:#FF4F16"></div>
+    <div id="bTL" class="brk" style="border-width:6px 0 0 6px"></div>
+    <div id="bTR" class="brk" style="border-width:6px 6px 0 0"></div>
+    <div id="bBL" class="brk" style="border-width:0 0 6px 6px"></div>
+    <div id="bBR" class="brk" style="border-width:0 6px 6px 0"></div>
+    <div id="nmCard" class="glass"></div>
+    <div id="nmA" class="a mono" style="font-size:36px"></div>
+    <div id="nmBw" class="a" style="overflow:hidden;width:820px;height:136px"><div id="nmB" class="a hk" style="font-size:128px"></div></div>
+    <!-- small car ID tag on the timing gate (Omarie 2026-10-03: "mention car names just make it subtle") -->
+    <div id="tag" class="glass mono" style="padding:8px 16px 8px 22px;font-size:22px;font-weight:700;letter-spacing:.06em;white-space:nowrap;color:#fff"></div>
+  </div>
+
+  <!-- 5. THU · FRI · SAT / RACE NIGHT over the POV montage b24-b28 -->
+  <div id="days" class="g">
+    <div class="glass" style="left:54px;top:300px;width:816px;height:270px"></div>
+    <div id="d0" class="a mono" style="left:92px;top:332px;font-size:72px;font-weight:800">THU</div>
+    <div id="d1" class="a mono" style="left:276px;top:332px;font-size:72px;font-weight:800">· FRI</div>
+    <div id="d2" class="a mono o" style="left:553px;top:332px;font-size:72px;font-weight:800">· SAT</div>
+    <div class="seg" id="db0" style="left:92px;top:418px;width:150px"><i></i></div>
+    <div class="seg" id="db1" style="left:322px;top:418px;width:186px"><i></i></div>
+    <div class="seg hot" id="db2" style="left:599px;top:418px;width:186px"><i></i></div>
+    <div id="dR" class="a hk o" style="left:88px;top:450px;font-size:112px">RACE NIGHT</div>
+  </div>
+
+  <!-- 6. F1 WEEKEND (b28) / NOV 19-21 (b30) -->
+  <div id="wk" class="g">
+    <div class="glass" style="left:54px;top:300px;width:816px;height:290px"></div>
+    <div id="wA" class="a" style="left:86px;top:328px"></div>
+    <div id="wB" class="a mono o" style="left:92px;top:474px;font-size:96px;font-weight:800">NOV 19–21</div>
+  </div>
+
+  <!-- 7. END CARD b36-b46.5 over the aerial road -->
+  <div id="end" class="g">
+    <div id="eCard" class="g">
+      <div class="glass" style="left:54px;top:940px;width:816px;height:548px"></div>
+      <img id="eLogo" class="a" src="../logos/sce-primary-horizontal--white.png" style="left:92px;top:968px;width:330px">
+      <div id="eWk" class="a mono o" style="left:94px;top:1040px;font-size:30px;font-weight:800"></div>
+      <div id="eCars" class="a mono" style="left:94px;top:1080px;font-size:34px;font-weight:800"></div>
+      <div id="eFlag" class="flag" style="left:100px;top:1126px;width:0"></div>
+      <div id="eBook" class="a hk" style="left:88px;top:1170px;font-size:120px">BOOK NOW</div>
+      <div id="eTxt" class="a mono o" style="left:94px;top:1296px;font-size:52px;font-weight:800"></div>
+      <div id="eSite" class="a mono" style="left:94px;top:1366px;font-size:27px;font-weight:700">SUPERCAREXP.VIP · @SUPERCAR_EXPERIENCE_</div>
+      <div id="eAge" class="a mono" style="left:94px;top:1406px;font-size:26px;font-weight:800;color:#d6d6d6">DRIVERS 25+</div>
+      <div id="eCity" class="a mono o" style="left:94px;top:1444px;font-size:26px;font-weight:800;letter-spacing:.06em">PICK UP IN LAS VEGAS</div>
+    </div>
+  </div>
+
+  <!-- sun-flare wipe: warm wash + travelling flare core + anamorphic streak -->
+  <div id="wash" class="g" style="background:#FFE7C2"></div>
+  <div id="flare" class="a" style="width:900px;height:900px;margin:-450px 0 0 -450px;
+    background:radial-gradient(circle,rgba(255,252,240,1) 0,rgba(255,236,200,.95) 10%,rgba(255,180,110,.55) 28%,rgba(255,120,40,.18) 50%,rgba(255,120,40,0) 70%)"></div>
+  <div id="streak" class="a" style="left:0;width:1080px;height:26px;margin-top:-13px;
+    background:linear-gradient(90deg,rgba(255,210,150,0),rgba(255,245,225,.9) 50%,rgba(255,210,150,0));filter:blur(3px)"></div>
+  <div id="sweep" class="a" style="top:900px;width:560px;height:620px;mix-blend-mode:screen;
+    background:linear-gradient(100deg,rgba(255,255,255,0) 30%,rgba(255,250,235,.30) 50%,rgba(255,255,255,0) 70%);
+    -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 40%,transparent 100%)"></div>
+</div>
+
+<script>
+const B = 0.4, bt = n => n * B;
+const $ = id => document.getElementById(id);
+const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lin = (t, a, b) => cl((t - a) / (b - a));
+const oC = x => 1 - Math.pow(1 - x, 3), iC = x => x * x * x;
+const oX = x => x >= 1 ? 1 : 1 - Math.pow(2, -10 * x);
+const oB = x => { const c = 1.70158, d = x - 1; return 1 + (c + 1) * d * d * d + c * d * d; };
+const vis = (el, on) => { el.style.display = on ? 'block' : 'none'; };
+const typeOn = (el, s, t, a, dur) => { el.textContent = s.slice(0, Math.round(s.length * lin(t, a, a + dur))); };
+const slam = (el, t, a, s0 = 1.3, blur = 9) => {
+  const p = lin(t, a, a + 0.13);
+  el.style.opacity = lin(t, a, a + 0.04); el.style.transformOrigin = '0 50%';
+  el.style.transform = `scale(${s0 - (s0 - 1) * oX(p)})`;
+  el.style.filter = p > 0 && p < 1 ? `blur(${(1 - p) * blur}px)` : 'none';
+};
+const W = 'F1 WEEKEND';
+$('wA').innerHTML = [...W].map(c => `<span class="hk" style="display:inline-block;font-size:128px">${c === ' ' ? '&nbsp;' : c}</span>`).join('');
+const wSpans = [...$('wA').children];
+
+// McLaren head-on bbox (source s -> x0, x1, y0, y1), read off a 108x96 px grid of the source
+const MCL = [[15.53, 192, 600, 1048, 1260], [15.73, 240, 700, 1020, 1272], [15.93, 280, 800, 1020, 1288], [16.13, 320, 880, 1000, 1320],
+             [16.33, 312, 928, 980, 1360], [16.53, 272, 1000, 960, 1392], [16.76, 250, 1040, 950, 1420]];
+const GT3 = [[11.69, 40, 1040, 840, 1340], [13.13, 40, 1040, 840, 1340]];
+function boxAt(K, ts) {
+  if (ts <= K[0][0]) return K[0].slice(1);
+  for (let i = 0; i < K.length - 1; i++) if (ts <= K[i + 1][0]) {
+    const k = lin(ts, K[i][0], K[i + 1][0]); return [1, 2, 3, 4].map(j => K[i][j] + (K[i + 1][j] - K[i][j]) * k); }
+  return K[K.length - 1].slice(1);
+}
+const FLARES = [4, 8, 16, 20, 28, 36].map(bt);
+
+window.renderAt = function (t) {
+  // ---------- 1. hook
+  const hookOn = t < bt(4) + 0.16; vis($('hook'), hookOn);
+  if (hookOn) {
+    $('hFlag').style.backgroundPosition = `${-t * 40}px 0`;
+    const beat = Math.floor(t / B), ph = t / B - beat;
+    ['hb1', 'hb2', 'hb3'].forEach((id, i) => { const g = $(id).lastChild, q = lin(ph, i * 0.15, i * 0.15 + 0.4);
+      g.style.display = beat >= 1 && q > 0 && q < 1 ? 'block' : 'none'; g.style.left = (-80 + q * 330) + 'px'; });
+    const out = iC(lin(t, bt(4) - 0.02, bt(4) + 0.14));
+    $('hTop').style.transform = `translateY(${-500 * out}px)`; $('hBot').style.transform = `translateY(${500 * out}px)`;
+  }
+
+  // ---------- 2. sectors b4-b8 (one per beat; RACE NIGHT on b7)
+  const sOn = t >= bt(4) && t < bt(8) + 0.12; vis($('sect'), sOn);
+  if (sOn) {
+    // cuts sit on the music's onsets: THU 1.605 s, FRI 2.200 s, SAT 21 / RACE NIGHT 2.605 s
+    const HIT = [1.605, 2.200, 2.605], k = t < HIT[1] ? 0 : t < HIT[2] ? 1 : 2, a = HIT[k];
+    const labs = ['S1', 'S2', 'S3 · SAT 21'], big = ['THU 19', 'FRI 20', 'RACE NIGHT'];
+    $('sLab').textContent = labs[k];
+    const p = oX(lin(t, a, a + 0.12));
+    $('sA').textContent = big[k]; $('sA').style.transform = `translateY(${(1 - p) * 190}px)`; $('sA').style.color = k >= 2 ? '#FF4F16' : '#fff';
+    $('sA').style.fontSize = k === 2 ? '140px' : '170px';
+    $('sB').textContent = k ? big[k - 1] : ''; $('sB').style.transform = `translateY(${-p * 190}px)`; $('sB').style.color = k - 1 >= 2 ? '#FF4F16' : '#fff';
+    $('sB').style.fontSize = k - 1 === 2 ? '140px' : '170px';
+    const bar = $('sBar'); bar.className = 'seg' + (k >= 2 ? ' hot' : '');
+    bar.firstChild.style.width = (100 * (k + oC(lin(t, a, a + 0.25))) / 3) + '%';
+    $('sect').style.opacity = 1 - lin(t, bt(8) - 0.02, bt(8) + 0.1);
+  }
+
+  // ---------- 3. NOV 19-21 b8-b12
+  const nOn = t >= bt(8) && t < bt(12) + 0.1; vis($('nov'), nOn);
+  if (nOn) {
+    slam($('nv1'), t, bt(8) + 0.05, 1.3, 8); slam($('nv2'), t, bt(8) + 0.12, 1.25, 12);
+    $('nvFlag').style.width = 760 * oC(lin(t, bt(9), bt(9) + 0.3)) + 'px'; $('nvFlag').style.backgroundPosition = `${-t * 40}px 0`;
+    typeOn($('nv3'), 'THU · FRI · SAT', t, bt(10), 0.3);
+    $('nov').style.opacity = 1 - lin(t, bt(12) - 0.05, bt(12) + 0.08);
+  }
+
+  // ---------- HUD pill
+  const hudOn = t >= bt(12) && t < bt(36) && !(t >= bt(20) && t < bt(24)); vis($('hud'), hudOn);
+  if (hudOn) typeOn($('hudTxt'), 'F1 WEEKEND · NOV 19–21', t, bt(12) + 0.05, 0.3);
+
+  // ---------- 4. lock-ons
+  const lOn = t >= bt(16) && t < bt(24); vis($('lock'), lOn);
+  if (lOn) {
+    const mc = t < bt(20), a0 = mc ? bt(16) : bt(20), a1 = a0 + bt(4);
+    const ts = mc ? 15.525 + (t - a0) * 0.77 : 11.69 + (t - a0) * 0.9;
+    const [x0, x1, y0, y1] = boxAt(mc ? MCL : GT3, ts);
+    const snap = oB(lin(t, a0 + 0.04, a0 + 0.18)), out = iC(lin(t, a1 - 0.1, a1));
+    const gl = -60 + (x0 - 20 + 60) * snap - 400 * out, gr = 1140 + (x1 + 16 - 1140) * snap + 400 * out;
+    [['gL', gl], ['gR', gr]].forEach(([id, x]) => { const e = $(id); e.style.left = x + 'px'; e.style.top = (y0 - 70) + 'px'; e.style.height = (y1 - y0 + 120) + 'px'; });
+    const tr = oC(lin(t, a0 + 0.12, a0 + 0.3));
+    $('gTrack').style.left = gl + 'px'; $('gTrack').style.top = (y1 + 30) + 'px'; $('gTrack').style.width = Math.max(0, (gr - gl) * tr * (1 - out)) + 'px';
+    const L = oX(lin(t, a0 + 0.2, a0 + 0.36)), sc = 1.4 - 0.4 * L, cx = (x0 + x1) / 2, cy = (y0 + y1) / 2, hw = (x1 - x0) / 2 + 8, hh = (y1 - y0) / 2 + 8;
+    [['bTL', -1, -1], ['bTR', 1, -1], ['bBL', -1, 1], ['bBR', 1, 1]].forEach(([id, sx, sy]) => {
+      const e = $(id); e.style.opacity = (t >= a0 + 0.2 ? 1 : 0) * (1 - out);
+      e.style.left = (cx + sx * hw * sc - (sx > 0 ? 60 : 0)) + 'px'; e.style.top = (cy + sy * hh * sc - (sy > 0 ? 60 : 0)) + 'px'; });
+    // name card: McLaren on top (car low in frame), Porsche at the bottom (sky behind it)
+    const card = $('nmCard'), top = mc ? 300 : 1352, h = 196;
+    card.style.cssText += `;left:54px;top:${top}px;width:640px;height:${h}px`;
+    const na = a0 + 0.2;
+    card.style.opacity = oC(lin(t, na, na + 0.15)) * (1 - out);
+    $('nmA').style.left = '92px'; $('nmA').style.top = (top + 24) + 'px'; typeOn($('nmA'), mc ? 'RENT A' : 'F1 WEEKEND · NOV 19–21', t, na, 0.15);
+    $('nmBw').style.left = '86px'; $('nmBw').style.top = (top + 66) + 'px';
+    $('nmB').textContent = mc ? 'SUPERCAR' : 'BOOK NOW';
+    $('nmB').style.transform = `translateY(${(1 - oX(lin(t, na + 0.05, na + 0.22))) * 140}px)`;
+    $('nmA').style.opacity = 1 - out; $('nmBw').style.opacity = 1 - out;
+    const tg = $('tag'); tg.style.left = (gl + 18) + 'px'; tg.style.top = (y0 - 70 - 52) + 'px';
+    typeOn(tg, mc ? 'MCLAREN 750S SPIDER' : 'PORSCHE 911 GT3 RS', t, a0 + 0.4, 0.22);
+    tg.style.opacity = (t >= a0 + 0.4 ? 1 : 0) * (1 - out);
+  }
+
+  // ---------- 5. THU · FRI · SAT / RACE NIGHT b24-b28
+  const dOn = t >= bt(24) && t < bt(28) + 0.1; vis($('days'), dOn);
+  if (dOn) {
+    [['d0', 9.60], ['d1', 9.75], ['d2', 9.90]].forEach(([id, a], i) => { slam($(id), t, a + 0.02, 1.35, 8);
+      $('db' + i).firstChild.style.width = 100 * oC(lin(t, a + 0.05, a + 0.3)) + '%'; });
+    slam($('dR'), t, bt(27), 1.3, 9); if (t < bt(27)) $('dR').style.opacity = 0;
+    $('days').style.opacity = 1 - lin(t, bt(28) - 0.04, bt(28) + 0.08);
+  }
+
+  // ---------- 6. F1 WEEKEND b28 / NOV 19-21 b30
+  const wOn = t >= bt(28) && t < bt(32) + 0.1; vis($('wk'), wOn);
+  if (wOn) {
+    wSpans.forEach((s, i) => { const a = bt(28) + 0.04 + i * 0.02, p = lin(t, a, a + 0.12);
+      s.style.opacity = lin(t, a, a + 0.03); s.style.transform = `translateY(${(1 - oX(p)) * 80}px) scale(${1.35 - 0.35 * oX(p)})`;
+      s.style.filter = p > 0 && p < 1 ? `blur(${(1 - p) * 8}px)` : 'none'; });
+    slam($('wB'), t, bt(30), 1.3, 10); if (t < bt(30)) $('wB').style.opacity = 0;
+    $('wk').style.opacity = 1 - lin(t, bt(32) - 0.04, bt(32) + 0.1);
+  }
+
+  // ---------- 7. end card
+  const eOn = t >= bt(36); vis($('end'), eOn);
+  if (eOn) {
+    const c = oX(lin(t, bt(36) + 0.04, bt(36) + 0.3));
+    $('eCard').style.opacity = c; $('eCard').style.transform = `translateY(${(1 - c) * 70}px)`;
+    typeOn($('eWk'), 'F1 WEEKEND · NOV 19–21', t, bt(36.5), 0.25);
+    typeOn($('eCars'), 'RENT A SUPERCAR', t, bt(37), 0.35);
+    $('eFlag').style.width = 754 * oC(lin(t, bt(37.5), bt(37.5) + 0.3)) + 'px'; $('eFlag').style.backgroundPosition = `${-t * 30}px 0`;
+    slam($('eBook'), t, bt(38), 1.3, 10); if (t < bt(38)) $('eBook').style.opacity = 0;
+    typeOn($('eTxt'), 'TEXT (725) 425-3583', t, bt(39), 0.3);
+    const s = oC(lin(t, bt(40), bt(40) + 0.2)); $('eSite').style.opacity = s; $('eSite').style.transform = `translateY(${(1 - s) * 22}px)`;
+    $('eAge').style.opacity = oC(lin(t, bt(40.5), bt(40.5) + 0.2));
+    $('eCity').style.opacity = oC(lin(t, bt(41), bt(41) + 0.2));
+  }
+  const sw = lin(t, window.CONFIG.FREEZE, window.CONFIG.FREEZE + 0.8);
+  $('sweep').style.display = sw > 0 && sw < 1 ? 'block' : 'none'; $('sweep').style.left = (-560 + sw * 1800) + 'px';
+
+  // ---------- sun-flare wipes (cover the cut on every bar hit)
+  let f = null; for (const tc of FLARES) if (Math.abs(t - tc) < 0.2) f = tc;
+  if (f === null) { $('wash').style.opacity = 0; $('flare').style.display = 'none'; $('streak').style.display = 'none'; }
+  else {
+    const p = lin(t, f - 0.2, f + 0.2), peak = Math.exp(-Math.pow((t - f) / 0.07, 2));
+    $('wash').style.opacity = 0.62 * peak;
+    const fx = -300 + p * 1680, fy = 760 + 120 * Math.sin(p * Math.PI);
+    $('flare').style.display = 'block'; $('flare').style.left = fx + 'px'; $('flare').style.top = fy + 'px';
+    $('flare').style.opacity = Math.sin(p * Math.PI);
+    $('streak').style.display = 'block'; $('streak').style.top = fy + 'px'; $('streak').style.opacity = 0.9 * Math.sin(p * Math.PI);
+  }
+};
+document.fonts.ready.then(() => { window.renderAt(0); window.__ready = true; });
+</script>
+</body></html>

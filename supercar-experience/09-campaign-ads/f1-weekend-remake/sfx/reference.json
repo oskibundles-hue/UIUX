@@ -1,0 +1,323 @@
+{
+ "source": "Video Oct 04 2026, 9 50 36 PM.mp4",
+ "made_by": "reference.py",
+ "timing_only": true,
+ "method": {
+  "separation": "REPET-SIM + bar REPET (Rafii & Pardo 2011, 2012)",
+  "z_min": 4.0,
+  "rel_min_db": -8.0,
+  "window_ms": [
+   -70,
+   100
+  ],
+  "shifts_s": [
+   -0.9,
+   -0.6,
+   -0.4,
+   0.4,
+   0.6,
+   0.9
+  ],
+  "beat_s": 0.69
+ },
+ "time_map": {
+  "reference_cuts": 52,
+  "shot_starts": 34,
+  "matched_within_70ms": 23,
+  "median_offset_ms": 0.0,
+  "video_s": 76.5,
+  "audio_s": 74.682993
+ },
+ "test": {
+  "moments": 122,
+  "hits_at_true": 7,
+  "chance_rate": 0.077,
+  "lift": 0.74,
+  "p": 0.839
+ },
+ "verdict": "not usable: 7 of 122 moments (5.7%) carry a reference sound, about the same as shifted moments (7.7%; lift x0.7, p=0.84). The reference's effects do not line up with this spotting list beyond chance, so no hits are written and the engine keeps to the research rules.",
+ "per_shot_rank_corr": 0.04,
+ "per_shot": [
+  {
+   "shot": 1,
+   "t0": 0.0,
+   "t1": 2.3,
+   "reference_effects_active_pct": 28.8,
+   "reference_onsets_per_s": 0.0,
+   "engine_cues": 2
+  },
+  {
+   "shot": 2,
+   "t0": 2.3,
+   "t1": 4.0,
+   "reference_effects_active_pct": 21.1,
+   "reference_onsets_per_s": 0.0,
+   "engine_cues": 0
+  },
+  {
+   "shot": 3,
+   "t0": 4.0,
+   "t1": 8.0,
+   "reference_effects_active_pct": 10.0,
+   "reference_onsets_per_s": 0.0,
+   "engine_cues": 1
+  },
+  {
+   "shot": 4,
+   "t0": 8.0,
+   "t1": 11.6,
+   "reference_effects_active_pct": 37.8,
+   "reference_onsets_per_s": 0.83,
+   "engine_cues": 2
+  },
+  {
+   "shot": 5,
+   "t0": 11.6,
+   "t1": 12.7,
+   "reference_effects_active_pct": 23.6,
+   "reference_onsets_per_s": 0.0,
+   "engine_cues": 0
+  },
+  {
+   "shot": 6,
+   "t0": 12.7,
+   "t1": 15.0,
+   "reference_effects_active_pct": 27.8,
+   "reference_onsets_per_s": 1.74,
+   "engine_cues": 3
+  },
+  {
+   "shot": 7,
+   "t0": 15.0,
+   "t1": 16.7,
+   "reference_effects_active_pct": 28.2,
+   "reference_onsets_per_s": 0.59,
+   "engine_cues": 2
+  },
+  {
+   "shot": 8,
+   "t0": 16.7,
+   "t1": 17.6,
+   "reference_effects_active_pct": 31.1,
+   "reference_onsets_per_s": 2.22,
+   "engine_cues": 2
+  },
+  {
+   "shot": 9,
+   "t0": 17.6,
+   "t1": 19.0,
+   "reference_effects_active_pct": 40.0,
+   "reference_onsets_per_s": 1.43,
+   "engine_cues": 2
+  },
+  {
+   "shot": 10,
+   "t0": 19.0,
+   "t1": 22.0,
+   "reference_effects_active_pct": 31.0,
+   "reference_onsets_per_s": 0.67,
+   "engine_cues": 7
+  },
+  {
+   "shot": 11,
+   "t0": 22.0,
+   "t1": 23.3,
+   "reference_effects_active_pct": 10.8,
+   "reference_onsets_per_s": 0.77,
+   "engine_cues": 1
+  },
+  {
+   "shot": 12,
+   "t0": 23.3,
+   "t1": 26.0,
+   "reference_effects_active_pct": 44.8,
+   "reference_onsets_per_s": 0.74,
+   "engine_cues": 7
+  },
+  {
+   "shot": 13,
+   "t0": 26.0,
+   "t1": 27.0,
+   "reference_effects_active_pct": 54.0,
+   "reference_onsets_per_s": 0.0,
+   "engine_cues": 3
+  },
+  {
+   "shot": 14,
+   "t0": 27.0,
+   "t1": 28.3,
+   "reference_effects_active_pct": 36.2,
+   "reference_onsets_per_s": 0.77,
+   "engine_cues": 1
+  },
+  {
+   "shot": 15,
+   "t0": 28.3,
+   "t1": 31.0,
+   "reference_effects_active_pct": 67.0,
+   "reference_onsets_per_s": 0.74,
+   "engine_cues": 2
+  },
+  {
+   "shot": 16,
+   "t0": 31.0,
+   "t1": 32.4,
+   "reference_effects_active_pct": 2.1,
+   "reference_onsets_per_s": 2.14,
+   "engine_cues": 2
+  },
+  {
+   "shot": 17,
+   "t0": 32.4,
+   "t1": 33.2,
+   "reference_effects_active_pct": 5.0,
+   "reference_onsets_per_s": 1.25,
+   "engine_cues": 4
+  },
+  {
+   "shot": 18,
+   "t0": 33.2,
+   "t1": 34.5,
+   "reference_effects_active_pct": 1.5,
+   "reference_onsets_per_s": 0.0,
+   "engine_cues": 3
+  },
+  {
+   "shot": 19,
+   "t0": 34.5,
+   "t1": 37.0,
+   "reference_effects_active_pct": 5.2,
+   "reference_onsets_per_s": 1.2,
+   "engine_cues": 4
+  },
+  {
+   "shot": 20,
+   "t0": 37.0,
+   "t1": 40.0,
+   "reference_effects_active_pct": 53.7,
+   "reference_onsets_per_s": 0.0,
+   "engine_cues": 3
+  },
+  {
+   "shot": 21,
+   "t0": 40.0,
+   "t1": 41.2,
+   "reference_effects_active_pct": 43.3,
+   "reference_onsets_per_s": 0.0,
+   "engine_cues": 2
+  },
+  {
+   "shot": 22,
+   "t0": 41.2,
+   "t1": 42.0,
+   "reference_effects_active_pct": 27.5,
+   "reference_onsets_per_s": 2.5,
+   "engine_cues": 0
+  },
+  {
+   "shot": 23,
+   "t0": 42.0,
+   "t1": 43.2,
+   "reference_effects_active_pct": 2.5,
+   "reference_onsets_per_s": 2.5,
+   "engine_cues": 1
+  },
+  {
+   "shot": 24,
+   "t0": 43.2,
+   "t1": 45.4,
+   "reference_effects_active_pct": 0.9,
+   "reference_onsets_per_s": 1.36,
+   "engine_cues": 5
+  },
+  {
+   "shot": 25,
+   "t0": 45.4,
+   "t1": 46.7,
+   "reference_effects_active_pct": 0.0,
+   "reference_onsets_per_s": 2.31,
+   "engine_cues": 2
+  },
+  {
+   "shot": 26,
+   "t0": 46.7,
+   "t1": 49.6,
+   "reference_effects_active_pct": 11.7,
+   "reference_onsets_per_s": 1.38,
+   "engine_cues": 5
+  },
+  {
+   "shot": 27,
+   "t0": 49.6,
+   "t1": 50.8,
+   "reference_effects_active_pct": 64.2,
+   "reference_onsets_per_s": 0.0,
+   "engine_cues": 2
+  },
+  {
+   "shot": 28,
+   "t0": 50.8,
+   "t1": 55.0,
+   "reference_effects_active_pct": 37.4,
+   "reference_onsets_per_s": 0.48,
+   "engine_cues": 2
+  },
+  {
+   "shot": 29,
+   "t0": 55.0,
+   "t1": 56.3,
+   "reference_effects_active_pct": 18.5,
+   "reference_onsets_per_s": 0.77,
+   "engine_cues": 1
+  },
+  {
+   "shot": 30,
+   "t0": 56.3,
+   "t1": 60.0,
+   "reference_effects_active_pct": 9.7,
+   "reference_onsets_per_s": 2.43,
+   "engine_cues": 6
+  },
+  {
+   "shot": 31,
+   "t0": 60.0,
+   "t1": 63.5,
+   "reference_effects_active_pct": 59.1,
+   "reference_onsets_per_s": 0.86,
+   "engine_cues": 4
+  },
+  {
+   "shot": 32,
+   "t0": 63.5,
+   "t1": 64.5,
+   "reference_effects_active_pct": 27.0,
+   "reference_onsets_per_s": 3.0,
+   "engine_cues": 1
+  },
+  {
+   "shot": 33,
+   "t0": 64.5,
+   "t1": 68.0,
+   "reference_effects_active_pct": 9.1,
+   "reference_onsets_per_s": 3.14,
+   "engine_cues": 2
+  },
+  {
+   "shot": 34,
+   "t0": 68.0,
+   "t1": 72.5,
+   "reference_effects_active_pct": 10.4,
+   "reference_onsets_per_s": 0.22,
+   "engine_cues": 3
+  },
+  {
+   "shot": 35,
+   "t0": 72.5,
+   "t1": 76.5,
+   "reference_effects_active_pct": 42.1,
+   "reference_onsets_per_s": 0.46,
+   "engine_cues": 1
+  }
+ ],
+ "hits": []
+}

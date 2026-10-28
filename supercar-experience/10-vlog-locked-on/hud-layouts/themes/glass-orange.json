@@ -1,0 +1,7 @@
+{
+ "name": "Dark glass + SE orange",
+ "accent": "#FF4F16",
+ "glow": "255,79,22",
+ "note": "The F1 race-weekend Day look (approved 3 Oct): dark glass panels for bright sky, SE orange #FF4F16.",
+ "css": ".plate{background:rgba(8,8,10,.58)!important;-webkit-backdrop-filter:blur(22px) saturate(1.3);backdrop-filter:blur(22px) saturate(1.3);box-shadow:inset 0 0 0 1px rgba(255,255,255,.16)!important}.pshadow{box-shadow:0 12px 32px rgba(0,0,0,.24)!important}.stripe{background:linear-gradient(90deg,#FF4F16 0 78%,#fff 78% 100%)!important}.mic{text-shadow:0 1px 3px rgba(0,0,0,.35)}svg circle[fill=\"#000\"]{fill:rgba(0,0,0,.35)}svg path[stroke=\"rgba(0,0,0,.45)\"]{stroke:rgba(0,0,0,.18)}"
+}

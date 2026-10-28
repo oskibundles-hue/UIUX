@@ -1,0 +1,1167 @@
+{
+ "_about": "One-way ticket, Part 1 (Sep 26 2026): the SE vlog standard (rally v2) re-built for this trip, SE orange #FF4F16 for every accent, v2 (6 Oct): the dark-glass strip (lib/drive_strip.js seStrip) is the one progress element from 1.9 s to the end card, compact (SE mark, camera clock, ONE-WAY TICKET · PART 1) and the full HUD-1 strip (clock, place, ROUTE; no side-G readout) over the two cabin-cam shots; the A2 side banner and its rail are gone. Everything that is not in the EDL lives here: paths, the per-shot reframe / look / ramp / rotation, transitions, the music slot, the clocks, the blurs and every on-screen line. The cut itself is tools/make_edl.py -> data/edl.json; captions tools/make_captions.py. Edit, then run ./render.sh. Sources for every line: README.md.",
+ "paths": {
+  "scratch": "/tmp/claude-0/-home-user-uiux/8947fb00-5a09-5ffd-9b11-969435c956d5/scratchpad/p1v2",
+  "ffmpeg": "/usr/bin/ffmpeg",
+  "mezz": "/home/user/day/mezz1",
+  "edl": "data/edl.json",
+  "captions": "data/captions.json",
+  "sparse": "/home/user/day/fetch/sparse",
+  "sfx": "../../../10-motion-sfx/locked-on-sfx",
+  "transcripts": "/home/user/day/tr",
+  "aud": "/home/user/day/aud",
+  "music_tracks": "/home/user/day/music/tracks.json"
+ },
+ "name": "2026-09-26 One-way ticket Part 1 v2 - SE LOCKED-ON vlog",
+ "forbidden": [
+  {
+   "src": "0080",
+   "a": 89.58,
+   "b": 111.9,
+   "why": "cut request (flags.json block)"
+  },
+  {
+   "src": "0089",
+   "a": 40.07,
+   "b": 62.77,
+   "why": "cut request (flags.json block)"
+  },
+  {
+   "src": "0092",
+   "a": 96.3,
+   "b": 106.92,
+   "why": "police / speed talk (flags.json block)"
+  },
+  {
+   "src": "0093",
+   "a": 115.5,
+   "b": 120.5,
+   "why": "speed-limit talk (not flagged by the index; found in day.md)"
+  },
+  {
+   "src": "0094",
+   "a": 176.0,
+   "b": 232.0,
+   "why": "phone in hand while driving"
+  },
+  {
+   "src": "0089",
+   "a": 78.0,
+   "b": 112.0,
+   "why": "ad mockups with prices on the phone screen"
+  },
+  {
+   "src": "0096",
+   "a": 41.8,
+   "b": 47.0,
+   "why": "phone in hand while driving (facts panel, 6 Oct)"
+  },
+  {
+   "src": "0094",
+   "a": 5.6,
+   "b": 7.5,
+   "why": "phone held and tapped at a junction (cutaway over 116.0-118.2 s, 6 Oct)"
+  }
+ ],
+ "timelapseShutter": 1.0,
+ "looks": {
+  "night": {
+   "mid": 0.18,
+   "contrast": 0.5,
+   "sat": 0.84,
+   "warm_sat": 1.08,
+   "shadow_tint": [
+    -0.01,
+    0.002,
+    0.014
+   ],
+   "hi_tint": [
+    0.012,
+    0.004,
+    -0.012
+   ]
+  },
+  "face": {
+   "mid": 0.2,
+   "contrast": 0.42,
+   "sat": 0.9,
+   "warm_sat": 1.02,
+   "shadow_tint": [
+    -0.006,
+    0.001,
+    0.008
+   ],
+   "hi_tint": [
+    0.01,
+    0.004,
+    -0.008
+   ]
+  },
+  "interior": {
+   "mid": 0.2,
+   "contrast": 0.42,
+   "sat": 0.88,
+   "warm_sat": 1.02,
+   "shadow_tint": [
+    -0.006,
+    0.001,
+    0.009
+   ],
+   "hi_tint": [
+    0.012,
+    0.005,
+    -0.01
+   ]
+  },
+  "day": {
+   "mid": 0.3,
+   "contrast": 0.35,
+   "sat": 0.9,
+   "warm_sat": 1.04,
+   "shadow_tint": [
+    -0.006,
+    0.002,
+    0.01
+   ],
+   "hi_tint": [
+    0.008,
+    0.003,
+    -0.008
+   ],
+   "gmin": 0.7
+  },
+  "garage": {
+   "mid": 0.22,
+   "contrast": 0.42,
+   "sat": 0.86,
+   "warm_sat": 1.06,
+   "shadow_tint": [
+    -0.008,
+    0.002,
+    0.011
+   ],
+   "hi_tint": [
+    0.01,
+    0.004,
+    -0.01
+   ]
+  },
+  "terminal": {
+   "mid": 0.24,
+   "contrast": 0.4,
+   "sat": 0.92,
+   "warm_sat": 1.02,
+   "shadow_tint": [
+    -0.004,
+    0.001,
+    0.006
+   ],
+   "hi_tint": [
+    0.008,
+    0.003,
+    -0.006
+   ],
+   "gmin": 0.65
+  },
+  "cabin": {
+   "mid": 0.3,
+   "contrast": 0.36,
+   "sat": 0.94,
+   "warm_sat": 1.04,
+   "shadow_tint": [
+    -0.004,
+    0.002,
+    0.008
+   ],
+   "hi_tint": [
+    0.006,
+    0.002,
+    -0.006
+   ],
+   "gmin": 0.7
+  }
+ },
+ "shotDefaults": {
+  "look": "day",
+  "s0": 1.0,
+  "s1": 1.04
+ },
+ "shots": {
+  "0": {
+   "look": "cabin"
+  },
+  "1": {
+   "look": "cabin"
+  },
+  "2": {
+   "look": "cabin",
+   "s1": 1.0
+  },
+  "3": {
+   "look": "cabin",
+   "s1": 1.0
+  },
+  "5": {
+   "look": "cabin"
+  },
+  "6": {
+   "look": "terminal",
+   "clockAs": {
+    "src": "0076",
+    "in": 13.88,
+    "_why": "7 Oct clock fix (b): cutaway under his 0076 line (0076 14.38 at 13.0): the strip clock reads the moment he speaks (04:56:26), so it runs forward into the 0077 escalator insert and the 0076 terminal-doors SYNC shot (04:56:52)"
+   }
+  },
+  "7": {
+   "look": "terminal",
+   "clockAs": {
+    "src": "0076",
+    "in": 24.65,
+    "_why": "7 Oct clock fix (b): the 0077 escalator insert sits under his 0076 line (0076 25.25 at 17.3): the clock reads 0076 (04:56:37-41), not the escalator's 05:10, so it never jumps back at 21.06"
+   }
+  },
+  "8": {
+   "look": "terminal"
+  },
+  "9": {
+   "look": "terminal"
+  },
+  "10": {
+   "look": "terminal"
+  },
+  "11": {
+   "look": "terminal",
+   "rot": 180
+  },
+  "12": {
+   "look": "terminal",
+   "clockAs": {
+    "src": "0079",
+    "in": 57.34,
+    "_why": "7 Oct clock fix (c): the 0078 gate-area insert sits under his 0079 line (0079 57.84 at 41.01): the clock reads 0079 (05:23:51), continuing the 0079 gate SYNC shot before it, not the 0078 05:14"
+   }
+  },
+  "13": {
+   "look": "terminal"
+  },
+  "16": {
+   "look": "terminal"
+  },
+  "22": {
+   "look": "day",
+   "rot": 90
+  },
+  "23": {
+   "look": "day",
+   "rot": 90
+  },
+  "24": {
+   "look": "day",
+   "rot": 90
+  },
+  "25": {
+   "look": "cabin"
+  },
+  "26": {
+   "look": "cabin",
+   "ramp": [
+    [
+     0,
+     1.0
+    ],
+    [
+     0.34,
+     1.0
+    ],
+    [
+     0.5,
+     3.0
+    ],
+    [
+     1.0,
+     3.0
+    ]
+   ]
+  },
+  "27": {
+   "look": "cabin",
+   "clockAs": {
+    "src": "0093",
+    "in": 4.1,
+    "_why": "cutaway under his 0093 line: the strip clock reads the moment he speaks (12:01)"
+   }
+  },
+  "28": {
+   "look": "cabin"
+  },
+  "29": {
+   "look": "cabin",
+   "s1": 1.0,
+   "clockAs": {
+    "src": "0094",
+    "in": 2.2,
+    "_why": "7 Oct clock fix (a): cutaway under his 0094 line (0094 2.34 at 118.37): the clock reads 0094 (12:10:23), continuous with the 0094 SYNC shot at 123.63"
+   }
+  },
+  "30": {
+   "look": "cabin",
+   "s1": 1.0,
+   "clockAs": {
+    "src": "0094",
+    "in": 5.4,
+    "_why": "7 Oct clock fix (a): cutaway under his 0094 line: the clock reads 0094 (12:10:26), continuous into the 0094 SYNC shot at 123.63 (0094 7.6)"
+   }
+  },
+  "31": {
+   "look": "cabin"
+  },
+  "32": {
+   "look": "cabin",
+   "clockAs": {
+    "src": "0094",
+    "in": 9.2,
+    "_why": "7 Oct clock fix (d, found by tools/clock_check.py): B-roll after the 0094 SYNC shot holds the 0094 clock (12:10:30), so the 0094 line at 128.73 (12:12:58) does not read earlier than the forest picture (12:17)"
+   }
+  },
+  "33": {
+   "look": "cabin",
+   "clockAs": {
+    "src": "0094",
+    "in": 10.5,
+    "_why": "7 Oct clock fix (d): holds the 0094 clock on from shot 33 (12:10:31-33)"
+   }
+  },
+  "34": {
+   "look": "cabin",
+   "clockAs": {
+    "src": "0094",
+    "in": 156.78,
+    "_why": "7 Oct clock fix (d): cutaway under his 0094 line (0094 156.98 at 128.73): the clock reads the moment he speaks (12:12:58), not 0095 28.0 (12:17:32), which ran back from the 12:17:58 forest shot before it"
+   }
+  },
+  "35": {
+   "look": "cabin",
+   "s1": 1.0
+  },
+  "36": {
+   "look": "cabin"
+  },
+  "37": {
+   "look": "cabin",
+   "s1": 1.0
+  },
+  "38": {
+   "look": "cabin",
+   "clockAs": {
+    "src": "0100",
+    "in": 33.0,
+    "_why": "cutaway under his 0100 line: the strip clock reads the moment he speaks (16:06), not the 15:42 road picture, so it never runs backwards"
+   }
+  },
+  "39": {
+   "look": "cabin"
+  }
+ },
+ "slips": {
+  "_about": "per-shot source slips over the EDL (applied by lib/plate.py when it loads the EDL): in/speed replace the EDL values, out = in + dur * speed"
+ },
+ "transitions": [
+  {
+   "into": 1,
+   "type": "whip",
+   "dir": "left"
+  },
+  {
+   "into": 2,
+   "type": "whip",
+   "dir": "right"
+  },
+  {
+   "into": 3,
+   "type": "whip",
+   "dir": "left"
+  },
+  {
+   "into": 4,
+   "type": "impact",
+   "strength": 0.45
+  },
+  {
+   "into": 6,
+   "type": "sweep",
+   "t0": 12.5,
+   "dur": 0.36
+  },
+  {
+   "into": 17,
+   "type": "sweep",
+   "t0": 60.01,
+   "dur": 0.36
+  },
+  {
+   "into": 29,
+   "type": "sweep",
+   "t0": 110.122,
+   "dur": 0.36
+  },
+  {
+   "into": 32,
+   "type": "whip",
+   "dir": "left"
+  },
+  {
+   "into": 33,
+   "type": "whip",
+   "dir": "right"
+  },
+  {
+   "into": 36,
+   "type": "whip",
+   "dir": "right"
+  },
+  {
+   "into": 37,
+   "type": "whip",
+   "dir": "left"
+  },
+  {
+   "into": 38,
+   "type": "whip",
+   "dir": "right",
+   "_why": "7 Oct: the 0099 cutaway follows the 0099 HUD-1 shot from the same mount; the whip hides the jump"
+  }
+ ],
+ "slams": [
+  {
+   "t": 12.7,
+   "title": "ONE-WAY TICKET"
+  },
+  {
+   "t": 60.21,
+   "title": "THE PICKUP"
+  },
+  {
+   "t": 110.322,
+   "title": "HIT THE ROAD"
+  }
+ ],
+ "endCard": {
+  "plateRun": 0.35
+ },
+ "clockStarts": {
+  "_about": "camera clock at source second 0 of each clip: the DJI file names (DJI_20260926HHMMSS_NNNN_D.MP4, local time). Chapter stamps = this + the chapter first shot in-point.",
+  "0075": "04:37:23",
+  "0076": "04:56:12",
+  "0077": "05:10:29",
+  "0078": "05:13:45",
+  "0079": "05:22:54",
+  "0081": "06:10:30",
+  "0082": "08:59:59",
+  "0084": "09:24:51",
+  "0087": "10:14:14",
+  "0088": "10:17:22",
+  "0089": "11:30:08",
+  "0090": "11:38:51",
+  "0091": "11:49:09",
+  "0092": "11:56:50",
+  "0093": "12:00:54",
+  "0094": "12:10:21",
+  "0095": "12:17:04",
+  "0096": "13:27:35",
+  "0097": "13:41:17",
+  "0099": "15:39:50",
+  "0100": "16:06:04",
+  "0101": "16:35:32",
+  "0102": "16:47:41"
+ },
+ "layer": {
+  "_about": "every on-screen element: code, kit/v2 component type, in/out on the timeline (s), params. Sources for every line: README.md. Captions are built from captions.json (config `captions`).",
+  "comps": [
+   {
+    "code": "HOOK",
+    "type": "v2hook",
+    "t0": 0.0,
+    "t1": 2.0,
+    "p": {
+     "eyebrow": "SUPERCAR EXPERIENCE · ROAD TRIP",
+     "line1": "ONE-WAY TICKET",
+     "line2": "PART 1 · SEP 26 2026",
+     "x": 54,
+     "y": 330,
+     "w": 853,
+     "exit": 1.42
+    }
+   },
+   {
+    "code": "G1-01",
+    "type": "chapterSlam",
+    "t0": 12.7,
+    "t1": 14.65,
+    "p": {
+     "tag": "",
+     "title": "ONE-WAY TICKET",
+     "y": 410,
+     "maxW": 700,
+     "maxS": 215
+    }
+   },
+   {
+    "code": "G1-02",
+    "type": "chapterSlam",
+    "t0": 60.21,
+    "t1": 62.16,
+    "p": {
+     "tag": "",
+     "title": "THE PICKUP",
+     "y": 410,
+     "maxW": 700,
+     "maxS": 215
+    }
+   },
+   {
+    "code": "G1-03",
+    "type": "chapterSlam",
+    "t0": 110.322,
+    "t1": 112.272,
+    "p": {
+     "tag": "",
+     "title": "HIT THE ROAD",
+     "y": 410,
+     "maxW": 700,
+     "maxS": 215
+    }
+   },
+   {
+    "code": "I1",
+    "type": "sweep",
+    "t0": 12.5,
+    "t1": 12.86,
+    "p": {
+     "angle": 16,
+     "width": 360
+    }
+   },
+   {
+    "code": "I1",
+    "type": "sweep",
+    "t0": 60.01,
+    "t1": 60.37,
+    "p": {
+     "angle": 16,
+     "width": 360
+    }
+   },
+   {
+    "code": "I1",
+    "type": "sweep",
+    "t0": 110.122,
+    "t1": 110.482,
+    "p": {
+     "angle": 16,
+     "width": 360
+    }
+   },
+   {
+    "code": "B1",
+    "type": "personLock",
+    "t0": 21.86,
+    "t1": 24.56,
+    "p": {
+     "track": "host_ch1",
+     "name": "OMARIE",
+     "handle": "@NQ.YOUNG",
+     "acquire": 21.86,
+     "exit": 24.26,
+     "maxBottom": 1100
+    }
+   },
+   {
+    "code": "D1-AIR",
+    "type": "clockStamp",
+    "t0": 49.81,
+    "t1": 54.51,
+    "p": {
+     "x": 54,
+     "y": 400,
+     "start": "00:00:00",
+     "place": "IN THE AIR",
+     "date": "SEP 26 2026",
+     "built": false,
+     "noClock": true
+    }
+   },
+   {
+    "code": "LOCK",
+    "type": "v2lock",
+    "t0": 77.972,
+    "t1": 79.552,
+    "p": {
+     "track": "mclaren",
+     "kicker": "LOCKED ON",
+     "name": "MCLAREN 600LT",
+     "acquire": 78.002,
+     "exit": 79.202,
+     "side": "above"
+    }
+   },
+   {
+    "code": "STRIP",
+    "type": "seStrip",
+    "t0": 1.9,
+    "t1": 172.932,
+    "p": {
+     "x": 54,
+     "y": 292,
+     "w": 853,
+     "hc": 84,
+     "hx": 140,
+     "progress": [
+      1.9,
+      172.932
+     ],
+     "label": "ONE-WAY TICKET · PART 1",
+     "clockFrom": 12.5,
+     "exit": 172.532,
+     "route_text": "SEATTLE → VEGAS",
+     "expand": [
+      {
+       "a": 126.422,
+       "b": 144.222,
+       "places": [
+        [
+         126.422,
+         "INTO THE MOUNTAINS"
+        ],
+        [
+         136.222,
+         "OPEN ROAD"
+        ]
+       ]
+      }
+     ]
+    }
+   },
+   {
+    "code": "PLACE",
+    "type": "v2place",
+    "t0": 145.522,
+    "t1": 148.522,
+    "p": {
+     "x": 54,
+     "y": 400,
+     "kicker": "JUST GOT INTO",
+     "name": "OREGON"
+    }
+   },
+   {
+    "code": "TEASE",
+    "type": "v2place",
+    "t0": 167.732,
+    "t1": 172.832,
+    "p": {
+     "x": 54,
+     "y": 400,
+     "kicker": "TO BE CONTINUED",
+     "name": "PART 2: THE NIGHT"
+    }
+   },
+   {
+    "code": "END",
+    "type": "v2end",
+    "t0": 172.932,
+    "t1": 178.332,
+    "p": {
+     "tagline": "A RIDE OF A LIFETIME.",
+     "cta": "TEXT OR DM TO BOOK",
+     "phone": "(725) 425-3583",
+     "url": "SUPERCAREXP.VIP",
+     "handle": "@SUPERCAR_EXPERIENCE_",
+     "locations": "LAS VEGAS · SCOTTSDALE · BOISE",
+     "requirement": "RENTERS 25+ · AGES 21–24 WITH UNDERAGE FEE",
+     "credit": "FILMED BY @NQ.YOUNG"
+    }
+   }
+  ],
+  "captions": {
+   "t0": 2.0,
+   "t1": 172.932,
+   "p": {
+    "size": 68,
+    "yBottom": 1372,
+    "maxLines": 2,
+    "maxW": 700,
+    "cx": 480
+   }
+  }
+ },
+ "captions": {
+  "hide": [],
+  "fix": {},
+  "extra": []
+ },
+ "tracks": {
+  "_about": "lock-on targets: shot, output frame range f0-f1, anchor frame (sharp, mid-shot) and the box x,y,w,h on it (output px). Tracked with lib/track_mid.py both ways from the anchor.",
+  "host_ch1": {
+   "shot": 8,
+   "f0": 650,
+   "f1": 740,
+   "anchor": 679,
+   "box": [
+    380,
+    700,
+    340,
+    380
+   ]
+  },
+  "mclaren": {
+   "shot": 22,
+   "f0": 2337,
+   "f1": 2376,
+   "anchor": 2352,
+   "box": [
+    526,
+    662,
+    321,
+    245
+   ]
+  }
+ },
+ "music": {
+  "_about": "RETIRED in v2 (Omarie, 6 Oct): no synth or library music. lib/music.py is gone; the bed is the in-car stereo and exhaust from the clips themselves (config `bed`). The NO MUSIC master swaps every in-car song for road/exhaust nat (bed segs `sub`).",
+  "enabled": false
+ },
+ "audio": {
+  "dialogFilter": "highpass=f=90:poles=2,afftdn=nr=10:nf=-42:tn=1,equalizer=f=300:t=q:w=1.2:g=-2,equalizer=f=3500:t=q:w=1.0:g=2.5,deesser=i=0.4:m=0.5:f=0.5,acompressor=threshold=-24dB:ratio=3:attack=10:release=150:makeup=2",
+  "dialogLufs": -16.0,
+  "edgeFade": 0.012,
+  "trims": {
+   "_about": "per-piece edge trims (s, source) found on the audio envelope where a neighbouring word crosses the EDL edge (build notes in cue.md)"
+  },
+  "extraDialog": [],
+  "natLufs": -24.0,
+  "natDuckDb": -12.0,
+  "sfx": {
+   "ratio": 0.45,
+   "duckDb": -6.0
+  },
+  "duck": {
+   "_about": "bed sidechain: every dialog piece; raised-cosine attack before the words and release after them; gaps under `bridge` s are held down (no pumping between sentences). Bed music ducks bed.duckDb.music, exhaust and nat duck audio.natDuckDb",
+   "attack": 0.06,
+   "release": 0.4,
+   "bridge": 0.6
+  },
+  "dialogFilterV1": "highpass=f=80:poles=2,afftdn=nr=8:nf=-45:tn=1,acompressor=threshold=-26dB:ratio=2:attack=12:release=180:makeup=1",
+  "_aboutDialogFilter": "fix B (Omarie, 6 Oct; the part2 chain): high-pass 90 Hz, gentle FFT noise reduction (nr 10 dB), -2 dB at 300 Hz, +2.5 dB at 3.5 kHz, de-esser, 3:1 compressor; then each piece is levelled to dialogLufs. dialogFilterV1 is the v1 chain (kept for the before/after numbers). edgeFadeOut: the voice fades over 100 ms at the end of its >= 350 ms tail (fix A). Dialog and bed audio are read from paths.aud (the camera AAC, full length; sample-aligned with the mezzanines, checked 6 Oct), so a tail can run past a mezzanine.",
+  "edgeFadeOut": 0.1,
+  "minVoiceOverBedDb": 10.0,
+  "dialogLatency": 0.025,
+  "_aboutDialogLatency": "part1 v2: the fix B chain delays the voice by 25.0 ms (measured 6 Oct: stem vs the raw clip audio, cross-correlation, 9 pieces, every one 24.9-25.0 ms); mix.py reads 25 ms further in so the voice stays on the lips"
+ },
+ "sfx": {
+  "files": {
+   "hitOpen": "SE-LO_01_hit_open.wav",
+   "hitDrop": "SE-LO_02_hit_drop.wav",
+   "hitEnd": "SE-LO_03_hit_endcard.wav",
+   "whooshLR": "SE-LO_04_whoosh_left_to_right.wav",
+   "whooshRL": "SE-LO_05_whoosh_right_to_left.wav",
+   "tickAcquire": "SE-LO_10_tick_acquire.wav",
+   "tickLock": "SE-LO_11_tick_lock.wav",
+   "tickReel": "SE-LO_12_tick_reel_lands.wav",
+   "riser": "SE-LO_06_riser_noise_1.5s.wav"
+  },
+  "align": {
+   "whooshLR": 0.62,
+   "whooshRL": 0.62
+  },
+  "extra": []
+ },
+ "master": {
+  "lufs": -14.0,
+  "ceiling": -2.0
+ },
+ "qa": {
+  "moments": {},
+  "bannerCodes": []
+ },
+ "blurs": [],
+ "speedo": [
+  {
+   "shot": 0,
+   "box": [
+    330,
+    985,
+    210,
+    120
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0097 speedometer"
+  },
+  {
+   "shot": 1,
+   "box": [
+    280,
+    1000,
+    200,
+    110
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0095 speedometer"
+  },
+  {
+   "shot": 2,
+   "box": [
+    280,
+    990,
+    220,
+    120
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0096 speedometer"
+  },
+  {
+   "shot": 3,
+   "box": [
+    260,
+    985,
+    210,
+    115
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0099 speedometer"
+  },
+  {
+   "shot": 5,
+   "box": [
+    330,
+    985,
+    210,
+    120
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0097 speedometer (v2 hook shot 5, 0097 4.6-7.8; box from shot 0, same camera mount)"
+  },
+  {
+   "shot": 27,
+   "box": [
+    290,
+    985,
+    270,
+    115
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0095 speedometer (cutaway 110.03-113.6, 0095 24.4-27.97; box from the 0095 21.2-24.4 cutaway, same mount)"
+  },
+  {
+   "shot": 29,
+   "box": [
+    290,
+    985,
+    270,
+    115
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0095 speedometer (cutaway 112.8-116.0, 0095 21.2-24.4; cluster drifts left late in the span, box widened 40 px left)"
+  },
+  {
+   "shot": 30,
+   "box": [
+    280,
+    1000,
+    200,
+    110
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0095 speedometer (cutaway)"
+  },
+  {
+   "shot": 31,
+   "box": [
+    280,
+    975,
+    180,
+    100
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0094 speedometer (shot 31, 0094 7.6-9.2, frames 3542-3589; was f0 3501-3589, which overlapped cutaway shot 30)"
+  },
+  {
+   "shot": 32,
+   "box": [
+    280,
+    940,
+    220,
+    130
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0095 speedometer"
+  },
+  {
+   "shot": 33,
+   "box": [
+    340,
+    970,
+    220,
+    120
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0095 speedometer"
+  },
+  {
+   "shot": 34,
+   "box": [
+    330,
+    985,
+    230,
+    115
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0095 speedometer"
+  },
+  {
+   "shot": 35,
+   "box": [
+    290,
+    990,
+    220,
+    120
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0096 speedometer"
+  },
+  {
+   "shot": 36,
+   "box": [
+    300,
+    985,
+    220,
+    115
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0097 speedometer"
+  },
+  {
+   "shot": 37,
+   "box": [
+    260,
+    990,
+    210,
+    110
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0099 speedometer"
+  },
+  {
+   "shot": 38,
+   "box": [
+    260,
+    990,
+    210,
+    110
+   ],
+   "pad": 16,
+   "radius": 16,
+   "why": "0099 speedometer (cutaway 152.33-156.73, 0099 158.2-162.6; box from the 0099 HUD-1 shot, same mount)"
+  }
+ ],
+ "_aboutSpeedo": "speedo: the McLaren's own speedometer on every cabin-cam shot (its digits are readable at phone size), blurred in a static feathered box per shot (no speed on screen). blurs: licence plates are not blurred in this vlog (Omarie, 6 Oct).",
+ "_remapped_v2": "config times and shot indices moved from the v1 cut (HEAD) to v2 by tools/remap_v2.py",
+ "bed": {
+  "_about": "v2 (Omarie, 6 Oct): the bed is the in-car stereo nat and exhaust from the clips (paths.aud), no synth or library music. Each seg: source span a-b of clip src placed at timeline t, levelled to its lufs (else the kind default), faded fin/fout (s). Every transcribed word inside a seg (the day index) is muted with 40 ms ramps, so no speech rides in the bed; `mute` adds spans. Music ducks duckDb.music under dialog, exhaust and nat duck audio.natDuckDb. The NO MUSIC master replaces each music seg by its `sub` (the same length of road/exhaust nat from a speech-free, music-free span; no song recognised by Shazam in 10 s windows every 5 s and no drums in htdemucs). Songs are listed in exports/qa/in_car_tracks_part1.md (tools/track_list.py). Forbidden spans apply to bed audio too.",
+  "lufs": {
+   "music": -21.0,
+   "exhaust": -22.0,
+   "nat": -24.0
+  },
+  "duckDb": {
+   "music": -14.0
+  },
+  "segs": [
+   {
+    "why": "hook: the in-car stereo under the open",
+    "kind": "music",
+    "src": "0097",
+    "a": 20.0,
+    "b": 33.4,
+    "t": 0.0,
+    "fin": 0.03,
+    "fout": 0.9,
+    "sub": {
+     "src": "0095",
+     "a": 8.0,
+     "why": "road/exhaust nat, roof down"
+    }
+   },
+   {
+    "why": "terminal, walking in",
+    "kind": "nat",
+    "src": "0076",
+    "a": 58.0,
+    "b": 62.2,
+    "t": 12.5,
+    "lufs": -30,
+    "mute": [
+     [
+      58.0,
+      59.25
+     ],
+     [
+      59.95,
+      62.2
+     ]
+    ]
+   },
+   {
+    "why": "escalator down",
+    "kind": "nat",
+    "src": "0077",
+    "a": 20.0,
+    "b": 24.36,
+    "t": 16.7,
+    "lufs": -30
+   },
+   {
+    "why": "the gate area",
+    "kind": "nat",
+    "src": "0078",
+    "a": 30.0,
+    "b": 35.4,
+    "t": 40.51,
+    "lufs": -30,
+    "mute": [
+     [
+      30.0,
+      33.95
+     ]
+    ]
+   },
+   {
+    "why": "window: wing and the city (engine)",
+    "kind": "nat",
+    "src": "0082",
+    "a": 2.0,
+    "b": 4.4,
+    "t": 49.61,
+    "lufs": -24
+   },
+   {
+    "why": "window: coming in low (engine)",
+    "kind": "nat",
+    "src": "0082",
+    "a": 12.0,
+    "b": 14.6,
+    "t": 52.01,
+    "lufs": -24
+   },
+   {
+    "why": "the red shop building, cars out front",
+    "kind": "nat",
+    "src": "0087",
+    "a": 4.0,
+    "b": 6.6,
+    "t": 60.01,
+    "lufs": -30
+   },
+   {
+    "why": "the McLaren rolls in: its exhaust is the moment",
+    "kind": "exhaust",
+    "src": "0090",
+    "a": 15.0,
+    "b": 20.6,
+    "t": 77.952,
+    "lufs": -20
+   },
+   {
+    "why": "the red interior, after \"interior chat\" (its own room sound; the words after it are muted)",
+    "kind": "nat",
+    "src": "0090",
+    "a": 116.55,
+    "b": 118.0,
+    "t": 91.522,
+    "lufs": -30,
+    "fin": 0.05,
+    "fout": 0.3
+   },
+   {
+    "why": "exhaust bridge: the roof opens, into the drive",
+    "kind": "exhaust",
+    "src": "0095",
+    "a": 2.0,
+    "b": 6.8,
+    "t": 98.292,
+    "fin": 0.5,
+    "fout": 0.9
+   },
+   {
+    "why": "the vibes: the forest montage on the in-car stereo, under \"Man, I miss trees\"",
+    "kind": "music",
+    "src": "0094",
+    "a": 233.0,
+    "b": 242.8,
+    "t": 116.792,
+    "fin": 0.3,
+    "fout": 0.5,
+    "sub": {
+     "src": "0095",
+     "a": 24.0,
+     "why": "road/exhaust nat"
+    }
+   },
+   {
+    "why": "HUD-1 into the mountains, in sync (the stereo as it played)",
+    "kind": "music",
+    "src": "0096",
+    "a": 31.4,
+    "b": 41.7,
+    "t": 126.222,
+    "fin": 0.3,
+    "fout": 0.5,
+    "sub": {
+     "src": "0095",
+     "a": 34.0,
+     "why": "road/exhaust nat"
+    }
+   },
+   {
+    "why": "HUD-1 open road, in sync (the stereo as it played)",
+    "kind": "music",
+    "src": "0099",
+    "a": 165.7,
+    "b": 174.9,
+    "t": 135.922,
+    "fin": 0.5,
+    "fout": 1.2,
+    "sub": {
+     "src": "0095",
+     "a": 44.5,
+     "why": "road/exhaust nat"
+    }
+   },
+   {
+    "why": "outro: road nat fading under the end card",
+    "kind": "exhaust",
+    "src": "0094",
+    "a": 112.0,
+    "b": 116.4,
+    "t": 173.892,
+    "fin": 0.8,
+    "fout": 2.4
+   }
+  ]
+ },
+ "_remapped_cut2": "v2 cut 2 (7 Oct): config times after 79.06 s moved back 243 frames (8.108 s) and shot indices after the dropped 0088 shot down by one, by tools/remap_cut2.py"
+}

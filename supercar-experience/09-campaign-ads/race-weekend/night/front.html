@@ -1,0 +1,344 @@
+<!doctype html>
+<!--
+  front.html v2 - FRONT motion layer, SE "F1 weekend" ad, direction C "COUNTDOWN".
+  Cut to Car Scenes' own music: 89.0 BPM, beat B = 0.6742 s, ad beat a=0 = music 2.9163 s, DROP on a4.
+  Transparent 1080x1920; window.renderAt(t) is pure in t. capture.py samples it for motion blur.
+  CONFIG (config.js, from build.py --post-date): DAYS = days from the posting date to Nov 19 2026.
+  v3: NO countdown (Omarie, 3 Oct: take out the 46 days to nov 19). Key text inside x 54-907, y 285-1536.
+  The SF90 is never named, labelled, bracketed or offered: only date / event words and HUD sit on its shots.
+  v2 fixes: reels feathered (no hard grey boxes), sweep feathered, hook complete on frame 0, name held
+  >= 1 s and repeated on the end card, flash 25 %, DRIVERS 25+ larger and lighter.
+-->
+<html><head><meta charset="utf-8">
+<style>
+@font-face{font-family:Hanken;font-weight:900;src:url('../fonts/HankenGrotesk-900.ttf')}
+@font-face{font-family:Hanken;font-weight:800;src:url('../fonts/HankenGrotesk-800.ttf')}
+@font-face{font-family:Mono;font-weight:700;src:url('../fonts/JetBrainsMono-700.ttf')}
+@font-face{font-family:Mono;font-weight:800;src:url('../fonts/JetBrainsMono-800.ttf')}
+:root{--o:#FF4F16}
+html,body{margin:0;padding:0;width:1080px;height:1920px;overflow:hidden;background:transparent}
+*{box-sizing:border-box}
+.a{position:absolute;left:0;top:0}
+.g{position:absolute;left:0;top:0;width:1080px;height:1920px}
+.hk{font-family:Hanken;font-weight:900;line-height:.9;letter-spacing:-.02em;white-space:pre;color:#fff}
+.mono{font-family:Mono;font-weight:700;line-height:1;letter-spacing:.04em;white-space:pre;color:#fff}
+.o{color:var(--o)}
+.chq{position:absolute;height:36px;background:repeating-conic-gradient(#fff 0 25%,#000 0 50%) 0 0/36px 36px}
+.seg{position:absolute;height:16px;background:rgba(255,255,255,.18);border-radius:2px;overflow:hidden}
+.seg i{position:absolute;left:0;top:0;bottom:0;width:0;background:#fff}
+.seg.hot i{background:var(--o);box-shadow:0 0 22px rgba(255,79,22,.7)}
+.seg b{position:absolute;top:0;bottom:0;width:90px;background:linear-gradient(90deg,rgba(255,255,255,0),rgba(255,255,255,.9),rgba(255,255,255,0));display:none}
+.lab{position:absolute;font-family:Mono;font-weight:700;font-size:28px;letter-spacing:.04em;color:#fff;white-space:pre}
+.lab b{color:#8a8a8a;font-weight:700}
+/* feathered reel: no element clips the blurred digits with a hard edge; two soft masks do the windowing */
+.rwH{position:absolute;-webkit-mask-image:linear-gradient(90deg,transparent 0,#000 50px,#000 calc(100% - 50px),transparent 100%)}
+.rwV{position:absolute;left:0;top:0;width:100%;height:100%}
+.rcol{position:absolute;top:0}
+.rcol .strip{position:absolute;left:0;top:0;display:flex;flex-direction:column;align-items:center;width:100%}
+.dash{position:absolute;width:4px;background:repeating-linear-gradient(to bottom,currentColor 0 14px,transparent 14px 24px)}
+.brk{position:absolute;width:56px;height:56px;border-color:var(--o);border-style:solid;border-width:0}
+.wipe{position:absolute;left:0;width:1080px;height:260px;
+  background:repeating-conic-gradient(#fff 0 25%,#0a0a0a 0 50%) 0 0/72px 72px;box-shadow:0 0 0 10px var(--o)}
+</style>
+<script src="config.js"></script>
+</head><body>
+<div id="stage" class="g">
+  <div id="scrimTop" class="g" style="background:linear-gradient(to bottom,rgba(0,0,0,.82) 0,rgba(0,0,0,.78) 43%,rgba(0,0,0,.1) 47%,rgba(0,0,0,0) 60%)"></div>
+  <div id="scrimMid" class="g" style="background:linear-gradient(to bottom,rgba(0,0,0,.7) 0,rgba(0,0,0,.6) 40%,rgba(0,0,0,0) 50%)"></div>
+  <div id="scrimLow" class="g" style="background:linear-gradient(to bottom,rgba(0,0,0,0) 0,rgba(0,0,0,0) 64%,rgba(0,0,0,.8) 68%,rgba(0,0,0,.88) 100%)"></div>
+
+  <!-- 1. HOOK: complete on frame 0 -->
+  <div id="hook" class="g">
+    <div id="hChq" class="chq" style="left:94px;top:300px;width:766px"></div>
+    <div class="a hk" style="left:90px;top:342px;font-size:68px">RENT A SUPERCAR</div>
+    <div class="a hk" style="left:88px;top:420px;font-size:140px">F1 WEEKEND</div>
+    <div class="a mono o" style="left:94px;top:566px;font-size:112px;font-weight:800">NOV 19–21</div>
+    <div class="a" style="left:94px;top:706px;width:766px;height:2px;background:rgba(255,255,255,.55)"></div>
+    <div class="lab" style="left:94px;top:724px"><b>S1 </b>THU 19</div>
+    <div class="lab" style="left:352px;top:724px"><b>S2 </b>FRI 20</div>
+    <div class="lab" style="left:610px;top:724px"><b>S3 </b><span class="o">SAT 21</span></div>
+    <div class="seg" id="hb1" style="left:94px;top:764px;width:248px"><i style="width:100%"></i><b></b></div>
+    <div class="seg" id="hb2" style="left:352px;top:764px;width:248px"><i style="width:100%"></i><b></b></div>
+    <div class="seg hot" id="hb3" style="left:610px;top:764px;width:250px"><i style="width:100%"></i><b></b></div>
+    <div class="a mono o" style="left:610px;top:796px;font-size:24px;font-weight:800;letter-spacing:.1em">RACE NIGHT</div>
+    <div class="a mono" style="left:94px;top:796px;font-size:24px;font-weight:800;letter-spacing:.1em">LAS VEGAS</div>
+    <img class="a" src="../logos/sce-primary-horizontal--white.png" style="left:94px;top:1420px;width:330px">
+  </div>
+
+  <!-- 2. THREE NIGHTS / IN VEGAS. (AMG interior, AMG POV) -->
+  <div id="nights" class="g">
+    <div id="n1" class="a hk" style="left:90px;top:360px;font-size:128px">THREE NIGHTS</div>
+    <div id="n2" class="a hk" style="left:90px;top:486px;font-size:128px">IN VEGAS<span class="o">.</span></div>
+  </div>
+
+  <!-- 3. SECTORS a6-a8 -->
+  <div id="sect" class="g">
+    <div class="seg" id="p1" style="left:94px;top:320px;width:248px"><i></i></div>
+    <div class="seg" id="p2" style="left:352px;top:320px;width:248px"><i></i></div>
+    <div class="seg hot" id="p3" style="left:610px;top:320px;width:250px"><i></i></div>
+    <div class="a" style="left:94px;top:372px;width:766px;height:60px;overflow:hidden">
+      <div id="sLab" class="a mono o" style="font-size:48px;font-weight:800"></div></div>
+    <div class="a" style="left:80px;top:436px;width:830px;height:200px;overflow:hidden">
+      <div id="sDayA" class="a hk" style="font-size:200px"></div>
+      <div id="sDayB" class="a hk" style="font-size:200px"></div></div>
+    <div class="seg" id="sBar" style="left:94px;top:660px;width:766px;height:24px"><i></i></div>
+    <div id="sRace" class="a hk o" style="left:90px;top:712px;font-size:132px">RACE NIGHT</div>
+  </div>
+
+  <!-- HUD strip -->
+  <div id="hud" class="g">
+    <div id="hudChq" class="chq" style="left:94px;top:294px;width:108px;height:24px;background-size:24px 24px"></div>
+    <div id="hudTxt" class="a mono" style="left:218px;top:294px;font-size:24px;font-weight:700"></div>
+  </div>
+
+  <!-- 4. TIMING GATES + LOCK-ON + RENTAL CARD (no car names, Omarie 2026-10-03) a9-a11 -->
+  <div id="gates" class="g">
+    <div id="gL" class="dash" style="color:#fff;top:880px;height:390px"></div>
+    <div id="gR" class="dash" style="color:#FF4F16;top:880px;height:390px"></div>
+    <div id="gLf" class="chq" style="top:852px;width:24px;height:24px;background-size:24px 24px"></div>
+    <div id="gRf" class="chq" style="top:852px;width:24px;height:24px;background-size:24px 24px"></div>
+    <div id="gTrack" class="a" style="top:1262px;height:3px;background:#FF4F16"></div>
+    <div id="bTL" class="brk" style="border-width:6px 0 0 6px"></div>
+    <div id="bTR" class="brk" style="border-width:6px 6px 0 0"></div>
+    <div id="bBL" class="brk" style="border-width:0 0 6px 6px"></div>
+    <div id="bBR" class="brk" style="border-width:0 6px 6px 0"></div>
+    <div id="nmA" class="a mono" style="left:94px;top:1300px;font-size:34px"></div>
+    <div class="a" style="left:88px;top:1342px;width:820px;height:112px;overflow:hidden">
+      <div id="nmB" class="a hk" style="font-size:104px">SUPERCAR</div></div>
+    <div id="nmC" class="a mono o" style="left:94px;top:1468px;font-size:26px;font-weight:800;letter-spacing:.1em"></div>
+    <div id="nmD" class="a mono" style="left:94px;top:1504px;font-size:22px;font-weight:700;letter-spacing:.06em;color:#d6d6d6"></div>
+  </div>
+
+  <!-- 5. F1 WEEKEND / NOV 19-21 a11-a12 -->
+  <div id="wknd" class="g">
+    <div id="wA" class="a" style="left:88px;top:380px"></div>
+    <div id="wB" class="a mono o" style="left:94px;top:530px;font-size:112px;font-weight:800">NOV 19–21</div>
+  </div>
+
+  <!-- 6. THU · FRI · SAT / RACE NIGHT (AMG head-on a12, SF90 rear a13: event words only) -->
+  <div id="cd" class="g">
+    <div id="cdD0" class="a mono" style="left:94px;top:400px;font-size:72px;font-weight:800">THU</div>
+    <div id="cdD1" class="a mono" style="left:278px;top:400px;font-size:72px;font-weight:800">· FRI</div>
+    <div id="cdD2" class="a mono o" style="left:555px;top:400px;font-size:72px;font-weight:800">· SAT</div>
+    <div id="cdR" class="a hk o" style="left:90px;top:500px;font-size:132px">RACE NIGHT</div>
+    <div id="cdChq" class="chq" style="left:94px;top:660px;width:766px"></div>
+  </div>
+
+  <!-- light sweep over the frozen car: feathered on every side -->
+  <div id="sweep" class="a" style="top:900px;width:520px;height:380px;mix-blend-mode:screen;
+    background:linear-gradient(100deg,rgba(255,255,255,0) 30%,rgba(255,255,255,.38) 50%,rgba(255,255,255,0) 70%);
+    -webkit-mask-image:radial-gradient(ellipse 50% 50% at 50% 50%,#000 40%,transparent 100%)"></div>
+
+  <!-- 7. END CARD a17-a24 -->
+  <div id="end" class="g">
+    <img id="eLogo" class="a" src="../logos/sce-stacked--white.png" style="left:94px;top:300px;width:250px">
+    <div id="eBox" class="a" style="left:520px;top:318px;width:340px;height:130px;border:2px solid #FF4F16"></div>
+    <div id="eBoxA" class="a mono" style="left:544px;top:340px;font-size:26px;font-weight:800"></div>
+    <div id="eBoxB" class="a mono o" style="left:542px;top:378px;font-size:50px;font-weight:800">NOV 19–21</div>
+    <div id="eWk" class="a mono" style="left:94px;top:488px;font-size:28px;font-weight:700"></div>
+    <div id="eNmA" class="a mono" style="left:94px;top:560px;font-size:30px"></div>
+    <div class="a" style="left:88px;top:598px;width:820px;height:92px;overflow:hidden">
+      <div id="eNmB" class="a hk" style="font-size:84px">SUPERCAR</div></div>
+    <div id="eNmC" class="a mono" style="left:94px;top:702px;font-size:22px;font-weight:700;letter-spacing:.06em;color:#d6d6d6"></div>
+    <div id="eChq" class="chq" style="left:94px;top:1262px;width:766px"></div>
+    <div id="eBook" class="a hk" style="left:88px;top:1306px;font-size:110px">BOOK NOW</div>
+    <div id="eTxt" class="a mono o" style="left:94px;top:1414px;font-size:52px;font-weight:800"></div>
+    <div id="eSite" class="a mono" style="left:94px;top:1474px;font-size:27px;font-weight:700">SUPERCAREXP.VIP · @SUPERCAR_EXPERIENCE_</div>
+    <div id="eAge" class="a mono" style="left:94px;top:1506px;font-size:26px;font-weight:800;color:#d6d6d6">DRIVERS 25+</div>
+  </div>
+
+  <div id="wipe" class="wipe"></div>
+  <div id="flash" class="g" style="background:#fff"></div>
+</div>
+
+<script>
+const B = 0.6742, bt = n => n * B;
+const DAYS = String(window.CONFIG.DAYS);
+const $ = id => document.getElementById(id);
+const cl = (x, a = 0, b = 1) => Math.max(a, Math.min(b, x));
+const lin = (t, a, b) => cl((t - a) / (b - a));
+const oC = x => 1 - Math.pow(1 - x, 3), iC = x => x * x * x;
+const oX = x => x >= 1 ? 1 : 1 - Math.pow(2, -10 * x);
+const oB = x => { const c = 1.70158, d = x - 1; return 1 + (c + 1) * d * d * d + c * d * d; };
+const vis = (el, on) => { el.style.display = on ? 'block' : 'none'; };
+const typeOn = (el, s, t, a, dur) => { el.textContent = s.slice(0, Math.round(s.length * lin(t, a, a + dur))); };
+
+// ---- feathered digit reels. host gets left/top of the digit box; pad = soft margin around it.
+function buildReel(host, value, x, y, h, w, fs, pad) {
+  host.innerHTML = '';
+  const H = document.createElement('div'); H.className = 'rwH';
+  H.style.cssText += `left:${x - pad}px;top:${y - pad}px;width:${value.length * w + 2 * pad}px;height:${h + 2 * pad}px`;
+  const V = document.createElement('div'); V.className = 'rwV';
+  const f = (pad / (h + 2 * pad) * 100).toFixed(1);
+  V.style.webkitMaskImage = `linear-gradient(180deg,transparent 0,#000 ${f * 0.85}%,#000 ${100 - f * 0.85}%,transparent 100%)`;
+  H.appendChild(V); host.appendChild(H);
+  const cols = [];
+  [...value].forEach((d, i) => {
+    const col = document.createElement('div'); col.className = 'rcol';
+    col.style.cssText += `left:${pad + i * w}px;width:${w}px;height:${h + 2 * pad}px`;
+    const s = document.createElement('div'); s.className = 'strip';
+    const N = 24, others = [];
+    for (let k = 0; k <= N; k++) {
+      const c = document.createElement('div'); c.className = 'hk';
+      c.style.cssText = `height:${h}px;font-size:${fs}px;letter-spacing:-.05em;display:flex;align-items:flex-start;justify-content:center;width:100%`;
+      c.textContent = k === N ? d : String((+d + 7 * (N - k)) % 10);
+      if (k < N) { c.style.filter = 'blur(44px)'; others.push(c); }
+      s.appendChild(c);
+    }
+    col.appendChild(s); V.appendChild(col); cols.push({ s, N, h, pad, others });
+  });
+  return cols;
+}
+function setReel(cols, t, a, dur) {
+  cols.forEach((c, i) => {
+    const d0 = a + i * 0.06, p = lin(t, d0, d0 + dur), e = oC(p);
+    c.s.style.transform = `translateY(${c.pad - c.N * c.h * e}px)`;
+    const v = p >= 1 ? 0 : 3 * Math.pow(1 - p, 2) * c.N / dur;
+    c.s.lastChild.style.filter = v > 2 ? `blur(${Math.min(22, v * 0.8)}px)` : 'none';
+    const op = p >= 1 ? 0 : 0.3 * Math.min(1, (1 - p) * 2.5);       // the blurred digits fade out as it lands
+    c.others.forEach(o => { o.style.opacity = op; });
+  });
+}
+// v3: no countdown, no reels
+
+const W = 'F1 WEEKEND'; $('wA').innerHTML = [...W].map(c => `<span class="hk" style="display:inline-block;font-size:132px">${c === ' ' ? '&nbsp;' : c}</span>`).join('');
+const wSpans = [...$('wA').children];
+
+const BOX = [[12.31, 280, 888], [12.56, 248, 900], [12.81, 228, 900], [13.06, 220, 920], [13.31, 220, 940], [13.56, 220, 880], [13.72, 220, 870]];
+function boxAt(ts) {
+  for (let i = 0; i < BOX.length - 1; i++) if (ts <= BOX[i + 1][0]) {
+    const k = lin(ts, BOX[i][0], BOX[i + 1][0]); return [BOX[i][1] + (BOX[i + 1][1] - BOX[i][1]) * k, BOX[i][2] + (BOX[i + 1][2] - BOX[i][2]) * k]; }
+  return BOX[BOX.length - 1].slice(1);
+}
+const WIPES = [[bt(4), 1], [bt(8), -1], [bt(14), 1]];
+function wipeY(t, tc, dir) { const p = lin(t, tc - 0.13, tc + 0.13); const y = -280 + p * (1920 + 560); return dir > 0 ? y : 1920 - y - 260; }
+const slam = (el, t, a, s0 = 1.32, blur = 10) => {
+  const p = lin(t, a, a + 0.14);
+  el.style.opacity = lin(t, a, a + 0.05); el.style.transformOrigin = '0 50%';
+  el.style.transform = `scale(${s0 - (s0 - 1) * oX(p)})`;
+  el.style.filter = p > 0 && p < 1 ? `blur(${(1 - p) * blur}px)` : 'none';
+};
+
+window.renderAt = function (t) {
+  const hookOn = t < bt(4) + 0.14, sectOn = t >= bt(6) && t < bt(8) + 0.14, cOn = t >= bt(12) && t < bt(14) + 0.14;
+  $('scrimTop').style.opacity = (hookOn || cOn) ? 1 : 0;
+  $('scrimMid').style.opacity = ((t >= bt(4) && t < bt(6)) || sectOn || (t >= bt(11) && t < bt(12))) ? 1 : (t >= bt(8) && t < bt(17) ? 0.45 : 0);
+  $('scrimLow').style.opacity = (t >= bt(9) && t < bt(11)) ? 1 : 0;
+  $('scrimTop').style.clipPath = 'none';
+
+  // ---------- 1. hook (complete at t=0; beat glints over the build)
+  vis($('hook'), hookOn);
+  if (hookOn) {
+    $('hChq').style.backgroundPosition = `${-t * 48}px 0`;
+    const beat = Math.floor(t / B), ph = t / B - beat;
+    ['hb1', 'hb2', 'hb3'].forEach((id, i) => { const g = $(id).lastChild; const q = lin(ph, i * 0.12, i * 0.12 + 0.35);
+      g.style.display = beat >= 1 && q > 0 && q < 1 ? 'block' : 'none'; g.style.left = (-90 + q * 340) + 'px'; });
+    $('hb3').firstChild.style.boxShadow = `0 0 ${22 + 30 * Math.max(0, 1 - ph * 3) * (beat >= 1)}px rgba(255,79,22,.8)`;
+    const y = wipeY(t, bt(4), 1);
+    const cp = t > bt(4) - 0.13 ? `inset(${Math.max(0, y + 260)}px 0 0 0)` : 'none';
+    $('hook').style.clipPath = cp; $('scrimTop').style.clipPath = cp;
+  }
+
+  // ---------- 2. THREE NIGHTS (a4) / IN VEGAS. (a4.5), full phrase held to a6
+  const nOn = t >= bt(4) && t < bt(6) + 0.1; vis($('nights'), nOn);
+  if (nOn) {
+    slam($('n1'), t, bt(4) + 0.03); slam($('n2'), t, bt(4.5));
+    $('nights').style.transform = `translateX(${-1300 * iC(lin(t, bt(6) - 0.02, bt(6) + 0.1))}px)`;
+  }
+
+  // ---------- 3. sectors: S1 a6, S2 a6.5, S3 a7, RACE NIGHT a7.5
+  vis($('sect'), sectOn);
+  if (sectOn) {
+    const hits = [6, 6.5, 7], k = t < bt(6.5) ? 0 : t < bt(7) ? 1 : 2, a = bt(hits[k]);
+    const labs = ['S1', 'S2', 'S3'], days = ['THU 19', 'FRI 20', 'SAT 21'];
+    ['p1', 'p2', 'p3'].forEach((id, i) => { $(id).firstChild.style.width = (100 * oC(lin(t, bt(hits[i]), bt(hits[i]) + 0.14))) + '%'; });
+    $('sLab').textContent = labs[k] + (k === 2 ? '  ·  SECTOR 3' : '');
+    const p = oX(lin(t, a, a + 0.13));
+    $('sDayA').textContent = days[k]; $('sDayA').style.transform = `translateY(${(1 - p) * 210}px)`;
+    $('sDayB').textContent = k ? days[k - 1] : ''; $('sDayB').style.transform = `translateY(${-p * 210}px)`;
+    const bar = $('sBar'); bar.className = 'seg' + (k === 2 ? ' hot' : ''); bar.firstChild.style.width = (100 * oC(lin(t, a, a + 0.2))) + '%';
+    slam($('sRace'), t, bt(7.5), 1.3, 8); if (t < bt(7.5)) $('sRace').style.opacity = 0;
+    const y = wipeY(t, bt(8), -1);
+    $('sect').style.clipPath = t > bt(8) - 0.13 ? `inset(0 0 ${Math.max(0, 1920 - y)}px 0)` : 'none';
+  }
+
+  // ---------- HUD a8-a17 (off under the F1 WEEKEND slam and the countdown)
+  const hudOn = t >= bt(8) && t < bt(17); vis($('hud'), hudOn && !(t >= bt(11) && t < bt(14) + 0.1));
+  if (hudOn) { typeOn($('hudTxt'), 'LAS VEGAS · F1 WEEKEND · NOV 19–21', t, bt(8) + 0.05, 0.3); $('hudChq').style.backgroundPosition = `${-t * 30}px 0`; }
+
+  // ---------- 4. gates + lock-on + name, AMG only (a9-a11); name lands by a9.5 and holds > 1 s
+  const gOn = t >= bt(9) && t < bt(11); vis($('gates'), gOn);
+  if (gOn) {
+    const ts = 12.31 + (t - bt(9));
+    const [x0, x1] = boxAt(ts);
+    const snap = oB(lin(t, bt(9), bt(9) + 0.14)), out = iC(lin(t, bt(11) - 0.1, bt(11)));
+    const gl = -60 + (x0 - 22 + 60) * snap - 400 * out, gr = 1140 + (x1 + 18 - 1140) * snap + 400 * out;
+    $('gL').style.left = gl + 'px'; $('gR').style.left = gr + 'px';
+    $('gLf').style.left = (gl - 10) + 'px'; $('gRf').style.left = (gr - 10) + 'px';
+    const tr = oC(lin(t, bt(9.15), bt(9.15) + 0.16));
+    $('gTrack').style.left = gl + 'px'; $('gTrack').style.width = Math.max(0, (gr - gl) * tr * (1 - out)) + 'px';
+    const L = oX(lin(t, bt(9.25), bt(9.25) + 0.15)), sc = 1.45 - 0.45 * L, cx = (x0 + x1) / 2, cy = 1105, hw = (x1 - x0) / 2 + 10, hh = 150;
+    [['bTL', -1, -1], ['bTR', 1, -1], ['bBL', -1, 1], ['bBR', 1, 1]].forEach(([id, sx, sy]) => {
+      const el = $(id); el.style.opacity = (t >= bt(9.25) ? 1 : 0) * (1 - out);
+      el.style.left = (cx + sx * hw * sc - (sx > 0 ? 56 : 0)) + 'px'; el.style.top = (cy + sy * hh * sc - (sy > 0 ? 56 : 0)) + 'px'; });
+    typeOn($('nmA'), 'RENT A', t, bt(9.25), 0.18);
+    const m = oX(lin(t, bt(9.25), bt(9.25) + 0.16)); $('nmB').style.transform = `translateY(${(1 - m) * 120}px)`;
+    typeOn($('nmC'), 'LAS VEGAS', t, bt(9.6), 0.18);
+    typeOn($('nmD'), 'MERCEDES-AMG GT BLACK SERIES', t, bt(9.1), 0.1);   // full from ~bt(9.25) to bt(11)-0.1: >= 1.0 s
+    $('gates').style.opacity = 1 - lin(t, bt(11) - 0.05, bt(11));
+  }
+
+  // ---------- 5. F1 WEEKEND (a11) / NOV 19-21 (a11.5)
+  const wOn = t >= bt(11) && t < bt(12) + 0.1; vis($('wknd'), wOn);
+  if (wOn) {
+    wSpans.forEach((s, i) => { const a = bt(11) + 0.02 + i * 0.018, p = lin(t, a, a + 0.12);
+      s.style.opacity = lin(t, a, a + 0.03); s.style.transform = `translateY(${(1 - oX(p)) * -90}px) scale(${1.4 - 0.4 * oX(p)})`;
+      s.style.filter = p > 0 && p < 1 ? `blur(${(1 - p) * 8}px)` : 'none'; });
+    const q = lin(t, bt(11.5), bt(11.5) + 0.13);
+    $('wB').style.opacity = q > 0 ? 1 : 0; $('wB').style.transform = `translateX(${(1 - oX(q)) * 700}px)`;
+    $('wB').style.filter = q > 0 && q < 1 ? `blur(${(1 - q) * 10}px)` : 'none';
+    $('wknd').style.transform = `translateY(${-1400 * iC(lin(t, bt(12) - 0.02, bt(12) + 0.1))}px)`;
+  }
+
+  // ---------- 6. countdown on the AMG head-on (a12-a14): spins, lands ~0.5 s in, holds ~0.8 s
+  vis($('cd'), cOn);
+  if (cOn) {
+    slam($('cdD0'), t, bt(12) + 0.02, 1.4, 8); slam($('cdD1'), t, bt(12.5), 1.4, 8); slam($('cdD2'), t, bt(13), 1.4, 8);
+    slam($('cdR'), t, bt(13.25), 1.3, 9); if (t < bt(13.25)) $('cdR').style.opacity = 0;
+    $('cdChq').style.width = 766 * oC(lin(t, bt(13.5), bt(13.5) + 0.2)) + 'px';
+    const y = wipeY(t, bt(14), 1);
+    const cp = t > bt(14) - 0.13 ? `inset(${Math.max(0, y + 260)}px 0 0 0)` : 'none';
+    $('cd').style.clipPath = cp; $('scrimTop').style.clipPath = cp;
+  }
+
+  // ---------- 7. end card a17-a24
+  const eOn = t >= bt(17); vis($('end'), eOn);
+  if (eOn) {
+    const lg = oX(lin(t, bt(17), bt(17) + 0.18));
+    $('eLogo').style.opacity = lin(t, bt(17), bt(17) + 0.06); $('eLogo').style.transform = `scale(${1.18 - 0.18 * lg})`; $('eLogo').style.transformOrigin = '0 0';
+    $('eBox').style.width = 340 * oC(lin(t, bt(17.4), bt(17.4) + 0.2)) + 'px'; $('eBox').style.opacity = t >= bt(17.4) ? 1 : 0;
+    typeOn($('eBoxA'), 'THU · FRI · SAT', t, bt(17.6), 0.25);
+    const eb = oX(lin(t, bt(17.8), bt(17.8) + 0.16)); $('eBoxB').style.opacity = t >= bt(17.8) ? 1 : 0; $('eBoxB').style.transform = `translateY(${(1 - eb) * 30}px)`;
+    typeOn($('eWk'), 'F1 WEEKEND · NOV 19–21 · LAS VEGAS', t, bt(17.6), 0.35);
+    typeOn($('eNmA'), 'RENT A', t, bt(18), 0.2);
+    typeOn($('eNmC'), 'MERCEDES-AMG GT BLACK SERIES', t, bt(18.3), 0.25);
+    const nb = oX(lin(t, bt(18), bt(18) + 0.18)); $('eNmB').style.transform = `translateY(${(1 - nb) * 100}px)`;
+    $('eChq').style.clipPath = `inset(0 ${100 - 100 * oC(lin(t, bt(18.25), bt(18.25) + 0.2))}% 0 0)`;
+    $('eChq').style.backgroundPosition = `${-t * 30}px 0`;
+    slam($('eBook'), t, bt(18.5), 1.3, 9);
+    typeOn($('eTxt'), 'TEXT (725) 425-3583', t, bt(19), 0.32);
+    const s = oC(lin(t, bt(19.5), bt(19.5) + 0.2)); $('eSite').style.opacity = s; $('eSite').style.transform = `translateY(${(1 - s) * 24}px)`;
+    $('eAge').style.opacity = oC(lin(t, bt(20), bt(20) + 0.2));
+  }
+  const sw = lin(t, window.CONFIG.FREEZE, window.CONFIG.FREEZE + 0.7);
+  $('sweep').style.display = sw > 0 && sw < 1 ? 'block' : 'none'; $('sweep').style.left = (-520 + sw * 1700) + 'px';
+
+  let wy = null; for (const [tc, d] of WIPES) if (Math.abs(t - tc) < 0.14) wy = wipeY(t, tc, d);
+  $('wipe').style.display = wy === null ? 'none' : 'block'; if (wy !== null) $('wipe').style.top = wy + 'px';
+  const fl = Math.max(0.25 * (1 - lin(t, bt(17), bt(17) + 0.22)) * (t >= bt(17)), 0.22 * (1 - lin(t, bt(7.5), bt(7.5) + 0.16)) * (t >= bt(7.5)),
+                      0.18 * (1 - lin(t, bt(4), bt(4) + 0.16)) * (t >= bt(4) && t < bt(5)));
+  $('flash').style.opacity = fl;
+};
+document.fonts.ready.then(() => { window.renderAt(0); window.__ready = true; });
+</script>
+</body></html>

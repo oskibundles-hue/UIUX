@@ -1,0 +1,65 @@
+{
+  "_about": "Every on-screen line of the Locked-On layer, plus the frame anchors measured on the approved T7 cut (rally_ig.mp4, 29.97 fps, frame n is shown at n*1001/30000 s). Edit copy here, then run ./render.sh. Sources for every line: README.md.",
+  "source": {
+    "video": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/vlog/rally_ig.mp4",
+    "ffmpeg": "/tmp/claude-0/-home-user-UIUX/2e2fc1bb-c45d-5ce1-ba97-afbf7647f193/scratchpad/ffmpeg",
+    "frames": 3866,
+    "extendFrames": 48
+  },
+  "copy": {
+    "hook": {
+      "eyebrow": "SUPERCAR EXPERIENCE · RALLY DAY",
+      "line1": "THE RALLY,",
+      "line2": "DINNER & THE DRIVE BACK"
+    },
+    "chapters": [
+      { "tag": "CH 01 / 05", "title": "PARKED CARS" },
+      { "tag": "CH 02 / 05", "title": "WALKING TO DINNER" },
+      { "tag": "CH 03 / 05", "title": "THE CONVOY BRIEFING" },
+      { "tag": "CH 04 / 05", "title": "THE DRIVE BACK" },
+      { "tag": "CH 05 / 05", "title": "LEVEL NINE" }
+    ],
+    "route": {
+      "title": "THE ROUTE",
+      "waypoints": ["15 NORTH", "OFF ON FLAMINGO", "LEFT ON LAS VEGAS BLVD", "BACK TO VENETIAN", "NINTH FLOOR"]
+    },
+    "locks": {
+      "soe": { "kicker": "OUR RIDE", "name": "ROLLS-ROYCE" },
+      "urus": { "kicker": "LEAD CAR", "name": "LAMBORGHINI URUS" }
+    },
+    "end": {
+      "tagline": "A RIDE OF A LIFETIME.",
+      "cta": "TEXT OR DM TO BOOK",
+      "phone": "(725) 425-3583",
+      "url": "SUPERCAREXP.VIP",
+      "handle": "@SUPERCAR_EXPERIENCE_",
+      "locations": "LAS VEGAS · SCOTTSDALE · BOISE",
+      "requirement": "RENTERS 25+ · AGES 21–24 WITH $299 UNDERAGE FEE",
+      "credit": "FILMED BY @NQ.YOUNG"
+    }
+  },
+  "anchors": {
+    "_about": "Frame numbers measured on the source (see cue.md for how).",
+    "titleFirst": 3,
+    "titleLast": 77,
+    "titleBox": [74, 406, 888, 627],
+    "bugBox": [685, 296, 985, 338],
+    "captionBand": [1270, 1460],
+    "pill1": { "cut": 134, "first": 142, "last": 205, "box": [314, 409, 765, 512] },
+    "pill2": { "cut": 467, "first": 476, "last": 538, "box": [232, 409, 849, 512] },
+    "briefingCut": 2001,
+    "driveCut": 3119,
+    "stripCut": 3215,
+    "levelNineCut": 3407,
+    "shotAfterLevelNine": 3503,
+    "endCardFirst": 3810,
+    "oldCardLogo": 3817,
+    "routeTicks": [
+      { "frame": 2114, "word": "north." },
+      { "frame": 2161, "word": "Flamingo." },
+      { "frame": 2374, "word": "Boulevard" },
+      { "frame": 2405, "word": "Venetian." },
+      { "frame": 2548, "word": "floor" }
+    ]
+  }
+}

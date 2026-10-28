@@ -1,0 +1,7 @@
+{
+ "name": "Black + SE orange",
+ "accent": "#FF4F16",
+ "glow": "255,79,22",
+ "note": "The F1 race-weekend Night colours on the solid black plates: SE orange #FF4F16 with white.",
+ "css": ".stripe{background:linear-gradient(90deg,#FF4F16 0 78%,#fff 78% 100%)!important}"
+}

@@ -1,0 +1,4 @@
+.venv/
+.node/
+vlog.env
+__pycache__/

@@ -1,0 +1,268 @@
+{
+  "_about": "Set 2 of the vlog kit (G3, B4, C4, C5, I4, I5, I6), all on DJI_0029 (Red Rock Casino garage, 22:49, Sep 15 2026). Same schema as config.json: shots in reel FRAMES (30000/1001 fps), plates from the rooftop clip. New plate fields: hfr (frames from the 59.94 fps source, so speed 0.5 is a true slow-motion), fg (2.5D push: the matted subject on its own faster Ken Burns over the inpainted background), matte (the still's subject matte, for pop / sweep). New shot fx: window (A outside, B inside the letters). Edit here and run python3 build2.py.",
+  "copy": {
+    "host": {
+      "name": "OMARIE",
+      "handle": "@NQ.YOUNG",
+      "kicker": "HOST"
+    },
+    "car": {
+      "make": "LAMBORGHINI",
+      "model": "URUS"
+    },
+    "chapters": {
+      "lineup": {
+        "tag": "CH 04 · RED ROCK",
+        "pre": "THE",
+        "title": "LINEUP",
+        "end": "END OF CH 04",
+        "full": "THE LINEUP"
+      },
+      "driveBack": {
+        "tag": "CH 05",
+        "pre": "THE",
+        "lines": [
+          "DRIVE",
+          "BACK"
+        ]
+      }
+    },
+    "index": {
+      "title": "VLOG KIT · SET 2",
+      "sub": "SAY THE CODES: E.G. \"USE G3, C5, I4\""
+    }
+  },
+  "mattes": {
+    "_about": "Apple Vision mattes (lib/matte.swift, python3 build2.py --stage mattes on a Mac). still = aligned with that still's 4K source frame; seq = one PNG per mezzanine frame. exclude = hand-drawn polygons (source 1080x1920 units) cut out of the matte where Vision merged another car into the subject.",
+    "host1": {
+      "kind": "seq",
+      "dir": "lib/data/mattes2/host1",
+      "src": "person"
+    },
+    "lineup252": {
+      "kind": "still",
+      "file": "lib/data/mattes2/still_rooftop_252.png",
+      "src": "rooftop:252",
+      "mode": "fg"
+    },
+    "urus166": {
+      "kind": "still",
+      "file": "lib/data/mattes2/still_rooftop_166.png",
+      "src": "rooftop:166",
+      "mode": "fg",
+      "exclude": [
+        [
+          [
+            410,
+            930
+          ],
+          [
+            630,
+            930
+          ],
+          [
+            614,
+            990
+          ],
+          [
+            600,
+            1028
+          ],
+          [
+            420,
+            1052
+          ],
+          [
+            410,
+            1052
+          ]
+        ]
+      ]
+    },
+    "suv128": {
+      "kind": "still",
+      "file": "lib/data/mattes2/still_rooftop_128.png",
+      "src": "rooftop:128",
+      "mode": "fg"
+    }
+  },
+  "contours": {
+    "urus166": {
+      "matte": "urus166",
+      "dilate": 18
+    }
+  },
+  "reel": {
+    "shots": [
+      {
+        "id": "host1",
+        "r": [
+          0,
+          66
+        ],
+        "plate": {
+          "kind": "clip",
+          "f0": 0
+        }
+      },
+      {
+        "id": "shutter",
+        "r": [
+          66,
+          84
+        ],
+        "fx": "switch",
+        "a": {
+          "kind": "clip",
+          "f0": 66
+        },
+        "b": "lineup",
+        "switchAt": 75
+      },
+      {
+        "id": "lineup",
+        "r": [
+          84,
+          174
+        ],
+        "plate": {
+          "kind": "still",
+          "src": "rooftop:252",
+          "span": [
+            75,
+            174
+          ],
+          "kb": {
+            "s0": 1.3,
+            "s1": 1.335,
+            "ax": 493,
+            "ay": 1150
+          },
+          "fg": {
+            "matte": "lineup252",
+            "kb": {
+              "s0": 1.3,
+              "s1": 1.4,
+              "ax": 493,
+              "ay": 1150
+            }
+          }
+        }
+      },
+      {
+        "id": "urusSlow",
+        "r": [
+          174,
+          226
+        ],
+        "plate": {
+          "kind": "clip",
+          "f0": 140,
+          "speed": 0.5,
+          "hfr": true
+        }
+      },
+      {
+        "id": "freeze",
+        "r": [
+          226,
+          298
+        ],
+        "plate": {
+          "kind": "still",
+          "src": "rooftop:166",
+          "matte": "urus166"
+        }
+      },
+      {
+        "id": "resume",
+        "r": [
+          298,
+          310
+        ],
+        "plate": {
+          "kind": "clip",
+          "f0": 166
+        }
+      },
+      {
+        "id": "suv",
+        "r": [
+          310,
+          338
+        ],
+        "plate": {
+          "kind": "clip",
+          "f0": 100
+        }
+      },
+      {
+        "id": "suvFreeze",
+        "r": [
+          338,
+          384
+        ],
+        "plate": {
+          "kind": "still",
+          "src": "rooftop:128",
+          "matte": "suv128",
+          "span": [
+            338,
+            424
+          ],
+          "kb": {
+            "s0": 1.0,
+            "s1": 1.045,
+            "ax": 660,
+            "ay": 1020
+          }
+        }
+      },
+      {
+        "id": "window",
+        "r": [
+          384,
+          424
+        ],
+        "fx": "window",
+        "a": "suvFreeze",
+        "b": {
+          "kind": "clip",
+          "f0": 346
+        }
+      },
+      {
+        "id": "host2",
+        "r": [
+          424,
+          468
+        ],
+        "plate": {
+          "kind": "clip",
+          "f0": 386
+        }
+      },
+      {
+        "id": "index",
+        "r": [
+          468,
+          528
+        ],
+        "plate": {
+          "kind": "black"
+        }
+      }
+    ],
+    "audio": {
+      "_about": "the clip's own sound at low level where a clip plays at 1x; silence on stills and the slow-motion; the I6 freeze tape-stops the SUV shot's sound",
+      "gainDb": -9.0,
+      "fadeMs": 60,
+      "tapeStop": 0.5
+    }
+  },
+  "hfr": {
+    "_about": "59.94 fps source frames pulled for hfr plates (source frame numbers)",
+    "from": 270,
+    "to": 340
+  }
+}

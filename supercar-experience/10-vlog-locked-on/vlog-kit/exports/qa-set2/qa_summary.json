@@ -1,0 +1,415 @@
+{
+ "audit": {
+  "frames_checked": 189,
+  "outside_safe": [],
+  "n_outside_safe": 0,
+  "transitional_outside_safe": [
+   {
+    "t": 13.5,
+    "text": "DRIVE",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 50.5,
+    "x1": 923.4,
+    "y0": 598.0,
+    "y1": 985.4
+   },
+   {
+    "t": 13.5,
+    "text": "DRIVE",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 50.5,
+    "x1": 923.4,
+    "y0": 598.0,
+    "y1": 985.4
+   },
+   {
+    "t": 13.5,
+    "text": "CH 05",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 795.0,
+    "x1": 927.6,
+    "y0": 552.7,
+    "y1": 575.5
+   },
+   {
+    "t": 13.5,
+    "text": "DRIVE",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 50.5,
+    "x1": 923.4,
+    "y0": 598.0,
+    "y1": 985.4
+   },
+   {
+    "t": 13.6,
+    "text": "DRIVE",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 34.4,
+    "x1": 1016.3,
+    "y0": 524.8,
+    "y1": 960.5
+   },
+   {
+    "t": 13.6,
+    "text": "BACK",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 72.4,
+    "x1": 972.1,
+    "y0": 965.2,
+    "y1": 1400.8
+   },
+   {
+    "t": 13.6,
+    "text": "DRIVE",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 34.4,
+    "x1": 1016.3,
+    "y0": 524.8,
+    "y1": 960.5
+   },
+   {
+    "t": 13.6,
+    "text": "BACK",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 72.4,
+    "x1": 972.1,
+    "y0": 965.2,
+    "y1": 1400.8
+   },
+   {
+    "t": 13.6,
+    "text": "DRIVE",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 34.4,
+    "x1": 1016.3,
+    "y0": 524.8,
+    "y1": 960.5
+   },
+   {
+    "t": 13.6,
+    "text": "BACK",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 72.4,
+    "x1": 972.1,
+    "y0": 965.2,
+    "y1": 1400.8
+   },
+   {
+    "t": 13.7,
+    "text": "DRIVE",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 338.6,
+    "y1": 897.1
+   },
+   {
+    "t": 13.7,
+    "text": "BACK",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 42.3,
+    "x1": 1080,
+    "y0": 903.1,
+    "y1": 1461.6
+   },
+   {
+    "t": 13.7,
+    "text": "DRIVE",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 338.6,
+    "y1": 897.1
+   },
+   {
+    "t": 13.7,
+    "text": "BACK",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 42.3,
+    "x1": 1080,
+    "y0": 903.1,
+    "y1": 1461.6
+   },
+   {
+    "t": 13.7,
+    "text": "DRIVE",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 338.6,
+    "y1": 897.1
+   },
+   {
+    "t": 13.7,
+    "text": "BACK",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 42.3,
+    "x1": 1080,
+    "y0": 903.1,
+    "y1": 1461.6
+   },
+   {
+    "t": 13.8,
+    "text": "DRIVE",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 0,
+    "y1": 743.1
+   },
+   {
+    "t": 13.8,
+    "text": "BACK",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 752.3,
+    "y1": 1609.2
+   },
+   {
+    "t": 13.8,
+    "text": "DRIVE",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 0,
+    "y1": 743.1
+   },
+   {
+    "t": 13.8,
+    "text": "BACK",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 752.3,
+    "y1": 1609.2
+   },
+   {
+    "t": 13.8,
+    "text": "DRIVE",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 0,
+    "y1": 743.1
+   },
+   {
+    "t": 13.8,
+    "text": "BACK",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 752.3,
+    "y1": 1609.2
+   },
+   {
+    "t": 13.9,
+    "text": "DRIVE",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 0,
+    "y1": 332.4
+   },
+   {
+    "t": 13.9,
+    "text": "BACK",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 350.2,
+    "y1": 1920
+   },
+   {
+    "t": 13.9,
+    "text": "DRIVE",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 0,
+    "y1": 332.4
+   },
+   {
+    "t": 13.9,
+    "text": "BACK",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 350.2,
+    "y1": 1920
+   },
+   {
+    "t": 13.9,
+    "text": "DRIVE",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 0,
+    "y1": 332.4
+   },
+   {
+    "t": 13.9,
+    "text": "BACK",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 350.2,
+    "y1": 1920
+   },
+   {
+    "t": 14,
+    "text": "BACK",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 0,
+    "y1": 1920
+   },
+   {
+    "t": 14,
+    "text": "BACK",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 0,
+    "y1": 1920
+   },
+   {
+    "t": 14,
+    "text": "BACK",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 0,
+    "y1": 1920
+   },
+   {
+    "t": 14.1,
+    "text": "BACK",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 0,
+    "y1": 1920
+   },
+   {
+    "t": 14.1,
+    "text": "BACK",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 0,
+    "y1": 1920
+   },
+   {
+    "t": 13.7928,
+    "text": "DRIVE",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 0,
+    "y1": 759.5
+   },
+   {
+    "t": 13.7928,
+    "text": "BACK",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 768.4,
+    "y1": 1593.4
+   },
+   {
+    "t": 13.7928,
+    "text": "DRIVE",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 0,
+    "y1": 759.5
+   },
+   {
+    "t": 13.7928,
+    "text": "BACK",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 768.4,
+    "y1": 1593.4
+   },
+   {
+    "t": 13.7928,
+    "text": "DRIVE",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 0,
+    "y1": 759.5
+   },
+   {
+    "t": 13.7928,
+    "text": "BACK",
+    "type": "letterWindow",
+    "code": "I4",
+    "x0": 0,
+    "x1": 1080,
+    "y0": 768.4,
+    "y1": 1593.4
+   }
+  ],
+  "n_transitional": 39,
+  "captions_outside_band": [],
+  "annotations_skipped": [
+   "codeChip",
+   "indexCard"
+  ]
+ },
+ "master": {
+  "file": "vlog-kit-set2-reel.mp4",
+  "MiB": 16.24,
+  "duration": "00:00:17.62",
+  "video": "h264 (High) (avc1 / 0x31637661), yuv420p(tv, bt709, progressive), 1080x1920, 7642 kb/s, 29.97 fps, 29.97 tbr, 30k tbn (d",
+  "audio": "aac (LC) (mp4a / 0x6134706D), 48000 Hz, stereo, fltp, 83 kb/s (default)",
+  "loudness_I": "-22.38",
+  "true_peak": "-11.27"
+ },
+ "check_stills": 24
+}
