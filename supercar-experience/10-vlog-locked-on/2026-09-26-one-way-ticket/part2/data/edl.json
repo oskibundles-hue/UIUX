@@ -126,12 +126,12 @@
   {
    "beat": 5,
    "src": "0111",
-   "in": 54.5,
-   "out": 57.05,
+   "in": 147.6,
+   "out": 150.15,
    "speed": 1.0,
    "t": 27.4,
    "dur": 2.55,
-   "note": "SYNC (v2: +0.15 s, measured end of voice)"
+   "note": "v3 (28 Oct): cutaway, the McLaren at the pump at night, under his 0111 54.70 line (v2 had 0111 54.5 SYNC: the store ceiling upside down); config clockAs 0111 54.5 keeps the strip clock at 20:08"
   },
   {
    "beat": 6,

@@ -140,7 +140,7 @@ beat('CH1', 'gas station (in-car nat)', [
 ])
 beat('CH1', '"It\'s a McLaren." / "I was like, that\'s not a Corvette."', [
     ('0111', 47.0, 1.8, 1.0, 'SYNC (v2: +0.1 s, the tail is counted from the measured end of voice)'),
-    ('0111', 54.5, 2.55, 1.0, 'SYNC (v2: +0.15 s, measured end of voice)'),
+    ('0111', 147.6, 2.55, 1.0, 'v3 (28 Oct): cutaway, the McLaren at the pump at night, under his 0111 54.70 line (v2 had 0111 54.5 SYNC: the store ceiling upside down); config clockAs 0111 54.5 keeps the strip clock at 20:08'),
 ], [('0111', 47.25, 48.45, ('sync', 0)), ('0111', 54.70, 56.50, ('sync', 1))])
 beat('CH1', '"We are gassed up, we are ready to leave." / "Let\'s play some tunes and get up out of here."', [
     ('0112', 17.1, 3.0, 1.0, 'SYNC'),

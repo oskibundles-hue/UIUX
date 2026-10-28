@@ -44,7 +44,9 @@ FIX = {
               'is not captioned (the audio runs on); "I have" (both models on the piece audio, missed by the day index) is not added')],
     '0111': [(['It\'s', 'a', 'McLaren'], ['It\'s', 'a', 'McLaren.'], 'punctuation'),
              (['like', 'that\'s'], ['like,', 'that\'s'], 'punctuation'),
-             (['a', 'Corvette'], ['a', 'Corvette.'], 'punctuation (final render check, 7 Oct)')],
+             (['a', 'Corvette'], ['a', 'Corvette.'], 'punctuation (final render check, 7 Oct)'),
+             (["that's"], [], 'v3 (28 Oct, Omarie by click): small.en hears "that\'s", medium.en and distil-large-v3 "no, it\'s": '
+              'the models differ, so the disputed word is not captioned ("I was like, not a Corvette.")')],
 }   # PART2_FIX: every piece in the cut was re-run with medium.en (beam 5); only pieces whose words both models share are in the cut
 OVERRIDE = {}
 LEAD = {}

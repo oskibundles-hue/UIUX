@@ -5,6 +5,34 @@ v1 was built from `../part1/` (same build, kit, gates, mix, DELIVERY at 11.1M). 
 car reads MCLAREN 600LT. The full README (every element, every line's source, sound, picture) is written after the render.
 
 
+## v3 (28 Oct): shot 10 spliced into v2 (Omarie's pick: SPLICE INTO v2)
+
+- **Why:** v2's shot 10 (0111 54.5-57.05, 27.4-29.95 s) showed the store ceiling upside down under "I was like, that's not a
+  Corvette." (FAIL card `brain/jobcards/20261027-cb071403-09b521.json`, row "Frame gate").
+- **New shot 10:** 0111 147.6-150.15, the McLaren parked at the pump at night, the store behind it (same stop), graded
+  "night"; `config.json` shots.10 `clockAs` 0111 54.5 keeps the strip clock as v2 (20:08). `data/edl.json` and
+  `tools/make_edl.py` carry the new source; nothing else in the cut changed.
+- **How:** `tools/splice_v3.py` rebuilds only shot 10 with this build's code (plate.py shot + strip glass, now
+  `plate.strip_glass()`, moved out of `join()` unchanged; build.py layer capture and composite), re-encodes only v2's GOP
+  821-987 with v2's x264 settings (its avcC equals v2's), stream-copies every other packet and each v2 file's audio.
+  `tools/proof_v3.py`: decoded frames differ only in 821-987 (821-897 new picture; 898-987 shot 11 re-encoded, PSNR Y 49 dB),
+  every packet outside is byte-identical, audio packet-identical, same duration / frames / codec / profile / fps / size.
+  `tools/contact_v3.py`: the v2 | v3 sheet 26.5-31.0 s.
+- **Mezzanine:** `0111_146.0-152.0.mov` (the engine's recipe) in `paths.mezz` (config.local.json).
+- **Round 2 (28 Oct, captions; nq-facts block, Omarie by click), one splice from v2 with two GOP windows:**
+  1. 0121 28.66 (113.9 s) showed "GUYS YOU can hear the car": `build.py caption_words()` sorted [start, end, word], so the
+     zero-length "you" / "guys" at 113.89 tied and broke alphabetically. Now `sorted(out, key=lambda r: r[0])` (stable: spoken
+     order). Checked over all 278 caption words: this pair is the only order change.
+  2. 0111 54.70 (27.6 s): small.en "that's", medium.en and distil-large-v3 "no, it's": dropped by the two-model rule, the
+     build's way (the word is deleted, nothing added; `tools/make_captions.py` FIX, `data/caption_fixes.json`,
+     `data/captions.json`). The 0.46 s gap it leaves closes the page (capPages), so it reads "I WAS LIKE," (834-860) then
+     "NOT A CORVETTE." (861-902, one line), 5 frames into shot 11 (0112).
+  - `tools/splice_v3.py` (round 2): GOP 821-987 (shot 10 + new layer; 898-902 shot 11's plate rebuilt by render_shot(11) from
+    0112, mezzanine `0112_16.3083-20.9.mov`, used only inside the caption change mask) and GOP 3256-3505 (caption redrawn over
+    v2's own picture by `tools/caption_patch_v3.py`, which refuses frames where a box would be removed). Outside the caption
+    band the encoder input equals v2's decoded frames bit for bit (asserted). `tools/proof_v3.py --gop .. --new .. --cap ..`:
+    frames differ only in 821-987 and 3256-3505, audio packet-identical. Sheets: `tools/contact_v3.py` (26.5-31.0 and 112.0-116.5).
+
 ## v2 recut (7 Oct): Omarie's v2 notes (`../HANDOFF-v2-both.md`)
 
 Style unchanged: rally v2 + the dark-glass one-strip HUD, SE orange #FF4F16, MCLAREN 600LT. `tools/make_edl.py` -> `data/edl.json`.
