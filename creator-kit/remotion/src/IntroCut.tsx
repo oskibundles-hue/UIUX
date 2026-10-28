@@ -14,18 +14,22 @@ loadFonts();
  *   - the key shot opening from a letterbox strip to full frame;
  *   - a warm light leak sweeping over the settled title;
  *   - a tag line that says what the video is.
+ * `tagEarly` (opt-in, used by GlitchIntro) brings the tag in at 1.7 to 2.1 s
+ * instead of 3.5 to 3.95 s, heavier and larger with a dark edge, so it reads
+ * before the title leaves. Off by default: existing intros render unchanged.
  */
 export type IntroCutProps = {
   small: string; big: string; tag?: string;
   montageEnd: number;        // seconds; where the held shot starts
   durationSeconds?: number; overlayOnly?: boolean; src?: string;
+  tagEarly?: boolean;
 };
 const clamp = { extrapolateLeft: "clamp" as const, extrapolateRight: "clamp" as const };
 const typed = (text: string, t: number, from: number, to: number) => {
   const n = Math.round(interpolate(t, [from, to], [0, text.length], clamp)); return text.slice(0, n);
 };
 
-export const IntroCut: React.FC<IntroCutProps> = ({ small, big, tag, montageEnd, overlayOnly = true }) => {
+export const IntroCut: React.FC<IntroCutProps> = ({ small, big, tag, montageEnd, overlayOnly = true, tagEarly = false }) => {
   const frame = useCurrentFrame(); const { fps, width: W, height: H } = useVideoConfig(); const t = frame / fps;
   const smallF = H * 0.0165, bigF = H * 0.074;
   const sTxt = typed(small, t, 0.15, 0.95), bTxt = typed(big, t, 1.05, 2.55);
@@ -37,7 +41,10 @@ export const IntroCut: React.FC<IntroCutProps> = ({ small, big, tag, montageEnd,
   // Light leak: one warm pass, left to right.
   const leakP = interpolate(t, [3.2, 4.3], [-0.7, 1.4], { ...clamp, easing: Easing.inOut(Easing.quad) });
   const leakOn = t > 3.2 && t < 4.3;
-  const tagIn = interpolate(t, [3.5, 3.95], [0, 1], clamp);
+  const tagIn = tagEarly ? interpolate(t, [1.7, 2.1], [0, 1], clamp) : interpolate(t, [3.5, 3.95], [0, 1], clamp);
+  const tagLook = tagEarly
+    ? { fontWeight: 800, fontSize: smallF * 0.95, textShadow: "0 0 4px rgba(0,0,0,0.95), 0 2px 14px rgba(0,0,0,0.85)" }
+    : { fontWeight: 600, fontSize: smallF * 0.85 };
   return (
     <AbsoluteFill style={{ backgroundColor: overlayOnly ? "transparent" : "#000" }}>
       {bar > 0 ? <>
@@ -56,7 +63,7 @@ export const IntroCut: React.FC<IntroCutProps> = ({ small, big, tag, montageEnd,
           {bTxt}{t >= 1.05 && cursorOn ? <span style={{ display: "inline-block", width: 4, height: bigF * 0.8, background: "#fff", verticalAlign: "-0.08em", marginLeft: 6 }} /> : null}
         </div>
         {tag ? (
-          <div style={{ marginTop: smallF * 1.1, fontFamily: "Archivo, Helvetica, sans-serif", fontWeight: 600, fontSize: smallF * 0.85, letterSpacing: "0.18em", textTransform: "uppercase", color: theme.accent, opacity: tagIn, transform: `translateY(${(1 - tagIn) * 10}px)` }}>{tag}</div>
+          <div style={{ marginTop: smallF * 1.1, fontFamily: "Archivo, Helvetica, sans-serif", ...tagLook, letterSpacing: "0.18em", textTransform: "uppercase", color: theme.accent, opacity: tagIn, transform: `translateY(${(1 - tagIn) * 10}px)` }}>{tag}</div>
         ) : null}
         {bigDone ? null : null}
       </div>

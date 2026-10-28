@@ -182,6 +182,45 @@ Audio-only takes it under one second. Same numbers, 200× faster.
 - Animations in-video (Remotion, or generative via the art skills)
 - Stream-style handle overlays for nq.young / youngomarie / youngomarie
 - Channel intro (montage typewriter, IntroCut.tsx + intro_sfx.py): dropped on 2026-09-09 at Omarie's call. Tests stay hosted; do not raise it again unless he does.
+  (2026-10-27: he approved the glitch intro, which reuses IntroCut's title; it is opt-in, see "Glitch intro" below. The montage intro stays parked.)
+
+## Glitch intro (opt-in)
+
+Approved by Omarie on 2026-10-27 (idea 27, reference e76; sample in
+`Agentic OS/reviews/2026-10-18-ig-edit-styles/samples/glitch_intro/`). Nothing
+uses it unless you render it; the default intro and every existing reel are
+unchanged.
+
+What it is: 7.5 s over the reel's own opening. One second of glitch (pixel
+squares from the side edges, a colour band, negative frames 9, 10 and 22,
+channel split, sliced bands, white flash at 1.0 s), then IntroCut's typed
+title over a blurred, darkened reel with the date tag in early, a glitch out
+at 5.33 s, and the reel clear to 7.5 s. 1080x1920 at 30 fps (its timings are
+frames at 30 fps).
+
+```bash
+cd remotion
+# copy the reel into public/ (a real file: a shortcut to Dropbox isn't served; reel.mp4 is git-ignored)
+# and pass its name as src. The opt-in test on 2026-10-27 matched the approved sample byte for byte.
+npx remotion render src/index.ts GlitchIntro1080 out/glitch_silent.mp4 --muted \
+  --props='{"small":"NQ.YOUNG PRESENTS","big":"My Saturday at the shop","tag":"Oct 10, 2026","src":"reel.mp4"}'
+# sound: the reel's own sound 10 dB down plus Celina's pack only (nothing synthesised)
+uv run --offline --no-project --with numpy --with soundfile --with scipy python ../scripts/glitch_intro_sound.py \
+  out/glitch_silent.mp4 public/reel.mp4 out/glitch_intro.mp4 \
+  --small "NQ.YOUNG PRESENTS" --big "My Saturday at the shop"
+```
+
+- `--small` and `--big` must be the same words as the props: the typing
+  sounds follow the letters.
+- The pack is read from `NQ_CELF_PACK` or `--pack`, else
+  `~/.local/vlogtools/work/research/2026-10-18-sfx-sound-design/celf_pack`.
+  It is not in this repo.
+- The date-tag fix is an IntroCut prop, `tagEarly` (in at 1.7 s, bolder, dark
+  edge). GlitchIntro turns it on; IntroCut4K keeps the old timing.
+- Use a clean cut without a burned-in hook under it: the blur hides the hook,
+  but the two titles still compete.
+- The output is the intro section only. Joining it to the rest of the reel
+  (from 7.5 s on) is not part of the kit yet.
 
 ## Looks and caption styles
 

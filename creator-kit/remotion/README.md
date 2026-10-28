@@ -85,6 +85,12 @@ and pass the words straight through.
 | `Handle` | Small permanent watermark. The only thing that survives a repost or screen-record. |
 | `EndCard` | One CTA, aimed at **sends** — DM shares are weighted far above likes for reaching non-followers. |
 
+## Opt-in glitch intro
+
+`GlitchIntro1080` (src/GlitchIntro.tsx) opens a reel with a one-second glitch
+and the IntroCut title. How to render it and its sound: "Glitch intro" in
+`../WORKFLOW.md`.
+
 ## Safe areas
 
 `src/theme.ts` holds the bounds. Instagram covers the bottom of a Reel with

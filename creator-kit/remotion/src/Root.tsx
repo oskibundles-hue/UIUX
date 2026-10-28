@@ -4,6 +4,7 @@ import { Reel, type ReelProps } from "./Reel";
 import { Motion, type MotionProps } from "./Motion";
 import { Intro, type IntroProps } from "./Intro";
 import { IntroCut, type IntroCutProps } from "./IntroCut";
+import { GlitchIntro, type GlitchIntroProps } from "./GlitchIntro";
 
 const FPS = 29.97;
 const SECONDS = 32.1;
@@ -76,6 +77,15 @@ export const RemotionRoot: React.FC = () => (
       fps={FPS} width={2160} height={3840}
       defaultProps={{ small: "first car in the new bay", big: "An SF90 Pulls Up", montageEnd: 2.2 } as IntroCutProps}
       calculateMetadata={({ props }: { props: IntroCutProps }) => ({ durationInFrames: Math.round(FPS * (props.durationSeconds ?? 5)) })}
+    />
+    {/* Opt-in glitch intro (approved 2026-10-27). Its timings are frames at 30 fps, so it renders at 30, not 29.97. */}
+    <Composition
+      id="GlitchIntro1080"
+      component={GlitchIntro}
+      durationInFrames={225}
+      fps={30} width={1080} height={1920}
+      defaultProps={{ small: "NQ.YOUNG PRESENTS", big: "My Saturday at the shop", tag: "Oct 10, 2026", src: "reel.mp4" } as GlitchIntroProps}
+      calculateMetadata={({ props }: { props: GlitchIntroProps }) => ({ durationInFrames: Math.round(30 * (props.durationSeconds ?? 7.5)) })}
     />
     <Composition
       id="StyleProof"
