@@ -1024,12 +1024,14 @@ const EP=[
 ];
 EP.forEach((e,i)=>e.n=i+1);
 const LATEST=EP[EP.length-1];
-/* Rates: every Las Vegas listing on supercarexp.vip/cars (26 cars, the rally listing left out), day and 5-hour,
+/* Rates: every Las Vegas listing on supercarexp.vip/cars (27 cars since 28 Oct, the rally listing left out), day and 5-hour,
    checked 28-29 Sept 2026 and again 7 Oct 2026 (750S Spider no longer listed, so it is out of Rentals but its ad
-   stays in the ads row; Brabus G63, S580 Maybach and AMG GT 43 rates updated). The first 6 have our approved ads. The rest use supercarexp.vip's own photo (photo:),
+   stays in the ads row; Brabus G63, S580 Maybach and AMG GT 43 rates updated). The 750S Spider is back on the Las Vegas list at $1,999 a day and
+   $1,399 for 5 hours (checked 28 Oct 2026), so it is back in Rentals. The first 6 have our approved ads. The rest use supercarexp.vip's own photo (photo:),
    and its own video where that video shows the same car (Mansory Urus, 911 Pure 800). No vlog footage here, by
    Omarie's rule (29 Sept). s0/s1/rate = the loop a card plays on hover; d2full = no half-price 2nd day. */
 const cars=[
+ {id:"750s",yr:2026,make:"McLaren",name:"750S Spider",type:"Exotic",day:1999,five:1399,vids:[["Experience ad","750s"]]},
  {id:"gt3",yr:2025,make:"Porsche",name:"911 GT3 RS",type:"Exotic",day:1799,five:1299,vids:[["Experience ad","gt3"],["Locked-On showcase","gt3_locked"]],flash:"5 hours · $1,200 flash special"},
  {id:"sto",yr:2023,make:"Lamborghini",name:"Huracán STO",type:"Exotic",day:1599,five:1099,vids:[["Experience ad","sto"],["HUD flash special","sto_hud"]],flash:"2-hour flash special, 11AM–1PM"},
  {id:"f8",yr:2022,make:"Ferrari",name:"F8 Tributo",type:"Exotic",day:1599,five:1099,vids:[["Experience ad","f8"]]},
