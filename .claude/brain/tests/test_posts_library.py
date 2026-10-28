@@ -83,6 +83,29 @@ def main():
         check("the record lists every part in order", [p["size"] for p in doc["video"]["parts"]] == [p["size"] for p in m["parts"]])
         check("the record points at the uploaded poster", doc["poster"] == f"{1:032x}")
         check("the record keeps the four stills", len(doc["stills"]) == 4 and all(len(s["id"]) == 32 for s in doc["stills"]))
+
+        doc.update(dropbox_path="Portfolio/t1.mp4", note="Plate covered.", steps=dict(doc["steps"], posted=True))
+        saved = os.path.join(work, "t1.json")
+        with open(saved, "w", encoding="utf-8") as f:
+            json.dump(doc, f)
+        total = doc["video"]["total"]
+        check("slim refuses a Dropbox size that differs", run("slim", saved, "--dropbox-size", str(total + 5893)).returncode != 0)
+        s = run("slim", saved, "--dropbox-size", str(total))
+        lines = [json.loads(x) for x in s.stdout.splitlines()] if s.returncode == 0 else []
+        check("slim prints the update, then one delete per part",
+              [x.get("action") for x in lines] == ["update"] + ["delete"] * len(doc["video"]["parts"]), s.stderr)
+        if lines:
+            with open(lines[0]["file_path"], encoding="utf-8") as f:
+                slimmed = json.load(f)
+            check("slim empties the parts and keeps the total", slimmed["video"]["parts"] == [] and slimmed["video"]["total"] == total)
+            check("slim ticks In Dropbox and keeps the Posted tick", slimmed["steps"]["dropbox"] is True and slimmed["steps"]["posted"] is True)
+            check("slim says where the full file is", slimmed["note"].startswith("Plate covered. Full file: post it from its Dropbox path"))
+        check("slim with --same-streams lets a differing size through",
+              run("slim", saved, "--dropbox-size", str(total + 5893), "--same-streams").returncode == 0)
+        doc.pop("dropbox_path")
+        with open(saved, "w", encoding="utf-8") as f:
+            json.dump(doc, f)
+        check("slim refuses a post with no Dropbox path", run("slim", saved, "--dropbox-size", str(total)).returncode != 0)
     print("\n" + ("all passed" if not FAILS else f"{len(FAILS)} failed: " + ", ".join(FAILS)))
     sys.exit(1 if FAILS else 0)
 

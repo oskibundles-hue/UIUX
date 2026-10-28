@@ -4,11 +4,13 @@
 usage: python3 .claude/brain/posts_library.py add VIDEO --brand fd|se|as --id <post-id> --title "<title>"
            [--num 12] [--car "<car>"] [--caption-file FILE --caption-source "<who approved it, when>"]
            [--hook "<line>"] [--note "<line>"] [--post-on "Wed 28 Oct"] [--dropbox-path "<folder/file>"]
-           [--drop-card <Video Drop card id>] [--still FILE]... [--ai] [--in-dropbox] [--no-parts] [--work DIR]
+           [--drop-card <Video Drop card id>] [--still FILE]... [--ai] [--in-dropbox] [--no-parts | --preview-only]
+           [--work DIR]
        python3 .claude/brain/posts_library.py record <post-id> name=<asset id>... [--part <asset id>:<bytes>]... [--work DIR] [--update]
        python3 .claude/brain/posts_library.py dropbox <post-id>         tick In Dropbox once the copy is confirmed
        python3 .claude/brain/posts_library.py read                      the call that reads every post back
        python3 .claude/brain/posts_library.py supersede <post-id> "<why>"   mark an older cut as replaced
+       python3 .claude/brain/posts_library.py slim DOC.json --dropbox-size <bytes> [--same-streams]
 
 Omarie, 2026-10-13: "i cant keep track of all this through dropbox and dropbox aint gonna keep my captions."
 Run it at hand-over, right after the Video Drop card step (playbooks/lead.md), so nobody re-types a post.
@@ -26,6 +28,9 @@ ArtifactData call (a `set` with file_path; a new post needs no if_version).
 server (Artifact publish with asset, from_url and asset_ids) and give `record` the new ids in order with
 --part <id>:<bytes>. The copy keeps the bytes off this machine's upload.
 
+--preview-only is for a long vlog (Omarie, 26 Oct: "Preview + Dropbox path"): no parts at all, so the page
+shows the poster, preview, frames, caption and Dropbox path, and the full file is posted from Dropbox.
+
 The caption is read from --caption-file byte for byte and never edited here: it has to be the approved one,
 and --caption-source says who approved it and when. The file must hold the caption and nothing else: a file
 with a Markdown heading or a code fence is refused, because all of it would land in Copy caption.
@@ -34,6 +39,15 @@ it prints an `update` that leaves his Posted tick, the hand-over date and the or
 "caption not on record". --ai labels every still "AI still" (a commercial that is all generated footage).
 Posted is Omarie's tick on the page; `read` prints the call that reads it back (steps.posted, posted_at).
 Post records live in the page's database, never in this repo. No model call; `add` takes a few seconds.
+
+`slim` drops a short ad's full file once its Dropbox copy is confirmed (Omarie, 26 Oct, after the page's file
+store reached 94% of its 1 GiB: "Only until in Dropbox"). Give it the post as `ArtifactData get` saved it
+(out_dir) and the Dropbox file's size from get_file_metadata on its dropbox_path. It writes an update that ticks
+In Dropbox (the size check is the confirmation), empties the parts and notes where the full file is, then
+prints that update and one Artifact delete per part. Make the update first, then the deletes. A size that
+differs from the library's is refused until the streams are shown to match: on 26 Oct four Dropbox copies
+carried an extra 5,893-byte uuid box with identical streams (ffmpeg -i FILE -map 0 -c copy -f streamhash
+-hash sha256 - on both files), and then --same-streams lets it through.
 """
 import json, os, shutil, subprocess, sys, time
 
@@ -41,9 +55,9 @@ URL = "https://claude.ai/artifact/Y3shBejn5Lat1TZY7hVWYk"   # the NQ Posts Libra
 PART = 19 * 1024 * 1024                                       # same part size as the Video Drop page
 WORK = os.path.join(os.environ.get("TMPDIR") or "/tmp", "posts-library-handover")   # --work overrides it
 BRANDS = ("fd", "se", "as")                                   # two brands never share a post
-FLAGS = {"--ai", "--in-dropbox", "--no-parts", "--update"}    # options that take no value
+FLAGS = {"--ai", "--in-dropbox", "--no-parts", "--preview-only", "--same-streams", "--update"}    # options that take no value
 KNOWN = FLAGS | {"--brand", "--id", "--title", "--num", "--car", "--caption-file", "--caption-source", "--hook", "--note",
-                 "--post-on", "--dropbox-path", "--drop-card", "--still", "--part", "--work"}
+                 "--post-on", "--dropbox-path", "--drop-card", "--still", "--part", "--work", "--dropbox-size"}
 MANY = {"--still", "--part"}                                  # options that can repeat
 FRAMES = (0.15, 0.5, 0.85)                                    # where the three frames are cut, as a share of the length
 
@@ -124,6 +138,8 @@ def add(pos, opt):
     pid = safe_id(opt.get("--id", ""))
     if not opt.get("--title"):
         sys.exit("--title is needed")
+    if opt.get("--preview-only") and not opt.get("--dropbox-path"):
+        sys.exit("--preview-only needs --dropbox-path: it is the only way to the full file")
     caption = ""
     if opt.get("--caption-file"):
         if not opt.get("--caption-source"):
@@ -140,8 +156,10 @@ def add(pos, opt):
     name = os.path.basename(video)
     base = name.rsplit(".", 1)[0].replace(" - INSTAGRAM 1080x1920", "")
     ff(["-ss", str(dur * 0.35), "-i", video, "-frames:v", "1", "-vf", "scale=540:-2", "-q:v", "4", os.path.join(folder, "poster.jpg")])
-    ff(["-i", video, "-vf", "scale=540:-2", "-c:v", "libx264", "-preset", "veryfast", "-crf", "29", "-pix_fmt", "yuv420p",
-        "-c:a", "aac", "-b:a", "96k", "-movflags", "+faststart", os.path.join(folder, "preview.mp4")])
+    # the bitrate cap keeps a 3-minute vlog's preview under the 20 MB asset limit
+    ff(["-i", video, "-vf", "scale=540:-2", "-c:v", "libx264", "-preset", "veryfast", "-crf", "29", "-maxrate", "650k",
+        "-bufsize", "1300k", "-pix_fmt", "yuv420p", "-c:a", "aac", "-b:a", "96k", "-movflags", "+faststart",
+        os.path.join(folder, "preview.mp4")])
     kind = "ai" if opt.get("--ai") else "video"
     stills = []
     for i, src in enumerate(opt.get("--still", []), 1):
@@ -157,16 +175,17 @@ def add(pos, opt):
         stills.append({"name": local, "kind": kind, "filename": f"{base} - frame {i}.jpg"})
     for s in stills:
         s["size"] = os.path.getsize(os.path.join(folder, s["name"]))
-    parts = [] if opt.get("--no-parts") else split(video, folder)
+    parts = [] if opt.get("--no-parts") or opt.get("--preview-only") else split(video, folder)
     doc = {
         "brand": brand, "num": opt.get("--num", ""), "title": opt["--title"], "car": opt.get("--car", ""),
         "length": f"{dur:.1f} s", "handed": time.strftime("%Y-%m-%d"), "post_on": opt.get("--post-on", ""),
         "hook": opt.get("--hook", ""), "caption": caption, "caption_source": opt.get("--caption-source", "") if caption else "",
         "note": opt.get("--note", ""), "superseded": False, "order": int(time.time()),
-        "dropbox_path": opt.get("--dropbox-path", ""), "drop_card": opt.get("--drop-card", ""),
+        "dropbox_path": opt.get("--dropbox-path", "").lstrip("/"), "drop_card": opt.get("--drop-card", ""),
         "steps": {"built": True, "checked": True, "dropbox": bool(opt.get("--in-dropbox")), "posted": False}, "posted_at": "",
     }
-    manifest = {"id": pid, "doc": doc, "video": {"filename": name, "total": os.path.getsize(video)}, "parts": parts, "stills": stills}
+    manifest = {"id": pid, "doc": doc, "video": {"filename": name, "total": os.path.getsize(video)}, "parts": parts, "stills": stills,
+                "preview_only": bool(opt.get("--preview-only"))}
     with open(os.path.join(folder, "manifest.json"), "w", encoding="utf-8") as f:
         json.dump(manifest, f, ensure_ascii=False, indent=1)
     files = ["poster.jpg", "preview.mp4"] + [s["name"] for s in stills] + [p["name"] for p in parts]
@@ -175,7 +194,7 @@ def add(pos, opt):
         print(json.dumps({"tool": "Artifact", "url": URL, "asset": True, "file_paths": paths[i:i + 25]}, ensure_ascii=False))
     print(f"{len(files)} files in {folder}. Upload them, then: posts_library.py record {pid} "
           + " ".join(n + "=<asset id>" for n in files)
-          + (" --part <asset id>:<bytes> for each part copied from Video Drop" if not parts else ""), file=sys.stderr)
+          + (" --part <asset id>:<bytes> for each part copied from Video Drop" if opt.get("--no-parts") else ""), file=sys.stderr)
 
 
 def record(pos, opt):
@@ -204,9 +223,9 @@ def record(pos, opt):
         if not size.isdigit():
             sys.exit(f"--part {spec!r}: write <asset id>:<bytes>")
         parts.append({"id": aid, "size": int(size)})
-    if not parts:
+    if not parts and not m.get("preview_only"):
         sys.exit("no video parts: give --part <asset id>:<bytes> for each part copied from Video Drop")
-    total = sum(p["size"] for p in parts)
+    total = sum(p["size"] for p in parts) if parts else m["video"]["total"]
     if parts and total != m["video"]["total"]:
         sys.exit(f"the parts add up to {total:,} bytes but the master is {m['video']['total']:,}: check the ids and their order")
     doc = dict(m["doc"])
@@ -228,6 +247,36 @@ def record(pos, opt):
     print(json.dumps(call, ensure_ascii=False))
 
 
+def slim(pos, opt):
+    if len(pos) != 1 or not str(opt.get("--dropbox-size", "")).isdigit():
+        sys.exit(__doc__)
+    with open(pos[0], encoding="utf-8") as f:
+        doc = json.load(f)
+    pid = safe_id(os.path.splitext(os.path.basename(pos[0]))[0])
+    video, size = doc.get("video") or {}, int(opt["--dropbox-size"])
+    if not video.get("parts"):
+        sys.exit(f"{pid} has no full file on the page: nothing to slim")
+    if not doc.get("dropbox_path"):
+        sys.exit(f"{pid} has no dropbox_path: the parts are the only copy the page knows of")
+    if size != video["total"] and not opt.get("--same-streams"):
+        sys.exit(f"Dropbox has {size:,} bytes, the library {video['total']:,}: compare the stream hashes "
+                 "(ffmpeg -i FILE -map 0 -c copy -f streamhash -hash sha256 -) and give --same-streams if they match")
+    note = doc.get("note", "")
+    if "Full file: post it from its Dropbox path" not in note:
+        note = (note + " Full file: post it from its Dropbox path (the library copy was removed on "
+                + time.strftime("%d %b").lstrip("0") + " to free space; Dropbox has the same file).").strip()
+    data = {"video": dict(video, parts=[]), "preview_only": True, "note": note,
+            "steps": dict(doc.get("steps") or {}, dropbox=True)}
+    out = os.path.splitext(pos[0])[0] + ".slim.json"
+    with open(out, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=1)
+    print(json.dumps({"tool": "ArtifactData", "url": URL, "action": "update", "collection": "posts", "doc_id": pid,
+                      "file_path": out, "if_version": "<the version `get` showed>"}, ensure_ascii=False))
+    for p in video["parts"]:
+        print(json.dumps({"tool": "Artifact", "action": "delete", "url": URL, "path": p["id"]}))
+    print(f"{len(video['parts'])} parts, {video['total']:,} bytes. Make the update first, then the deletes.", file=sys.stderr)
+
+
 def main(argv):
     if not argv or argv[0] in ("-h", "--help"):
         sys.exit(__doc__)
@@ -241,6 +290,8 @@ def main(argv):
     elif cmd == "dropbox" and len(pos) == 1:
         print(json.dumps({"tool": "ArtifactData", "url": URL, "action": "update", "collection": "posts", "doc_id": safe_id(pos[0]),
                           "data": {"steps": {"dropbox": True}}, "if_version": "<the version `read` showed>"}))
+    elif cmd == "slim":
+        slim(pos, opt)
     elif cmd == "supersede" and len(pos) == 2:
         print(json.dumps({"tool": "ArtifactData", "url": URL, "action": "update", "collection": "posts", "doc_id": safe_id(pos[0]),
                           "data": {"superseded": True, "note": pos[1]}, "if_version": "<the version `read` showed>"}, ensure_ascii=False))

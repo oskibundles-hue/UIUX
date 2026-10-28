@@ -77,19 +77,27 @@ Right after the Video Drop card step, add the post, with nothing typed twice:
    scratchpad>`, plus the caption file and who approved it, the Dropbox path and the Video Drop card id. It cuts
    the poster, a small preview and three frames, splits the master and prints the upload call. Add `--still FILE`
    for each cover or AI still, and `--ai` when every shot is generated.
-2. Make the upload call it printed (one call for up to 25 files). When the master is already on Video Drop, pass
-   `--no-parts` and copy those parts across on the server instead of uploading them again.
+2. Make the upload call it printed (one call for up to 25 files, each under 20 MB). When the master is already on
+   Video Drop, pass `--no-parts` and copy those parts across on the server instead of uploading them again. For a
+   long vlog, pass `--preview-only` with `--dropbox-path` (Omarie, 26 Oct: "Preview + Dropbox path"): no parts, and
+   the page points to the Dropbox file instead.
 3. `python3 .claude/brain/posts_library.py record <post-id> name=<asset id>... --work <same folder>` writes the
    record and prints the database call. Make it. The post appears on the page at once; the page itself is not
    edited or republished.
-4. Open the page and check the post plays, its caption copies and Save offers the full file.
+4. Open the page and check the post plays, its caption copies and Save offers the full file (for a preview-only
+   vlog, that the Dropbox path shows instead).
 
 - The caption is the approved one, read from its file byte for byte. With no approved caption, leave it out: the
   page then shows the hook and "caption not on record". Never write one to fill the gap.
 - The caption file holds the caption and nothing else. A hand-over note with a heading, a "Post with" line or a
   code fence is refused; save the caption lines to their own file first.
 - Once the Dropbox copy is confirmed (Video Drop step 5), run `posts_library.py dropbox <post-id>` and make the
-  call it prints, so In Dropbox is true on the page. For any other change to a post already on the page, use
+  call it prints, so In Dropbox is true on the page. For a short ad that still carries its full file, run `slim`
+  in place of `dropbox`, because the page's file store is 1 GiB (it reached 94% on 26 Oct): `ArtifactData get`
+  the post with out_dir, `get_file_metadata` its dropbox_path, then
+  `posts_library.py slim <saved doc.json> --dropbox-size <size>`. Make the update it prints (it ticks In
+  Dropbox too), then the Artifact deletes. If the sizes differ, compare the stream hashes as it says before
+  giving `--same-streams`. For any other change to a post already on the page, use
   `record ... --update`: a plain `record` replaces the whole record and would clear his Posted tick.
 - One brand per post. A newer cut replaces an older one with `posts_library.py supersede <old-id> "<why>"`; the
   old one stays on the page, greyed, with saving off.
