@@ -29,6 +29,11 @@ CARDS = os.environ.get("NQOS_JOBCARDS") or (os.path.join(HOME, "jobcards") if HA
                                             else os.path.join(WORK, "jobcards"))
 CHECK_AGENT = "nq-check"
 BUILD_AGENTS = ("nq-build", "nq-fix", "nq-run", "nq-label")
+# The facts panel votes on the delivered file after nq-check, so its briefs belong to the job before; counted as a
+# brief they named the next job and gave it the last job's format (session af6460ee, 2026-10-28).
+VOTER_AGENTS = ("nq-facts", "nq-second")
+# A "Format: vlog" or "Workstream: X" line the lead opens a brief with: never the job's name.
+LABEL_LINE_RE = re.compile(r"^\W*[A-Za-z][\w /-]{0,24}:\s*\S")
 STYLES = ("Locked-On", "Quick-Promo", "Fast Cut", "Reel Cut", "Now Boarding", "Paste-Up", "iPhone index",
           "post mockup", "studio carousel", "rally v2")
 PLAYBOOK_RE = re.compile(r"playbooks/([\w-]+)\.md|\b(formula-dynamics|supercar-experience|anti-stock|research|"
@@ -282,6 +287,17 @@ def outputs(report, roots=()):
 
 # ---- the card ------------------------------------------------------------------------------------------
 
+def labelled(text):
+    """Only the brief's "Format: X" and "Workstream: Y" lines, so they can win over the words of another brief."""
+    return "\n".join(re.findall(r"(?im)^\W*(?:format|workstream):.*$", text or ""))
+
+
+def job_name(text):
+    """The brief's first line that isn't a "Label: value" line, whitespace folded, 80 characters."""
+    line = next((l for l in (text or "").splitlines() if l.strip() and not LABEL_LINE_RE.match(l)), "")
+    return re.sub(r"\s+", " ", line).strip()[:80]
+
+
 def brief_fields(who, text):
     return {"who": who, "style": detect(text, "style"), "playbook": detect(text, "playbook"),
             "text": denoise(text or "")[:600]}
@@ -297,7 +313,8 @@ def build_card(lead_path, report, check_tool_id=None, session="", agent_id="", c
             if kind == CHECK_AGENT:
                 check_brief = inp.get("prompt", "")
                 continue
-            briefs.append(brief_fields(kind or "agent", inp.get("prompt", "")))
+            if kind not in VOTER_AGENTS:
+                briefs.append(brief_fields(kind or "agent", inp.get("prompt", "")))
             steps += tool_steps(name, inp, "lead")
             if kind in BUILD_AGENTS or kind not in ("claude-code-guide", "Explore", "Plan"):
                 for _, n2, i2 in tool_uses(records(subs.get(tid))):
@@ -309,15 +326,19 @@ def build_card(lead_path, report, check_tool_id=None, session="", agent_id="", c
     brief_text = "\n".join(b["text"] for b in briefs) or check_brief
     verdict, checks = parse_report(report)
     at = datetime.datetime.now(datetime.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    # A build brief names the job; with none in scope (a re-check after a hand fix) the Working-now title does
-    # better than nq-check's own instructions, which read as a job title nobody gave (2026-10-27); then "unknown".
-    first = re.sub(r"\s+", " ", next((b["text"] for b in briefs if b["text"].strip()), "")
-                   or live_job(session))[:80]
+    # The Working-now title names the job; without one, a build brief's first line that isn't a "Format: X" label
+    # (2026-10-28: the labels became the name). nq-check's own instructions read as a job title nobody gave
+    # (2026-10-27), so with no build brief in scope it is "unknown".
+    first = re.sub(r"\s+", " ", live_job(session)).strip()[:80] or next(
+        (n for n in (job_name(b["text"]) for b in briefs) if n), "")
+    # This nq-check's own Format/Workstream lines name its job, then the build briefs' lines, then their words.
     return {
         "id": f"{at[:10].replace('-', '')}-{(session or 'nosession')[:8]}-{(agent_id or check_tool_id or 'x')[-6:]}",
         "at": at, "session": session, "job": first or UNKNOWN,
-        "workstream": detect(brief_text, "workstream") or detect(all_text, "workstream"),
-        "format": (detect(brief_text, "format") or detect(check_brief, "format") or detect(report, "format")
+        "workstream": (detect(labelled(check_brief), "workstream") or detect(labelled(brief_text), "workstream")
+                       or detect(brief_text, "workstream") or detect(all_text, "workstream")),
+        "format": (detect(labelled(check_brief), "format") or detect(labelled(brief_text), "format")
+                   or detect(brief_text, "format") or detect(check_brief, "format") or detect(report, "format")
                    or UNKNOWN),
         "style": detect(brief_text, "style") or detect(check_brief, "style"),
         "playbook": detect(brief_text, "playbook"),
@@ -385,6 +406,8 @@ def with_paths(ev):
     tp = ev.get("transcript_path") or ""
     if "/subagents/" in tp:
         ev["transcript_path"] = tp.split("/subagents/")[0] + ".jsonl"
+        if not ev.get("agent_transcript_path") and tp.endswith(".jsonl"):
+            ev["agent_transcript_path"] = tp            # the agent's own transcript, so its meta names the call
     if not ev.get("agent_transcript_path") and ev.get("agent_id") and ev.get("transcript_path"):
         ev["agent_transcript_path"] = os.path.join(ev["transcript_path"][:-len(".jsonl")], "subagents",
                                                    f"agent-{ev['agent_id']}.jsonl")
@@ -411,7 +434,9 @@ def from_event(ev):
         report = agent_report(ev["agent_transcript_path"])
     if not report or "launched successfully" in report[:200]:
         return None                                    # a background launch, not the finished check
-    check_tool_id = ev.get("tool_use_id")
+    # Only an Agent/Task result's tool_use_id is the nq-check call: a handback's is the agent's own
+    # SubagentHandback call, which matched nothing and fell back to the session's latest nq-check (2026-10-28).
+    check_tool_id = ev.get("tool_use_id") if ev.get("tool_name") in ("Agent", "Task") else None
     if not check_tool_id and ev.get("agent_transcript_path"):
         try:
             check_tool_id = json.load(open(ev["agent_transcript_path"][:-len(".jsonl")] + ".meta.json")).get("toolUseId")
