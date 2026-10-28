@@ -39,6 +39,20 @@ z = r.parse_post(comments[1]["body"], "", comments[1])
 check("Muse's own suggestion is not scored as the post", "ferrari" not in z["text"], z["text"][-80:])
 check("statuses: picked handle is marked", r.statuses(comments).get("zoom.maker") == "picked")
 
+# Muse's relay format from 2026-10-28 on: "@account (N followers) — N likes / N comments", or "followers not shown"
+def relay_line(line):
+    c = {"created_at": "2026-10-29T00:00:00Z", "html_url": "", "body": ""}
+    return r.parse_post(f"https://www.instagram.com/reel/NEW111/\n{line}", "", c)
+for line, want in (("@grid.cars (193,000 followers) — 4,100 likes / 210 comments", (193000, 4100, 210)),
+                   ("@grid.cars (577K followers) — 4,100 likes / 210 comments", (577000, 4100, 210)),
+                   ("@grid.cars (1.2M followers) — 4,100 likes / 210 comments", (1200000, 4100, 210)),
+                   ("@grid.cars (followers not shown) — 4,100 likes / 210 comments", (None, 4100, 210))):
+    q = relay_line(line)
+    check(f"relay format: {line.split('(')[1].split(')')[0]}", (q["followers"], q["likes"], q["comments"]) == want
+          and q["account"] == "@grid.cars", q)
+q = relay_line("@grid.cars (followers not shown) — 4,100 likes / 210 comments")
+check("followers not shown scores like no count", r.engagement_points(q) == r.engagement_points({**q, "followers": None}))
+
 # scoring parts
 e, _ = r.engagement_points(p)
 check("gated comments count a fifth: (20000 + 6000) / 50000 is over 5%, full marks", round(e) == 40, e)
