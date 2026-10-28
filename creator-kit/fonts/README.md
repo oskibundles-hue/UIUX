@@ -13,3 +13,7 @@ used here.** `@font-face` is accepted, `document.fonts` reports success, and the
 text paints in the fallback face with no error anywhere. Use TTF, and verify by
 rendering the same string with and without the `@font-face` — if the two PNGs
 are byte-identical, the font did not load.
+
+**BebasNeue-Regular.ttf**: [Bebas Neue](https://fonts.google.com/specimen/Bebas+Neue)
+by Dharma Type, licensed SIL Open Font License 1.1. It's Formula Dynamics' display face, used by
+`thumbnail.py --brand fd`. Taken from the `@expo-google-fonts/bebas-neue` npm package.

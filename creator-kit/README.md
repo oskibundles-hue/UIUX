@@ -10,6 +10,11 @@ creator-kit/
 ├── scripts/
 │   ├── build_luts.py      regenerates the look pack (pure stdlib)
 │   ├── autocut.py         silence-cut + grade + 4K export, one command
+│   ├── idea_scraper.py    outlier videos/posts from your watchlist -> idea list
+│   ├── thumbnail.py       best cover frames -> branded IG covers + grid check
+│   ├── voice_build.py     his transcripts/captions -> voice/style.json + STYLE.md
+│   ├── script_write.py    idea -> script brief (and drafts with --api) in his voice
+│   ├── voice_check.py     flags AI tells, long lines, stiff wording, read time
 │   ├── match_grade.py     copy a grade from a reference by histogram matching
 │   ├── bake_lut.py        bakes any ffmpeg colour chain into a .cube
 │   └── ig_export.sh       Osmo clip → Instagram-ready 1080×1920 master
@@ -39,6 +44,127 @@ Performance matters on 4K60: raw decode runs at 0.84x realtime and the LUT
 drops it to 0.23x. So it defaults to a single ABR pass. Add `--two-pass` for
 exact size targeting at double the time, and `--fast` to run the LUT after
 the downscale when you are not exporting at native resolution.
+
+## idea_scraper — what to film next
+
+```bash
+brew install yt-dlp                     # once, on the Mac
+python3 scripts/idea_scraper.py         # writes ideas/out/ideas-<date>.md
+```
+
+Reads the latest uploads of every YouTube channel and this week's top posts of
+every subreddit in `ideas/watchlist.json`, and lists what is beating its own
+source's normal: views over the channel's median, upvotes over the
+subreddit's median. A 3x video on a small channel counts the same as one on a
+big channel, because the shape is what you copy. Each idea comes with its
+title pattern (`I spent $N on N wheels`) and the brand topics it hits.
+
+Re-runs only show new ideas (`--all` shows everything again). `--brand`,
+`--top`, `--min-outlier` and `--per-channel` tune it, and `--offline` scores a
+saved fetch with no network. Add the channels you actually study to the
+watchlist first; the YouTube lists start nearly empty on purpose. Free: no API
+keys, no logins, nothing posted. Test: `python3 ideas/test_idea_scraper.py`.
+
+## thumbnail — pick and brand the cover
+
+```bash
+python3 scripts/thumbnail.py reel.mp4 --brand fd --text "FORGED|FITMENT DAY"
+python3 scripts/thumbnail.py reel.mp4 --brand se --text "KEYS|HANDED OVER" --kicker "THE PICKUP"
+```
+
+Never let Instagram pick the cover. This scores 80 frames of the Reel on
+sharpness, exposure and colour, keeps the best few (spread out, never a soft or
+black frame) and renders each as a 1080x1920 cover twice: clean, and with your
+headline. The words after `|` take the accent colour. Each brand keeps its own
+look, in the Locked-On style: FD is Bebas Neue with FD red, SE is Space Grotesk
+with gold corner brackets and a `[ KICKER ]`, and `vlog` uses the caption gold.
+
+Every cover also gets a grid check: the 3:4 profile-grid crop is drawn on it,
+and the script flags a headline that falls outside the crop, in the bottom
+third, in the top-left UI corner, or with too little contrast against the
+frame. Pick from `covers/<clip>/sheet.png`. `--at 12.5` uses your own frame,
+`--lut luts/X.cube` grades it to match the Reel, and `--picks` sets how many.
+It never writes copy; the headline is yours. Test: `python3 scripts/test_thumbnail.py`.
+
+## script in my voice — idea to a script Omarie would actually say
+
+```bash
+python3 scripts/transcribe.py talking-reels/*.mp4 -o transcripts/       # his own words, on the Mac
+python3 scripts/voice_build.py transcripts/ old-captions.txt               # -> voice/style.json, voice/STYLE.md
+python3 scripts/script_write.py --idea "why we torque wheels by hand" --brand fd --seconds 30
+python3 scripts/script_write.py --from ideas/out/2026-10-27.json --brand se --pick 2 --api
+python3 scripts/voice_check.py my-edit.txt --seconds 30
+```
+
+- `voice_build.py` measures how he talks: sentence length, pace, questions,
+  contractions, fillers, openers, the phrases he repeats and a bank of his own
+  lines. Under 1,500 words it says the profile is thin. Feed it talking reels,
+  not music-only ones.
+- `script_write.py` always writes `scripts-out/<idea>/brief.md` (paste into
+  Claude Code). `--api` calls Claude (`claude-opus-5-5`, server-side refusal
+  fallbacks on) for 3 drafts with hook, body, CTA, on-screen text and a shot
+  list, each run through `voice_check.py`. Edit `drafts.json` by hand, then
+  `--check` it again.
+- Facts it doesn't have come back as `[CHECK: ...]`, and `voice_check.py` lists
+  every figure as a claim to source; those go through nq-facts. Nothing posts.
+
+Test: `python3 scripts/test_voice.py` (no network, the Claude call is faked).
+
+## post_queue — nothing posts without Omarie's yes
+
+```bash
+python3 scripts/post_queue.py add --brand fd --kind reel --media reel.mp4 \
+    --cover covers/reel/cover-02-text.jpg --caption-file caption.txt --at "2026-10-28 18:00"
+python3 scripts/post_queue.py add --brand fd --kind carousel --media 01.jpg 02.jpg 03.mp4 \
+    --url https://.../01.jpg https://.../02.jpg - --caption "..."
+python3 scripts/post_queue.py page --brand fd       # -> posting/approve/index.html, the post mockup look
+python3 scripts/post_queue.py approvals ~/Downloads/approvals.json
+python3 scripts/post_queue.py publish               # dry run: what would post
+python3 scripts/post_queue.py publish --live        # posts what's approved and due
+python3 scripts/post_queue.py list
+```
+
+- **The gate.** Every post has a digest: a SHA-256 over the account, type,
+  caption, every media file's bytes, the cover and the options. The approval
+  page saves the digest each yes was given for. `publish` works the digest out
+  again from the files on disk and refuses if anything changed. An edited
+  caption or a re-exported video goes back to pending and needs a fresh yes. A
+  posted post never posts again. A post is marked `posting` before the API
+  call, so a crash can't leave it approved and post it twice; `retry <id>`
+  puts a failed post back once you've checked Instagram.
+- **Held, not posted:** a caption over 2,200 characters or over 30 hashtags,
+  an unsourced `[CHECK: ...]`, a photo with no public URL, or a post whose
+  `--at` time hasn't come yet.
+- **The approval page** is the post mockup (IG phone frame plus kit) in the
+  brand's own look, one brand per page. Each post has Approve, Needs changes
+  (a note is required) and Reject. Publish `posting/approve/index.html` as an
+  Artifact with `capabilities: {db: {rules: [{path: "approvals", read: "view",
+  write: "owner"}]}, user: {}, downloads: true}`, so only Omarie can decide.
+  Decisions save to the page's `approvals` collection. The **Save approval
+  file** button downloads `approvals.json` for the `approvals` step. Or the
+  lead reads the collection with ArtifactData and writes that file.
+- **Types.** Reels go up straight from the file (resumable upload), and the
+  cover frame comes from `thumbnail.py`'s `covers.json`, `--cover-time` or a
+  public `--cover-url`. Instagram only takes photos by public URL (`--url`, `-`
+  for none), so photos in a feed post or carousel need hosting first. Videos in
+  a carousel upload from the file.
+
+**One-time setup on the Mac** (the token never goes in this repo):
+
+1. The Instagram account must be a Business or Creator account linked to a
+   Facebook Page.
+2. In a Meta developer app, add Instagram Graph API with
+   `instagram_basic` and `instagram_content_publish` (plus `pages_show_list`
+   and `pages_read_engagement`). Make a long-lived user token and find the
+   Instagram user id (`/me/accounts` → the page → `instagram_business_account`).
+3. Save `~/.config/creator-kit/instagram.json` with `chmod 600`:
+   `{"accounts": {"fd": {"ig_user_id": "1784...", "token": "EAAG..."}}}`. Add
+   one entry per account (`se`, `vlog`). Use `"host": "graph.instagram.com"` for
+   an Instagram-login token. Long-lived tokens last about 60 days, so refresh
+   before then.
+
+Test: `python3 scripts/test_posting.py` (a fake Graph API on localhost, no
+token, nothing reaches Instagram).
 
 ## match_grade — copy a look you have no recipe for
 
