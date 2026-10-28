@@ -5,6 +5,21 @@ v1 was built from `../part1/` (same build, kit, gates, mix, DELIVERY at 11.1M). 
 car reads MCLAREN 600LT. The full README (every element, every line's source, sound, picture) is written after the render.
 
 
+## v3 (28 Oct): shot 10 spliced into v2 (Omarie's pick: SPLICE INTO v2)
+
+- **Why:** v2's shot 10 (0111 54.5-57.05, 27.4-29.95 s) showed the store ceiling upside down under "I was like, that's not a
+  Corvette." (FAIL card `brain/jobcards/20261027-cb071403-09b521.json`, row "Frame gate").
+- **New shot 10:** 0111 147.6-150.15, the McLaren parked at the pump at night, the store behind it (same stop), graded
+  "night"; `config.json` shots.10 `clockAs` 0111 54.5 keeps the strip clock as v2 (20:08). `data/edl.json` and
+  `tools/make_edl.py` carry the new source; nothing else in the cut changed.
+- **How:** `tools/splice_v3.py` rebuilds only shot 10 with this build's code (plate.py shot + strip glass, now
+  `plate.strip_glass()`, moved out of `join()` unchanged; build.py layer capture and composite), re-encodes only v2's GOP
+  821-987 with v2's x264 settings (its avcC equals v2's), stream-copies every other packet and each v2 file's audio.
+  `tools/proof_v3.py`: decoded frames differ only in 821-987 (821-897 new picture; 898-987 shot 11 re-encoded, PSNR Y 49 dB),
+  every packet outside is byte-identical, audio packet-identical, same duration / frames / codec / profile / fps / size.
+  `tools/contact_v3.py`: the v2 | v3 sheet 26.5-31.0 s.
+- **Mezzanine:** `0111_146.0-152.0.mov` (the engine's recipe) in `paths.mezz` (config.local.json).
+
 ## v2 recut (7 Oct): Omarie's v2 notes (`../HANDOFF-v2-both.md`)
 
 Style unchanged: rally v2 + the dark-glass one-strip HUD, SE orange #FF4F16, MCLAREN 600LT. `tools/make_edl.py` -> `data/edl.json`.

@@ -506,6 +506,29 @@ def sweep_mask(t, tr):
     return np.clip((line - xx) / 26 + 0.5, 0, 1)[..., None]
 
 
+def strip_glass(img, rects):
+    """part1: the HUD strip's frosted glass (themes/glass-orange.json: backdrop-filter blur(22px) saturate(1.3)):
+    the plate inside the strip panel's visible rect is blurred and saturated here; the layer draws the tint on top.
+    (v3, 28 Oct: moved out of join() unchanged so tools/splice_v3.py draws the same glass on a spliced shot.)"""
+    from PIL import ImageFilter
+    img = img.copy()
+    for (x, y, w, h) in rects:
+        x0, y0, x1, y1 = int(round(x)), int(round(y)), int(round(x + w)), int(round(y + h))
+        if x1 - x0 < 2 or y1 - y0 < 1:
+            continue
+        m = 66
+        X0, Y0, X1, Y1 = max(0, x0 - m), max(0, y0 - m), min(W, x1 + m), min(H, y1 + m)
+        reg = Image.fromarray(img[Y0:Y1, X0:X1]).filter(ImageFilter.GaussianBlur(22))
+        f = np.asarray(reg, np.float32)[y0 - Y0:y1 - Y0, x0 - X0:x1 - X0] / 255
+        sat = 1.3                                   # CSS saturate() matrix
+        M = np.array([[0.213 + 0.787 * sat, 0.715 - 0.715 * sat, 0.072 - 0.072 * sat],
+                      [0.213 - 0.213 * sat, 0.715 + 0.285 * sat, 0.072 - 0.072 * sat],
+                      [0.213 - 0.213 * sat, 0.715 - 0.715 * sat, 0.072 + 0.928 * sat]], np.float32)
+        f = np.clip(f @ M.T, 0, 1)
+        img[y0:y1, x0:x1] = (f * 255 + 0.5).astype(np.uint8)
+    return img
+
+
 def join():
     out = os.path.join(WORK, 'plate.mov')
     enc = subprocess.Popen([FF, '-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgb24', '-s', f'{W}x{H}', '-r', '30000/1001', '-i', '-',
@@ -553,27 +576,9 @@ def join():
     GL = glass_rects()
 
     def glass(img, i):
-        """part1: the HUD strip's frosted glass (themes/glass-orange.json: backdrop-filter blur(22px) saturate(1.3)):
-        the plate inside the strip panel's visible rect is blurred and saturated here; the layer draws the tint on top."""
-        from PIL import ImageFilter
         if i not in GL:
             return img
-        img = img.copy()
-        for (x, y, w, h) in GL[i]:
-            x0, y0, x1, y1 = int(round(x)), int(round(y)), int(round(x + w)), int(round(y + h))
-            if x1 - x0 < 2 or y1 - y0 < 1:
-                continue
-            m = 66
-            X0, Y0, X1, Y1 = max(0, x0 - m), max(0, y0 - m), min(W, x1 + m), min(H, y1 + m)
-            reg = Image.fromarray(img[Y0:Y1, X0:X1]).filter(ImageFilter.GaussianBlur(22))
-            f = np.asarray(reg, np.float32)[y0 - Y0:y1 - Y0, x0 - X0:x1 - X0] / 255
-            sat = 1.3                                   # CSS saturate() matrix
-            M = np.array([[0.213 + 0.787 * sat, 0.715 - 0.715 * sat, 0.072 - 0.072 * sat],
-                          [0.213 - 0.213 * sat, 0.715 + 0.285 * sat, 0.072 - 0.072 * sat],
-                          [0.213 - 0.213 * sat, 0.715 - 0.715 * sat, 0.072 + 0.928 * sat]], np.float32)
-            f = np.clip(f @ M.T, 0, 1)
-            img[y0:y1, x0:x1] = (f * 255 + 0.5).astype(np.uint8)
-        return img
+        return strip_glass(img, GL[i])
 
     def blur_plates(img, i):
         from PIL import ImageFilter

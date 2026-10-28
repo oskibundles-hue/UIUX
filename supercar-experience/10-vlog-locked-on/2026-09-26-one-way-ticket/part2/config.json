@@ -265,7 +265,12 @@
    "look": "night"
   },
   "10": {
-   "look": "night"
+   "look": "night",
+   "clockAs": {
+    "src": "0111",
+    "in": 54.5,
+    "_why": "v3 28 Oct: shot 10 is now the cutaway 0111 147.6 (the McLaren at the pump) under his 0111 54.70 line; the strip clock reads the line (20:08:29 at the shot's first frame, as v2), so it never jumps to 20:10 and back"
+   }
   },
   "11": {
    "look": "night"
