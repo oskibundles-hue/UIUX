@@ -103,3 +103,33 @@ DECLINED = user decided not to pursue
 **Suggested improvement:** At session start, if `~/.claude/CLAUDE.md` is missing, restore it from the backup. Consider keeping the backup on every workstream branch, or in Dropbox beside the project memory, so any session can restore it.
 
 **Principle:** A rule that lives in one place outside version control is a rule that silently stops applying. Check that the rules loaded, not only that they exist.
+
+### Observation 7: Video Drop's "saved" state does not mean the file is in Dropbox
+
+**Status:** OPEN
+**Date:** 2026-10-31
+**Session context:** Sep 3 Bum Cola delivery (Mono and the 2x2 grid), checking the Dropbox copies before clearing uploads.
+**Skill:** `.claude/playbooks/lead.md` (Video Drop steps, on `claude/new-session-mucc2q`)
+**Type:** internal
+**Phase/Area:** Confirming delivery before clearing parts
+
+**Issue:** The page set both cards to `"state": "saved"` and rewrote their folder to where Omarie saved Mono (`NQ Studio / 04 Exports / 2026-10-27 Bum Cola talking head`, not the card's `Anti Stock Media / 04 Exports / 2026-10-27`). Mono was there and passed `c2pa_strip_check.py` (master byte for byte, stamp 5,893 bytes). The grid was marked saved too, but a Dropbox title search found no copy. Clearing on the strength of the page's state would have dropped a file that was never saved; he chose to clear it anyway because it was review-only.
+
+**Suggested improvement:** Before clearing a card's parts, find the file in Dropbox (title search, not the card's folder) and run the C2PA strip check; treat the page's "saved" state and folder as a hint only. Write the cleared note to say whether the Dropbox copy was checked or the clear was his call without a copy. Consider defaulting new Anti Stock cards' folder to the NQ Studio path he actually uses.
+
+**Principle:** A state a page sets on its own is a claim about intent, not proof of delivery. Check the destination before destroying the source.
+
+### Observation 8: Edit the live Video Drop page in place, never republish a local copy
+
+**Status:** OPEN
+**Date:** 2026-10-31
+**Session context:** Same job; the Artifact tool was switched off mid-session.
+**Skill:** `.claude/playbooks/lead.md` (Video Drop steps)
+**Type:** internal
+**Phase/Area:** Updating cards
+
+**Issue:** The live page had moved on twice since this session's last publish (another session's cards and the page's own saved-state writes, including a reformat from one-line to pretty-printed JSON). Republishing the session's local copy would have overwritten them. `read_file` with `paths` (saves the page to a file without loading it into context), then `edit_version` with the card's exact live text and `base_version` set to the live version, worked first time; the stale base was refused with a 409, as it should be.
+
+**Suggested improvement:** For card changes, always `read_file` with `paths: ["index.html"]`, grep the saved file, and `edit_version` against that version. Drop the local scratchpad copy as a source after any publish.
+
+**Principle:** A shared page has other writers. Change only what you mean to change, against the version that is live now.
