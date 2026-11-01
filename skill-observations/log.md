@@ -106,7 +106,7 @@ DECLINED = user decided not to pursue
 
 ### Observation 7: Video Drop's "saved" state does not mean the file is in Dropbox
 
-**Status:** OPEN
+**Status:** PARTLY ACTIONED 2026-11-01. The NQ Studio folder rule is in `lead.md` on branch `docs/anti-stock-export-folder`; the check-before-clearing step is still open.
 **Date:** 2026-10-31
 **Session context:** Sep 3 Bum Cola delivery (Mono and the 2x2 grid), checking the Dropbox copies before clearing uploads.
 **Skill:** `.claude/playbooks/lead.md` (Video Drop steps, on `claude/new-session-mucc2q`)
