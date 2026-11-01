@@ -13,6 +13,11 @@ in Dropbox itself, deliver it through the **Video Drop** page: https://claude.ai
 - Each video is a card. Omarie taps **Save video**; the page rejoins the parts and opens his phone's share sheet,
   and he picks **Dropbox** and the folder named on the card.
 - Use this one page for every delivery. Never make a second one.
+- An Anti Stock card's `folder` is `NQ Studio / 04 Exports / <YYYY-MM-DD> <short name>`: the date you deliver,
+  then a few words naming the piece (e.g. `NQ Studio / 04 Exports / 2026-10-27 Bum Cola talking head`). It is
+  where Omarie saves his exports, and `video_drop_sync.py` uploads to the card's folder as written, so a wrong
+  path makes a stray folder. There is no `Anti Stock Media / 04 Exports`. Formula Dynamics and Supercar
+  Experience cards keep their own folders.
 - The steps are in the notes:
   1. Split the master into 19 MiB parts.
   2. Upload them as the page's assets in one call.
