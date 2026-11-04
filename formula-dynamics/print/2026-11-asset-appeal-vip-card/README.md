@@ -11,9 +11,16 @@ logos, five-segment accent stripe. Cormorant Garamond italic is the black-tie ac
 Wordplay: front **"PRECISION has a DRESS CODE."** (FD's Precision value plus black tie). Back **"A different asset
 class."** (Asset Appeal's name, with cars as assets).
 
+Two fronts for Nate to pick from; the back is the same on both:
+
+- **A, "PRECISION has a DRESS CODE."**: `card.json`, files named `FD-x-AssetAppeal_VIP-card_5x7_*`.
+- **B, "TIME & TORQUE."**: watches (Asset Appeal) and torque (FD). `card_time-and-torque.json`, files named
+  `FD-x-AssetAppeal_VIP-card_5x7_time-and-torque_*`. Build it with `CARD=card_time-and-torque.json`.
+
 ## Finish it on Wednesday (about 2 minutes)
 
 1. Put the confirmed offers and the end date into `card.json` (`back.offers[].title / detail`, `back.terms`).
+   If Nate picks version B, make the same edits in `card_time-and-torque.json` instead.
    Titles are short Bebas lines, e.g. `PAINT PROTECTION FILM`; details are one italic line.
 2. Asset Appeal's emblem (green and gold, front) is cut from their Instagram avatar for now: fine at its printed
    0.66 in, but soft. If Nate can get their original logo file (SVG/PDF, or PNG 1000 px+), save it in `assets/`
@@ -22,7 +29,8 @@ class."** (Asset Appeal's name, with cars as assets).
    the print files carry a red "DRAFT · NOT FOR PRINT" stamp. With none left, it prints `FINAL` and drops the stamp
    and the `_DRAFT` from the file names. It also prints `overflow: none` when every line fits; if a long offer
    overflows, shorten it. (`CARD=` and `OUT=` point it at another copy file or output folder.)
-4. Send `out/FD-x-AssetAppeal_VIP-card_5x7_print-bleed.pdf` to the printer.
+4. Send `out/FD-x-AssetAppeal_VIP-card_5x7_print-bleed.pdf` (or `..._time-and-torque_print-bleed.pdf` for B) to
+   the printer.
 
 ## Print spec (for the shop)
 
@@ -38,7 +46,10 @@ class."** (Asset Appeal's name, with cars as assets).
 
 ## Files
 
-- `card.json`: all the words on the card
+- `card.json`: all the words on the card (version A)
+- `card_time-and-torque.json`: the same, with the TIME & TORQUE front (version B). `line1_amp` sets the italic
+  ampersand, `max_pt` the largest headline size; the build shrinks the headline until it fits the width and leaves
+  air in the column
 - `build.js`: layout and renderer (Playwright/Chromium). Writes `out/`: the print PDF, 300 dpi PNGs of each side
   (with bleed) and a trimmed side-by-side preview
 - `assets/`: FD vector logos from `formula-dynamics/02-logos` on

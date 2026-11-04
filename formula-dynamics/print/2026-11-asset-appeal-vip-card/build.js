@@ -86,6 +86,8 @@ body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
 .headline .mid { font-family: 'Cormorant', serif; font-style: italic; font-weight: 500;
   font-size: 30pt; display: block; line-height: 1; margin: .02in 0 .05in; }
 .dot { color: var(--red); }
+.amp { font-family: 'Cormorant', serif; font-style: italic; font-weight: 500; font-size: .74em; margin-left: .14em; }
+.headline .big + .big { margin-top: .04in; }
 .stripe { height: .034in; display: flex; }
 .front .stripe { margin-top: .22in; }
 .stripe i { display: block; height: 100%; }
@@ -121,8 +123,8 @@ body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     ${partnerMark}
     <div class="kicker bebas tracked">${esc(f.kicker)}</div>
     <div class="headline bebas">
-      <span class="big">${esc(f.line1)}</span>
-      <span class="mid">${esc(f.line2)}</span>
+      <span class="big">${esc(f.line1)}${f.line1_amp ? `<span class="amp">${esc(f.line1_amp)}</span>` : ''}</span>
+      ${f.line2 ? `<span class="mid"${f.mid_pt ? ` style="font-size:${f.mid_pt}pt"` : ''}>${esc(f.line2)}</span>` : ''}
       <span class="big">${esc(f.line3)}<span class="dot">.</span></span>
     </div>
     ${stripe(1.25)}
@@ -154,7 +156,7 @@ body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   const htmlPath = path.join(OUT, 'card.html');
   fs.writeFileSync(htmlPath, html);
   const tag = DRAFT ? '_DRAFT' : '';
-  const base = `FD-x-AssetAppeal_VIP-card_5x7`;
+  const base = `FD-x-AssetAppeal_VIP-card_5x7${spec.variant ? '_' + spec.variant : ''}`;
 
   const browser = await chromium.launch();
   const ctx = await browser.newContext({
@@ -164,16 +166,20 @@ body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   const page = await ctx.newPage();
   await page.goto('file://' + htmlPath);
   await page.evaluate(() => document.fonts.ready);
-  // headline: the widest .big line fills 85% of the column; both lines share that size
-  await page.evaluate(() => {
+  // headline: both lines share one size, the largest that keeps the widest line within 85% of the column
+  // and leaves 0.3 in of air in the front column
+  await page.evaluate((MAX_PT) => {
     const col = document.querySelector('.front .col').getBoundingClientRect().width;
     const bigs = [...document.querySelectorAll('.headline .big')];
-    let pt = 90;
+    let pt = MAX_PT;
     const set = () => bigs.forEach((b) => (b.style.fontSize = pt + 'pt'));
     set();
-    while (pt > 30 && Math.max(...bigs.map((b) => b.scrollWidth)) > col * 0.85) { pt -= 0.5; set(); }
+    const c = document.querySelector('.front .col');
+    const gap = (el) => el.getBoundingClientRect().top - el.previousElementSibling.getBoundingClientRect().bottom;
+    const tooTall = () => gap(c.querySelector('.kicker')) + gap(c.querySelector('.foot')) < 0.3 * 96;
+    while (pt > 30 && (Math.max(...bigs.map((b) => b.scrollWidth)) > col * 0.85 || tooTall())) { pt -= 0.5; set(); }
     document.body.dataset.headlinePt = pt;
-  });
+  }, f.max_pt || 90);
   const headlinePt = await page.evaluate(() => document.body.dataset.headlinePt);
   const fontsOk = await page.evaluate(() => ['12px "Bebas Neue"', '600 12px "Cormorant"', 'italic 500 12px "Cormorant"', 'italic 600 12px "Cormorant"'].map((f) => [f, document.fonts.check(f)]));
 
