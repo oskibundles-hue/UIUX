@@ -1,0 +1,38 @@
+{
+  "_note": "Copy for the FD x Asset Appeal VIP card. Edit this file, then run: node build.js. Any text still holding a [bracket] marks the build as a DRAFT, and the PDF name says so.",
+  "partner": {
+    "name": "ASSET APPEAL",
+    "logo": null,
+    "_logo_note": "When Asset Appeal's logo arrives, save it in assets/ (white or transparent PNG/SVG) and put its file name here, e.g. \"asset-appeal-logo.svg\". Until then their name is set in type."
+  },
+  "front": {
+    "kicker": "BY INVITATION ONLY",
+    "line1": "PRECISION",
+    "line2": "has a",
+    "line3": "DRESS CODE",
+    "title": "VIP PRIVILEGES",
+    "sub": "Reserved for you, on the reverse.",
+    "foot": "LAS VEGAS · MMXXVI"
+  },
+  "back": {
+    "title": "VIP PRIVILEGES",
+    "sub": "A different asset class.",
+    "offers": [
+      {
+        "title": "PAINT PROTECTION FILM",
+        "detail": "[Offer to confirm Wednesday]"
+      },
+      {
+        "title": "WHEELS & FITMENT",
+        "detail": "[Offer to confirm Wednesday]"
+      },
+      {
+        "title": "PERFORMANCE TUNING",
+        "detail": "[Offer to confirm Wednesday]"
+      }
+    ],
+    "terms": "Present this card to redeem · Valid through [date to confirm]",
+    "contact1": "FORMULADYNAMICSPERFORMANCE.COM · @FORMULADYNAMICSPERFORMANCE",
+    "contact2": "4790 POLARIS AVE · LAS VEGAS, NV 89103"
+  }
+}
