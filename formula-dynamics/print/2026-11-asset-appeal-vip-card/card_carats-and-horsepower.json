@@ -1,0 +1,42 @@
+{
+  "_note": "Copy for the FD x Asset Appeal VIP card, option D (CARATS & HORSEPOWER). Edit this file, then run: node build.js. Any text still holding a [bracket] marks the build as a DRAFT, and the PDF name says so.",
+  "variant": "carats-and-horsepower",
+  "partner": {
+    "name": "ASSET APPEAL",
+    "logo": "asset-appeal-emblem_from-ig-screenshot.png",
+    "_logo_note": "Emblem cut from the @asset_appeal Instagram avatar (screenshot, 3 Nov 2026): fine at 0.66 in but soft. Swap in Asset Appeal's original logo file (SVG/PDF, or PNG 1000 px+) before the final print. logo_h is its printed height in inches.",
+    "logo_h": 0.66
+  },
+  "front": {
+    "kicker": "BY INVITATION ONLY",
+    "title": "VIP PRIVILEGES",
+    "sub": "Reserved for you, on the reverse.",
+    "foot": "LAS VEGAS · MMXXVI",
+    "line1": "CARATS",
+    "line1_amp": "&",
+    "line2": "",
+    "line3": "HORSEPOWER",
+    "max_pt": 96
+  },
+  "back": {
+    "title": "VIP PRIVILEGES",
+    "sub": "A different asset class.",
+    "offers": [
+      {
+        "title": "PAINT PROTECTION FILM",
+        "detail": "[Offer to confirm Wednesday]"
+      },
+      {
+        "title": "WHEELS & FITMENT",
+        "detail": "[Offer to confirm Wednesday]"
+      },
+      {
+        "title": "PERFORMANCE TUNING",
+        "detail": "[Offer to confirm Wednesday]"
+      }
+    ],
+    "terms": "Present this card to redeem · Valid through [date to confirm]",
+    "contact1": "FORMULADYNAMICSPERFORMANCE.COM · @FORMULADYNAMICSPERFORMANCE",
+    "contact2": "4790 POLARIS AVE · LAS VEGAS, NV 89103"
+  }
+}
