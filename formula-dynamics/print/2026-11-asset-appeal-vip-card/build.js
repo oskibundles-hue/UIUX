@@ -31,7 +31,7 @@ const placeholders = strings.filter((s) => /\[[^\]]*\]/.test(s));
 const DRAFT = placeholders.length > 0;
 
 const partnerMark = spec.partner.logo
-  ? `<img class="partner-logo" src="${A}${esc(spec.partner.logo)}" alt="${esc(spec.partner.name)}">`
+  ? `<img class="partner-logo" style="height:${spec.partner.logo_h || 0.42}in" src="${A}${esc0(spec.partner.logo)}" alt="${esc(spec.partner.name)}">`
   : `<div class="partner-type">${esc(spec.partner.name)}</div>`;
 const stripe = (w) => `<div class="stripe" style="width:${w}in"><i style="flex:36.7;background:#FE0F13"></i><i style="flex:21.4;background:#000"></i><i style="flex:19.4;background:#FFF"></i><i style="flex:17;background:#1DB14B"></i><i style="flex:5.5;background:#FFDE00"></i></div>`;
 const watermark = DRAFT ? '<div class="wm"><span>DRAFT \u00b7 NOT FOR PRINT</span></div>' : '';
@@ -74,12 +74,12 @@ body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   border: 2pt solid rgba(254,15,19,.42); padding: .02in .16in 0; transform: rotate(-32deg); white-space: nowrap; }
 
 /* ---- front ---- */
-.fd-logo { width: 1.62in; display: block; }
+.fd-logo { width: 1.5in; display: block; }
 .assoc { font-family: 'Cormorant', serif; font-style: italic; font-weight: 500; font-size: 10.5pt;
   opacity: .78; margin-top: .3in; letter-spacing: .02em; }
 .partner-type { font-family: 'Cormorant', serif; font-weight: 600; font-size: 14.5pt;
   letter-spacing: .34em; padding-left: .34em; margin-top: .05in; }
-.partner-logo { max-width: 1.5in; max-height: .42in; margin-top: .08in; }
+.partner-logo { display: block; width: auto; margin-top: .1in; }
 .kicker { font-size: 9.5pt; opacity: .8; margin-top: auto; }
 .headline { margin-top: .12in; line-height: .86; }
 .headline .big { font-size: 74pt; letter-spacing: .015em; display: block; white-space: nowrap; }
@@ -87,9 +87,9 @@ body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   font-size: 30pt; display: block; line-height: 1; margin: .02in 0 .05in; }
 .dot { color: var(--red); }
 .stripe { height: .034in; display: flex; }
-.front .stripe { margin-top: .26in; }
+.front .stripe { margin-top: .22in; }
 .stripe i { display: block; height: 100%; }
-.title { font-size: 15pt; margin-top: .2in; }
+.title { font-size: 15pt; margin-top: .18in; }
 .sub { font-family: 'Cormorant', serif; font-style: italic; font-weight: 500; font-size: 12pt;
   opacity: .82; margin-top: .05in; }
 .foot { font-size: 8.5pt; opacity: .7; margin-top: auto; }
@@ -164,14 +164,14 @@ body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   const page = await ctx.newPage();
   await page.goto('file://' + htmlPath);
   await page.evaluate(() => document.fonts.ready);
-  // headline: the widest .big line fills 92% of the column; both lines share that size
+  // headline: the widest .big line fills 85% of the column; both lines share that size
   await page.evaluate(() => {
     const col = document.querySelector('.front .col').getBoundingClientRect().width;
     const bigs = [...document.querySelectorAll('.headline .big')];
     let pt = 90;
     const set = () => bigs.forEach((b) => (b.style.fontSize = pt + 'pt'));
     set();
-    while (pt > 30 && Math.max(...bigs.map((b) => b.scrollWidth)) > col * 0.92) { pt -= 0.5; set(); }
+    while (pt > 30 && Math.max(...bigs.map((b) => b.scrollWidth)) > col * 0.85) { pt -= 0.5; set(); }
     document.body.dataset.headlinePt = pt;
   });
   const headlinePt = await page.evaluate(() => document.body.dataset.headlinePt);

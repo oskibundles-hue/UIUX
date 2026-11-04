@@ -15,7 +15,9 @@ class."** (Asset Appeal's name, with cars as assets).
 
 1. Put the confirmed offers and the end date into `card.json` (`back.offers[].title / detail`, `back.terms`).
    Titles are short Bebas lines, e.g. `PAINT PROTECTION FILM`; details are one italic line.
-2. If Asset Appeal's logo has arrived, save it in `assets/` (white or transparent) and set `partner.logo`.
+2. Asset Appeal's emblem (green and gold, front) is cut from their Instagram avatar for now: fine at its printed
+   0.66 in, but soft. If Nate can get their original logo file (SVG/PDF, or PNG 1000 px+), save it in `assets/`
+   and point `partner.logo` at it (`partner.logo_h` sets its printed height in inches).
 3. Run `NODE_PATH=$(npm root -g) node build.js`. While any `[bracket]` is left, the placeholders print in red and
    the print files carry a red "DRAFT · NOT FOR PRINT" stamp. With none left, it prints `FINAL` and drops the stamp
    and the `_DRAFT` from the file names. It also prints `overflow: none` when every line fits; if a long offer
