@@ -1,0 +1,44 @@
+{
+  "_note": "Copy for the FD x Asset Appeal VIP card, back option D (POLE POSITION). Only the back differs: to use it, copy this \"back\" block into the copy file of the chosen front. Edit this file, then run: node build.js. Any text still holding a [bracket] marks the build as a DRAFT, and the PDF name says so.",
+  "variant": "back-pole-position",
+  "partner": {
+    "name": "ASSET APPEAL",
+    "logo": "asset-appeal-emblem_from-ig-screenshot.png",
+    "_logo_note": "Emblem cut from the @asset_appeal Instagram avatar (screenshot, 3 Nov 2026): fine at 0.66 in but soft. Swap in Asset Appeal's original logo file (SVG/PDF, or PNG 1000 px+) before the final print. logo_h is its printed height in inches.",
+    "logo_h": 0.66
+  },
+  "front": {
+    "kicker": "BY INVITATION ONLY",
+    "line1": "TIME",
+    "line2": "",
+    "line3": "TORQUE",
+    "title": "VIP PRIVILEGES",
+    "sub": "Reserved for you, on the reverse.",
+    "foot": "LAS VEGAS · MMXXVI",
+    "max_pt": 96,
+    "line1_amp": "&"
+  },
+  "back": {
+    "title": "POLE POSITION",
+    "sub": "Front of the grid, reserved for you.",
+    "offers": [
+      {
+        "title": "PAINT PROTECTION FILM",
+        "detail": "[Offer to confirm Wednesday]"
+      },
+      {
+        "title": "WHEELS & FITMENT",
+        "detail": "[Offer to confirm Wednesday]"
+      },
+      {
+        "title": "PERFORMANCE TUNING",
+        "detail": "[Offer to confirm Wednesday]"
+      }
+    ],
+    "terms": "Present this card to redeem · Valid through [date to confirm]",
+    "contact1": "FORMULADYNAMICSPERFORMANCE.COM · @FORMULADYNAMICSPERFORMANCE",
+    "contact2": "4790 POLARIS AVE · LAS VEGAS, NV 89103",
+    "layout": "rows",
+    "numbering": "pole"
+  }
+}

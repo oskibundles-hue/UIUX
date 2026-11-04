@@ -21,6 +21,20 @@ named `FD-x-AssetAppeal_VIP-card_5x7_<variant>_*`.
 3. **"CARATS & HORSEPOWER."**: Asset Appeal's jewellery and FD's tuning. `card_carats-and-horsepower.json`
 4. **"BLACK TIE at FULL THROTTLE."**: the black-tie feel with the throttle open. `card_black-tie-full-throttle.json`
 
+Four backs, lettered as on `out/FD-x-AssetAppeal_VIP-card_5x7_back-options.png`; any front goes with any back. The
+back option files carry the TIME & TORQUE front only so their previews match: to use one, copy its `back` block into
+the chosen front's copy file.
+
+- **A, "VIP PRIVILEGES / A different asset class."**: the dinner-menu layout with roman numerals. Already in every
+  front file.
+- **B, "APPRECIATING ASSETS / Some assets are meant to be driven."**: numerals in a column, offers left-aligned
+  (`layout: rows`). `card_back-appreciating-assets.json`
+- **C, "THE FINER THINGS / Finely tuned."**: no numerals, small red diamonds between the offers, and a "Reserved for
+  ____" line to write a guest's name on (`layout: certificate`; delete `reserved_line` to drop the line).
+  `card_back-finer-things.json`
+- **D, "POLE POSITION / Front of the grid, reserved for you."**: P1, P2, P3 in FD red (`layout: rows`,
+  `numbering: pole`). `card_back-pole-position.json`
+
 ## Finish it on Wednesday (about 2 minutes)
 
 1. Put the confirmed offers and the end date into the copy file of the front Nate picked
@@ -52,7 +66,8 @@ named `FD-x-AssetAppeal_VIP-card_5x7_<variant>_*`.
 - `card.json` and `card_<variant>.json`: all the words on the card, one file per front option. `line1_amp` sets
   the italic ampersand, `line2` the small italic middle line, `max_pt` the largest headline size; the build shrinks
   the headline until it fits the width and leaves air in the column
-- `out/FD-x-AssetAppeal_VIP-card_5x7_front-options.png`: the four fronts on one numbered sheet, for picking
+- `out/FD-x-AssetAppeal_VIP-card_5x7_front-options.png` and `..._back-options.png`: the four fronts (1-4) and the
+  four backs (A-D), each on one sheet, for picking
 - `build.js`: layout and renderer (Playwright/Chromium). Writes `out/`: the print PDF, 300 dpi PNGs of each side
   (with bleed) and a trimmed side-by-side preview
 - `assets/`: FD vector logos from `formula-dynamics/02-logos` on

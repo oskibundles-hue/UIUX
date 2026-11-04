@@ -39,6 +39,14 @@ const watermark = DRAFT ? '<div class="wm"><span>DRAFT \u00b7 NOT FOR PRINT</spa
 const f = spec.front, b = spec.back;
 const roman = ['I', 'II', 'III', 'IV', 'V'];
 
+// offer numbering on the back: roman (I., II.), pole (P1, P2) or none
+const numLabel = (i) => {
+  const n = spec.back.numbering || 'roman';
+  if (n === 'none') return '';
+  if (n === 'pole') return `<div class="num pole">P${i + 1}</div>`;
+  return `<div class="num">${roman[i] || i + 1}.</div>`;
+};
+
 const html = `<!doctype html>
 <html><head><meta charset="utf-8">
 <style>
@@ -113,6 +121,24 @@ body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   opacity: .72; margin-top: auto; }
 .contact { font-size: 8.3pt; letter-spacing: .14em; padding-left: .14em; opacity: .85; margin-top: .14in; line-height: 1.5; }
 .pair { font-size: 8pt; opacity: .68; margin-top: .1in; }
+.b-title { white-space: nowrap; }
+.o-text { display: flex; flex-direction: column; align-items: center; }
+.reserved { display: flex; align-items: flex-end; gap: .1in; margin-top: .2in; font-family: 'Cormorant', serif;
+  font-style: italic; font-weight: 500; font-size: 12.5pt; opacity: .85; }
+.reserved i { display: block; width: 1.9in; border-bottom: .5pt solid rgba(255,255,255,.6); margin-bottom: .06in; }
+/* rows: a numeral column on the left, the offer text left-aligned beside it */
+.back.rows .offers { align-items: stretch; }
+.back.rows .offer { flex-direction: row; align-items: baseline; gap: .14in; }
+.back.rows .offer { padding: .14in 0 .13in; }
+.back.rows .o-title { font-size: 23pt; }
+.back.rows .num { width: .42in; flex-shrink: 0; text-align: right; font-size: 15pt; }
+.back.rows .o-text { align-items: flex-start; text-align: left; }
+.back .num.pole { font-family: 'Bebas Neue', sans-serif; font-style: normal; font-weight: 400; font-size: 25pt;
+  color: var(--red); opacity: 1; letter-spacing: .02em; }
+/* certificate: no numerals; a small red diamond between offers instead of a rule */
+.back.certificate .offer + .offer { border-top: none; }
+.back.certificate .offer + .offer::before { content: ''; width: .055in; height: .055in; background: var(--red);
+  transform: rotate(45deg); margin-bottom: .1in; }
 </style></head><body>
 
 <section class="page front">
@@ -134,15 +160,16 @@ body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
   </div>
 </section>
 
-<section class="page back">
+<section class="page back ${b.layout || 'menu'}">
   <div class="frame"></div>${watermark}
   <div class="col">
     ${stripe(1.0)}
     <div class="b-title bebas">${esc(b.title)}</div>
     <div class="b-sub">${esc(b.sub)}</div>
+    ${b.reserved_line ? `<div class="reserved"><span>${esc(b.reserved_line)}</span><i></i></div>` : ''}
     <div class="rule"></div>
     <div class="offers">
-      ${b.offers.map((o, i) => `<div class="offer"><div class="num">${roman[i] || i + 1}.</div><div class="o-title bebas">${esc(o.title)}</div><div class="o-detail">${esc(o.detail)}</div></div>`).join('\n      ')}
+      ${b.offers.map((o, i) => `<div class="offer">${numLabel(i)}<div class="o-text"><div class="o-title bebas">${esc(o.title)}</div><div class="o-detail">${esc(o.detail)}</div></div></div>`).join('\n      ')}
     </div>
     <div class="terms">${esc(b.terms)}</div>
     <div class="contact bebas">${esc(b.contact1)}<br>${esc(b.contact2)}</div>
@@ -180,6 +207,12 @@ body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
     while (pt > 30 && (Math.max(...bigs.map((b) => b.scrollWidth)) > col * 0.85 || tooTall())) { pt -= 0.5; set(); }
     document.body.dataset.headlinePt = pt;
   }, f.max_pt || 90);
+  await page.evaluate(() => {
+    const t = document.querySelector('.b-title');
+    const w = t.parentElement.clientWidth;
+    let pt = 36;
+    while (pt > 20 && t.getBoundingClientRect().width > w) { pt -= 0.5; t.style.fontSize = pt + 'pt'; }
+  });
   const headlinePt = await page.evaluate(() => document.body.dataset.headlinePt);
   const fontsOk = await page.evaluate(() => ['12px "Bebas Neue"', '600 12px "Cormorant"', 'italic 500 12px "Cormorant"', 'italic 600 12px "Cormorant"'].map((f) => [f, document.fonts.check(f)]));
 
