@@ -1,5 +1,6 @@
 {
-  "_note": "Copy for the FD x Asset Appeal VIP card. Edit this file, then run: node build.js. Any text still holding a [bracket] marks the build as a DRAFT, and the PDF name says so.",
+  "_note": "Copy for the FD x Asset Appeal VIP card, option C (TAILORED for SPEED). Edit this file, then run: node build.js. Any text still holding a [bracket] marks the build as a DRAFT, and the PDF name says so.",
+  "variant": "tailored-for-speed",
   "partner": {
     "name": "ASSET APPEAL",
     "logo": "asset-appeal-emblem_from-ig-screenshot.png",
@@ -8,12 +9,13 @@
   },
   "front": {
     "kicker": "BY INVITATION ONLY",
-    "line1": "PRECISION",
-    "line2": "has a",
-    "line3": "DRESS CODE",
     "title": "VIP PRIVILEGES",
     "sub": "Reserved for you, on the reverse.",
-    "foot": "LAS VEGAS · MMXXVI"
+    "foot": "LAS VEGAS · MMXXVI",
+    "line1": "TAILORED",
+    "line2": "for",
+    "line3": "SPEED",
+    "max_pt": 90
   },
   "back": {
     "title": "VIP PRIVILEGES",
