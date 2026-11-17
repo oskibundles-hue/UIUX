@@ -4,10 +4,12 @@
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var store = { get: function (k) { try { return localStorage.getItem(k); } catch (e) { return null; } },
                 set: function (k, v) { try { localStorage.setItem(k, v); } catch (e) {} } };
-  var TABS = ['todo', 'pages', 'files', 'rules'];
+  // the tabs this page actually has, read from its own tab bar, so a page can name its own
+  var TABS = $$('.tab[data-tab]').map(function (b) { return b.dataset.tab; });
+  if (!TABS.length) TABS = ['todo', 'pages', 'files', 'rules'];
   var panels = {}; TABS.forEach(function (t) { panels[t] = $('#p-' + t); });
   var bigTitle = $('#bigTitle'), navTitle = $('#navTitle'), nav = $('#nav'), q = $('#q'), qx = $('#qx');
-  var current = 'todo';
+  var current = TABS[0] || 'todo', PAGE_TITLE = document.title;   // the page's own <title>, kept across tab switches
 
   // ---------------------------------------------------------------- counts (counted from the page, never typed)
   var nWait = $$('#waiting details.wi').length;          // open items are counted from the list, never typed
@@ -17,12 +19,14 @@
   var live = rows.length - dead.length, roster = $('#roster');
   // the one hand-stamped figure: how many pages the gallery held when the sweep read it (data-gallery, data-swept)
   var GALLERY = roster ? +(roster.dataset.gallery || live) : live, SWEPT = roster ? (roster.dataset.swept || 'the last sweep') : '';
+  // rows moved to an Archive tab still cover the gallery, so they count too (data-archived); 0 when there is no archive
+  var ARCHIVED = roster ? +(roster.dataset.archived || 0) : 0, LISTED = live + ARCHIVED;
   if (roster) {
-    var ok = live === GALLERY;
+    var ok = LISTED === GALLERY;
     roster.innerHTML = '<span class="' + (ok ? 'ok' : 'no') + '">' + (ok ? '&#10003;' : '&#9888;') + '</span><span><b>' +
-      (ok ? 'Every page in the gallery has a row.' : 'Mismatch: ' + Math.abs(live - GALLERY) + (live > GALLERY ? ' more rows than gallery pages.' : ' gallery pages with no row.')) +
-      '</b> ' + rows.length + ' rows counted on this page: ' + live + ' that open, ' + dead.length +
-      ' that no longer do. The gallery held ' + GALLERY + ' pages when it was read on ' + SWEPT + '.</span>';
+      (ok ? 'Every page in the gallery has a row.' : 'Mismatch: ' + Math.abs(LISTED - GALLERY) + (LISTED > GALLERY ? ' more rows than gallery pages.' : ' gallery pages with no row.')) +
+      '</b> ' + LISTED + ' counted: ' + live + ' live' + (dead.length ? ', ' + dead.length + ' that no longer open' : '') +
+      (ARCHIVED ? ', ' + ARCHIVED + ' archived' : '') + '. The gallery held ' + GALLERY + ' pages when it was read on ' + SWEPT + '.</span>';
   }
 
   // ---------------------------------------------------------------- tabs
@@ -33,7 +37,7 @@
     $$('.tab').forEach(function (b) { if (b.dataset.tab === tab) b.setAttribute('aria-current', 'page'); else b.removeAttribute('aria-current'); });
     var title = panels[tab].dataset.title;
     bigTitle.textContent = title; navTitle.textContent = title;
-    document.title = 'Download Everything';
+    document.title = PAGE_TITLE;
     store.set('de-tab', tab);
     try { history.replaceState(null, '', '#' + tab); } catch (e) {}
     if (!opts || !opts.keepScroll) window.scrollTo(0, 0);
