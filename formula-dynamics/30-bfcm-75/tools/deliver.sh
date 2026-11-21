@@ -8,7 +8,6 @@ mkdir -p "$OUT" "$DEL/ledger" "$DEL/editable source"
 ~/.local/bin/uv run -q --with playwright --with pillow python tools/render.py "$OUT" $SRC/slide-0{1,2,3}.html >/dev/null
 rm -rf "$OUT/_phone"
 cp $SRC/Caption.txt "$OUT/Caption.txt"
-rsync -a --exclude '.DS_Store' source assets tools "$DEL/editable source/"
-cp ledger/*.csv "$DEL/ledger/"
+rsync -a --exclude '.DS_Store' --exclude ref --exclude out source assets tools "$DEL/editable source/"
 python3 tools/build_meta.py "$DEL"
 ls "$OUT"

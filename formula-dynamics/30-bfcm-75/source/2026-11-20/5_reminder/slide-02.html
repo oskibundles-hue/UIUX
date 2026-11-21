@@ -1,0 +1,34 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<style>
+.head{position:absolute;left:var(--sx);right:var(--sx);top:150px}
+.head .display{font-size:92px;margin-top:20px}
+.head .body{font-size:36px;margin-top:14px}
+.list{position:absolute;left:var(--sx);right:var(--sx);top:400px}
+.item{border:1px solid var(--line);background:#111114;padding:30px 30px 26px;margin-bottom:22px}
+.item .t{font-family:"Barlow";font-weight:500;font-size:42px;line-height:1.1;color:var(--sub)}
+.item .t .m{color:var(--white);font-weight:700;border-bottom:3px solid var(--white)}
+.item .t .pn{font-family:"Plex";font-weight:700;font-size:34px;color:var(--white);background:var(--red);padding:2px 10px;margin-left:6px;white-space:nowrap}
+.item .t .pn.diff{background:transparent;border:2px solid var(--red);color:var(--white)}
+.item .p{font-family:"Plex";font-size:32px;color:var(--grey);margin-top:14px}
+.item .p b{color:var(--white);font-weight:700}
+.item .p s{text-decoration-color:rgba(255,255,255,.5)}
+.keys{position:absolute;left:var(--sx);right:var(--sx);top:948px;display:flex;gap:36px;font-family:"Plex";font-size:22px;letter-spacing:.05em;color:var(--sub);text-transform:uppercase}
+.keys span::before{content:"";display:inline-block;vertical-align:-2px;margin-right:10px}
+.keys .k1::before{width:26px;height:0;border-bottom:3px solid var(--white);vertical-align:4px}
+.keys .k2::before{width:18px;height:18px;background:var(--red)}
+.take{position:absolute;left:var(--sx);right:var(--sx);top:1004px;font-size:36px}
+.fine{position:absolute;left:var(--sx);right:200px;bottom:var(--sy)}
+</style></head><body>
+<div class="slide">
+  <div class="run"><span><b>READ THE LISTING</b> &nbsp;·&nbsp; REAL TITLES</span><span class="count">02<i> / 03</i></span></div>
+  <div class="head"><div class="rule"></div><div class="display">They look alike.<br>They don't fit alike.</div><div class="body">Same part, three listings. The title tells them apart.</div></div>
+  <div class="list">
+    <div class="item"><div class="t">BMC Air Filter for <span class="m">Ferrari 458</span> <span class="pn diff">FB614/01</span></div><div class="p"><b>$178.49</b> &nbsp;<s>$209.99</s></div></div>
+    <div class="item"><div class="t">BMC Air Filter for <span class="m">Ferrari 488</span> <span class="pn">FB895/01</span></div><div class="p"><b>$182.75</b> &nbsp;<s>$215.00</s></div></div>
+    <div class="item"><div class="t">BMC Air Filter for <span class="m">Ferrari F8</span> <span class="pn">FB895/01</span></div><div class="p"><b>$182.75</b> &nbsp;<s>$215.00</s></div></div>
+  </div>
+  <div class="keys"><span class="k1">Your model</span><span class="k2">Part number</span></div>
+  <div class="take body">The 488 and F8 share <b>FB895/01</b>. The 458 takes a different filter. <b>The link you save should name your car.</b></div>
+  <div class="fine">Titles and prices from formuladynamics.com, checked Nov 20, 2026. 15% off air filters through Dec 4.</div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

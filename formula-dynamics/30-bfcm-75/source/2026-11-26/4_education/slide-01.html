@@ -1,0 +1,25 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../day.css">
+<style>
+/* macro crop: hat meets ring */
+.photo{height:880px}
+.photo img{--x:30%;--y:45%;--zoom:1.05}
+.photo .shade{background:linear-gradient(180deg,rgba(8,8,10,.92) 0%,rgba(8,8,10,.25) 16%,rgba(8,8,10,0) 26%,rgba(8,8,10,0) 70%,#08080A 100%)}
+.bot{position:absolute;left:var(--sx);right:var(--sx);top:820px;z-index:4}
+.bot .kicker{margin-top:22px}
+.bot .display{font-size:136px;margin-top:10px}
+.bot .body{font-size:36px;margin-top:18px;margin-right:130px}
+.tagb{position:absolute;left:var(--sx);bottom:var(--sy);z-index:4}
+.photo::after{content:"";position:absolute;top:0;right:0;width:540px;height:190px;z-index:2;background:linear-gradient(270deg,rgba(8,8,10,.8) 0%,rgba(8,8,10,.8) 55%,rgba(8,8,10,0) 100%);-webkit-mask-image:linear-gradient(180deg,#000 0,#000 150px,transparent 190px)}
+</style></head><body>
+<div class="slide">
+  <div class="photo"><img src="../../../assets/photos/brembo2pc_rotor_edge.jpg" alt="Close-up of a drilled two-piece Brembo rotor where the black hat meets the ring"><div class="shade"></div></div>
+  <div class="run"><span><b>FORMULA DYNAMICS SALE</b> &nbsp;·&nbsp; NOV 20 – DEC 4</span><span class="count">01<i> / 03</i></span></div>
+  <div class="bot">
+    <div class="rule"></div>
+    <div class="kicker">Brake rotors · how to read one</div>
+    <div class="display">Two parts.<br><span class="red">One rotor.</span></div>
+    <div class="body">Next time you see a rotor through the spokes, look at its center. The hat and the ring do different jobs.</div>
+  </div>
+  <div class="tagb tag">Shown: Brembo two-piece rotor, FD product shoot</div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

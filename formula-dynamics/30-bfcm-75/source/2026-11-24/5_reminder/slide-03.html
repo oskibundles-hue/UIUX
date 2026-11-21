@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<style>/* filled cart: two real listings for two cars, was/now per line, then the total */
+.head{position:absolute;left:var(--sx);right:var(--sx);top:150px}
+.head .kicker{margin-top:22px}
+.head .display{font-size:104px;margin-top:12px}
+.cart{position:absolute;left:var(--sx);right:var(--sx);top:470px}
+.ln{border-top:1px solid var(--line);padding:30px 0 28px;display:grid;grid-template-columns:1fr 250px;gap:20px;align-items:center}
+.ln .car{font-family:"Plex";font-weight:700;font-size:22px;letter-spacing:.06em;color:var(--red);text-transform:uppercase}
+.ln h3{font-family:"Barlow";font-weight:700;font-size:38px;line-height:1.05;text-transform:uppercase;letter-spacing:.02em;margin-top:8px}
+.ln p{font-family:"Barlow";font-weight:500;font-size:30px;line-height:1.12;color:var(--sub);margin-top:6px}
+.ln .px{text-align:right}
+.ln .px s{display:block;font-family:"Plex";font-size:26px;color:var(--grey)}
+.ln .px b{display:block;font-family:"Bebas";font-weight:400;font-size:84px;line-height:.95;color:var(--white);margin-top:4px}
+.ln .px i{display:block;font-style:normal;font-family:"Plex";font-weight:700;font-size:22px;color:var(--red);margin-top:4px}
+.tot{border-top:2px solid var(--white);padding-top:24px;display:grid;grid-template-columns:1fr auto;align-items:end}
+.tot span{font-family:"Barlow";font-weight:700;font-size:36px;text-transform:uppercase;letter-spacing:.03em}
+.tot span small{display:block;font-family:"Plex";font-weight:400;font-size:26px;color:var(--grey);text-transform:none;letter-spacing:0;margin-top:6px}
+.tot b{font-family:"Bebas";font-weight:400;font-size:120px;line-height:.9}
+.cta{position:absolute;left:var(--sx);right:var(--sx);bottom:150px;display:flex;align-items:center;justify-content:space-between}
+.cta .btn{background:var(--red);color:var(--white);font-family:"Bebas";font-size:50px;letter-spacing:.02em;padding:12px 24px 6px;white-space:nowrap;line-height:1}
+.cta .mark{position:static;width:250px}
+.fine{position:absolute;left:var(--sx);right:var(--sx);bottom:var(--sy)}
+</style></head><body>
+<div class="slide">
+  <div class="run"><span><b>A FILLED CART</b> &nbsp;·&nbsp; TWO CARS</span><span class="count">03<i> / 03</i></span></div>
+  <div class="head">
+    <div class="rule"></div>
+    <div class="kicker">One example, two cars</div>
+    <div class="display">Two cars,<br>one cart</div>
+  </div>
+  <div class="cart">
+    <div class="ln"><div><div class="car">Car 1 · Ferrari F430</div><h3>Brake Pads for Ferrari F430</h3><p>Front &amp; rear set, Quiet - Low Dust</p></div><div class="px"><s>was $195.00</s><b>$156.00</b><i>20% off</i></div></div>
+    <div class="ln"><div><div class="car">Car 2 · Maserati Ghibli</div><h3>Wheel Spacers for Maserati Ghibli</h3><p>Rear +15mm, FD chrome extended bolts</p></div><div class="px"><s>was $275.00</s><b>$233.75</b><i>15% off</i></div></div>
+    <div class="tot"><span>Cart total<small>was $470.00 · you save $80.25</small></span><b>$389.75</b></div>
+  </div>
+  <div class="cta"><span class="btn">Shop now · formuladynamics.com</span><div class="mark"><img src="../../../assets/logos/store-wordmark-white.png" alt="Formula Dynamics"></div></div>
+  <div class="fine">Example only. Prices from the formuladynamics.com listings for these variants, checked Nov 20, 2026. Sale ends Dec 4.</div>
+</div></body></html>

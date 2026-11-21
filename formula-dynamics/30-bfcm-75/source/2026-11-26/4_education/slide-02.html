@@ -1,0 +1,30 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../day.css">
+<style>
+/* numbered anatomy on the photo */
+.photo{height:800px}
+.photo img{--x:50%;--y:50%;--zoom:1.18}
+.photo .shade{background:linear-gradient(180deg,rgba(0,0,0,.6) 0%,rgba(0,0,0,.55) 11.25%,rgba(0,0,0,0) 27.5%,rgba(8,8,10,0) 80%,#08080A 100%)}
+.p1{left:var(--p1x,420px);top:var(--p1y,250px)}
+.p2{left:var(--p2x,975px);top:var(--p2y,565px)}
+.p3{left:var(--p3x,880px);top:var(--p3y,262px)}
+.ring3{position:absolute;left:816px;top:184px;width:50px;height:50px;margin:-25px 0 0 -25px;border-radius:50%;border:4px solid var(--red);box-shadow:0 0 0 3px rgba(8,8,10,.5);z-index:4}
+.p4{left:var(--p4x,190px);top:var(--p4y,600px)}
+ol{position:absolute;left:var(--sx);right:var(--sx);top:790px;list-style:none;display:grid;grid-template-columns:1fr 1fr;column-gap:36px}
+li{display:grid;grid-template-columns:62px 1fr;border-top:1px solid var(--line);padding:16px 0 14px}
+li .n{width:44px;height:44px;border-radius:50%;background:var(--red);font-family:"Plex";font-weight:700;font-size:24px;display:flex;align-items:center;justify-content:center}
+li h3{font-family:"Barlow";font-weight:700;font-size:34px;letter-spacing:.03em;text-transform:uppercase;line-height:1}
+li p{font-family:"Barlow";font-weight:500;font-size:30px;line-height:1.14;color:var(--sub);margin-top:6px}
+.photo::after{content:"";position:absolute;top:0;right:0;width:540px;height:190px;z-index:2;background:linear-gradient(270deg,rgba(8,8,10,.8) 0%,rgba(8,8,10,.8) 55%,rgba(8,8,10,0) 100%);-webkit-mask-image:linear-gradient(180deg,#000 0,#000 150px,transparent 190px)}
+</style></head><body>
+<div class="slide">
+  <div class="photo"><img src="../../../assets/photos/brembo2pc_rotor_face.jpg" alt="Two-piece Brembo rotor, face on"><div class="shade"></div></div>
+  <div class="run"><span><b>WHAT YOU'RE LOOKING AT</b> &nbsp;·&nbsp; BRAKE ROTORS</span><span class="count">02<i> / 03</i></span></div>
+  <div class="ring3"></div><div class="pin p1">1</div><div class="pin p2">2</div><div class="pin p3">3</div><div class="pin p4">4</div>
+  <ol>
+    <li><span class="n">1</span><div><h3>The hat</h3><p>The center. It bolts to the hub and carries the ring.</p></div></li>
+    <li><span class="n">2</span><div><h3>The ring</h3><p>The braking surface. The pads clamp both faces.</p></div></li>
+    <li><span class="n">3</span><div><h3>The joints</h3><p>Fasteners hold the ring to the hat.</p></div></li>
+    <li><span class="n">4</span><div><h3>The holes</h3><p>Cross-drilled. Slotted rings are the other option.</p></div></li>
+  </ol>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

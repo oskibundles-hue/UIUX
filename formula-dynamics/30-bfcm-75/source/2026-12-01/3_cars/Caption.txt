@@ -1,0 +1,5 @@
+The FD Power ECM for the Maserati 4200 is a separate module that works with the factory ECU. Your ECU stays in the car, it is not modified, and factory updates still go through. A Flip Chip switches between two programs, such as 91 or 93 octane.
+
+It fits the GranSport, Coupe and Spyder, and it is $1,276.00 this week, down from $1,595.00.
+
+20% off ECM modules through Dec 4. Shop at formuladynamics.com.

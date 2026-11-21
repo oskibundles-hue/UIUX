@@ -1,0 +1,31 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../day.css">
+<style>
+.hd{top:150px}
+.hd .display{font-size:104px}
+.flow{position:absolute;left:var(--sx);right:var(--sx);top:330px;display:grid;grid-template-columns:1fr 44px 1fr 44px 1fr;align-items:stretch}
+.node{min-height:470px;border:1px solid var(--line);border-top:6px solid var(--red);background:rgba(255,255,255,.03);padding:24px 20px 26px}
+.node .n{font-family:"Plex";font-weight:700;font-size:24px;color:var(--red)}
+.node h3{font-family:"Bebas";font-weight:400;font-size:66px;line-height:.9;margin-top:10px}
+.node p{font-family:"Barlow";font-weight:500;font-size:33px;line-height:1.16;color:var(--sub);margin-top:14px}
+.arr{display:flex;align-items:center;justify-content:center}
+.arr i{display:block;width:0;height:0;border-top:16px solid transparent;border-bottom:16px solid transparent;border-left:22px solid var(--red)}
+.back::after{content:"";position:absolute;left:-11px;top:-14px;width:0;height:0;border-left:11px solid transparent;border-right:11px solid transparent;border-bottom:16px solid rgba(255,255,255,.6)}
+.back{position:absolute;left:540px;right:214px;top:802px;border:2px dashed rgba(255,255,255,.35);border-top:0;height:56px}
+.back span{position:absolute;left:-52px;top:70px;width:520px;text-align:left;white-space:nowrap;font-family:"Barlow";font-weight:500;font-size:30px;line-height:1.25;color:var(--white)}
+.note{position:absolute;left:var(--sx);right:200px;top:1050px;font-family:"Barlow";font-weight:500;font-size:44px;line-height:1.18;color:var(--sub)}
+.note b{color:var(--white)}
+</style></head><body>
+<div class="slide">
+  <div class="run"><span><b>THE SIGNAL PATH</b> &nbsp;·&nbsp; PEDAL TO THROTTLE</span><span class="count">02<i> / 03</i></span></div>
+  <div class="hd"><div class="display">Three steps, every press</div></div>
+  <div class="flow">
+    <div class="node"><div class="n">01</div><h3>Pedal</h3><p>Position sensors read how far you press. There are usually two, so the system can cross-check them.</p></div>
+    <div class="arr"><i></i></div>
+    <div class="node"><div class="n">02</div><h3>ECU</h3><p>The engine computer turns pedal position into a throttle opening, using its own programming.</p></div>
+    <div class="arr"><i></i></div>
+    <div class="node"><div class="n">03</div><h3>Throttle body</h3><p>An electric motor turns the throttle plate to the angle the ECU asks for.</p></div>
+  </div>
+  <div class="back"><span>A sensor reports the plate's angle<br>back to the ECU</span></div>
+  <div class="note">So how the car answers your foot is <b>a setting</b>, not a fixed linkage.</div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

@@ -1,0 +1,3 @@
+On a drive-by-wire car there's no cable between your foot and the engine. Sensors in the pedal (usually two, so the system can cross-check them) report how far you press. The ECU turns that into a throttle opening, and an electric motor moves the throttle plate while another sensor reports its angle back.
+
+So pedal response is a setting, not a fixed linkage. FD sells drive-by-wire modules separately from ECU tunes, listed for competition use only. Details at formuladynamics.com.

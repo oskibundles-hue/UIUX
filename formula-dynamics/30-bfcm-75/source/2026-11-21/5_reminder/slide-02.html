@@ -1,0 +1,33 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<style>
+/* checklist on a paper-dark card, photo as a thin strip on the right */
+.strip{position:absolute;right:0;top:0;width:300px;height:1350px;overflow:hidden}
+.strip img{width:100%;height:100%;object-fit:cover;object-position:var(--x,50%) var(--y,50%);display:block}
+.strip::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,#08080A 0%,rgba(8,8,10,.35) 40%,rgba(8,8,10,.2) 100%)}
+.head{position:absolute;left:var(--sx);width:760px;top:150px}
+.head .display{font-size:112px;margin-top:20px}
+.head .body{font-size:34px;margin-top:18px}
+ul{position:absolute;left:var(--sx);width:800px;top:560px;list-style:none}
+li{display:grid;grid-template-columns:76px 1fr;padding:24px 0 22px;border-top:1px solid var(--line)}
+li .box{width:46px;height:46px;border:3px solid var(--red);margin-top:2px}
+li h3{font-family:"Barlow";font-weight:700;font-size:40px;line-height:1;text-transform:uppercase;letter-spacing:.03em;color:var(--white)}
+li p{font-family:"Barlow";font-weight:500;font-size:31px;line-height:1.18;color:var(--sub);margin-top:8px}
+li p b{color:var(--white);font-weight:700}
+.fine{position:absolute;left:var(--sx);width:760px;bottom:var(--sy)}
+.run{right:var(--sx)}
+</style></head><body>
+<div class="slide">
+  <div class="strip"><img src="../../../assets/photos/m4200_rear34_lift.jpg" alt="Black Maserati 4200 in the FD shop" style="--x:40%;--y:60%"></div>
+  <div class="run"><span><b>BEFORE YOU ADD PADS</b> &nbsp;·&nbsp; CHECKLIST</span><span class="count">02<i> / 03</i></span></div>
+  <div class="head">
+    <div class="rule"></div>
+    <div class="display">Order the right set once</div>
+  </div>
+  <ul>
+    <li><span class="box"></span><div><h3>Your brake package</h3><p>Some listings split by caliper. Quattroporte 2014+: <b>Base 4-piston front / 1-piston rear</b>, <b>S/SQ4 sport brakes 6 / 4</b>, or <b>GTS/Trofeo</b>.</p></div></li>
+    <li><span class="box"></span><div><h3>The axle</h3><p>Front pads only, rear pads only, or the front and rear set.</p></div></li>
+    <li><span class="box"></span><div><h3>The compound</h3><p><b>Quiet - Low Dust</b> (ceramic) or <b>Carbon Kevlar - Performance</b>, where the listing offers both.</p></div></li>
+  </ul>
+  <div class="fine">Options as named on the FD brake pad listings at formuladynamics.com, checked Nov 20, 2026.</div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

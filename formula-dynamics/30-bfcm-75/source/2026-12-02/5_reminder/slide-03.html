@@ -1,0 +1,33 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../day.css">
+<style>
+/* two columns: buy now (sale tiers) / buy later (carbon at regular price) */
+.head{position:absolute;left:var(--sx);right:var(--sx);top:150px}
+.head .display{font-size:116px}
+.head .body{font-size:34px;margin-top:14px}
+.cols{position:absolute;left:var(--sx);right:var(--sx);top:400px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.col{background:#131317;height:610px;display:flex;flex-direction:column}
+.col .hd{padding:18px 24px 14px;font-family:"Bebas";font-size:72px;line-height:.9}
+.col.now .hd{background:var(--red);color:var(--white)}
+.col.later .hd{border:3px solid rgba(255,255,255,.45);border-bottom:0;color:var(--white)}
+.col .sub{font-family:"Plex";font-size:21px;letter-spacing:.05em;color:var(--sub);text-transform:uppercase;padding:14px 24px 8px}
+.col ul{list-style:none;padding:0 24px}
+.col li{display:flex;justify-content:space-between;align-items:baseline;border-top:1px solid var(--line);padding:14px 0 12px;font-family:"Barlow";font-weight:700;font-size:32px;text-transform:uppercase;color:var(--white);line-height:1.05}
+.col li i{font-style:normal;font-family:"Plex";font-weight:700;font-size:26px;color:var(--red)}
+.col.later li{display:block;padding:14px 0 14px}
+.col.later li span{display:block;font-family:"Plex";font-weight:700;font-size:28px;color:var(--sub);text-transform:none;margin-top:6px}
+.col.later .note{margin-top:auto;padding:0 24px 22px;font-family:"Barlow";font-weight:500;font-size:30px;line-height:1.15;color:var(--sub)}
+.cta{bottom:180px}
+</style></head><body>
+<div class="slide">
+  <div class="run"><span><b>THE LAST THREE DAYS</b> &nbsp;·&nbsp; ENDS DEC 4</span><span class="count">03<i> / 03</i></span></div>
+  <div class="head"><div class="display">Order now.<br>Carbon later.</div></div>
+  <div class="cols">
+    <div class="col now"><div class="hd">Buy now</div><div class="sub">In a sale tier, ends Dec 4</div>
+      <ul><li>FD brake lines<i>20%</i></li><li>FD brake pads<i>20%</i></li><li>ECU tuning<i>20%</i></li><li>FD suspension<i>15%</i></li><li>Air filters<i>15%</i></li><li>KW coilovers<i>5%</i></li></ul></div>
+    <div class="col later"><div class="hd">Buy later</div><div class="sub">SF90 carbon, regular price</div>
+      <ul><li>Front dive planes<span>$1,200.00</span></li><li>Front center duct<span>$3,500.00</span></li><li>Front splitter lip<span>$7,200.00</span></li><li>Rear diffuser<span>$14,000.00</span></li></ul>
+      <div class="note">No sale price on any of them.</div></div>
+  </div>
+  <div class="cta"><span class="btn">Shop now · formuladynamics.com</span><div class="mark"><img src="../../../assets/logos/store-wordmark-white.png" alt="Formula Dynamics"></div></div>
+  <div class="fine abs">Up to 20% on selected parts through Dec 4, 2026. Carbon listings showed no sale price when checked Nov 20, 2026.</div>
+</div></body></html>

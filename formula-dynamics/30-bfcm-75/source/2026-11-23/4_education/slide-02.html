@@ -1,0 +1,49 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../day.css">
+<style>
+.head{position:absolute;left:var(--sx);right:var(--sx);top:140px}
+.head .kicker{margin-top:22px}
+.head .display{font-size:112px;margin-top:12px}
+.dia{position:absolute;left:var(--sx);top:430px;width:936px;height:520px;background:#111115;border:1px solid var(--line);overflow:hidden}
+.dia div{position:absolute}
+.dia .cap{font-family:"Plex";font-size:21px;letter-spacing:.06em;color:var(--sub);text-transform:uppercase;white-space:nowrap}
+.fender{left:-20px;top:46px;width:660px;height:84px;background:#2b2b31;border-radius:0 0 46px 0}
+.tire{left:330px;top:150px;width:250px;height:320px;background:#1d1d22;border:3px solid #4a4a52;border-radius:56px}
+.rim{left:548px;top:212px;width:14px;height:196px;background:#c9c9d0}
+.edge{left:637px;top:46px;width:6px;height:424px;background:var(--red)}
+.ground{left:0;right:0;top:470px;height:2px;background:#5a5a62}
+.gap{left:583px;top:302px;width:54px;height:2px;background:var(--white)}
+.gap::before,.gap::after{content:"";position:absolute;top:-12px;width:2px;height:26px;background:var(--white)}
+.gap::before{left:0}.gap::after{right:0}
+.gl{left:664px;top:282px}
+.gl .cap{letter-spacing:0}
+.gl b{display:block;font-family:"Bebas";font-size:64px;color:var(--white);line-height:.9;letter-spacing:.01em}
+.how{position:absolute;left:var(--sx);right:var(--sx);top:984px}
+.how p{font-family:"Barlow";font-weight:500;font-size:31px;line-height:1.15;color:var(--sub);padding-left:28px;position:relative;margin-bottom:10px}
+.how p::before{content:"";position:absolute;left:0;top:12px;width:12px;height:12px;background:var(--red)}
+.how p b{color:var(--white)}
+.fine{right:200px}
+</style></head><body>
+<div class="slide">
+  <div class="run"><span><b>WHEEL POSITION</b> &nbsp;·&nbsp; HOW TO MEASURE</span><span class="count">02<i> / 03</i></span></div>
+  <div class="head">
+    <div class="rule"></div>
+    <div class="kicker">Front view, one wheel</div>
+    <div class="display">One straight edge.<br>One gap.</div>
+  </div>
+  <div class="dia">
+    <div class="fender"></div><div class="cap" style="left:40px;top:76px;color:var(--white)">Fender, top centre</div>
+    <div class="tire"></div><div class="rim"></div>
+    <div class="cap" style="left:350px;top:180px">Tire</div>
+    <div class="cap" style="left:410px;top:416px">Rim face</div>
+    <div class="edge"></div><div class="cap" style="left:660px;top:150px;color:var(--red)">Straight edge</div>
+    <div class="gap"></div>
+    <div class="gl"><b>Gap, in mm</b><span class="cap">Rim or tire to edge</span></div>
+    <div class="ground"></div><div class="cap" style="left:40px;top:480px">Flat ground, wheels straight</div>
+  </div>
+  <div class="how">
+    <p>Hold the edge from the <b>top centre of the fender</b> down to the base of the tire.</p>
+    <p>Measure to the <b>rim face</b> for a more aggressive fit, or the tire's widest point.</p>
+  </div>
+  <div class="fine">Method from FD's guide "How to Measure for Wheel Spacers" on formuladynamics.com, read Nov 20, 2026.</div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

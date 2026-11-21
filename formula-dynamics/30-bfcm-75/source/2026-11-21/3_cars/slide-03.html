@@ -1,0 +1,41 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<style>
+.head{position:absolute;left:var(--sx);right:var(--sx);top:150px}
+.head .kicker{margin-top:22px}
+.head .display{font-size:124px;margin-top:14px}
+.card{position:absolute;left:var(--sx);right:var(--sx);top:500px;border:2px solid var(--line);background:rgba(255,255,255,.03)}
+.card .hd{display:flex;justify-content:space-between;align-items:center;background:var(--red);padding:14px 26px 8px}
+.card .hd b{font-family:"Bebas";font-weight:400;font-size:84px;line-height:.95;color:var(--white)}
+.card .hd span{font-family:"Plex";font-weight:700;font-size:44px;color:var(--white)}
+.row{display:grid;grid-template-columns:230px 1fr;align-items:baseline;padding:18px 26px;border-top:1px solid var(--line)}
+.row:first-of-type{border-top:0}
+.row i{font-style:normal;font-family:"Barlow";font-weight:700;font-size:28px;letter-spacing:.08em;text-transform:uppercase;color:var(--grey)}
+.row p{font-family:"Barlow";font-weight:700;font-size:36px;line-height:1.1;color:var(--white)}
+.chk{position:absolute;left:var(--sx);right:var(--sx);top:850px;font-family:"Barlow";font-weight:500;font-size:32px;line-height:1.1;color:var(--sub);white-space:nowrap}
+.price{position:absolute;left:var(--sx);right:var(--sx);top:945px;display:flex;align-items:flex-end;gap:28px;border-top:4px solid var(--red);padding-top:16px}
+.price .now{font-family:"Bebas";font-size:110px;line-height:.85;color:var(--white)}
+.price .was{font-family:"Plex";font-size:30px;color:var(--grey);text-decoration:line-through;text-decoration-color:rgba(255,255,255,.55);margin-bottom:8px}
+.price .off{margin-left:auto;font-family:"Bebas";font-size:64px;line-height:1;color:var(--red);margin-bottom:6px}
+.cta{position:absolute;left:var(--sx);right:var(--sx);bottom:176px;display:flex;align-items:center;justify-content:space-between}
+.cta .btn{background:var(--red);color:var(--white);font-family:"Bebas";font-size:50px;letter-spacing:.02em;padding:12px 24px 6px;white-space:nowrap;line-height:1}
+.cta .mark{position:static;width:250px}
+.fine{position:absolute;left:var(--sx);right:var(--sx);bottom:var(--sy)}
+</style></head><body>
+<div class="slide">
+  <div class="run"><span><b>THE LISTING</b> &nbsp;·&nbsp; PUROSANGUE FILTER</span><span class="count">03<i> / 03</i></span></div>
+  <div class="head">
+    <div class="rule"></div>
+    <div class="kicker">BMC FB487/20 · Ferrari Purosangue</div>
+    <div class="display">FB487/20<br><span style="color:var(--red)">$178.49</span></div>
+  </div>
+  <div class="card">
+    <div class="row"><i>Replaces OEM</i><p>223039 &middot; 235577 &middot; 802766</p></div>
+    <div class="row"><i>Fits</i><p>Purosangue 6.5 V12, 2022 on</p></div>
+    <div class="row"><i>Comes</i><p>Pre-oiled</p></div>
+    <div class="row"><i>Care</i><p>Washable and reusable</p></div>
+  </div>
+  <div class="chk">Not sure? The listing links BMC's own fit checker.</div>
+  <div class="price"><span class="now">$178.49</span><span class="was">$209.99</span><span class="off">15% OFF</span></div>
+  <div class="cta"><span class="btn">Shop now · formuladynamics.com</span><div class="mark"><img src="../../../assets/logos/store-wordmark-white.png" alt="Formula Dynamics"></div></div>
+  <div class="fine">15% off BMC air filters through Dec 4, 2026. Price from the BMC Air Filter for Ferrari Purosangue - FB487/20 listing, checked Nov 20, 2026.</div>
+</div></body></html>

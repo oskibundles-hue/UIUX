@@ -1,0 +1,28 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../day.css">
+<style>
+.photo{height:1350px}
+/* macro on the rear wheel (5.6s frame): zoom 2 puts the caliper at about (700,800) */
+.photo img{--y:100%;--zoom:2;--ox:994px;--oy:526px;filter:brightness(1.6) saturate(1.3)}
+.photo .shade{background:linear-gradient(180deg,rgba(8,8,10,.96) 0%,rgba(8,8,10,.9) 28%,rgba(8,8,10,.35) 40%,rgba(8,8,10,0) 50%,rgba(8,8,10,0) 84%,rgba(8,8,10,.85) 100%)}
+.top{position:absolute;left:var(--sx);right:var(--sx);top:150px;z-index:4}
+.top .kicker{margin-top:22px}
+.top .display{font-size:132px;margin-top:12px}
+.top .display .red{color:var(--red)}
+/* ring on the caliper behind the spokes; slide px */
+.ringc{left:var(--cx);top:var(--cy);width:210px;height:210px;margin:-105px 0 0 -105px;--cx:700px;--cy:800px}
+.call{position:absolute;right:var(--sx);top:935px;z-index:4;text-align:right}
+.bot{position:absolute;left:var(--sx);right:200px;bottom:var(--sy);z-index:4}
+</style></head><body>
+<div class="slide">
+  <div class="photo"><img src="../../../assets/photos/granturismo_rear34_wheelsharp.jpg" alt="White Maserati GranTurismo rear wheel, red caliper behind black spokes, FD shop"><div class="shade"></div></div>
+  <div class="run"><span><b>CARS &amp; PARTS</b> &nbsp;·&nbsp; MASERATI GRANTURISMO</span><span class="count">01<i> / 03</i></span></div>
+  <div class="top">
+    <div class="rule"></div>
+    <div class="kicker">FD brake pads · GranTurismo 2008–2019</div>
+    <div class="display">The pads live<br><span class="red">behind the spokes</span></div>
+  </div>
+  <div class="ringc"></div>
+  <div class="call"><span class="lab">20% off FD pads</span></div>
+  <div class="bot"><div class="tag">Shown: GranTurismo at the FD shop</div></div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>
