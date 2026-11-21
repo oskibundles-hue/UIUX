@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<!-- STARTER slide 2 of 3: photo top + ring callout on the part + was/now/save table. -->
+<style>
+.photo{height:700px}
+.photo img{--y:52%}
+.photo .shade{background:linear-gradient(180deg,rgba(8,8,10,.85) 0%,rgba(8,8,10,0) 24%,rgba(8,8,10,0) 72%,#08080A 100%)}
+/* ring: centre it on the part in slide px (--cx/--cy); zoom-check that it sits on the part after rendering */
+.ring{position:absolute;left:var(--cx);top:var(--cy);width:176px;height:176px;margin:-88px 0 0 -88px;border:4px solid var(--red);border-radius:50%;z-index:4;--cx:820px;--cy:330px}
+.callout{position:absolute;right:340px;top:304px;z-index:4;text-align:right}
+.callout .lab{display:inline-block;background:var(--red);color:var(--white);font-family:"Barlow";font-weight:700;font-size:34px;letter-spacing:.04em;padding:8px 16px;text-transform:uppercase}
+.head{position:absolute;left:var(--sx);right:var(--sx);top:690px}
+.head .display{font-size:104px}
+table{position:absolute;left:var(--sx);right:var(--sx);top:900px;width:936px;border-collapse:collapse}
+th{font-family:"Plex";font-weight:400;font-size:21px;letter-spacing:.06em;color:var(--grey);text-align:right;padding:0 0 12px;text-transform:uppercase}
+th:first-child{text-align:left}
+td{border-top:1px solid var(--line);padding:16px 0 14px;vertical-align:top;text-align:right;font-family:"Plex";font-size:30px;color:var(--sub)}
+td:first-child{text-align:left}
+td .st{font-family:"Bebas";font-size:58px;color:var(--white);line-height:.9;display:block}
+td .ex{font-family:"Barlow";font-weight:500;font-size:30px;color:var(--sub);display:block;margin-top:6px;line-height:1.1}
+td.was{text-decoration:line-through;text-decoration-color:rgba(255,255,255,.5)}
+td.now{color:var(--white);font-weight:700}
+td.save{color:var(--red);font-weight:700}
+.fine{position:absolute;left:var(--sx);right:200px;bottom:var(--sy)}
+</style></head><body>
+<div class="slide">
+  <div class="photo"><img src="../../../assets/_placeholder.jpg" alt="[[what the photo shows]]"><div class="shade"></div></div>
+  <div class="run"><span><b>[[SECTION]]</b> &nbsp;·&nbsp; [[PART]]</span><span class="count">02<i> / 03</i></span></div>
+  <div class="ring"></div>
+  <div class="callout"><span class="lab">[[Label on the part]]</span></div>
+  <div class="head"><div class="display">[[Which one is yours?]]</div></div>
+  <table>
+    <tr><th>[[Variant]]</th><th>Was</th><th>Now</th><th>You save</th></tr>
+    <tr><td><span class="st">[[Variant A]]</span><span class="ex">[[who it is for]]</span></td><td class="was">[[$0.00]]</td><td class="now">[[$0.00]]</td><td class="save">[[$0.00]]</td></tr>
+    <tr><td><span class="st">[[Variant B]]</span><span class="ex">[[who it is for]]</span></td><td class="was">[[$0.00]]</td><td class="now">[[$0.00]]</td><td class="save">[[$0.00]]</td></tr>
+  </table>
+  <div class="fine">Prices from the formuladynamics.com listing, checked [[Mon D, YYYY]].</div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

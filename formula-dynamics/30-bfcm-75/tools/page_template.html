@@ -53,6 +53,8 @@ html{scroll-padding-top:84px}
 .day{padding-top:44px}
 .day h2{font-size:clamp(34px,4vw,48px);display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 16px;border-top:3px solid var(--red);padding-top:12px}
 .day h2 span{font:600 17px/1.2 Barlow,sans-serif;color:var(--red)}
+.day h2 .up{margin-left:auto;align-self:center;font:500 14px/1 "IBM Plex Mono",Menlo,monospace;color:var(--sub);text-decoration:none;padding:14px 0}
+.day h2 .up:hover,.day h2 .up:focus-visible{color:var(--red)}
 .post{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:22px 28px;padding:26px 0;border-bottom:1px solid var(--line)}
 .strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
 .strip img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;border-radius:3px;background:var(--panel)}
@@ -95,7 +97,7 @@ footer p{max-width:70ch}
 <main class="band" style="padding-top:0"><div class="wrap" id="list"></div></main>
 <footer class="band"><div class="wrap">
   <h2>Full-size files</h2>
-  <p>The 1080 × 1350 exports, the 75 captions, the editable source, the source and fitment ledger, the contact sheet and the boss review PDF are in the <a href="__DRIVE__">Drive delivery folder</a>. The pictures on this page are reduced previews.</p>
+  <p>The 1080 × 1350 exports, the 75 captions, the editable source, the source and fitment ledger, the contact sheet, the full-size review PDF and PDFs of this page (one for a laptop, one for a phone) are in the <a href="__DRIVE__">Drive delivery folder</a>. The pictures on this page are reduced previews.</p>
   <p>__CHECKS__</p>
   <p class="warn">Discount tiers come from the campaign notes in the sale folder. The public sale emails were not found, so check the tiers against them before anything posts.</p>
 </div></footer>
@@ -112,13 +114,13 @@ wall.innerHTML = '<span class="lab"></span>' + ROLES.map(r => `<span class="lab"
       : `<span class="tile gap" title="Not built yet"></span>`).join("")).join("");
 document.getElementById("days").innerHTML = DATA.map(d => `<a href="#${d.id}">${d.wd} ${d.md}</a>`).join("");
 document.getElementById("list").innerHTML = DATA.map(d => `<section class="day" id="${d.id}">
-  <h2>${d.wdl} ${d.md}${d.note ? `<span>${esc(d.note)}</span>` : ""}</h2>
+  <h2>${d.wdl} ${d.md}${d.note ? `<span>${esc(d.note)}</span>` : ""}<a class="up" href="#wall">All covers ↑</a></h2>
   ${d.posts.map((p, i) => p ? `<article class="post" id="c${p.n}">
     <div class="strip">${p.imgs.map((s, k) => `<img src="${s}" alt="Slide ${k + 1} of 3" loading="lazy">`).join("")}</div>
     <div class="meta">
       <p class="when">${ROLES[i][0]} · <span class="mono">${ROLES[i][1]}</span> · #${p.n}</p>
       <h3>${esc(p.concept || p.role)}</h3>
-      ${p.prices && !/^(none|n\/a|-)?$/i.test(p.prices) ? `<p class="prices"><b>Prices shown:</b> ${esc(p.prices.replace(/\s*->\s*/g, " now "))}</p>` : ""}
+      ${p.prices ? `<p class="prices"><b>Prices shown:</b> ${/^(none|n\/a|-)$/i.test(p.prices.trim()) ? "none on the slides" : esc(p.prices.replace(/\s*->\s*/g, " now "))}</p>` : ""}
       <p class="cap">${esc(p.cap)}</p>
       <button class="copy" type="button" data-n="${p.n}">Copy caption</button>
     </div></article>`

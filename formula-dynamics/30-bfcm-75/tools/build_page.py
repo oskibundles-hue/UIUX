@@ -12,7 +12,7 @@ SLOTS = [("1_products", "Product spotlight", "9 AM"), ("2_sale", "Sale guide", "
          ("5_reminder", "Sale reminder", "7 PM")]
 NOTES = {"2026-11-26": "Thanksgiving", "2026-11-27": "Black Friday", "2026-11-28": "Small Business Saturday",
          "2026-11-30": "Cyber Monday", "2026-12-04": "Last day of the sale"}
-DRIVE = "https://drive.google.com/drive/folders/1thkwBipnUR0XABz6mdxJmZlc8y-afVv-"
+DRIVE = "https://drive.google.com/drive/folders/1Y3I1KqXrw-jF1eHXEZED7Un6HgVE9LMh"
 # What was checked: only state what the review runs actually did. Optional third argument: a text file to use instead.
 CHECKS = (pathlib.Path(sys.argv[3]).read_text().strip() if len(sys.argv) > 3 else
           "Every carousel was reviewed at phone size (390 px wide) for margins, clipping and readable type, "
