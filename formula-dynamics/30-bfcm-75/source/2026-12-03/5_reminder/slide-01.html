@@ -1,0 +1,36 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../day.css">
+<style>
+.photo{height:1350px}
+.photo img{--x:58%;--y:55%}
+.photo .shade{background:linear-gradient(180deg,rgba(8,8,10,.9) 0%,rgba(8,8,10,.55) 20%,rgba(8,8,10,.15) 36%,rgba(8,8,10,.2) 52%,rgba(8,8,10,.92) 66%,#08080A 100%)}
+.strip{position:absolute;left:var(--sx);right:var(--sx);top:150px;display:grid;grid-template-columns:repeat(3,1fr);z-index:4;border-top:3px solid var(--red)}
+.d{padding:16px 0 0}
+.d .w{font-family:"Plex";font-size:22px;letter-spacing:.08em;color:var(--sub);text-transform:uppercase}
+.d .n{font-family:"Bebas";font-size:96px;line-height:.9;color:var(--white);margin-top:6px}
+.d .s{font-family:"Barlow";font-weight:700;font-size:30px;text-transform:uppercase;letter-spacing:.04em;color:var(--sub)}
+.d.today .n{color:var(--white)}
+.d.today .s{color:var(--white)}
+.d.last{background:var(--red);padding:16px 18px 14px}
+.d.last .w,.d.last .s{color:var(--white)}
+.d.off{opacity:.45;padding-left:18px}
+.bot{position:absolute;left:var(--sx);right:200px;bottom:var(--sy);z-index:4}
+.bot .display{font-size:128px}
+.bot .display .red{color:var(--red)}
+.bot .body{font-size:38px;margin-top:20px}
+.bot .tag{margin-top:20px}
+</style></head><body>
+<div class="slide">
+  <div class="photo"><img src="../../../assets/photos/shop_goldwheel_shelf.jpg" alt="Gold parts on a display shelf at the Formula Dynamics shop"><div class="shade"></div></div>
+  <div class="run"><span><b>SALE REMINDER</b> &nbsp;·&nbsp; EVENING</span><span class="count">01<i> / 03</i></span></div>
+  <div class="strip">
+    <div class="d today"><div class="w">Thu</div><div class="n">Dec 3</div><div class="s">Today: ask</div></div>
+    <div class="d last"><div class="w">Fri</div><div class="n">Dec 4</div><div class="s">Last day</div></div>
+    <div class="d off"><div class="w">Sat</div><div class="n">Dec 5</div><div class="s">Sale over</div></div>
+  </div>
+  <div class="bot">
+    <div class="display">Unsure it fits?<br><span class="red">Ask tonight</span></div>
+    <div class="body">Ask today and keep <b>Dec 4</b> for ordering.</div>
+    <div class="tag">Shown: a display shelf at the FD shop</div>
+  </div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

@@ -1,0 +1,32 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../day.css">
+<style>
+.top{position:absolute;left:var(--sx);right:var(--sx);top:150px;z-index:4}
+.top .kicker{margin-top:22px}
+.top .display{font-size:158px;line-height:.9;margin-top:24px}
+.top .display .red{color:var(--red)}
+.photo{top:800px;height:550px}
+.photo img{--x:50%;--y:72%;filter:brightness(.95) contrast(1.05)}
+.photo .shade{background:linear-gradient(180deg,#08080A 0%,rgba(8,8,10,.4) 18%,rgba(8,8,10,0) 40%,rgba(8,8,10,.35) 62%,rgba(8,8,10,.92) 84%,#08080A 100%)}
+.wire{position:absolute;left:var(--sx);right:var(--sx);top:730px;display:flex;align-items:center;gap:18px}
+.wire .end{font-family:"Plex";font-weight:700;font-size:26px;letter-spacing:.08em;color:var(--white);text-transform:uppercase;white-space:nowrap}
+.wire .gap{flex:1;border-top:3px dashed rgba(255,255,255,.35);position:relative;height:0}
+.wire .gap::after{content:"NO CABLE";position:absolute;left:50%;top:-40px;transform:translateX(-50%);font-family:"Plex";font-weight:700;font-size:22px;letter-spacing:.1em;color:var(--red);background:#08080A;padding:0 10px;white-space:nowrap}
+.bot{position:absolute;left:var(--sx);right:200px;bottom:var(--sy);z-index:4}
+.bot .body{font-size:40px}
+.bot .tag{margin-top:18px}
+</style></head><body>
+<div class="slide">
+  <div class="photo"><img src="../../../assets/photos/urus_dash_script.jpg" alt="Dashboard and air vents inside the Lamborghini Urus"><div class="shade"></div></div>
+  <div class="run"><span><b>HOW IT WORKS</b> &nbsp;·&nbsp; DRIVE-BY-WIRE</span><span class="count">01<i> / 03</i></span></div>
+  <div class="top">
+    <div class="rule"></div>
+    <div class="kicker">Throttle response, explained</div>
+    <div class="display">There's no cable behind <span class="red">your pedal</span></div>
+  </div>
+  <div class="wire"><span class="end">Pedal</span><span class="gap"></span><span class="end">Throttle plate</span></div>
+  <div class="bot">
+    <div class="body">On a drive-by-wire car the pedal is a sensor. A computer and an electric motor do the rest. Swipe for the path.</div>
+    <div class="tag">Shown: Lamborghini Urus cabin</div>
+  </div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

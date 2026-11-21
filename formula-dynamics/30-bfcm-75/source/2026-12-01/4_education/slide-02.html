@@ -1,0 +1,50 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../day.css">
+<style>
+.head{position:absolute;left:var(--sx);right:var(--sx);top:140px}
+.head .display{font-size:100px}
+.head .body{font-size:32px;margin-top:10px}
+.cmp{position:absolute;left:var(--sx);top:330px;width:936px;display:flex;gap:24px}
+.pane{flex:1;background:#111115;border:1px solid var(--line);height:470px;position:relative;overflow:hidden}
+.pane .cap{position:absolute;left:18px;top:14px;font-family:"Plex";font-size:22px;letter-spacing:.06em;color:var(--sub);text-transform:uppercase;font-weight:700}
+.pane.low .cap{color:var(--red)}
+.pane svg{position:absolute;left:0;top:0;width:100%;height:100%}
+.pane .v{position:absolute;left:18px;bottom:14px;font-family:"Bebas";font-size:60px;line-height:1;color:var(--white)}
+.pane .v small{display:block;font-family:"Plex";font-size:21px;letter-spacing:.04em;color:var(--grey);text-transform:uppercase;margin-top:4px}
+.steps{position:absolute;left:var(--sx);right:var(--sx);top:840px}
+.k{display:grid;grid-template-columns:64px 1fr;border-top:1px solid var(--line);padding:14px 0}
+.k .n{width:44px;height:44px;border-radius:50%;background:var(--white);color:var(--ink);font-family:"Bebas";font-size:34px;line-height:48px;text-align:center}
+.k .t{font-family:"Barlow";font-weight:500;font-size:31px;line-height:1.15;color:var(--sub)}
+.k .t b{color:var(--white);font-weight:700}
+.tagb{position:absolute;left:var(--sx);bottom:var(--sy)}
+</style></head><body>
+<div class="slide">
+  <div class="run"><span><b>RIDE HEIGHT</b> &nbsp;·&nbsp; SIDE BY SIDE</span><span class="count">02<i> / 03</i></span></div>
+  <div class="head"><div class="display">Same wheel. Less room.</div><div class="body">Front view of one wheel and arch, before and after lowering.</div></div>
+  <div class="cmp">
+    <div class="pane"><div class="cap">Stock height</div>
+      <svg viewBox="0 0 456 470" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 110 L0 40 L456 40 L456 110 L400 110 Q228 20 56 110 Z" fill="#2b2b31"/>
+        <path d="M56 110 Q228 20 400 110" fill="none" stroke="#C9C9D0" stroke-width="5"/>
+        <rect x="116" y="170" width="224" height="250" rx="40" fill="#1d1d22" stroke="#4a4a52" stroke-width="4"/>
+        <line x1="228" y1="66" x2="228" y2="170" stroke="#fff" stroke-width="4"/>
+        <line x1="212" y1="66" x2="244" y2="66" stroke="#fff" stroke-width="4"/><line x1="212" y1="170" x2="244" y2="170" stroke="#fff" stroke-width="4"/>
+        <line x1="0" y1="420" x2="456" y2="420" stroke="#5a5a62" stroke-width="3"/>
+      </svg><div class="v">Gap<small>Room to move</small></div></div>
+    <div class="pane low"><div class="cap">Lowered</div>
+      <svg viewBox="0 0 456 470" xmlns="http://www.w3.org/2000/svg">
+        <path d="M0 170 L0 100 L456 100 L456 170 L400 170 Q228 80 56 170 Z" fill="#2b2b31"/>
+        <path d="M56 170 Q228 80 400 170" fill="none" stroke="#C9C9D0" stroke-width="5"/>
+        <rect x="116" y="170" width="224" height="250" rx="40" fill="#1d1d22" stroke="#4a4a52" stroke-width="4"/>
+        <line x1="228" y1="126" x2="228" y2="170" stroke="#FE0F13" stroke-width="5"/>
+        <line x1="212" y1="126" x2="244" y2="126" stroke="#FE0F13" stroke-width="5"/><line x1="212" y1="170" x2="244" y2="170" stroke="#FE0F13" stroke-width="5"/>
+        <line x1="0" y1="420" x2="456" y2="420" stroke="#5a5a62" stroke-width="3"/>
+      </svg><div class="v">Smaller gap<small>Less room to move</small></div></div>
+  </div>
+  <div class="steps">
+    <div class="k"><div class="n">1</div><div class="t"><b>Measure</b> tire top to arch lip at today's ride height.</div></div>
+    <div class="k"><div class="n">2</div><div class="t"><b>Subtract</b> how far the car will drop. What is left is the room.</div></div>
+    <div class="k"><div class="n">3</div><div class="t"><b>Tire and wheel size</b> change the answer. Check them too.</div></div>
+  </div>
+  <div class="tagb tag">Simplified drawing, not to scale</div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

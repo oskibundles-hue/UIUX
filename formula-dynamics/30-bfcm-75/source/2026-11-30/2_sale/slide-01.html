@@ -1,0 +1,41 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../day.css">
+<style>
+/* date strip: 15 sale days, the first ten spent, Cyber Monday lit, four to go */
+.head{position:absolute;left:var(--sx);right:var(--sx);top:150px}
+.head .kicker{margin-top:22px}
+.head .display{font-size:200px;margin-top:14px;line-height:.86}
+.head .display .red{color:var(--red)}
+.strip{position:absolute;left:var(--sx);right:var(--sx);top:640px}
+.lab{font-family:"Plex";font-size:24px;letter-spacing:.08em;color:var(--grey);text-transform:uppercase;margin-bottom:14px}
+.days{display:grid;grid-template-columns:repeat(15,1fr);gap:0}
+.d{height:92px;border:1px solid var(--line);border-left:0;display:flex;align-items:center;justify-content:center;font-family:"Plex";font-weight:700;font-size:26px;color:#5b5b63;background:#101014}
+.d:first-child{border-left:1px solid var(--line)}
+.d.gone{background:#101014}
+.d.half{border-bottom:5px solid var(--grey);color:var(--sub)}
+.d.now{background:var(--red);color:var(--white);border-color:var(--red)}
+.d.left{color:var(--white);background:transparent}
+.marks{position:relative;height:84px;margin-top:10px;font-family:"Plex";font-size:22px;letter-spacing:.04em;color:var(--sub);text-transform:uppercase}
+.marks span{position:absolute;white-space:nowrap}
+.marks .h{left:calc(100%/15*7 - 12px);top:0;color:var(--sub)}
+.marks .n{right:calc(100%/15*4 - 8px);top:40px;color:var(--red);font-weight:700}
+.marks .e{right:0;top:36px;color:var(--white)}
+.bot{position:absolute;left:var(--sx);right:200px;bottom:var(--sy)}
+.bot .body{font-size:38px}
+</style></head><body>
+<div class="slide">
+  <div class="run"><span><b>CYBER MONDAY</b> &nbsp;·&nbsp; MON NOV 30</span><span class="count">01<i> / 03</i></span></div>
+  <div class="head">
+    <div class="rule"></div>
+    <div class="kicker">Day 11 of the 15-day sale</div>
+    <div class="display">Past halfway.<br><span class="red">5 days left.</span></div>
+  </div>
+  <div class="strip">
+    <div class="lab">Sale days, Nov 20 to Dec 4</div>
+    <div class="days">
+      <div class="d gone">20</div><div class="d gone">21</div><div class="d gone">22</div><div class="d gone">23</div><div class="d gone">24</div><div class="d gone">25</div><div class="d gone">26</div><div class="d half">27</div><div class="d gone">28</div><div class="d gone">29</div><div class="d now">30</div><div class="d left">1</div><div class="d left">2</div><div class="d left">3</div><div class="d left">4</div>
+    </div>
+    <div class="marks"><span class="h">&#9650; Halfway, Nov 27</span><span class="n">Today &#9650;</span></div>
+  </div>
+  <div class="bot"><div class="body">The sale ends Fri Dec 4. Swipe for three listings already in it today.</div></div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

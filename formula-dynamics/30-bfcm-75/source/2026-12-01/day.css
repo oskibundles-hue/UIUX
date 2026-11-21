@@ -1,0 +1,8 @@
+/* Dec 1 day-wide additions. Loaded after ../../styles.css. */
+.cta{position:absolute;left:var(--sx);right:var(--sx);display:flex;align-items:center;justify-content:space-between;z-index:5}
+.cta .btn{background:var(--red);color:var(--white);font-family:"Bebas";font-size:50px;letter-spacing:.02em;padding:12px 24px 6px;white-space:nowrap;line-height:1}
+.cta .mark{position:static;width:250px}
+.fineb{position:absolute;left:var(--sx);right:var(--sx);bottom:var(--sy);z-index:5}
+.was{text-decoration:line-through;text-decoration-color:rgba(255,255,255,.55);color:var(--grey)}
+.pill{display:inline-block;background:var(--red);color:var(--white);font-family:"Plex";font-weight:700;font-size:26px;padding:4px 12px;letter-spacing:.02em}
+.pill.ghost{background:transparent;border:2px solid var(--red);color:var(--white)}

@@ -1,0 +1,29 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<style>
+/* the handoff checklist: three boxes to tick before the car is dropped off */
+.head{position:absolute;left:var(--sx);right:var(--sx);top:130px}
+.head .display{font-size:100px}
+.head .body{margin-top:16px;font-size:34px}
+.list{position:absolute;left:var(--sx);right:var(--sx);top:350px}
+.item{display:grid;grid-template-columns:84px 1fr;column-gap:30px;padding:34px 0;border-top:1px solid var(--line)}
+.item:last-child{border-bottom:1px solid var(--line)}
+.box{width:64px;height:64px;border:3px solid var(--red);margin-top:4px;position:relative}
+.box::after{content:"";position:absolute;left:18px;top:4px;width:18px;height:34px;border-right:5px solid var(--white);border-bottom:5px solid var(--white);transform:rotate(45deg)}
+.item h3{margin:0;font-family:"Bebas";font-weight:400;font-size:60px;line-height:.92;color:var(--white);text-transform:uppercase}
+.item p{margin:10px 0 0;font-family:"Barlow";font-weight:500;font-size:32px;line-height:1.2;color:var(--sub)}
+.fine{position:absolute;left:var(--sx);right:200px;bottom:var(--sy)}
+</style></head><body>
+<div class="slide">
+  <div class="run"><span><b>THE HANDOFF</b> &nbsp;·&nbsp; THREE CHECKS</span><span class="count">02<i> / 03</i></span></div>
+  <div class="head">
+    <div class="display">Tick these first</div>
+    <div class="body">Before the car is dropped off for the install.</div>
+  </div>
+  <div class="list">
+    <div class="item"><div class="box"></div><div><h3>Send the listing links</h3><p>One link per part, so your installer sees exactly what's arriving.</p></div></div>
+    <div class="item"><div class="box"></div><div><h3>Name the variant</h3><p>Valved or not, Stage 1 or Stage 2: the listing shows what you picked.</p></div></div>
+    <div class="item"><div class="box"></div><div><h3>Ask what the shop supplies</h3><p>Anything already in your box shouldn't show up again on the bill.</p></div></div>
+  </div>
+  <div class="fine">For owners who buy parts online and have them fitted by an installer.</div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

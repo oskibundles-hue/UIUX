@@ -1,0 +1,50 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../day.css">
+<style>
+.head{position:absolute;left:var(--sx);right:var(--sx);top:140px}
+.head .display{font-size:104px;margin-top:18px}
+.panel{position:absolute;left:var(--sx);right:var(--sx);height:380px;border-top:1px solid var(--line)}
+.p1{top:390px}.p2{top:800px}
+.panel .st{position:absolute;left:0;top:24px;font-family:"Bebas";font-size:72px;line-height:.9;color:var(--white)}
+.panel .st i{font-style:normal;color:var(--red)}
+.panel p{position:absolute;left:0;top:96px;width:330px;font-family:"Barlow";font-weight:500;font-size:31px;line-height:1.16;color:var(--sub)}
+.panel p b{color:var(--white);font-weight:700}
+.panel svg{position:absolute;right:0;top:26px}
+</style></head><body>
+<div class="slide">
+  <div class="run"><span><b>HOW IT WORKS</b> &nbsp;·&nbsp; TWO PATHS</span><span class="count">02<i> / 03</i></span></div>
+  <div class="head"><div class="rule"></div><div class="display">Closed or open</div></div>
+  <div class="panel p1">
+    <div class="st">Valve <i>closed</i></div>
+    <p>Gas takes the <b>longer path</b> through a resonator section. Quieter, for cold starts and cruising.</p>
+    <svg width="580" height="330" viewBox="0 0 580 330" fill="none">
+      <rect x="120" y="40" width="340" height="250" rx="18" stroke="#C9C9D0" stroke-width="4"/>
+      <path d="M0 165 H120" stroke="#C9C9D0" stroke-width="10"/>
+      <path d="M460 165 H580" stroke="#C9C9D0" stroke-width="10"/>
+      <rect x="180" y="200" width="220" height="60" rx="10" stroke="#9A9AA2" stroke-width="3" stroke-dasharray="8 8"/>
+      <text x="290" y="238" fill="#9A9AA2" font-family="Plex" font-size="21" text-anchor="middle">RESONATOR</text>
+      <path d="M150 165 H296" stroke="#9A9AA2" stroke-width="3" stroke-dasharray="6 6"/>
+      <line x1="300" y1="130" x2="300" y2="200" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+      <path d="M20 165 H150 V230 H180" stroke="#FE0F13" stroke-width="5"/>
+      <path d="M400 230 H430 V165 H560" stroke="#FE0F13" stroke-width="5"/>
+      <path d="M546 153 L566 165 L546 177" stroke="#FE0F13" stroke-width="5"/>
+      <text x="300" y="112" fill="#FFFFFF" font-family="Plex" font-size="21" text-anchor="middle">VALVE SHUT</text>
+    </svg>
+  </div>
+  <div class="panel p2">
+    <div class="st">Valve <i>open</i></div>
+    <p>Gas takes the <b>short, straight path</b> to the tips. Louder.</p>
+    <svg width="580" height="330" viewBox="0 0 580 330" fill="none">
+      <rect x="120" y="40" width="340" height="250" rx="18" stroke="#C9C9D0" stroke-width="4"/>
+      <path d="M0 165 H120" stroke="#C9C9D0" stroke-width="10"/>
+      <path d="M460 165 H580" stroke="#C9C9D0" stroke-width="10"/>
+      <rect x="180" y="200" width="220" height="60" rx="10" stroke="#9A9AA2" stroke-width="3" stroke-dasharray="8 8"/>
+      <text x="290" y="238" fill="#9A9AA2" font-family="Plex" font-size="21" text-anchor="middle">RESONATOR</text>
+      <path d="M20 165 H560" stroke="#FE0F13" stroke-width="5"/>
+      <path d="M546 153 L566 165 L546 177" stroke="#FE0F13" stroke-width="5"/>
+      <line x1="265" y1="148" x2="335" y2="148" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/>
+      <text x="300" y="112" fill="#FFFFFF" font-family="Plex" font-size="21" text-anchor="middle">VALVE OPEN</text>
+    </svg>
+  </div>
+  <div class="fine foot" style="right:200px">Simplified diagram. Closed-valve routing as described in the formuladynamics.com F8 valved exhaust listing.</div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

@@ -1,0 +1,14 @@
+/* Nov 29 day-wide additions (shared by the five carousels). styles.css is untouched. */
+.cta{position:absolute;left:var(--sx);right:var(--sx);display:flex;align-items:center;justify-content:space-between;gap:24px}
+.cta .btn{background:var(--red);color:var(--white);font-family:"Bebas";font-size:50px;letter-spacing:.02em;padding:12px 24px 6px;white-space:nowrap;line-height:1}
+.cta .mark{position:static;width:250px;flex:none}
+.fine.abs{position:absolute;left:var(--sx);right:var(--sx);bottom:var(--sy)}
+.fine.abs.short{right:200px}
+.hd{position:absolute;left:var(--sx);right:var(--sx);z-index:4}
+.hd .display{font-size:104px}
+.hd .body{margin-top:14px}
+.price .now{color:var(--white);font-weight:700}
+.was{text-decoration:line-through;text-decoration-color:rgba(255,255,255,.5)}
+.pill{display:inline-block;font-family:"Plex";font-weight:700;font-size:22px;letter-spacing:.06em;text-transform:uppercase;
+  padding:6px 12px;border:2px solid var(--red);color:var(--white)}
+.pill.solid{background:var(--red)}

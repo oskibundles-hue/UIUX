@@ -1,0 +1,10 @@
+/* Nov 26 day-wide additions (Thanksgiving, brakes day). Loaded after ../../styles.css. */
+.cta{position:absolute;left:var(--sx);right:var(--sx);bottom:196px;display:flex;align-items:center;justify-content:space-between;z-index:4}
+.cta .btn{background:var(--red);color:var(--white);font-family:"Bebas";font-size:50px;letter-spacing:.02em;padding:12px 24px 6px;white-space:nowrap;line-height:1}
+.cta .mark{position:static;width:250px}
+.fine.foot{position:absolute;left:var(--sx);right:var(--sx);bottom:var(--sy);z-index:4}
+.was{text-decoration:line-through;text-decoration-color:rgba(255,255,255,.55);color:var(--grey)}
+.red{color:var(--red)}
+.pin{position:absolute;width:56px;height:56px;margin:-28px 0 0 -28px;border-radius:50%;background:var(--red);color:var(--white);
+  font-family:"Plex";font-weight:700;font-size:28px;display:flex;align-items:center;justify-content:center;z-index:4;
+  box-shadow:0 0 0 4px rgba(8,8,10,.55)}

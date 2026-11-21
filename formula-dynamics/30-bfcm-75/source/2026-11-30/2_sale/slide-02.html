@@ -1,0 +1,29 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../day.css">
+<style>
+/* three listing tiles: photo, title, variant, was and now */
+.head{position:absolute;left:var(--sx);right:var(--sx);top:150px}
+.head .display{font-size:104px;margin-top:18px}
+.head .display .red{color:var(--red)}
+.tiles{position:absolute;left:var(--sx);right:var(--sx);top:350px}
+.t{display:grid;grid-template-columns:220px 1fr;gap:28px;border-top:1px solid var(--line);padding:18px 0 16px;align-items:center}
+.t .im{width:220px;height:220px;background:#fff;overflow:hidden}
+.t .im img{width:100%;height:100%;object-fit:contain}
+.t h3{font-family:"Bebas";font-weight:400;font-size:50px;line-height:.98;color:var(--white);text-transform:uppercase}
+.t .v{font-family:"Plex";font-size:22px;letter-spacing:.04em;color:var(--grey);text-transform:uppercase;margin-top:10px;line-height:1.3}
+.t .p{display:flex;align-items:baseline;gap:16px;margin-top:12px}
+.t .p b{font-family:"Plex";font-weight:700;font-size:38px;color:var(--white)}
+.t .p s{font-family:"Plex";font-size:28px;color:var(--grey);text-decoration-color:rgba(255,255,255,.5)}
+.t .p em{font-style:normal;font-family:"Barlow";font-weight:700;font-size:32px;color:var(--white);background:var(--red);padding:2px 12px 0;letter-spacing:.04em}
+.fine.pin{right:200px}
+</style></head><body>
+<div class="slide">
+  <div class="run"><span><b>IN THE SALE TODAY</b> &nbsp;·&nbsp; 3 LISTINGS</span><span class="count">02<i> / 03</i></span></div>
+  <div class="head"><div class="rule"></div><div class="display">Already <span class="red">marked down</span></div></div>
+  <div class="tiles">
+    <div class="t"><div class="im"><img src="../../../assets/photos/ghibli_swaybars_listing.png" alt="Sport sway bars, store listing photo"></div><div><h3>Sport sway bars, Maserati Ghibli</h3><div class="v">3.0L Base / S / SQ4</div><div class="p"><b>$675.75</b><s>$795.00</s><em>15% OFF</em></div></div></div>
+    <div class="t"><div class="im"><img src="../../../assets/photos/larini_xpipe_ghibli_listing.png" alt="Larini X-pipe, store listing photo"></div><div><h3>Larini X-pipe, Maserati Ghibli</h3><div class="v">Base / S (2WD) variant</div><div class="p"><b>$1,075.50</b><s>$1,195.00</s><em>10% OFF</em></div></div></div>
+    <div class="t"><div class="im"><img src="../../../assets/photos/kw_v3_ghibli_listing.jpg" alt="KW V3 coilover kit, store listing photo"></div><div><h3>KW V3 coilover kit, Maserati Ghibli</h3><div class="v">Without Skyhook variant</div><div class="p"><b>$3,409.55</b><s>$3,589.00</s><em>5% OFF</em></div></div></div>
+  </div>
+  <div class="fine pin">Prices and variants from the formuladynamics.com listings. Selected parts only, through Dec 4, 2026.</div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

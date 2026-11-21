@@ -21,9 +21,18 @@ CAL = {  # date: (spotlight, sale guide, car, education, reminder) from the Code
 SLOTS = ["1_products","2_sale","3_cars","4_education","5_reminder"]
 NAMES = ["Product spotlight","Sale guide","Car with product","Education","Sale reminder"]
 out = pathlib.Path(sys.argv[1])
-done = {}
-with open(out/"ledger"/"FD-BFCM-75 source and fitment ledger.csv") as f:
-    for r in csv.DictReader(f): done[(r["date"], r["slot"])] = r
+done = {}; rows = []
+here = pathlib.Path(__file__).resolve().parent.parent
+for fp in sorted((here/"ledger"/"rows").glob("*.csv")):
+    with open(fp) as f:
+        for r in csv.DictReader(f): rows.append(r)
+rows.sort(key=lambda r: (r["date"], r["slot"]))
+for r in rows:
+    if (out/"exports"/r["date"]/r["slot"]/"03.jpg").exists(): done[(r["date"], r["slot"])] = r
+(out/"ledger").mkdir(exist_ok=True)
+for dest in (out/"ledger"/"FD-BFCM-75 source and fitment ledger.csv", here/"ledger"/"FD-BFCM-75 source and fitment ledger.csv"):
+    with open(dest, "w", newline="") as f:
+        w = csv.DictWriter(f, fieldnames=list(rows[0].keys())); w.writeheader(); w.writerows(rows)
 n = len(done)
 L = [f"# FD-BFCM-75 progress", "",
      f"Updated {datetime.datetime.now().strftime('%Y-%m-%d %H:%M')} Pacific. **{n} of 75 carousels done, {3*n} of 225 slides exported.** {75-n} carousels to go.", "",

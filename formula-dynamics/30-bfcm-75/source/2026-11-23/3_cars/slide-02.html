@@ -1,0 +1,37 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../day.css">
+<style>
+.photo{height:640px;background:#eef0f4}
+.photo{display:flex}
+.photo .ph{width:50%;height:100%;overflow:hidden}
+.photo .ph img{--x:50%;--y:50%;--zoom:1.6;--ox:50%;--oy:50%}
+.photo .ph+.ph img{--zoom:1.15;--y:50%;--ox:40%}
+.photo .shade{position:absolute;left:0;top:0;width:100%;height:100%;background:linear-gradient(180deg,#08080A 0%,rgba(8,8,10,.85) 12%,rgba(8,8,10,0) 28%,rgba(8,8,10,0) 80%,#08080A 100%)}
+.head{position:absolute;left:var(--sx);right:var(--sx);top:592px}
+.head .display{font-size:100px}
+.grid{position:absolute;left:var(--sx);right:var(--sx);top:704px;display:grid;grid-template-columns:1fr 1fr;gap:0 40px}
+.col{border-top:3px solid var(--red);padding-top:20px}
+.col .k{font-family:"Plex";font-size:21px;letter-spacing:.06em;color:var(--grey);text-transform:uppercase}
+.col .big{font-family:"Bebas";font-size:64px;line-height:.9;margin-top:10px}
+.col p{font-family:"Barlow";font-weight:500;font-size:31px;line-height:1.15;color:var(--sub);margin-top:8px}
+.col .pr{font-family:"Plex";font-size:30px;margin-top:16px;color:var(--sub)}
+.col .pr b{color:var(--white)}
+.was{text-decoration:line-through;text-decoration-color:rgba(255,255,255,.5)}
+.kit{position:absolute;left:var(--sx);right:var(--sx);top:1010px;border-top:1px solid var(--line);padding-top:20px;display:flex;justify-content:space-between;align-items:baseline}
+.kit .st{font-family:"Bebas";font-size:52px;line-height:.9}
+.kit .ex{font-family:"Barlow";font-size:30px;color:var(--sub);display:block;margin-top:6px}
+.kit .pr{font-family:"Plex";font-size:30px;color:var(--sub)} .kit .pr b{color:var(--white)}
+.tagrow{position:absolute;left:var(--sx);right:200px;bottom:176px}
+</style></head><body>
+<div class="slide">
+  <div class="photo"><div class="ph"><img src="../../../assets/photos/brembo_caliper_black_studio.jpg" alt="Black Brembo caliper, FD product photo"></div><div class="ph"><img src="../../../assets/photos/brembo_disc_black_studio.jpg" alt="Brembo two-piece drilled disc, FD product photo"></div><div class="shade"></div></div>
+  <div class="run"><span><b>BREMBO GT KIT</b> &nbsp;·&nbsp; MASERATI 4200</span><span class="count">02<i> / 03</i></span></div>
+  <div class="head"><div class="display">What's in the kit</div></div>
+  <div class="grid">
+    <div class="col"><div class="k">Front axle</div><div class="big">6-piston monobloc</div><p>380 x 34mm two-piece discs</p><div class="pr"><span class="was">$4,895.00</span> <b>$4,650.25</b></div></div>
+    <div class="col"><div class="k">Rear axle</div><div class="big">4-piston monobloc</div><p>380 x 28mm two-piece discs</p><div class="pr"><span class="was">$4,195.00</span> <b>$3,985.25</b></div></div>
+  </div>
+  <div class="kit"><div><span class="st">Front and rear kit</span><span class="ex">Pre-assembled, all hardware. Standard Brembo colours</span></div><div class="pr"><span class="was">$9,090.00</span> <b>$8,635.50</b></div></div>
+  <div class="tagrow"><div class="tag">Shown: Brembo GT caliper and disc, FD product photo</div></div>
+  <div class="fine" style="right:200px">Prices for red, black, yellow or silver with Brembo logo, from formuladynamics.com, checked Nov 20, 2026.</div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

@@ -1,0 +1,43 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../day.css">
+<style>
+/* side-by-side: two listings for the same filter slot */
+.head{position:absolute;left:var(--sx);right:var(--sx);top:150px}
+.head .display{font-size:104px}
+.head .body{font-size:34px;margin-top:14px}
+.cols{position:absolute;left:var(--sx);right:var(--sx);top:440px;display:grid;grid-template-columns:1fr 1fr;gap:24px}
+.c{background:#131317;padding:30px 28px 30px;height:560px;display:flex;flex-direction:column}
+.c.b{background:#1b0a0b;outline:3px solid var(--red);outline-offset:-3px}
+.c .who{font-family:"Plex";font-size:21px;letter-spacing:.06em;color:var(--grey);text-transform:uppercase}
+.c .name{font-family:"Bebas";font-size:64px;line-height:.9;color:var(--white);margin-top:14px}
+.c .pn{font-family:"Plex";font-size:24px;color:var(--sub);margin-top:8px}
+.c ul{list-style:none;margin-top:26px}
+.c li{font-family:"Barlow";font-weight:500;font-size:30px;line-height:1.15;color:var(--sub);padding:10px 0;border-top:1px solid var(--line)}
+.c .price{margin-top:auto}
+.c .was{font-family:"Plex";font-size:28px;color:var(--grey);text-decoration:line-through}
+.c .now{font-family:"Plex";font-weight:700;font-size:58px;color:var(--white);line-height:1.1}
+.c .pill{margin-top:12px}
+.fine.abs{right:200px}
+</style></head><body>
+<div class="slide">
+  <div class="run"><span><b>SAME SLOT, TWO LISTINGS</b> &nbsp;·&nbsp; GRANTURISMO</span><span class="count">02<i> / 03</i></span></div>
+  <div class="head"><div class="display">One filter box. Two choices.</div>
+    <div class="body">The BMC listing says it replaces OEM part 205468. With 15% off it costs <b>$2.75 more</b>, and only BMC carries the discount.</div></div>
+  <div class="cols">
+    <div class="c a">
+      <div class="who">Maserati OEM</div>
+      <div class="name">OEM air filter</div>
+      <div class="pn">PN 205468</div>
+      <ul><li>Factory paper element</li><li>Factory part number</li></ul>
+      <div class="price"><div class="now">$129.00</div><span class="pill off">Regular price</span></div>
+    </div>
+    <div class="c b">
+      <div class="who">BMC</div>
+      <div class="name">BMC air filter</div>
+      <div class="pn">FB546/20</div>
+      <ul><li>Comes pre-oiled</li><li>Washable and reusable</li></ul>
+      <div class="price"><div class="was">$155.00</div><div class="now">$131.75</div><span class="pill on">15% off · save $23.25</span></div>
+    </div>
+  </div>
+  <div class="fine abs">GranTurismo 2008–2019 listings. Prices and details from formuladynamics.com, checked Nov 20, 2026.</div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

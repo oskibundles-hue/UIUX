@@ -1,1 +1,5 @@
 assets/photos/
+ref/
+out/
+.bak-*/
+*.bak

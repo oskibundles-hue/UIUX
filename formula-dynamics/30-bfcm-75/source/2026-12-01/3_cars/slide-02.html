@@ -1,0 +1,36 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../day.css">
+<style>
+.photo{left:auto;right:0;width:330px;height:1350px}
+.photo img{--x:56%;--y:50%;--zoom:1.45;--ox:75%;--oy:54%;filter:brightness(1.3) contrast(1.05)}
+.photo .shade{background:linear-gradient(180deg,rgba(8,8,10,.92) 0,rgba(8,8,10,.85) 140px,rgba(8,8,10,0) 280px),linear-gradient(90deg,#08080A 0%,rgba(8,8,10,0) 24%)}
+.head{position:absolute;left:var(--sx);width:640px;top:150px;z-index:4}
+.head .display{font-size:104px}
+.head .body{font-size:34px;margin-top:12px}
+.ab{position:absolute;left:var(--sx);width:640px;top:430px;z-index:4}
+.card{border:3px solid var(--line);padding:22px 26px 12px}
+.card.fd{border-color:var(--red);margin-top:30px}
+.card h3{font-family:"Bebas";font-weight:400;font-size:64px;letter-spacing:.02em;line-height:1;color:var(--sub);text-transform:uppercase}
+.card.fd h3{color:var(--white)}
+.card .l{display:grid;grid-template-columns:34px 1fr;border-top:1px solid var(--line);margin-top:16px;padding:16px 0 12px;font-family:"Barlow";font-weight:500;font-size:34px;line-height:1.16;color:var(--sub)}
+.card .l i{font-style:normal;font-family:"Plex";font-weight:700;font-size:30px;color:var(--grey)}
+.card.fd .l i{color:var(--red)}
+.card.fd .l{color:var(--white)}
+.tagb{position:absolute;left:var(--sx);bottom:var(--sy);z-index:4}
+.mark.icon{z-index:6}
+</style></head><body>
+<div class="slide">
+  <div class="photo"><img src="../../../assets/photos/m4200_v8_badge_clip08_lift.jpg" alt="V8 badge on the black Maserati 4200 at FD"><div class="shade"></div></div>
+  <div class="run"><span><b>HOW IT FITS</b> &nbsp;·&nbsp; FD POWER ECM</span><span class="count">02<i> / 03</i></span></div>
+  <div class="head"><div class="display">Reflash or module?</div><div class="body">What happens to the ECU already in your car.</div></div>
+  <div class="ab">
+    <div class="card"><h3>Reflash</h3>
+      <div class="l"><i>&times;</i><span>ECU mailed out and rewritten</span></div>
+      <div class="l"><i>&times;</i><span>A dealer update can overwrite it</span></div></div>
+    <div class="card fd"><h3>FD Power ECM</h3>
+      <div class="l"><i>+</i><span>ECU stays in the car, unmodified</span></div>
+      <div class="l"><i>+</i><span>Factory engine and transmission updates still go through</span></div>
+      <div class="l"><i>+</i><span>Module can be removed</span></div></div>
+  </div>
+  <div class="tagb tag">Shown: V8 badge, 4200 at the FD shop</div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

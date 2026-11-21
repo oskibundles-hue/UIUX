@@ -1,0 +1,37 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<style>
+.photo{height:1350px}
+.photo img{--y:34%}
+.photo .shade{background:linear-gradient(180deg,rgba(8,8,10,.96) 0%,rgba(8,8,10,.86) 30%,rgba(8,8,10,.25) 46%,rgba(8,8,10,0) 56%,rgba(8,8,10,.2) 66%,rgba(8,8,10,.9) 78%,#08080A 88%)}
+.top{position:absolute;left:var(--sx);right:var(--sx);top:150px;z-index:4}
+.top .kicker{margin-top:22px}
+.top .display{font-size:168px;margin-top:10px}
+.top .display .red{color:var(--red)}
+.strip{position:absolute;left:var(--sx);right:var(--sx);bottom:150px;z-index:4}
+.strip .lab{display:flex;justify-content:space-between;font-family:"Plex";font-size:21px;letter-spacing:.08em;color:var(--sub);margin-bottom:10px}
+.strip .days{display:grid;grid-template-columns:repeat(15,1fr);gap:4px}
+.strip .d{height:64px;border:1px solid rgba(255,255,255,.28);display:flex;align-items:center;justify-content:center;font-family:"Plex";font-weight:700;font-size:26px;color:var(--white);background:rgba(8,8,10,.5)}
+.strip .d.today{background:var(--red);border-color:var(--red)}
+.strip .d.last{border:3px solid var(--white)}
+.strip .mo{display:grid;grid-template-columns:11fr 4fr;gap:4px;margin-top:10px;font-family:"Plex";font-size:21px;letter-spacing:.08em;color:var(--grey)}
+.strip .mo span:last-child{border-left:1px solid var(--line);padding-left:8px}
+.bot{position:absolute;left:var(--sx);right:var(--sx);bottom:var(--sy);z-index:4}
+.bot .tag{font-size:21px}
+</style></head><body>
+<div class="slide">
+  <div class="photo"><img src="../../../assets/photos/shop_exterior_sign.jpg" alt="Formula Dynamics building and sign"><div class="shade"></div></div>
+  <div class="run"><span><b>FORMULA DYNAMICS SALE</b> &nbsp;·&nbsp; PUBLIC LAUNCH</span><span class="count">01<i> / 03</i></span></div>
+  <div class="top">
+    <div class="rule"></div>
+    <div class="kicker">The sale is open to everyone today</div>
+    <div class="display">15 days.<br>Up to <span class="red">20%</span> off.</div>
+  </div>
+  <div class="strip">
+    <div class="lab"><span>TODAY · FRI NOV 20</span><span>LAST DAY · FRI DEC 4</span></div>
+    <div class="days">
+      <div class="d today">20</div><div class="d">21</div><div class="d">22</div><div class="d">23</div><div class="d">24</div><div class="d">25</div><div class="d">26</div><div class="d">27</div><div class="d">28</div><div class="d">29</div><div class="d">30</div><div class="d">1</div><div class="d">2</div><div class="d">3</div><div class="d last">4</div>
+    </div>
+    <div class="mo"><span>NOV</span><span>DEC</span></div>
+  </div>
+  <div class="bot"><div class="tag">Selected parts at formuladynamics.com · Shown: the FD building</div></div>
+</div></body></html>

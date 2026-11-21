@@ -1,0 +1,41 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<style>
+/* calendar strip from this post to the last day */
+.head{position:absolute;left:var(--sx);right:var(--sx);top:150px}
+.head .kicker{margin-top:22px}
+.head .display{font-size:112px;margin-top:12px}
+.cal{position:absolute;left:var(--sx);right:var(--sx);top:520px;display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+.d{border:1px solid var(--line);height:150px;padding:14px 16px;display:flex;flex-direction:column;justify-content:space-between}
+.d small{font-family:"Plex";font-size:21px;letter-spacing:.06em;color:var(--grey);text-transform:uppercase}
+.d b{font-family:"Bebas";font-weight:400;font-size:72px;line-height:.85;color:var(--sub)}
+.d.now{border:2px solid var(--white)}
+.d.now b{color:var(--white)}
+.d.last{background:var(--red);border-color:var(--red)}
+.d.last small,.d.last b{color:var(--white)}
+.note{position:absolute;left:var(--sx);right:var(--sx);top:1050px;font-size:36px}
+.fine{position:absolute;left:var(--sx);right:200px;bottom:var(--sy)}
+</style></head><body>
+<div class="slide">
+  <div class="run"><span><b>THE CALENDAR</b> &nbsp;·&nbsp; TWO CARS</span><span class="count">02<i> / 03</i></span></div>
+  <div class="head">
+    <div class="rule"></div>
+    <div class="kicker">From today to the last day</div>
+    <div class="display">Time for two<br>shopping lists</div>
+  </div>
+  <div class="cal">
+    <div class="d now"><small>Tue · today</small><b>Nov 24</b></div>
+    <div class="d"><small>Wed</small><b>Nov 25</b></div>
+    <div class="d"><small>Thu</small><b>Nov 26</b></div>
+    <div class="d"><small>Fri</small><b>Nov 27</b></div>
+    <div class="d"><small>Sat</small><b>Nov 28</b></div>
+    <div class="d"><small>Sun</small><b>Nov 29</b></div>
+    <div class="d"><small>Mon</small><b>Nov 30</b></div>
+    <div class="d"><small>Tue</small><b>Dec 1</b></div>
+    <div class="d"><small>Wed</small><b>Dec 2</b></div>
+    <div class="d"><small>Thu</small><b>Dec 3</b></div>
+    <div class="d last" style="grid-column:span 2"><small>Fri · last day</small><b>Dec 4</b></div>
+  </div>
+  <div class="body note">One car's list is easy to finish. <b>The second car's list is the one that gets left for later.</b></div>
+  <div class="fine">Black Friday sale at formuladynamics.com runs through Dec 4, 2026.</div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

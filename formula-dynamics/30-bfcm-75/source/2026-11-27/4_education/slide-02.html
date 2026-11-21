@@ -1,0 +1,38 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../day.css">
+<style>
+.head{position:absolute;left:var(--sx);right:var(--sx);top:150px}
+.head .display{font-size:104px;margin-top:18px}
+.pair{position:absolute;left:var(--sx);right:var(--sx);top:390px;display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.c{border-top:4px solid var(--red);padding-top:24px}
+.c h3{font-family:"Bebas";font-weight:400;font-size:74px;line-height:.9;text-transform:uppercase}
+.c .alt{font-family:"Plex";font-size:24px;color:var(--grey);letter-spacing:.06em;margin-top:6px;text-transform:uppercase}
+/* diagram: body line, damper, wheel; arrow shows wheel travel */
+.fig{position:relative;height:300px;margin:26px 0 10px;border:1px solid var(--line);background:rgba(255,255,255,.03)}
+.fig .bodyl{position:absolute;left:30px;right:30px;top:40px;height:10px;background:var(--sub)}
+.fig .bodyl::after{content:"BODY";position:absolute;right:0;top:16px;font-family:"Plex";font-size:21px;color:var(--grey);letter-spacing:.08em}
+.fig .tube{position:absolute;left:120px;width:26px;background:#3a3a42;border:2px solid var(--sub)}
+.fig .rod{position:absolute;left:129px;width:8px;top:50px;background:var(--white)}
+.fig .wheel{position:absolute;left:83px;width:100px;height:100px;border-radius:50%;border:14px solid var(--white);background:var(--ink)}
+.fig .arr{position:absolute;left:250px;font-family:"Bebas";font-size:150px;line-height:1;color:var(--red)}
+.c.comp .tube{top:96px;height:54px}.c.comp .rod{height:46px}.c.comp .wheel{top:146px}.c.comp .arr{top:70px}
+.c.reb .tube{top:150px;height:54px}.c.reb .rod{height:100px}.c.reb .wheel{top:196px}.c.reb .arr{top:84px}
+.c p{font-family:"Barlow";font-weight:500;font-size:33px;line-height:1.16;color:var(--sub)}
+.c p b{color:var(--white);font-weight:700}
+.c .eg{font-family:"Barlow";font-weight:500;font-size:30px;color:var(--grey);margin-top:12px;line-height:1.15}
+.key{position:absolute;left:var(--sx);right:var(--sx);top:1060px;border-top:1px solid var(--line);padding-top:22px;font-family:"Barlow";font-weight:500;font-size:34px;line-height:1.18;color:var(--sub)}
+.key b{color:var(--white)}
+</style></head><body>
+<div class="slide">
+  <div class="run"><span><b>WHICH IS WHICH</b> &nbsp;·&nbsp; DAMPING</span><span class="count">02<i> / 03</i></span></div>
+  <div class="head"><div class="rule"></div><div class="display">Same damper, two directions</div></div>
+  <div class="pair">
+    <div class="c comp"><h3>Compression</h3><div class="alt">also called bump</div>
+      <div class="fig"><div class="bodyl"></div><div class="rod"></div><div class="tube"></div><div class="wheel"></div><div class="arr">↑</div></div>
+      <p>The wheel moves <b>up</b> toward the body and the damper <b>shortens</b>.</p><div class="eg">Hitting a bump or a driveway lip.</div></div>
+    <div class="c reb"><h3>Rebound</h3><div class="alt">the return stroke</div>
+      <div class="fig"><div class="bodyl"></div><div class="rod"></div><div class="tube"></div><div class="wheel"></div><div class="arr">↓</div></div>
+      <p>The wheel moves back <b>down</b> and the damper <b>extends</b>.</p><div class="eg">Coming off the bump, or over a crest.</div></div>
+  </div>
+  <div class="key"><b>The spring holds the car up.</b> Damping sets how hard the damper resists each of these two motions.</div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

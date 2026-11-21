@@ -1,0 +1,32 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../day.css">
+<style>
+/* three listings side by side: photo above, one price line under each */
+.head{position:absolute;left:var(--sx);right:var(--sx);top:150px}
+.head .display{font-size:104px;margin-top:18px}
+.head .display .red{color:var(--red)}
+.cols{position:absolute;left:var(--sx);right:var(--sx);top:350px;display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.ph{position:relative;width:301px;height:380px;overflow:hidden;border-bottom:3px solid var(--red);background:#fff}
+.ph img{position:absolute;display:block;max-width:none}
+.col .pc{font-family:"Bebas";font-size:48px;line-height:.9;color:var(--red);margin-top:20px}
+.col .pr{font-family:"Bebas";font-size:96px;line-height:.9;margin-top:6px;color:var(--white)}
+.col .was{font-family:"Plex";font-size:24px;color:var(--grey);margin-top:8px}
+.col .was s{text-decoration-thickness:2px}
+.col .hr{margin:16px 0 14px}
+.col h3{font-family:"Barlow";font-weight:700;font-size:34px;line-height:1.08;text-transform:uppercase;color:var(--white)}
+.col p{font-family:"Barlow";font-weight:500;font-size:30px;line-height:1.12;color:var(--sub);margin-top:8px}
+.mark.icon{z-index:6}
+.fine.pin{right:200px}
+.key{position:absolute;left:var(--sx);right:var(--sx);top:1120px;font-family:"Barlow";font-weight:500;font-size:30px;line-height:1.18;color:var(--sub)}
+
+</style></head><body>
+<div class="slide">
+  <div class="run"><span><b>UNDER $100</b> &nbsp;·&nbsp; THREE LISTINGS</span><span class="count">02<i> / 03</i></span></div>
+  <div class="head"><div class="rule"></div><div class="display">Still on the <span class="red">rack</span></div></div>
+  <div class="cols">
+    <div class="col"><div class="ph"><img src="../../../assets/photos/bmc_fb956-20_listing.png" style="width:520px;left:-110px;top:90px" alt="BMC FB956/20 listing image"></div><div class="pc">15% off</div><div class="pr">$67.99</div><div class="was">was <s>$79.99</s></div><div class="hr"></div><h3>BMC air filter</h3><p>Mercedes AMG GT 43 EQ Boost, FB956/20</p></div>
+    <div class="col"><div class="ph"><img src="../../../assets/photos/levante_pads_listing.png" style="width:560px;left:-130px;top:60px" alt="FD Levante brake pads listing image"></div><div class="pc">20% off</div><div class="pr">$79.20</div><div class="was">was <s>$99.00</s></div><div class="hr"></div><h3>Brake pads</h3><p>Maserati Levante, Base, rear only, Quiet</p></div>
+    <div class="col"><div class="ph"><img src="../../../assets/photos/ferrari360_pads_listing.png" style="width:600px;left:-150px;top:40px" alt="FD Ferrari 360 brake pads listing image"></div><div class="pc">20% off</div><div class="pr">$95.20</div><div class="was">was <s>$119.00</s></div><div class="hr"></div><h3>Brake pads</h3><p>Ferrari 360, front only, Quiet</p></div>
+  </div>
+  <div class="key">Prices are for the exact variant listed. Images from the listings.</div>
+  <div class="fine pin">Listings on formuladynamics.com, selected parts, through Dec 4, 2026.</div>
+</div></body></html>
