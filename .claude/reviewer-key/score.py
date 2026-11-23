@@ -12,7 +12,7 @@ The key is frozen: if cases.json no longer matches KEY_SHA, scoring refuses.
 import hashlib, json, sys
 from pathlib import Path
 
-KEY_SHA = "95d60440336f3e90c50ba2723ea64a1980fe5d7db8d503ac09e8aafcb0208dec"
+KEY_SHA = "aff47bdcdc2359dd913cc5bca500eee86efe58978bbceb2d81061ece09ccc446"
 TAGS = {"Seen", "Inferred", "Unknown"}
 here = Path(__file__).resolve().parent
 raw = (here / "cases.json").read_bytes()
