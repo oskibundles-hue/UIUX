@@ -12,15 +12,31 @@ import sys
 HIGGSFIELD_PAID = re.compile(
     r"^(generate_\w+|execute_preset|upscale_\w+|outpaint_image|reframe|remove_background|"
     r"motion_control|voice_change|dubbing|create_voice|shorts_studio_create|"
-    r"virality_predictor|tiktok_music_tune|cancel_trial_auto_renewal)$"
+    r"virality_predictor|tiktok_music_tune|cancel_trial_auto_renewal|separate_stems|"
+    r"ai_influencer_generate|build_ai_influencer|ads_studio_generate|scene_builder_3d_generate_\w+|"
+    r"gpu_generate|gpu_job_start|gpu_rent|gpu_rental_generate|gpu_rental_exec)$"
+)
+# Connectors now show up under an id, not their name (found 24 Nov: the gate never fired).
+SERVER_IDS = {
+    "e17b92d9-8ef6-414a-9d7c-cbcd27995067": "Higgsfield",
+    "a8f752c9-094c-401f-bfd1-5765c16a1cac": "Dropbox",
+    "6887db1f-0e1a-41ac-ba4c-ce4158862ba3": "vidIQ",
+    "ce55a968-b7c0-40de-9c2e-6aca8cb8f490": "Vertiso_Memory",
+}
+# Tool names only Higgsfield uses: catches it again if the connector id changes.
+HIGGSFIELD_ONLY = re.compile(
+    r"^(generate_(image|video|audio|3d)|execute_preset|motion_control|outpaint_image|upscale_(image|video)|"
+    r"separate_stems|ai_influencer_generate|build_ai_influencer|ads_studio_generate|"
+    r"scene_builder_3d_generate_\w+|gpu_generate|gpu_job_start|gpu_rent|gpu_rental_generate|show_plans_and_credits)$"
 )
 PUBLISH = {
-    "Higgsfield": {"tiktok_prepare_publish", "publish_website", "deploy_website"},
-    "vidIQ": {"vidiq_update_video_thumbnail"},
+    "Higgsfield": {"tiktok_prepare_publish", "publish_website", "deploy_website", "publish_project",
+                   "publish_playable_game", "share_project", "meta_ads_write"},
+    "vidIQ": {"vidiq_update_video_thumbnail", "vidiq_social_post_publish", "vidiq_reply_to_comment"},
     "Windsor_ai": {"execute_action"},
 }
 DROPBOX_DESTRUCTIVE = {"move", "delete"}
-MEMORY_WRITE = re.compile(r"^(remember|update_memory|archive_memory|approve_constraint|forget\w*|delete\w*)$")
+MEMORY_WRITE = re.compile(r"^(remember|update_memory|archive_memory|approve_constraint|purge_actions|forget\w*|delete\w*)$")
 
 
 def decide(kind, reason):
@@ -33,7 +49,14 @@ def decide(kind, reason):
 
 
 def check_mcp(tool, args):
-    _, server, name = tool.split("__", 2)
+    parts = tool.split("__", 2)
+    if len(parts) < 3:
+        return
+    _, server, name = parts
+    server = SERVER_IDS.get(server, server)
+    if server not in ("Higgsfield", "Dropbox", "vidIQ", "Windsor_ai", "Vertiso_Memory") \
+            and HIGGSFIELD_ONLY.match(name):
+        server = "Higgsfield"
     if server == "Higgsfield" and HIGGSFIELD_PAID.match(name):
         decide("ask", f"Regret list: paid Higgsfield call ({name}). Quote the per-render cost "
                       "(get_cost where the model supports it, else the preset price) and confirm the "
