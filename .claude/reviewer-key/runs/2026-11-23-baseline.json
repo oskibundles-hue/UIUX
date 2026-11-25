@@ -1,0 +1,1102 @@
+[
+ {
+  "id": "K01",
+  "verdict": "FAIL",
+  "failed": [
+   "house"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Sheet: Brief names Locked-On; rental-first frame 0 RENT A SUPERCAR built.",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "brand",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "layout",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "frames",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "Sheet: F1 plain text, no logos, no prices.",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "Sheet: Original clip audio, -14.0 LUFS, TP -1.7 dBTP (<= -1.5).",
+    "tag": "Seen"
+   },
+   {
+    "check": "approval",
+    "result": "PASS",
+    "evidence": "Sheet: One file delivered.",
+    "tag": "Seen"
+   },
+   {
+    "check": "voice",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "house",
+    "result": "FAIL",
+    "evidence": "End card carries '46 DAYS TO NOV 19'. race-weekend rule (HOUSE-STYLE, Omarie 2026-10-03 'take out the 46 days to nov 19'): no countdown.",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K02",
+  "verdict": "FAIL",
+  "failed": [
+   "house"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "figures",
+    "result": "PASS",
+    "evidence": "Sheet: Figures sourced per sheet.",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "layout",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "frames",
+    "result": "PASS",
+    "evidence": "Sheet: Day grade on sunlit desert footage, as ROOF DOWN approval.",
+    "tag": "Seen"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "Sheet: Copy 5/5.",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "Sheet: -14.1 LUFS.",
+    "tag": "Seen"
+   },
+   {
+    "check": "approval",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "voice",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "house",
+    "result": "FAIL",
+    "evidence": "Two files for one edit (ProRes master + IG file). Rule 8 / Omarie 2026-09-28: one Instagram-ready file per edit, no separate master.",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K03",
+  "verdict": "FAIL",
+  "failed": [
+   "figures"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Sheet: Locked-On named; kinetic type and slot reel present.",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "FAIL",
+    "evidence": "'0-60 IN 3.0 S' and '518 HP' have no named source (sources list: none). Price $1,295/DAY is sourced (pricing.json).",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "PASS",
+    "evidence": "Sheet: Gold sampled #C9A24B matches brand-tokens.json.",
+    "tag": "Seen"
+   },
+   {
+    "check": "layout",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "frames",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "copy",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "audio",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "approval",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "voice",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "house",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   }
+  ]
+ },
+ {
+  "id": "K04",
+  "verdict": "FAIL",
+  "failed": [
+   "house"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "figures",
+    "result": "PASS",
+    "evidence": "Sheet: All figures sourced.",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "layout",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "frames",
+    "result": "PASS",
+    "evidence": "Sheet: Day grade on sunlit footage, correct.",
+    "tag": "Seen"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "Sheet: Copy 5/5.",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "Sheet: -14.0 LUFS.",
+    "tag": "Seen"
+   },
+   {
+    "check": "approval",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "voice",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "house",
+    "result": "FAIL",
+    "evidence": "Title LAS VEGAS over open desert footage with no city in shot. Rule: never LAS VEGAS over desert footage.",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K05",
+  "verdict": "FAIL",
+  "failed": [
+   "style"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "FAIL",
+    "evidence": "Brief 'make a quick ad for the Huracan STO' names no style; render built anyway (brackets + slot reel). A brief naming no style is a FAIL; lead must ask Omarie which style.",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "PASS",
+    "evidence": "Sheet: Figures sourced.",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "layout",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "frames",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "Sheet: Copy 5/5.",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "Sheet: -14.0 LUFS.",
+    "tag": "Seen"
+   },
+   {
+    "check": "approval",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "voice",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "house",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   }
+  ]
+ },
+ {
+  "id": "K06",
+  "verdict": "FAIL",
+  "failed": [
+   "house",
+   "frames"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "figures",
+    "result": "PASS",
+    "evidence": "Sheet: Figures sourced.",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "layout",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "frames",
+    "result": "FAIL",
+    "evidence": "Night look over bright sky reads fake on the frames as described.",
+    "tag": "Seen"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "Sheet: Copy 5/5.",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "Sheet: -14.0 LUFS.",
+    "tag": "Seen"
+   },
+   {
+    "check": "approval",
+    "result": "PASS",
+    "evidence": "Sheet: One file.",
+    "tag": "Seen"
+   },
+   {
+    "check": "voice",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "house",
+    "result": "FAIL",
+    "evidence": "Night grade (crushed blacks, blue cast) applied to sunlit desert footage. Locked-On rule 5: on sunlit footage keep one day grade; a night look reads fake.",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K07",
+  "verdict": "FAIL",
+  "failed": [
+   "house",
+   "brand"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "figures",
+    "result": "PASS",
+    "evidence": "Sheet: Figures sourced.",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "FAIL",
+    "evidence": "Stripe used outside its brand spec orientation (BRAND-SPEC \u00a71).",
+    "tag": "Seen"
+   },
+   {
+    "check": "layout",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "frames",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "copy",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "Sheet: -14.0 LUFS.",
+    "tag": "Seen"
+   },
+   {
+    "check": "approval",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "voice",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "house",
+    "result": "FAIL",
+    "evidence": "Four-colour accent stripe with black segment stood vertically down left edge. Rule learned the hard way: never stand the stripe on end (reads as a broken line).",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K08",
+  "verdict": "FAIL",
+  "failed": [
+   "house"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Sheet: Sep 15 rally v2 vlog named.",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "brand",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "layout",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "frames",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "Sheet: Omarie's own speech captioned; not scored.",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "Sheet: Music ducked 11 dB under speech, per standard.",
+    "tag": "Seen"
+   },
+   {
+    "check": "approval",
+    "result": "PASS",
+    "evidence": "Sheet: One Instagram-ready file.",
+    "tag": "Seen"
+   },
+   {
+    "check": "voice",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "house",
+    "result": "FAIL",
+    "evidence": "Guest lower third 'JOHN SMITH, EGNYTE' names a guest. Vlog standard: label guests by company only (EGNYTE GUEST), never by name.",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K09",
+  "verdict": "FAIL",
+  "failed": [
+   "audio"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "figures",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "brand",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "layout",
+    "result": "PASS",
+    "evidence": "Sheet: Captions at 70.5%, Archivo 800, no gold pill.",
+    "tag": "Seen"
+   },
+   {
+    "check": "frames",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "copy",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "audio",
+    "result": "FAIL",
+    "evidence": "Input Integrated -9.2 LUFS; Anti Stock delivers at -14 LUFS (5.2 LU hot).",
+    "tag": "Seen"
+   },
+   {
+    "check": "approval",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "voice",
+    "result": "PASS",
+    "evidence": "Sheet: Captions cover only Omarie.",
+    "tag": "Seen"
+   },
+   {
+    "check": "house",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   }
+  ]
+ },
+ {
+  "id": "K10",
+  "verdict": "FAIL",
+  "failed": [
+   "brand"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Sheet: Locked-On named.",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "brand",
+    "result": "FAIL",
+    "evidence": "FD reel's end card uses SE gold-on-black lockup and @SUPERCAR_EXPERIENCE_. Two brands in one video is a FAIL; FD keeps FD red/Bebas Neue.",
+    "tag": "Seen"
+   },
+   {
+    "check": "layout",
+    "result": "PASS",
+    "evidence": "Sheet: Keep-out zones clear.",
+    "tag": "Seen"
+   },
+   {
+    "check": "frames",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "copy",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "audio",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "approval",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "voice",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "house",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   }
+  ]
+ },
+ {
+  "id": "K11",
+  "verdict": "PASS",
+  "failed": [],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Sheet: Locked-On named; frame 0 fully built hook FLASH SPECIAL / TODAY ONLY with SE lockup.",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "PASS",
+    "evidence": "Sheet: $1,495/DAY sourced to SE rate card pricing.json Oct 2026.",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "PASS",
+    "evidence": "Sheet: Gold sampled matches brand-tokens.json.",
+    "tag": "Seen"
+   },
+   {
+    "check": "layout",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "frames",
+    "result": "PASS",
+    "evidence": "Sheet: Badge lock-on tracked on a smooth 1.4 s shot (>=1 s rule).",
+    "tag": "Seen"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "Sheet: deslop 5/5.",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "Sheet: Clip music continuous, -14.0 LUFS, TP -1.6 dBTP, last 50 ms silent.",
+    "tag": "Seen"
+   },
+   {
+    "check": "approval",
+    "result": "PASS",
+    "evidence": "Sheet: Held variants in separate held/ folder; one IG-ready file.",
+    "tag": "Seen"
+   },
+   {
+    "check": "voice",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "house",
+    "result": "PASS",
+    "evidence": "Sheet: Meets rules 1-8 as described.",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K12",
+  "verdict": "PASS",
+  "failed": [],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Sheet: Fast Cut named.",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "brand",
+    "result": "PASS",
+    "evidence": "Sheet: RED sampled #FE0F13 matches Motion.tsx.",
+    "tag": "Seen"
+   },
+   {
+    "check": "layout",
+    "result": "PASS",
+    "evidence": "Sheet: Captions 70.5%, Archivo 800, no gold pill, no oversized key word.",
+    "tag": "Seen"
+   },
+   {
+    "check": "frames",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "Sheet: Hook Claude wrote scores 5/5.",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "Sheet: -14.1 LUFS.",
+    "tag": "Seen"
+   },
+   {
+    "check": "approval",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "voice",
+    "result": "PASS",
+    "evidence": "Sheet: Only Omarie captioned; coverage 78% at default threshold.",
+    "tag": "Seen"
+   },
+   {
+    "check": "house",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   }
+  ]
+ },
+ {
+  "id": "K13",
+  "verdict": "FAIL",
+  "failed": [
+   "voice"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "figures",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "brand",
+    "result": "PASS",
+    "evidence": "Sheet: Red matches.",
+    "tag": "Seen"
+   },
+   {
+    "check": "layout",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "frames",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "copy",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "Sheet: -14.0 LUFS.",
+    "tag": "Seen"
+   },
+   {
+    "check": "approval",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "voice",
+    "result": "FAIL",
+    "evidence": "Coverage raised 71% to 94% by lowering voice-match threshold 0.62 to 0.40; a friend's lines now captioned. Captions must caption only Omarie and coverage may not be raised by loosening the threshold.",
+    "tag": "Seen"
+   },
+   {
+    "check": "house",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   }
+  ]
+ },
+ {
+  "id": "K14",
+  "verdict": "FAIL",
+  "failed": [
+   "copy"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Sheet: Quick-Promo named.",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "PASS",
+    "evidence": "Sheet: Figures sourced.",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "layout",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "frames",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "copy",
+    "result": "FAIL",
+    "evidence": "Post caption Claude wrote: 'Unleash the thrill and elevate your journey - experience luxury like never before.' deslop 2/5; must be 5/5.",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "Sheet: -14.0 LUFS.",
+    "tag": "Seen"
+   },
+   {
+    "check": "approval",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "voice",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "house",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   }
+  ]
+ },
+ {
+  "id": "K15",
+  "verdict": "FAIL",
+  "failed": [
+   "approval"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Sheet: Locked-On named.",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "brand",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "layout",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "frames",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "copy",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "audio",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "approval",
+    "result": "FAIL",
+    "evidence": "wheels_B.mp4 (held, not approved) sits beside approved wheels_A.mp4, both named as finals, no held/ folder. Held variants must be physically separate.",
+    "tag": "Seen"
+   },
+   {
+    "check": "voice",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "house",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   }
+  ]
+ },
+ {
+  "id": "K16",
+  "verdict": "PASS",
+  "failed": [],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Sheet: Sep 15 rally v2 vlog named.",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "PASS",
+    "evidence": "Sheet: No figures on screen.",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "layout",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "frames",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "Sheet: Captions are Omarie's transcribed speech; never scored on deslop, so the would-be 2/5 does not apply.",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "Sheet: Music ducked 11 dB under speech, -14.0 LUFS.",
+    "tag": "Seen"
+   },
+   {
+    "check": "approval",
+    "result": "PASS",
+    "evidence": "Sheet: One Instagram-ready file.",
+    "tag": "Seen"
+   },
+   {
+    "check": "voice",
+    "result": "N/A",
+    "evidence": "Sheet gives no evidence for this check; not applicable or not settled by the sheet.",
+    "tag": "Unknown"
+   },
+   {
+    "check": "house",
+    "result": "PASS",
+    "evidence": "Sheet: Guests labelled EGNYTE GUEST (company only); caption every line.",
+    "tag": "Seen"
+   }
+  ]
+ }
+]

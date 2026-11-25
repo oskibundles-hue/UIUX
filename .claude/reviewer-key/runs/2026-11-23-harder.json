@@ -1,0 +1,959 @@
+[
+ {
+  "id": "K01",
+  "verdict": "FAIL",
+  "failed": [
+   "house"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Locked-On named; F1 rental ad",
+    "tag": "Seen"
+   },
+   {
+    "check": "house",
+    "result": "FAIL",
+    "evidence": "'46 DAYS TO NOV 19' countdown; Omarie 2026-10-03 'take out the 46 days', no countdown",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "PASS",
+    "evidence": "No prices; countdown is the only figure (fails under house)",
+    "tag": "Inferred"
+   },
+   {
+    "check": "brand",
+    "result": "N/A",
+    "evidence": "No pixel sample given",
+    "tag": "Unknown"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "-14.0 LUFS, TP -1.7; last 50 ms not stated",
+    "tag": "Seen"
+   },
+   {
+    "check": "approval",
+    "result": "PASS",
+    "evidence": "One file",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K02",
+  "verdict": "FAIL",
+  "failed": [
+   "house"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Locked-On",
+    "tag": "Seen"
+   },
+   {
+    "check": "house",
+    "result": "FAIL",
+    "evidence": "Master ProRes + IG file; rule 8 one file per edit, no separate master",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "PASS",
+    "evidence": "Sourced",
+    "tag": "Seen"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "5/5",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "-14.1 LUFS",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "N/A",
+    "evidence": "No pixel sample given",
+    "tag": "Unknown"
+   }
+  ]
+ },
+ {
+  "id": "K03",
+  "verdict": "FAIL",
+  "failed": [
+   "figures"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Locked-On",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "FAIL",
+    "evidence": "'0-60 IN 3.0 S' and '518 HP' have no source",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "PASS",
+    "evidence": "Gold sampled #C9A24B matches tokens",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "N/A",
+    "evidence": "Loudness not given",
+    "tag": "Unknown"
+   }
+  ]
+ },
+ {
+  "id": "K04",
+  "verdict": "FAIL",
+  "failed": [
+   "house"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Locked-On",
+    "tag": "Seen"
+   },
+   {
+    "check": "house",
+    "result": "FAIL",
+    "evidence": "LAS VEGAS title over open desert, no city in shot",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "PASS",
+    "evidence": "Sourced",
+    "tag": "Seen"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "5/5",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "-14.0 LUFS",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K05",
+  "verdict": "FAIL",
+  "failed": [
+   "style"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "FAIL",
+    "evidence": "Brief names no style",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "PASS",
+    "evidence": "Sourced",
+    "tag": "Seen"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "5/5",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "-14.0 LUFS",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K06",
+  "verdict": "FAIL",
+  "failed": [
+   "house"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Locked-On",
+    "tag": "Seen"
+   },
+   {
+    "check": "house",
+    "result": "FAIL",
+    "evidence": "Night grade on sunlit desert; rule 5 says one day grade",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "PASS",
+    "evidence": "Sourced",
+    "tag": "Seen"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "5/5",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "-14.0 LUFS",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K07",
+  "verdict": "FAIL",
+  "failed": [
+   "house"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Locked-On",
+    "tag": "Seen"
+   },
+   {
+    "check": "house",
+    "result": "FAIL",
+    "evidence": "Four-colour stripe stood on end; never vertical; rail unapproved",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "PASS",
+    "evidence": "Sourced",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "-14.0 LUFS",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K08",
+  "verdict": "FAIL",
+  "failed": [
+   "house"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Sep 15 rally v2 vlog",
+    "tag": "Seen"
+   },
+   {
+    "check": "house",
+    "result": "FAIL",
+    "evidence": "Guest named 'JOHN SMITH, EGNYTE'; company only (EGNYTE GUEST)",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "N/A",
+    "evidence": "Ducking 11 dB ok; LUFS not given",
+    "tag": "Unknown"
+   },
+   {
+    "check": "approval",
+    "result": "PASS",
+    "evidence": "One file",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K09",
+  "verdict": "FAIL",
+  "failed": [
+   "audio"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Fast Cut",
+    "tag": "Seen"
+   },
+   {
+    "check": "layout",
+    "result": "PASS",
+    "evidence": "70.5%, Archivo 800, no pill",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "FAIL",
+    "evidence": "-9.2 LUFS, needs -14",
+    "tag": "Seen"
+   },
+   {
+    "check": "voice",
+    "result": "PASS",
+    "evidence": "Only Omarie captioned",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "N/A",
+    "evidence": "RED not sampled",
+    "tag": "Unknown"
+   }
+  ]
+ },
+ {
+  "id": "K10",
+  "verdict": "FAIL",
+  "failed": [
+   "brand"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Locked-On",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "FAIL",
+    "evidence": "FD reel ends on SE gold lockup and @SUPERCAR_EXPERIENCE_: two brands",
+    "tag": "Seen"
+   },
+   {
+    "check": "layout",
+    "result": "PASS",
+    "evidence": "Keep-out zones clear",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K11",
+  "verdict": "PASS",
+  "failed": [],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Locked-On: frame-0 hook, tracked lock-on",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "PASS",
+    "evidence": "$1,495 from pricing.json Oct 2026",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "PASS",
+    "evidence": "Gold sampled matches tokens",
+    "tag": "Seen"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "5/5",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "-14.0 LUFS, TP -1.6, last 50 ms silent, clip music",
+    "tag": "Seen"
+   },
+   {
+    "check": "approval",
+    "result": "PASS",
+    "evidence": "Held variants in held/",
+    "tag": "Seen"
+   },
+   {
+    "check": "house",
+    "result": "PASS",
+    "evidence": "One IG file",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K12",
+  "verdict": "PASS",
+  "failed": [],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Fast Cut",
+    "tag": "Seen"
+   },
+   {
+    "check": "layout",
+    "result": "PASS",
+    "evidence": "70.5%, Archivo 800, no pill, no big key word",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "PASS",
+    "evidence": "RED sampled #FE0F13",
+    "tag": "Seen"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "Hook 5/5",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "-14.1 LUFS",
+    "tag": "Seen"
+   },
+   {
+    "check": "voice",
+    "result": "PASS",
+    "evidence": "Only Omarie; 78% at default threshold",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K13",
+  "verdict": "FAIL",
+  "failed": [
+   "voice"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Kinetic Cut named",
+    "tag": "Seen"
+   },
+   {
+    "check": "voice",
+    "result": "FAIL",
+    "evidence": "Threshold lowered 0.62 to 0.40 to raise coverage; friend now captioned",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "-14.0 LUFS",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "PASS",
+    "evidence": "Red matches (sampling not stated)",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K14",
+  "verdict": "FAIL",
+  "failed": [
+   "copy"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Quick-Promo",
+    "tag": "Seen"
+   },
+   {
+    "check": "copy",
+    "result": "FAIL",
+    "evidence": "'Unleash the thrill and elevate your journey...' deslop 2/5",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "PASS",
+    "evidence": "Sourced",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "-14.0 LUFS",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K15",
+  "verdict": "FAIL",
+  "failed": [
+   "approval"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Locked-On",
+    "tag": "Seen"
+   },
+   {
+    "check": "approval",
+    "result": "FAIL",
+    "evidence": "Held wheels_B beside approved wheels_A, both named final, no held/",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K16",
+  "verdict": "PASS",
+  "failed": [],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Sep 15 rally v2 vlog",
+    "tag": "Seen"
+   },
+   {
+    "check": "copy",
+    "result": "N/A",
+    "evidence": "Omarie's transcribed speech, not scored",
+    "tag": "Seen"
+   },
+   {
+    "check": "house",
+    "result": "PASS",
+    "evidence": "EGNYTE GUEST, music ducked 11 dB",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "-14.0 LUFS",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "N/A",
+    "evidence": "No figures on screen",
+    "tag": "Seen"
+   },
+   {
+    "check": "approval",
+    "result": "PASS",
+    "evidence": "One file",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K17",
+  "verdict": "FAIL",
+  "failed": [
+   "house"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Locked-On",
+    "tag": "Seen"
+   },
+   {
+    "check": "house",
+    "result": "FAIL",
+    "evidence": "Las Vegas-only ad uses brand.phone, the Scottsdale line",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "PASS",
+    "evidence": "pricing.json",
+    "tag": "Seen"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "5/5",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "-14.0 LUFS, TP -1.8",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K18",
+  "verdict": "FAIL",
+  "failed": [
+   "audio"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Locked-On",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "FAIL",
+    "evidence": "True peak -1.1 dBTP, limit <= -1.5",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "PASS",
+    "evidence": "Gold sampled matches",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "PASS",
+    "evidence": "Sourced",
+    "tag": "Seen"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "5/5",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K19",
+  "verdict": "PASS",
+  "failed": [],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "race-weekend Day",
+    "tag": "Seen"
+   },
+   {
+    "check": "house",
+    "result": "PASS",
+    "evidence": "RENT A SUPERCAR frame 0+end, pickup line in panel, labels 1.2 s, no countdown/prices/logos",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "Original audio, -14.0, TP -1.6",
+    "tag": "Seen"
+   },
+   {
+    "check": "approval",
+    "result": "PASS",
+    "evidence": "One IG file",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "N/A",
+    "evidence": "No pixel sample given",
+    "tag": "Unknown"
+   }
+  ]
+ },
+ {
+  "id": "K20",
+  "verdict": "FAIL",
+  "failed": [
+   "layout"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Locked-On",
+    "tag": "Seen"
+   },
+   {
+    "check": "layout",
+    "result": "FAIL",
+    "evidence": "Hook 30 px above 4:5 band; exception is only race-weekend Night, new layouts stay strict",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "PASS",
+    "evidence": "Sourced",
+    "tag": "Seen"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "5/5",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "-14.0 LUFS",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K21",
+  "verdict": "FAIL",
+  "failed": [
+   "figures"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Locked-On, centred layout",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "FAIL",
+    "evidence": "'+60 HP (STAGE 1)' sourced to 'typical gains'; no dyno sheet",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "PASS",
+    "evidence": "#E10600 sampled matches fd_brand.py",
+    "tag": "Seen"
+   },
+   {
+    "check": "layout",
+    "result": "PASS",
+    "evidence": "Keep-out zones clear",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K22",
+  "verdict": "FAIL",
+  "failed": [
+   "figures",
+   "house"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Quick-Promo 15 s six beats",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "FAIL",
+    "evidence": "'0-60 IN 2.8 S' no source",
+    "tag": "Seen"
+   },
+   {
+    "check": "house",
+    "result": "FAIL",
+    "evidence": "Synth drone pad laid under clip music; drop it when source has music",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "-14.0 LUFS",
+    "tag": "Seen"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "5/5",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K23",
+  "verdict": "FAIL",
+  "failed": [
+   "brand"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Locked-On",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "FAIL",
+    "evidence": "Gold read from CSS, no pixel sample of render",
+    "tag": "Seen"
+   },
+   {
+    "check": "figures",
+    "result": "PASS",
+    "evidence": "Sourced",
+    "tag": "Seen"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "5/5",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "-14.0 LUFS, TP -1.7",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K24",
+  "verdict": "PASS",
+  "failed": [],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Kinetic Cut",
+    "tag": "Seen"
+   },
+   {
+    "check": "voice",
+    "result": "PASS",
+    "evidence": "64% at default 0.62, unchanged; friend not captioned",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "PASS",
+    "evidence": "RED sampled #FE0F13",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "-14.0 LUFS",
+    "tag": "Seen"
+   },
+   {
+    "check": "copy",
+    "result": "PASS",
+    "evidence": "Hook 5/5",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K25",
+  "verdict": "FAIL",
+  "failed": [
+   "brand"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Sep 15 rally v2 vlog",
+    "tag": "Seen"
+   },
+   {
+    "check": "brand",
+    "result": "FAIL",
+    "evidence": "FD tag + FD red five-segment stripe inside SE vlog: two brands",
+    "tag": "Seen"
+   },
+   {
+    "check": "house",
+    "result": "PASS",
+    "evidence": "EGNYTE GUEST, ducked 11 dB",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "-14.0 LUFS",
+    "tag": "Seen"
+   }
+  ]
+ },
+ {
+  "id": "K26",
+  "verdict": "FAIL",
+  "failed": [
+   "house"
+  ],
+  "rows": [
+   {
+    "check": "style",
+    "result": "PASS",
+    "evidence": "Sep 15 rally v2 vlog",
+    "tag": "Seen"
+   },
+   {
+    "check": "house",
+    "result": "FAIL",
+    "evidence": "Egnyte logo beside lower third; client as text, never logo",
+    "tag": "Seen"
+   },
+   {
+    "check": "layout",
+    "result": "PASS",
+    "evidence": "SE banner right edge at 30% (14-55%)",
+    "tag": "Seen"
+   },
+   {
+    "check": "audio",
+    "result": "PASS",
+    "evidence": "-14.0 LUFS, ducked 11 dB",
+    "tag": "Seen"
+   }
+  ]
+ }
+]

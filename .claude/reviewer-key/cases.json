@@ -1,0 +1,320 @@
+{
+ "about": "Frozen answer key for the reviewer agent. Each case is a written delivery sheet with zero or more planted mistakes, taken from real corrections in HOUSE-STYLE.md (feedback log and rules) and the reviewer's own checks. Do not edit to make a score pass; changes need Omarie's yes and a new hash in score.py.",
+ "check_ids": [
+  "style",
+  "figures",
+  "brand",
+  "layout",
+  "frames",
+  "copy",
+  "audio",
+  "approval",
+  "voice",
+  "house"
+ ],
+ "cases": [
+  {
+   "id": "K01",
+   "workstream": "SE",
+   "style": "Locked-On",
+   "sheet": "F1 weekend 'Rent a Supercar' night ad, 9:16, 14 s. Frame 0: RENT A SUPERCAR on black with SE lockup. Original clip audio, -14.0 LUFS, true peak -1.7 dBTP. End card: RENT A SUPERCAR, '46 DAYS TO NOV 19', TEXT OR DM TO BOOK, Las Vegas phone, site, @SUPERCAR_EXPERIENCE_. F1 in plain text, no logos. No prices. One file delivered.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "house"
+    ]
+   ]
+  },
+  {
+   "id": "K02",
+   "workstream": "SE",
+   "style": "Locked-On",
+   "sheet": "ROOF DOWN delivery folder for one edit holds two files: roofdown_master.mp4 (ProRes) and roofdown_ig.mp4 (9:16, H.264 High, ~11.5 Mb/s, AAC 48 kHz, fast start). Figures sourced, copy 5/5, -14.1 LUFS, day grade on sunlit desert footage.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "house",
+     "approval"
+    ]
+   ]
+  },
+  {
+   "id": "K03",
+   "workstream": "SE",
+   "style": "Locked-On",
+   "sheet": "Porsche GT3 RS showcase. Kinetic type shows '0-60 IN 3.0 S' and '518 HP'. Price slot reel lands on $1,295/DAY, source: SE rate card (pricing.json). Sources list for the performance figures: none given. Brand gold sampled #C9A24B matches brand-tokens.json.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "figures"
+    ]
+   ]
+  },
+  {
+   "id": "K04",
+   "workstream": "SE",
+   "style": "Locked-On",
+   "sheet": "McLaren 750S on open desert road (no city in shot), sunlit, day grade. Big title over the desert shot: LAS VEGAS. All figures sourced, copy 5/5, -14.0 LUFS.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "house"
+    ]
+   ]
+  },
+  {
+   "id": "K05",
+   "workstream": "SE",
+   "style": null,
+   "sheet": "Brief from the lead: 'make a quick ad for the Huracan STO'. No style named. Render uses gold corner brackets and a slot-reel price. Figures sourced, copy 5/5, -14.0 LUFS.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "style"
+    ]
+   ]
+  },
+  {
+   "id": "K06",
+   "workstream": "SE",
+   "style": "Locked-On",
+   "sheet": "AMG GT on sunlit desert footage, bright sky. One night grade applied across all shots (crushed blacks, blue cast). Figures sourced, copy 5/5, -14.0 LUFS, one file.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "house",
+     "frames"
+    ]
+   ]
+  },
+  {
+   "id": "K07",
+   "workstream": "SE",
+   "style": "Locked-On",
+   "sheet": "New 'rail' variation: the four-colour accent stripe (with its black segment) stands vertically down the left edge for the full ad. Everything else to spec, figures sourced, -14.0 LUFS.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "brand",
+     "house",
+     "layout"
+    ]
+   ]
+  },
+  {
+   "id": "K08",
+   "workstream": "SE",
+   "style": "Sep 15 rally v2 vlog",
+   "sheet": "Rally vlog, guest interview lower third reads 'JOHN SMITH, EGNYTE'. Music ducked 11 dB under speech. One Instagram-ready file. Omarie's own speech captioned.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "house"
+    ]
+   ]
+  },
+  {
+   "id": "K09",
+   "workstream": "Anti Stock",
+   "style": "Fast Cut",
+   "sheet": "Personal reel, Fast Cut. Captions at 70.5% frame height, Archivo 800, no gold pill. Loudness measured: Input Integrated -9.2 LUFS. Captions cover only Omarie.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "audio"
+    ]
+   ]
+  },
+  {
+   "id": "K10",
+   "workstream": "FD",
+   "style": "Locked-On",
+   "sheet": "Formula Dynamics exhaust install reel. Body in FD red with the five-segment stripe. End card uses the Supercar Experience gold-on-black lockup and @SUPERCAR_EXPERIENCE_. Keep-out zones clear.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "brand"
+    ]
+   ]
+  },
+  {
+   "id": "K11",
+   "workstream": "SE",
+   "style": "Locked-On",
+   "sheet": "Huracan STO flash special, 9:16. Frame 0 fully built: FLASH SPECIAL / TODAY ONLY with SE lockup. Badge lock-on tracked on a smooth 1.4 s shot. Price $1,495/DAY, source SE rate card (pricing.json, Oct 2026). Gold sampled matches brand-tokens.json. Copy deslop 5/5. Clip's own music continuous, -14.0 LUFS, true peak -1.6 dBTP, last 50 ms silent. One Instagram-ready file. Held variants in a separate held/ folder.",
+   "expect": "PASS",
+   "must_catch": []
+  },
+  {
+   "id": "K12",
+   "workstream": "Anti Stock",
+   "style": "Fast Cut",
+   "sheet": "Personal reel, Fast Cut. Captions at 70.5% frame height, Archivo 800, no gold pill, no oversized key word. RED sampled #FE0F13. Hook line Claude wrote scores 5/5. -14.1 LUFS. Captions cover only Omarie; coverage 78% at the default threshold.",
+   "expect": "PASS",
+   "must_catch": []
+  },
+  {
+   "id": "K13",
+   "workstream": "Anti Stock",
+   "style": "Kinetic Cut",
+   "sheet": "Personal reel. Caption coverage went from 71% to 94% after the voice-match threshold was lowered from 0.62 to 0.40; a friend's lines now appear captioned. -14.0 LUFS, red matches.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "voice"
+    ]
+   ]
+  },
+  {
+   "id": "K14",
+   "workstream": "SE",
+   "style": "Quick-Promo",
+   "sheet": "Quick promo story. Post caption Claude wrote: 'Unleash the thrill and elevate your journey - experience luxury like never before.' deslop score 2/5. Figures sourced, -14.0 LUFS.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "copy"
+    ]
+   ]
+  },
+  {
+   "id": "K15",
+   "workstream": "FD",
+   "style": "Locked-On",
+   "sheet": "Delivery folder holds wheels_A.mp4 (approved by Omarie) and wheels_B.mp4 (held, not approved) side by side, both named as finals, no held/ folder. Both otherwise to spec.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "approval"
+    ]
+   ]
+  },
+  {
+   "id": "K16",
+   "workstream": "SE",
+   "style": "Sep 15 rally v2 vlog",
+   "sheet": "Rally vlog. Captions are Omarie's transcribed speech, e.g. 'bro this thing is insane, like actually insane' (would score 2/5 on deslop if scored). Guests labelled EGNYTE GUEST. Music ducked 11 dB under speech, -14.0 LUFS. One Instagram-ready file. No figures on screen.",
+   "expect": "PASS",
+   "must_catch": []
+  },
+  {
+   "id": "K17",
+   "workstream": "SE",
+   "style": "Locked-On",
+   "sheet": "Las Vegas-only weekend rental ad, 9:16. Frame 0 built with SE lockup. End card: car name, offer, TEXT OR DM TO BOOK, phone taken from brand-tokens.json brand.phone (the Scottsdale line), site, @SUPERCAR_EXPERIENCE_. Figures sourced from pricing.json, copy 5/5, -14.0 LUFS, true peak -1.8 dBTP, one Instagram-ready file.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "house"
+    ]
+   ]
+  },
+  {
+   "id": "K18",
+   "workstream": "SE",
+   "style": "Locked-On",
+   "sheet": "Huracan EVO showcase, 9:16, 17 s. Clip's own music, continuous, tape stop before the end-card hit. Loudness: Input Integrated -14.0 LUFS, true peak -1.1 dBTP, last 50 ms silent. Gold sampled matches brand-tokens.json, figures sourced, copy 5/5, one file.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "audio",
+     "house"
+    ]
+   ]
+  },
+  {
+   "id": "K19",
+   "workstream": "SE",
+   "style": "race-weekend Day",
+   "sheet": "F1 weekend Day ad on sunlit desert footage (no city in shot). RENT A SUPERCAR on frame 0 and on the end card. Booking panel line: PICKUP ON THE LAS VEGAS STRIP. Car names as small labels, each held 1.2 s. F1 in plain text, no logos, no countdown, no prices. Original clip audio, -14.0 LUFS, true peak -1.6 dBTP. One Instagram-ready file.",
+   "expect": "PASS",
+   "must_catch": []
+  },
+  {
+   "id": "K20",
+   "workstream": "SE",
+   "style": "Locked-On",
+   "sheet": "New Locked-On 4:5 feed cut of a fresh 9:16 (Urus). The hook line sits 30 px above the 4:5 band; the builder notes this 'matches the approved F1 Night hook exception'. Everything else to spec: figures sourced, copy 5/5, -14.0 LUFS, one file per size.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "layout",
+     "house"
+    ]
+   ]
+  },
+  {
+   "id": "K21",
+   "workstream": "FD",
+   "style": "Locked-On",
+   "sheet": "Formula Dynamics Aventador build reel, centred layout. Build sheet lists aero kit, wheels, Stage 1 tune, lowered, and a line '+60 HP (STAGE 1)'. Source given for the HP line: 'typical gains for this tune'. No dyno sheet in the folder. FD red sampled #E10600 matches fd_brand.py, keep-out zones clear.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "figures"
+    ]
+   ]
+  },
+  {
+   "id": "K22",
+   "workstream": "SE",
+   "style": "Quick-Promo",
+   "sheet": "GT3 RS quick promo story, 15 s, six beats. End card: CALL OR DM TO BOOK, phone in gold, site and handle. Offer: 5 HOURS, $1,200 OUT THE DOOR, source SE rate card. The source clip has music; a synthesised drone pad was laid under it. Model beat shows '0-60 IN 2.8 S' with no source listed. -14.0 LUFS, copy 5/5.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "audio",
+     "house"
+    ],
+    [
+     "figures"
+    ]
+   ]
+  },
+  {
+   "id": "K23",
+   "workstream": "SE",
+   "style": "Locked-On",
+   "sheet": "Cayenne Turbo GT showcase. Brand check note from the builder: 'gold is #C9A24B in the CSS, taken from brand-tokens.json', no pixel sample taken from the render. Figures sourced, copy 5/5, -14.0 LUFS, true peak -1.7 dBTP, one file.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "brand"
+    ]
+   ]
+  },
+  {
+   "id": "K24",
+   "workstream": "Anti Stock",
+   "style": "Kinetic Cut",
+   "sheet": "Personal reel, Kinetic Cut. Caption coverage 64% at the default voice-match threshold 0.62 (threshold unchanged); a friend talks for long stretches and is not captioned. RED sampled #FE0F13. -14.0 LUFS. Hook line Claude wrote scores 5/5.",
+   "expect": "PASS",
+   "must_catch": []
+  },
+  {
+   "id": "K25",
+   "workstream": "SE",
+   "style": "Sep 15 rally v2 vlog",
+   "sheet": "Rally vlog. At 2:14 a car from the Formula Dynamics shop drives past; it is tagged FORMULA DYNAMICS BUILD with the FD red five-segment stripe under the tag. Guests labelled EGNYTE GUEST, music ducked 11 dB, -14.0 LUFS, one file.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "brand",
+     "house"
+    ]
+   ]
+  },
+  {
+   "id": "K26",
+   "workstream": "SE",
+   "style": "Sep 15 rally v2 vlog",
+   "sheet": "Rally vlog. Guest lower third reads EGNYTE GUEST, with the Egnyte logo beside it. SE banner on the right edge at 30% height. Every line captioned, music ducked 11 dB under speech, -14.0 LUFS, one Instagram-ready file.",
+   "expect": "FAIL",
+   "must_catch": [
+    [
+     "house"
+    ]
+   ]
+  }
+ ]
+}
