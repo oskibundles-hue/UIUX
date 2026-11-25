@@ -33,11 +33,6 @@ While you wait: write your warm list (Step 1, place A). It costs nothing and nee
 | C | **Car meets and Cars & Coffee** (one a weekend) | Every car there is the right kind of car, and the owner is standing next to it. | Print card + script 4 |
 | D | **Instagram, Las Vegas owners** (local car tags, meet pages, owners who tag Vegas) | Cold, so slower. Works best after you met them or filmed the car. | Script 3 + animated card |
 | E | **Anyone who mentions a problem** (a noise, a warning light, service due) in a chat, comment or in person | They need help now. This converts best. | Script 2 + phone card |
-| F | **Supercar Experience customers** | On hold. See the note below. | Nothing yet |
-
-**Supercar Experience (F): don't use it yet.** Its customers mostly rent and fly in, so few
-own a car here. Sending them to another business could also clash with SE. Ask the SE
-owner first. If they say yes, use script 1 only, never on SE's accounts or in SE's name.
 
 ---
 
@@ -120,5 +115,4 @@ is owed.
 - Don't promise prices, horsepower, results or turnaround times. Nate quotes those.
 - Don't say "discount". If Nate sets an offer, use his exact words.
 - Don't post as FD or on FD's accounts. This is you, telling people you trust the shop.
-- Don't mix in Supercar Experience branding or customers without the SE owner's yes.
 - Don't send the same person more than two messages.
