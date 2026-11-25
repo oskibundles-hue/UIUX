@@ -1,0 +1,32 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<style>
+/* split comparison: two studio tiles, two tiers */
+.head{position:absolute;left:var(--sx);right:var(--sx);top:140px}
+.head .display{font-size:88px;margin-top:20px;line-height:1}
+.tiles{position:absolute;left:var(--sx);right:var(--sx);top:430px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.tile{position:relative;height:540px;overflow:hidden;background:#dcdcdc}
+.tile img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover}
+.tile.sp img{object-position:50% 52%;transform:scale(1.35)}
+.tile.wh{background:#fff}
+.tile.wh img{object-fit:contain;transform:scale(1.12)}
+.tile .lab{position:absolute;left:0;top:0;background:var(--ink);color:var(--white);font-family:"Plex";font-weight:700;font-size:21px;letter-spacing:.08em;padding:10px 14px;text-transform:uppercase}
+.figs{position:absolute;left:var(--sx);right:var(--sx);top:996px;display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.fig .n{font-family:"Bebas";font-size:150px;line-height:.85;color:var(--red)}
+.fig.lo .n{color:var(--white)}
+.fig .n small{font-size:60px;color:var(--sub);margin-left:8px}
+.fig p{font-family:"Barlow";font-weight:700;font-size:34px;line-height:1.05;text-transform:uppercase;letter-spacing:.03em;color:var(--white);margin-top:8px}
+.fig p span{display:block;font-weight:500;text-transform:none;letter-spacing:0;color:var(--sub);font-size:30px;margin-top:4px}
+</style></head><body>
+<div class="slide">
+  <div class="run"><span><b>FORMULA DYNAMICS SALE</b> &nbsp;·&nbsp; NOV 20 – DEC 4</span><span class="count">01<i> / 03</i></span></div>
+  <div class="head"><div class="rule"></div><div class="display">15% to keep your wheels<br><span style="color:var(--red)">5% to change them</span></div></div>
+  <div class="tiles">
+    <div class="tile sp"><img src="../../../assets/photos/spacer15_bolts_studio.jpg" alt="FD 15 mm wheel spacer with extended bolts"><span class="lab">FD wheel spacer</span></div>
+    <div class="tile wh"><img src="../../../assets/photos/velocecorsa_mercury_listing.png" alt="Veloce Corsa wheel, Gloss Mercury, store listing image"><span class="lab">Veloce Corsa wheel</span></div>
+  </div>
+  <div class="figs">
+    <div class="fig"><div class="n">15%<small>off</small></div><p>Keeping your wheels<span>FD wheel spacers</span></p></div>
+    <div class="fig lo"><div class="n">5%<small>off</small></div><p>Changing your wheels<span>Wheels</span></p></div>
+  </div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FD Black Friday carousels</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+/* VOICE: an agency's campaign proof book handed to the shop: confident, exact, nothing decorative.
+   IDEA: the run sheet of an Instagram campaign, a wall of covers pinned by day and post time.
+   PICTURE: the wall itself: all 75 cover slides as one grid, days across, the five post times down.
+   COLOUR and TYPE: FD black #08080A ground, white type, FD red #FE0F13 as the one accent; Bebas Neue, Barlow, IBM Plex Mono for times and prices.
+   LAYOUT: title and key figures, the wall, a day row, then each day's five carousels with slides, concept, prices and caption. */
+:root{color-scheme:dark;--bg:#08080A;--panel:#121216;--ink:#F4F4F6;--sub:#C9C9D0;--grey:#8E8E97;--line:rgba(255,255,255,.12);--red:#FE0F13}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 Barlow,"Helvetica Neue",Arial,sans-serif;overflow-x:clip}
+a{color:inherit}
+.band{padding:clamp(28px,4vw,64px) max(5vw,16px)}
+.wrap{max-width:1240px;margin:0 auto}
+.brand{display:flex;align-items:center;gap:12px;color:var(--sub);font-weight:600}
+.brand img{width:40px;height:auto}
+h1,h2,h3{font-family:"Bebas Neue",Impact,sans-serif;font-weight:400;line-height:1.05;margin:0;text-wrap:balance}
+h1{font-size:clamp(40px,6vw,64px);margin:18px 0 10px;max-width:16em}
+.lede{color:var(--sub);font-size:17px;max-width:62ch;margin:0}
+.top{display:grid;grid-template-columns:minmax(0,1.5fr) minmax(0,1fr);gap:22px 56px;align-items:end}
+.figs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px 28px;margin:0;padding:0 0 4px;list-style:none}
+.figs li{display:flex;flex-direction:column;gap:6px;color:var(--sub);border-top:1px solid var(--line);padding-top:12px}
+.figs b{font:500 clamp(30px,3.4vw,44px)/1 "IBM Plex Mono",Menlo,monospace;color:var(--ink)}
+@media(max-width:900px){.top{grid-template-columns:minmax(0,1fr)}.figs{grid-template-columns:repeat(4,max-content);gap:14px 30px}}
+@media(max-width:600px){.figs{grid-template-columns:repeat(2,minmax(0,1fr))}}
+.figs .hot b{color:var(--red)}
+.mono{font-family:"IBM Plex Mono",Menlo,monospace;font-weight:500;white-space:nowrap}
+/* the wall */
+.wall{display:grid;gap:6px;margin-top:30px;grid-template-columns:56px repeat(15,minmax(0,1fr));grid-template-rows:auto repeat(5,auto);grid-auto-flow:column}
+.wall .lab{font:500 13px/1.2 "IBM Plex Mono",Menlo,monospace;color:var(--grey);align-self:center;white-space:nowrap}
+.wall .dh{text-align:center;color:var(--sub);padding-bottom:4px;align-self:end}
+.wall .dh i{display:block;font-style:normal;color:var(--grey);font-size:12px}
+.wall .dh.on{color:var(--red)}
+.tile{display:block;aspect-ratio:4/5;background:var(--panel);border-radius:3px;overflow:hidden;outline:2px solid transparent;outline-offset:1px;transition:outline-color .15s,transform .15s}
+.tile img{width:100%;height:100%;object-fit:cover;display:block}
+.tile:hover,.tile:focus-visible{outline-color:var(--red);transform:translateY(-2px)}
+.tile.gap{background:repeating-linear-gradient(45deg,#16161b 0 6px,#0f0f13 6px 12px)}
+.key{color:var(--grey);font-size:14px;margin:12px 0 0}
+/* day row */
+.days{display:flex;gap:8px;overflow-x:auto;padding:12px max(5vw,16px);border-block:1px solid var(--line);background:var(--bg);z-index:5}
+.days a{flex:none;text-decoration:none;font:500 14px/1 "IBM Plex Mono",Menlo,monospace;color:var(--sub);padding:14px 12px;border-radius:3px;min-height:44px;display:flex;align-items:center}
+.days a:hover,.days a:focus-visible{background:var(--panel);color:var(--ink)}
+@media(min-width:900px){.days{position:sticky;top:0}}
+html{scroll-padding-top:84px}
+/* days and posts */
+.day{padding-top:44px}
+.day h2{font-size:clamp(34px,4vw,48px);display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 16px;border-top:3px solid var(--red);padding-top:12px}
+.day h2 span{font:600 17px/1.2 Barlow,sans-serif;color:var(--red)}
+.day h2 .up{margin-left:auto;align-self:center;font:500 14px/1 "IBM Plex Mono",Menlo,monospace;color:var(--sub);text-decoration:none;padding:14px 0}
+.day h2 .up:hover,.day h2 .up:focus-visible{color:var(--red)}
+.post{display:grid;grid-template-columns:minmax(0,3fr) minmax(0,2fr);gap:22px 28px;padding:26px 0;border-bottom:1px solid var(--line)}
+.strip{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.strip img{width:100%;aspect-ratio:4/5;object-fit:cover;display:block;border-radius:3px;background:var(--panel)}
+.meta .when{color:var(--red);font-weight:700;margin:0 0 6px}
+.meta h3{font-size:32px;margin:0 0 10px}
+.meta .prices{color:var(--sub);font-size:15px;margin:0 0 12px}
+.meta .prices b{color:var(--ink);font-weight:600}
+.cap{white-space:pre-wrap;color:var(--sub);margin:0 0 14px;max-width:62ch}
+.copy{font:600 15px/1 Barlow,sans-serif;color:var(--ink);background:none;border:1px solid var(--line);border-radius:3px;padding:0 16px;min-height:44px;cursor:pointer}
+.copy:hover,.copy:focus-visible{border-color:var(--red);outline:none}
+.missing{color:var(--grey);font-style:italic}
+footer{border-top:1px solid var(--line);color:var(--sub)}
+footer h2{font-size:34px;color:var(--ink);margin-bottom:10px}
+footer p{max-width:70ch}
+.warn{border-left:3px solid var(--red);padding-left:14px}
+@media(max-width:900px){.post{grid-template-columns:minmax(0,1fr)}}
+@media(max-width:700px){
+  .wall{grid-template-columns:52px repeat(5,minmax(0,1fr));grid-template-rows:none;grid-auto-flow:row;gap:5px}
+  .wall .lab{font-size:12px;text-align:center}
+  .wall .dh{text-align:left;padding:0}
+  .strip{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:82%;overflow-x:auto;scroll-snap-type:x mandatory}
+  .strip img{scroll-snap-align:start}
+}
+@media(prefers-reduced-motion:reduce){.tile{transition:none}.tile:hover{transform:none}}
+</style>
+</head>
+<body>
+<header class="band"><div class="wrap">
+  <div class="top"><div>
+  <div class="brand"><img src="fd-icon.png" alt="">Formula Dynamics · parts store and shop</div>
+  <h1>Black Friday on the feed: 75 carousels, Nov 20 to Dec 4</h1>
+  <p class="lede">Five carousels a day for fifteen days. Each day has a product spotlight, a sale guide, a real FD car with a part that fits it, one thing owners can learn, and an evening reminder. Every price matches the formuladynamics.com listing on the day it was built.</p>
+  </div><ul class="figs">
+    <li><b>__TOTAL__</b>carousels</li><li><b>__SLIDES__</b>slides at 1080 × 1350</li><li><b>__DAYS__</b>days</li><li class="hot"><b>20%</b>top tier, selected parts, through Dec 4</li>
+  </ul></div>
+  <div class="wall" id="wall" aria-label="All cover slides by day and post time"></div>
+  <p class="key">Covers by day (across) and post time in Pacific (down). Tap a cover to open its carousel.</p>
+</div></header>
+<nav class="days" id="days" aria-label="Days"></nav>
+<main class="band" style="padding-top:0"><div class="wrap" id="list"></div></main>
+<footer class="band"><div class="wrap">
+  <h2>Full-size files</h2>
+  <p>The 1080 × 1350 exports, the 75 captions, the editable source, the source and fitment ledger, the contact sheet, the full-size review PDF and PDFs of this page (one for a laptop, one for a phone) are in the <a href="__DRIVE__">Drive delivery folder</a>. The pictures on this page are reduced previews.</p>
+  <p>__CHECKS__</p>
+  <p class="warn">Discount tiers come from the campaign notes in the sale folder. The public sale emails were not found, so check the tiers against them before anything posts.</p>
+</div></footer>
+<script>
+{
+const DATA = __DATA__;
+const ROLES = [["Product spotlight","9 AM"],["Sale guide","11 AM"],["Car with product","1 PM"],["Education","4 PM"],["Sale reminder","7 PM"]];
+const esc = s => String(s).replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const wall = document.getElementById("wall");
+wall.innerHTML = '<span class="lab"></span>' + ROLES.map(r => `<span class="lab">${r[1]}</span>`).join("") +
+  DATA.map(d => `<a class="lab dh${d.note ? " on" : ""}" href="#${d.id}" style="text-decoration:none">${d.wd}<i>${d.md}</i></a>` +
+    d.posts.map((p, i) => p
+      ? `<a class="tile" href="#c${p.n}" title="${esc(d.md + " · " + ROLES[i][1] + " · " + (p.concept || p.role))}"><img src="${p.imgs[0]}" alt="${esc(p.concept || p.role)}" loading="lazy"></a>`
+      : `<span class="tile gap" title="Not built yet"></span>`).join("")).join("");
+document.getElementById("days").innerHTML = DATA.map(d => `<a href="#${d.id}">${d.wd} ${d.md}</a>`).join("");
+document.getElementById("list").innerHTML = DATA.map(d => `<section class="day" id="${d.id}">
+  <h2>${d.wdl} ${d.md}${d.note ? `<span>${esc(d.note)}</span>` : ""}<a class="up" href="#wall">All covers ↑</a></h2>
+  ${d.posts.map((p, i) => p ? `<article class="post" id="c${p.n}">
+    <div class="strip">${p.imgs.map((s, k) => `<img src="${s}" alt="Slide ${k + 1} of 3" loading="lazy">`).join("")}</div>
+    <div class="meta">
+      <p class="when">${ROLES[i][0]} · <span class="mono">${ROLES[i][1]}</span> · #${p.n}</p>
+      <h3>${esc(p.concept || p.role)}</h3>
+      ${p.prices ? `<p class="prices"><b>Prices shown:</b> ${/^(none|n\/a|-)$/i.test(p.prices.trim()) ? "none on the slides" : esc(p.prices.replace(/\s*->\s*/g, " now "))}</p>` : ""}
+      <p class="cap">${esc(p.cap)}</p>
+      <button class="copy" type="button" data-n="${p.n}">Copy caption</button>
+    </div></article>`
+    : `<article class="post"><p class="missing">${ROLES[i][0]} · ${ROLES[i][1]}: not built yet.</p></article>`).join("")}
+</section>`).join("");
+const caps = {};
+DATA.forEach(d => d.posts.forEach(p => { if (p) caps[p.n] = p.cap; }));
+document.getElementById("list").addEventListener("click", async e => {
+  const b = e.target.closest(".copy"); if (!b) return;
+  try { await navigator.clipboard.writeText(caps[b.dataset.n]); b.textContent = "Copied"; }
+  catch (err) { b.textContent = "Copy blocked: select the text instead"; }
+  setTimeout(() => { b.textContent = "Copy caption"; }, 2200);
+});
+}
+</script>
+</body>
+</html>

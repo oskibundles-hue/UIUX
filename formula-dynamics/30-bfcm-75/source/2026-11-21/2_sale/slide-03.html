@@ -1,0 +1,44 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<style>
+.photo{height:520px}
+.photo img{--y:50%}
+.photo .shade{background:linear-gradient(180deg,rgba(8,8,10,.88) 0%,rgba(8,8,10,.05) 30%,rgba(8,8,10,.05) 62%,#08080A 100%)}
+.head{position:absolute;left:var(--sx);right:var(--sx);top:150px}
+.head .display{font-size:118px;margin-top:20px}
+/* date strip, Nov 20 to Dec 4 */
+.strip{position:absolute;left:var(--sx);right:var(--sx);top:420px;display:grid;grid-template-columns:repeat(15,1fr);gap:6px}
+.d{height:92px;border:1px solid var(--line);display:flex;flex-direction:column;justify-content:flex-end;padding:0 0 8px 8px;font-family:"Plex";font-size:21px;color:var(--grey)}
+.d b{font-family:"Bebas";font-weight:400;font-size:40px;line-height:.9;color:var(--sub)}
+.d.today{background:var(--red);border-color:var(--red);color:var(--white)}
+.d.today b{color:var(--white)}
+.d.end{border:2px solid var(--white)}
+.d.end b{color:var(--white)}
+.sl{position:absolute;left:var(--sx);right:var(--sx);top:526px;display:flex;justify-content:space-between;font-family:"Plex";font-size:21px;letter-spacing:.06em;color:var(--grey);text-transform:uppercase}
+.rows{position:absolute;left:var(--sx);right:var(--sx);top:620px}
+.today-l{position:absolute;left:calc(var(--sx) + 62px);top:390px;font-family:"Plex";font-weight:700;font-size:21px;letter-spacing:.06em;color:var(--red)}
+.r{display:grid;grid-template-columns:1fr auto;border-top:1px solid var(--line);padding:34px 0 32px}
+.r h3{font-family:"Barlow";font-weight:700;font-size:42px;line-height:1.05;text-transform:uppercase;letter-spacing:.03em;color:var(--white)}
+.r p{font-family:"Barlow";font-weight:500;font-size:32px;line-height:1.2;color:var(--sub);margin-top:8px;max-width:700px}
+.r .p{font-family:"Bebas";font-size:120px;line-height:.9;color:var(--red);padding-left:24px}
+.cta{position:absolute;left:var(--sx);right:var(--sx);bottom:140px;display:flex;align-items:center;justify-content:space-between}
+.cta .btn{background:var(--red);color:var(--white);font-family:"Bebas";font-size:50px;letter-spacing:.02em;padding:12px 24px 6px;white-space:nowrap;line-height:1}
+.cta .mark{position:static;width:250px}
+.fine{position:absolute;left:var(--sx);right:var(--sx);bottom:var(--sy)}
+</style></head><body>
+<div class="slide">
+  <div class="run"><span><b>PICK YOUR TIER</b> &nbsp;·&nbsp; WHEEL WORK</span><span class="count">03<i> / 03</i></span></div>
+  <div class="head"><div class="rule"></div><div class="display">Both tiers end Dec 4</div></div>
+  <div class="today-l">TODAY &#8595;</div>
+  <div class="strip">
+    <div class="d"><b>20</b></div><div class="d today"><b>21</b></div><div class="d"><b>22</b></div><div class="d"><b>23</b></div><div class="d"><b>24</b></div>
+    <div class="d"><b>25</b></div><div class="d"><b>26</b></div><div class="d"><b>27</b></div><div class="d"><b>28</b></div><div class="d"><b>29</b></div>
+    <div class="d"><b>30</b></div><div class="d"><b>1</b></div><div class="d"><b>2</b></div><div class="d"><b>3</b></div><div class="d end"><b>4</b></div>
+  </div>
+  <div class="sl"><span>Nov 20 · sale opens</span><span>Dec 4 · last day</span></div>
+  <div class="rows">
+    <div class="r"><div><h3>Keeping your wheels</h3><p>FD wheel spacers. Kits up to +18 mm come with new extended wheel bolts. +22 mm and up bolt on and reuse your originals.</p></div><span class="p">15%</span></div>
+    <div class="r"><div><h3>Changing your wheels</h3><p>Wheels, including the Veloce Corsa sets listed by model.</p></div><span class="p">5%</span></div>
+  </div>
+  <div class="cta"><span class="btn">Shop now · formuladynamics.com</span><div class="mark"><img src="../../../assets/logos/store-wordmark-white.png" alt="Formula Dynamics"></div></div>
+  <div class="fine">Tiers per the FD sale, Nov 20 to Dec 4, 2026. Bolt details from the FD Wheel Spacers listings, checked Nov 20, 2026.</div>
+</div></body></html>

@@ -1,0 +1,8 @@
+/* Nov 30 (Cyber Monday) day-wide additions. Loaded after ../../styles.css. */
+.cta{position:absolute;left:var(--sx);right:var(--sx);display:flex;align-items:center;justify-content:space-between;z-index:5}
+.cta .btn{background:var(--red);color:var(--white);font-family:"Bebas";font-size:50px;letter-spacing:.02em;padding:12px 24px 6px;white-space:nowrap;line-height:1}
+.cta .mark{position:static;width:250px}
+.fine.pin{position:absolute;left:var(--sx);right:var(--sx);bottom:var(--sy);z-index:5}
+.hr{height:1px;background:var(--line)}
+.pct{font-family:"Bebas";line-height:.85;color:var(--white)}
+.pct.red{color:var(--red)}

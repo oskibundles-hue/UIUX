@@ -1,0 +1,56 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<style>
+.head{position:absolute;left:var(--sx);right:var(--sx);top:150px}
+.head .display{font-size:112px;margin-top:20px}
+.cols{position:absolute;left:var(--sx);right:var(--sx);top:340px;display:grid;grid-template-columns:1fr 1fr;column-gap:40px}
+.col h3{font-family:"Barlow";font-weight:700;font-size:38px;letter-spacing:.03em;text-transform:uppercase;color:var(--white);line-height:1;margin-top:18px}
+.col .sub{font-family:"Plex";font-size:21px;letter-spacing:.06em;color:var(--grey);text-transform:uppercase;margin-top:8px}
+.col svg{display:block;width:448px;height:380px;background:#111114;border:1px solid var(--line)}
+.col ul{list-style:none;margin-top:18px}
+.col li{font-family:"Barlow";font-weight:500;font-size:34px;line-height:1.16;color:var(--sub);border-top:1px solid var(--line);padding:14px 0 14px}
+.col li b{color:var(--white);font-weight:700}
+.col.b h3{color:var(--white)}
+.col.b li::before{content:"";display:inline-block;width:12px;height:12px;background:var(--red);margin-right:12px;vertical-align:3px}
+.col.a li::before{content:"";display:inline-block;width:12px;height:12px;border:2px solid var(--grey);margin-right:12px;vertical-align:3px}
+.fine{position:absolute;left:var(--sx);right:200px;bottom:var(--sy)}
+</style></head><body>
+<div class="slide">
+  <div class="run"><span><b>SAME JOB, DIFFERENT WALL</b> &nbsp;·&nbsp; CROSS-SECTION</span><span class="count">02<i> / 03</i></span></div>
+  <div class="head"><div class="rule"></div><div class="display">Rubber vs braided</div></div>
+  <div class="cols">
+    <div class="col a">
+      <svg viewBox="0 0 448 380" aria-label="Rubber hose cross-section">
+        <circle cx="224" cy="190" r="112" fill="#3a3a40"/>
+        <circle cx="224" cy="190" r="44" fill="#C9C9D0"/>
+        <line x1="268" y1="190" x2="410" y2="190" stroke="#9A9AA2" stroke-width="2"/>
+        <text x="300" y="176" fill="#C9C9D0" font-family="Plex" font-size="21">RUBBER</text>
+        <line x1="224" y1="190" x2="120" y2="350" stroke="#9A9AA2" stroke-width="2"/>
+        <text x="20" y="366" fill="#C9C9D0" font-family="Plex" font-size="21">FLUID</text>
+      </svg>
+      <h3>Rubber hose</h3><div class="sub">Typical stock line</div>
+      <ul>
+        <li>Can <b>swell under hard braking</b>, felt as a softer pedal</li>
+        <li>Porous, so fluid can <b>take on moisture</b> more easily</li>
+      </ul>
+    </div>
+    <div class="col b">
+      <svg viewBox="0 0 448 380" aria-label="Stainless braided line cross-section">
+        <defs><pattern id="br" width="14" height="14" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><rect width="14" height="14" fill="#6d6d75"/><rect width="6" height="14" fill="#c9c9d0"/></pattern></defs>
+        <circle cx="224" cy="190" r="112" fill="url(#br)"/>
+        <circle cx="224" cy="190" r="88" fill="#3a3a40"/>
+        <circle cx="224" cy="190" r="44" fill="#C9C9D0"/>
+        <line x1="322" y1="140" x2="410" y2="72" stroke="#FE0F13" stroke-width="3"/>
+        <text x="268" y="52" fill="#FFFFFF" font-family="Plex" font-weight="700" font-size="21">STEEL BRAID</text>
+        <line x1="268" y1="225" x2="300" y2="345" stroke="#9A9AA2" stroke-width="2"/>
+        <text x="262" y="366" fill="#C9C9D0" font-family="Plex" font-size="21">INNER LINE</text>
+      </svg>
+      <h3>Stainless braided</h3><div class="sub">FD braided lines</div>
+      <ul>
+        <li>The braid <b>holds the line's shape</b> under pressure</li>
+        <li>It also <b>protects the line</b> from the outside</li>
+      </ul>
+    </div>
+  </div>
+  <div class="fine">Simplified illustration, not to scale. Points from the FD stainless braided brake line listings, formuladynamics.com, checked Nov 20, 2026.</div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

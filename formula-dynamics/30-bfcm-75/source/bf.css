@@ -1,0 +1,7 @@
+/* Black Friday mark, look B (top band), picked by Omarie 2026-11-25. Covers (slide 1) from Nov 26 on.
+   Full-width FD red band across the top; the running header moves into it. Text sits inside the 64px top margin. */
+.bf .run{display:none}
+.bfb{position:absolute;left:0;top:0;width:1080px;height:136px;background:var(--red);z-index:7;display:flex;align-items:flex-end;justify-content:space-between;padding:0 var(--sx) 16px}
+.bfb b{font-family:"Bebas";font-weight:400;font-size:66px;line-height:.8;letter-spacing:.02em;color:var(--white)}
+.bfb span{font-family:"Plex";font-weight:700;font-size:30px;letter-spacing:.05em;color:var(--white);padding-bottom:3px}
+.bfb span i{font-style:normal;font-weight:400;opacity:.75}

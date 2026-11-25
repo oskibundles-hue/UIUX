@@ -1,0 +1,34 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css">
+<style>
+/* macro of the kit contents with numbered pins. Photo asset is 2160x3240; with width 1080 the
+   rendered scale is 0.5 before zoom. Pins are placed in slide px; edit --px/--py if the photo changes. */
+.photo{height:820px}
+.photo img{--y:66.4%}
+.photo .shade{background:linear-gradient(180deg,rgba(8,8,10,.94) 0%,rgba(8,8,10,.5) 12%,rgba(8,8,10,0) 24%,rgba(8,8,10,0) 92%,#08080A 100%)}
+.pin{position:absolute;left:var(--px);top:var(--py);z-index:4}
+.pin .ring{position:absolute;width:var(--d,120px);height:var(--d,120px);left:calc(var(--d,120px) / -2);top:calc(var(--d,120px) / -2);border:4px solid var(--red);border-radius:50%}
+.pin .n{position:absolute;left:calc(var(--d,120px) / 2 - 18px);top:calc(var(--d,120px) / -2 - 22px);background:var(--red);color:var(--white);font-family:"Plex";font-weight:700;font-size:26px;padding:4px 10px}
+.head{position:absolute;left:var(--sx);right:var(--sx);top:836px}
+.head .display{font-size:80px}
+ol{position:absolute;left:var(--sx);right:var(--sx);top:912px;list-style:none}
+li{display:grid;grid-template-columns:72px 1fr;border-top:1px solid var(--line);padding:12px 0 10px}
+li .n{font-family:"Plex";font-weight:700;font-size:30px;color:var(--red);padding-top:4px}
+li h3{font-family:"Barlow";font-weight:700;font-size:36px;letter-spacing:.03em;text-transform:uppercase;color:var(--white);line-height:1}
+li p{font-family:"Barlow";font-weight:500;font-size:30px;line-height:1.1;color:var(--sub);margin-top:2px}
+.fine{position:absolute;left:var(--sx);right:200px;bottom:var(--sy)}
+</style></head><body>
+<div class="slide">
+  <div class="photo"><img src="../../../assets/photos/oilkit_ghibli_studio.jpg" alt="Close view of the OE filter, copper washer and oil quarts"><div class="shade"></div></div>
+  <div class="run"><span><b>IN THE BOX</b> &nbsp;·&nbsp; GHIBLI OIL KIT</span><span class="count">02<i> / 03</i></span></div>
+  <div class="pin" style="--px:537px;--py:294px;--d:170px"><div class="ring"></div><span class="n">01</span></div>
+  <div class="pin" style="--px:640px;--py:700px;--d:110px"><div class="ring"></div><span class="n">02</span></div>
+  <div class="pin" style="--px:837px;--py:406px;--d:150px"><div class="ring"></div><span class="n">03</span></div>
+  <div class="head"><div class="display">Everything for one change</div></div>
+  <ol>
+    <li><span class="n">01</span><div><h3>Genuine OE Maserati filter</h3><p>Part number 311401, as named on the listing.</p></div></li>
+    <li><span class="n">02</span><div><h3>Copper crush washer</h3><p>A fresh one comes in the kit.</p></div></li>
+    <li><span class="n">03</span><div><h3>Factory-approved oil</h3><p>Full synthetic, with extra for top-off.</p></div></li>
+  </ol>
+  <div class="fine">Contents from the formuladynamics.com listing, checked Nov 20, 2026. Oil brand varies with availability.</div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

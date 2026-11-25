@@ -1,0 +1,37 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../day.css">
+<style>
+.head{position:absolute;left:var(--sx);right:var(--sx);top:150px}
+.head .display{font-size:96px;margin-top:20px}
+.card{position:absolute;left:var(--sx);right:var(--sx);top:360px;height:270px;background:#F2F2F4;color:#111;padding:34px 40px}
+.card .v{font-family:"Plex";font-size:21px;letter-spacing:.06em;color:#666}
+.card h3{font-family:"Barlow";font-weight:700;font-size:44px;line-height:1.05;margin-top:10px;color:#111}
+.card .pr{display:flex;gap:22px;align-items:baseline;margin-top:34px;font-family:"Plex"}
+.card .pr .w{font-size:34px;color:#777;text-decoration:line-through}
+.card .pr .n{font-size:54px;font-weight:700;color:#111}
+.dot{display:inline-flex;align-items:center;justify-content:center;width:46px;height:46px;border-radius:50%;background:var(--red);color:#fff;font-family:"Plex";font-weight:700;font-size:26px}
+.card .d1{position:absolute;left:40px;top:248px}
+.card .d2{position:absolute;left:300px;top:248px}
+.card .pr{padding-left:0}
+.keys{position:absolute;left:var(--sx);right:var(--sx);top:680px}
+.k{display:grid;grid-template-columns:70px 1fr;padding:22px 0;border-top:1px solid var(--line)}
+.k p{font-family:"Barlow";font-weight:500;font-size:34px;line-height:1.12;color:var(--sub)}
+.k p b{color:var(--white)}
+.sum{position:absolute;left:var(--sx);right:var(--sx);top:1000px;font-family:"Plex";font-size:34px;color:var(--sub);border-top:3px solid var(--white);padding-top:18px}
+.sum b{font-family:"Bebas";font-weight:400;font-size:84px;color:var(--red);line-height:1;display:block;margin-top:6px}
+</style></head><body>
+<div class="slide">
+  <div class="run"><span><b>READ THE LISTING</b> &nbsp;·&nbsp; SALE ARITHMETIC</span><span class="count">02<i> / 03</i></span></div>
+  <div class="head"><div class="rule"></div><div class="display">Two prices, one check</div></div>
+  <div class="card">
+    <div class="v">FORMULADYNAMICS.COM LISTING (DIAGRAM)</div>
+    <h3>BMC Air Filter for Lamborghini Huracan, FB807/08</h3>
+    <div class="pr"><span class="dot">1</span><span class="w">$349.99</span><span class="dot">2</span><span class="n">$297.49</span></div>
+  </div>
+  <div class="keys">
+    <div class="k"><span class="dot">1</span><p><b>Struck-through price:</b> what it listed for before the sale.</p></div>
+    <div class="k"><span class="dot">2</span><p><b>Bold price:</b> what you pay through Dec 4.</p></div>
+  </div>
+  <div class="sum">297.49 ÷ 349.99 = 0.85, so you pay 85%<b>15% off · $52.50 kept</b></div>
+  <div class="fine short">Listing prices from formuladynamics.com, checked Nov 20, 2026. Air filters are in the 15% tier.</div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

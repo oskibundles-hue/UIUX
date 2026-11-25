@@ -1,0 +1,8 @@
+assets/photos/*
+!assets/photos/.keep
+ref/*
+!ref/.keep
+out/
+.bak-*/
+*.bak
+__pycache__/

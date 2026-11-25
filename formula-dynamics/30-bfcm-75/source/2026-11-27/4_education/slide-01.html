@@ -1,0 +1,33 @@
+<!doctype html><html><head><meta charset="utf-8"><link rel="stylesheet" href="../../styles.css"><link rel="stylesheet" href="../day.css"><link rel="stylesheet" href="../../bf.css">
+<style>
+.photo{height:1350px}
+.photo img{--y:50%}
+.photo .shade{background:linear-gradient(180deg,rgba(8,8,10,.96) 0%,rgba(8,8,10,.9) 22%,rgba(8,8,10,.7) 34%,rgba(8,8,10,.7) 38%,rgba(8,8,10,.3) 46%,rgba(8,8,10,.1) 50%,rgba(8,8,10,.25) 66%,rgba(8,8,10,.9) 80%,#08080A 100%)}
+.top{position:absolute;left:var(--sx);right:var(--sx);top:150px;z-index:4}
+.top .kicker{margin-top:22px}
+.top .display{font-size:132px;margin-top:12px}
+.top .display .red{color:var(--red)}
+/* labels with leader lines, slide px; re-aim if the photo changes */
+.pin{position:absolute;z-index:4;display:flex;align-items:center}
+.pin i{display:block;height:3px;background:var(--red)}
+.pin.spring{left:640px;top:560px}.pin.spring i{width:90px;order:-1}
+.pin.damper{left:760px;top:880px}.pin.damper i{width:70px;order:-1}
+.bot{position:absolute;left:var(--sx);right:200px;bottom:var(--sy);z-index:4}
+.bot .body{font-size:38px}
+.bot .tag{margin-top:20px}
+/* bf-nudge */.bf .top{top:172px}</style></head><body>
+<div class="slide bf"><div class="bfb"><b>BLACK FRIDAY SALE</b><span>ENDS DEC 4 &nbsp;·&nbsp; 01<i> / 03</i></span></div>
+  <div class="photo"><img src="../../../assets/photos/zr1_coilover_bench.jpg" alt="Coil spring and damper in a spring compressor on the FD shop floor"><div class="shade"></div></div>
+  <div class="run"><span><b>SUSPENSION LANGUAGE</b> &nbsp;·&nbsp; LEARN IT</span><span class="count">01<i> / 03</i></span></div>
+  <div class="top">
+    <div class="rule"></div>
+    <div class="kicker">Two words on every adjustable damper</div>
+    <div class="display">Compression<br><span class="red">or rebound?</span></div>
+  </div>
+  <div class="pin spring"><i></i><span class="lab">Spring</span></div>
+  <div class="bot">
+    <div class="body">Both words describe the <b>damper</b> inside that spring, not the spring itself. Swipe for which motion is which.</div>
+    <div class="tag">Shown: spring work on the FD bench</div>
+  </div>
+  <div class="mark icon"><img src="../../../assets/logos/fd-icon-white.png" alt="FD"></div>
+</div></body></html>

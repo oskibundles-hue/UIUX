@@ -1,0 +1,42 @@
+/* FD-BFCM-75 shared slide system. 1080x1350 canvas, owner-focused editorial.
+   Brand: FD red #FE0F13 is the only accent. Bebas Neue display, Barlow Condensed body, IBM Plex Mono figures.
+   Photos are <img> tags cropped by CSS (--x/--y object-position, --zoom), so a photo can be swapped without
+   touching the layout. One FD mark per slide. Safe area: 72px sides, 64px top/bottom. */
+@font-face{font-family:"Bebas";src:url(../assets/fonts/BebasNeue-Regular.ttf)}
+@font-face{font-family:"Barlow";font-weight:700;src:url(../assets/fonts/BarlowCondensed-Bold.ttf)}
+@font-face{font-family:"Barlow";font-weight:500;src:url(../assets/fonts/BarlowCondensed-Medium.ttf)}
+@font-face{font-family:"Plex";font-weight:400;src:url(../assets/fonts/IBMPlexMono-Regular.ttf)}
+@font-face{font-family:"Plex";font-weight:700;src:url(../assets/fonts/IBMPlexMono-Bold.ttf)}
+:root{--red:#FE0F13;--ink:#08080A;--white:#FFFFFF;--sub:#C9C9D0;--grey:#9A9AA2;--line:rgba(255,255,255,.18);
+  --sx:72px;--sy:64px}
+*{margin:0;padding:0;box-sizing:border-box}
+html,body{width:1080px;height:1350px;background:var(--ink);overflow:hidden}
+.slide{position:relative;width:1080px;height:1350px;overflow:hidden;background:var(--ink);color:var(--white);
+  font-family:"Barlow",sans-serif;font-weight:500;-webkit-font-smoothing:antialiased}
+
+/* photo layer */
+.photo{position:absolute;left:0;top:0;width:1080px;overflow:hidden}
+.photo img{display:block;width:100%;height:100%;object-fit:cover;object-position:var(--x,50%) var(--y,50%);
+  transform:scale(var(--zoom,1));transform-origin:var(--ox,50%) var(--oy,50%)}
+.photo .shade{position:absolute;inset:0}
+
+/* running header */
+.run{position:absolute;left:var(--sx);right:var(--sx);top:var(--sy);display:flex;justify-content:space-between;
+  align-items:center;font-family:"Plex";font-size:24px;letter-spacing:.06em;color:var(--sub);z-index:5}
+.run b{color:var(--white);font-weight:700}
+.run .count{color:var(--white);font-weight:700}
+.run .count i{font-style:normal;color:var(--grey);font-weight:400}
+.rule{height:3px;background:var(--red);width:96px}
+
+.kicker{font-family:"Barlow";font-weight:700;font-size:34px;letter-spacing:.08em;color:var(--red);text-transform:uppercase}
+.display{font-family:"Bebas";font-weight:400;line-height:.88;letter-spacing:.005em;text-transform:uppercase}
+.body{font-family:"Barlow";font-weight:500;font-size:38px;line-height:1.18;color:var(--sub)}
+.body b{color:var(--white);font-weight:700}
+.mono{font-family:"Plex"}
+.fine{font-family:"Plex";font-size:21px;line-height:1.4;color:var(--grey);letter-spacing:.01em}
+.tag{font-family:"Plex";font-size:21px;letter-spacing:.06em;color:var(--sub);text-transform:uppercase}
+.tag::before{content:"";display:inline-block;width:10px;height:10px;background:var(--red);margin-right:12px;vertical-align:1px}
+
+.mark{position:absolute;z-index:6}
+.mark img{display:block;width:100%}
+.mark.icon{right:var(--sx);bottom:var(--sy);width:92px}
