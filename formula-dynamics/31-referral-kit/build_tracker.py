@@ -5,7 +5,8 @@
 
 Opens in Numbers, Excel or Google Sheets. The two commission rates and the payout terms sit on
 the SETTINGS tab as yellow-flagged placeholders until Nate sets them; every row reads them from
-there, so changing one cell re-prices the whole sheet.
+there, so changing one cell re-prices the whole sheet. PARTNERS logs the businesses Omarie calls;
+LEADS holds the rows the AI callback sends (column names must match its field names).
 """
 from pathlib import Path
 
@@ -134,6 +135,69 @@ for i, (a, f, fmt) in enumerate(lines, start=3):
         cell.font = Font(name="Arial", bold=True, color=RED)
 sm["A9"] = "Rates and terms are placeholders on the SETTINGS tab until Nate signs off."
 sm["A9"].font = Font(name="Arial", italic=True, color="7A7A82")
+
+# ---- shared helper for the two list tabs ----------------------------------------------------
+def list_tab(name, cols, rows=ROWS):
+    """Header row in the house style, frozen, boxed and formatted for `rows` rows."""
+    ws = wb.create_sheet(name)
+    for c, (head, width, _) in enumerate(cols, start=1):
+        cell = ws.cell(1, c, head)
+        cell.font = HEAD
+        cell.fill = HEAD_FILL
+        cell.alignment = Alignment(wrap_text=True, vertical="center")
+        ws.column_dimensions[cell.column_letter].width = width
+    ws.row_dimensions[1].height = 34
+    ws.freeze_panes = "A2"
+    for r in range(2, rows + 2):
+        for c, (_, _, fmt) in enumerate(cols, start=1):
+            cell = ws.cell(r, c)
+            cell.border = BOX
+            if fmt:
+                cell.number_format = fmt
+    ws.auto_filter.ref = f"A1:{ws.cell(1, len(cols)).column_letter}{rows + 1}"
+    return ws
+
+
+def pick_list(ws, col_letter, options, rows=ROWS):
+    dv = DataValidation(type="list", formula1='"' + ",".join(options) + '"', allow_blank=True)
+    ws.add_data_validation(dv)
+    dv.add(f"{col_letter}2:{col_letter}{rows + 1}")
+
+
+# ---- PARTNERS: businesses Omarie calls himself ------------------------------------------------
+PARTNER_TYPES = ["Exotic rental", "Dealership", "Detailer", "Wrap / PPF", "Car club",
+                 "Storage garage", "Hotel concierge", "Other"]
+OUTCOMES = ["No answer", "Voicemail", "Not interested", "Call back", "Interested", "Partner"]
+pt = list_tab("PARTNERS", [
+    ("Business", 26, None),
+    ("Type", 16, None),
+    ("Phone", 16, "@"),
+    ("Website", 26, None),
+    ("Contact name", 18, None),
+    ("Date called", 12, "mm/dd/yyyy"),
+    ("Outcome", 15, None),
+    ("Next step", 26, None),
+    ("Next date", 12, "mm/dd/yyyy"),
+    ("Customers sent", 11, "0"),
+    ("Notes", 40, None),
+])
+pick_list(pt, "B", PARTNER_TYPES)
+pick_list(pt, "G", OUTCOMES)
+# "Not interested" rows go grey (and stay off the call list); "Partner" rows go green
+pt.conditional_formatting.add(f"A2:K{last}", FormulaRule(formula=['$G2="Not interested"'],
+                              font=Font(color=GREY), fill=PatternFill("solid", fgColor="F0F0F2")))
+pt.conditional_formatting.add(f"A2:K{last}", FormulaRule(formula=['$G2="Partner"'],
+                              fill=PatternFill("solid", fgColor="E3F4E8")))
+
+# ---- LEADS: rows the AI callback writes. Column names are the callback's field names; ------
+# ---- keep them exactly as they are, or the import breaks. ----------------------------------
+LEAD_COLS = ["received_at", "first_name", "phone", "car", "need", "best_time", "consent",
+             "consent_text_version", "consent_ip", "source", "call_status", "call_outcome",
+             "booked_time", "notes"]
+LEAD_WIDTH = {"received_at": 18, "need": 30, "consent_text_version": 20, "notes": 40,
+              "booked_time": 18, "call_outcome": 18}
+LEAD_FMT = {"phone": "@", "consent_ip": "@", "consent_text_version": "@"}
+ld = list_tab("LEADS", [(c, LEAD_WIDTH.get(c, 14), LEAD_FMT.get(c)) for c in LEAD_COLS])
 
 OUT.parent.mkdir(exist_ok=True)
 wb.save(OUT)

@@ -1,0 +1,10 @@
+# Lead data and logs hold real people's numbers. Never commit them.
+consent_log.jsonl
+dnc.txt
+calls.json
+notifications.log
+dry_run_requests.jsonl
+*.tmp
+__pycache__/
+leads.csv
+consent_texts.json.bak
