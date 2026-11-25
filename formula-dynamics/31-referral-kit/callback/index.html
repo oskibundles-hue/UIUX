@@ -1,0 +1,192 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#08080a">
+<meta name="robots" content="noindex">
+<title>Get a call back · Formula Dynamics · Las Vegas</title>
+<style>
+  /* Fonts are served by callback_server.py from the repo's FD font files (see SETUP.md). */
+  @font-face { font-family: "Bebas Neue"; src: url("/fonts/BebasNeue-Regular.ttf") format("truetype"); font-display: swap; }
+  @font-face { font-family: "Barlow Condensed"; src: url("/fonts/BarlowCondensed-Medium.ttf") format("truetype"); font-weight: 500; font-display: swap; }
+  @font-face { font-family: "Barlow Condensed"; src: url("/fonts/BarlowCondensed-Bold.ttf") format("truetype"); font-weight: 700; font-display: swap; }
+
+  :root {
+    --ink: #08080a; --panel: #111114; --line: #26262c; --white: #ffffff;
+    --sub: #c9c9d0; --grey: #9a9aa2; --red: #FE0F13;
+    --display: "Bebas Neue", "Oswald", Impact, sans-serif;
+    --body: "Barlow Condensed", "Arial Narrow", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; background: var(--ink); color: var(--white); }
+  body { font: 500 18px/1.4 var(--body); -webkit-font-smoothing: antialiased;
+         padding: env(safe-area-inset-top) 0 env(safe-area-inset-bottom); }
+  main { max-width: 480px; margin: 0 auto; padding: 28px 20px 40px; }
+
+  .bar { height: 4px; width: 56px; background: var(--red); margin-bottom: 18px; }
+  .kicker { font: 700 14px/1 var(--body); letter-spacing: .18em; color: var(--grey); text-transform: uppercase; }
+  h1 { font: 400 54px/.92 var(--display); letter-spacing: .01em; margin: 10px 0 12px; }
+  .lede { color: var(--sub); margin: 0 0 26px; font-size: 19px; }
+
+  form { display: grid; gap: 20px; }
+  label.field, fieldset { display: grid; gap: 8px; margin: 0; padding: 0; border: 0; min-width: 0; }
+  .lbl { font: 400 22px/1 var(--display); letter-spacing: .04em; }
+  .hint { color: var(--grey); font-size: 15px; }
+  input[type=text], input[type=tel], textarea {
+    width: 100%; font: 500 19px/1.3 var(--body); color: var(--white);
+    background: var(--panel); border: 1px solid var(--line); border-radius: 6px;
+    padding: 14px 14px; outline: none; -webkit-appearance: none; appearance: none;
+  }
+  textarea { min-height: 76px; resize: vertical; }
+  input:focus, textarea:focus { border-color: var(--white); }
+  input::placeholder, textarea::placeholder { color: #5d5d66; }
+
+  .chips { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+  .chip input { position: absolute; opacity: 0; pointer-events: none; }
+  .chip span {
+    display: block; text-align: center; padding: 13px 8px; border-radius: 6px;
+    border: 1px solid var(--line); background: var(--panel); color: var(--sub);
+    font: 700 17px/1 var(--body); letter-spacing: .06em; text-transform: uppercase; cursor: pointer;
+  }
+  .chip input:checked + span { border-color: var(--red); color: var(--white); box-shadow: inset 0 0 0 1px var(--red); }
+  .chip input:focus-visible + span { outline: 2px solid var(--white); outline-offset: 2px; }
+
+  .consent { display: grid; grid-template-columns: 28px 1fr; gap: 12px; align-items: start;
+             background: var(--panel); border: 1px solid var(--line); border-radius: 6px; padding: 14px; }
+  .consent input { width: 24px; height: 24px; margin: 2px 0 0; accent-color: var(--red); }
+  .consent p { margin: 0; color: var(--sub); font-size: 15.5px; line-height: 1.4; }
+
+  button {
+    width: 100%; border: 0; border-radius: 6px; padding: 17px 16px; cursor: pointer;
+    background: var(--red); color: var(--white); font: 400 28px/1 var(--display); letter-spacing: .06em;
+  }
+  button[disabled] { opacity: .45; cursor: default; }
+  .err { color: var(--white); border-left: 3px solid var(--red); padding: 4px 0 4px 10px; display: none; font-size: 16px; }
+  .err.on { display: block; }
+  .hp { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+
+  .fine { color: var(--grey); font-size: 14px; margin-top: 26px; line-height: 1.45; }
+  .fine b { color: var(--sub); font-weight: 700; }
+  .done { display: none; }
+  .done.on { display: block; }
+  .done h2 { font: 400 46px/.95 var(--display); margin: 8px 0 12px; }
+  .done p { color: var(--sub); }
+</style>
+</head>
+<body>
+<main>
+  <div class="bar" aria-hidden="true"></div>
+  <div class="kicker">Formula Dynamics · Las Vegas · Ref OMARIE</div>
+
+  <section id="ask">
+    <h1>Get a call back about your car</h1>
+    <p class="lede">Tell us the car and what it needs. An AI assistant calls you in about two minutes to
+      confirm the details and set up a time for the shop to call you.</p>
+
+    <form id="lead" action="/lead" method="post" novalidate>
+      <input type="hidden" name="ref" value="OMARIE">
+      <input type="hidden" name="consent_text_version" value="2026-11-24.v1">
+      <input type="hidden" name="page_url" value="">
+      <div class="hp" aria-hidden="true"><label>Leave this empty <input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+
+      <label class="field">
+        <span class="lbl">First name</span>
+        <input type="text" name="first_name" autocomplete="given-name" maxlength="40" required>
+      </label>
+
+      <label class="field">
+        <span class="lbl">Mobile number</span>
+        <input type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="(702) 000-0000" maxlength="20" required>
+      </label>
+
+      <label class="field">
+        <span class="lbl">Your car</span>
+        <input type="text" name="car" placeholder="Year, make, model" maxlength="80" required>
+      </label>
+
+      <fieldset>
+        <legend class="lbl">What it needs</legend>
+        <div class="chips">
+          <label class="chip"><input type="radio" name="need" value="Service" required><span>Service</span></label>
+          <label class="chip"><input type="radio" name="need" value="Parts"><span>Parts</span></label>
+          <label class="chip"><input type="radio" name="need" value="A problem"><span>A problem</span></label>
+          <label class="chip"><input type="radio" name="need" value="A mod"><span>A mod</span></label>
+        </div>
+        <textarea name="need_detail" maxlength="240" placeholder="Anything else? e.g. a noise from the front, an exhaust you're thinking about (optional)"></textarea>
+      </fieldset>
+
+      <fieldset>
+        <legend class="lbl">Best time for the shop to call</legend>
+        <div class="chips">
+          <label class="chip"><input type="radio" name="best_time" value="Morning" required><span>Morning</span></label>
+          <label class="chip"><input type="radio" name="best_time" value="Afternoon"><span>Afternoon</span></label>
+          <label class="chip"><input type="radio" name="best_time" value="Evening"><span>Evening</span></label>
+          <label class="chip"><input type="radio" name="best_time" value="Any time"><span>Any time</span></label>
+        </div>
+      </fieldset>
+
+      <!-- CONSENT. The text inside #consent-text is the legal record. callback_server.py reads
+           it from this file at start-up, hashes it and stores the hash with every lead, so any
+           edit here MUST come with a new consent_text_version above (the server refuses to start
+           if the text changed but the version did not). -->
+      <label class="consent">
+        <input type="checkbox" name="consent" value="yes" id="consent">
+        <p id="consent-text" data-version="2026-11-24.v1">By ticking this box, I agree that an AI-voice assistant calling for Omarie, on behalf of Formula Dynamics, and Formula Dynamics itself may call and text me at the number above about this request, using an artificial or AI-generated voice and automated technology. Calls may be recorded. Consent is not a condition of any purchase. Message and data rates may apply. Reply STOP to any text, or say "stop" on any call, to opt out.</p>
+      </label>
+
+      <div class="err" id="err" role="alert"></div>
+      <button type="submit" id="go">Call me back</button>
+    </form>
+
+    <p class="fine"><b>Who is calling:</b> an AI assistant working for Omarie, a Las Vegas creator who refers
+      customers to Formula Dynamics. Omarie may earn a referral commission from the shop. Your details are used
+      only to follow up on this request and are never sold. The shop quotes all prices and work itself.</p>
+  </section>
+
+  <section class="done" id="done" aria-live="polite">
+    <div class="kicker">Got it</div>
+    <h2 id="done-title">Watch your phone</h2>
+    <p id="done-msg">An AI assistant calling for Omarie about Formula Dynamics will ring you in about two minutes.</p>
+    <p class="fine">Changed your mind? Say "stop" on the call, or reply STOP to any text.</p>
+  </section>
+</main>
+
+<script>
+(function () {
+  var form = document.getElementById('lead');
+  var err = document.getElementById('err');
+  var go = document.getElementById('go');
+  form.page_url.value = location.href;
+
+  function fail(msg) { err.textContent = msg; err.classList.add('on'); go.disabled = false; }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    err.classList.remove('on');
+    var digits = (form.phone.value || '').replace(/\D/g, '');
+    if (!form.first_name.value.trim()) return fail('Add your first name.');
+    if (!(digits.length === 10 || (digits.length === 11 && digits[0] === '1'))) return fail('Add a 10-digit US mobile number.');
+    if (!form.car.value.trim()) return fail('Add your car.');
+    if (!form.querySelector('input[name=need]:checked')) return fail('Pick what the car needs.');
+    if (!form.querySelector('input[name=best_time]:checked')) return fail('Pick the best time for the shop to call.');
+    if (!form.consent.checked) return fail('Tick the box to agree to the call. We cannot call you without it.');
+    go.disabled = true;
+    fetch(form.action, {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: new URLSearchParams(new FormData(form))
+    }).then(function (r) { return r.json().then(function (j) { return [r.ok, j]; }); })
+      .then(function (res) {
+        if (!res[0]) return fail(res[1].error || 'Something went wrong. Try again.');
+        if (res[1].message) document.getElementById('done-msg').textContent = res[1].message;
+        document.getElementById('ask').style.display = 'none';
+        document.getElementById('done').classList.add('on');
+        window.scrollTo(0, 0);
+      })
+      .catch(function () { fail('No connection. Check your signal and try again.'); });
+  });
+})();
+</script>
+</body>
+</html>
