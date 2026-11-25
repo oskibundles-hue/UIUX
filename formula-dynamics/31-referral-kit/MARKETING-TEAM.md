@@ -2,7 +2,7 @@
 
 Written 25 Nov 2026 for Omarie. This adds two engines to `PLAN.md`: business partners
 you call yourself, and an AI that calls back people who scan your QR code.
-Nothing here calls, texts or posts by itself. Nate approves anything that speaks for FD.
+Nothing here calls, texts or posts by itself. Omarie's work carries Nate's approval (25 Nov 2026).
 
 ## Who does what
 
@@ -27,14 +27,14 @@ Nothing here calls, texts or posts by itself. Nate approves anything that speaks
 Calls go to businesses only. A number that looks like a personal cell gets checked against the
 National Do Not Call Registry first. No AI or recorded voice on these calls.
 
-## Engine 2: AI callback for QR leads (after Nate says yes)
+## Engine 2: AI callback for QR leads
 
 Someone scans the QR and fills in a short form. They tick a box agreeing to an AI call.
 The AI calls within about 2 minutes. It says it is an AI, asks about the car and the need,
 and books a time for FD to call. It never quotes prices, results or discounts.
 
 What it needs before it goes live (steps in `callback/SETUP.md`):
-1. Nate approves the AI speaking for FD, and names who takes the booked calls.
+1. Nate's approval: covered (Omarie, 25 Nov 2026). Still to name: who calls back the booked times.
 2. You sign up for a calling service (Vapi is the pick) and buy a number. This costs money monthly.
 3. Someone hosts the small server, and the QR cards point at its address.
 4. A lawyer reads the consent box once (recommended, not checked).

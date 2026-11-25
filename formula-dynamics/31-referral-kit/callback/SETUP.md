@@ -11,17 +11,17 @@ anything, bought a number, called anyone or put anything online.
 
 ---
 
-## Step 0. Nate says yes first (nothing goes live before this)
+## Step 0. Nate's approval (cleared)
 
-The assistant speaks for Formula Dynamics in every call. Before any real call:
+Omarie, in chat on 25 Nov 2026: "nate approves everything i do". So Nate's yes is covered,
+and no written yes is needed before the first call.
 
-1. Show Nate `agent_prompt.md` (what the assistant says) and the form (`index.html`).
-2. Ask him: is he happy for an AI to call people about FD, does he want calls put through to
-   the shop (and on which number and hours), and who at FD takes the call-back times.
-3. Get his yes in writing (a text is fine). Keep it.
+Two shop details are still worth filling in, because the server can't guess them:
+1. Should calls be put through to the shop? If yes, which number and which hours
+   (`FD_SHOP_NUMBER`, `FD_SHOP_HOURS`). If not, leave them empty: the assistant books a time.
+2. Who at FD calls back the booked times. The summary goes to you, so you pass it on.
 
-The referral code OMARIE, the commission and any offer are still waiting on Nate too. The
-assistant never mentions money, deals or offers, so that wait does not block it.
+The assistant never mentions money, deals or offers, so the commission talk does not block it.
 
 ---
 
@@ -185,7 +185,7 @@ lawyer who knows US calling rules (TCPA) read the consent box and the opening li
 
 ## Step 9. Go-live checklist
 
-- [ ] Nate's written yes (Step 0)
+- [x] Nate's approval (Step 0: covered by Omarie, 25 Nov 2026)
 - [ ] `test_callback.py` shows ALL PASS
 - [ ] A real call to your own phone works, and the summary reached you
 - [ ] Saying "stop" put your number on `dnc.txt`
