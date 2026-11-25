@@ -10,7 +10,7 @@
   "hooks": {
     "PreToolUse": [
       {
-        "matcher": "Bash|mcp__(Higgsfield|Dropbox|Windsor_ai|vidIQ|Vertiso_Memory)__.*",
+        "matcher": "Bash|mcp__.*",
         "hooks": [
           {
             "type": "command",
